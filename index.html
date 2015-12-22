@@ -1,0 +1,45 @@
+<html>
+
+  <head>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    
+    <title>Angular 2 QuickStart</title>
+    
+    <!-- Bootstrap stuff -->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- Angular2 stuff -->
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <!--Just to support the needed functionality of ES6 for some browser-->
+    <script src="node_modules/es6-shim/es6-shim.js"></script>
+
+    <!-- 2. Configure SystemJS -->
+    <script>
+      System.config({
+        packages: {        
+          "app/src": {
+            format: 'register',
+            defaultExtension: 'js'
+          }
+        }
+      });
+      System.import('app/src/app')
+            .then(null, console.error.bind(console));
+    </script>
+
+  </head>
+  
+  <!-- 3. Display the application -->
+  <body>
+    <div>
+        <app>Loading...</app>  
+    </div>
+  </body>
+
+</html>

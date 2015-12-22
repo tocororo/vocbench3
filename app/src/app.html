@@ -1,0 +1,17 @@
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a [routerLink]="['./Home']">Home</a></li>
+                <li><a [routerLink]="['Concepts']">Concepts</a></li>
+		      	<li><a [routerLink]="['Class']">Class</a></li>
+				<li><a [routerLink]="['Schemes']">Schemes</a></li>
+				<li><a [routerLink]="['Sparql']">SPARQL</a></li>
+				<li><a [routerLink]="['Test']">Test</a></li>
+            </ul>
+        </div>    
+    </div>
+</nav>
+<div class="container-fluid">
+    <router-outlet></router-outlet>
+</div>
