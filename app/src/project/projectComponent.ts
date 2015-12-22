@@ -22,12 +22,11 @@ export class ProjectComponent {
 	onClick() {
         this.projectService.listProjects()
             .subscribe(
-                function(data) {
-                    var parser = new DOMParser();
-			        var stResp = parser.parseFromString(data, "application/xml"); 
+                function(stResp) {
 				    var projColl = stResp.getElementsByTagName("project");
+                    var projects = [];
 				    for (var i=0; i<projColl.length; i++) {
-                        this.projectList.push({
+                        projects.push({
                             accessible: projColl[i].getAttribute("accessible"),
                             modelConfigType: projColl[i].getAttribute("modelConfigType"),
                             ontmgr: projColl[i].getAttribute("ontmgr"),
@@ -38,10 +37,11 @@ export class ProjectComponent {
 				            name: projColl[i].textContent,
 					   })
 				    }
+                    this.projectList = projects;
                     console.log("projs: " + JSON.stringify(this.projectList));
                 },
-                function(err) { console.log("in error callback"); this.logError(err) },
-                function() { console.log('Call Complete') }
+                function(err) { console.log(err); },
+                function() {}
             );
 	}
     

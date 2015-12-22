@@ -1,3 +1,7 @@
 <input type="button" (click)="onClick()" value="Click me!" />
 <!--<rdf-resource [resource]="res"></rdf-resource>-->
 <rdf-resource></rdf-resource>
+
+<select>
+    <option *ngFor="#p of projectList" [value]="p.name">{{p.name}}</option>
+</select>
