@@ -7,6 +7,7 @@ import {
 } from "angular2/router";
 import {HTTP_PROVIDERS} from 'angular2/http';
 import { ProjectComponent } from "./project/projectComponent";
+import { ConceptsComponent } from "./skos/conceptsComponent";
 import { HttpManager } from "./utils/HttpManager";
 import { VocbenchCtx } from "./utils/VocbenchCtx";
 
@@ -17,8 +18,8 @@ import { VocbenchCtx } from "./utils/VocbenchCtx";
 })
 
 @RouteConfig([
-	{path: "/Home",     name: "Home",     component: ProjectComponent},
-    {path: "/Concepts", name: "Concepts", component: ProjectComponent},
+	{path: "/Projects", name: "Projects", component: ProjectComponent},
+    {path: "/Concepts", name: "Concepts", component: ConceptsComponent},
     {path: "/Class",    name: "Class",    component: ProjectComponent},
     {path: "/Schemes",  name: "Schemes",  component: ProjectComponent},
     {path: "/Sparql",   name: "Sparql",   component: ProjectComponent},

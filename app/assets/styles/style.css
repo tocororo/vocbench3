@@ -1,0 +1,79 @@
+html, body {
+	padding: 0;
+	margin: 0;
+}
+
+#viewContainer {
+	position: absolute;
+	top: 50;
+	bottom: 0;
+	width: 100%;
+	padding: 8px;
+}
+
+header {
+	background-color: #1B3671;
+	padding: 0;
+	margin: 0;
+	height: 50px;
+}
+
+header ul {
+	margin: 0;
+	padding-left: 16px;
+	width: 100%;
+	box-sizing: border-box; /* padding and border included in the element's total width and height */
+}
+
+header ul li {
+	display: inline; /* dispose all the listitem inline */
+	line-height: 50px;
+}
+
+header ul li a {
+	text-decoration: none;
+	color: #FFFFFF;
+	font-family: Arial;
+	font-size: 12px;
+	padding: 6px 8px 6px 8px;
+    border-radius: 3px;
+}
+
+header ul li a:HOVER {
+	text-decoration: none;
+	background-color: #E8E7E7;
+	color: #000000;
+}
+
+.glyphicon-chevron-left, .glyphicon-chevron-right,
+.glyphicon-chevron-up, .glyphicon-chevron-down{
+ 	color: #E8E7E7;
+}
+
+.glyphicon-chevron-left:HOVER, .glyphicon-chevron-right:HOVER,
+.glyphicon-chevron-up:HOVER, .glyphicon-chevron-down:HOVER{
+ 	color: #1B3671;
+}
+
+.ui-splitbar {
+	background-color: #1B3671;
+}
+
+.ui-splitbar:HOVER {
+	background-color: #7486AB;	
+}
+
+.uib-tab {
+	background-color: #7486AB;
+}
+
+input[disabled="disabled"]  {
+	filter : grayscale(100%);
+	opacity: 0.5;
+}
+
+.CodeMirror { height: auto; border: 1px solid #ddd; }
+.CodeMirror-scroll { max-height: 200px; }
+.CodeMirror pre { padding-left: 7px; line-height: 1.25; }
+
+

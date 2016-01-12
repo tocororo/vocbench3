@@ -1,0 +1,17 @@
+<div class="treeNode">
+	<div class="expandCollapseBtnContainer">
+		<input type="image" *ngIf="node.getAdditionalProperty('more')==1 && !node.getAdditionalProperty('open')"
+            src="app/assets/images/tree_expand.png"
+            (click)="expandNode()">
+		<input type="image" *ngIf="node.getAdditionalProperty('open')"
+            src="app/assets/images/tree_collapse.png"
+            (click)="collapseNode()">
+	</div>
+	<rdf-resource [resource]="node"></rdf-resource>
+</div>
+<!--<div class="subTree subtreeClose" *ngIf="node.getAdditionalProperty('more')==1">-->
+<div [ngClass]="subTreeStyle" *ngIf="node.getAdditionalProperty('more')==1">
+    <!--<p *ngFor="#n of node.getAdditionalProperty('children')">{{n.getShow()}}</p>-->
+    <rdf-resource *ngFor="#n of node.getAdditionalProperty('children')" [resource]="n"></rdf-resource>
+	<!--<concept-tree-node *ngFor="n of node.children" [node]="n" [scheme]="scheme"></concept-tree-node>-->
+</div>

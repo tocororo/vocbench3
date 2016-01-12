@@ -7,47 +7,65 @@ export interface ARTNode {
     getShow(): string;
 	getNominalValue(): string;
 	toNT(): string;
+    setAdditionalProperty(propName: string, propValue): void;
+    getAdditionalProperty(propName: string): string;
 	
 }
 
 export class ARTURIResource implements ARTNode {
 	public uri:string;
 	public show:string;
-	public rule:string;
+	public role:string;
 	
-	constructor(uri:string, show:string, rule:string) {
+	constructor(uri:string, show:string, role:string) {
 		this.uri = uri;
 		this.show = show;
-		this.rule = rule;
+		this.role = role;
 	}
+    
+    getURI(): string {
+        return this.uri;
+    }
+    
+    getRole(): string {
+        return this.role;
+    }
 	
-	isResource = function() : boolean {
+	isResource(): boolean {
 		return true;
 	};
 	
-	isURIResource = function() : boolean {
+	isURIResource(): boolean {
 		return true;
 	};
     
-	isLiteral = function() : boolean {
+	isLiteral(): boolean {
         return false;
     }
     
-	isBNode() : boolean {
+	isBNode(): boolean {
         return false;
     }
     
-    getShow() : string {
+    getShow(): string {
         return this.show;
     }
     
-	getNominalValue() : string {
+	getNominalValue(): string {
 		return this.uri;
 	};
 	
-	toNT() : string {
+	toNT(): string {
 		return "<" + this.uri + ">";
 	};
+    
+    setAdditionalProperty(propName: string, propValue): void {
+        this[propName] = propValue;
+    }
+    
+    getAdditionalProperty(propName: string) {
+        return this[propName];
+    }
 	
 }
 
@@ -55,40 +73,56 @@ export class ARTLiteral implements ARTNode {
 	public label:string;
 	public datatype:string;
 	public lang:string;
-	public isTypedLiteral:string
+	public typedLiteral:boolean
 	
-	constructor(label:string, datatype:string, lang:string, isTypedLiteral:string) {
+	constructor(label:string, datatype:string, lang:string, typedLiteral:boolean) {
 		this.label = label;
 		this.datatype = datatype;
 		this.lang = lang;
-		this.isTypedLiteral = isTypedLiteral;
+		this.typedLiteral = typedLiteral;
 	}
     
-    isResource() : boolean {
-		return false;
-	};
-	
-	isURIResource() : boolean {
-		return false;
-	};
-    
-	isLiteral() : boolean {
-		return true;
-	};
-    
-    isBNode() : boolean {
-        return false;
-    }
-    
-    getShow() : string {
-        return this.toNT();
-    }
-	
-	getNominalValue() : string {
+    getLabel(): string {
 		return this.label;
 	};
 	
-	toNT() : string {
+	getDatatype(): string {
+		return this.datatype;
+	};
+	
+	getLang(): string {
+		return this.lang;
+	};
+    
+    isResource(): boolean {
+		return false;
+	};
+	
+	isURIResource(): boolean {
+		return false;
+	};
+    
+	isLiteral(): boolean {
+		return true;
+	};
+    
+    isTypedLiteral(): boolean {
+		return this.typedLiteral;
+	};
+    
+    isBNode(): boolean {
+        return false;
+    }
+    
+    getShow(): string {
+        return this.toNT();
+    }
+	
+	getNominalValue(): string {
+		return this.label;
+	};
+	
+	toNT(): string {
 		var nt = JSON.stringify(this.label);
 		if (this.lang != null && this.lang.length > 0) {
 			nt += "@" + this.lang;
@@ -97,6 +131,14 @@ export class ARTLiteral implements ARTNode {
 		}
 		return nt;
 	};
+    
+    setAdditionalProperty(propName: string, propValue): void {
+        this[propName] = propValue;
+    }
+    
+    getAdditionalProperty(propName: string) {
+        return this[propName];
+    }
 	
 }
 
@@ -111,32 +153,64 @@ export class ARTBNode implements ARTNode {
 		this.role = role;
 	}
     
-    isResource() : boolean {
+    getId(): string {
+        return this.id;
+    }
+    
+    isResource(): boolean {
 		return false;
 	};
 	
-	isURIResource() : boolean {
+	isURIResource(): boolean {
 		return false;
 	};
     
-	isLiteral() : boolean {
+	isLiteral(): boolean {
 		return false;
 	};
     
-	isBNode() : boolean {
+	isBNode(): boolean {
 		return true;
 	};
     
-    getShow() : string {
+    getShow(): string {
         return this.getNominalValue();
     }
 	
-	getNominalValue() : string {
+	getNominalValue(): string {
 		return "_:" + this.id;
 	};
 	
-	toNT() : string {
+	toNT(): string {
 		return this.getNominalValue();
+	};
+    
+    setAdditionalProperty(propName: string, propValue): void {
+        this[propName] = propValue;
+    }
+    
+    getAdditionalProperty(propName: string) {
+        return this[propName];
+    }
+	
+}
+
+export class ARTPredicateObjects {
+    
+    public predicate: ARTURIResource;
+    public objects;
+  
+    constructor(predicate: ARTURIResource, objects) {
+		this.predicate = predicate;
+		this.objects = objects;
+	}
+	
+	getPredicate(): ARTURIResource {
+		return this.predicate;
+	};
+	
+	getObjects() {
+		return this.objects;
 	};
 	
 }

@@ -1,7 +1,4 @@
-<input type="button" (click)="onClick()" value="Click me!" />
-<!--<rdf-resource [resource]="res"></rdf-resource>-->
-<rdf-resource></rdf-resource>
-
-<select>
+<select [(ngModel)]="currentProject" (change)="onChange($event.target.value)">
     <option *ngFor="#p of projectList" [value]="p.name">{{p.name}}</option>
 </select>
+<p>{{currentProject}}</p>

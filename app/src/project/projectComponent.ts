@@ -1,28 +1,27 @@
-import {Component} from "angular2/core";
-import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
-import {Http, HTTP_PROVIDERS} from 'angular2/http';
-import {ProjectServices} from "./projectServices";
-import 'rxjs/add/operator/map'; //CHECK IF THIS STILL BE NEEDED IN FUTURE VERSION
+import {Component, OnInit, OnDestroy} from "angular2/core";
+import {ProjectServices} from "../services/projectServices";
+import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Component({
 	selector: "project-component",
 	templateUrl: "app/src/project/projectComponent.html",
-    viewProviders: [HTTP_PROVIDERS], //CHECK THIS
     providers: [ProjectServices],
-	directives: [RdfResourceComponent]
 })
-export class ProjectComponent {
-	public currentProject = "progetto attuale";
-    public projectList = [];
+export class ProjectComponent implements OnInit {
+	public currentProject = "";
+    public projectList;
     
-	constructor(private projectService:ProjectServices) {
-	
+	constructor(private projectService:ProjectServices, private vbCtx:VocbenchCtx) {
     }
-
-	onClick() {
+    
+    ngOnInit() {
+        this.getProjects();
+    }
+    
+    getProjects() {
         this.projectService.listProjects()
             .subscribe(
-                function(stResp) {
+                stResp => {
 				    var projColl = stResp.getElementsByTagName("project");
                     var projects = [];
 				    for (var i=0; i<projColl.length; i++) {
@@ -40,9 +39,31 @@ export class ProjectComponent {
                     this.projectList = projects;
                     console.log("projs: " + JSON.stringify(this.projectList));
                 },
-                function(err) { console.log(err); },
-                function() {}
+                err => console.log(err),
+                () => {}
             );
-	}
+    }
+    
+    onChange(newProject) {
+        console.log("new Project " + JSON.stringify(newProject));
+        if (newProject != this.currentProject) {
+            //disonnect from old project
+            if (this.currentProject != "") {
+                console.log("Disconnecting from project " + this.currentProject);
+                this.projectService.disconnectFromProject(this.currentProject)
+            }
+            //access the new one
+            console.log("Accessing project " + newProject);
+            this.projectService.accessProject(newProject)
+                .subscribe(
+                data => {
+                    this.currentProject = newProject;
+                    this.vbCtx.setProject(newProject);
+                },
+                err => console.log(err),
+                () => { }
+            );
+        }
+    }
     
 }
