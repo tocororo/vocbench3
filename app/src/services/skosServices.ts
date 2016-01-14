@@ -18,9 +18,8 @@ export class SkosServices {
         console.log("[SkosServices] getTopConcepts");
         var params:any = {};
         if (scheme != undefined) {
-            console.log("SCHEME UNDEFINED");
-			params.scheme = scheme;
-		} else console.log("SCHEME DEFINED " + scheme);
+		params.scheme = scheme;
+	}
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService);
     }
     

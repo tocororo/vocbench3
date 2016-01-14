@@ -1,18 +1,22 @@
-import {Component} from "angular2/core";
+import {Component, OnInit} from "angular2/core";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
-import {ConceptTreeComponent} from "../tree/conceptTree/ConceptTreeComponent";
+import {ConceptTreePanelComponent} from "./conceptTreePanel/ConceptTreePanelComponent";
 import {ARTNode, ARTURIResource} from "../utils/ARTResources";
+import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({
 	selector: "concepts-component",
 	templateUrl: "app/src/skos/conceptsComponent.html",
-	directives: [RdfResourceComponent, ConceptTreeComponent]
+	directives: [ConceptTreePanelComponent]
 })
-export class ConceptsComponent {
+export class ConceptsComponent implements OnInit {
     
-    public res:ARTNode;
+    public scheme:ARTURIResource;
     
-	constructor() {
+	constructor(public vbCtx:VocbenchCtx) {}
+    
+    ngOnInit() {
+        this.scheme = this.vbCtx.getScheme();
     }
     
 }

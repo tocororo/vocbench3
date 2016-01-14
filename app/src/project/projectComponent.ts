@@ -8,17 +8,12 @@ import {VocbenchCtx} from '../utils/VocbenchCtx';
     providers: [ProjectServices],
 })
 export class ProjectComponent implements OnInit {
-	public currentProject = "";
+	public currentProject;
     public projectList;
     
-	constructor(private projectService:ProjectServices, private vbCtx:VocbenchCtx) {
-    }
+	constructor(private projectService:ProjectServices, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
-        this.getProjects();
-    }
-    
-    getProjects() {
         this.projectService.listProjects()
             .subscribe(
                 stResp => {
@@ -37,11 +32,11 @@ export class ProjectComponent implements OnInit {
 					   })
 				    }
                     this.projectList = projects;
-                    console.log("projs: " + JSON.stringify(this.projectList));
                 },
                 err => console.log(err),
                 () => {}
             );
+        this.currentProject = this.vbCtx.getProject();
     }
     
     onChange(newProject) {

@@ -1,18 +1,20 @@
 export interface ARTNode {
-	
 	isResource(): boolean;
 	isURIResource(): boolean;
 	isLiteral(): boolean;
 	isBNode(): boolean;
-    getShow(): string;
 	getNominalValue(): string;
 	toNT(): string;
     setAdditionalProperty(propName: string, propValue): void;
     getAdditionalProperty(propName: string): string;
-	
 }
 
-export class ARTURIResource implements ARTNode {
+export interface ARTResource extends ARTNode {
+    getRole(): string;
+    getShow(): string;
+}
+
+export class ARTURIResource implements ARTResource {
 	public uri:string;
 	public show:string;
 	public role:string;
@@ -57,6 +59,63 @@ export class ARTURIResource implements ARTNode {
 	
 	toNT(): string {
 		return "<" + this.uri + ">";
+	};
+    
+    setAdditionalProperty(propName: string, propValue): void {
+        this[propName] = propValue;
+    }
+    
+    getAdditionalProperty(propName: string) {
+        return this[propName];
+    }
+	
+}
+
+export class ARTBNode implements ARTResource {
+	public id:string;
+	public show:string;
+	public role:string;
+	
+	constructor(id:string, show:string, role:string) {
+		this.id = id;
+		this.show = show;
+		this.role = role;
+	}
+    
+    getId(): string {
+        return this.id;
+    }
+    
+    getRole(): string {
+        return this.role;
+    }
+    
+    isResource(): boolean {
+		return true;
+	};
+	
+	isURIResource(): boolean {
+		return false;
+	};
+    
+	isLiteral(): boolean {
+		return false;
+	};
+    
+	isBNode(): boolean {
+		return true;
+	};
+    
+    getShow(): string {
+        return this.getNominalValue();
+    }
+	
+	getNominalValue(): string {
+		return "_:" + this.id;
+	};
+	
+	toNT(): string {
+		return this.getNominalValue();
 	};
     
     setAdditionalProperty(propName: string, propValue): void {
@@ -114,10 +173,6 @@ export class ARTLiteral implements ARTNode {
         return false;
     }
     
-    getShow(): string {
-        return this.toNT();
-    }
-	
 	getNominalValue(): string {
 		return this.label;
 	};
@@ -130,59 +185,6 @@ export class ARTLiteral implements ARTNode {
 			nt += "^^" + this.datatype;
 		}
 		return nt;
-	};
-    
-    setAdditionalProperty(propName: string, propValue): void {
-        this[propName] = propValue;
-    }
-    
-    getAdditionalProperty(propName: string) {
-        return this[propName];
-    }
-	
-}
-
-export class ARTBNode implements ARTNode {
-	public id:string;
-	public show:string;
-	public role:string;
-	
-	constructor(id:string, show:string, role:string) {
-		this.id = id;
-		this.show = show;
-		this.role = role;
-	}
-    
-    getId(): string {
-        return this.id;
-    }
-    
-    isResource(): boolean {
-		return false;
-	};
-	
-	isURIResource(): boolean {
-		return false;
-	};
-    
-	isLiteral(): boolean {
-		return false;
-	};
-    
-	isBNode(): boolean {
-		return true;
-	};
-    
-    getShow(): string {
-        return this.getNominalValue();
-    }
-	
-	getNominalValue(): string {
-		return "_:" + this.id;
-	};
-	
-	toNT(): string {
-		return this.getNominalValue();
 	};
     
     setAdditionalProperty(propName: string, propValue): void {

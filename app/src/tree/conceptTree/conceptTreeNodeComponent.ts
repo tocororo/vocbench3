@@ -1,4 +1,4 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
 import {SkosServices} from "../../services/skosServices";
@@ -7,12 +7,13 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 @Component({
 	selector: "concept-tree-node",
 	templateUrl: "app/src/tree/conceptTree/conceptTreeNodeComponent.html",
-    directives: [RdfResourceComponent],
+    directives: [RdfResourceComponent, ConceptTreeNodeComponent],
     providers: [SkosServices, Deserializer],
 })
 export class ConceptTreeNodeComponent {
 	@Input() node:ARTURIResource;
     @Input() scheme:ARTURIResource;
+    // @Output() nodeSelevtedEvent:EventEmitter<ARTURIResource> = new EventEmitter();
     
     subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
@@ -55,6 +56,14 @@ export class ConceptTreeNodeComponent {
 		this.node.setAdditionalProperty("open", false);
 		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
         this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
+    }
+    
+    /**
+     * Called when a node in the tree is clicked. This function emit an event 
+     */
+    selectNode() {
+        console.log("node " + this.node.getShow() + " selected");
+        // this.nodeSelevtedEvent.emit("nodeSelevtedEvent", this.node);
     }
 	
 }

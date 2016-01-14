@@ -1,4 +1,3 @@
 <select [(ngModel)]="currentProject" (change)="onChange($event.target.value)">
     <option *ngFor="#p of projectList" [value]="p.name">{{p.name}}</option>
 </select>
-<p>{{currentProject}}</p>

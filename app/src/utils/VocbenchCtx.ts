@@ -1,9 +1,11 @@
 import {Injectable} from 'angular2/core';
+import {ARTURIResource} from './ARTResources';
 
 @Injectable()
 export class VocbenchCtx {
     
     project: string = "SYSTEM";
+    scheme: ARTURIResource;
     
 	constructor() {
         
@@ -13,8 +15,16 @@ export class VocbenchCtx {
         this.project = project;
     }
     
-    getProject() : string {
+    getProject(): string {
         return this.project;
+    }
+    
+    setScheme(scheme: ARTURIResource) {
+        this.scheme = scheme;
+    }
+    
+    getScheme(): ARTURIResource {
+        return this.scheme;
     }
     
 }

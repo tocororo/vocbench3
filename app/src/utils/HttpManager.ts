@@ -19,9 +19,7 @@ export class HttpManager {
 	//old services url parts
 	private oldServerpath : string = "resources/stserver/STServer";
     
-	constructor(public http:Http, private vocbenchCtx:VocbenchCtx) {
-        
-	}
+	constructor(public http:Http, private vocbenchCtx:VocbenchCtx) {}
     
     /*
 	 * params must be an object list like: 

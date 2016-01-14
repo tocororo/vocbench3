@@ -1,72 +1,129 @@
-html, body {
-	padding: 0;
-	margin: 0;
+rdf-resource {
+	display: block;
+	height: 24px;
+	position: relative;
 }
 
-#viewContainer {
+rdf-resource img {
+	/* to align vertically in rdf-resource container */
 	position: absolute;
-	top: 50;
-	bottom: 0;
-	width: 100%;
-	padding: 8px;
+	display: inline;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
-header {
-	background-color: #1B3671;
-	padding: 0;
-	margin: 0;
-	height: 50px;
+rdf-resource label {
+	margin: 0px 0px 0px 5px; /* override label margin defined in bootstrap */
+	left: 16px; /* push the label 16px from the left in order to left space to the resource icon */
+	/* to align vertically in rdf-resource container */
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
-header ul {
-	margin: 0;
-	padding-left: 16px;
-	width: 100%;
-	box-sizing: border-box; /* padding and border included in the element's total width and height */
+.selectedResource {
+	border: 1px solid #1b3671;
+	background-color: #a4afc8;
 }
 
-header ul li {
-	display: inline; /* dispose all the listitem inline */
-	line-height: 50px;
+.treeNode {
+	display: block;
+	height: 24px;
+	position: relative;
+	margin: 2px 0px;
 }
 
-header ul li a {
-	text-decoration: none;
-	color: #FFFFFF;
-	font-family: Arial;
-	font-size: 12px;
-	padding: 6px 8px 6px 8px;
-    border-radius: 3px;
+.treeNode .expandCollapseBtnContainer {
+	/* to align vertically in treeNode container */
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
-header ul li a:HOVER {
-	text-decoration: none;
-	background-color: #E8E7E7;
-	color: #000000;
+.treeNode rdf-resource {
+	margin: 0px 0px 0px 5px;
+	display: inline-block; /* To render the element next to the expand/collapse button */
+	border: 1px solid #eaeaea;
+	border-radius: 6px;
+	/* To make rdf-resource width fill the remaining width of the treeNode */
+	position: absolute;
+	left: 16px;
+	right: 0px;
+	/* to align vertically in treeNode container */
+	top: 50%;
+	transform: translateY(-50%);
 }
 
-.glyphicon-chevron-left, .glyphicon-chevron-right,
-.glyphicon-chevron-up, .glyphicon-chevron-down{
- 	color: #E8E7E7;
+.treeNode rdf-resource:HOVER {
+	background-color: #e5e5e5;
 }
 
-.glyphicon-chevron-left:HOVER, .glyphicon-chevron-right:HOVER,
-.glyphicon-chevron-up:HOVER, .glyphicon-chevron-down:HOVER{
- 	color: #1B3671;
+.subTree {
+	padding-left:15px;
+    /*border: 1px solid #1b3671;*/
 }
 
-.ui-splitbar {
-	background-color: #1B3671;
+.subtreeOpen {
+	max-height: 1600px; /* A big value possibly not exceeded by the content (to allow the transition) */
+	transition: max-height 0.5s ease-in;
+	overflow: hidden;
+	/*border: 1px solid green; */
 }
 
-.ui-splitbar:HOVER {
-	background-color: #7486AB;	
+.subtreeClose {
+	max-height: 0;
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+    /*border: 1px solid red; */
 }
 
-.uib-tab {
-	background-color: #7486AB;
+.conceptSchemeItem {
+	height: 24px;
+	position: relative;
+	margin: 2px 0px;
 }
 
+.conceptSchemeItem input[type=radio] {
+	/* to align vertically in container conceptSchemeRadio */
+	position: absolute;
+	display: inline;
+	top: 50%;
+	transform: translateY(-50%);
+	margin: 0px; /* override input margin defined in bootstrap */
+}
+
+.conceptSchemeItem rdf-resource {
+	border: 1px solid #eaeaea;
+	border-radius: 6px;
+	/* to align vertically in container conceptSchemeRadio */
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 16px; /* push the label rdf-resource from the left in order to left space to the radio input */
+	right: 0px;
+}
+
+.conceptSchemeItem rdf-resource:HOVER {
+    background-color: #e5e5e5;
+}
+
+.resourceViewPartition {
+	padding: 5px;
+	margin: 3px 0px;
+	border: 1px solid #a4afc8;
+	background: #e5e5e5;
+	border-radius: 4px;
+}
+
+.resourceViewPartition > label {
+	text-decoration: underline;
+}
+
+.panelCommandBar {
+    border-bottom: 1px solid #a4afc8;
+}
+
+/*The following still doesn't work*/
 input[disabled="disabled"]  {
 	filter : grayscale(100%);
 	opacity: 0.5;
@@ -75,5 +132,3 @@ input[disabled="disabled"]  {
 .CodeMirror { height: auto; border: 1px solid #ddd; }
 .CodeMirror-scroll { max-height: 200px; }
 .CodeMirror pre { padding-left: 7px; line-height: 1.25; }
-
-

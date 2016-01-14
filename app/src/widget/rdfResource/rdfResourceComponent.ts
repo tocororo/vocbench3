@@ -1,28 +1,24 @@
 import {Component, Input, OnInit} from "angular2/core";
-import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
+import {ResourceUtils} from "../../utils/ResourceUtils";
 
 @Component({
 	selector: "rdf-resource",
-	//templateUrl: "app/src/widget/rdfResource/rdfResource.html",
-    template: `
-        <img [src]="imageSrc">
-        <label>{{resourceShow}}</label>
-    `,
+	templateUrl: "app/src/widget/rdfResource/rdfResource.html",
+    providers: [ResourceUtils],
 })
 export class RdfResourceComponent implements OnInit {
-	@Input() resource:ARTNode;
+	@Input() resource:ARTResource;
 	public imageSrc: string;
 	public resourceShow: string;
 	
-	constructor() {
-        
-	}
+	constructor(private resUtils:ResourceUtils) {}
     
     ngOnInit() {
         console.log("In rdfResourceComponent " + JSON.stringify(this.resource));
-        //this.resource = new ARTURIResource("http://demo.it#concept", "concept", "concept");
-        this.imageSrc = "app/assets/images/concept.png";
-		this.resourceShow = this.resource.getShow();	//find a way to cast ARTNode to ARTURIResource
+        // this.imageSrc = "app/assets/images/concept.png";
+        this.imageSrc = this.resUtils.getImageSrc(this.resource);
+		this.resourceShow = this.resource.getShow();
     }
 	
 	//some function of the controller here

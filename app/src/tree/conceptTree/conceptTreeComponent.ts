@@ -17,7 +17,11 @@ export class ConceptTreeComponent implements OnInit {
 	constructor(private skosService:SkosServices, public deserializer:Deserializer) {}
     
     ngOnInit() {
-        this.skosService.getTopConcepts(this.scheme)
+        var schemeUri = null;
+        if (this.scheme != undefined) {
+            schemeUri = this.scheme.getURI();
+        }
+        this.skosService.getTopConcepts(schemeUri)
             .subscribe(
                 stResp => {
                     this.roots = this.deserializer.createRDFArray(stResp);
@@ -25,5 +29,5 @@ export class ConceptTreeComponent implements OnInit {
                 }
             );
     }
-	
+    
 }
