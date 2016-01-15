@@ -20,7 +20,7 @@ export class ProjectServices {
         return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService);
     }
     
-    disconnectFromProject(project) {
+    disconnectFromProject(project:string) {
         console.log("[ProjectServices] disconnectFromProject");
         var params = {
 				"consumer" : "SYSTEM",
@@ -29,7 +29,7 @@ export class ProjectServices {
         return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params, this.oldTypeService);
 	}
 	
-	accessProject(project) {
+	accessProject(project:string) {
         console.log("[ProjectServices] accessProject");
 		var params = {
 				"consumer" : "SYSTEM",

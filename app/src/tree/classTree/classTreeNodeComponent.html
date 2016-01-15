@@ -11,5 +11,5 @@
 </div>
 
 <div [ngClass]="subTreeStyle" *ngIf="node.getAdditionalProperty('more')==1">
-	<concept-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"></concept-tree-node>
+	<class-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n"></class-tree-node>
 </div>

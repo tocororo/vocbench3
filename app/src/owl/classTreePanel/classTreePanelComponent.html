@@ -1,0 +1,11 @@
+<!-- Commands -->
+<div class="panelCommandBar">
+	<input type="image" title="Create Class" src="app/assets/images/class_create.png" (click)="createClass()">
+	<!-- disabled when no node is selected  -->
+	<input type="image" title="Create SubClass" src="app/assets/images/class_addSubClass.png" (click)="createSubClass()" [disabled]="!selectedClass">
+	<input type="image" title="Delete Class" src="app/assets/images/class_delete.png" (click)="deleteClass()" [disabled]="!selectedClass">
+</div>
+
+<div>
+	<class-tree [rootclass]="rootClass"></class-tree>
+</div>

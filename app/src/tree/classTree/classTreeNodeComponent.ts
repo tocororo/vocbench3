@@ -1,43 +1,38 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
-import {SkosServices} from "../../services/skosServices";
+import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
-	selector: "concept-tree-node",
-	templateUrl: "app/src/tree/conceptTree/conceptTreeNodeComponent.html",
-    directives: [RdfResourceComponent, ConceptTreeNodeComponent],
-    providers: [SkosServices, Deserializer],
+	selector: "class-tree-node",
+	templateUrl: "app/src/tree/classTree/classTreeNodeComponent.html",
+    directives: [RdfResourceComponent, ClassTreeNodeComponent],
+    providers: [OwlServices, Deserializer],
 })
-export class ConceptTreeNodeComponent {
+export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;
-    @Input() scheme:ARTURIResource;
     // @Output() nodeSelevtedEvent:EventEmitter<ARTURIResource> = new EventEmitter();
     
     subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
-	constructor(private skosService:SkosServices, public deserializer:Deserializer) {}
+	constructor(private owlService:OwlServices, public deserializer:Deserializer) {}
     
     /**
- 	 * Function called when "+" button is clicked.
- 	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
- 	 * then expands the subtree div.
- 	 */
+	 * Function called when "+" button is clicked.
+	 * Gets a node as parameter and retrieve with an http call the subClass of the node,
+	 * then expands the subtree div.
+	 */
     expandNode() {
         if (this.node.getAdditionalProperty("more") == 1) { //if node has children
-       		var schemeUri = null; //no scheme mode
-    	    if (this.scheme != undefined) {
-    	    	schemeUri = this.scheme.getURI();
-    	    }
-    		this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri)
+    		this.owlService.getSubClasses(this.node.getURI())
                 .subscribe(
                     stResp => {
-                        var narrower = this.deserializer.createRDFArray(stResp);
-                        for (var i=0; i<narrower.length; i++) {
-                            narrower[i].setAdditionalProperty("children", []);
+                        var subClasses = this.deserializer.createRDFArray(stResp);
+                        for (var i=0; i<subClasses.length; i++) {
+                            subClasses[i].setAdditionalProperty("children", []);
                         }
-                        this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
+                        this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
                         console.log("Child of " + this.node.getShow() + " " + JSON.stringify(this.node.getAdditionalProperty("children")));
                         //change the class of the subTree div from subtreeClose to subtreeOpen
                         this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");

@@ -14,16 +14,16 @@ export class SkosServices {
     
     //Concept services 
     
-    getTopConcepts(scheme?) {
+    getTopConcepts(scheme?:string) {
         console.log("[SkosServices] getTopConcepts");
         var params:any = {};
         if (scheme != undefined) {
-		params.scheme = scheme;
-	}
+            params.scheme = scheme;
+        }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService);
     }
     
-    getNarrowerConcepts(concept, scheme) {
+    getNarrowerConcepts(concept:string, scheme:string) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params:any = {
             "concept" : concept,
@@ -35,7 +35,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService);
     }
     
-    createConcept(concept, scheme, prefLabel, prefLabelLang) {
+    createConcept(concept:string, scheme:string, prefLabel:string, prefLabelLang:string) {
         console.log("[SkosServices] createConcept");
         var params:any = {
             "concept" : concept,
@@ -48,7 +48,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService);
     }
     
-    deleteConcept(concept) {
+    deleteConcept(concept:string) {
         console.log("[SkosServices] deleteConcept");
         var params:any = {
             "concept" : concept,
@@ -56,7 +56,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService);
     }
     
-    createNarrower(concept, broader, scheme, prefLabel, prefLabelLang) {
+    createNarrower(concept:string, broader:string, scheme:string, prefLabel:string, prefLabelLang:string) {
         console.log("[SkosServices] createNarrower");
         var params:any = {
             "concept" : concept,
@@ -78,7 +78,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "getAllSchemesList", params, this.oldTypeService);
     }
     
-    createScheme(scheme, prefLabel, prefLabelLang) {
+    createScheme(scheme:string, prefLabel:string, prefLabelLang:string) {
         console.log("[SkosServices] createScheme");
         var params:any = {
             "scheme" : scheme,
@@ -90,7 +90,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService);
     }
     
-    deleteScheme(scheme, forceDeleteDanglingConcepts) {
+    deleteScheme(scheme:string, forceDeleteDanglingConcepts:boolean) {
         console.log("[SkosServices] deleteScheme");
         var params:any = {
             "scheme" : scheme,

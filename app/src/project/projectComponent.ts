@@ -43,12 +43,10 @@ export class ProjectComponent implements OnInit {
         console.log("new Project " + JSON.stringify(newProject));
         if (newProject != this.currentProject) {
             //disonnect from old project
-            if (this.currentProject != "") {
-                console.log("Disconnecting from project " + this.currentProject);
+            if (this.currentProject != "SYSTEM") {
                 this.projectService.disconnectFromProject(this.currentProject)
             }
             //access the new one
-            console.log("Accessing project " + newProject);
             this.projectService.accessProject(newProject)
                 .subscribe(
                 data => {

@@ -1,6 +1,6 @@
 <div class="treeNode">
 	<div class="expandCollapseBtnContainer">
-		<input type="image" *ngIf="node.getAdditionalProperty('more')==1 && !node.getAdditionalProperty('open')"
+		<input type="image" *ngIf="node.getAdditionalProperty('children').length > 0 && !node.getAdditionalProperty('open')"
             src="app/assets/images/tree_expand.png"
             (click)="expandNode()">
 		<input type="image" *ngIf="node.getAdditionalProperty('open')"
@@ -10,6 +10,6 @@
 	<rdf-resource [resource]="node" (click)="selectNode()"></rdf-resource>
 </div>
 
-<div [ngClass]="subTreeStyle" *ngIf="node.getAdditionalProperty('more')==1">
-	<concept-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"></concept-tree-node>
+<div [ngClass]="subTreeStyle" *ngIf="node.getAdditionalProperty('children').length > 0">
+	<property-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"></property-tree-node>
 </div>

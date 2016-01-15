@@ -1,7 +1,6 @@
 import {Component, OnInit} from "angular2/core";
-import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ConceptTreePanelComponent} from "./conceptTreePanel/ConceptTreePanelComponent";
-import {ARTNode, ARTURIResource} from "../utils/ARTResources";
+import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({
