@@ -1,6 +1,7 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
+import {VBEventHandler} from "../../utils/VBEventHandler";
 import {SkosServices} from "../../services/skosServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
@@ -11,13 +12,14 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
     providers: [SkosServices, Deserializer],
 })
 export class ConceptTreeNodeComponent {
-	@Input() node:ARTURIResource;
-    @Input() scheme:ARTURIResource;
-    // @Output() nodeSelevtedEvent:EventEmitter<ARTURIResource> = new EventEmitter();
+    @Input() node: ARTURIResource;
+    @Input() scheme: ARTURIResource;
     
-    subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
+    subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
 	
-	constructor(private skosService:SkosServices, public deserializer:Deserializer) {}
+	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
+        this.eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
+    }
     
     /**
  	 * Function called when "+" button is clicked.
@@ -38,7 +40,6 @@ export class ConceptTreeNodeComponent {
                             narrower[i].setAdditionalProperty("children", []);
                         }
                         this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
-                        console.log("Child of " + this.node.getShow() + " " + JSON.stringify(this.node.getAdditionalProperty("children")));
                         //change the class of the subTree div from subtreeClose to subtreeOpen
                         this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
                     }
@@ -61,8 +62,22 @@ export class ConceptTreeNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     selectNode() {
-        console.log("node " + this.node.getShow() + " selected");
-        // this.nodeSelevtedEvent.emit("nodeSelevtedEvent", this.node);
+        this.eventHandler.conceptTreeNodeSelectedEvent.emit(this.node);
     }
-	
+    
+    onConceptDeleted(concept:ARTURIResource) {
+        var children = this.node.getAdditionalProperty("children");
+        for (var i=0; i<children.length; i++) {
+            if (children[i].getURI() == concept.getURI()) {
+                children.splice(i, 1);
+                //if node has no more children change info of node so the UI will update
+   				if (children.length == 0) {
+   					this.node.setAdditionalProperty("more", 0);
+   					this.node.setAdditionalProperty("open", false);
+   				}
+                break;
+            }
+        }
+    }
+    
 }

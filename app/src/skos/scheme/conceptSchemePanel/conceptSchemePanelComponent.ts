@@ -24,7 +24,6 @@ export class ConceptSchemePanelComponent implements OnInit {
             .subscribe(
                 stResp => {
                     this.schemeList = this.deserializer.createRDFArray(stResp);
-                    console.log("schemeList SchemesComponent onInit " + JSON.stringify(this.schemeList));
                 }
             );
         this.selectedScheme = this.vbCtx.getScheme();

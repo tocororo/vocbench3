@@ -7,8 +7,10 @@ import { ConceptsComponent } from "./skos/conceptsComponent";
 import { ClassComponent } from "./owl/classComponent";
 import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
+import { TestComponent } from "./test/testComponent";
 import { HttpManager } from "./utils/HttpManager";
 import { VocbenchCtx } from "./utils/VocbenchCtx";
+import { VBEventHandler } from "./utils/VBEventHandler";
 
 @Component({
 	selector: "app",
@@ -23,7 +25,7 @@ import { VocbenchCtx } from "./utils/VocbenchCtx";
     {path: "/Concepts", name: "Concepts", component: ConceptsComponent},
     {path: "/Schemes",  name: "Schemes",  component: SchemesComponent},
     {path: "/Sparql",   name: "Sparql",   component: ProjectComponent},
-    {path: "/Test",     name: "Test",     component: ProjectComponent},
+    {path: "/Test",     name: "Test",     component: TestComponent},
 ])
 
 export class App {
@@ -32,8 +34,8 @@ export class App {
 
 bootstrap(App, [
 	ROUTER_PROVIDERS, HTTP_PROVIDERS,
-    HttpManager, VocbenchCtx
-]); 
+    HttpManager, VocbenchCtx, VBEventHandler
+]);
 /**
  * 2nd argument is an array of providers injectable 
  * Providers can be injected punctually in a Component if needed (using the proviers: [] array), or

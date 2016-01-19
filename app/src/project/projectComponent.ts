@@ -40,7 +40,6 @@ export class ProjectComponent implements OnInit {
     }
     
     onChange(newProject) {
-        console.log("new Project " + JSON.stringify(newProject));
         if (newProject != this.currentProject) {
             //disonnect from old project
             if (this.currentProject != "SYSTEM") {

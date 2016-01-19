@@ -1,5 +1,5 @@
 import {Component, OnInit} from "angular2/core";
-import {ConceptTreePanelComponent} from "./conceptTreePanel/ConceptTreePanelComponent";
+import {ConceptTreePanelComponent} from "./conceptTreePanel/conceptTreePanelComponent";
 import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 

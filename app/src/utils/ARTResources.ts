@@ -6,6 +6,7 @@ export interface ARTNode {
 	getNominalValue(): string;
 	toNT(): string;
     setAdditionalProperty(propName: string, propValue): void;
+    deleteAdditionalProperty(propName: string): void;
     getAdditionalProperty(propName: string): string;
 }
 
@@ -65,6 +66,10 @@ export class ARTURIResource implements ARTResource {
         this[propName] = propValue;
     }
     
+    deleteAdditionalProperty(propName: string) {
+        delete this[propName];
+    }
+    
     getAdditionalProperty(propName: string) {
         return this[propName];
     }
@@ -120,6 +125,10 @@ export class ARTBNode implements ARTResource {
     
     setAdditionalProperty(propName: string, propValue): void {
         this[propName] = propValue;
+    }
+    
+    deleteAdditionalProperty(propName: string) {
+        delete this[propName];
     }
     
     getAdditionalProperty(propName: string) {
@@ -189,6 +198,10 @@ export class ARTLiteral implements ARTNode {
     
     setAdditionalProperty(propName: string, propValue): void {
         this[propName] = propValue;
+    }
+    
+    deleteAdditionalProperty(propName: string) {
+        delete this[propName];
     }
     
     getAdditionalProperty(propName: string) {
