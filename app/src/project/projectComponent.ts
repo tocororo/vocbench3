@@ -33,13 +33,12 @@ export class ProjectComponent implements OnInit {
 				    }
                     this.projectList = projects;
                 },
-                err => console.log(err),
-                () => {}
+                err => console.log(err)
             );
         this.currentProject = this.vbCtx.getProject();
     }
     
-    onChange(newProject) {
+    public changeProject(newProject) {
         if (newProject != this.currentProject) {
             //disonnect from old project
             if (this.currentProject != "SYSTEM") {
@@ -48,13 +47,12 @@ export class ProjectComponent implements OnInit {
             //access the new one
             this.projectService.accessProject(newProject)
                 .subscribe(
-                data => {
-                    this.currentProject = newProject;
-                    this.vbCtx.setProject(newProject);
-                },
-                err => console.log(err),
-                () => { }
-            );
+                    data => {
+                        this.currentProject = newProject;
+                        this.vbCtx.setProject(newProject);
+                    },
+                    err => console.log(err)
+                );
         }
     }
     

@@ -59,7 +59,7 @@ rdf-resource label {
 }
 
 .subTree {
-	padding-left:20px;
+	padding-left:15px;
     /*border: 1px solid #1b3671;*/
 }
 
@@ -124,7 +124,7 @@ rdf-resource label {
 }
 
 /*The following still doesn't work*/
-input[disabled="disabled"]  {
+input[type="image"]:disabled  {
 	filter : grayscale(100%);
 	opacity: 0.5;
 }

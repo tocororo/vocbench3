@@ -1,7 +1,7 @@
 import {Component, OnInit} from "angular2/core";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
-import {Deserializer} from "../../../utils/Deserializer";
 import {SkosServices} from "../../../services/skosServices";
+import {Deserializer} from "../../../utils/Deserializer";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 
@@ -9,7 +9,7 @@ import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 	selector: "concept-scheme-panel",
 	templateUrl: "app/src/skos/scheme/conceptSchemePanel/conceptSchemePanelComponent.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, Deserializer],
+    providers: [SkosServices],
 })
 export class ConceptSchemePanelComponent implements OnInit {
     
@@ -29,16 +29,16 @@ export class ConceptSchemePanelComponent implements OnInit {
         this.selectedScheme = this.vbCtx.getScheme();
     }
     
-    createScheme() {
+    public createScheme() {
         alert("creating scheme");    
     }
     
-    deleteScheme() {
+    public deleteScheme() {
         alert("deleting scheme " + this.focusedScheme.getURI());    
     }
     
     //this is not Angular-way, is a workaround, radio button is not still fully supported, check it again in the future
-    selectScheme(selSchemeUri) {
+    public selectScheme(selSchemeUri) {
         for (var i=0; i < this.schemeList.length; i++) {
             if (this.schemeList[i].getURI() == selSchemeUri) {
                 this.selectedScheme = this.schemeList[i];
@@ -51,14 +51,14 @@ export class ConceptSchemePanelComponent implements OnInit {
     /**
      * Called when a scheme is clicked. Set the clicked scheme as focused. Useful to select a scheme to delete
      */
-    focusScheme(scheme:ARTURIResource) {
+    public focusScheme(scheme:ARTURIResource) {
         this.focusedScheme = scheme;
     }
     
     /**
      * Check if a scheme is focused. Useful to apply style (show the scheme item as higlighted)
      */
-    isFocused(scheme:ARTURIResource) {
+    public isFocused(scheme:ARTURIResource) {
         if (this.focusedScheme != undefined && scheme != undefined) {
             return this.focusedScheme.getURI() == scheme.getURI();    
         } else {

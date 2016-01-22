@@ -9,16 +9,24 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 	selector: "concept-tree-node",
 	templateUrl: "app/src/tree/conceptTree/conceptTreeNodeComponent.html",
     directives: [RdfResourceComponent, ConceptTreeNodeComponent],
-    providers: [SkosServices, Deserializer],
+    providers: [SkosServices],
 })
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Input() scheme: ARTURIResource;
     
-    subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
+    private subscrConcDeleted;
+    private subscrNarrowerCreated;
+    public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
 	
 	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
+        this.subscrConcDeleted = eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
+        this.subscrNarrowerCreated = eventHandler.narrowerCreatedEvent.subscribe(data => this.onNarrowerCreated(data));
+    }
+    
+    ngOnDestroy() {
+        this.subscrConcDeleted.unsubscribe();
+        this.subscrNarrowerCreated.unsubscribe();
     }
     
     /**
@@ -26,7 +34,7 @@ export class ConceptTreeNodeComponent {
  	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
  	 * then expands the subtree div.
  	 */
-    expandNode() {
+    public expandNode() {
         if (this.node.getAdditionalProperty("more") == 1) { //if node has children
        		var schemeUri = null; //no scheme mode
     	    if (this.scheme != undefined) {
@@ -52,7 +60,7 @@ export class ConceptTreeNodeComponent {
    	 * Function called when "-" button is clicked.
    	 * Collapse the subtree div.
    	 */
-    collapseNode() {
+    public collapseNode() {
 		this.node.setAdditionalProperty("open", false);
 		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
         this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
@@ -61,11 +69,13 @@ export class ConceptTreeNodeComponent {
     /**
      * Called when a node in the tree is clicked. This function emit an event 
      */
-    selectNode() {
+    public selectNode() {
         this.eventHandler.conceptTreeNodeSelectedEvent.emit(this.node);
     }
     
-    onConceptDeleted(concept:ARTURIResource) {
+    //EVENT LISTENERS
+    
+    private onConceptDeleted(concept:ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
             if (children[i].getURI() == concept.getURI()) {
@@ -77,6 +87,15 @@ export class ConceptTreeNodeComponent {
    				}
                 break;
             }
+        }
+    }
+    
+    //data contains "resource" and "parent"
+    private onNarrowerCreated(data) {
+        //add the new concept as children only if the parent is the current concept
+        if (this.node.getURI() == data.parent.getURI()) {
+            this.node.getAdditionalProperty("children").push(data.resource);
+            this.node.setAdditionalProperty("more", 1);
         }
     }
     

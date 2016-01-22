@@ -1,7 +1,5 @@
 import {Injectable} from 'angular2/core';
 import {Http} from 'angular2/http';
-import 'rxjs/add/operator/map'; //CHECK IF THIS STILL BE NEEDED IN FUTURE VERSION
-
 import {HttpManager} from "../utils/HttpManager";
 
 @Injectable()

@@ -51,7 +51,7 @@ export class HttpManager {
             .map(res => {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
-			        var stResp = parser.parseFromString(res.text(), "application/xml"); 
+                    var stResp = parser.parseFromString(res.text(), "application/xml");
                     return stResp;     
                 } else if (this.isResponseJson(res)) {
                     return res.json();

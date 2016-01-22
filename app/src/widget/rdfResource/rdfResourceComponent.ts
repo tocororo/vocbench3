@@ -15,7 +15,6 @@ export class RdfResourceComponent implements OnInit {
 	constructor(private resUtils:ResourceUtils) {}
     
     ngOnInit() {
-        //console.log("In rdfResourceComponent " + JSON.stringify(this.resource));
         this.imageSrc = this.resUtils.getImageSrc(this.resource);
 		this.resourceShow = this.resource.getShow();
     }

@@ -1,25 +1,29 @@
 import {Component, Input, OnInit} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
-import {SkosServices} from "../../services/skosServices";
 import {VBEventHandler} from "../../utils/VBEventHandler";
-import {ConceptTreeNodeComponent} from "./ConceptTreeNodeComponent";
+import {SkosServices} from "../../services/skosServices";
+import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 
 @Component({
 	selector: "concept-tree",
 	templateUrl: "app/src/tree/conceptTree/conceptTreeComponent.html",
     directives: [ConceptTreeNodeComponent],
-    providers: [SkosServices, Deserializer],
+    providers: [SkosServices],
 })
 export class ConceptTreeComponent implements OnInit {
 	@Input() scheme:ARTURIResource;
     public roots:ARTURIResource[];
-    public selectedNode:ARTURIResource;
+    private selectedNode:ARTURIResource;
+    
+    private subscrNodeSelected;
+    private subscrTopConcCreated;
+    private subscrConcDeleted;
 	
 	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onConceptSelected(node));
-        this.eventHandler.conceptCreatedEvent.subscribe(concept => this.onConceptCreated(concept));
-        this.eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
+        this.subscrNodeSelected = eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onConceptSelected(node));
+        this.subscrTopConcCreated = eventHandler.topConceptCreatedEvent.subscribe(concept => this.onTopConceptCreated(concept));
+        this.subscrConcDeleted = eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
     }
     
     ngOnInit() {
@@ -38,7 +42,15 @@ export class ConceptTreeComponent implements OnInit {
             );
     }
     
-    onConceptSelected(node:ARTURIResource) {
+    ngOnDestroy() {
+        this.subscrNodeSelected.unsubscribe();
+        this.subscrTopConcCreated.unsubscribe();
+        this.subscrConcDeleted.unsubscribe();
+    }
+    
+    //EVENT LISTENERS
+    
+    private onConceptSelected(node:ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);    
@@ -47,15 +59,15 @@ export class ConceptTreeComponent implements OnInit {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);
         }
-        return true;
     }
     
-    onConceptCreated(concept:ARTURIResource) {
+    private onTopConceptCreated(concept:ARTURIResource) {
         this.roots.push(concept);
     }
     
-    onConceptDeleted(concept:ARTURIResource) {
-        for (var i=0; i<this.roots.length; i++) {
+    private onConceptDeleted(concept:ARTURIResource) {
+        //check if the concept to delete is a root
+        for (var i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == concept.getURI()) {
                 this.roots.splice(i, 1);
                 break;

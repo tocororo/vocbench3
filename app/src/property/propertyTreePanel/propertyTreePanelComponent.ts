@@ -1,45 +1,87 @@
 import {Component, Input} from "angular2/core";
-import {PropertyTreeComponent} from "../../tree/propertyTree/PropertyTreeComponent";
+import {PropertyTreeComponent} from "../../tree/propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {VBEventHandler} from "../../utils/VBEventHandler";
+import {Deserializer} from "../../utils/Deserializer";
+import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
 	selector: "property-tree-panel",
 	templateUrl: "app/src/property/propertyTreePanel/propertyTreePanelComponent.html",
-	directives: [PropertyTreeComponent]
+	directives: [PropertyTreeComponent],
+    providers: [PropertyServices],
 })
 export class PropertyTreePanelComponent {
+    
     private selectedProperty:ARTURIResource;
+    private subscrNodeSelected;
     
-	constructor() {}
-    
-    createProperty() {
-        alert("create property");
+	constructor(private propService:PropertyServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
+        this.subscrNodeSelected = eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node));
+        this.subscrNodeSelected = eventHandler.topPropertyCreatedEvent.subscribe(node => this.onNodeSelected(node));
     }
     
-    createObjectProperty() {
-        alert("create object property");
+    public createProperty() {
+        this.createPropertyForType("rdf:Property");
     }
     
-    createDatatypeProperty() {
-        alert("create datatype property");
+    public createObjectProperty() {
+        this.createPropertyForType("owl:ObjectProperty");
     }
     
-    createAnnotationProperty() {
-        alert("create annotation property");
+    public createDatatypeProperty() {
+        this.createPropertyForType("owl:DatatypeProperty");
     }
     
-    createOntologyProperty() {
-        alert("create ontology property");
+    public createAnnotationProperty() {
+        this.createPropertyForType("owl:AnnotationProperty");
     }
     
-    /* the following methods still cannot be used 'cause to selectedClass should be updated 
-       through event emitted from. Need to understand how to emit/broadcast event in NG2 */ 
-    createSubProperty() {
-        alert("create subProperty of..." + JSON.stringify(this.selectedProperty));
+    public createOntologyProperty() {
+        this.createPropertyForType("owl:OntologyProperty");
     }
     
-    deleteClass() {
-        alert("delete Property..." + JSON.stringify(this.selectedProperty));
+    private createPropertyForType(type) {
+        var propertyName = prompt("Insert property name");
+        if (propertyName == null) return;
+        this.propService.addProperty(propertyName, type)
+            .subscribe(
+                stResp => {
+                    var newProp = this.deserializer.createURI(stResp);
+                    newProp.setAdditionalProperty("children", []);
+                    this.eventHandler.topPropertyCreatedEvent.emit(newProp);       
+                }
+            );
     }
+    
+    public createSubProperty() {
+        var propertyName = prompt("Insert property name");
+        if (propertyName == null) return;
+        this.propService.addSubProperty(propertyName, this.selectedProperty.getRole(), this.selectedProperty.getURI())
+            .subscribe(
+                stResp => {
+                    var newProp = this.deserializer.createURI(stResp);
+                    newProp.setAdditionalProperty("children", []);
+                    this.eventHandler.subPropertyCreatedEvent.emit({"resource": newProp, "parent": this.selectedProperty});       
+                }
+            );
+    }
+    
+    public deleteProperty() {
+        this.propService.removeProperty(this.selectedProperty.getURI())
+            .subscribe(
+                stResp => {
+                    this.eventHandler.propertyDeletedEvent.emit(this.selectedProperty);
+                    this.selectedProperty = null;
+                }
+            );
+    }
+    
+    //EVENT LISTENERS
+    
+    private onNodeSelected(node:ARTURIResource) {
+        this.selectedProperty = node;
+    }
+    
     
 }

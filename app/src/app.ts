@@ -1,4 +1,4 @@
-import { Component, provide } from "angular2/core";
+import { Component } from "angular2/core";
 import { bootstrap } from "angular2/platform/browser";
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from "angular2/router";
 import { HTTP_PROVIDERS } from 'angular2/http';
@@ -9,6 +9,8 @@ import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { TestComponent } from "./test/testComponent";
 import { HttpManager } from "./utils/HttpManager";
+import { Deserializer } from "./utils/Deserializer";
+import { STResponseUtils } from "./utils/STResponseUtils";
 import { VocbenchCtx } from "./utils/VocbenchCtx";
 import { VBEventHandler } from "./utils/VBEventHandler";
 
@@ -34,7 +36,7 @@ export class App {
 
 bootstrap(App, [
 	ROUTER_PROVIDERS, HTTP_PROVIDERS,
-    HttpManager, VocbenchCtx, VBEventHandler
+    HttpManager, VocbenchCtx, VBEventHandler, STResponseUtils, Deserializer
 ]);
 /**
  * 2nd argument is an array of providers injectable 

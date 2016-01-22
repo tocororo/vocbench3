@@ -1,7 +1,5 @@
 import {Injectable} from 'angular2/core';
 import {Http} from 'angular2/http';
-import 'rxjs/add/operator/map'; //CHECK IF THIS STILL BE NEEDED IN FUTURE VERSION
-
 import {HttpManager} from "../utils/HttpManager";
 
 @Injectable()
@@ -29,9 +27,9 @@ export class SkosServices {
             "concept" : concept,
 			"treeView" : true,
         };
-		if (scheme != undefined) {
-			params.scheme = scheme;
-		}
+        if (scheme != undefined) {
+            params.scheme = scheme;
+        }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService);
     }
     
@@ -41,10 +39,10 @@ export class SkosServices {
             "concept" : concept,
 			"scheme" : scheme,
         };
-		if (prefLabel != undefined && prefLabelLang != undefined) {
-			params.prefLabel = prefLabel;
-			params.prefLabelLang = prefLabelLang;
-		}
+        if (prefLabel != undefined && prefLabelLang != undefined) {
+            params.prefLabel = prefLabel;
+            params.prefLabelLang = prefLabelLang;
+        }
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService);
     }
     
@@ -63,11 +61,11 @@ export class SkosServices {
 			"broaderConcept" : broader,
 			"scheme" : scheme,
         };
-		if (prefLabel != undefined && prefLabelLang != undefined) {
-			params.prefLabel = prefLabel;
-			params.prefLabelLang = prefLabelLang;
-		}
-        return this.httpMgr.doGet(this.serviceName, "createNarrower", params, this.oldTypeService);
+        if (prefLabel != undefined && prefLabelLang != undefined) {
+            params.prefLabel = prefLabel;
+            params.prefLabelLang = prefLabelLang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService);
     }
     
     //Scheme services
@@ -83,21 +81,22 @@ export class SkosServices {
         var params:any = {
             "scheme" : scheme,
         };
-		if (prefLabel != undefined && prefLabelLang != undefined) {
-			params.prefLabel = prefLabel;
-			params.prefLabelLang = prefLabelLang;
-		}
+        if (prefLabel != undefined && prefLabelLang != undefined) {
+            params.prefLabel = prefLabel;
+            params.prefLabelLang = prefLabelLang;
+        }
         return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService);
     }
     
-    deleteScheme(scheme:string, forceDeleteDanglingConcepts:boolean) {
+    deleteScheme(scheme:string, forceDeleteDanglingConcepts?:boolean) {
         console.log("[SkosServices] deleteScheme");
         var params:any = {
             "scheme" : scheme,
+            "setForceDeleteDanglingConcepts" : forceDeleteDanglingConcepts != undefined,
         };
-		if (forceDeleteDanglingConcepts != undefined) {
-			params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
-		}
+        if (forceDeleteDanglingConcepts != undefined) {
+            params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
+        }
         return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService);
     }
 

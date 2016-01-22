@@ -10,4 +10,3 @@
     <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="selectScheme(input.value);" />
 	<rdf-resource [resource]="s" (click)="focusScheme(s)" [ngClass]="{selectedResource : isFocused(s)}"></rdf-resource>
 </div>
-<p *ngIf="selectedScheme">selected is {{selectedScheme.getShow()}}</p>
