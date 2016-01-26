@@ -10,8 +10,7 @@
     <input type="image" title="Delete Concept" src="app/assets/images/concept_delete.png"
         (click)="deleteConcept()" [disabled]="!selectedConcept">
     <!-- Shown in no scheme mode -->
-    <!--routerLink doesn't work, investigate on it-->
-    <a [routerLink]="['Concepts']" title="No skos:ConceptScheme selected" style="float: right;" *ngIf="!scheme">
+    <a [routerLink]="['/Schemes']" title="No skos:ConceptScheme selected" style="float: right;" *ngIf="!scheme">
         <img src="app/assets/images/warning.png">
     </a>
 </div>

@@ -20,7 +20,7 @@ export class ClassTreePanelComponent {
     
 	constructor(private owlService:OwlServices, private deserializer:Deserializer, private respUtils:STResponseUtils, 
             private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node));   
+        this.subscrNodeSelected = eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)); 
     }
     
     ngOnInit() {

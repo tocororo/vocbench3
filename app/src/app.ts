@@ -1,6 +1,6 @@
 import { Component } from "angular2/core";
 import { bootstrap } from "angular2/platform/browser";
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from "angular2/router";
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Location } from "angular2/router";
 import { HTTP_PROVIDERS } from 'angular2/http';
 import { ProjectComponent } from "./project/projectComponent";
 import { ConceptsComponent } from "./skos/conceptsComponent";
@@ -31,7 +31,21 @@ import { VBEventHandler } from "./utils/VBEventHandler";
 ])
 
 export class App {
-	
+    private id;
+    constructor(private location:Location, private vbCtx:VocbenchCtx) {
+        this.id = Date.now();
+    }
+    
+    //returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links 
+    public isActive(viewLocation) {
+        return this.location.path() == viewLocation;
+    }
+    
+    //returns true if a project is open. Useful to enable/disable navbar links 
+    public isProjectOpen() {
+        return this.vbCtx.getProject() != "SYSTEM";
+    }
+    
 }
 
 bootstrap(App, [

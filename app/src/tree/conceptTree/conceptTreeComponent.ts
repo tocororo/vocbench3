@@ -20,7 +20,7 @@ export class ConceptTreeComponent implements OnInit {
     private subscrTopConcCreated;
     private subscrConcDeleted;
 	
-	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
+    constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.subscrNodeSelected = eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onConceptSelected(node));
         this.subscrTopConcCreated = eventHandler.topConceptCreatedEvent.subscribe(concept => this.onTopConceptCreated(concept));
         this.subscrConcDeleted = eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));

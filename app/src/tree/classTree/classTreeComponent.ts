@@ -17,12 +17,12 @@ export class ClassTreeComponent implements OnInit {
     private selectedNode:ARTURIResource;
     
     private subscrNodeSelected;
-    private subscrRootClassCreated;
     private subscrClassDeleted;
 	
 	constructor(private owlService:OwlServices, public deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.subscrNodeSelected = eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node));
         this.subscrClassDeleted = eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls));
+        
     }
     
     ngOnInit() {
@@ -45,7 +45,6 @@ export class ClassTreeComponent implements OnInit {
     
     ngOnDestroy() {
         this.subscrNodeSelected.unsubscribe();
-        this.subscrRootClassCreated.unsubscribe();
         this.subscrClassDeleted.unsubscribe();
     }
     

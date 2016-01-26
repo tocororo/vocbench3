@@ -41,7 +41,6 @@ export class PropertyTreeComponent implements OnInit {
     }
     
     private parseProperty(propXml): ARTURIResource {
-        var deleteForbidden = propXml.getAttribute("deleteForbidden");
         var show = propXml.getAttribute("name");
         var role = propXml.getAttribute("type");
         var uri = propXml.getAttribute("uri");

@@ -11,7 +11,7 @@ import {ROUTER_DIRECTIVES} from "angular2/router";
 @Component({
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/conceptTreePanel/conceptTreePanelComponent.html",
-	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES], //ROUTER_DIRECTIVES for router_link in noScheme image button (check)
+	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES], //ROUTER_DIRECTIVES for routerLink in noScheme image button
     providers: [SkosServices]
 })
 export class ConceptTreePanelComponent {
