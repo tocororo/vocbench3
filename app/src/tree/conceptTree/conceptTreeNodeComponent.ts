@@ -50,7 +50,8 @@ export class ConceptTreeNodeComponent {
                         this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
                         //change the class of the subTree div from subtreeClose to subtreeOpen
                         this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
-                    }
+                    },
+                    err => alert("Error: " + err)
                 );
             this.node.setAdditionalProperty("open", true);
         }

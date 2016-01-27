@@ -39,7 +39,8 @@ export class ClassTreeComponent implements OnInit {
                     for (var i=0; i<this.roots.length; i++) {
                         this.roots[i].setAdditionalProperty("children", []);
                     }
-                }
+                },
+                err => alert("Error: " + err)
             );
     }
     

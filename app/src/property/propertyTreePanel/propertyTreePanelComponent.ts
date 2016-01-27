@@ -50,7 +50,8 @@ export class PropertyTreePanelComponent {
                     var newProp = this.deserializer.createURI(stResp);
                     newProp.setAdditionalProperty("children", []);
                     this.eventHandler.topPropertyCreatedEvent.emit(newProp);       
-                }
+                },
+                err => alert("Error: " + err)
             );
     }
     
@@ -63,7 +64,8 @@ export class PropertyTreePanelComponent {
                     var newProp = this.deserializer.createURI(stResp);
                     newProp.setAdditionalProperty("children", []);
                     this.eventHandler.subPropertyCreatedEvent.emit({"resource": newProp, "parent": this.selectedProperty});       
-                }
+                },
+                err => alert("Error: " + err)
             );
     }
     
@@ -73,7 +75,8 @@ export class PropertyTreePanelComponent {
                 stResp => {
                     this.eventHandler.propertyDeletedEvent.emit(this.selectedProperty);
                     this.selectedProperty = null;
-                }
+                },
+                err => alert("Error: " + err)
             );
     }
     

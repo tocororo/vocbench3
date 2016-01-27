@@ -39,14 +39,11 @@ export class ClassTreePanelComponent {
         this.owlService.createClass(this.rootClass.getURI(), className)
             .subscribe(
                 stResp => {
-                    if (this.respUtils.isException(stResp)) { //when class already exists
-                        alert(this.respUtils.getExceptionMessage(stResp));
-                    } else {
-                        var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                        newClass.setAdditionalProperty("children", []);
-                        this.eventHandler.subClassCreatedEvent.emit({"resource": newClass, "parent": this.rootClass});
-                    }
-                }
+                    var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                    newClass.setAdditionalProperty("children", []);
+                    this.eventHandler.subClassCreatedEvent.emit({ "resource": newClass, "parent": this.rootClass });
+                },
+                err => alert("Error: " + err)
             );
     }
     
@@ -56,14 +53,11 @@ export class ClassTreePanelComponent {
         this.owlService.createClass(this.selectedClass.getURI(), className)
             .subscribe(
                 stResp => {
-                    if (this.respUtils.isException(stResp)) { //when class already exists
-                        alert(this.respUtils.getExceptionMessage(stResp));
-                    } else {
-                        var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                        newClass.setAdditionalProperty("children", []);
-                        this.eventHandler.subClassCreatedEvent.emit({"resource": newClass, "parent": this.selectedClass});
-                    }
-                }
+                    var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                    newClass.setAdditionalProperty("children", []);
+                    this.eventHandler.subClassCreatedEvent.emit({"resource": newClass, "parent": this.selectedClass});
+                },
+                err => alert("Error: " + err)
             );
     }
     
@@ -71,13 +65,10 @@ export class ClassTreePanelComponent {
         this.owlService.deleteClass(this.selectedClass.getURI())
             .subscribe(
                 stResp => {
-                    if (this.respUtils.isFail(stResp)) { //when class has subClasses
-                        alert(this.respUtils.getFailMessage(stResp));
-                    } else {
-                        this.eventHandler.classDeletedEvent.emit(this.selectedClass);
-                        this.selectedClass = null;
-                    }
-                }
+                    this.eventHandler.classDeletedEvent.emit(this.selectedClass);
+                    this.selectedClass = null;
+                },
+                err => alert("Error: " + err)
             )
     }
     

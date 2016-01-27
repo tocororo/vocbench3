@@ -41,7 +41,7 @@ export class ProjectComponent implements OnInit {
 				    }
                     this.projectList = projects;
                 },
-                err => console.log(err)
+                err => alert("Error: " + err)
             );
     }
     
@@ -109,7 +109,7 @@ export class ProjectComponent implements OnInit {
     private connectToProject(project) {
         this.projectService.accessProject(project.name)
             .subscribe(
-                data => {
+                stResp => {
                     this.vbCtx.setProject(project.name);
                     project.open = true;
                 },
@@ -121,8 +121,10 @@ export class ProjectComponent implements OnInit {
         this.projectService.disconnectFromProject(project.name)
             .subscribe(
                 stResp => {
+                    this.vbCtx.setProject("SYSTEM");
                     project.open = false;
-                } 
+                },
+                err => alert("Error: " + err)
             );
     }
     

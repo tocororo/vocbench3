@@ -36,7 +36,8 @@ export class PropertyTreeComponent implements OnInit {
                         var p = this.parseProperty(propertiesXml[i]);
                         this.propertyTree.push(p);
                     }
-                }
+                },
+                err => alert("Error: " + err)
             );
     }
     
