@@ -46,7 +46,10 @@ export class ClassTreeNodeComponent {
                         //change the class of the subTree div from subtreeClose to subtreeOpen
                         this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
                     },
-                    err => alert("Error: " + err)
+                    err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
                 );
             this.node.setAdditionalProperty("open", true);
         }

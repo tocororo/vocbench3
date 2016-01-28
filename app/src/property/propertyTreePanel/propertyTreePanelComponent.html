@@ -1,21 +1,22 @@
-<!-- Commands -->
-<div class="panelCommandBar">
-    <input type="image" title="Create Property" src="app/assets/images/prop_create.png"
-        (click)="createProperty()">
-	<input type="image" title="Create Object Property" src="app/assets/images/propObject_create.png"
-        (click)="createObjectProperty()">
-    <input type="image" title="Create Datatype Property" src="app/assets/images/propDatatype_create.png"
-        (click)="createDatatypeProperty()">
-    <input type="image" title="Create Annotation Property" src="app/assets/images/propAnnotation_create.png"
-        (click)="createAnnotationProperty()">
-    <input type="image" title="Create Ontology Property" src="app/assets/images/propOntology_create.png"
-        (click)="createOntologyProperty()">
-    <input type="image" title="Create SubProperty" src="app/assets/images/prop_addSubProperty.png"
-        (click)="createSubProperty()" [disabled]="!selectedProperty">
-    <input type="image" title="Delete Property" src="app/assets/images/prop_delete.png"
-        (click)="deleteProperty()" [disabled]="!selectedProperty || selectedProperty.getAdditionalProperty('deleteForbidden')">
-</div>
-
-<div>
-	<property-tree></property-tree>
+<div class="panel panel-default">
+    <!-- Commands -->
+    <div class="panel-heading">
+        <input type="image" title="Create Property" src="app/assets/images/prop_create.png"
+            (click)="createProperty()">
+        <input type="image" title="Create Object Property" src="app/assets/images/propObject_create.png"
+            (click)="createObjectProperty()">
+        <input type="image" title="Create Datatype Property" src="app/assets/images/propDatatype_create.png"
+            (click)="createDatatypeProperty()">
+        <input type="image" title="Create Annotation Property" src="app/assets/images/propAnnotation_create.png"
+            (click)="createAnnotationProperty()">
+        <input type="image" title="Create Ontology Property" src="app/assets/images/propOntology_create.png"
+            (click)="createOntologyProperty()">
+        <input type="image" title="Create SubProperty" src="app/assets/images/prop_addSubProperty.png"
+            (click)="createSubProperty()" [disabled]="!selectedProperty">
+        <input type="image" title="Delete Property" src="app/assets/images/prop_delete.png"
+            (click)="deleteProperty()" [disabled]="!selectedProperty || selectedProperty.getAdditionalProperty('deleteForbidden')">
+    </div>
+    <div class="panel-body">
+        <property-tree></property-tree>
+    </div>
 </div>

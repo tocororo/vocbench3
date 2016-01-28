@@ -1,12 +1,15 @@
-<!-- Commands -->
-<div class="panelCommandBar">
-    <input type="image" title="Create Concept Scheme" 
-        src="app/assets/images/conceptScheme_create.png" (click)="createScheme()">
-    <input type="image" title="Delete Concept Scheme" 
-        src="app/assets/images/conceptScheme_delete.png" (click)="deleteScheme()" [disabled]="!focusedScheme">
-</div>
-
-<div *ngFor="#s of schemeList" class="conceptSchemeItem">
-    <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="selectScheme(input.value);" />
-	<rdf-resource [resource]="s" (click)="focusScheme(s)" [ngClass]="{selectedResource : isFocused(s)}"></rdf-resource>
+<div class="panel panel-default">
+    <!-- Commands -->
+    <div class="panel-heading">
+        <input type="image" title="Create Concept Scheme" 
+            src="app/assets/images/conceptScheme_create.png" (click)="createScheme()">
+        <input type="image" title="Delete Concept Scheme" 
+            src="app/assets/images/conceptScheme_delete.png" (click)="deleteScheme()" [disabled]="!focusedScheme">
+    </div>
+    <div class="panel-body">
+        <div *ngFor="#s of schemeList" class="conceptSchemeItem">
+            <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="selectScheme(input.value);" />
+            <rdf-resource [resource]="s" (click)="focusScheme(s)" [ngClass]="{selectedResource : isFocused(s)}"></rdf-resource>
+        </div>
+    </div>
 </div>

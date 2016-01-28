@@ -4,17 +4,17 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 
 @Component({
 	selector: "rdf-resource",
-	templateUrl: "app/src/widget/rdfResource/rdfResource.html",
+	templateUrl: "app/src/widget/rdfResource/rdfResourceComponent.html",
     providers: [ResourceUtils],
 })
-export class RdfResourceComponent implements OnInit {
+export class RdfResourceComponent {
 	@Input() resource:ARTResource;
 	public imageSrc: string;
 	public resourceShow: string;
 	
 	constructor(private resUtils:ResourceUtils) {}
     
-    ngOnInit() {
+    ngOnChanges(changes) {
         this.imageSrc = this.resUtils.getImageSrc(this.resource);
 		this.resourceShow = this.resource.getShow();
     }

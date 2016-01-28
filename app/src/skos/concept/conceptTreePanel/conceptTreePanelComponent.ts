@@ -5,14 +5,13 @@ import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {Deserializer} from "../../../utils/Deserializer";
-import {STResponseUtils} from "../../../utils/STResponseUtils";
 import {ROUTER_DIRECTIVES} from "angular2/router";
 
 @Component({
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
 	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES], //ROUTER_DIRECTIVES for routerLink in noScheme image button
-    providers: [SkosServices]
+    providers: [SkosServices],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
@@ -20,7 +19,7 @@ export class ConceptTreePanelComponent {
     private selectedConcept:ARTURIResource;
     private subscrNodeSelected;
     
-	constructor(private skosService:SkosServices, private deserializer:Deserializer, private respUtils:STResponseUtils, 
+	constructor(private skosService:SkosServices, private deserializer:Deserializer, 
             private eventHandler:VBEventHandler, private vbCtx:VocbenchCtx) {
         this.subscrNodeSelected = eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node));
     }
@@ -39,7 +38,10 @@ export class ConceptTreePanelComponent {
                     newConc.setAdditionalProperty("children", []);
                     this.eventHandler.topConceptCreatedEvent.emit(newConc);       
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     
@@ -53,7 +55,10 @@ export class ConceptTreePanelComponent {
                     newConc.setAdditionalProperty("children", []);
                     this.eventHandler.narrowerCreatedEvent.emit({"resource": newConc, "parent": this.selectedConcept});
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             )
     }
     
@@ -64,7 +69,10 @@ export class ConceptTreePanelComponent {
                     this.eventHandler.conceptDeletedEvent.emit(this.selectedConcept);
                     this.selectedConcept = null;
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             )
     }
     

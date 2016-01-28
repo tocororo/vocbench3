@@ -15,10 +15,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="#p of projectList" (dblclick)="onProjectDblClick(p)">
+        <tr *ngFor="#p of projectList">
             <td class="text-center">
-                <img *ngIf="!p.open" src="app/assets/images/folder.gif">
-                <img *ngIf="p.open" src="app/assets/images/folder-open.gif">
+                <img *ngIf="!p.open" src="app/assets/images/folder.gif" (dblclick)="openProject(p)">
+                <img *ngIf="p.open" src="app/assets/images/folder-open.gif" (dblclick)="closeProject(p)">
             </td>
             <td class="text-center">{{p.name}}</td>
             <td class="text-center">{{p.ontmgr}}</td>

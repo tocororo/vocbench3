@@ -37,7 +37,10 @@ export class PropertyTreeComponent implements OnInit {
                         this.propertyTree.push(p);
                     }
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     

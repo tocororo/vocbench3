@@ -1,0 +1,133 @@
+<!--<div class="resourceViewPartition">
+    <label>Resource:</label>
+    <rdf-resource [resource]="resource"></rdf-resource>
+</div>
+
+<div class="resourceViewPartition" *ngIf="typesColl">
+    <label>Types:</label>
+    <rdf-resource *ngFor="#t of typesColl" [resource]="t"></rdf-resource>
+</div>
+
+<div class="resourceViewPartition" *ngIf="topconceptofColl">
+    <label>Top Concept Of:</label>
+    <rdf-resource *ngFor="#t of topconceptofColl" [resource]="t"></rdf-resource>
+</div>
+
+<div class="resourceViewPartition" *ngIf="schemesColl">
+    <label>Schemes:</label>
+    <rdf-resource *ngFor="#s of schemesColl" [resource]="s"></rdf-resource>
+</div>
+
+<div class="resourceViewPartition" *ngIf="broadersColl">
+    <label>Broaders:</label>
+    <rdf-resource *ngFor="#b of broadersColl" [resource]="b"></rdf-resource>
+</div>
+
+<div class="resourceViewPartition" *ngIf="lexicalizationsColl">
+    <label>Lexicalizations:</label>
+    <div *ngFor="#pol of lexicalizationsColl">
+        <rdf-resource [resource]="pol.predicate"></rdf-resource>
+        <div style="padding: 0px 12px;">
+            <rdf-resource *ngFor="#obj of pol.objects" [resource]="obj"></rdf-resource>
+        </div>
+    </div>
+</div>
+
+<div class="resourceViewPartition" *ngIf="propertiesColl">
+    <label>Properties:</label>
+    <div *ngFor="#pol of propertiesColl">
+        <rdf-resource [resource]="pol.predicate"></rdf-resource>
+        <div style="padding: 0px 12px;">
+            <rdf-resource *ngFor="#obj of pol.objects" [resource]="obj"></rdf-resource>
+        </div>
+    </div>
+</div>-->
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label>Resource:</label>
+    </div>
+    <div class="panel-body">
+        <rdf-resource [resource]="resource"></rdf-resource>
+    </div>
+</div>
+
+<div class="panel panel-default" *ngIf="typesColl && typesColl.length > 0">
+    <div class="panel-heading">
+        <label>Types:</label>
+        <input type="image" title="Add a type" src="app/assets/images/class_create.png" (click)="addType()">
+    </div>
+    <div class="panel-body">
+        <rdf-resource *ngFor="#t of typesColl" [resource]="t"></rdf-resource>
+    </div>
+</div>
+
+<div class="panel panel-default" *ngIf="topconceptofColl && topconceptofColl.length > 0">
+    <div class="panel-heading">
+        <label>Top Concept Of:</label>
+        <input type="image" title="Add to a ConceptScheme as topConcept" src="app/assets/images/conceptScheme_create.png" (click)="addAsTopConceptTo()">
+    </div>
+    <div class="panel-body">
+        <rdf-resource *ngFor="#t of topconceptofColl" [resource]="t"></rdf-resource>
+    </div>
+</div>
+
+<div class="panel panel-default" *ngIf="schemesColl && schemesColl.length > 0">
+    <div class="panel-heading">
+        <label>Schemes:</label>
+        <input type="image" title="Add to a ConceptScheme" src="app/assets/images/conceptScheme_create.png" (click)="addToScheme()">
+    </div>
+    <div class="panel-body">
+        <rdf-resource *ngFor="#s of schemesColl" [resource]="s"></rdf-resource>
+    </div>
+</div>
+
+<div class="panel panel-default" *ngIf="broadersColl && broadersColl.length > 0">
+    <div class="panel-heading">
+        <label>Broaders:</label>
+        <input type="image" title="Add a broader concept" src="app/assets/images/concept_create.png" (click)="addBroader()">
+    </div>
+    <div class="panel-body">
+        <rdf-resource *ngFor="#b of broadersColl" [resource]="b"></rdf-resource>
+    </div>
+</div>
+
+<div class="panel panel-default" *ngIf="lexicalizationsColl && lexicalizationsColl.length > 0">
+    <div class="panel-heading">
+        <label>Lexicalizations:</label>
+        <input type="image" title="Add a lexicalization" src="app/assets/images/prop_create.png" (click)="addLexicalization()">
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default" *ngFor="#pol of lexicalizationsColl">
+            <!-- each item is a predicateObjectsList -->
+            <div class="panel-heading">
+                <label>{{pol.predicate.getShow()}}</label>
+                <input type="image" [title]="getAddPropImgTitle(pol.predicate)" [src]="getAddPropImgSrc(pol.predicate)" (click)="enrichProperty(pol.predicate)">
+            </div>
+            <div class="panel-body">
+                <rdf-resource *ngFor="#obj of pol.objects" [resource]="obj"></rdf-resource>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default" *ngIf="propertiesColl && propertiesColl.length > 0">
+    <div class="panel-heading">
+        <label>Properties:</label>
+        <input type="image" title="Add a property value" src="app/assets/images/prop_create.png" (click)="addPropertyValue()">
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default" *ngFor="#pol of propertiesColl">
+            <!-- each item is a predicateObjectsList -->
+            <div class="panel-heading">
+                <label>{{pol.predicate.getShow()}}</label>
+                <input type="image" [title]="getAddPropImgTitle(pol.predicate)" [src]="getAddPropImgSrc(pol.predicate)" (click)="enrichProperty(pol.predicate)">
+            </div>
+            <div class="panel-body">
+                <rdf-resource *ngFor="#obj of pol.objects" [resource]="obj"></rdf-resource>
+            </div>
+        </div>
+    </div>
+</div>
+

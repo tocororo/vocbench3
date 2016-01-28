@@ -51,7 +51,10 @@ export class PropertyTreePanelComponent {
                     newProp.setAdditionalProperty("children", []);
                     this.eventHandler.topPropertyCreatedEvent.emit(newProp);       
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     
@@ -65,7 +68,10 @@ export class PropertyTreePanelComponent {
                     newProp.setAdditionalProperty("children", []);
                     this.eventHandler.subPropertyCreatedEvent.emit({"resource": newProp, "parent": this.selectedProperty});       
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     
@@ -76,7 +82,10 @@ export class PropertyTreePanelComponent {
                     this.eventHandler.propertyDeletedEvent.emit(this.selectedProperty);
                     this.selectedProperty = null;
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     

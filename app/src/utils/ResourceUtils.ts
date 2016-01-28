@@ -71,5 +71,30 @@ export class ResourceUtils {
         }
         return imgSrc;
     };
+    
+    getAddPropImageSrc(rdfResource: ARTURIResource): string {
+        var imgSrc;
+        var role = rdfResource.getRole().toLowerCase();
+        if (role == "cls") {
+            imgSrc = "app/assets/images/class.png";
+        } else if (role == "concept") {
+            imgSrc = "app/assets/images/concept_create.png";
+        } else if (role == "individual") {
+            imgSrc = "app/assets/images/individual_create.png";
+        } else if (role == "conceptscheme") {
+            imgSrc = "app/assets/images/conceptScheme_create.png";
+        } else if (role.indexOf("objectproperty") != -1) {
+            imgSrc = "app/assets/images/propObject_create.png";
+        } else if (role.indexOf("datatypeproperty") != -1) {
+            imgSrc = "app/assets/images/propDatatype_create.png";
+        } else if (role.indexOf("annotationproperty") != -1) {
+            imgSrc = "app/assets/images/propAnnotation_create.png";
+        } else if (role.indexOf("ontologyproperty") != -1) {
+            imgSrc = "app/assets/images/propOntology_create.png";
+        } else if (role.indexOf("property") != -1) {
+            imgSrc = "app/assets/images/prop_create.png";
+        }
+        return imgSrc
+    }
 
 }

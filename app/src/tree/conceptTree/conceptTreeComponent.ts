@@ -39,7 +39,10 @@ export class ConceptTreeComponent implements OnInit {
                         this.roots[i].setAdditionalProperty("children", []);
                     }
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     

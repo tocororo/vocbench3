@@ -1,6 +1,5 @@
 import {Component} from "angular2/core";
 import {SparqlServices} from "../services/sparqlServices";
-import {STResponseUtils} from "../utils/STResponseUtils";
 
 @Component({
 	selector: "sparql-component",
@@ -17,7 +16,7 @@ export class SparqlComponent {
     public queryTime: string;
     public inferred: boolean = false;
     
-    constructor(private sparqlService:SparqlServices, private respUtils:STResponseUtils) {}
+    constructor(private sparqlService:SparqlServices) {}
     
     public doQuery() {
         var lang = "SPARQL";
@@ -33,7 +32,10 @@ export class SparqlComponent {
                     this.headers = data.sparql.head.vars;
                     this.queryResult = data.sparql.results.bindings;       
                 },
-                err => alert("Erroro: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     

@@ -40,8 +40,69 @@ export class ProjectComponent implements OnInit {
                         projects.push(proj);
 				    }
                     this.projectList = projects;
+                    
+                    //Init closing potential multiple open projects. If just one, connect to it.
+                    var currentProject = this.vbCtx.getProject();
+                    var openProjectList = [];
+                    if (currentProject.name == "SYSTEM") { //first start
+                        for (var i = 0; i < this.projectList.length; i++) { //collect projects remained open
+                            if (this.projectList[i].open) {
+                                openProjectList.push(this.projectList[i]);
+                            }
+                        }
+                        if (openProjectList.length == 1) { //just one open project => connect to it
+                            this.connectToProject(openProjectList[0]);
+                        } else if (openProjectList.length > 1) { //multiple open projects
+                            for (var i = 0; i < openProjectList.length; i++) { //close all open projects
+                                this.disconnectFromProject(openProjectList[i]);
+                            }
+                        }
+                    }
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
+            );
+    }
+    
+    public openProject(project) {
+        var currentProject = this.vbCtx.getProject();
+        if (currentProject.name != "SYSTEM") {
+            this.disconnectFromProject(currentProject);
+        }
+        this.connectToProject(project);
+    }
+    
+    public closeProject(project) {
+        this.disconnectFromProject(project);
+    }
+    
+    private connectToProject(project) {
+        this.projectService.accessProject(project.name)
+            .subscribe(
+                stResp => {
+                    this.vbCtx.setProject(project);
+                    project.open = true;
+                },
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
+            );
+    }
+    
+    private disconnectFromProject(project) {
+        this.projectService.disconnectFromProject(project.name)
+            .subscribe(
+                stResp => {
+                    this.vbCtx.setProject({ name : "SYSTEM" });
+                    project.open = false;
+                },
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     
@@ -70,62 +131,4 @@ export class ProjectComponent implements OnInit {
         }
         return prettyPrint;
     }
-    
-    public onProjectDblClick(project) {
-        var currentProject;
-        var currentProjectName = this.vbCtx.getProject();
-        if (currentProjectName == "SYSTEM") {
-            currentProject = new Object();
-            currentProject.name = currentProjectName;
-        } else {
-            for (var i=0; i<this.projectList.length; i++) {
-                if (this.projectList[i].name == currentProjectName) {
-                    currentProject = this.projectList[i];
-                    break;
-                }
-            }
-        }    
-        if (currentProject.name == "SYSTEM") {
-            if (project.open) {
-                //closing a project open when VB started => disconnect
-                this.disconnectFromProject(project);
-            } else {
-                //opening a first project => connect
-                this.connectToProject(project);    
-            }
-        } else {
-            if (currentProject.name == project.name) {
-                //closing project => just disconnect
-                this.disconnectFromProject(project);
-            } else {
-                //changing project => disconnect and then connect
-                this.disconnectFromProject(currentProject);
-                this.connectToProject(project)
-            }
-            
-        }
-    }
-    
-    private connectToProject(project) {
-        this.projectService.accessProject(project.name)
-            .subscribe(
-                stResp => {
-                    this.vbCtx.setProject(project.name);
-                    project.open = true;
-                },
-                err => console.log(err)
-            );
-    }
-    
-    private disconnectFromProject(project) {
-        this.projectService.disconnectFromProject(project.name)
-            .subscribe(
-                stResp => {
-                    this.vbCtx.setProject("SYSTEM");
-                    project.open = false;
-                },
-                err => alert("Error: " + err)
-            );
-    }
-    
 }

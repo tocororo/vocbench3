@@ -4,13 +4,12 @@ import {OwlServices} from "../../services/owlServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {Deserializer} from "../../utils/Deserializer";
-import {STResponseUtils} from "../../utils/STResponseUtils";
 
 @Component({
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
 	directives: [ClassTreeComponent],
-    providers: [OwlServices]
+    providers: [OwlServices],
 })
 export class ClassTreePanelComponent {
     @Input('rootclass') rootClass:ARTURIResource;
@@ -18,8 +17,7 @@ export class ClassTreePanelComponent {
     private selectedClass:ARTURIResource;
     private subscrNodeSelected;
     
-	constructor(private owlService:OwlServices, private deserializer:Deserializer, private respUtils:STResponseUtils, 
-            private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.subscrNodeSelected = eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)); 
     }
     
@@ -43,7 +41,10 @@ export class ClassTreePanelComponent {
                     newClass.setAdditionalProperty("children", []);
                     this.eventHandler.subClassCreatedEvent.emit({ "resource": newClass, "parent": this.rootClass });
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     
@@ -57,7 +58,10 @@ export class ClassTreePanelComponent {
                     newClass.setAdditionalProperty("children", []);
                     this.eventHandler.subClassCreatedEvent.emit({"resource": newClass, "parent": this.selectedClass});
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             );
     }
     
@@ -68,7 +72,10 @@ export class ClassTreePanelComponent {
                     this.eventHandler.classDeletedEvent.emit(this.selectedClass);
                     this.selectedClass = null;
                 },
-                err => alert("Error: " + err)
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
             )
     }
     
