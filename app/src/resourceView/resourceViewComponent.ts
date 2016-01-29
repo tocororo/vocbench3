@@ -1,5 +1,5 @@
 import {Component, Input} from "angular2/core";
-import {ARTURIResource} from "../utils/ARTResources";
+import {ARTURIResource, ARTNode} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {ResourceUtils} from "../utils/ResourceUtils";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
@@ -30,37 +30,50 @@ export class ResourceViewComponent {
     }
     
     public addType() {
-        console.log("add type to resource " + this.resource.getShow());
         alert("add type to resource " + this.resource.getShow());
     }
     
+    public deleteType(type: ARTURIResource) {
+        alert("delete type " + type.getShow() + " to " + this.resource.getShow());
+    }
+    
     public addAsTopConceptTo() {
-        console.log("add resource " + this.resource.getShow() + " as top concept to a scheme");
         alert("add resource " + this.resource.getShow() + " as top concept to a scheme");
     }
     
+    public removeAsTopConcept(scheme: ARTURIResource) {
+        alert("deleting " + this.resource.getShow() + " as top concept of " + scheme.getShow());
+    }
+    
     public addToScheme() {
-        console.log("add resource " + this.resource.getShow() + " to a scheme");
         alert("add resource " + this.resource.getShow() + " to a scheme");
     }
     
+    public removeFromScheme(scheme: ARTURIResource) {
+        alert("deleting " + this.resource.getShow() + " as from scheme " + scheme.getShow());
+    }
+    
     public addBroader() {
-        console.log("add broader to resource " + this.resource.getShow());
         alert("add broader to resource " + this.resource.getShow());
     }
     
+    public removeBroader(broader: ARTURIResource) {
+        alert("remove broader " + broader.getShow() + " to resource " + this.resource.getShow());
+    }
+    
     public addLexicalization() {
-        console.log("add lexicalization to resource " + this.resource.getShow());
         alert("add lexicalization to resource " + this.resource.getShow());
     }
     
     public addPropertyValue() {
-        console.log("add property to resource " + this.resource.getShow());
         alert("add property to resource " + this.resource.getShow());
     }
     
+    public removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        alert("remove triple " + this.resource.getShow() + " " + predicate.getShow() + " " + object.getShow());
+    }
+    
     public enrichProperty(predicate: ARTURIResource) {
-        console.log("add " + predicate.getShow() + " to resource " + this.resource.getShow());
         alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
     }
     
@@ -68,8 +81,16 @@ export class ResourceViewComponent {
         return "Add a " + predicate.getShow();
     }
     
+    public getRemovePropImgTitle(predicate: ARTURIResource) {
+        return "Remove " + predicate.getShow();
+    }
+    
     public getAddPropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getAddPropImageSrc(predicate);
+        return this.resUtils.getActionPropImageSrc(predicate, "create");
+    }
+    
+    public getRemovePropImgSrc(predicate: ARTURIResource) {
+        return this.resUtils.getActionPropImageSrc(predicate, "delete");
     }
     
     private buildResourceView(res: ARTURIResource) {

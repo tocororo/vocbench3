@@ -72,27 +72,30 @@ export class ResourceUtils {
         return imgSrc;
     };
     
-    getAddPropImageSrc(rdfResource: ARTURIResource): string {
+    /**
+     * Available values for action are: "create" and "delete"
+     */
+    getActionPropImageSrc(rdfResource: ARTURIResource, action: string): string {
         var imgSrc;
         var role = rdfResource.getRole().toLowerCase();
         if (role == "cls") {
-            imgSrc = "app/assets/images/class.png";
+            imgSrc = "app/assets/images/class_" + action + ".png";    
         } else if (role == "concept") {
-            imgSrc = "app/assets/images/concept_create.png";
+            imgSrc = "app/assets/images/concept_" + action + ".png";
         } else if (role == "individual") {
-            imgSrc = "app/assets/images/individual_create.png";
+            imgSrc = "app/assets/images/individual_" + action + ".png";
         } else if (role == "conceptscheme") {
-            imgSrc = "app/assets/images/conceptScheme_create.png";
+            imgSrc = "app/assets/images/conceptScheme_" + action + ".png";
         } else if (role.indexOf("objectproperty") != -1) {
-            imgSrc = "app/assets/images/propObject_create.png";
+            imgSrc = "app/assets/images/propObject_" + action + ".png";
         } else if (role.indexOf("datatypeproperty") != -1) {
-            imgSrc = "app/assets/images/propDatatype_create.png";
+            imgSrc = "app/assets/images/propDatatype_" + action + ".png";
         } else if (role.indexOf("annotationproperty") != -1) {
-            imgSrc = "app/assets/images/propAnnotation_create.png";
+            imgSrc = "app/assets/images/propAnnotation_" + action + ".png";
         } else if (role.indexOf("ontologyproperty") != -1) {
-            imgSrc = "app/assets/images/propOntology_create.png";
+            imgSrc = "app/assets/images/propOntology_" + action + ".png";
         } else if (role.indexOf("property") != -1) {
-            imgSrc = "app/assets/images/prop_create.png";
+            imgSrc = "app/assets/images/prop_create_" + action + ".png";
         }
         return imgSrc
     }

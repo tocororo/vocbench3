@@ -1,20 +1,23 @@
 <div class="panel panel-default">
     <!-- Commands -->
-    <div class="panel-heading">    
-        <!-- disabled in no scheme mode (a scheme has not been provided) -->
-        <input type="image" title="Create Concept" src="app/assets/images/concept_create.png" 
-            (click)="createConcept()" [disabled]="!scheme">
-        <!-- disabled in no scheme mode (a scheme has not been provided) or when no concept is selected  -->
-        <input type="image" title="Add Narrower" src="app/assets/images/concept_addNarrower.png"
-            (click)="createNarrower()" [disabled]="!selectedConcept || !scheme">
-        <!-- disabled when no concept is selected  -->
-        <input type="image" title="Delete Concept" src="app/assets/images/concept_delete.png"
-            (click)="deleteConcept()" [disabled]="!selectedConcept">
-        <!-- Shown in no scheme mode -->
+    <div class="panel-heading">  
+        <div class="btn-group btn-group-xs" role="group">
+            <button class="btn btn-default" title="Create Concept" (click)="createConcept()" [disabled]="!scheme">
+                <img src="app/assets/images/concept_create.png" />
+            </button>
+            <button class="btn btn-default" title="Add narrower" (click)="createNarrower()" [disabled]="!selectedConcept || !scheme">
+                <img src="app/assets/images/concept_addNarrower.png" />
+            </button>
+            <button class="btn btn-default" title="Delete Concept" (click)="deleteConcept()" [disabled]="!selectedConcept">
+                <img src="app/assets/images/concept_delete.png" />
+            </button>
+        </div>
         <a [routerLink]="['/Schemes']" title="No skos:ConceptScheme selected" style="float: right;" *ngIf="!scheme">
             <img src="app/assets/images/warning.png">
         </a>
     </div>
+    
+    
     <!-- Tree -->
     <div class="panel-body">
         <concept-tree [scheme]="scheme"></concept-tree>

@@ -1,10 +1,17 @@
 <div class="panel panel-default">
     <!-- Commands -->
     <div class="panel-heading">
-        <input type="image" title="Create Class" src="app/assets/images/class_create.png" (click)="createClass()">
-        <!-- disabled when no node is selected  -->
-        <input type="image" title="Create SubClass" src="app/assets/images/class_addSubClass.png" (click)="createSubClass()" [disabled]="!selectedClass">
-        <input type="image" title="Delete Class" src="app/assets/images/class_delete.png" (click)="deleteClass()" [disabled]="!selectedClass">
+        <div class="btn-group btn-group-xs" role="group">
+            <button class="btn btn-default" title="Create Class" (click)="createClass()">
+                <img src="app/assets/images/class_create.png" />
+            </button>
+            <button class="btn btn-default" title="Create SubClass" (click)="createSubClass()" [disabled]="!selectedClass">
+                <img src="app/assets/images/class_addSubClass.png" />
+            </button>
+            <button class="btn btn-default" title="Delete Class" (click)="deleteClass()" [disabled]="!selectedClass">
+                <img src="app/assets/images/class_delete.png" />
+            </button>
+        </div>    
     </div>
     <!-- Tree -->
     <div class="panel-body">

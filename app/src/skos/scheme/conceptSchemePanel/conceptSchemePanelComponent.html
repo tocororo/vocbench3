@@ -1,10 +1,14 @@
 <div class="panel panel-default">
     <!-- Commands -->
     <div class="panel-heading">
-        <input type="image" title="Create Concept Scheme" 
-            src="app/assets/images/conceptScheme_create.png" (click)="createScheme()">
-        <input type="image" title="Delete Concept Scheme" 
-            src="app/assets/images/conceptScheme_delete.png" (click)="deleteScheme()" [disabled]="!focusedScheme">
+        <div class="btn-group btn-group-xs" role="group">
+            <button class="btn btn-default" title="Create Concept Scheme" (click)="createScheme()">
+                <img src="app/assets/images/conceptScheme_create.png" />
+            </button>
+            <button class="btn btn-default" title="Delete Concept Scheme" (click)="deleteScheme()" [disabled]="!focusedScheme">
+                <img src="app/assets/images/conceptScheme_delete.png" />
+            </button>
+        </div>
     </div>
     <div class="panel-body">
         <div *ngFor="#s of schemeList" class="conceptSchemeItem">

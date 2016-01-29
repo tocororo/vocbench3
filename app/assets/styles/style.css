@@ -1,34 +1,21 @@
 rdf-resource {
-	display: block;
-	height: 24px;
-	position: relative;
+	min-height: 24px;
+	position: relative; 
 }
 
 rdf-resource img {
-	/* to align vertically in rdf-resource container */
-	position: absolute;
-	display: inline;
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-rdf-resource label {
-	margin: 0px 0px 0px 5px; /* override label margin defined in bootstrap */
-	left: 16px; /* push the label 16px from the left in order to left space to the resource icon */
-	/* to align vertically in rdf-resource container */
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
+    margin-bottom: 2px;
+    margin-left: 2px;
 }
 
 .selectedResource {
-	border: 1px solid #1b3671;
-	background-color: #a4afc8;
+	border: 1px solid #a4a4a4 !important;
+    background-color: gainsboro;
 }
 
 .treeNode {
 	display: block;
-	height: 24px;
+	min-height: 24px;
 	position: relative;
 	margin: 2px 0px;
 }
@@ -52,6 +39,7 @@ rdf-resource label {
 	/* to align vertically in treeNode container */
 	top: 50%;
 	transform: translateY(-50%);
+    padding-top: 2px;
 }
 
 .treeNode rdf-resource:HOVER {
@@ -107,22 +95,17 @@ rdf-resource label {
     background-color: #e5e5e5;
 }
 
-.resourceViewPartition {
-	padding: 5px;
-	margin: 3px 0px;
-	border: 1px solid #a4afc8;
-	background: #e5e5e5;
-	border-radius: 4px;
-}
-
-.resourceViewPartition > label {
-	text-decoration: underline;
-}
-
-/*The following still doesn't work*/
 input[type="image"]:disabled  {
 	filter : grayscale(100%);
 	opacity: 0.5;
+}
+
+.table tr.active td {
+    background-color: #e6e6e6 !important;
+}
+
+.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+    border: none;
 }
 
 .CodeMirror { height: auto; border: 1px solid #ddd; }
@@ -131,21 +114,31 @@ input[type="image"]:disabled  {
 
 /* BOOTSTRAP OVERRIDE */
 
-.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4,
-.col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10,
-.col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
-.col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12,
-.col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8,
-.col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3,
-.col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+body {
+    font-size: 13px;
+}
+
+.table {
+    font-size: 13px;
+    margin-bottom: 0px;
+}
+
+.col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12,
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+.col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12,
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
     position: relative;
     min-height: 1px;
     padding-right: 10px;
     padding-left: 10px;
 }
 
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    vertical-align: middle;
+}
+
 .panel { margin-bottom: 5px; }
-.panel-heading { margin-bottom: 0px; padding: 10px 10px; }
+.panel-heading { margin-bottom: 0px; padding: 6px 10px; }
 .panel-body { padding: 10px; }
 
 label { margin-bottom: 0px; }
