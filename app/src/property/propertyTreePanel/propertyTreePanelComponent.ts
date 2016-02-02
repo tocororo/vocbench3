@@ -14,11 +14,15 @@ import {PropertyServices} from "../../services/propertyServices";
 export class PropertyTreePanelComponent {
     
     private selectedProperty:ARTURIResource;
-    private subscrNodeSelected;
+    private eventSubscriptions = [];
     
 	constructor(private propService:PropertyServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node));
-        this.subscrNodeSelected = eventHandler.topPropertyCreatedEvent.subscribe(node => this.onNodeSelected(node));
+        this.eventSubscriptions.push(eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
+        this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onNodeSelected(node)));
+    }
+    
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     public createProperty() {

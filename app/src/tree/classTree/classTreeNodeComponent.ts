@@ -14,18 +14,17 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;
     
-    private subscrClassDeleted;
-    private subscrSubClassCreated;
+    private eventSubscriptions = [];
+    
     public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
 	constructor(private owlService:OwlServices, public deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.subscrClassDeleted = eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls));
-        this.subscrSubClassCreated = eventHandler.subClassCreatedEvent.subscribe(data => this.onSubClassCreated(data));
+        this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(data => this.onSubClassCreated(data)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
     ngOnDestroy() {
-        this.subscrClassDeleted.unsubscribe();
-        this.subscrSubClassCreated.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     /**

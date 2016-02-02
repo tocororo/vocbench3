@@ -16,14 +16,15 @@ export class ConceptTreeComponent implements OnInit {
     public roots:ARTURIResource[];
     private selectedNode:ARTURIResource;
     
-    private subscrNodeSelected;
-    private subscrTopConcCreated;
-    private subscrConcDeleted;
+    private eventSubscriptions = [];
 	
     constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onConceptSelected(node));
-        this.subscrTopConcCreated = eventHandler.topConceptCreatedEvent.subscribe(concept => this.onTopConceptCreated(concept));
-        this.subscrConcDeleted = eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
+        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(concept => this.onConceptSelected(concept)));
+        this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(concept => this.onTopConceptCreated(concept)));
+        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept)));
+        this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
+            data => this.onConceptRemovedFromScheme(data)));
+        
     }
     
     ngOnInit() {
@@ -47,9 +48,7 @@ export class ConceptTreeComponent implements OnInit {
     }
     
     ngOnDestroy() {
-        this.subscrNodeSelected.unsubscribe();
-        this.subscrTopConcCreated.unsubscribe();
-        this.subscrConcDeleted.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     //EVENT LISTENERS
@@ -76,6 +75,15 @@ export class ConceptTreeComponent implements OnInit {
                 this.roots.splice(i, 1);
                 break;
             }
+        }
+    }
+    
+     //data contains "concept" and "scheme"
+    private onConceptRemovedFromScheme(data) {
+        var scheme = data.scheme;
+        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
+            var concept = data.concept;
+            this.onConceptDeleted(concept);
         }
     }
     

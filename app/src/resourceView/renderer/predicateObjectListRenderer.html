@@ -1,0 +1,35 @@
+<div class="panel panel-default" *ngIf="predicateObjectList">
+    <div class="panel-heading">
+        <label>{{label}}:</label>
+        <div style="float: right">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()">
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-default" *ngFor="#po of predicateObjectList">
+            <!-- each item is a predicateObjects -->
+            <div class="panel-heading">
+                <label>{{po.getPredicate().getShow()}}</label>
+                <div style="float: right">
+                    <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
+                        (click)="enrichProperty(po.getPredicate())">
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-hover table-borderless">
+                    <tbody>
+                        <tr *ngFor="#obj of po.getObjects()">
+                            <td>
+                                <rdf-resource [resource]="obj"></rdf-resource>
+                            </td>
+                            <td class="text-right">
+                                <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
+                                    (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

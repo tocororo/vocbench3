@@ -95,8 +95,6 @@ export class STResponseUtils {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("reply")[0].getAttribute("status") == "fail";
         } else { //JSON
-            console.log("stresponse " + JSON.stringify(stResp.stresponse));
-            console.log("stresponse.reply " + JSON.stringify(stResp.stresponse.reply));
             return stResp.stresponse.reply.status == "fail";
         }
 

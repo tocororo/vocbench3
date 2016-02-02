@@ -88,18 +88,19 @@ export class ProjectComponent implements OnInit {
         } else {
             this.projectService.deleteProject(this.selectedProject.name)
                 .subscribe(
-                stResp => {
-                    for (var i = 0; i < this.projectList.length; i++) { //remove project from list
-                        if (this.projectList[i].name == this.selectedProject.name) {
-                            this.projectList.splice(i, 1);
+                    stResp => {
+                        for (var i = 0; i < this.projectList.length; i++) { //remove project from list
+                            if (this.projectList[i].name == this.selectedProject.name) {
+                                this.projectList.splice(i, 1);
+                            }
                         }
+                        this.selectedProject = null;
+                    },
+                    err => {
+                        alert("Error: " + err);
+                        console.error(err.stack);
                     }
-                    this.selectedProject = null;
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
+                )
         }
     }
     

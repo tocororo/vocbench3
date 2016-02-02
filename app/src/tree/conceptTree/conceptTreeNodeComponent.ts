@@ -15,18 +15,20 @@ export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Input() scheme: ARTURIResource;
     
-    private subscrConcDeleted;
-    private subscrNarrowerCreated;
+    private eventSubscriptions = [];
+    
     public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
 	
 	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.subscrConcDeleted = eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept));
-        this.subscrNarrowerCreated = eventHandler.narrowerCreatedEvent.subscribe(data => this.onNarrowerCreated(data));
+        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept)));
+        this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(data => this.onNarrowerCreated(data)));
+        this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
+            data => this.onConceptRemovedFromScheme(data)));
+        this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(data => this.onBroaderRemoved(data)));
     }
     
     ngOnDestroy() {
-        this.subscrConcDeleted.unsubscribe();
-        this.subscrNarrowerCreated.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     /**
@@ -100,6 +102,24 @@ export class ConceptTreeNodeComponent {
         if (this.node.getURI() == data.parent.getURI()) {
             this.node.getAdditionalProperty("children").push(data.resource);
             this.node.setAdditionalProperty("more", 1);
+        }
+    }
+    
+    //data contains "concept" and "scheme"
+    private onConceptRemovedFromScheme(data) {
+        var scheme = data.scheme;
+        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
+            var concept = data.concept;
+            this.onConceptDeleted(concept);
+        }
+    }
+    
+    //data contains "concept" and "broader"
+    private onBroaderRemoved(data) {
+        var broader = data.broader;
+        if (broader.getURI() == this.node.getURI()) {
+            var concept = data.concept;
+            this.onConceptDeleted(concept);
         }
     }
     

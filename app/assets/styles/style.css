@@ -137,7 +137,7 @@ body {
     vertical-align: middle;
 }
 
-.panel { margin-bottom: 5px; }
+.panel .panel { margin-bottom: 5px; } /*panel inside panel (resource view)*/
 .panel-heading { margin-bottom: 0px; padding: 6px 10px; }
 .panel-body { padding: 10px; }
 

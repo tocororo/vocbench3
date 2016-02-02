@@ -1,0 +1,23 @@
+<div class="panel panel-default" *ngIf="objectList">
+    <div class="panel-heading">
+        <label>{{label}}:</label>
+        <div style="float: right">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()">
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed table-hover table-borderless">
+            <tbody>
+                <tr *ngFor="#o of objectList">
+                    <td>
+                        <rdf-resource [resource]="o"></rdf-resource>
+                    </td>
+                    <td class="text-right">
+                        <input type="image" [title]="removeBtnImgTitle" [src]="removeBtnImgSrc" 
+                            (click)="remove(o)" [disabled]="!o.getAdditionalProperty('explicit')">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

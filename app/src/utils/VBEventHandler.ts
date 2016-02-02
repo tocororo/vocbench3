@@ -17,12 +17,18 @@ export class VBEventHandler {
     //event should contains an object with "resource" (the narrower created) and "parent"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
     public conceptDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    //event should contains an object with "concept" and "scheme"
+    public conceptRemovedFromSchemeEvent: EventEmitter<any> = new EventEmitter();
+    //event should contains an object with "concept" and "broader"
+    public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //CLASS EVENTS
     public classTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contains an object with "resource" (the subClass created) and "parent"
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
     public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    //event should contains an object with "cls" and "type"
+    public typeDeletedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
     public propertyTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
@@ -32,5 +38,14 @@ export class VBEventHandler {
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     
 	constructor() {}
+    
+    /**
+     * utility method to make a component unsubscribe from all the event to which has subscribed
+     */
+    public unsubscribeAll(subscriptions: any[]) {
+        for (var i=0; i<subscriptions.length; i++) {
+            subscriptions[i].unsubscribe();
+        }
+    }
     
 }

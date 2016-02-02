@@ -1,96 +1,44 @@
 import {Component, Input} from "angular2/core";
-import {ARTURIResource, ARTNode} from "../utils/ARTResources";
+import {ARTURIResource} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
-import {ResourceUtils} from "../utils/ResourceUtils";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ResourceViewServices} from "../services/resourceViewServices";
+
+import {TypesPartitionRenderer} from "./renderer/typesPartitionRenderer";
+import {TopConceptsPartitionRenderer} from "./renderer/topConceptsPartitionRenderer";
+import {SchemesPartitionRenderer} from "./renderer/schemesPartitionRenderer";
+import {BroadersPartitionRenderer} from "./renderer/broadersPartitionRenderer";
+import {LexicalizationsPartitionRenderer} from "./renderer/lexicalizationsPartitionRenderer";
+import {PropertiesPartitionRenderer} from "./renderer/propertiesPartitionRenderer";
 
 @Component({
 	selector: "resource-view",
 	templateUrl: "app/src/resourceView/resourceViewComponent.html",
-	directives: [RdfResourceComponent],
-    providers: [ResourceViewServices, ResourceUtils],
+	directives: [RdfResourceComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, SchemesPartitionRenderer,
+            BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer],
+    providers: [ResourceViewServices],
 })
 export class ResourceViewComponent {
     
     @Input() resource:ARTURIResource;
     
     //partitions
-    public typesColl;
-    public topconceptofColl;
-    public schemesColl;
-    public broadersColl;
+    public typesColl: ARTURIResource[];
+    public topconceptofColl: ARTURIResource[];
+    public schemesColl: ARTURIResource[];
+    public broadersColl: ARTURIResource[];
     public lexicalizationsColl;
     public propertiesColl;
     
-	constructor(private resViewService:ResourceViewServices, private deserializer:Deserializer, private resUtils:ResourceUtils) {}
+	constructor(private resViewService:ResourceViewServices, private deserializer:Deserializer) {
+    }
     
     ngOnChanges(changes) {
-        this.buildResourceView(this.resource);
+        this.buildResourceView(this.resource);//refresh resource view when Input resource changes
     }
     
-    public addType() {
-        alert("add type to resource " + this.resource.getShow());
-    }
-    
-    public deleteType(type: ARTURIResource) {
-        alert("delete type " + type.getShow() + " to " + this.resource.getShow());
-    }
-    
-    public addAsTopConceptTo() {
-        alert("add resource " + this.resource.getShow() + " as top concept to a scheme");
-    }
-    
-    public removeAsTopConcept(scheme: ARTURIResource) {
-        alert("deleting " + this.resource.getShow() + " as top concept of " + scheme.getShow());
-    }
-    
-    public addToScheme() {
-        alert("add resource " + this.resource.getShow() + " to a scheme");
-    }
-    
-    public removeFromScheme(scheme: ARTURIResource) {
-        alert("deleting " + this.resource.getShow() + " as from scheme " + scheme.getShow());
-    }
-    
-    public addBroader() {
-        alert("add broader to resource " + this.resource.getShow());
-    }
-    
-    public removeBroader(broader: ARTURIResource) {
-        alert("remove broader " + broader.getShow() + " to resource " + this.resource.getShow());
-    }
-    
-    public addLexicalization() {
-        alert("add lexicalization to resource " + this.resource.getShow());
-    }
-    
-    public addPropertyValue() {
-        alert("add property to resource " + this.resource.getShow());
-    }
-    
-    public removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        alert("remove triple " + this.resource.getShow() + " " + predicate.getShow() + " " + object.getShow());
-    }
-    
-    public enrichProperty(predicate: ARTURIResource) {
-        alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
-    }
-    
-    public getAddPropImgTitle(predicate: ARTURIResource) {
-        return "Add a " + predicate.getShow();
-    }
-    
-    public getRemovePropImgTitle(predicate: ARTURIResource) {
-        return "Remove " + predicate.getShow();
-    }
-    
-    public getAddPropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "create");
-    }
-    
-    public getRemovePropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "delete");
+    refresh() {
+        this.buildResourceView(this.resource);//refresh resource view when a partition apply a change
     }
     
     private buildResourceView(res: ARTURIResource) {
@@ -104,19 +52,19 @@ export class ResourceViewComponent {
                         var partition = respPartitions[i];
                         var partitionName = partition.tagName;
                         if (partitionName == "resource") {
-                            this.renderResourcePartition(partition);
+                            this.resource = this.deserializer.createURI(partition.children[0]);
                         } else if (partitionName == "types") {
-                            this.renderTypesPartition(partition);
+                            this.typesColl = this.deserializer.createRDFArray(partition);
                         } else if (partitionName == "topconceptof") {
-                            this.renderTopConceptOfPartition(partition);
+                            this.topconceptofColl = this.deserializer.createRDFArray(partition);
                         } else if (partitionName == "schemes") {
-                            this.renderSchemesPartition(partition);
+                            this.schemesColl = this.deserializer.createRDFArray(partition);
                         } else if (partitionName == "broaders") {
-                            this.renderBroadersPartition(partition);
+                            this.broadersColl = this.deserializer.createRDFArray(partition);
                         } else if (partitionName == "lexicalizations") {
-                            this.renderLexicalizationsPartition(partition);
+                            this.lexicalizationsColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
                         } else if (partitionName == "properties") {
-                            this.renderPropertiesPartition(partition);
+                            this.propertiesColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
                         }
                     }
                 },
@@ -125,34 +73,6 @@ export class ResourceViewComponent {
                     console.error(err.stack);
                 }
             );
-    }
-    
-    private renderResourcePartition(resourceElement) {
-        this.resource = this.deserializer.createURI(resourceElement.children[0]);
-    }
-
-    private renderTypesPartition(typesElement) {
-        this.typesColl = this.deserializer.createRDFArray(typesElement);
-    }
-
-    private renderTopConceptOfPartition(topconceptofElement) {
-        this.topconceptofColl = this.deserializer.createRDFArray(topconceptofElement);
-    }
-
-    private renderSchemesPartition(schemesElement) {
-        this.schemesColl = this.deserializer.createRDFArray(schemesElement);
-    }
-
-    private renderBroadersPartition(broadersElement) {
-        this.broadersColl = this.deserializer.createRDFArray(broadersElement);
-    }
-
-    private renderLexicalizationsPartition(lexicalizationsElement) {
-        this.lexicalizationsColl = this.deserializer.createPredicateObjectsList(lexicalizationsElement.children[0]);
-    }
-
-    private renderPropertiesPartition(propertiesElement) {
-        this.propertiesColl = this.deserializer.createPredicateObjectsList(propertiesElement.children[0]);
     }
     
 }

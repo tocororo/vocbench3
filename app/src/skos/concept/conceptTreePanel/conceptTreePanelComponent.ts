@@ -17,15 +17,15 @@ export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
     
     private selectedConcept:ARTURIResource;
-    private subscrNodeSelected;
+    private eventSubscriptions = [];
     
 	constructor(private skosService:SkosServices, private deserializer:Deserializer, 
             private eventHandler:VBEventHandler, private vbCtx:VocbenchCtx) {
-        this.subscrNodeSelected = eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node));
+        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
     }
     
     ngOnDestroy() {
-        this.subscrNodeSelected.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     public createConcept() {
@@ -36,7 +36,7 @@ export class ConceptTreePanelComponent {
                 stResp => {
                     var newConc = this.deserializer.createURI(stResp);
                     newConc.setAdditionalProperty("children", []);
-                    this.eventHandler.topConceptCreatedEvent.emit(newConc);       
+                    this.eventHandler.topConceptCreatedEvent.emit(newConc);
                 },
                 err => { 
                     alert("Error: " + err);

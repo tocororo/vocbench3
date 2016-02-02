@@ -13,7 +13,7 @@ export class ProjectServices {
     listProjects() {
         console.log("[ProjectServices] listProjects");
         var params = {
-            "consumer": "SYSTEM"
+            consumer: "SYSTEM"
         };
         return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService);
     }
@@ -21,8 +21,8 @@ export class ProjectServices {
     disconnectFromProject(project: string) {
         console.log("[ProjectServices] disconnectFromProject");
         var params = {
-            "consumer": "SYSTEM",
-            "projectName": project
+            consumer: "SYSTEM",
+            projectName: project
         };
         return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params, this.oldTypeService);
     }
@@ -30,10 +30,10 @@ export class ProjectServices {
     accessProject(project: string) {
         console.log("[ProjectServices] accessProject");
         var params = {
-            "consumer": "SYSTEM",
-            "projectName": project,
-            "requestedAccessLevel": "RW",
-            "requestedLockLevel": "NO"
+            consumer: "SYSTEM",
+            projectName: project,
+            requestedAccessLevel: "RW",
+            requestedLockLevel: "NO"
         };
         return this.httpMgr.doGet(this.serviceName, "accessProject", params, this.oldTypeService);
     }
@@ -41,8 +41,8 @@ export class ProjectServices {
     deleteProject(project: string) {
         console.log("[ProjectServices] deleteProject");
         var params = {
-            "consumer": "SYSTEM",
-            "projectName": project,
+            consumer: "SYSTEM",
+            projectName: project,
         };
         return this.httpMgr.doGet(this.serviceName, "deleteProject", params, this.oldTypeService);
     }

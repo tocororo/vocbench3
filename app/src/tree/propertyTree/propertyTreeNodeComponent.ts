@@ -11,13 +11,17 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 export class PropertyTreeNodeComponent {
 	@Input() node:ARTURIResource;
     
-    private subscrPropDeleted;
-    private subscrSubPropCreated;
+    private eventSubscriptions = [];
+    
     public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
 	constructor(private eventHandler:VBEventHandler) {
-        this.subscrPropDeleted = eventHandler.propertyDeletedEvent.subscribe(concept => this.onPropertyDeleted(concept));
-        this.subscrSubPropCreated = eventHandler.subPropertyCreatedEvent.subscribe(data => this.onSubPropertyCreated(data));
+        this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(data => this.onSubPropertyCreated(data)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(concept => this.onPropertyDeleted(concept)));
+    }
+    
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     /**

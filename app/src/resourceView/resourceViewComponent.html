@@ -4,174 +4,19 @@
         <rdf-resource [resource]="resource"></rdf-resource>
     </div>
     <div class="panel-body">
-        <div class="panel panel-default" *ngIf="typesColl && typesColl.length > 0">
-            <div class="panel-heading">
-                <label>Types:</label>
-                <div style="float: right">
-                    <input type="image" title="Add a type" src="app/assets/images/class_create.png" (click)="addType()">
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-hover table-borderless">
-                    <tbody>
-                        <tr *ngFor="#t of typesColl">
-                            <td>
-                                <rdf-resource [resource]="t"></rdf-resource>
-                            </td>
-                            <td class="text-right">
-                                <input type="image" title="Delete type" src="app/assets/images/class_delete.png" 
-                                    (click)="deleteType(t)" [disabled]="!t.getAdditionalProperty('explicit')">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="panel panel-default" *ngIf="topconceptofColl && topconceptofColl.length > 0">
-            <div class="panel-heading">
-                <label>Top Concept Of:</label>
-                <div style="float: right">
-                    <input type="image" title="Add to a ConceptScheme as topConcept" src="app/assets/images/conceptScheme_create.png" (click)="addAsTopConceptTo()">
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-hover table-borderless">
-                    <tbody>
-                        <tr *ngFor="#t of topconceptofColl">
-                            <td>
-                                <rdf-resource [resource]="t"></rdf-resource>
-                            </td>
-                            <td class="text-right">
-                                <input type="image" title="Remove as topConcept" src="app/assets/images/conceptScheme_delete.png" 
-                                    (click)="removeAsTopConcept(t)" [disabled]="!t.getAdditionalProperty('explicit')">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="panel panel-default" *ngIf="schemesColl && schemesColl.length > 0">
-            <div class="panel-heading">
-                <label>Schemes:</label>
-                <div style="float: right">
-                    <input type="image" title="Add to a ConceptScheme" src="app/assets/images/conceptScheme_create.png" (click)="addToScheme()">
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-hover table-borderless">
-                    <tbody>
-                        <tr *ngFor="#s of schemesColl">
-                            <td>
-                                <rdf-resource [resource]="s"></rdf-resource>
-                            </td>
-                            <td class="text-right">
-                                <input type="image" title="Remove from ConceptScheme" src="app/assets/images/conceptScheme_delete.png" 
-                                    (click)="removeFromScheme(s)" [disabled]="!s.getAdditionalProperty('explicit')">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="panel panel-default" *ngIf="broadersColl && broadersColl.length > 0">
-            <div class="panel-heading">
-                <label>Broaders:</label>
-                <div style="float: right">
-                    <input type="image" title="Add a broader concept" src="app/assets/images/concept_create.png" (click)="addBroader()">
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-hover table-borderless">
-                    <tbody>
-                        <tr *ngFor="#b of broadersColl">
-                            <td>
-                                <rdf-resource [resource]="b"></rdf-resource>
-                            </td>
-                            <td class="text-right">
-                                <input type="image" title="Remove from ConceptScheme" src="app/assets/images/concept_delete.png" 
-                                    (click)="removeBroader(b)" [disabled]="!b.getAdditionalProperty('explicit')">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="panel panel-default" *ngIf="lexicalizationsColl && lexicalizationsColl.length > 0">
-            <div class="panel-heading">
-                <label>Lexicalizations:</label>
-                <div style="float: right">
-                    <input type="image" title="Add a lexicalization" src="app/assets/images/prop_create.png" (click)="addLexicalization()">
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="panel panel-default" *ngFor="#pol of lexicalizationsColl">
-                    <!-- each item is a predicateObjectsList -->
-                    <div class="panel-heading">
-                        <label>{{pol.predicate.getShow()}}</label>
-                        <div style="float: right">
-                            <input type="image" [title]="getAddPropImgTitle(pol.predicate)" [src]="getAddPropImgSrc(pol.predicate)" (click)="enrichProperty(pol.predicate)">
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-condensed table-hover table-borderless">
-                            <tbody>
-                                <tr *ngFor="#obj of pol.objects">
-                                    <td>
-                                        <rdf-resource [resource]="obj"></rdf-resource>
-                                    </td>
-                                    <td class="text-right">
-                                        <input type="image" [title]="getRemovePropImgTitle(pol.predicate)" [src]="getRemovePropImgSrc(pol.predicate)" 
-                                            (click)="removePredicateObject(pol.predicate, obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel panel-default" *ngIf="propertiesColl && propertiesColl.length > 0">
-            <div class="panel-heading">
-                <label>Properties:</label>
-                <div style="float: right">
-                    <input type="image" title="Add a property value" src="app/assets/images/prop_create.png" (click)="addPropertyValue()">
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="panel panel-default" *ngFor="#pol of propertiesColl">
-                    <!-- each item is a predicateObjectsList -->
-                    <div class="panel-heading">
-                        <label>{{pol.predicate.getShow()}}</label>
-                        <div style="float: right">
-                            <input type="image" [title]="getAddPropImgTitle(pol.predicate)" [src]="getAddPropImgSrc(pol.predicate)" (click)="enrichProperty(pol.predicate)">
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <!--<rdf-resource *ngFor="#obj of pol.objects" [resource]="obj"></rdf-resource>-->
-                        
-                        <table class="table table-condensed table-hover table-borderless">
-                            <tbody>
-                                <tr *ngFor="#obj of pol.objects">
-                                    <td>
-                                        <rdf-resource [resource]="obj"></rdf-resource>
-                                    </td>
-                                    <td class="text-right">
-                                        <input type="image" [title]="getRemovePropImgTitle(pol.predicate)" [src]="getRemovePropImgSrc(pol.predicate)" (click)="removePredicateObject(pol.predicate, obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
         
+        <types-renderer [object-list]="typesColl" [resource]="resource" (update)="refresh()"></types-renderer>
+        
+        <top-concepts-renderer [object-list]="topconceptofColl" [resource]="resource" (update)="refresh()"></top-concepts-renderer>
+        
+        <schemes-renderer [object-list]="schemesColl" [resource]="resource" (update)="refresh()"></schemes-renderer>
+        
+        <broaders-renderer [object-list]="broadersColl" [resource]="resource" (update)="refresh()"></broaders-renderer>
+        
+        <lexicalizations-renderer [pred-obj-list]="lexicalizationsColl" [resource]="resource" (update)="refresh()"></lexicalizations-renderer>
+        
+        <properties-renderer [pred-obj-list]="propertiesColl" [resource]="resource" (update)="refresh()"></properties-renderer>
+
     </div>
 
 </div>

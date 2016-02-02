@@ -16,15 +16,12 @@ export class PropertyTreeComponent implements OnInit {
     public propertyTree: ARTURIResource[] = [];
     private selectedNode:ARTURIResource;
     
-    private subscrNodeSelected;
-    private subscrTopPropCreated;
-    private subscrPropDeleted;
+    private eventSubscriptions = [];
 	
 	constructor(private propertyService:PropertyServices, private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onPropertySelected(node));
-        this.subscrTopPropCreated = eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node));
-        this.subscrPropDeleted = eventHandler.propertyDeletedEvent.subscribe(node => this.onPropertyDeleted(node));
-        
+        this.eventSubscriptions.push(eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onPropertySelected(node)));
+        this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(node => this.onPropertyDeleted(node)));
     }
     
     ngOnInit() {
@@ -42,6 +39,10 @@ export class PropertyTreeComponent implements OnInit {
                     console.error(err.stack);
                 }
             );
+    }
+    
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     private parseProperty(propXml): ARTURIResource {

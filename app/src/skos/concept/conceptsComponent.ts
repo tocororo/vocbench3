@@ -14,10 +14,10 @@ export class ConceptsComponent implements OnInit {
     
     public scheme:ARTURIResource;
     public resource:ARTURIResource;
-    private subscrNodeSelected;
+    private eventSubscriptions = [];
     
 	constructor(public vbCtx:VocbenchCtx, private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node));
+        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
     }
     
     ngOnInit() {
@@ -25,7 +25,7 @@ export class ConceptsComponent implements OnInit {
     }
     
     ngOnDestroy() {
-        this.subscrNodeSelected.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     //EVENT LISTENERS 

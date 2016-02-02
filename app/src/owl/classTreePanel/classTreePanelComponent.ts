@@ -15,10 +15,10 @@ export class ClassTreePanelComponent {
     @Input('rootclass') rootClass:ARTURIResource;
     
     private selectedClass:ARTURIResource;
-    private subscrNodeSelected;
+    private eventSubscriptions = [];
     
 	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)); 
+        this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
     }
     
     ngOnInit() {
@@ -28,7 +28,7 @@ export class ClassTreePanelComponent {
     }
     
     ngOnDestroy() {
-        this.subscrNodeSelected.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     public createClass() {

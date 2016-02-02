@@ -16,13 +16,11 @@ export class ClassTreeComponent implements OnInit {
     public roots:ARTURIResource[];
     private selectedNode:ARTURIResource;
     
-    private subscrNodeSelected;
-    private subscrClassDeleted;
+    private eventSubscriptions = [];
 	
 	constructor(private owlService:OwlServices, public deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.subscrNodeSelected = eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node));
-        this.subscrClassDeleted = eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls));
-        
+        this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
     ngOnInit() {
@@ -48,8 +46,7 @@ export class ClassTreeComponent implements OnInit {
     }
     
     ngOnDestroy() {
-        this.subscrNodeSelected.unsubscribe();
-        this.subscrClassDeleted.unsubscribe();
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     
