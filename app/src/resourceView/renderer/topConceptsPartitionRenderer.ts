@@ -31,8 +31,17 @@ export class TopConceptsPartitionRenderer {
     }
     
     public remove(scheme: ARTURIResource) {
-        alert("deleting " + this.resource.getShow() + " as top concept of " + scheme.getShow());
-        this.update.emit(null);
+        this.skosService.removeTopConcept(this.resource.getURI(), scheme.getURI())
+            .subscribe(
+                stResp => {
+                    this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: this.resource, scheme: scheme});
+                    this.update.emit(null);
+                },
+                err => {
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
+            );
     }
     
 }

@@ -1,16 +1,14 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
-import {ARTURIResource, ARTNode, ARTPredicateObjects} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
+import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {SkosServices} from "../../services/skosServices";
-import {OwlServices} from "../../services/owlServices";
+import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
 	selector: "properties-renderer",
 	templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, OwlServices, ResourceUtils],
+    providers: [ResourceUtils, PropertyServices],
 })
 export class PropertiesPartitionRenderer {
     
@@ -24,8 +22,7 @@ export class PropertiesPartitionRenderer {
     public removeBtnImgSrc = "app/assets/images/prop_delete.png";
     public removeBtnImgTitle = "Remove property value";
     
-    constructor(private skosService:SkosServices, private owlService:OwlServices, 
-        private eventHandler:VBEventHandler, private resUtils:ResourceUtils) {}
+    constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
         
     public add() {
         alert("add property to resource " + this.resource.getShow());
@@ -38,8 +35,27 @@ export class PropertiesPartitionRenderer {
     }
     
     public removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        alert("remove triple " + this.resource.getShow() + " " + predicate.getShow() + " " + object.getShow());
-        this.update.emit(null);
+        var type;
+        var lang;
+        if (object.isBNode()) {
+            type = "bnode";
+        } else if (object.isURIResource()) {
+            type = "uri";
+        } else if (object.isLiteral()) {
+            if ((<ARTLiteral>object).isTypedLiteral()) {
+                type = "typedLiteral";
+            } else if ((<ARTLiteral>object).getLang() != null) {
+                type = "plainLiteral";
+                lang = (<ARTLiteral>object).getLang();
+            } else {
+                type = "literal";
+            }
+        }
+        this.propertyService.removePropValue(this.resource.getURI(), predicate.getURI(), object.getNominalValue(), null, type, lang)
+            .subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
     }
     
     

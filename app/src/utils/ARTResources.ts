@@ -112,7 +112,7 @@ export class ARTBNode implements ARTResource {
     };
 
     getShow(): string {
-        return this.getNominalValue();
+        return this.show;
     }
 
     getNominalValue(): string {

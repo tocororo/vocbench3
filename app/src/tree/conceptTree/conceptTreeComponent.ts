@@ -19,12 +19,16 @@ export class ConceptTreeComponent implements OnInit {
     private eventSubscriptions = [];
 	
     constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(concept => this.onConceptSelected(concept)));
-        this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(concept => this.onTopConceptCreated(concept)));
-        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept)));
+        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(
+            concept => this.onConceptSelected(concept)));
+        this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
+            concept => this.onTopConceptCreated(concept)));
+        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
+            concept => this.onConceptDeleted(concept)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
             data => this.onConceptRemovedFromScheme(data)));
-        
+        this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
+            data => this.onConceptRemovedFromScheme(data)));
     }
     
     ngOnInit() {
@@ -78,7 +82,7 @@ export class ConceptTreeComponent implements OnInit {
         }
     }
     
-     //data contains "concept" and "scheme"
+    //data contains "concept" and "scheme"
     private onConceptRemovedFromScheme(data) {
         var scheme = data.scheme;
         if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {

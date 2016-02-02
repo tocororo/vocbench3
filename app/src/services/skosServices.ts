@@ -138,5 +138,73 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService);
     }
+    
+    //Label services
+    
+    setPrefLabel(concept: string, label: string, lang: string) {
+        console.log("[SkosServices] setPrefLabel");
+        var params: any = {
+            concept: concept,
+            label: label,
+            lang: lang,
+        };
+        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService);
+    }
+    
+    removePrefLabel(concept: string, label: string, lang?: string) {
+        console.log("[SkosServices] removePrefLabel");
+        var params: any = {
+            concept: concept,
+            label: label,
+        };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService);
+	}
+    
+    addAltLabel(concept: string, label: string, lang: string) {
+        console.log("[SkosServices] addAltLabel");
+        var params: any = {
+            concept: concept,
+            label: label,
+            lang: lang,
+        };
+        return this.httpMgr.doGet(this.serviceName, "addAltLabel", params, this.oldTypeService);
+    }
+    
+    removeAltLabel(concept: string, label: string, lang?: string) {
+        console.log("[SkosServices] removeAltLabel");
+        var params: any = {
+            concept: concept,
+            label: label,
+        };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "removeAltLabel", params, this.oldTypeService);
+	}
+    
+    addHiddenLabel(concept: string, label: string, lang: string) {
+        console.log("[SkosServices] addHiddenLabel");
+        var params: any = {
+            concept: concept,
+            label: label,
+            lang: lang,
+        };
+        return this.httpMgr.doGet(this.serviceName, "addHiddenLabel", params, this.oldTypeService);
+    }
+    
+    removeHiddenLabel(concept: string, label: string, lang?: string) {
+        console.log("[SkosServices] removeHiddenLabel");
+        var params: any = {
+            concept: concept,
+            label: label,
+        };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "removeHiddenLabel", params, this.oldTypeService);
+	}
 
 }

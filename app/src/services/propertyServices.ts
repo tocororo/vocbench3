@@ -72,6 +72,7 @@ export class PropertyServices {
         console.log("[PropertyServices] removeProperty");
         var params: any = {
             name: name,
+            type: "Property",
         };
         return this.httpMgr.doGet("delete", "removeProperty", params, this.oldTypeService);
     }
@@ -111,7 +112,7 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "getPropertyDescription", params, this.oldTypeService);
     }
 
-    removePropValue(instanceQName: string, propertyQName: string, value: string, rangeQName: string, type: string, lang: string) {
+    removePropValue(instanceQName: string, propertyQName: string, value: string, rangeQName: string, type: string, lang?: string) {
         console.log("[PropertyServices] removePropValue");
         var params: any = {
             instanceQName: instanceQName,
@@ -119,12 +120,14 @@ export class PropertyServices {
             value: value,
             rangeQName: rangeQName,
             type: type,
-            lang: lang,
         };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "removePropValue", params, this.oldTypeService);
     }
 
-    createAndAddPropValue(instanceQName: string, propertyQName: string, value: string, rangeQName: string, type: string, lang: string) {
+    createAndAddPropValue(instanceQName: string, propertyQName: string, value: string, rangeQName: string, type: string, lang?: string) {
         console.log("[PropertyServices] createAndAddPropValue");
         var params: any = {
             instanceQName: instanceQName,
@@ -132,8 +135,10 @@ export class PropertyServices {
             value: value,
             rangeQName: rangeQName,
             type: type,
-            lang: lang,
         };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "createAndAddPropValue", params, this.oldTypeService);
     }
 

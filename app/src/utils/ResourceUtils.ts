@@ -60,6 +60,13 @@ export class ResourceUtils {
                 } else {
                     imgSrc = "app/assets/images/prop_imported.png";
                 }
+            } else if (role == "xlabel") {
+                var lang = rdfResource.getAdditionalProperty("lang");
+                if (lang != undefined && lang != "") {
+                    imgSrc = "app/assets/images/flags/flag_" + lang + ".png";
+                } else {
+                    imgSrc = "app/assets/images/flags/flag_unknown.png";
+                }    
             }
         } else if (rdfResource.isLiteral()) {
             var lang = (<ARTLiteral>rdfResource).getLang();

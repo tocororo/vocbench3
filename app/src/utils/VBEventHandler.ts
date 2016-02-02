@@ -19,6 +19,8 @@ export class VBEventHandler {
     public conceptDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contains an object with "concept" and "scheme"
     public conceptRemovedFromSchemeEvent: EventEmitter<any> = new EventEmitter();
+    //event should contains an object with "concept" and "scheme"
+    public conceptRemovedAsTopConceptEvent: EventEmitter<any> = new EventEmitter();
     //event should contains an object with "concept" and "broader"
     public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
     
