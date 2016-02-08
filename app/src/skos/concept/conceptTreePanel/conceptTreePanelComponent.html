@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <!-- Commands -->
     <div class="panel-heading">  
-        <div class="btn-group btn-group-xs" role="group">
+        <div class="btn-group btn-group-xs" style="flex: 1;" role="group">
             <button class="btn btn-default" title="Create Concept" (click)="createConcept()" [disabled]="!scheme">
                 <img src="app/assets/images/concept_create.png" />
             </button>
@@ -19,7 +19,7 @@
     
     
     <!-- Tree -->
-    <div class="panel-body" style="max-height: 70%; overflow-y: auto;">
+    <div class="panel-body">
         <concept-tree [scheme]="scheme"></concept-tree>
     </div>
 </div>

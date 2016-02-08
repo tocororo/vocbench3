@@ -7,11 +7,19 @@
         
         <types-renderer [object-list]="typesColl" [resource]="resource" (update)="refresh()"></types-renderer>
         
+        <class-axiom-renderer [pred-obj-list]="classAxiomColl" [resource]="resource" (update)="refresh()"></class-axiom-renderer>
+        
         <top-concepts-renderer [object-list]="topconceptofColl" [resource]="resource" (update)="refresh()"></top-concepts-renderer>
         
         <schemes-renderer [object-list]="schemesColl" [resource]="resource" (update)="refresh()"></schemes-renderer>
         
         <broaders-renderer [object-list]="broadersColl" [resource]="resource" (update)="refresh()"></broaders-renderer>
+        
+        <superproperties-renderer [object-list]="superpropertiesColl" [resource]="resource" (update)="refresh()"></superproperties-renderer>
+        
+        <domains-renderer [object-list]="domainsColl" [resource]="resource" (update)="refresh()"></domains-renderer>
+        
+        <ranges-renderer [object-list]="rangesColl" [resource]="resource" (update)="refresh()"></ranges-renderer>
         
         <lexicalizations-renderer [pred-obj-list]="lexicalizationsColl" [resource]="resource" (update)="refresh()"></lexicalizations-renderer>
         

@@ -114,11 +114,11 @@ export class ConceptTreeNodeComponent {
         }
     }
     
-    //data contains "concept" and "broader"
+    //data contains "resource" and "parent"
     private onBroaderRemoved(data) {
-        var broader = data.broader;
+        var broader = data.parent;
         if (broader.getURI() == this.node.getURI()) {
-            var concept = data.concept;
+            var concept = data.resource;
             this.onConceptDeleted(concept);
         }
     }

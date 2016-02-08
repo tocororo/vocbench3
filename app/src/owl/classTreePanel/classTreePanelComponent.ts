@@ -66,7 +66,7 @@ export class ClassTreePanelComponent {
     }
     
     public deleteClass() {
-        this.owlService.deleteClass(this.selectedClass.getURI())
+        this.owlService.removeClass(this.selectedClass.getURI())
             .subscribe(
                 stResp => {
                     this.eventHandler.classDeletedEvent.emit(this.selectedClass);

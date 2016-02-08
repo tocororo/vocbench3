@@ -18,6 +18,7 @@ export class PropertyTreeNodeComponent {
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(data => this.onSubPropertyCreated(data)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(concept => this.onPropertyDeleted(concept)));
+        this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(data => this.onSuperPropertyRemoved(data)));
     }
     
     ngOnDestroy() {
@@ -77,6 +78,15 @@ export class PropertyTreeNodeComponent {
         if (this.node.getURI() == data.parent.getURI()) {
             this.node.getAdditionalProperty("children").push(data.resource);
             this.node.setAdditionalProperty("more", 1);
+        }
+    }
+    
+    //data contains "resource" and "parent"
+    private onSuperPropertyRemoved(data) {
+        var superProp = data.parent;
+        if (superProp.getURI() == this.node.getURI()) {
+            var prop = data.resource;
+            this.onPropertyDeleted(prop);
         }
     }
 	

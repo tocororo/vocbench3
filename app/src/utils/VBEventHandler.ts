@@ -21,7 +21,7 @@ export class VBEventHandler {
     public conceptRemovedFromSchemeEvent: EventEmitter<any> = new EventEmitter();
     //event should contains an object with "concept" and "scheme"
     public conceptRemovedAsTopConceptEvent: EventEmitter<any> = new EventEmitter();
-    //event should contains an object with "concept" and "broader"
+    //event should contains an object with "resource" and "parent"
     public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //CLASS EVENTS
@@ -31,6 +31,8 @@ export class VBEventHandler {
     public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contains an object with "cls" and "type"
     public typeDeletedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contains an object with "resource" and "parent"
+    public subClassRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
     public propertyTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
@@ -38,6 +40,8 @@ export class VBEventHandler {
     //event should contains an object with "resource" (the subproperty created) and "parent"
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    //event should contains an object with "resource" and "parent"
+    public superPropertyRemovedEvent: EventEmitter<any> = new EventEmitter();
     
 	constructor() {}
     

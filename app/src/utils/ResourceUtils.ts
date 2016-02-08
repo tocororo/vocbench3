@@ -3,6 +3,9 @@ import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicate
 
 @Injectable()
 export class ResourceUtils {
+    
+    private availableFlagLang = ["ar", "cs", "de", "el", "en", "es", "fr", "hi", "it", "ja", 
+            "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
 
     getImageSrc(rdfResource: ARTNode): string {
         var imgSrc;
@@ -31,49 +34,53 @@ export class ResourceUtils {
             } else if (role == "conceptscheme") {
                 imgSrc = "app/assets/images/conceptScheme.png";
             } else if (role.indexOf("objectproperty") != -1) {
-                if (explicit || !deleteForbidden) {
+                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
                     imgSrc = "app/assets/images/propObject.png";
                 } else {
-                    imgSrc = "app/assets/images/propObject_imported.png";
+                    imgSrc = "app/assets/images/propObject_imported.png";       
                 }
             } else if (role.indexOf("datatypeproperty") != -1) {
-                if (explicit || !deleteForbidden) {
+                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
                     imgSrc = "app/assets/images/propDatatype.png";
                 } else {
                     imgSrc = "app/assets/images/propDatatype_imported.png";
                 }
             } else if (role.indexOf("annotationproperty") != -1) {
-                if (explicit || !deleteForbidden) {
+                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
                     imgSrc = "app/assets/images/propAnnotation.png";
                 } else {
                     imgSrc = "app/assets/images/propAnnotation_imported.png";
                 }
             } else if (role.indexOf("ontologyproperty") != -1) {
-                if (explicit || !deleteForbidden) {
+                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
                     imgSrc = "app/assets/images/propOntology.png";
                 } else {
                     imgSrc = "app/assets/images/propOntology_imported.png";
                 }
             } else if (role.indexOf("property") != -1) {
-                if (explicit || !deleteForbidden) {
+                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
                     imgSrc = "app/assets/images/prop.png";
                 } else {
                     imgSrc = "app/assets/images/prop_imported.png";
                 }
             } else if (role == "xlabel") {
                 var lang = rdfResource.getAdditionalProperty("lang");
-                if (lang != undefined && lang != "") {
-                    imgSrc = "app/assets/images/flags/flag_" + lang + ".png";
-                } else {
-                    imgSrc = "app/assets/images/flags/flag_unknown.png";
-                }    
+                if (lang != undefined && lang != null) {
+                    if (this.availableFlagLang.indexOf(lang) != -1) {
+                        imgSrc = "app/assets/images/flags/flag_" + lang + ".png";    
+                    } else {
+                        imgSrc = "app/assets/images/flags/flag_unknown.png";    
+                    }
+                }
             }
         } else if (rdfResource.isLiteral()) {
             var lang = (<ARTLiteral>rdfResource).getLang();
-            if (lang != undefined && lang != "") {
-                imgSrc = "app/assets/images/flags/flag_" + lang + ".png";
-            } else {
-                imgSrc = "app/assets/images/flags/flag_unknown.png";
+            if (lang != undefined && lang != null) {
+                if (this.availableFlagLang.indexOf(lang) != -1) {
+                    imgSrc = "app/assets/images/flags/flag_" + lang + ".png";
+                } else {
+                    imgSrc = "app/assets/images/flags/flag_unknown.png";
+                }
             }
         }
         return imgSrc;
@@ -102,7 +109,7 @@ export class ResourceUtils {
         } else if (role.indexOf("ontologyproperty") != -1) {
             imgSrc = "app/assets/images/propOntology_" + action + ".png";
         } else if (role.indexOf("property") != -1) {
-            imgSrc = "app/assets/images/prop_create_" + action + ".png";
+            imgSrc = "app/assets/images/prop_" + action + ".png";
         }
         return imgSrc
     }

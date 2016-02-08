@@ -16,7 +16,12 @@ export class RdfResourceComponent {
     
     ngOnChanges(changes) {
         this.imageSrc = this.resUtils.getImageSrc(this.resource);
-		this.resourceShow = this.resource.getShow();
+        if (this.resource.isLiteral()) {
+            this.resourceShow = this.resource.getNominalValue();    
+        } else {
+            this.resourceShow = this.resource.getShow();    
+        }
+		
     }
 	
 }

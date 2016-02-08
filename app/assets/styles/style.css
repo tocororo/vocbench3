@@ -1,98 +1,76 @@
 rdf-resource {
 	min-height: 24px;
-	position: relative; 
+    display: inline-flex;
+    align-items: center;
 }
 
-rdf-resource img {
-    margin-bottom: 2px;
-    margin-left: 2px;
+rdf-resource > .rdfResourceIcon {
+    width: 16px;
+    margin-right: 5px;
+}
+
+rdf-resource > span {
+    flex: 1;
 }
 
 .selectedResource {
-	border: 1px solid #a4a4a4 !important;
-    background-color: gainsboro;
+    background-color: #e6e6e6;
 }
 
 .treeNode {
-	display: block;
 	min-height: 24px;
-	position: relative;
 	margin: 2px 0px;
+    display: flex;
+    align-items: center;
 }
 
 .treeNode .expandCollapseBtnContainer {
-	/* to align vertically in treeNode container */
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
+    width: 16px;
 }
 
 .treeNode rdf-resource {
-	margin: 0px 0px 0px 5px;
-	display: inline-block; /* To render the element next to the expand/collapse button */
-	border: 1px solid #eaeaea;
-	border-radius: 6px;
-	/* To make rdf-resource width fill the remaining width of the treeNode */
-	position: absolute;
-	left: 16px;
-	right: 0px;
-	/* to align vertically in treeNode container */
-	top: 50%;
-	transform: translateY(-50%);
-    padding-top: 2px;
+	border-radius: 2px;
+    flex: 1;
 }
 
 .treeNode rdf-resource:HOVER {
-	background-color: #e5e5e5;
+	background-color: #f5f5f5;
 }
 
 .subTree {
 	padding-left:15px;
-    /*border: 1px solid #1b3671;*/
 }
 
 .subtreeOpen {
 	max-height: 1600px; /* A big value possibly not exceeded by the content (to allow the transition) */
 	transition: max-height 0.5s ease-in;
 	overflow: hidden;
-	/*border: 1px solid green; */
 }
 
 .subtreeClose {
 	max-height: 0;
     transition: max-height 0.3s ease-out;
     overflow: hidden;
-    /*border: 1px solid red; */
 }
 
 .conceptSchemeItem {
 	height: 24px;
-	position: relative;
-	margin: 2px 0px;
+    display: flex;
+    align-items: center;
+    
 }
 
 .conceptSchemeItem input[type=radio] {
-	/* to align vertically in container conceptSchemeRadio */
-	position: absolute;
-	display: inline;
-	top: 50%;
-	transform: translateY(-50%);
-	margin: 0px; /* override input margin defined in bootstrap */
+	margin: 0px 5px 0px 0px; /* override input margin defined in bootstrap */
 }
 
 .conceptSchemeItem rdf-resource {
-	border: 1px solid #eaeaea;
-	border-radius: 6px;
-	/* to align vertically in container conceptSchemeRadio */
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	left: 16px; /* push the label rdf-resource from the left in order to left space to the radio input */
-	right: 0px;
+	border-radius: 2px;
+	flex: 1;
 }
 
 .conceptSchemeItem rdf-resource:HOVER {
-    background-color: #e5e5e5;
+    background-color: #f5f5f5;
 }
 
 input[type="image"]:disabled  {
@@ -108,18 +86,40 @@ input[type="image"]:disabled  {
     border: none;
 }
 
-.CodeMirror { height: auto; border: 1px solid #ddd; }
-.CodeMirror-scroll { max-height: 200px; }
-.CodeMirror pre { padding-left: 7px; line-height: 1.25; }
+.resViewObjectItem {
+    display: flex;
+    align-items: center;
+}
+
+.resViewObjectItem:HOVER {
+    background-color: #f5f5f5;
+}
+
+.resViewObjectItem > rdf-resource {
+    flex: 1;
+}
+
+.resViewPartitionRendererHeading {
+    display: flex;
+    align-items: center;
+}
+
+.resViewPartitionRendererHeading > label {
+    flex: 1;
+}
 
 /* BOOTSTRAP OVERRIDE */
 
 body {
+    font-size: 11px;
+}
+
+nav {
     font-size: 13px;
 }
 
 .table {
-    font-size: 13px;
+    font-size: 11px;
     margin-bottom: 0px;
 }
 
@@ -138,7 +138,7 @@ body {
 }
 
 .panel .panel { margin-bottom: 5px; } /*panel inside panel (resource view)*/
-.panel-heading { margin-bottom: 0px; padding: 6px 10px; }
+.panel-heading { margin-bottom: 0px; padding: 5px 10px; }
 .panel-body { padding: 10px; }
 
 label { margin-bottom: 0px; }

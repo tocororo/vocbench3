@@ -194,7 +194,7 @@ export class ARTLiteral implements ARTNode {
         var nt = JSON.stringify(this.label);
         if (this.lang != null && this.lang.length > 0) {
             nt += "@" + this.lang;
-        } else if (this.datatype != null) {
+        } else if (this.datatype != null && this.datatype != "") {
             nt += "^^" + this.datatype;
         }
         return nt;

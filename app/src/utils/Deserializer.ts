@@ -32,23 +32,39 @@ export class Deserializer {
 		
 		var uri = uriElement.textContent;
 		var show = uriElement.getAttribute('show');
-		var explicit = uriElement.getAttribute('explicit') == "true";
-		var deleteForbidden = uriElement.getAttribute('deleteForbidden') == "true";
+        var role = uriElement.getAttribute('role');
+        var artURIRes = new ARTURIResource(uri, show, role);
+        
+        //optional properties
+		var explicit = uriElement.getAttribute('explicit');
+        if (explicit != undefined) {
+             artURIRes.setAdditionalProperty("explicit", (explicit == "true"));
+        }
+		var deleteForbidden = uriElement.getAttribute('deleteForbidden');
+        if (deleteForbidden != undefined) {
+            artURIRes.setAdditionalProperty("deleteForbidden", (deleteForbidden == "true"));
+        }
 		var more = uriElement.getAttribute('more');
-		var role = uriElement.getAttribute('role');
+        if (more != undefined) {
+            artURIRes.setAdditionalProperty("more", more); 
+        }
 		var numInst = uriElement.getAttribute("numInst");
+        if (numInst != undefined) {
+            artURIRes.setAdditionalProperty("numInst", numInst);
+        }
 		var hasCustomRange = uriElement.getAttribute("hasCustomRange") == "true";//indicates if a property has a CustomRange
+        if (hasCustomRange != undefined) {
+            artURIRes.setAdditionalProperty("hasCustomRange", hasCustomRange);
+        }
 		var resourcePosition = uriElement.getAttribute("resourcePosition");//indicates the position of the resource
+        if (resourcePosition != undefined) {
+            artURIRes.setAdditionalProperty("resourcePosition", resourcePosition);
+        }
 		var lang = uriElement.getAttribute("lang");//indicates the language of an xLabel
+        if (lang != undefined) {
+            artURIRes.setAdditionalProperty("lang", lang);
+        }
 		
-		var artURIRes = new ARTURIResource(uri, show, role);
-		artURIRes.setAdditionalProperty("explicit", explicit); 
-		artURIRes.setAdditionalProperty("deleteForbidden", deleteForbidden);
-		artURIRes.setAdditionalProperty("more", more); 
-		artURIRes.setAdditionalProperty("numInst", numInst);
-		artURIRes.setAdditionalProperty("hasCustomRange", hasCustomRange);
-		artURIRes.setAdditionalProperty("resourcePosition", resourcePosition);
-		artURIRes.setAdditionalProperty("lang", lang);
 		return artURIRes;
 	}
 	
@@ -63,14 +79,22 @@ export class Deserializer {
 		var id = bnodeElement.textContent;
 		var show = bnodeElement.getAttribute("show");
 		var role = bnodeElement.getAttribute('role');
-		var explicit = bnodeElement.getAttribute('explicit') == "true";
-		var resourcePosition = bnodeElement.getAttribute("resourcePosition");//indicates the position of the resource
+        var bNodeRes = new ARTBNode(id, show, role);
+        
+        //optional properties
+		var explicit = bnodeElement.getAttribute('explicit');
+        if (explicit != undefined) {
+             bNodeRes.setAdditionalProperty("explicit", (explicit == "true"));
+        }
+        var resourcePosition = bnodeElement.getAttribute("resourcePosition");//indicates the position of the resource
+        if (resourcePosition != undefined) {
+            bNodeRes.setAdditionalProperty("resourcePosition", resourcePosition);
+        }
 		var lang = bnodeElement.getAttribute("lang");//indicates the language of an xLabel
+        if (lang != undefined) {
+            bNodeRes.setAdditionalProperty("lang", lang);
+        }
 
-		var bNodeRes = new ARTBNode(id, show, role);
-		bNodeRes.setAdditionalProperty("explicit", explicit);
-		bNodeRes.setAdditionalProperty("resourcePosition", resourcePosition);
-		bNodeRes.setAdditionalProperty("lang", lang);
 		return bNodeRes;
 	}
 	
@@ -103,27 +127,32 @@ export class Deserializer {
 		} else {
 			lang = literalElement.getAttribute("lang");
 		}
-		var show = literalElement.getAttribute("show");
-		var explicit = literalElement.getAttribute('explicit') == "true";
-		
 		var artLiteralRes = new ARTLiteral(label, datatype, lang, isTypedLiteral);
-		artLiteralRes.setAdditionalProperty("show", show);
-		artLiteralRes.setAdditionalProperty("explicit", explicit);
+        //optional properties
+        var show = literalElement.getAttribute("show");
+        if (show != undefined) {
+             artLiteralRes.setAdditionalProperty("show", show);
+        }
+		var explicit = literalElement.getAttribute('explicit');
+        if (explicit != undefined) {
+             artLiteralRes.setAdditionalProperty("explicit", (explicit == "true"));
+        }
+        
 		return artLiteralRes;
 	}
 	
-	createRDFNode(element): ARTNode {
-		var tagName = element.tagName;
-		if (tagName == 'uri'){
-			return this.createURI(element);
-		} else if(tagName == 'bnode'){
-			return this.createBlankNode(element);
-		} else if(tagName == 'plainLiteral' || tagName == 'typedLiteral'){ 
-			return this.createLiteral(element);
-		} else {
-			throw new Error("Not a RDFNode");
-		}
-	}
+    createRDFNode(element): ARTNode {
+        var tagName = element.tagName;
+        if (tagName == 'uri') {
+            return this.createURI(element);
+        } else if (tagName == 'bnode') {
+            return this.createBlankNode(element);
+        } else if (tagName == 'plainLiteral' || tagName == 'typedLiteral') {
+            return this.createLiteral(element);
+        } else {
+            throw new Error("Not a RDFNode");
+        }
+    }
 	
 	createRDFResource(element) {
 		var tagName = element.tagName;

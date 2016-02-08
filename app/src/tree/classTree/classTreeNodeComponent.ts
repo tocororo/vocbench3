@@ -21,6 +21,7 @@ export class ClassTreeNodeComponent {
 	constructor(private owlService:OwlServices, public deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(data => this.onSubClassCreated(data)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
+        this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(data => this.onSubClassRemoved(data)));
     }
     
     ngOnDestroy() {
@@ -94,6 +95,15 @@ export class ClassTreeNodeComponent {
         if (this.node.getURI() == data.parent.getURI()) {
             this.node.getAdditionalProperty("children").push(data.resource);
             this.node.setAdditionalProperty("more", 1);
+        }
+    }
+    
+    //data contains "resource" and "parent"
+    private onSubClassRemoved(data) {
+        var superClass = data.parent;
+        if (superClass.getURI() == this.node.getURI()) {
+            var cls = data.resource;
+            this.onClassDeleted(cls);
         }
     }
 	

@@ -34,7 +34,7 @@ export class BroadersPartitionRenderer {
         this.skosService.removeBroaderConcept(this.resource.getURI(), broader.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.broaderRemovedEvent.emit({concept: this.resource, broader: broader});
+                    this.eventHandler.broaderRemovedEvent.emit({resource: this.resource, parent: broader});
                     this.update.emit(null);
                 },
                 err => {

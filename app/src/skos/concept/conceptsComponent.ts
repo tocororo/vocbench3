@@ -6,7 +6,7 @@ import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 
 @Component({
-	selector: "concepts-component",
+	selector: "concept-component",
 	templateUrl: "app/src/skos/concept/conceptsComponent.html",
 	directives: [ConceptTreePanelComponent, ResourceViewComponent]
 })
