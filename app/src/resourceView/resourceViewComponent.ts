@@ -14,6 +14,7 @@ import {ClassAxiomPartitionPartitionRenderer} from "./renderer/classAxiomPartiti
 import {SuperPropertiesPartitionRenderer} from "./renderer/superPropertiesPartitionRenderer";
 import {DomainsPartitionRenderer} from "./renderer/domainsPartitionRenderer";
 import {RangesPartitionRenderer} from "./renderer/rangesPartitionRenderer";
+import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitionRenderer";
 
 @Component({
 	selector: "resource-view",
@@ -21,7 +22,7 @@ import {RangesPartitionRenderer} from "./renderer/rangesPartitionRenderer";
 	directives: [RdfResourceComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, SchemesPartitionRenderer,
             BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer, 
             SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-            RangesPartitionRenderer],
+            RangesPartitionRenderer, PropertyFacetsPartitionRenderer],
     providers: [ResourceViewServices],
 })
 export class ResourceViewComponent {
@@ -39,6 +40,8 @@ export class ResourceViewComponent {
     public rangesColl: ARTURIResource[];
     public lexicalizationsColl: ARTPredicateObjects[];
     public propertiesColl: ARTPredicateObjects[];
+    public propertyFacets: any[];
+    public inverseofColl: ARTURIResource[];
     
 	constructor(private resViewService:ResourceViewServices, private deserializer:Deserializer) {
     }
@@ -76,7 +79,7 @@ export class ResourceViewComponent {
                         } else if (partitionName == "superproperties") {
                             this.superpropertiesColl = this.deserializer.createRDFArray(partition);
                         } else if (partitionName == "facets") {
-                            
+                            this.parseFacetsPartition(partition);
                         } else if (partitionName == "domains") {
                             this.domainsColl = this.deserializer.createRDFArray(partition);
                         } else if (partitionName == "ranges") {
@@ -93,6 +96,36 @@ export class ResourceViewComponent {
                     console.error(err.stack);
                 }
             );
+    }
+    
+    private parseFacetsPartition(facetsElement) {
+        //init default facets
+        this.propertyFacets = [
+            {name: "symmetric", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
+            {name: "functional", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
+            {name: "inverseFunctional", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
+            {name: "transitive", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
+        ];
+        var facetsChildren = facetsElement.children;
+        for (var i = 0; i < facetsChildren.length; i++) {
+            var facetName = facetsChildren[i].tagName;
+            if (facetName == "symmetric" || facetName == "functional" || facetName == "inverseFunctional" || facetName == "transitive") {
+                var facet = {
+                    name: facetName,
+                    explicit: (facetsChildren[i].getAttribute("explicit") == "true"),
+                    value: (facetsChildren[i].getAttribute("value") == "true")
+                };
+                //replace the default facets
+                for (var j=0; j<this.propertyFacets.length; j++) {
+                    if (this.propertyFacets[j].name == facetName) {
+                        this.propertyFacets[j] = facet;
+                        break;
+                    }
+                }
+            } else if (facetName == "inverseof") {
+                this.inverseofColl = this.deserializer.createRDFArray(facetsChildren[i]);
+            }
+        }
     }
     
 }

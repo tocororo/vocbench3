@@ -14,7 +14,8 @@ rdf-resource > span {
 }
 
 .selectedResource {
-    background-color: #e6e6e6;
+    background-color: #cde8ff;
+    border: 1px solid #7bc3ff;
 }
 
 .treeNode {
@@ -34,7 +35,7 @@ rdf-resource > span {
 }
 
 .treeNode rdf-resource:HOVER {
-	background-color: #f5f5f5;
+    background-color: #e5f3ff;
 }
 
 .subTree {
@@ -70,7 +71,7 @@ rdf-resource > span {
 }
 
 .conceptSchemeItem rdf-resource:HOVER {
-    background-color: #f5f5f5;
+    background-color: #e5f3ff;
 }
 
 input[type="image"]:disabled  {
@@ -79,7 +80,7 @@ input[type="image"]:disabled  {
 }
 
 .table tr.active td {
-    background-color: #e6e6e6 !important;
+    background-color: #cde8ff !important;
 }
 
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
@@ -92,7 +93,7 @@ input[type="image"]:disabled  {
 }
 
 .resViewObjectItem:HOVER {
-    background-color: #f5f5f5;
+    background-color: #e5f3ff;
 }
 
 .resViewObjectItem > rdf-resource {
