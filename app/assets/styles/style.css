@@ -34,7 +34,7 @@ rdf-resource > span {
     flex: 1;
 }
 
-.treeNode rdf-resource:HOVER {
+.treeNode rdf-resource:hover {
     background-color: #e5f3ff;
 }
 
@@ -70,7 +70,7 @@ rdf-resource > span {
 	flex: 1;
 }
 
-.conceptSchemeItem rdf-resource:HOVER {
+.conceptSchemeItem rdf-resource:hover {
     background-color: #e5f3ff;
 }
 
@@ -92,7 +92,7 @@ input[type="image"]:disabled  {
     align-items: center;
 }
 
-.resViewObjectItem:HOVER {
+.resViewObjectItem:hover {
     background-color: #e5f3ff;
 }
 
@@ -119,6 +119,31 @@ nav {
     font-size: 13px;
 }
 
+.navbar-default {
+	background: linear-gradient(to right, #1B3671, #7486AB);
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
+	color: #fff;
+}
+
+.navbar-default .navbar-nav > li > a {
+	color: #fff;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+	color: #000;
+    background-color: #7486AB;
+}
+
+.navbar-default .navbar-nav>.disabled>a, .navbar-default .navbar-nav>.disabled>a:focus, .navbar-default .navbar-nav>.disabled>a:hover {
+    color: #777;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    color: #000;
+}
+
 .table {
     font-size: 11px;
     margin-bottom: 0px;
@@ -140,6 +165,10 @@ nav {
 
 .panel .panel { margin-bottom: 5px; } /*panel inside panel (resource view)*/
 .panel-heading { margin-bottom: 0px; padding: 5px 10px; }
+.panel-default > .panel-heading {
+    background: linear-gradient(#FFFFFF, #CACACA);
+    border-color: #BFBFBF;
+}
 .panel-body { padding: 10px; }
 
 label { margin-bottom: 0px; }
