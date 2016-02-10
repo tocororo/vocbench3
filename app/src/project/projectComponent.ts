@@ -8,9 +8,9 @@ import {VocbenchCtx} from '../utils/VocbenchCtx';
     providers: [ProjectServices],
 })
 export class ProjectComponent implements OnInit {
-    public projectList;
+    private projectList;
 
-    public selectedProject;
+    private selectedProject;
 
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx) { }
 
@@ -68,11 +68,11 @@ export class ProjectComponent implements OnInit {
             );
     }
 
-    public selectProject(project) {
+    private selectProject(project) {
         this.selectedProject = project;
     }
 
-    public isSelected(project) {
+    private isSelected(project) {
         return this.selectedProject == project;
     }
     

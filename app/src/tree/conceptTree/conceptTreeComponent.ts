@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
@@ -6,19 +6,21 @@ import {SkosServices} from "../../services/skosServices";
 import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 
 @Component({
-	selector: "concept-tree",
-	templateUrl: "app/src/tree/conceptTree/conceptTreeComponent.html",
+    selector: "concept-tree",
+    templateUrl: "app/src/tree/conceptTree/conceptTreeComponent.html",
     directives: [ConceptTreeNodeComponent],
     providers: [SkosServices],
 })
-export class ConceptTreeComponent implements OnInit {
-	@Input() scheme:ARTURIResource;
-    public roots:ARTURIResource[];
-    private selectedNode:ARTURIResource;
-    
+export class ConceptTreeComponent {
+    @Input() scheme: ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+
+    public roots: ARTURIResource[];
+    private selectedNode: ARTURIResource;
+
     private eventSubscriptions = [];
-	
-    constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
+
+    constructor(private skosService: SkosServices, private deserializer: Deserializer, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(
             concept => this.onConceptSelected(concept)));
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
@@ -30,7 +32,7 @@ export class ConceptTreeComponent implements OnInit {
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
             data => this.onConceptRemovedFromScheme(data)));
     }
-    
+
     ngOnInit() {
         var schemeUri = null;
         if (this.scheme != undefined) {
@@ -38,41 +40,42 @@ export class ConceptTreeComponent implements OnInit {
         }
         this.skosService.getTopConcepts(schemeUri)
             .subscribe(
-                stResp => {
-                    this.roots = this.deserializer.createRDFArray(stResp);
-                    for (var i=0; i<this.roots.length; i++) {
-                        this.roots[i].setAdditionalProperty("children", []);
-                    }
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err.stack);
+            stResp => {
+                this.roots = this.deserializer.createRDFArray(stResp);
+                for (var i = 0; i < this.roots.length; i++) {
+                    this.roots[i].setAdditionalProperty("children", []);
                 }
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
             );
     }
-    
+
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     //EVENT LISTENERS
     
-    private onConceptSelected(node:ARTURIResource) {
+    private onConceptSelected(node: ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty("selected", true);    
+            this.selectedNode.setAdditionalProperty("selected", true);
         } else if (this.selectedNode.getURI() != node.getURI()) {
             this.selectedNode.deleteAdditionalProperty("selected");
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);
         }
+        this.itemSelected.emit(node);
     }
-    
-    private onTopConceptCreated(concept:ARTURIResource) {
+
+    private onTopConceptCreated(concept: ARTURIResource) {
         this.roots.push(concept);
     }
-    
-    private onConceptDeleted(concept:ARTURIResource) {
+
+    private onConceptDeleted(concept: ARTURIResource) {
         //check if the concept to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == concept.getURI()) {
@@ -80,6 +83,8 @@ export class ConceptTreeComponent implements OnInit {
                 break;
             }
         }
+        //reset the selected item
+        this.itemSelected.emit(undefined);
     }
     
     //data contains "concept" and "scheme"
@@ -90,5 +95,5 @@ export class ConceptTreeComponent implements OnInit {
             this.onConceptDeleted(concept);
         }
     }
-    
+
 }

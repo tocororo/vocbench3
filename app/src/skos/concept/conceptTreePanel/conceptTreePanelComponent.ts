@@ -1,4 +1,4 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ConceptTreeComponent} from "../../../tree/conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
@@ -15,17 +15,12 @@ import {ROUTER_DIRECTIVES} from "angular2/router";
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     private selectedConcept:ARTURIResource;
-    private eventSubscriptions = [];
     
 	constructor(private skosService:SkosServices, private deserializer:Deserializer, 
             private eventHandler:VBEventHandler, private vbCtx:VocbenchCtx) {
-        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
-    }
-    
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     public createConcept() {
@@ -68,6 +63,7 @@ export class ConceptTreePanelComponent {
                 stResp => {
                     this.eventHandler.conceptDeletedEvent.emit(this.selectedConcept);
                     this.selectedConcept = null;
+                    this.itemSelected.emit(undefined);
                 },
                 err => { 
                     alert("Error: " + err);
@@ -77,9 +73,9 @@ export class ConceptTreePanelComponent {
     }
     
     //EVENT LISTENERS
-    
     private onNodeSelected(node:ARTURIResource) {
         this.selectedConcept = node;
+        this.itemSelected.emit(node);
     }
     
 }

@@ -1,4 +1,4 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ClassTreeComponent} from "../../tree/classTree/classTreeComponent";
 import {OwlServices} from "../../services/owlServices";
 import {ARTURIResource} from "../../utils/ARTResources";
@@ -13,13 +13,11 @@ import {Deserializer} from "../../utils/Deserializer";
 })
 export class ClassTreePanelComponent {
     @Input('rootclass') rootClass:ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     private selectedClass:ARTURIResource;
-    private eventSubscriptions = [];
     
-	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
-    }
+	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {}
     
     ngOnInit() {
         if (this.rootClass == undefined) {
@@ -27,11 +25,7 @@ export class ClassTreePanelComponent {
         }
     }
     
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-    
-    public createClass() {
+    private createClass() {
         var className = prompt("Insert class name");
         if (className == null) return;
         this.owlService.createClass(this.rootClass.getURI(), className)
@@ -71,6 +65,7 @@ export class ClassTreePanelComponent {
                 stResp => {
                     this.eventHandler.classDeletedEvent.emit(this.selectedClass);
                     this.selectedClass = null;
+                    this.itemSelected.emit(undefined);
                 },
                 err => { 
                     alert("Error: " + err);
@@ -80,8 +75,8 @@ export class ClassTreePanelComponent {
     }
     
     //EVENT LISTENERS
-    
     private onNodeSelected(node:ARTURIResource) {
         this.selectedClass = node;
+        this.itemSelected.emit(node);
     }
 }

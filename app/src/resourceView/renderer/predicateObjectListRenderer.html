@@ -1,17 +1,17 @@
-<div class="panel panel-default" *ngIf="predicateObjectList">
-    <div class="panel-heading resViewPartitionRendererHeading">
+<div class="resViewPartitionRendererPanel" *ngIf="predicateObjectList">
+    <div class="resViewPartitionRendererHeading">
         <label>{{label}}:</label>
         <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()">
     </div>
-    <div class="panel-body">
-        <div class="panel panel-default" *ngFor="#po of predicateObjectList">
+    <div class="resViewPartitionRendererBody">
+        <div class="resViewPartitionRendererPanel" *ngFor="#po of predicateObjectList">
             <!-- each item is a predicateObjects -->
-            <div class="panel-heading resViewPartitionRendererHeading">
+            <div class="resViewPartitionRendererHeading">
                 <label>{{po.getPredicate().getShow()}}</label>
                 <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
                         (click)="enrichProperty(po.getPredicate())">
             </div>
-            <div class="panel-body">
+            <div class="resViewPartitionRendererBody">
                 <div *ngFor="#obj of po.getObjects()" class="resViewObjectItem">
                     <rdf-resource [resource]="obj"></rdf-resource>
                     <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"

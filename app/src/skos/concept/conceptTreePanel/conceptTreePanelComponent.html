@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <!-- Commands -->
     <div class="panel-heading">  
-        <div class="btn-group btn-group-xs" style="flex: 1;" role="group">
+        <div class="btn-group btn-group-xs" role="group">
             <button class="btn btn-default" title="Create Concept" (click)="createConcept()" [disabled]="!scheme">
                 <img src="app/assets/images/concept_create.png" />
             </button>
@@ -17,9 +17,19 @@
         </a>
     </div>
     
-    
     <!-- Tree -->
     <div class="panel-body">
-        <concept-tree [scheme]="scheme"></concept-tree>
+        <concept-tree [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree>
+    </div>
+    
+    <div class="panel-footer">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
     </div>
 </div>

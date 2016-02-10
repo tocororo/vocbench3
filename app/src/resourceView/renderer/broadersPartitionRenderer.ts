@@ -16,11 +16,11 @@ export class BroadersPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Broaders";
-    public addBtnImgSrc = "app/assets/images/concept_create.png";
-    public addBtnImgTitle = "Add broader";
-    public removeBtnImgSrc = "app/assets/images/concept_delete.png";
-    public removeBtnImgTitle = "Remove broader";
+    private label = "Broaders";
+    private addBtnImgSrc = "app/assets/images/concept_create.png";
+    private addBtnImgTitle = "Add broader";
+    private removeBtnImgSrc = "app/assets/images/concept_delete.png";
+    private removeBtnImgTitle = "Remove broader";
     
     constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {}
     

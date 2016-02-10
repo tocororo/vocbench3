@@ -35,12 +35,12 @@ export class App {
     constructor(private location:Location, private vbCtx:VocbenchCtx) {}
     
     //returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links 
-    public isActive(viewLocation) {
+    private isActive(viewLocation) {
         return this.location.path() == viewLocation;
     }
     
     //returns true if a project is open. Useful to enable/disable navbar links 
-    public isProjectOpen() {
+    private isProjectOpen() {
         return this.vbCtx.getProject().name != "SYSTEM";
     }
     

@@ -5,15 +5,15 @@
             <button class="btn btn-default" title="Create Concept Scheme" (click)="createScheme()">
                 <img src="app/assets/images/conceptScheme_create.png" />
             </button>
-            <button class="btn btn-default" title="Delete Concept Scheme" (click)="deleteScheme()" [disabled]="!focusedScheme">
+            <button class="btn btn-default" title="Delete Concept Scheme" (click)="deleteScheme()" [disabled]="!selectedScheme">
                 <img src="app/assets/images/conceptScheme_delete.png" />
             </button>
         </div>
     </div>
     <div class="panel-body">
         <div *ngFor="#s of schemeList" class="conceptSchemeItem">
-            <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="selectScheme(input.value);" />
-            <rdf-resource [resource]="s" (click)="focusScheme(s)" [ngClass]="{selectedResource : isFocused(s)}"></rdf-resource>
+            <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="activateScheme(input.value);" />
+            <rdf-resource [resource]="s" (click)="selectScheme(s)" [ngClass]="{selectedResource : isSelected(s)}"></rdf-resource>
         </div>
     </div>
 </div>

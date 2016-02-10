@@ -1,10 +1,8 @@
-<div class="col-md-12">
-    <div class="row">
-        <div class="col-sm-3">
-            <property-tree-panel [scheme]="scheme"></property-tree-panel>
-        </div>
-        <div class="col-sm-9">
-            <resource-view *ngIf="resource" [resource]="resource"></resource-view>
-        </div>
+<div class="hbox">
+    <div class="sidebar">
+        <property-tree-panel [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></property-tree-panel>
+    </div>
+    <div class="resViewContainer" *ngIf="resource">
+        <resource-view [resource]="resource"></resource-view>
     </div>
 </div>

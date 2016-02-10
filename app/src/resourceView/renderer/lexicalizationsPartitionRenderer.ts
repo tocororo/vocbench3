@@ -19,11 +19,11 @@ export class LexicalizationsPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Lexicalizations";
-    public addBtnImgSrc = "app/assets/images/propAnnotation_create.png";
-    public addBtnImgTitle = "Add a lexicalization";
-    public removeBtnImgSrc = "app/assets/images/propAnnotation_delete.png";
-    public removeBtnImgTitle = "Remove lexicalization";
+    private label = "Lexicalizations";
+    private addBtnImgSrc = "app/assets/images/propAnnotation_create.png";
+    private addBtnImgTitle = "Add a lexicalization";
+    private removeBtnImgSrc = "app/assets/images/propAnnotation_delete.png";
+    private removeBtnImgTitle = "Remove lexicalization";
     
     constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
         private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
@@ -132,19 +132,19 @@ export class LexicalizationsPartitionRenderer {
     }
     
     
-    public getAddPropImgTitle(predicate: ARTURIResource) {
+    private getAddPropImgTitle(predicate: ARTURIResource) {
         return "Add a " + predicate.getShow();
     }
     
-    public getRemovePropImgTitle(predicate: ARTURIResource) {
+    private getRemovePropImgTitle(predicate: ARTURIResource) {
         return "Remove " + predicate.getShow();
     }
     
-    public getAddPropImgSrc(predicate: ARTURIResource) {
+    private getAddPropImgSrc(predicate: ARTURIResource) {
         return this.resUtils.getActionPropImageSrc(predicate, "create");
     }
     
-    public getRemovePropImgSrc(predicate: ARTURIResource) {
+    private getRemovePropImgSrc(predicate: ARTURIResource) {
         return this.resUtils.getActionPropImageSrc(predicate, "delete");
     }
 }

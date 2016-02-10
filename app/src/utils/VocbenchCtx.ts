@@ -27,4 +27,8 @@ export class VocbenchCtx {
         return this.scheme;
     }
     
+    removeScheme() {
+        this.scheme = undefined;
+    }
+    
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from "angular2/core";
+import {Component, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
@@ -11,7 +11,8 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
     providers: [PropertyServices],
     directives: [PropertyTreeNodeComponent],
 })
-export class PropertyTreeComponent implements OnInit {
+export class PropertyTreeComponent {
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     public propertyTree: ARTURIResource[] = [];
     private selectedNode:ARTURIResource;
@@ -74,6 +75,7 @@ export class PropertyTreeComponent implements OnInit {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);
         }
+        this.itemSelected.emit(node);
     }
     
     private onTopPropertyCreated(property:ARTURIResource) {
@@ -88,6 +90,8 @@ export class PropertyTreeComponent implements OnInit {
                 break;
             }
         }
+        //reset the selected item
+        this.itemSelected.emit(undefined);
     }
     
 }

@@ -1,3 +1,69 @@
+html, body {
+    height: 100%
+}
+
+app {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+project-component, class-component, property-component, concept-component, scheme-component, sparql-component {
+    flex: 1;
+    display: flex;
+    padding: 15px;
+    overflow-y: hidden;
+}
+
+.vbox {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+.hbox {
+    display: flex;
+    flex-flow: row;
+    flex: 1;
+}
+
+.sidebar {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+.resViewContainer {
+    display: flex;
+    flex-flow: column;
+    margin-left: 15px;
+    flex: 4;  
+}
+
+resource-view {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+concept-tree-panel, concept-scheme-panel, class-tree-panel, property-tree-panel {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+concept-tree-panel>.panel, concept-scheme-panel>.panel, class-tree-panel>.panel, property-tree-panel>.panel, resource-view>.panel {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+}
+
+concept-tree-panel>.panel>.panel-body, concept-scheme-panel>.panel>.panel-body,
+class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, resource-view>.panel>.panel-body {
+    flex: 1;
+    overflow: auto;
+}
+
 rdf-resource {
 	min-height: 24px;
     display: inline-flex;
@@ -58,7 +124,6 @@ rdf-resource > span {
 	height: 24px;
     display: flex;
     align-items: center;
-    
 }
 
 .conceptSchemeItem input[type=radio] {
@@ -77,6 +142,10 @@ rdf-resource > span {
 input[type="image"]:disabled  {
 	filter : grayscale(100%);
 	opacity: 0.5;
+}
+
+.table tr:hover td {
+    background-color: #e5f3ff !important;
 }
 
 .table tr.active td {
@@ -100,13 +169,28 @@ input[type="image"]:disabled  {
     flex: 1;
 }
 
+.resViewPartitionRendererPanel {
+	display: flex;
+	flex-flow: column;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin-bottom: 5px;
+}
+
 .resViewPartitionRendererHeading {
     display: flex;
     align-items: center;
+	background: linear-gradient(#fff, #ddd);
+	padding: 4px 8px;
+	border-bottom: 1px solid #ccc;
 }
 
 .resViewPartitionRendererHeading > label {
     flex: 1;
+}
+
+.resViewPartitionRendererBody {
+	padding: 8px;
 }
 
 /* BOOTSTRAP OVERRIDE */
@@ -117,6 +201,10 @@ body {
 
 nav {
     font-size: 13px;
+}
+
+.navbar {
+    margin-bottom: 0px;
 }
 
 .navbar-default {
@@ -136,6 +224,10 @@ nav {
     background-color: #7486AB;
 }
 
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    background-color: #7486AB;
+}
+
 .navbar-default .navbar-nav>.disabled>a, .navbar-default .navbar-nav>.disabled>a:focus, .navbar-default .navbar-nav>.disabled>a:hover {
     color: #777;
 }
@@ -149,26 +241,18 @@ nav {
     margin-bottom: 0px;
 }
 
-.col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12,
-.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
-.col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12,
-.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
-    position: relative;
-    min-height: 1px;
-    padding-right: 10px;
-    padding-left: 10px;
-}
-
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     vertical-align: middle;
 }
 
+.panel { margin-bottom: 0px; }
 .panel .panel { margin-bottom: 5px; } /*panel inside panel (resource view)*/
 .panel-heading { margin-bottom: 0px; padding: 5px 10px; }
 .panel-default > .panel-heading {
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }
-.panel-body { padding: 10px; }
+.panel-body { padding: 6px; }
+.panel-footer { padding: 5px; }
 
 label { margin-bottom: 0px; }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
@@ -11,8 +11,10 @@ import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
     directives: [ClassTreeNodeComponent],
     providers: [OwlServices],
 })
-export class ClassTreeComponent implements OnInit {
+export class ClassTreeComponent {
 	@Input('rootclass') rootClass:ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    
     public roots:ARTURIResource[];
     private selectedNode:ARTURIResource;
     
@@ -61,6 +63,7 @@ export class ClassTreeComponent implements OnInit {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);
         }
+        this.itemSelected.emit(node);
     }
     
     private onClassDeleted(cls:ARTURIResource) {
@@ -71,6 +74,8 @@ export class ClassTreeComponent implements OnInit {
                 break;
             }
         }
+        //reset the selected item
+        this.itemSelected.emit(undefined);
     }
     
 }

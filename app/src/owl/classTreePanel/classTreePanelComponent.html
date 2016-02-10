@@ -8,13 +8,14 @@
             <button class="btn btn-default" title="Create SubClass" (click)="createSubClass()" [disabled]="!selectedClass">
                 <img src="app/assets/images/class_addSubClass.png" />
             </button>
-            <button class="btn btn-default" title="Delete Class" (click)="deleteClass()" [disabled]="!selectedClass">
+            <button class="btn btn-default" title="Delete Class" (click)="deleteClass()"
+                    [disabled]="!selectedClass || !selectedClass.getAdditionalProperty('explicit')">
                 <img src="app/assets/images/class_delete.png" />
             </button>
         </div>    
     </div>
     <!-- Tree -->
     <div class="panel-body">
-        <class-tree [rootclass]="rootClass"></class-tree>
+        <class-tree [rootclass]="rootClass" (itemSelected)="onNodeSelected($event)"></class-tree>
     </div>
 </div>

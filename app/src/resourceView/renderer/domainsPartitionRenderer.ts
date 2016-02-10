@@ -15,11 +15,11 @@ export class DomainsPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Domains";
-    public addBtnImgSrc = "app/assets/images/class_create.png";
-    public addBtnImgTitle = "Add a domain";
-    public removeBtnImgSrc = "app/assets/images/class_delete.png";
-    public removeBtnImgTitle = "Remove domain";
+    private label = "Domains";
+    private addBtnImgSrc = "app/assets/images/class_create.png";
+    private addBtnImgTitle = "Add a domain";
+    private removeBtnImgSrc = "app/assets/images/class_delete.png";
+    private removeBtnImgTitle = "Remove domain";
     
     constructor(private propService:PropertyServices) {}
     

@@ -16,11 +16,11 @@ export class PropertiesPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Properties";
-    public addBtnImgSrc = "app/assets/images/prop_create.png";
-    public addBtnImgTitle = "Add a property value";
-    public removeBtnImgSrc = "app/assets/images/prop_delete.png";
-    public removeBtnImgTitle = "Remove property value";
+    private label = "Properties";
+    private addBtnImgSrc = "app/assets/images/prop_create.png";
+    private addBtnImgTitle = "Add a property value";
+    private removeBtnImgSrc = "app/assets/images/prop_delete.png";
+    private removeBtnImgTitle = "Remove property value";
     
     constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
         
@@ -59,19 +59,19 @@ export class PropertiesPartitionRenderer {
     }
     
     
-    public getAddPropImgTitle(predicate: ARTURIResource) {
+    private getAddPropImgTitle(predicate: ARTURIResource) {
         return "Add a " + predicate.getShow();
     }
     
-    public getRemovePropImgTitle(predicate: ARTURIResource) {
+    private getRemovePropImgTitle(predicate: ARTURIResource) {
         return "Remove " + predicate.getShow();
     }
     
-    public getAddPropImgSrc(predicate: ARTURIResource) {
+    private getAddPropImgSrc(predicate: ARTURIResource) {
         return this.resUtils.getActionPropImageSrc(predicate, "create");
     }
     
-    public getRemovePropImgSrc(predicate: ARTURIResource) {
+    private getRemovePropImgSrc(predicate: ARTURIResource) {
         return this.resUtils.getActionPropImageSrc(predicate, "delete");
     }
     

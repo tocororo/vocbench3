@@ -1,10 +1,8 @@
-<div class="col-md-12">
-    <div class="row">
-        <div class="col-sm-3">
-            <class-tree-panel></class-tree-panel>
-        </div>
-        <div class="col-sm-9">
-            <resource-view *ngIf="resource" [resource]="resource"></resource-view>
-        </div>
+<div class="hbox">
+    <div class="sidebar" style="flex: 1;">
+        <class-tree-panel (itemSelected)="onNodeSelected($event)"></class-tree-panel>
+    </div>
+    <div class="resViewContainer" *ngIf="resource">
+        <resource-view [resource]="resource"></resource-view>
     </div>
 </div>

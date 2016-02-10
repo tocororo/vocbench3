@@ -1,1 +1,8 @@
-<concept-scheme-panel></concept-scheme-panel>
+<div class="hbox">
+    <div class="sidebar">
+        <concept-scheme-panel (itemSelected)="onSchemeSelected($event)"></concept-scheme-panel>
+    </div>
+    <div class="resViewContainer" *ngIf="resource">
+        <resource-view [resource]="resource"></resource-view>
+    </div>
+</div>

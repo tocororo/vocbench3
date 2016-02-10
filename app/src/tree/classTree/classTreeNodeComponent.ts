@@ -24,6 +24,12 @@ export class ClassTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(data => this.onSubClassRemoved(data)));
     }
     
+    ngOnInit() {
+        if (this.node.getURI() == "http://www.w3.org/2002/07/owl#Thing") {
+            this.expandNode();
+        }
+    }
+    
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }

@@ -1,4 +1,4 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {PropertyTreeComponent} from "../../tree/propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
@@ -12,12 +12,12 @@ import {PropertyServices} from "../../services/propertyServices";
     providers: [PropertyServices],
 })
 export class PropertyTreePanelComponent {
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     private selectedProperty:ARTURIResource;
     private eventSubscriptions = [];
     
 	constructor(private propService:PropertyServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onNodeSelected(node)));
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onNodeSelected(node)));
     }
     
@@ -85,6 +85,7 @@ export class PropertyTreePanelComponent {
                 stResp => {
                     this.eventHandler.propertyDeletedEvent.emit(this.selectedProperty);
                     this.selectedProperty = null;
+                    this.itemSelected.emit(undefined);
                 },
                 err => { 
                     alert("Error: " + err);
@@ -97,6 +98,7 @@ export class PropertyTreePanelComponent {
     
     private onNodeSelected(node:ARTURIResource) {
         this.selectedProperty = node;
+        this.itemSelected.emit(node);
     }
     
     

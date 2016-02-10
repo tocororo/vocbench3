@@ -2,13 +2,13 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create Property" (click)="createPorperty()">
+            <button class="btn btn-default" title="Create Property" (click)="createProperty()">
                 <img src="app/assets/images/prop_create.png" />
             </button>
-            <button class="btn btn-default" title="Create Object Property" (click)="createObjectPorperty()">
+            <button class="btn btn-default" title="Create Object Property" (click)="createObjectProperty()">
                 <img src="app/assets/images/propObject_create.png" />
             </button>
-            <button class="btn btn-default" title="Create Datatype Property" (click)="createDatatypePorperty()">
+            <button class="btn btn-default" title="Create Datatype Property" (click)="createDatatypeProperty()">
                 <img src="app/assets/images/propDatatype_create.png" />
             </button>
             <button class="btn btn-default" title="Create Annotation Property" (click)="createAnnotationProperty()">
@@ -27,6 +27,6 @@
         </div>
     </div>
     <div class="panel-body">
-            <property-tree></property-tree>
+            <property-tree (itemSelected)="onNodeSelected($event)"></property-tree>
     </div>
 </div>

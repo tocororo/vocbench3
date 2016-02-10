@@ -21,7 +21,6 @@ export class RdfResourceComponent {
         } else {
             this.resourceShow = this.resource.getShow();    
         }
-		
     }
-	
+
 }

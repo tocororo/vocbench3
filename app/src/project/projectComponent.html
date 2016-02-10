@@ -1,33 +1,37 @@
-<div class="btn-group btn-group-sm" style="margin-bottom: 10px;" role="group">
-  <button type="button" class="btn btn-default" (click)="createProject()">Create</button>
-  <button type="button" class="btn btn-default" (click)="deleteProject()" [disabled]="!selectedProject">Delete</button>
-  <button type="button" class="btn btn-default" (click)="importProject()">Import</button>
-</div>
+<div class="vbox">
+    <div class="btn-group btn-group-sm" style="margin-bottom: 10px;" role="group">
+        <button type="button" class="btn btn-default" (click)="createProject()">Create</button>
+        <button type="button" class="btn btn-default" (click)="deleteProject()" [disabled]="!selectedProject">Delete</button>
+        <button type="button" class="btn btn-default" (click)="importProject()">Import</button>
+    </div>
 
-<table class="table table-hover table-condensed">
-    <thead>
-        <tr >
-            <th class="text-center">Open/Close</th>
-            <th class="text-center">Project Name</th>
-            <th class="text-center">Triple Store</th>
-            <th class="text-center">Type</th>
-            <th class="text-center">Onto Type</th>
-            <th class="text-center">Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="#p of projectList" (click)="selectProject(p)" [ngClass]="{active: isSelected(p)}">
-            <td class="text-center">
-                <img *ngIf="!p.open" src="app/assets/images/folder.gif" (dblclick)="openProject(p)">
-                <img *ngIf="p.open" src="app/assets/images/folder-open.gif" (dblclick)="closeProject(p)">
-            </td>
-            <td class="text-center">{{p.name}}</td>
-            <td class="text-center">{{p.ontmgr}}</td>
-            <td class="text-center">{{p.type}}</td>
-            <td class="text-center">{{p.ontoType}}</td>
-            <td class="text-center">
-                <span [class]="p.status.class" [title]="p.status.message"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <div style="overflow-y: auto">
+        <table class="table table-hover table-condensed table-fixedheader" style="flex: 1">
+            <thead>
+                <tr >
+                    <th class="text-center">Open/Close</th>
+                    <th class="text-center">Project Name</th>
+                    <th class="text-center">Triple Store</th>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Onto Type</th>
+                    <th class="text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#p of projectList" (click)="selectProject(p)" [ngClass]="{active: isSelected(p)}">
+                    <td class="text-center">
+                        <img *ngIf="!p.open" src="app/assets/images/folder.gif" (dblclick)="openProject(p)">
+                        <img *ngIf="p.open" src="app/assets/images/folder-open.gif" (dblclick)="closeProject(p)">
+                    </td>
+                    <td class="text-center">{{p.name}}</td>
+                    <td class="text-center">{{p.ontmgr}}</td>
+                    <td class="text-center">{{p.type}}</td>
+                    <td class="text-center">{{p.ontoType}}</td>
+                    <td class="text-center">
+                        <span [class]="p.status.class" [title]="p.status.message"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    <div>
+</div>
