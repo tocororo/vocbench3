@@ -23,12 +23,12 @@ export class DomainsPartitionRenderer {
     
     constructor(private propService:PropertyServices) {}
     
-    public add() {
+    private add() {
         alert("add domain to " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public remove(domain: ARTURIResource) {
+    private remove(domain: ARTURIResource) {
         this.propService.removePropertyDomain(this.resource.getURI(), domain.getURI())
             .subscribe(
                 stResp => {

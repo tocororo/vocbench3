@@ -16,20 +16,20 @@ export class SuperPropertiesPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Superproperties";
-    public addBtnImgSrc = "app/assets/images/prop_create.png";
-    public addBtnImgTitle = "Add a superproperty";
-    public removeBtnImgSrc = "app/assets/images/prop_delete.png";
-    public removeBtnImgTitle = "Remove superproperty";
+    private label = "Superproperties";
+    private addBtnImgSrc = "app/assets/images/prop_create.png";
+    private addBtnImgTitle = "Add a superproperty";
+    private removeBtnImgSrc = "app/assets/images/prop_delete.png";
+    private removeBtnImgTitle = "Remove superproperty";
     
     constructor(private propService:PropertyServices, private eventHandler:VBEventHandler) {}
     
-    public add() {
+    private add() {
         alert("add superproperty to " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public remove(superProp: ARTURIResource) {
+    private remove(superProp: ARTURIResource) {
         this.propService.removeSuperProperty(this.resource.getURI(), superProp.getURI())
             .subscribe(
                 stResp => {

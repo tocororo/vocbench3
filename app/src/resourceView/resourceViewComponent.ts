@@ -30,18 +30,18 @@ export class ResourceViewComponent {
     @Input() resource:ARTURIResource;
     
     //partitions
-    public typesColl: ARTURIResource[];
-    public classAxiomColl: ARTPredicateObjects[];
-    public topconceptofColl: ARTURIResource[];
-    public schemesColl: ARTURIResource[];
-    public broadersColl: ARTURIResource[];
-    public superpropertiesColl: ARTURIResource[];
-    public domainsColl: ARTURIResource[];
-    public rangesColl: ARTURIResource[];
-    public lexicalizationsColl: ARTPredicateObjects[];
-    public propertiesColl: ARTPredicateObjects[];
-    public propertyFacets: any[];
-    public inverseofColl: ARTURIResource[];
+    private typesColl: ARTURIResource[];
+    private classAxiomColl: ARTPredicateObjects[];
+    private topconceptofColl: ARTURIResource[];
+    private schemesColl: ARTURIResource[];
+    private broadersColl: ARTURIResource[];
+    private superpropertiesColl: ARTURIResource[];
+    private domainsColl: ARTURIResource[];
+    private rangesColl: ARTURIResource[];
+    private lexicalizationsColl: ARTPredicateObjects[];
+    private propertiesColl: ARTPredicateObjects[];
+    private propertyFacets: any[];
+    private inverseofColl: ARTURIResource[];
     
 	constructor(private resViewService:ResourceViewServices, private deserializer:Deserializer) {
     }

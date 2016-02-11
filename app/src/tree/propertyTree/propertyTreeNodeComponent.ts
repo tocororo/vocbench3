@@ -13,7 +13,7 @@ export class PropertyTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-    public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
+    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(data => this.onSubPropertyCreated(data)));
@@ -42,7 +42,7 @@ export class PropertyTreeNodeComponent {
    	 * Function called when "-" button is clicked.
    	 * Collapse the subtree div.
    	 */
-    public collapseNode() {
+    private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
 		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
         this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
@@ -51,7 +51,7 @@ export class PropertyTreeNodeComponent {
     /**
      * Called when a node in the tree is clicked. This function emit an event 
      */
-    public selectNode() {
+    private selectNode() {
         this.eventHandler.propertyTreeNodeSelectedEvent.emit(this.node);
     }
     

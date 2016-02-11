@@ -16,21 +16,21 @@ export class SchemesPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Schemes";
-    public addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
-    public addBtnImgTitle = "Add to a ConceptScheme";
-    public removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
-    public removeBtnImgTitle = "Remove from ConceptScheme";
+    private label = "Schemes";
+    private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
+    private addBtnImgTitle = "Add to a ConceptScheme";
+    private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
+    private removeBtnImgTitle = "Remove from ConceptScheme";
     
     constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {}
     
     //add as top concept
-    public add() {
+    private add() {
         alert("add resource " + this.resource.getShow() + " as to a scheme");
         this.update.emit(null);
     }
     
-    public remove(scheme: ARTURIResource) {
+    private remove(scheme: ARTURIResource) {
         this.skosService.removeConceptFromScheme(this.resource.getURI(), scheme.getURI())
             .subscribe(
                 stResp => {

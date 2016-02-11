@@ -9,8 +9,8 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 })
 export class RdfResourceComponent {
 	@Input() resource:ARTResource;
-	public imageSrc: string;
-	public resourceShow: string;
+	private imageSrc: string;
+	private resourceShow: string;
 	
 	constructor(private resUtils:ResourceUtils) {}
     

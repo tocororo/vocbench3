@@ -8,7 +8,7 @@ export class OwlServices {
     private serviceName = "cls";
     private oldTypeService = true;
 
-    constructor(public http: Http, private httpMgr: HttpManager) { }
+    constructor(private http: Http, private httpMgr: HttpManager) { }
 
     getClassesInfoAsRootsForTree(clsName: string) {
         console.log("[owlServices] getClassesInfoAsRootsForTree");

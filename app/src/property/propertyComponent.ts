@@ -10,7 +10,7 @@ import {ARTURIResource} from "../utils/ARTResources";
 })
 export class PropertyComponent {
     
-    public resource:ARTURIResource;
+    private resource:ARTURIResource;
     
 	constructor() {}
     

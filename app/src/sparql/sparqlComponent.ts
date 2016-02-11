@@ -8,17 +8,17 @@ import {SparqlServices} from "../services/sparqlServices";
 })
 export class SparqlComponent {
     
-    public query:string = "SELECT * WHERE { ?s ?p ?o } LIMIT 10";
-    public queryMode: string = "query";
-    public headers: string[];
-    public queryResult: string[];
-    public queryInProgress: boolean = false;
-    public queryTime: string;
-    public inferred: boolean = false;
+    private query:string = "SELECT * WHERE { ?s ?p ?o } LIMIT 10";
+    private queryMode: string = "query";
+    private headers: string[];
+    private queryResult: string[];
+    private queryInProgress: boolean = false;
+    private queryTime: string;
+    private inferred: boolean = false;
     
     constructor(private sparqlService:SparqlServices) {}
     
-    public doQuery() {
+    private doQuery() {
         var lang = "SPARQL";
         var initTime = new Date().getTime();
         this.sparqlService.resolveQuery(this.query, lang, this.inferred, this.queryMode)
@@ -39,7 +39,7 @@ export class SparqlComponent {
             );
     }
     
-    public clear() {
+    private clear() {
         this.headers = null;
         this.queryResult = null;
         this.queryTime = null;

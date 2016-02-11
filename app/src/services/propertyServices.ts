@@ -8,7 +8,7 @@ export class PropertyServices {
     private serviceName = "property";
     private oldTypeService = true;
 
-    constructor(public http: Http, private httpMgr: HttpManager) { }
+    constructor(private http: Http, private httpMgr: HttpManager) { }
 
     getPropertiesTree(instanceQName?: string, method?: string) {
         console.log("[PropertyServices] getPropertiesTree");

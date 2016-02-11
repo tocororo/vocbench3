@@ -15,20 +15,20 @@ export class RangesPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Ranges";
-    public addBtnImgSrc = "app/assets/images/class_create.png";
-    public addBtnImgTitle = "Add a range";
-    public removeBtnImgSrc = "app/assets/images/class_delete.png";
-    public removeBtnImgTitle = "Remove range";
+    private label = "Ranges";
+    private addBtnImgSrc = "app/assets/images/class_create.png";
+    private addBtnImgTitle = "Add a range";
+    private removeBtnImgSrc = "app/assets/images/class_delete.png";
+    private removeBtnImgTitle = "Remove range";
     
     constructor(private propService:PropertyServices) {}
     
-    public add() {
+    private add() {
         alert("add range to " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public remove(range: ARTURIResource) {
+    private remove(range: ARTURIResource) {
         this.propService.removePropertyRange(this.resource.getURI(), range.getURI())
             .subscribe(
                 stResp => {

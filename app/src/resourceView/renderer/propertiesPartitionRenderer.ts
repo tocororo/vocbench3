@@ -24,17 +24,17 @@ export class PropertiesPartitionRenderer {
     
     constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
         
-    public add() {
+    private add() {
         alert("add property to resource " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public enrichProperty(predicate: ARTURIResource) {
+    private enrichProperty(predicate: ARTURIResource) {
         alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+    private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         var type;
         var lang;
         if (object.isBNode()) {

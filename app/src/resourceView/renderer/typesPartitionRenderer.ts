@@ -16,21 +16,21 @@ export class TypesPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Types";
-    public addBtnImgSrc = "app/assets/images/class_create.png";
-    public addBtnImgTitle = "Add a type";
-    public removeBtnImgSrc = "app/assets/images/class_delete.png";
-    public removeBtnImgTitle = "Remove type"; 
+    private label = "Types";
+    private addBtnImgSrc = "app/assets/images/class_create.png";
+    private addBtnImgTitle = "Add a type";
+    private removeBtnImgSrc = "app/assets/images/class_delete.png";
+    private removeBtnImgTitle = "Remove type"; 
     
     constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {}
     
     //add type
-    public add() {
+    private add() {
         alert("add type to resource " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public remove(type: ARTURIResource) {
+    private remove(type: ARTURIResource) {
         this.owlService.removeType(this.resource.getURI(), type.getURI())
             .subscribe(
                 stResp => {

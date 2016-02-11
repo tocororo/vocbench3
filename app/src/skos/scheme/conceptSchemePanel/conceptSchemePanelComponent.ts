@@ -19,7 +19,7 @@ export class ConceptSchemePanelComponent {
     private activeScheme:ARTURIResource;
     private selectedScheme:ARTURIResource;
     
-	constructor(private skosService:SkosServices, public deserializer:Deserializer, public vbCtx:VocbenchCtx) {}
+	constructor(private skosService:SkosServices, private deserializer:Deserializer, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
         this.skosService.getAllSchemesList()
@@ -35,11 +35,11 @@ export class ConceptSchemePanelComponent {
         this.activeScheme = this.vbCtx.getScheme();
     }
     
-    public createScheme() {
+    private createScheme() {
         alert("creating scheme");    
     }
     
-    public deleteScheme() {
+    private deleteScheme() {
         //TODO check if scheme has concept and eventually ask the user whether delete the dangling concept (determines 2nd param of request)
         this.skosService.deleteScheme(this.selectedScheme.getURI(), false)
             .subscribe(

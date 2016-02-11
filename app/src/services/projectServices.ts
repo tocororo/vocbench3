@@ -8,7 +8,7 @@ export class ProjectServices {
     private serviceName = "Projects";
     private oldTypeService = false;
 
-    constructor(public http: Http, private httpMgr: HttpManager) { }
+    constructor(private http: Http, private httpMgr: HttpManager) { }
 
     listProjects() {
         console.log("[ProjectServices] listProjects");

@@ -5,17 +5,17 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 
 @Component({
-	selector: "concept-component",
-	templateUrl: "app/src/skos/concept/conceptsComponent.html",
-	directives: [ConceptTreePanelComponent, ResourceViewComponent]
+    selector: "concept-component",
+    templateUrl: "app/src/skos/concept/conceptsComponent.html",
+    directives: [ConceptTreePanelComponent, ResourceViewComponent]
 })
 export class ConceptsComponent implements OnInit {
-    
-    public scheme:ARTURIResource;
-    public resource:ARTURIResource;
-    
-	constructor(public vbCtx:VocbenchCtx) {}
-    
+
+    private scheme: ARTURIResource;
+    private resource: ARTURIResource;
+
+    constructor(private vbCtx: VocbenchCtx) { }
+
     ngOnInit() {
         this.scheme = this.vbCtx.getScheme();
     }
@@ -24,5 +24,5 @@ export class ConceptsComponent implements OnInit {
     private onNodeSelected(node) {
         this.resource = node;
     }
-    
+
 }

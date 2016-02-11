@@ -8,7 +8,7 @@ export class ResourceViewServices {
     private serviceName = "ResourceView";
     private oldTypeService = false;
 
-    constructor(public http: Http, private httpMgr: HttpManager) { }
+    constructor(private http: Http, private httpMgr: HttpManager) { }
 
     getResourceView(resource: string) {
         console.log("[resourceViewServices] getResourceView");

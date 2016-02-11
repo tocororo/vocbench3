@@ -42,7 +42,7 @@ export class ClassTreePanelComponent {
             );
     }
     
-    public createSubClass() {
+    private createSubClass() {
         var className = prompt("Insert class name");
         if (className == null) return;
         this.owlService.createClass(this.selectedClass.getURI(), className)
@@ -59,7 +59,7 @@ export class ClassTreePanelComponent {
             );
     }
     
-    public deleteClass() {
+    private deleteClass() {
         this.owlService.removeClass(this.selectedClass.getURI())
             .subscribe(
                 stResp => {

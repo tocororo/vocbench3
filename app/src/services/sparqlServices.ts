@@ -8,7 +8,7 @@ export class SparqlServices {
     private serviceName = "sparql";
     private oldTypeService = true;
 
-    constructor(public http: Http, private httpMgr: HttpManager) { }
+    constructor(private http: Http, private httpMgr: HttpManager) { }
 
     resolveQuery(query: string, lang: string, infer: boolean, mode: string) {
         console.log("[SparqlServices] resolveQuery");

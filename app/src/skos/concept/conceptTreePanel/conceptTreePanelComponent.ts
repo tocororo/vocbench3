@@ -23,7 +23,7 @@ export class ConceptTreePanelComponent {
             private eventHandler:VBEventHandler, private vbCtx:VocbenchCtx) {
     }
     
-    public createConcept() {
+    private createConcept() {
         var conceptName = prompt("Insert concept name");
         if (conceptName == null) return;
         this.skosService.createConcept(conceptName, this.vbCtx.getScheme().getURI(), null, null)
@@ -40,7 +40,7 @@ export class ConceptTreePanelComponent {
             );
     }
     
-    public createNarrower() {
+    private createNarrower() {
         var conceptName = prompt("Insert concept name");
         if (conceptName == null) return;
         this.skosService.createNarrower(conceptName, this.selectedConcept.getURI(), this.vbCtx.getScheme().getURI(), null, null)
@@ -57,7 +57,7 @@ export class ConceptTreePanelComponent {
             )
     }
     
-    public deleteConcept() {
+    private deleteConcept() {
         this.skosService.deleteConcept(this.selectedConcept.getURI())
             .subscribe(
                 stResp => {

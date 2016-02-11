@@ -15,8 +15,7 @@ export class ProjectComponent implements OnInit {
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx) { }
 
     ngOnInit() {
-        this.projectService.listProjects()
-            .subscribe(
+        this.projectService.listProjects().subscribe(
             stResp => {
                 var projColl = stResp.getElementsByTagName("project");
                 var projects = [];
@@ -64,8 +63,7 @@ export class ProjectComponent implements OnInit {
             err => {
                 alert("Error: " + err);
                 console.error(err.stack);
-            }
-            );
+            });
     }
 
     private selectProject(project) {
@@ -77,53 +75,62 @@ export class ProjectComponent implements OnInit {
     }
     
     //TODO
-    public createProject() {
+    private createProject() {
         alert("create project");
     }
 
-    public deleteProject() {
+    private deleteProject() {
         if (this.selectedProject.open) {
             alert(this.selectedProject.name + " is currently open. Please, close the project and then retry.");
             return;
         } else {
-            this.projectService.deleteProject(this.selectedProject.name)
-                .subscribe(
-                    stResp => {
-                        for (var i = 0; i < this.projectList.length; i++) { //remove project from list
-                            if (this.projectList[i].name == this.selectedProject.name) {
-                                this.projectList.splice(i, 1);
-                            }
+            this.projectService.deleteProject(this.selectedProject.name).subscribe(
+                stResp => {
+                    for (var i = 0; i < this.projectList.length; i++) { //remove project from list
+                        if (this.projectList[i].name == this.selectedProject.name) {
+                            this.projectList.splice(i, 1);
                         }
-                        this.selectedProject = null;
-                    },
-                    err => {
-                        alert("Error: " + err);
-                        console.error(err.stack);
                     }
-                )
+                    this.selectedProject = null;
+                },
+                err => {
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                })
         }
     }
     
     //TODO
-    public importProject() {
+    private importProject() {
         alert("import project");
     }
 
-    public openProject(project) {
+    private openProject(project) {
         var currentProject = this.vbCtx.getProject();
-        if (currentProject.name != "SYSTEM") {
-            this.disconnectFromProject(currentProject);
+        if (currentProject.name != "SYSTEM") { //a project is already open
+            //first disconnect from old project
+            //(don't call this.closeProject cause I need to execute connectToProject in syncronous way)
+            this.projectService.disconnectFromProject(currentProject.name).subscribe(
+                stResp => {
+                    currentProject.open = false;
+                    //then connect to the new one
+                    this.connectToProject(project);
+                },
+                err => {
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                });
+        } else { //no project open
+            this.connectToProject(project);
         }
-        this.connectToProject(project);
     }
 
-    public closeProject(project) {
+    private closeProject(project) {
         this.disconnectFromProject(project);
     }
-
+    
     private connectToProject(project) {
-        this.projectService.accessProject(project.name)
-            .subscribe(
+        this.projectService.accessProject(project.name).subscribe(
             stResp => {
                 this.vbCtx.setProject(project);
                 project.open = true;
@@ -131,13 +138,11 @@ export class ProjectComponent implements OnInit {
             err => {
                 alert("Error: " + err);
                 console.error(err.stack);
-            }
-            );
+            });
     }
 
     private disconnectFromProject(project) {
-        this.projectService.disconnectFromProject(project.name)
-            .subscribe(
+        this.projectService.disconnectFromProject(project.name).subscribe(
             stResp => {
                 this.vbCtx.setProject({ name: "SYSTEM" });
                 project.open = false;
@@ -145,8 +150,7 @@ export class ProjectComponent implements OnInit {
             err => {
                 alert("Error: " + err);
                 console.error(err.stack);
-            }
-            );
+            });
     }
 
     private prettyPrintOntoType(ontoType: string): string {

@@ -25,12 +25,12 @@ export class BroadersPartitionRenderer {
     constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {}
     
     //add a broader
-    public add() {
+    private add() {
         alert("add broader to " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public remove(broader: ARTURIResource) {
+    private remove(broader: ARTURIResource) {
         this.skosService.removeBroaderConcept(this.resource.getURI(), broader.getURI())
             .subscribe(
                 stResp => {

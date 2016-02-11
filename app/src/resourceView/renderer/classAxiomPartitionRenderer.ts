@@ -18,21 +18,21 @@ export class ClassAxiomPartitionPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();
     
-    public label = "Class Axioms";
-    public addBtnImgSrc = "app/assets/images/class_create.png";
-    public addBtnImgTitle = "Add a class axiom";
-    public removeBtnImgSrc = "app/assets/images/class_delete.png";
-    public removeBtnImgTitle = "Remove class axiom";
+    private label = "Class Axioms";
+    private addBtnImgSrc = "app/assets/images/class_create.png";
+    private addBtnImgTitle = "Add a class axiom";
+    private removeBtnImgSrc = "app/assets/images/class_delete.png";
+    private removeBtnImgTitle = "Remove class axiom";
     
     constructor(private propertyService:PropertyServices, private owlService:OwlServices, 
             private eventHandler:VBEventHandler, private resUtils:ResourceUtils) {}
         
-    public add() {
+    private add() {
         alert("add class axiom to resource " + this.resource.getShow());
         this.update.emit(null);
     }
     
-    public enrichProperty(predicate: ARTURIResource) {
+    private enrichProperty(predicate: ARTURIResource) {
         alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
         //switch between the predicates handled by this Renderer
         // if (predicate.getURI() == "http://www.w3.org/2002/07/owl#equivalentClass") {
@@ -46,7 +46,7 @@ export class ClassAxiomPartitionPartitionRenderer {
         this.update.emit(null);
     }
     
-    public removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+    private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         var objectType = object.isURIResource() ? "uri" : "bnode"; 
         //switch between the predicates handled by this Renderer
         if (predicate.getURI() == "http://www.w3.org/2002/07/owl#equivalentClass") {
@@ -98,19 +98,19 @@ export class ClassAxiomPartitionPartitionRenderer {
     }
     
     
-    public getAddPropImgTitle(predicate: ARTURIResource) {
+    private getAddPropImgTitle(predicate: ARTURIResource) {
         return "Add a " + predicate.getShow();
     }
     
-    public getRemovePropImgTitle(predicate: ARTURIResource) {
+    private getRemovePropImgTitle(predicate: ARTURIResource) {
         return "Remove " + predicate.getShow();
     }
     
-    public getAddPropImgSrc(predicate: ARTURIResource) {
+    private getAddPropImgSrc(predicate: ARTURIResource) {
         return this.resUtils.getActionPropImageSrc(predicate, "create");
     }
     
-    public getRemovePropImgSrc(predicate: ARTURIResource) {
+    private getRemovePropImgSrc(predicate: ARTURIResource) {
         return this.resUtils.getActionPropImageSrc(predicate, "delete");
     }
     

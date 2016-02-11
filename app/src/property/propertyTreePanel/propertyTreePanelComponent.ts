@@ -25,23 +25,23 @@ export class PropertyTreePanelComponent {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
-    public createProperty() {
+    private createProperty() {
         this.createPropertyForType("rdf:Property");
     }
     
-    public createObjectProperty() {
+    private createObjectProperty() {
         this.createPropertyForType("owl:ObjectProperty");
     }
     
-    public createDatatypeProperty() {
+    private createDatatypeProperty() {
         this.createPropertyForType("owl:DatatypeProperty");
     }
     
-    public createAnnotationProperty() {
+    private createAnnotationProperty() {
         this.createPropertyForType("owl:AnnotationProperty");
     }
     
-    public createOntologyProperty() {
+    private createOntologyProperty() {
         this.createPropertyForType("owl:OntologyProperty");
     }
     
@@ -62,7 +62,7 @@ export class PropertyTreePanelComponent {
             );
     }
     
-    public createSubProperty() {
+    private createSubProperty() {
         var propertyName = prompt("Insert property name");
         if (propertyName == null) return;
         this.propService.addSubProperty(propertyName, this.selectedProperty.getRole(), this.selectedProperty.getURI())
@@ -79,7 +79,7 @@ export class PropertyTreePanelComponent {
             );
     }
     
-    public deleteProperty() {
+    private deleteProperty() {
         this.propService.removeProperty(this.selectedProperty.getURI())
             .subscribe(
                 stResp => {

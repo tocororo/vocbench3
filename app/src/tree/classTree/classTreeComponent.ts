@@ -20,7 +20,7 @@ export class ClassTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private owlService:OwlServices, public deserializer:Deserializer, private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }

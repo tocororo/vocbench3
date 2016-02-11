@@ -14,7 +14,7 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
 export class PropertyTreeComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
-    public propertyTree: ARTURIResource[] = [];
+    private propertyTree: ARTURIResource[] = [];
     private selectedNode:ARTURIResource;
     
     private eventSubscriptions = [];

@@ -16,9 +16,9 @@ export class ClassTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-    public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
+    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
-	constructor(private owlService:OwlServices, public deserializer:Deserializer, private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(data => this.onSubClassCreated(data)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
         this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(data => this.onSubClassRemoved(data)));
@@ -65,7 +65,7 @@ export class ClassTreeNodeComponent {
    	 * Function called when "-" button is clicked.
    	 * Collapse the subtree div.
    	 */
-    public collapseNode() {
+    private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
 		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
         this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
@@ -74,7 +74,7 @@ export class ClassTreeNodeComponent {
     /**
      * Called when a node in the tree is clicked. This function emit an event 
      */
-    public selectNode() {
+    private selectNode() {
         this.eventHandler.classTreeNodeSelectedEvent.emit(this.node);
     }
     

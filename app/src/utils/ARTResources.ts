@@ -16,9 +16,9 @@ export interface ARTResource extends ARTNode {
 }
 
 export class ARTURIResource implements ARTResource {
-    public uri: string;
-    public show: string;
-    public role: string;
+    private uri: string;
+    private show: string;
+    private role: string;
 
     constructor(uri: string, show: string, role: string) {
         this.uri = uri;
@@ -77,9 +77,9 @@ export class ARTURIResource implements ARTResource {
 }
 
 export class ARTBNode implements ARTResource {
-    public id: string;
-    public show: string;
-    public role: string;
+    private id: string;
+    private show: string;
+    private role: string;
 
     constructor(id: string, show: string, role: string) {
         this.id = id;
@@ -138,10 +138,10 @@ export class ARTBNode implements ARTResource {
 }
 
 export class ARTLiteral implements ARTNode {
-    public label: string;
-    public datatype: string;
-    public lang: string;
-    public typedLiteral: boolean
+    private label: string;
+    private datatype: string;
+    private lang: string;
+    private typedLiteral: boolean
 
     constructor(label: string, datatype: string, lang: string, typedLiteral: boolean) {
         this.label = label;
@@ -216,8 +216,8 @@ export class ARTLiteral implements ARTNode {
 
 export class ARTPredicateObjects {
 
-    public predicate: ARTURIResource;
-    public objects;
+    private predicate: ARTURIResource;
+    private objects;
 
     constructor(predicate: ARTURIResource, objects) {
         this.predicate = predicate;

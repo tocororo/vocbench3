@@ -28,13 +28,13 @@ export class LexicalizationsPartitionRenderer {
     constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
         private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
     
-    public add() {
+    private add() {
         alert("add lexicalization to resource " + this.resource.getShow());
         //this should allow to choose a lexicalization to enrich
         this.update.emit(null);
     }
     
-    public enrichProperty(predicate: ARTURIResource) {
+    private enrichProperty(predicate: ARTURIResource) {
         alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
         
         // var label, lang; //TODO to obtain through dialog
@@ -84,7 +84,7 @@ export class LexicalizationsPartitionRenderer {
         // }
     }
     
-    public removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+    private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#prefLabel") {
             this.skosxlService.removePrefLabel(this.resource.getURI(), object.getShow(), object.getAdditionalProperty("lang"))
                 .subscribe(
