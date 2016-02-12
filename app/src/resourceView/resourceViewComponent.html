@@ -1,7 +1,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <label>Resource:</label>
-        <rdf-resource [resource]="resource"></rdf-resource>
+        <div class="hbox" style="align-items: center">
+            <label>Resource:</label>
+            <rdf-resource [resource]="resource"></rdf-resource>
+            <input #renameinput type="text" style="flex: 1; margin: 0px 10px;" [value]="resource.getURI()" [readonly]="renameFn.locked">
+            <button class="btn btn-default btn-xs" type="button" (click)="renameResource(renameinput.value, renameinput)">{{renameFn.label}}</button>
+        </div>
     </div>
     <div class="panel-body">
         <types-renderer [object-list]="typesColl" [resource]="resource" (update)="refresh()"></types-renderer>

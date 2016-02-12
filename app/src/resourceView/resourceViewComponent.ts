@@ -29,6 +29,11 @@ export class ResourceViewComponent {
     
     @Input() resource:ARTURIResource;
     
+    private renameFn = {
+        locked : true,
+        label : "Rename",    
+    }
+    
     //partitions
     private typesColl: ARTURIResource[];
     private classAxiomColl: ARTPredicateObjects[];
@@ -126,6 +131,21 @@ export class ResourceViewComponent {
                 this.inverseofColl = this.deserializer.createRDFArray(facetsChildren[i]);
             }
         }
+    }
+    
+    private renameResource(uri: string, inputEl: HTMLElement) {
+        if (this.renameFn.label == "Rename") {
+            inputEl.focus();
+            this.renameFn.locked = false;
+            this.renameFn.label = "Confirm";    
+        } else {
+            this.renameFn.locked = true;
+            this.renameFn.label = "Rename";
+            if (this.resource.getURI() != uri) {
+                alert("renaming " + this.resource.getURI() + " in " + uri);       
+            }
+        }
+        
     }
     
 }

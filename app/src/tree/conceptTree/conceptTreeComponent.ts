@@ -1,26 +1,31 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {SkosServices} from "../../services/skosServices";
+import {OntoSearchServices} from "../../services/ontoSearchServices";
 import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 
 @Component({
     selector: "concept-tree",
     templateUrl: "app/src/tree/conceptTree/conceptTreeComponent.html",
     directives: [ConceptTreeNodeComponent],
-    providers: [SkosServices],
+    providers: [SkosServices, OntoSearchServices],
 })
 export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    
+    //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
+    @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
     public roots: ARTURIResource[];
     private selectedNode: ARTURIResource;
 
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private deserializer: Deserializer, private eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, private searchService: OntoSearchServices, 
+            private deserializer: Deserializer, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(
             concept => this.onConceptSelected(concept)));
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
@@ -32,7 +37,7 @@ export class ConceptTreeComponent {
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
             data => this.onConceptRemovedFromScheme(data)));
     }
-
+    
     ngOnInit() {
         var schemeUri = null;
         if (this.scheme != undefined) {
@@ -40,22 +45,51 @@ export class ConceptTreeComponent {
         }
         this.skosService.getTopConcepts(schemeUri)
             .subscribe(
-            stResp => {
-                this.roots = this.deserializer.createRDFArray(stResp);
-                for (var i = 0; i < this.roots.length; i++) {
-                    this.roots[i].setAdditionalProperty("children", []);
+                stResp => {
+                    this.roots = this.deserializer.createRDFArray(stResp);
+                    for (var i = 0; i < this.roots.length; i++) {
+                        this.roots[i].setAdditionalProperty("children", []);
+                    }
+                },
+                err => {
+                    alert("Error: " + err);
+                    console.error(err.stack);
                 }
-            },
-            err => {
-                alert("Error: " + err);
-                console.error(err.stack);
-            }
             );
     }
-
+    
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
+    
+    public openTreeAt(node: ARTURIResource) {
+        this.searchService.getPathFromRoot(node.getURI(), this.scheme.getURI()).subscribe(
+            //at the moment the response is not parsable with the Deserializer, in the future
+            //the service will be refactored according to the <uri> xml serialization format
+            stResp => {
+                var path = new Array<ARTURIResource>();
+                var conceptElemColl = stResp.getElementsByTagName("concept");
+                for (var i=0; i<conceptElemColl.length; i++) {
+                    var show = conceptElemColl[i].getAttribute("show");
+                    var uri = conceptElemColl[i].textContent;
+                    path.push(new ARTURIResource(uri, show, "concept"));
+                }
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                for (var i = 0; i < childrenNodeComponent.length; i++) {
+                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) { //looking for first node (root) to expand
+                        if (!childrenNodeComponent[i].node.getAdditionalProperty("open")) {
+                            childrenNodeComponent[i].expandNode();//expand the ConceptTreeNodeComponent if is closed
+                        }
+                        //let the child node expand the remaining path
+                        path.splice(0, 1);
+                        childrenNodeComponent[i].expandPath(path);
+                        break;
+                    }
+                }
+            }
+        );
+    }
+    
     
     //EVENT LISTENERS
     

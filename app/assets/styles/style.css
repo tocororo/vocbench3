@@ -62,6 +62,9 @@ concept-tree-panel>.panel>.panel-body, concept-scheme-panel>.panel>.panel-body,
 class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, resource-view>.panel>.panel-body {
     flex: 1;
     overflow: auto;
+    /* CHECK THIS for the problem with chrome
+     http://stackoverflow.com/questions/33681562/why-does-chrome-not-properly-handle-flexbox-items-added-with-jquery
+    */
 }
 
 rdf-resource {
@@ -116,7 +119,9 @@ rdf-resource > span {
 
 .subtreeClose {
 	max-height: 0;
-    transition: max-height 0.3s ease-out;
+    /*Temporarly removed closing animation: it works only if the children node are not removed
+      when the subtree collapses, but this causes problem in the search in trees */
+    /*transition: max-height 0.3s ease-out;*/
     overflow: hidden;
 }
 

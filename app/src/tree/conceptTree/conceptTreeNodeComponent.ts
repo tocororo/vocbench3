@@ -1,4 +1,4 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
@@ -15,9 +15,17 @@ export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Input() scheme: ARTURIResource;
     
+    //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
+    @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
+    //structure to support the tree opening
+    private pendingSearch = {
+        pending: false, //tells if there is a pending search waiting that children view are initialized 
+        path: [], //remaining path of the tree to open
+    }
+    
     private eventSubscriptions = [];
     
-    public subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
+    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
 	
 	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept)));
@@ -27,8 +35,48 @@ export class ConceptTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(data => this.onBroaderRemoved(data)));
     }
     
+    ngAfterViewInit() {
+        //when ConceptTreeNodeComponent children are added, looks for a pending search to resume
+        this.viewChildrenNode.changes.subscribe(
+            c => {
+                if (this.pendingSearch.pending) {//there is a pending search
+                    this.expandPath(this.pendingSearch.path);
+                }
+            });
+    }
+    
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+    
+    /**
+     * 
+     */
+    public expandPath(path: ARTURIResource[]) {
+        if (path.length == 1) {//the last node (the one to reach) is child of this node
+            return;
+        }
+        var nodeChildren = this.viewChildrenNode.toArray();
+        if (nodeChildren.length == 0) {
+            //Still no children ConceptTreeNodeComponent, save pending search so it can resume when the children are initialized
+            this.pendingSearch.pending = true;
+            this.pendingSearch.path = path;
+        } else if (this.pendingSearch.pending) {
+            //the tree expansion is resumed, reset the pending search
+            this.pendingSearch.pending = false;
+            this.pendingSearch.path = [];
+        }
+        for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+            if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the one to expand
+                if (!nodeChildren[i].node.getAdditionalProperty("open")) {
+                    nodeChildren[i].expandNode(); //expand the ConceptTreeNodeComponent if is closed
+                }
+                //let the child node expand the remaining path
+                path.splice(0, 1);
+                nodeChildren[i].expandPath(path);
+                break;
+            }
+        }
     }
     
     /**
@@ -37,45 +85,41 @@ export class ConceptTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        if (this.node.getAdditionalProperty("more") == 1) { //if node has children
-       		var schemeUri = null; //no scheme mode
-    	    if (this.scheme != undefined) {
-    	    	schemeUri = this.scheme.getURI();
-    	    }
-    		this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri)
-                .subscribe(
-                    stResp => {
-                        var narrower = this.deserializer.createRDFArray(stResp);
-                        for (var i=0; i<narrower.length; i++) {
-                            narrower[i].setAdditionalProperty("children", []);
-                        }
-                        this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
-                        //change the class of the subTree div from subtreeClose to subtreeOpen
-                        this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
-                    },
-                    err => {
-                        alert("Error: " + err);
-                        console.error(err.stack);
-                    }
-                );
-            this.node.setAdditionalProperty("open", true);
+      	var schemeUri = null; //no scheme mode
+        if (this.scheme != undefined) {
+            schemeUri = this.scheme.getURI();
         }
+        this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri).subscribe(
+            stResp => {
+                var narrower = this.deserializer.createRDFArray(stResp);
+                for (var i = 0; i < narrower.length; i++) {
+                    narrower[i].setAdditionalProperty("children", []);
+                }
+                this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
+                //change the class of the subTree div from subtreeClose to subtreeOpen
+                this.subTreeStyle = "subTree subtreeOpen";
+                this.node.setAdditionalProperty("open", true);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            });
     }
     
     /**
    	 * Function called when "-" button is clicked.
    	 * Collapse the subtree div.
    	 */
-    public collapseNode() {
+    private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
-		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
-        this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
+        this.subTreeStyle = "subTree subtreeClose";
+        this.node.setAdditionalProperty("children", []);
     }
     
     /**
      * Called when a node in the tree is clicked. This function emit an event 
      */
-    public selectNode() {
+    private selectNode() {
         this.eventHandler.conceptTreeNodeSelectedEvent.emit(this.node);
     }
     

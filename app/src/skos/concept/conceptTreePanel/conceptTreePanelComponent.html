@@ -24,9 +24,10 @@
     
     <div class="panel-footer">
         <div class="input-group input-group-sm">
-            <input type="text" class="form-control" placeholder="Search for...">
+            <input #searchinput type="text" class="form-control" [placeholder]="searchInputPlaceholder" 
+                (keypress)="searchKeyHandler($event.keyIdentifier, searchinput.value)" [disabled]="!scheme">
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button">
+                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)" [disabled]="!scheme">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </span>

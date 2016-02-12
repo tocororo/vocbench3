@@ -41,23 +41,21 @@ export class ClassTreeNodeComponent {
 	 */
     public expandNode() {
         if (this.node.getAdditionalProperty("more") == 1) { //if node has children
-    		this.owlService.getSubClasses(this.node.getURI())
-                .subscribe(
-                    stResp => {
-                        var subClasses = this.deserializer.createRDFArray(stResp);
-                        for (var i=0; i<subClasses.length; i++) {
-                            subClasses[i].setAdditionalProperty("children", []);
-                        }
-                        this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
-                        //change the class of the subTree div from subtreeClose to subtreeOpen
-                        this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
-                    },
-                    err => { 
+            this.owlService.getSubClasses(this.node.getURI()).subscribe(
+                stResp => {
+                    var subClasses = this.deserializer.createRDFArray(stResp);
+                    for (var i = 0; i < subClasses.length; i++) {
+                        subClasses[i].setAdditionalProperty("children", []);
+                    }
+                    this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
+                    //change the class of the subTree div from subtreeClose to subtreeOpen
+                    this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
+                    this.node.setAdditionalProperty("open", true);
+                },
+                err => {
                     alert("Error: " + err);
                     console.error(err.stack);
-                }
-                );
-            this.node.setAdditionalProperty("open", true);
+                });
         }
     }
     

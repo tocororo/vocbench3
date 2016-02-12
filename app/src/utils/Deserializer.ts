@@ -154,7 +154,7 @@ export class Deserializer {
         }
     }
 	
-	createRDFResource(element) {
+	createRDFResource(element): ARTNode {
 		var tagName = element.tagName;
 		if(tagName == 'uri' || tagName == 'bnode'){
 			return this.createRDFNode(element);
@@ -163,7 +163,7 @@ export class Deserializer {
 		}
 	}
 	
-	createPredicateObjectsList(element) {
+	createPredicateObjectsList(element): ARTPredicateObjects[] {
 		if (element.tagName != "collection") {
 			throw new Error("Not a collection");
 		}
