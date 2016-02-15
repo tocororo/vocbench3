@@ -75,12 +75,10 @@ export class ConceptTreeComponent {
                     path.push(new ARTURIResource(uri, show, "concept"));
                 }
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (var i = 0; i < childrenNodeComponent.length; i++) {
-                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) { //looking for first node (root) to expand
-                        if (!childrenNodeComponent[i].node.getAdditionalProperty("open")) {
-                            childrenNodeComponent[i].expandNode();//expand the ConceptTreeNodeComponent if is closed
-                        }
-                        //let the child node expand the remaining path
+                //open tree from root to node
+                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                        //let the found node expand itself and the remaining path
                         path.splice(0, 1);
                         childrenNodeComponent[i].expandPath(path);
                         break;

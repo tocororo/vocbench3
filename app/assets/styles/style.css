@@ -61,7 +61,19 @@ concept-tree-panel>.panel, concept-scheme-panel>.panel, class-tree-panel>.panel,
 concept-tree-panel>.panel>.panel-body, concept-scheme-panel>.panel>.panel-body,
 class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, resource-view>.panel>.panel-body {
     flex: 1;
+    display: flex;
+    flex-flow: column;
+}
+
+concept-tree, class-tree, property-tree {
+    display: flex;
+    flex: 1;
+}
+
+/* Note: in order to work, the div with this class needs to be placed into a display:flex container */
+.scrollableContainer {
     overflow: auto;
+    flex: 1;
     /* CHECK THIS for the problem with chrome
      http://stackoverflow.com/questions/33681562/why-does-chrome-not-properly-handle-flexbox-items-added-with-jquery
     */
@@ -113,13 +125,14 @@ rdf-resource > span {
 
 .subtreeOpen {
 	max-height: 1600px; /* A big value possibly not exceeded by the content (to allow the transition) */
-	transition: max-height 0.5s ease-in;
+    /* Temporarly removed opening animation: it cause problem when scrolling the tree to focus on searched item */
+	/*transition: max-height 0.5s ease-in;*/
 	overflow: hidden;
 }
 
 .subtreeClose {
 	max-height: 0;
-    /*Temporarly removed closing animation: it works only if the children node are not removed
+    /* Temporarly removed closing animation: it works only if the children node are not removed
       when the subtree collapses, but this causes problem in the search in trees */
     /*transition: max-height 0.3s ease-out;*/
     overflow: hidden;

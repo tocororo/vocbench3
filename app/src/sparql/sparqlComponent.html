@@ -1,39 +1,42 @@
-<div>
-    <label>Query language</label>
-    <select name="queryModeSelect" [(ngModel)]="queryMode">
-        <option value="query">SPARQL 1.1 Query</option>
-        <option value="update">SPARQL 1.1 Update</option>
-    </select>
-</div>
+<div class="vbox">
+    
+    <div style="margin: 5px 0;">
+        <label>Query language</label>
+        <select name="queryModeSelect" [(ngModel)]="queryMode">
+            <option value="query">SPARQL 1.1 Query</option>
+            <option value="update">SPARQL 1.1 Update</option>
+        </select>
+    </div>
+
+    <textarea [(ngModel)]="query" rows="10" style="width:100%;"></textarea>
+
+    <div style="margin: 5px 0;">
+        <button class="btn btn-sm btn-primary" type="button" (click)="doQuery()" [disabled]="queryInProgress">Submit query</button>
+        <button class="btn btn-sm btn-info" type="button" (click)="clear()">Clear</button>
+        <label style="margin-left: 5px;">
+            Include inferred statement:
+            <input #inferredcb type="checkbox" (change)="inferred = inferredcb.checked">
+        </label>
+    </div>
 
 
-<textarea [(ngModel)]="query" rows="10" style="width:100%;"></textarea>
+    <div *ngIf="queryResult" class="vbox">
+        <label>Result of the query </label>
+        <p *ngIf="queryTime != null" style="display: inline; margin-left: 5px;">(Done in {{queryTime}})</p>
+        <div class="scrollableContainer">
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th *ngFor="#h of headers">{{h}}</th>
+                    </tr>
+                </thead>
+                <tbody style="overflow: auto;">
+                    <tr *ngFor="#bindings of queryResult">
+                        <td *ngFor="#h of headers">{{bindings[h].value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-
-
-<div style="margin: 5px 0;">
-    <button class="btn btn-sm btn-primary" type="button" (click)="doQuery()" [disabled]="queryInProgress">Submit query</button>
-    <button class="btn btn-sm btn-info" type="button" (click)="clear()">Clear</button>
-    <label style="margin-left: 5px;">
-        Include inferred statement:
-        <input #inferredcb type="checkbox" (change)="inferred = inferredcb.checked">
-    </label>
-</div>
-
-
-<div *ngIf="queryResult">
-    <label>Result of the query </label>
-    <p *ngIf="queryTime != null" style="display: inline; margin-left: 5px;">(Done in {{queryTime}})</p>
-    <table class="table table-bordered table-striped table-condensed">
-        <thead>
-            <tr>
-                <th *ngFor="#h of headers">{{h}}</th>
-            </tr>
-        </thead>
-        <tbody style="overflow: auto;">
-            <tr *ngFor="#bindings of queryResult">
-                <td *ngFor="#h of headers">{{bindings[h].value}}</td>
-            </tr>
-        </tbody>
-    </table>
 </div>
