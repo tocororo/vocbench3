@@ -1,5 +1,5 @@
 import {Component, Input} from "angular2/core";
-import {ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
+import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ResourceViewServices} from "../services/resourceViewServices";
@@ -29,10 +29,7 @@ export class ResourceViewComponent {
     
     @Input() resource:ARTURIResource;
     
-    private renameFn = {
-        locked : true,
-        label : "Rename",    
-    }
+    private renameLocked = true;
     
     //partitions
     private typesColl: ARTURIResource[];
@@ -41,8 +38,8 @@ export class ResourceViewComponent {
     private schemesColl: ARTURIResource[];
     private broadersColl: ARTURIResource[];
     private superpropertiesColl: ARTURIResource[];
-    private domainsColl: ARTURIResource[];
-    private rangesColl: ARTURIResource[];
+    private domainsColl: ARTNode[];
+    private rangesColl: ARTNode[];
     private lexicalizationsColl: ARTPredicateObjects[];
     private propertiesColl: ARTPredicateObjects[];
     private propertyFacets: any[];
@@ -72,17 +69,17 @@ export class ResourceViewComponent {
                         if (partitionName == "resource") {
                             this.resource = this.deserializer.createURI(partition.children[0]);
                         } else if (partitionName == "types") {
-                            this.typesColl = this.deserializer.createRDFArray(partition);
+                            this.typesColl = this.deserializer.createURIArray(partition);
                         } else if (partitionName == "classaxioms") {
                             this.classAxiomColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
                         } else if (partitionName == "topconceptof") {
-                            this.topconceptofColl = this.deserializer.createRDFArray(partition);
+                            this.topconceptofColl = this.deserializer.createURIArray(partition);
                         } else if (partitionName == "schemes") {
-                            this.schemesColl = this.deserializer.createRDFArray(partition);
+                            this.schemesColl = this.deserializer.createURIArray(partition);
                         } else if (partitionName == "broaders") {
-                            this.broadersColl = this.deserializer.createRDFArray(partition);
+                            this.broadersColl = this.deserializer.createURIArray(partition);
                         } else if (partitionName == "superproperties") {
-                            this.superpropertiesColl = this.deserializer.createRDFArray(partition);
+                            this.superpropertiesColl = this.deserializer.createURIArray(partition);
                         } else if (partitionName == "facets") {
                             this.parseFacetsPartition(partition);
                         } else if (partitionName == "domains") {
@@ -128,24 +125,26 @@ export class ResourceViewComponent {
                     }
                 }
             } else if (facetName == "inverseof") {
-                this.inverseofColl = this.deserializer.createRDFArray(facetsChildren[i]);
+                this.inverseofColl = this.deserializer.createURIArray(facetsChildren[i]);
             }
         }
     }
     
-    private renameResource(uri: string, inputEl: HTMLElement) {
-        if (this.renameFn.label == "Rename") {
-            inputEl.focus();
-            this.renameFn.locked = false;
-            this.renameFn.label = "Confirm";    
-        } else {
-            this.renameFn.locked = true;
-            this.renameFn.label = "Rename";
-            if (this.resource.getURI() != uri) {
-                alert("renaming " + this.resource.getURI() + " in " + uri);       
-            }
+    private startRename(inputEl: HTMLElement) {
+        inputEl.focus();
+        this.renameLocked = false;
+    }
+    
+    private renameResource(uri: string) {
+        this.renameLocked = true;
+        if (this.resource.getURI() != uri) {
+            alert("renaming " + this.resource.getURI() + " in " + uri);       
         }
-        
+    }
+    
+    private cancelRename(inputEl: HTMLInputElement) {
+        inputEl.value = this.resource.getURI();
+        this.renameLocked = true;
     }
     
 }

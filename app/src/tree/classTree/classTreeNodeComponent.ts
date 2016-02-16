@@ -43,7 +43,7 @@ export class ClassTreeNodeComponent {
         if (this.node.getAdditionalProperty("more") == 1) { //if node has children
             this.owlService.getSubClasses(this.node.getURI()).subscribe(
                 stResp => {
-                    var subClasses = this.deserializer.createRDFArray(stResp);
+                    var subClasses = this.deserializer.createURIArray(stResp);
                     for (var i = 0; i < subClasses.length; i++) {
                         subClasses[i].setAdditionalProperty("children", []);
                     }

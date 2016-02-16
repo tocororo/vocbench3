@@ -99,7 +99,7 @@ export class ConceptTreeNodeComponent {
         }
         this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri).subscribe(
             stResp => {
-                var narrower = this.deserializer.createRDFArray(stResp);
+                var narrower = this.deserializer.createURIArray(stResp);
                 for (var i = 0; i < narrower.length; i++) {
                     narrower[i].setAdditionalProperty("children", []);
                 }

@@ -4,23 +4,39 @@ import {ARTNode, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects} from
 @Injectable()
 export class Deserializer {
     
-    createRDFArray(response) {
+    /**
+     * creates an array of mixed resources (ARTBNode, ARTLiteral, ARTURIResource)
+     */
+    createRDFArray(response): ARTNode[] {
 		var collectionElement = response.getElementsByTagName('collection')[0];
 		var childElements = collectionElement.childNodes;
 		return this.createRDFArrayGivenList(childElements);
 	};
+    
+    /**
+     * creates an array of only ARTURIResource
+     */
+    createURIArray(response): ARTURIResource[] {
+        var uriResourceArray: ARTURIResource[] = new Array();
+        var collectionElement = response.getElementsByTagName('collection')[0];
+		var uriElemens = collectionElement.getElementsByTagName('uri');
+        for (var i = 0; i < uriElemens.length; i++) {
+            uriResourceArray.push(this.createURI(uriElemens[i]))
+        }
+        return uriResourceArray;
+    }
 	
-	createRDFArrayGivenList(childElements) {
-		var collectionArray = new Array(); 
-		if(typeof childElements.length == "undefined")
-			return null;
-		for (var i = 0; i < childElements.length; i++){
-			if(childElements[i].nodeType == 1) {// == ELEMENT_NODE
-				collectionArray.push(this.createRDFNode(childElements[i]));
-			}
-		}
-		return collectionArray;
-	};
+    createRDFArrayGivenList(childElements): ARTNode[] {
+        var collectionArray: ARTNode[] = new Array();
+        if (typeof childElements.length == "undefined")
+            return null;
+        for (var i = 0; i < childElements.length; i++) {
+            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
+                collectionArray.push(this.createRDFNode(childElements[i]));
+            }
+        }
+        return collectionArray;
+    };
 	
 	createURI(response): ARTURIResource {
 		var uriElement;

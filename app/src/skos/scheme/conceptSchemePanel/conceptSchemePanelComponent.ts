@@ -25,7 +25,7 @@ export class ConceptSchemePanelComponent {
         this.skosService.getAllSchemesList()
             .subscribe(
                 stResp => {
-                    this.schemeList = this.deserializer.createRDFArray(stResp);
+                    this.schemeList = this.deserializer.createURIArray(stResp);
                 },
                 err => {
                     alert("Error: " + err);

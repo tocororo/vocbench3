@@ -83,7 +83,7 @@ export class ConceptTreePanelComponent {
     private doSearch(searchedText: string) {
         this.searchService.searchOntology(searchedText, "concept", this.vbCtx.getScheme().getURI()).subscribe(
             stResp => {
-                var searchResult = this.deserializer.createRDFArray(stResp);
+                var searchResult = this.deserializer.createURIArray(stResp);
                 if (searchResult.length == 0) {
                     alert("No results found for '" + searchedText + "'");
                 } else if (searchResult.length == 1) {

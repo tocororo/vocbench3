@@ -3,8 +3,23 @@
         <div class="hbox" style="align-items: center">
             <label>Resource:</label>
             <rdf-resource [resource]="resource"></rdf-resource>
-            <input #renameinput type="text" style="flex: 1; margin: 0px 10px;" [value]="resource.getURI()" [readonly]="renameFn.locked">
-            <button class="btn btn-default btn-xs" type="button" (click)="renameResource(renameinput.value, renameinput)">{{renameFn.label}}</button>
+            <div style="margin-left: 10px;">
+                <div class="input-group input-group-sm">
+                    <input #renameinput type="text" class="form-control" [value]="resource.getURI()" [readonly]="renameLocked">
+                    <div class="input-group-btn">
+                        <button *ngIf="renameLocked" class="btn btn-default" style="width:60px" type="button" 
+                            (click)="startRename(renameinput)">Rename</button>
+                        <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" 
+                            (click)="renameResource(renameinput.value)">
+                            <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                        </button>
+                        <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" 
+                            (click)="cancelRename(renameinput)">
+                            <span class="glyphicon glyphicon-remove" style="color: red"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="panel-body scrollableContainer">

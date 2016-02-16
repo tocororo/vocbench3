@@ -35,7 +35,7 @@ export class ClassTreeComponent {
         this.owlService.getClassesInfoAsRootsForTree(rootClassUri)
             .subscribe(
                 stResp => {
-                    this.roots = this.deserializer.createRDFArray(stResp);
+                    this.roots = this.deserializer.createURIArray(stResp);
                     for (var i=0; i<this.roots.length; i++) {
                         this.roots[i].setAdditionalProperty("children", []);
                     }
