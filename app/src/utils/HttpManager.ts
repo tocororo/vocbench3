@@ -20,7 +20,7 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private vocbenchCtx: VocbenchCtx, private stRespUtils: STResponseUtils) { }
+    constructor(private http: Http, private vbCtx: VocbenchCtx, private stRespUtils: STResponseUtils) { }
     
     /*
 	 * params must be an object list like: 
@@ -40,7 +40,7 @@ export class HttpManager {
         }
         
         //add parameters
-        url += "ctx_project=" + encodeURIComponent(this.vocbenchCtx.getProject().name) + "&";
+        url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject()) + "&";
         for (var key in params) {
             url += key + "=" + encodeURIComponent(params[key]) + "&";
         }
@@ -89,7 +89,7 @@ export class HttpManager {
         }
         
         //add ctx parameters
-        url += "ctx_project=" + encodeURIComponent(this.vocbenchCtx.getProject().name) + "&";
+        url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject()) + "&";
 
         console.log("[POST]: " + url); //CHECK FOR LOGGER MODULE IN ANGULAR 2
         

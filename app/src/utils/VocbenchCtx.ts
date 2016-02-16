@@ -4,18 +4,18 @@ import {ARTURIResource} from './ARTResources';
 @Injectable()
 export class VocbenchCtx {
     
-    project: any;
+    project: string;
     scheme: ARTURIResource;
     
 	constructor() {
-        this.project = { name : "SYSTEM" };
+        this.project = "SYSTEM";
 	}
     
-    setProject(project) {
+    setProject(project: string) {
         this.project = project;
     }
     
-    getProject() {
+    getProject(): string {
         return this.project;
     }
     

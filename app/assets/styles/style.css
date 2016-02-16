@@ -2,6 +2,18 @@ html, body {
     height: 100%
 }
 
+/* Div visible only in some scenario when there is need to block event from user */
+#blockDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    opacity: 0.5;
+    background-color: black;
+}
+
 app {
     height: 100%;
     display: flex;

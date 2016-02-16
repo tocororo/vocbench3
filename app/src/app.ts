@@ -41,7 +41,7 @@ export class App {
     
     //returns true if a project is open. Useful to enable/disable navbar links 
     private isProjectOpen() {
-        return this.vbCtx.getProject().name != "SYSTEM";
+        return this.vbCtx.getProject() != "SYSTEM";
     }
     
 }

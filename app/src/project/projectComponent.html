@@ -20,15 +20,15 @@
             <tbody>
                 <tr *ngFor="#p of projectList" (click)="selectProject(p)" [ngClass]="{active: isSelected(p)}">
                     <td class="text-center">
-                        <img *ngIf="!p.open" src="app/assets/images/folder.gif" (dblclick)="openProject(p)">
-                        <img *ngIf="p.open" src="app/assets/images/folder-open.gif" (dblclick)="closeProject(p)">
+                        <img *ngIf="!p.isOpen()" src="app/assets/images/folder.gif" (dblclick)="openProject(p)">
+                        <img *ngIf="p.isOpen()" src="app/assets/images/folder-open.gif" (dblclick)="closeProject(p)">
                     </td>
-                    <td class="text-center">{{p.name}}</td>
-                    <td class="text-center">{{p.ontmgr}}</td>
-                    <td class="text-center">{{p.type}}</td>
-                    <td class="text-center">{{p.ontoType}}</td>
+                    <td class="text-center">{{p.getName()}}</td>
+                    <td class="text-center">{{p.getPrettyPrintOntoMgr()}}</td>
+                    <td class="text-center">{{p.getType()}}</td>
+                    <td class="text-center">{{p.getPrettyPrintOntoType()}}</td>
                     <td class="text-center">
-                        <span [class]="p.status.class" [title]="p.status.message"></span>
+                        <span [class]="p.getStatus().class" [title]="p.getStatus().message"></span>
                     </td>
                 </tr>
             </tbody>
