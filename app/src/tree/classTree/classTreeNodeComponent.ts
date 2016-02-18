@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
-import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
@@ -18,10 +17,12 @@ export class ClassTreeNodeComponent {
     
     private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
-	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(data => this.onSubClassCreated(data)));
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
-        this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(data => this.onSubClassRemoved(data)));
+	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
+            data => this.onSubClassCreated(data.subClass, data.superClassURI)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(classURI => this.onClassDeleted(classURI)));
+        this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
+            data => this.onSubClassRemoved(data.classURI, data.subClassURI)));
     }
     
     ngOnInit() {
@@ -42,11 +43,7 @@ export class ClassTreeNodeComponent {
     public expandNode() {
         if (this.node.getAdditionalProperty("more") == 1) { //if node has children
             this.owlService.getSubClasses(this.node.getURI()).subscribe(
-                stResp => {
-                    var subClasses = this.deserializer.createURIArray(stResp);
-                    for (var i = 0; i < subClasses.length; i++) {
-                        subClasses[i].setAdditionalProperty("children", []);
-                    }
+                subClasses => {
                     this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
                     //change the class of the subTree div from subtreeClose to subtreeOpen
                     this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
@@ -54,7 +51,7 @@ export class ClassTreeNodeComponent {
                 },
                 err => {
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 });
         }
     }
@@ -78,10 +75,10 @@ export class ClassTreeNodeComponent {
     
     //EVENT LISTENERS
     
-    private onClassDeleted(cls:ARTURIResource) {
+    private onClassDeleted(classURI: string) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
-            if (children[i].getURI() == cls.getURI()) {
+            if (children[i].getURI() == classURI) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
@@ -93,21 +90,17 @@ export class ClassTreeNodeComponent {
         }
     }
     
-    //data contains "resource" and "parent"
-    private onSubClassCreated(data) {
+    private onSubClassCreated(subClass: ARTURIResource, superClassURI: string) {
         //add the new class as children only if the parent is the current class
-        if (this.node.getURI() == data.parent.getURI()) {
-            this.node.getAdditionalProperty("children").push(data.resource);
+        if (this.node.getURI() == superClassURI) {
+            this.node.getAdditionalProperty("children").push(subClass);
             this.node.setAdditionalProperty("more", 1);
         }
     }
     
-    //data contains "resource" and "parent"
-    private onSubClassRemoved(data) {
-        var superClass = data.parent;
-        if (superClass.getURI() == this.node.getURI()) {
-            var cls = data.resource;
-            this.onClassDeleted(cls);
+    private onSubClassRemoved(classURI: string, subClassURI: string) {
+        if (classURI == this.node.getURI()) {
+            this.onClassDeleted(subClassURI);
         }
     }
 	

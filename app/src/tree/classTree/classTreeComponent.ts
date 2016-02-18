@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
-import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
@@ -20,9 +19,9 @@ export class ClassTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node)));
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(classURI => this.onClassDeleted(classURI)));
     }
     
     ngOnInit() {
@@ -34,15 +33,12 @@ export class ClassTreeComponent {
         }
         this.owlService.getClassesInfoAsRootsForTree(rootClassUri)
             .subscribe(
-                stResp => {
-                    this.roots = this.deserializer.createURIArray(stResp);
-                    for (var i=0; i<this.roots.length; i++) {
-                        this.roots[i].setAdditionalProperty("children", []);
-                    }
+                roots => {
+                    this.roots = roots;
                 },
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
     }
@@ -66,10 +62,10 @@ export class ClassTreeComponent {
         this.itemSelected.emit(node);
     }
     
-    private onClassDeleted(cls:ARTURIResource) {
+    private onClassDeleted(classURI: string) {
         //check if the class to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == cls.getURI()) {
+            if (this.roots[i].getURI() == classURI) {
                 this.roots.splice(i, 1);
                 break;
             }

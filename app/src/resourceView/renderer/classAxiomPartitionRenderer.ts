@@ -2,7 +2,6 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ResourceUtils} from "../../utils/ResourceUtils";
-import {VBEventHandler} from "../../utils/VBEventHandler";
 import {PropertyServices} from "../../services/propertyServices";
 import {OwlServices} from "../../services/owlServices";
 
@@ -24,8 +23,7 @@ export class ClassAxiomPartitionPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove class axiom";
     
-    constructor(private propertyService:PropertyServices, private owlService:OwlServices, 
-            private eventHandler:VBEventHandler, private resUtils:ResourceUtils) {}
+    constructor(private propertyService:PropertyServices, private owlService:OwlServices, private resUtils:ResourceUtils) {}
         
     private add() {
         alert("add class axiom to resource " + this.resource.getShow());
@@ -59,10 +57,9 @@ export class ClassAxiomPartitionPartitionRenderer {
             this.owlService.removeSuperCls(this.resource.getURI(), object.getNominalValue())
                 .subscribe(
                     stResp => {
-                        this.eventHandler.subClassRemovedEvent.emit({parent: object, resource: this.resource});
                         this.update.emit(null);
                     },
-                    err => { alert("Error: " + err); console.error(err.stack);} 
+                    err => { alert("Error: " + err); console.error(err['stack']);} 
                 );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#disjointWith") {
             this.propertyService.removePropValue(this.resource.getURI(), predicate.getURI(), object.getNominalValue(), null, objectType)

@@ -3,9 +3,7 @@ import {ConceptTreeComponent} from "../../../tree/conceptTree/conceptTreeCompone
 import {SkosServices} from "../../../services/skosServices";
 import {OntoSearchServices} from "../../../services/ontoSearchServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
-import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {Deserializer} from "../../../utils/Deserializer";
 import {ROUTER_DIRECTIVES} from "angular2/router";
 
 @Component({
@@ -23,9 +21,7 @@ export class ConceptTreePanelComponent {
     private selectedConcept:ARTURIResource;
     private searchInputPlaceholder: string;
     
-	constructor(private skosService:SkosServices, private searchService: OntoSearchServices, private deserializer:Deserializer, 
-            private eventHandler:VBEventHandler, private vbCtx:VocbenchCtx) {
-    }
+	constructor(private skosService:SkosServices, private searchService: OntoSearchServices, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
         this.searchInputPlaceholder = this.scheme ? "Search..." : "Search not available in no-scheme mode"; 
@@ -34,16 +30,12 @@ export class ConceptTreePanelComponent {
     private createConcept() {
         var conceptName = prompt("Insert concept name");
         if (conceptName == null) return;
-        this.skosService.createConcept(conceptName, this.vbCtx.getScheme().getURI(), null, null)
+        this.skosService.createTopConcept(conceptName, this.vbCtx.getScheme().getURI(), null, null)
             .subscribe(
-                stResp => {
-                    var newConc = this.deserializer.createURI(stResp);
-                    newConc.setAdditionalProperty("children", []);
-                    this.eventHandler.topConceptCreatedEvent.emit(newConc);
-                },
+                newConc => {},
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
     }
@@ -53,14 +45,10 @@ export class ConceptTreePanelComponent {
         if (conceptName == null) return;
         this.skosService.createNarrower(conceptName, this.selectedConcept.getURI(), this.vbCtx.getScheme().getURI(), null, null)
             .subscribe(
-                stResp => {
-                    var newConc = this.deserializer.createURI(stResp);
-                    newConc.setAdditionalProperty("children", []);
-                    this.eventHandler.narrowerCreatedEvent.emit({"resource": newConc, "parent": this.selectedConcept});
-                },
+                newConc => {},
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             )
     }
@@ -69,7 +57,6 @@ export class ConceptTreePanelComponent {
         this.skosService.deleteConcept(this.selectedConcept.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.conceptDeletedEvent.emit(this.selectedConcept);
                     this.selectedConcept = null;
                     this.itemSelected.emit(undefined);
                 },
@@ -82,8 +69,7 @@ export class ConceptTreePanelComponent {
     
     private doSearch(searchedText: string) {
         this.searchService.searchOntology(searchedText, "concept", this.vbCtx.getScheme().getURI()).subscribe(
-            stResp => {
-                var searchResult = this.deserializer.createURIArray(stResp);
+            searchResult => {
                 if (searchResult.length == 0) {
                     alert("No results found for '" + searchedText + "'");
                 } else if (searchResult.length == 1) {
@@ -96,7 +82,7 @@ export class ConceptTreePanelComponent {
             },
             err => {
                 alert("Error: " + err);
-                console.error(err.stack);
+                console.error(err['stack']);
             });
     }
     

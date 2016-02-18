@@ -1,6 +1,7 @@
 import {Injectable} from 'angular2/core';
-import {Http} from 'angular2/http';
 import {HttpManager} from "../utils/HttpManager";
+import {Deserializer} from "../utils/Deserializer";
+import {VBEventHandler} from "../utils/VBEventHandler";
 
 @Injectable()
 export class SkosServices {
@@ -8,7 +9,7 @@ export class SkosServices {
     private serviceName = "skos";
     private oldTypeService = true;
 
-    constructor(private http: Http, private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private deserializer: Deserializer, private eventHandler: VBEventHandler) { }
     
     //Concept services 
     
@@ -18,7 +19,15 @@ export class SkosServices {
         if (scheme != undefined) {
             params.scheme = scheme;
         }
-        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService).map(
+            stResp => {
+                var topConcepts = this.deserializer.createURIArray(stResp);
+                for (var i = 0; i < topConcepts.length; i++) {
+                    topConcepts[i].setAdditionalProperty("children", []);
+                }
+                return topConcepts;
+            }
+        );
     }
 
     getNarrowerConcepts(concept: string, scheme: string) {
@@ -30,10 +39,18 @@ export class SkosServices {
         if (scheme != undefined) {
             params.scheme = scheme;
         }
-        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService).map(
+            stResp => {
+                var narrower = this.deserializer.createURIArray(stResp);
+                for (var i = 0; i < narrower.length; i++) {
+                    narrower[i].setAdditionalProperty("children", []);
+                }
+                return narrower;
+            }
+        );
     }
 
-    createConcept(concept: string, scheme: string, prefLabel: string, prefLabelLang: string) {
+    createTopConcept(concept: string, scheme: string, prefLabel: string, prefLabelLang: string) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             concept: concept,
@@ -43,7 +60,13 @@ export class SkosServices {
             params.prefLabel = prefLabel;
             params.prefLabelLang = prefLabelLang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
+            stResp => {
+                var newConc = this.deserializer.createURI(stResp);
+                newConc.setAdditionalProperty("children", []);
+                this.eventHandler.topConceptCreatedEvent.emit(newConc);
+                return newConc;
+            });
     }
 
     deleteConcept(concept: string) {
@@ -51,7 +74,12 @@ export class SkosServices {
         var params: any = {
             concept: concept,
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.conceptDeletedEvent.emit(concept);
+                return stResp;
+            }
+        );
     }
 
     createNarrower(concept: string, broader: string, scheme: string, prefLabel: string, prefLabelLang: string) {
@@ -65,7 +93,13 @@ export class SkosServices {
             params.prefLabel = prefLabel;
             params.prefLabelLang = prefLabelLang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
+            stResp => {
+                var newConc = this.deserializer.createURI(stResp);
+                newConc.setAdditionalProperty("children", []);
+                this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broaderURI: broader});
+                return newConc;
+            });
     }
 
     removeBroaderConcept(concept: string, broaderConcept: string) {
@@ -74,7 +108,12 @@ export class SkosServices {
             concept: concept,
             broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeBroaderConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeBroaderConcept", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.broaderRemovedEvent.emit({conceptURI: concept, broaderURI: broaderConcept});
+                return stResp;
+            }
+        );
     }
 
     removeTopConcept(concept: string, scheme: string) {
@@ -83,7 +122,12 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeTopConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeTopConcept", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.conceptRemovedAsTopConceptEvent.emit({conceptURI: concept, schemeURI: scheme});
+                return stResp;
+            }   
+        );
     }
 
     addConceptToScheme(concept: string, scheme: string, lang?: string) {
@@ -104,7 +148,12 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeConceptFromScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeConceptFromScheme", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.conceptRemovedFromSchemeEvent.emit({conceptURI: concept, schemeURI: scheme});
+                return stResp;
+            }
+        );
     }
     
     //Scheme services
@@ -112,10 +161,14 @@ export class SkosServices {
     getAllSchemesList() {
         console.log("[SkosServices] getAllSchemesList");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllSchemesList", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getAllSchemesList", params, this.oldTypeService).map(
+            stResp => {
+                return this.deserializer.createURIArray(stResp);
+            }
+        );
     }
 
-    createScheme(scheme: string, prefLabel: string, prefLabelLang: string) {
+    createScheme(scheme: string, prefLabel?: string, prefLabelLang?: string) {
         console.log("[SkosServices] createScheme");
         var params: any = {
             scheme: scheme,
@@ -124,7 +177,11 @@ export class SkosServices {
             params.prefLabel = prefLabel;
             params.prefLabelLang = prefLabelLang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService).map(
+            stResp => {
+                var newScheme = this.deserializer.createURI(stResp);
+                return newScheme;
+            });
     }
 
     deleteScheme(scheme: string, forceDeleteDanglingConcepts?: boolean) {

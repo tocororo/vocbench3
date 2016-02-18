@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {PropertyServices} from "../../services/propertyServices";
 
@@ -22,7 +21,7 @@ export class SuperPropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove superproperty";
     
-    constructor(private propService:PropertyServices, private eventHandler:VBEventHandler) {}
+    constructor(private propService:PropertyServices) {}
     
     private add() {
         alert("add superproperty to " + this.resource.getShow());
@@ -33,7 +32,6 @@ export class SuperPropertiesPartitionRenderer {
         this.propService.removeSuperProperty(this.resource.getURI(), superProp.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.superPropertyRemovedEvent.emit({resource: this.resource, parent: superProp});
                     this.update.emit(null);
                 },
                 err => {

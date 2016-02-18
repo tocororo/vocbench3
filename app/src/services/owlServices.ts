@@ -1,6 +1,7 @@
 import {Injectable} from 'angular2/core';
-import {Http} from 'angular2/http';
 import {HttpManager} from "../utils/HttpManager";
+import {Deserializer} from "../utils/Deserializer";
+import {VBEventHandler} from "../utils/VBEventHandler";
 
 @Injectable()
 export class OwlServices {
@@ -8,7 +9,7 @@ export class OwlServices {
     private serviceName = "cls";
     private oldTypeService = true;
 
-    constructor(private http: Http, private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private deserializer: Deserializer, private eventHandler: VBEventHandler) { }
 
     getClassesInfoAsRootsForTree(clsName: string) {
         console.log("[owlServices] getClassesInfoAsRootsForTree");
@@ -16,7 +17,15 @@ export class OwlServices {
             clsesqnames: clsName,
             instNum: true
         };
-        return this.httpMgr.doGet(this.serviceName, "getClassesInfoAsRootsForTree", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getClassesInfoAsRootsForTree", params, this.oldTypeService).map(
+            stResp => {
+                var roots = this.deserializer.createURIArray(stResp);
+                for (var i = 0; i < roots.length; i++) {
+                    roots[i].setAdditionalProperty("children", []);
+                }
+                return roots;
+            }
+        );
     }
 	
 	/**
@@ -30,7 +39,15 @@ export class OwlServices {
             tree: true,
             instNum: true
         };
-        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, this.oldTypeService).map(
+            stResp => {
+                var subClasses = this.deserializer.createURIArray(stResp);
+                for (var i = 0; i < subClasses.length; i++) {
+                    subClasses[i].setAdditionalProperty("children", []);
+                }
+                return subClasses;
+            }
+        );
     }
 
     createClass(superClassName: string, newClassName: string) {
@@ -39,7 +56,14 @@ export class OwlServices {
             superClassName: superClassName,
             newClassName: newClassName,
         };
-        return this.httpMgr.doGet(this.serviceName, "createClass", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "createClass", params, this.oldTypeService).map(
+            stResp => {
+                var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                newClass.setAdditionalProperty("children", []);
+                this.eventHandler.subClassCreatedEvent.emit({"subClass": newClass, "superClassURI": superClassName});
+                return stResp;
+            }
+        );
     }
 
     removeClass(className: string) {
@@ -48,7 +72,12 @@ export class OwlServices {
             name: className,
             type: "Class",
         };
-        return this.httpMgr.doGet("delete", "removeClass", params, this.oldTypeService);
+        return this.httpMgr.doGet("delete", "removeClass", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.classDeletedEvent.emit(className);
+                return stResp;
+            }
+        );
     }
     
     addSuperCls(clsqname: string, superclsqname: string) {
@@ -66,7 +95,12 @@ export class OwlServices {
             clsqname: clsqname,
             superclsqname: superclsqname,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeSuperCls", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeSuperCls", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.subClassRemovedEvent.emit({classURI: superclsqname, subClassURI: clsqname});
+                return stResp;
+            }
+        );
     }
     
     addType(clsqname: string, typeqname: string) {
@@ -84,7 +118,12 @@ export class OwlServices {
             clsqname: cls,
             typeqname: type,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeType", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeType", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.typeDeletedEvent.emit({classURI: cls, typeURI: type});
+                return stResp;      
+            }
+        );
     }
     
     addIndividual(clsName: string, instanceName: string) {

@@ -1,5 +1,4 @@
 import {Injectable} from 'angular2/core';
-import {Http} from 'angular2/http';
 import {HttpManager} from "../utils/HttpManager";
 
 @Injectable()
@@ -8,7 +7,7 @@ export class ProjectServices {
     private serviceName = "Projects";
     private oldTypeService = false;
 
-    constructor(private http: Http, private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager) { }
 
     listProjects() {
         console.log("[ProjectServices] listProjects");

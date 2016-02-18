@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {OwlServices} from "../../services/owlServices";
 
@@ -22,7 +21,7 @@ export class TypesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove type"; 
     
-    constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {}
+    constructor(private owlService:OwlServices) {}
     
     //add type
     private add() {
@@ -34,7 +33,6 @@ export class TypesPartitionRenderer {
         this.owlService.removeType(this.resource.getURI(), type.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.typeDeletedEvent.emit({cls: this.resource.getURI(), type: type.getURI()});
                     this.update.emit(null);
                 },
                 err => {

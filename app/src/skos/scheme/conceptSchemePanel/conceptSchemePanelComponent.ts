@@ -1,7 +1,6 @@
 import {Component, Output, EventEmitter} from "angular2/core";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {SkosServices} from "../../../services/skosServices";
-import {Deserializer} from "../../../utils/Deserializer";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 
@@ -19,24 +18,34 @@ export class ConceptSchemePanelComponent {
     private activeScheme:ARTURIResource;
     private selectedScheme:ARTURIResource;
     
-	constructor(private skosService:SkosServices, private deserializer:Deserializer, private vbCtx:VocbenchCtx) {}
+	constructor(private skosService:SkosServices, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
         this.skosService.getAllSchemesList()
             .subscribe(
-                stResp => {
-                    this.schemeList = this.deserializer.createURIArray(stResp);
+                schemeList => {
+                    this.schemeList = schemeList;
                 },
                 err => {
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
         this.activeScheme = this.vbCtx.getScheme();
     }
     
     private createScheme() {
-        alert("creating scheme");    
+        var schemeName = prompt("Insert conceptScheme name");
+        if (schemeName == null) return;
+        this.skosService.createScheme(schemeName).subscribe(
+            newScheme => {
+                this.schemeList.push(newScheme);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        )
     }
     
     private deleteScheme() {

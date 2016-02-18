@@ -1,6 +1,5 @@
 import {Component, Input, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
-import {Deserializer} from "../../utils/Deserializer";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {SkosServices} from "../../services/skosServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
@@ -29,12 +28,27 @@ export class ConceptTreeNodeComponent {
     
     private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
 	
-	constructor(private skosService:SkosServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(concept => this.onConceptDeleted(concept)));
-        this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(data => this.onNarrowerCreated(data)));
+	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
+            deletedConceptURI => this.onConceptDeleted(deletedConceptURI)));
+        this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
+            data => this.onNarrowerCreated(data.narrower, data.broaderURI)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data)));
-        this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(data => this.onBroaderRemoved(data)));
+            data => this.onConceptRemovedFromScheme(data.conceptURI, data.schemeURI)));
+        this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
+            data => this.onBroaderRemoved(data.conceptURI, data.broaderURI)));
+        console.log("adding resourceRenamedEvent to eventSubscriptions");
+        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+            data => {
+                if (data.oldResourceURI == this.node.getURI()) {
+                    console.log("In " + this.node.getURI() + " detected resource renamed in " + data.newResourceURI);
+                    // console.log(JSON.stringify(this.node));
+                    // this.node = new ARTURIResource(data.newResourceURI, this.node.getShow(), this.node.getRole());
+                    // this.node.setAdditionalProperty("explicit", this.node.getAdditionalProperty("explicit"));
+                    // this.node.setAdditionalProperty("children", this.node.getAdditionalProperty("children"));
+                    // this.node.setAdditionalProperty("more", this.node.getAdditionalProperty("more"));
+                }
+            }));
     }
     
     ngAfterViewInit() {
@@ -98,11 +112,7 @@ export class ConceptTreeNodeComponent {
             schemeUri = this.scheme.getURI();
         }
         this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri).subscribe(
-            stResp => {
-                var narrower = this.deserializer.createURIArray(stResp);
-                for (var i = 0; i < narrower.length; i++) {
-                    narrower[i].setAdditionalProperty("children", []);
-                }
+            narrower => {
                 this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
                 //change the class of the subTree div from subtreeClose to subtreeOpen
                 this.subTreeStyle = "subTree subtreeOpen";
@@ -110,7 +120,7 @@ export class ConceptTreeNodeComponent {
             },
             err => {
                 alert("Error: " + err);
-                console.error(err.stack);
+                console.error(err['stack']);
             });
     }
     
@@ -133,10 +143,10 @@ export class ConceptTreeNodeComponent {
     
     //EVENT LISTENERS
     
-    private onConceptDeleted(concept:ARTURIResource) {
+    private onConceptDeleted(deletedConceptURI: string) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
-            if (children[i].getURI() == concept.getURI()) {
+            if (children[i].getURI() == deletedConceptURI) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
@@ -148,30 +158,23 @@ export class ConceptTreeNodeComponent {
         }
     }
     
-    //data contains "resource" and "parent"
-    private onNarrowerCreated(data) {
+    private onNarrowerCreated(narrower: ARTURIResource, broaderURI: string) {
         //add the new concept as children only if the parent is the current concept
-        if (this.node.getURI() == data.parent.getURI()) {
-            this.node.getAdditionalProperty("children").push(data.resource);
+        if (this.node.getURI() == broaderURI) {
+            this.node.getAdditionalProperty("children").push(narrower);
             this.node.setAdditionalProperty("more", 1);
         }
     }
     
-    //data contains "concept" and "scheme"
-    private onConceptRemovedFromScheme(data) {
-        var scheme = data.scheme;
-        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
-            var concept = data.concept;
-            this.onConceptDeleted(concept);
+    private onConceptRemovedFromScheme(conceptURI: string, schemeURI: string) {
+        if (this.scheme != undefined && this.scheme.getURI() == schemeURI) {
+            this.onConceptDeleted(conceptURI);
         }
     }
     
-    //data contains "resource" and "parent"
-    private onBroaderRemoved(data) {
-        var broader = data.parent;
-        if (broader.getURI() == this.node.getURI()) {
-            var concept = data.resource;
-            this.onConceptDeleted(concept);
+    private onBroaderRemoved(conceptURI: string, broaderURI: string) {
+        if (broaderURI == this.node.getURI()) {
+            this.onConceptDeleted(conceptURI);
         }
     }
     

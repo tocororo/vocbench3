@@ -3,6 +3,7 @@ import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResource
 import {Deserializer} from "../utils/Deserializer";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ResourceViewServices} from "../services/resourceViewServices";
+import {RefactorServices} from "../services/refactorServices";
 
 import {TypesPartitionRenderer} from "./renderer/typesPartitionRenderer";
 import {TopConceptsPartitionRenderer} from "./renderer/topConceptsPartitionRenderer";
@@ -23,7 +24,7 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
             BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer, 
             SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
             RangesPartitionRenderer, PropertyFacetsPartitionRenderer],
-    providers: [ResourceViewServices],
+    providers: [ResourceViewServices, RefactorServices],
 })
 export class ResourceViewComponent {
     
@@ -45,7 +46,8 @@ export class ResourceViewComponent {
     private propertyFacets: any[];
     private inverseofColl: ARTURIResource[];
     
-	constructor(private resViewService:ResourceViewServices, private deserializer:Deserializer) {
+	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices, 
+        private deserializer:Deserializer) {
     }
     
     ngOnChanges(changes) {
@@ -130,18 +132,35 @@ export class ResourceViewComponent {
         }
     }
     
+    /** 
+     * Enable and focus the input text to rename the resource 
+     */  
     private startRename(inputEl: HTMLElement) {
         inputEl.focus();
         this.renameLocked = false;
     }
     
+    /**
+     * Apply the renaming of the resource and restore the original UI
+     */
     private renameResource(uri: string) {
         this.renameLocked = true;
         if (this.resource.getURI() != uri) {
-            alert("renaming " + this.resource.getURI() + " in " + uri);       
+            this.refactorService.renameResource(this.resource.getURI(), uri).subscribe(
+                stResp => {
+                    // this.refresh();
+                },
+                err => { 
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
+            );    
         }
     }
     
+    /**
+     * Cancel the renaming of the resource and restore the original UI
+     */
     private cancelRename(inputEl: HTMLInputElement) {
         inputEl.value = this.resource.getURI();
         this.renameLocked = true;

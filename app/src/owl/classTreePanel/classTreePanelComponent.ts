@@ -2,8 +2,6 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ClassTreeComponent} from "../../tree/classTree/classTreeComponent";
 import {OwlServices} from "../../services/owlServices";
 import {ARTURIResource} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
-import {Deserializer} from "../../utils/Deserializer";
 
 @Component({
 	selector: "class-tree-panel",
@@ -17,7 +15,7 @@ export class ClassTreePanelComponent {
     
     private selectedClass:ARTURIResource;
     
-	constructor(private owlService:OwlServices, private deserializer:Deserializer, private eventHandler:VBEventHandler) {}
+	constructor(private owlService:OwlServices) {}
     
     ngOnInit() {
         if (this.rootClass == undefined) {
@@ -30,14 +28,10 @@ export class ClassTreePanelComponent {
         if (className == null) return;
         this.owlService.createClass(this.rootClass.getURI(), className)
             .subscribe(
-                stResp => {
-                    var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                    newClass.setAdditionalProperty("children", []);
-                    this.eventHandler.subClassCreatedEvent.emit({ "resource": newClass, "parent": this.rootClass });
-                },
+                stResp => {},
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
     }
@@ -47,14 +41,10 @@ export class ClassTreePanelComponent {
         if (className == null) return;
         this.owlService.createClass(this.selectedClass.getURI(), className)
             .subscribe(
-                stResp => {
-                    var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                    newClass.setAdditionalProperty("children", []);
-                    this.eventHandler.subClassCreatedEvent.emit({"resource": newClass, "parent": this.selectedClass});
-                },
+                stResp => {},
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
     }
@@ -63,13 +53,12 @@ export class ClassTreePanelComponent {
         this.owlService.removeClass(this.selectedClass.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.classDeletedEvent.emit(this.selectedClass);
                     this.selectedClass = null;
                     this.itemSelected.emit(undefined);
                 },
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             )
     }

@@ -1,6 +1,7 @@
 import {Injectable} from 'angular2/core';
-import {Http} from 'angular2/http';
 import {HttpManager} from "../utils/HttpManager";
+import {Deserializer} from "../utils/Deserializer";
+import {ARTURIResource} from "../utils/ARTResources";
 
 @Injectable()
 export class OntoSearchServices {
@@ -8,7 +9,7 @@ export class OntoSearchServices {
     private serviceName = "OntoSearch";
     private oldTypeService = true;
 
-    constructor(private http: Http, private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private deserializer: Deserializer) { }
 
     searchOntology(inputString: string, types: string, scheme?: string) {
         console.log("[OntoSearchServices] searchOntology");
@@ -19,7 +20,11 @@ export class OntoSearchServices {
         if (scheme != undefined) {
             params.scheme = scheme;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchOntology", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "searchOntology", params, this.oldTypeService).map(
+            stResp => {
+                return this.deserializer.createURIArray(stResp);
+            }
+        );
     }
     
     /**
@@ -31,7 +36,20 @@ export class OntoSearchServices {
             concept: concept,
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService).map(
+            stResp => {
+                //at the moment the response is not parsable with the Deserializer, in the future
+                //the service will be refactored according to the <uri> xml serialization format
+                var path = new Array<ARTURIResource>();
+                var conceptElemColl = stResp.getElementsByTagName("concept");
+                for (var i=0; i<conceptElemColl.length; i++) {
+                    var show = conceptElemColl[i].getAttribute("show");
+                    var uri = conceptElemColl[i].textContent;
+                    path.push(new ARTURIResource(uri, show, "concept"));
+                }
+                return path;  
+            }
+        );
     }
 
 }

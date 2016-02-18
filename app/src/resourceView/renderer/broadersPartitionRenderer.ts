@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {SkosServices} from "../../services/skosServices";
 
@@ -22,7 +21,7 @@ export class BroadersPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/concept_delete.png";
     private removeBtnImgTitle = "Remove broader";
     
-    constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {}
+    constructor(private skosService:SkosServices) {}
     
     //add a broader
     private add() {
@@ -34,12 +33,11 @@ export class BroadersPartitionRenderer {
         this.skosService.removeBroaderConcept(this.resource.getURI(), broader.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.broaderRemovedEvent.emit({resource: this.resource, parent: broader});
                     this.update.emit(null);
                 },
                 err => {
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
     }

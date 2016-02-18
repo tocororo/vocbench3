@@ -16,9 +16,11 @@ export class PropertyTreeNodeComponent {
     private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
 	constructor(private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(data => this.onSubPropertyCreated(data)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(concept => this.onPropertyDeleted(concept)));
-        this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(data => this.onSuperPropertyRemoved(data)));
+        this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
+            data => this.onSubPropertyCreated(data.subProperty, data.superPropertyURI)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(propertyURI => this.onPropertyDeleted(propertyURI)));
+        this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
+            data => this.onSuperPropertyRemoved(data.propertyURI, data.superPropertyURI)));
     }
     
     ngOnDestroy() {
@@ -57,10 +59,10 @@ export class PropertyTreeNodeComponent {
     
     //EVENT LISTENERS
     
-    private onPropertyDeleted(property:ARTURIResource) {
+    private onPropertyDeleted(propertyURI: string) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
-            if (children[i].getURI() == property.getURI()) {
+            if (children[i].getURI() == propertyURI) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
@@ -72,21 +74,17 @@ export class PropertyTreeNodeComponent {
         }
     }
     
-    //data contains "resource" and "parent"
-    private onSubPropertyCreated(data) {
+    private onSubPropertyCreated(subProperty: ARTURIResource, superPropertyURI: string) {
         //add the new property as children only if the parent is the current property
-        if (this.node.getURI() == data.parent.getURI()) {
-            this.node.getAdditionalProperty("children").push(data.resource);
+        if (this.node.getURI() == superPropertyURI) {
+            this.node.getAdditionalProperty("children").push(subProperty);
             this.node.setAdditionalProperty("more", 1);
         }
     }
     
-    //data contains "resource" and "parent"
-    private onSuperPropertyRemoved(data) {
-        var superProp = data.parent;
-        if (superProp.getURI() == this.node.getURI()) {
-            var prop = data.resource;
-            this.onPropertyDeleted(prop);
+    private onSuperPropertyRemoved(propertyURI: string, superPropertyURI: string) {
+        if (superPropertyURI == this.node.getURI()) {
+            this.onPropertyDeleted(propertyURI);
         }
     }
 	

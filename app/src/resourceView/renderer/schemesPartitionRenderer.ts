@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {SkosServices} from "../../services/skosServices";
 
@@ -22,7 +21,7 @@ export class SchemesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
     private removeBtnImgTitle = "Remove from ConceptScheme";
     
-    constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {}
+    constructor(private skosService:SkosServices) {}
     
     //add as top concept
     private add() {
@@ -34,12 +33,11 @@ export class SchemesPartitionRenderer {
         this.skosService.removeConceptFromScheme(this.resource.getURI(), scheme.getURI())
             .subscribe(
                 stResp => {
-                    this.eventHandler.conceptRemovedFromSchemeEvent.emit({concept: this.resource, scheme: scheme});
                     this.update.emit(null);
                 },
                 err => {
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );
     }
