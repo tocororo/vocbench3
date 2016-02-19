@@ -21,6 +21,8 @@ export class PropertyTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(propertyURI => this.onPropertyDeleted(propertyURI)));
         this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
             data => this.onSuperPropertyRemoved(data.propertyURI, data.superPropertyURI)));
+        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+            data => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
     
     ngOnDestroy() {
@@ -88,4 +90,11 @@ export class PropertyTreeNodeComponent {
         }
     }
 	
+    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
+        if (oldResource.getURI() == this.node.getURI()) {
+            this.node['show'] = newResource.getShow();
+            this.node['uri'] = newResource.getURI();
+        }
+    }
+    
 }

@@ -23,6 +23,8 @@ export class ClassTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(classURI => this.onClassDeleted(classURI)));
         this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
             data => this.onSubClassRemoved(data.classURI, data.subClassURI)));
+        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+            data => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
     
     ngOnInit() {
@@ -101,6 +103,13 @@ export class ClassTreeNodeComponent {
     private onSubClassRemoved(classURI: string, subClassURI: string) {
         if (classURI == this.node.getURI()) {
             this.onClassDeleted(subClassURI);
+        }
+    }
+    
+    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
+        if (oldResource.getURI() == this.node.getURI()) {
+            this.node['show'] = newResource.getShow();
+            this.node['uri'] = newResource.getURI();
         }
     }
 	

@@ -51,7 +51,9 @@ export class ResourceViewComponent {
     }
     
     ngOnChanges(changes) {
-        this.buildResourceView(this.resource);//refresh resource view when Input resource changes
+        if (changes.resource) {
+            this.buildResourceView(this.resource);//refresh resource view when Input resource changes       
+        }
     }
     
     private buildResourceView(res: ARTURIResource) {

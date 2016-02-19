@@ -114,6 +114,8 @@ export class ProjectComponent implements OnInit {
                 stResp => {
                     document.getElementById("blockDiv").style.display = "none";
                     ctxProject.setOpen(false);
+                    this.vbCtx.setProject("SYSTEM");
+                    this.vbCtx.removeScheme();
                     //then connect to the new one
                     this.connectToProject(project);
                 },
@@ -150,6 +152,7 @@ export class ProjectComponent implements OnInit {
         this.projectService.disconnectFromProject(project.getName()).subscribe(
             stResp => {
                 this.vbCtx.setProject("SYSTEM");
+                this.vbCtx.removeScheme();
                 project.setOpen(false);
             },
             err => {
