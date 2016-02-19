@@ -14,38 +14,39 @@ export class VBEventHandler {
     //CONCEPT EVENTS
     public conceptTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     public topConceptCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contains an object with "narrower" (the narrower created) and "broaderURI"
+    //event should contain an object with "narrower" (the narrower created) and "broaderURI"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the URI of the deleted concept
     public conceptDeletedEvent: EventEmitter<string> = new EventEmitter();
-    //event should contains an object with "conceptURI" and "schemeURI"
+    //event should contain an object with "conceptURI" and "schemeURI"
     public conceptRemovedFromSchemeEvent: EventEmitter<any> = new EventEmitter();
-    //event should contains an object with "conceptURI" and "schemeURI"
+    //event should contain an object with "conceptURI" and "schemeURI"
     public conceptRemovedAsTopConceptEvent: EventEmitter<any> = new EventEmitter();
-    //event should contains an object with "conceptURI" and "broaderURI"
+    //event should contain an object with "conceptURI" and "broaderURI"
     public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //CLASS EVENTS
     public classTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contains an object with "subClass" (the subClass created) and "superClassURI"
+    //event should contain an object with "subClass" (the subClass created) and "superClassURI"
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the URI of the deleted class
     public classDeletedEvent: EventEmitter<string> = new EventEmitter();
-    //event should contains an object with "cls" and "type"
+    //event should contain an object with "cls" and "type"
     public typeDeletedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contains an object with "classURI" and "subClassURI"
+    //event should contain an object with "classURI" and "subClassURI"
     public subClassRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
     public propertyTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contains an object with "subProperty" (the subproperty created) and "superPropertyURI"
+    //event should contain an object with "subProperty" (the subproperty created) and "superPropertyURI"
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contains the URI of the deleted property
+    //event should contain the URI of the deleted property
     public propertyDeletedEvent: EventEmitter<string> = new EventEmitter();
-    //event should contains an object with "propertyURI" and "superPropertyURI"
+    //event should contain an object with "propertyURI" and "superPropertyURI"
     public superPropertyRemovedEvent: EventEmitter<any> = new EventEmitter();
     
+    //event should contain an object with "oldResource" and "newResource", both of them ARTURIResource
     public resourceRenamedEvent: EventEmitter<any> = new EventEmitter();
     
 	constructor() {}

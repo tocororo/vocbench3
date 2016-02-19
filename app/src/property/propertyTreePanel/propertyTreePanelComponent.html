@@ -21,7 +21,7 @@
                 <img src="app/assets/images/prop_addSubProperty.png" />
             </button>
             <button class="btn btn-default" title="Delete Property" (click)="deleteProperty()"
-                    [disabled]="!selectedProperty || selectedProperty.getAdditionalProperty('deleteForbidden')">
+                    [disabled]="!selectedProperty || !selectedProperty.getAdditionalProperty('explicit')">
                 <img src="app/assets/images/prop_delete.png" />
             </button>
         </div>

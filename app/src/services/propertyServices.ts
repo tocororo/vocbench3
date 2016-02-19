@@ -37,9 +37,10 @@ export class PropertyServices {
         var show = propXml.getAttribute("name");
         var role = propXml.getAttribute("type");
         var uri = propXml.getAttribute("uri");
-        var deleteForbidden = propXml.getAttribute("deleteForbidden") == "true";
+        //properties use deleteForbidden instead of explicit, use explicit in order to standardize the attributes
+        var explicit = propXml.getAttribute("deleteForbidden") != "true";
         var p = new ARTURIResource(uri, show, role);
-        p.setAdditionalProperty("deleteForbidden", deleteForbidden);
+        p.setAdditionalProperty("explicit", explicit);
         //recursively parse children
         var subProperties: ARTURIResource[] = [];
         var subPropsXml = propXml.querySelectorAll(":scope > SubProperties > Property");

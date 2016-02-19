@@ -37,18 +37,8 @@ export class ConceptTreeNodeComponent {
             data => this.onConceptRemovedFromScheme(data.conceptURI, data.schemeURI)));
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
             data => this.onBroaderRemoved(data.conceptURI, data.broaderURI)));
-        console.log("adding resourceRenamedEvent to eventSubscriptions");
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => {
-                if (data.oldResourceURI == this.node.getURI()) {
-                    console.log("In " + this.node.getURI() + " detected resource renamed in " + data.newResourceURI);
-                    // console.log(JSON.stringify(this.node));
-                    // this.node = new ARTURIResource(data.newResourceURI, this.node.getShow(), this.node.getRole());
-                    // this.node.setAdditionalProperty("explicit", this.node.getAdditionalProperty("explicit"));
-                    // this.node.setAdditionalProperty("children", this.node.getAdditionalProperty("children"));
-                    // this.node.setAdditionalProperty("more", this.node.getAdditionalProperty("more"));
-                }
-            }));
+            data => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
     
     ngAfterViewInit() {
@@ -175,6 +165,13 @@ export class ConceptTreeNodeComponent {
     private onBroaderRemoved(conceptURI: string, broaderURI: string) {
         if (broaderURI == this.node.getURI()) {
             this.onConceptDeleted(conceptURI);
+        }
+    }
+    
+    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
+        if (oldResource.getURI() == this.node.getURI()) {
+            this.node['show'] = newResource.getShow();
+            this.node['uri'] = newResource.getURI();
         }
     }
     

@@ -1,2 +1,3 @@
-<div class="rdfResourceIcon"><img *ngIf="imageSrc" [src]="imageSrc"></div>
-<span>{{resourceShow}}</span>
+<div class="rdfResourceIcon"><img *ngIf="getImgSrc()" [src]="getImgSrc()"></div>
+<span *ngIf="resource.isResource()">{{resource.getShow()}}</span>
+<span *ngIf="resource.isLiteral()">{{resource.getNominalValue()}}</span>

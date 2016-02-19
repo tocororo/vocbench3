@@ -12,7 +12,6 @@ export class ResourceUtils {
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
             var explicit = rdfResource.getAdditionalProperty("explicit");
-            var deleteForbidden = rdfResource.getAdditionalProperty("deleteForbidden");//TEMP untill refactor of Property service server side
             if (role == "cls") {
                 if (explicit) {
                     imgSrc = "app/assets/images/class.png";
@@ -34,31 +33,31 @@ export class ResourceUtils {
             } else if (role == "conceptscheme") {
                 imgSrc = "app/assets/images/conceptScheme.png";
             } else if (role.indexOf("objectproperty") != -1) {
-                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
+                if (explicit) {
                     imgSrc = "app/assets/images/propObject.png";
                 } else {
                     imgSrc = "app/assets/images/propObject_imported.png";       
                 }
             } else if (role.indexOf("datatypeproperty") != -1) {
-                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
+                if (explicit) {
                     imgSrc = "app/assets/images/propDatatype.png";
                 } else {
                     imgSrc = "app/assets/images/propDatatype_imported.png";
                 }
             } else if (role.indexOf("annotationproperty") != -1) {
-                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
+                if (explicit) {
                     imgSrc = "app/assets/images/propAnnotation.png";
                 } else {
                     imgSrc = "app/assets/images/propAnnotation_imported.png";
                 }
             } else if (role.indexOf("ontologyproperty") != -1) {
-                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
+                if (explicit) {
                     imgSrc = "app/assets/images/propOntology.png";
                 } else {
                     imgSrc = "app/assets/images/propOntology_imported.png";
                 }
             } else if (role.indexOf("property") != -1) {
-                if (explicit || (deleteForbidden != undefined && !deleteForbidden)) {
+                if (explicit) {
                     imgSrc = "app/assets/images/prop.png";
                 } else {
                     imgSrc = "app/assets/images/prop_imported.png";

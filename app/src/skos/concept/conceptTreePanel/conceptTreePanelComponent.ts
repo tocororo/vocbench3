@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
 import {ConceptTreeComponent} from "../../../tree/conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
-import {OntoSearchServices} from "../../../services/ontoSearchServices";
+import {SearchServices} from "../../../services/searchServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ROUTER_DIRECTIVES} from "angular2/router";
@@ -10,7 +10,7 @@ import {ROUTER_DIRECTIVES} from "angular2/router";
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
 	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES], //ROUTER_DIRECTIVES for routerLink in noScheme image button
-    providers: [SkosServices, OntoSearchServices],
+    providers: [SkosServices, SearchServices],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
@@ -21,7 +21,7 @@ export class ConceptTreePanelComponent {
     private selectedConcept:ARTURIResource;
     private searchInputPlaceholder: string;
     
-	constructor(private skosService:SkosServices, private searchService: OntoSearchServices, private vbCtx:VocbenchCtx) {}
+	constructor(private skosService:SkosServices, private searchService: SearchServices, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
         this.searchInputPlaceholder = this.scheme ? "Search..." : "Search not available in no-scheme mode"; 
@@ -68,7 +68,7 @@ export class ConceptTreePanelComponent {
     }
     
     private doSearch(searchedText: string) {
-        this.searchService.searchOntology(searchedText, "concept", this.vbCtx.getScheme().getURI()).subscribe(
+        this.searchService.searchResource(searchedText, ["concept"], true, "contain", this.vbCtx.getScheme().getURI()).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
                     alert("No results found for '" + searchedText + "'");

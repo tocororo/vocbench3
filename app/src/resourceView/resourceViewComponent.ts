@@ -54,10 +54,6 @@ export class ResourceViewComponent {
         this.buildResourceView(this.resource);//refresh resource view when Input resource changes
     }
     
-    refresh() {
-        this.buildResourceView(this.resource);//refresh resource view when a partition apply a change
-    }
-    
     private buildResourceView(res: ARTURIResource) {
         this.resViewService.getResourceView(res.getURI())
             .subscribe(
@@ -143,16 +139,18 @@ export class ResourceViewComponent {
     /**
      * Apply the renaming of the resource and restore the original UI
      */
-    private renameResource(uri: string) {
+    private renameResource(newUri: string) {
         this.renameLocked = true;
-        if (this.resource.getURI() != uri) {
-            this.refactorService.renameResource(this.resource.getURI(), uri).subscribe(
-                stResp => {
-                    // this.refresh();
+        if (this.resource.getURI() != newUri) { //if the uri has changed 
+            this.refactorService.changeResourceURI(this.resource.getURI(), newUri).subscribe(
+                newResource => {
+                    //here pass newResource instead of this.resource since this.resource is not still
+                    //updated/injected from the NodeComponent that catch the rename event 
+                    this.buildResourceView(newResource);
                 },
                 err => { 
                     alert("Error: " + err);
-                    console.error(err.stack);
+                    console.error(err['stack']);
                 }
             );    
         }

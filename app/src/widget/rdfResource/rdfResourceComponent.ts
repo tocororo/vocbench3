@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from "angular2/core";
-import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
+import {ARTResource} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 
 @Component({
@@ -9,18 +9,11 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 })
 export class RdfResourceComponent {
 	@Input() resource:ARTResource;
-	private imageSrc: string;
-	private resourceShow: string;
 	
 	constructor(private resUtils:ResourceUtils) {}
     
-    ngOnChanges(changes) {
-        this.imageSrc = this.resUtils.getImageSrc(this.resource);
-        if (this.resource.isLiteral()) {
-            this.resourceShow = this.resource.getNominalValue();    
-        } else {
-            this.resourceShow = this.resource.getShow();    
-        }
+    private getImgSrc() {
+        return this.resUtils.getImageSrc(this.resource);
     }
 
 }

@@ -56,10 +56,6 @@ export class Deserializer {
         if (explicit != undefined) {
              artURIRes.setAdditionalProperty("explicit", (explicit == "true"));
         }
-		var deleteForbidden = uriElement.getAttribute('deleteForbidden');
-        if (deleteForbidden != undefined) {
-            artURIRes.setAdditionalProperty("deleteForbidden", (deleteForbidden == "true"));
-        }
 		var more = uriElement.getAttribute('more');
         if (more != undefined) {
             artURIRes.setAdditionalProperty("more", more); 

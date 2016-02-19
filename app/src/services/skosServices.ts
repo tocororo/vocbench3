@@ -13,11 +13,14 @@ export class SkosServices {
     
     //Concept services 
     
-    getTopConcepts(scheme?: string) {
+    getTopConcepts(scheme: string, lang?: string) {
         console.log("[SkosServices] getTopConcepts");
         var params: any = {};
-        if (scheme != undefined) {
+        if (scheme != null) {
             params.scheme = scheme;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService).map(
             stResp => {
@@ -30,14 +33,17 @@ export class SkosServices {
         );
     }
 
-    getNarrowerConcepts(concept: string, scheme: string) {
+    getNarrowerConcepts(concept: string, scheme: string, lang?: string) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params: any = {
             concept: concept,
             treeView: true,
         };
-        if (scheme != undefined) {
+        if (scheme != null) {
             params.scheme = scheme;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService).map(
             stResp => {
@@ -158,9 +164,12 @@ export class SkosServices {
     
     //Scheme services
     
-    getAllSchemesList() {
+    getAllSchemesList(lang?: string) {
         console.log("[SkosServices] getAllSchemesList");
         var params: any = {};
+        if (lang != undefined) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "getAllSchemesList", params, this.oldTypeService).map(
             stResp => {
                 return this.deserializer.createURIArray(stResp);

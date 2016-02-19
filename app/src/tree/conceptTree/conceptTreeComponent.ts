@@ -2,14 +2,14 @@ import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "a
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {SkosServices} from "../../services/skosServices";
-import {OntoSearchServices} from "../../services/ontoSearchServices";
+import {SearchServices} from "../../services/searchServices";
 import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 
 @Component({
     selector: "concept-tree",
     templateUrl: "app/src/tree/conceptTree/conceptTreeComponent.html",
     directives: [ConceptTreeNodeComponent],
-    providers: [SkosServices, OntoSearchServices],
+    providers: [SkosServices, SearchServices],
 })
 export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
@@ -23,7 +23,7 @@ export class ConceptTreeComponent {
 
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private searchService: OntoSearchServices, private eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(
             concept => this.onConceptSelected(concept)));
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
@@ -58,7 +58,7 @@ export class ConceptTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node.getURI(), this.scheme.getURI()).subscribe(
+        this.searchService.getPathFromRoot(node.getURI(), "concept", this.scheme.getURI()).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node
