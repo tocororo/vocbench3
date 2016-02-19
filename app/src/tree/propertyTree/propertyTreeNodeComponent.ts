@@ -1,7 +1,17 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+
+/**
+ * Currently the propertyTree is built statically, that means the server provide to the client
+ * all the hierarchy, and not like the conceptTree and classTree where the trees are built
+ * dynamically starting from the roots and retrieving the children of a given node.
+ * Given that, the code that opens a path in the tree (for the search function) doesn't require to wait for the
+ * initalization of the children views (since they are already initialized at the initalization of the whole tree).
+ * So, the code pieces that deals with this thing are commented at the moment. Once the property services will be
+ * refactored, this code will be useful again and decommented.
+ */
 
 @Component({
 	selector: "property-tree-node",
@@ -10,6 +20,16 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 })
 export class PropertyTreeNodeComponent {
 	@Input() node:ARTURIResource;
+    
+    //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
+    @ViewChild('treeNodeElement') treeNodeElement;
+    //PropertyTreeNodeComponent children of this Component (useful to open tree for the search)
+    @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
+    //structure to support the tree opening
+    // private pendingSearch = {
+    //     pending: false, //tells if there is a pending search waiting that children view are initialized 
+    //     path: [], //remaining path of the tree to open
+    // }
     
     private eventSubscriptions = [];
     
@@ -25,8 +45,54 @@ export class PropertyTreeNodeComponent {
             data => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
     
+    ngAfterViewInit() {
+        //when ClassTreeNodeComponent children are added, looks for a pending search to resume
+        // this.viewChildrenNode.changes.subscribe(
+        //     c => {
+        //         if (this.pendingSearch.pending) {//there is a pending search
+        //             this.expandPath(this.pendingSearch.path);
+        //         }
+        //     });
+    }
+    
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+    
+    /**
+     * Expand recursively the given path untill the final node.
+     * If the given path is empty then the current node is the searched one, otherwise
+     * the current node expands itself (if is closed), looks among its children for the following node of the path,
+     * then call recursively expandPath() for the child node.
+     */
+    public expandPath(path: ARTURIResource[]) {
+        if (path.length == 0) { //this is the last node of the path. Focus it in the tree
+            this.treeNodeElement.nativeElement.scrollIntoView();
+            //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
+            //this.selectNode();
+        } else {
+            if (!this.node.getAdditionalProperty("open")) { //if node is close, expand itself
+                this.expandNode();
+            }
+            var nodeChildren = this.viewChildrenNode.toArray();
+            // if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
+            //     //save pending search so it can resume when the children are initialized
+            //     this.pendingSearch.pending = true;
+            //     this.pendingSearch.path = path;
+            // } else if (this.pendingSearch.pending) {
+            //     //the tree expansion is resumed, reset the pending search
+            //     this.pendingSearch.pending = false;
+            //     this.pendingSearch.path = [];
+            // }
+            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+                if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
+                    //let the child node expand the remaining path
+                    path.splice(0, 1);
+                    nodeChildren[i].expandPath(path);
+                    break;
+                }
+            }
+        }
     }
     
     /**
@@ -35,11 +101,9 @@ export class PropertyTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        if (this.node.getAdditionalProperty("children").length > 0) { //if node has children
-            //change the class of the subTree div from subtreeClose to subtreeOpen
-            this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
-            this.node.setAdditionalProperty("open", true);
-        }
+        //change the class of the subTree div from subtreeClose to subtreeOpen
+        this.subTreeStyle = "subTree subtreeOpen";
+        this.node.setAdditionalProperty("open", true);
     }
     
     /**
@@ -48,8 +112,7 @@ export class PropertyTreeNodeComponent {
    	 */
     private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
-		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
-        this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
+        this.subTreeStyle = "subTree subtreeClose";
     }
     
     /**

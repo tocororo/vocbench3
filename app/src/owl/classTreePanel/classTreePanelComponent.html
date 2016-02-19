@@ -14,8 +14,22 @@
             </button>
         </div>    
     </div>
+    
     <!-- Tree -->
     <div class="panel-body">
         <class-tree [rootclass]="rootClass" (itemSelected)="onNodeSelected($event)"></class-tree>
+    </div>
+    
+    <!-- Search -->
+    <div class="panel-footer">
+        <div class="input-group input-group-sm">
+            <input #searchinput type="text" class="form-control" placeholder="Search..." 
+                (keypress)="searchKeyHandler($event.keyIdentifier, searchinput.value)">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
     </div>
 </div>

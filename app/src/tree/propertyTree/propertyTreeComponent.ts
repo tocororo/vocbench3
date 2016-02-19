@@ -1,24 +1,28 @@
-import {Component, Output, EventEmitter} from "angular2/core";
+import {Component, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {PropertyServices} from "../../services/propertyServices";
+import {SearchServices} from "../../services/searchServices";
 import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
 
 @Component({
 	selector: "property-tree",
 	templateUrl: "app/src/tree/propertyTree/propertyTreeComponent.html",
-    providers: [PropertyServices],
+    providers: [PropertyServices, SearchServices],
     directives: [PropertyTreeNodeComponent],
 })
 export class PropertyTreeComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    
+    //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
+    @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
     
     private propertyTree: ARTURIResource[] = [];
     private selectedNode:ARTURIResource;
     
     private eventSubscriptions = [];
 	
-	constructor(private propertyService:PropertyServices, private eventHandler:VBEventHandler) {
+	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onPropertySelected(node)));
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(propertyURI => this.onPropertyDeleted(propertyURI)));
@@ -39,6 +43,23 @@ export class PropertyTreeComponent {
     
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+    
+    public openTreeAt(node: ARTURIResource) {
+        this.searchService.getPathFromRoot(node.getURI(), "property").subscribe(
+            path => {
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                //open tree from root to node
+                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                        //let the found node expand itself and the remaining path
+                        path.splice(0, 1);
+                        childrenNodeComponent[i].expandPath(path);
+                        break;
+                    }
+                }
+            }
+        );
     }
     
     //EVENT LISTENERS

@@ -12,7 +12,8 @@ export class SearchServices {
     constructor(private httpMgr: HttpManager, private deserializer: Deserializer) { }
 
     /**
-     * available searchMode values: "contain", "start", "end", "exact"
+     * @param {string[]} rolesArray: available roles: "concept", "cls", "property", "individual"
+     * @param {string} searchMode: available searchMode values: "contain", "start", "end", "exact"
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string, scheme?: string) {
         console.log("[SearchServices] searchResource");

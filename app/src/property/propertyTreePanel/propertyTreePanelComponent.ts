@@ -1,20 +1,23 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
 import {PropertyTreeComponent} from "../../tree/propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PropertyServices} from "../../services/propertyServices";
+import {SearchServices} from "../../services/searchServices";
 
 @Component({
 	selector: "property-tree-panel",
 	templateUrl: "app/src/property/propertyTreePanel/propertyTreePanelComponent.html",
 	directives: [PropertyTreeComponent],
-    providers: [PropertyServices],
+    providers: [PropertyServices, SearchServices],
 })
 export class PropertyTreePanelComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
+    @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
+    
     private selectedProperty:ARTURIResource;
     
-	constructor(private propService:PropertyServices) {}
+	constructor(private propService:PropertyServices, private searchService: SearchServices) {}
     
     private createProperty() {
         this.createPropertyForType("rdf:Property");
@@ -74,6 +77,38 @@ export class PropertyTreePanelComponent {
                     console.error(err.stack);
                 }
             );
+    }
+    
+    private doSearch(searchedText: string) {
+        this.searchService.searchResource(searchedText, ["property"], true, "contain").subscribe(
+            searchResult => {
+                if (searchResult.length == 0) {
+                    alert("No results found for '" + searchedText + "'");
+                } else if (searchResult.length == 1) {
+                    this.viewChildTree.openTreeAt(searchResult[0]);
+                } else {
+                    //modal dialog still not available, so it's not possible to let the user choose which result prefer
+                    alert(searchResult.length + " results found. This function is currently not available for multiple results");
+                }
+                
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            });
+    }
+    
+    /**
+     * Handles the keypress event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(keyIdentifier, searchedText) {
+        if (keyIdentifier == "Enter") {
+            if (searchedText.trim() == "") {
+                alert("Please enter a valid string to search");
+            } else {
+                this.doSearch(searchedText);           
+            }
+        }
     }
     
     //EVENT LISTENERS

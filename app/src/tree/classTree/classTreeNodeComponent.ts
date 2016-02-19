@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
@@ -12,6 +12,16 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 })
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;
+    
+    //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
+    @ViewChild('treeNodeElement') treeNodeElement;
+    //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
+    @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
+    //structure to support the tree opening
+    private pendingSearch = {
+        pending: false, //tells if there is a pending search waiting that children view are initialized 
+        path: [], //remaining path of the tree to open
+    }
     
     private eventSubscriptions = [];
     
@@ -33,8 +43,54 @@ export class ClassTreeNodeComponent {
         }
     }
     
+    ngAfterViewInit() {
+        //when ClassTreeNodeComponent children are added, looks for a pending search to resume
+        this.viewChildrenNode.changes.subscribe(
+            c => {
+                if (this.pendingSearch.pending) {//there is a pending search
+                    this.expandPath(this.pendingSearch.path);
+                }
+            });
+    }
+    
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+    
+    /**
+     * Expand recursively the given path untill the final node.
+     * If the given path is empty then the current node is the searched one, otherwise
+     * the current node expands itself (if is closed), looks among its children for the following node of the path,
+     * then call recursively expandPath() for the child node.
+     */
+    public expandPath(path: ARTURIResource[]) {
+        if (path.length == 0) { //this is the last node of the path. Focus it in the tree
+            this.treeNodeElement.nativeElement.scrollIntoView();
+            //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
+            //this.selectNode();
+        } else {
+            if (!this.node.getAdditionalProperty("open")) { //if node is close, expand itself
+                this.expandNode();
+            }
+            var nodeChildren = this.viewChildrenNode.toArray();
+            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
+                //save pending search so it can resume when the children are initialized
+                this.pendingSearch.pending = true;
+                this.pendingSearch.path = path;
+            } else if (this.pendingSearch.pending) {
+                //the tree expansion is resumed, reset the pending search
+                this.pendingSearch.pending = false;
+                this.pendingSearch.path = [];
+            }
+            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+                if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
+                    //let the child node expand the remaining path
+                    path.splice(0, 1);
+                    nodeChildren[i].expandPath(path);
+                    break;
+                }
+            }
+        }
     }
     
     /**
@@ -43,19 +99,17 @@ export class ClassTreeNodeComponent {
 	 * then expands the subtree div.
 	 */
     public expandNode() {
-        if (this.node.getAdditionalProperty("more") == 1) { //if node has children
-            this.owlService.getSubClasses(this.node.getURI()).subscribe(
-                subClasses => {
-                    this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
-                    //change the class of the subTree div from subtreeClose to subtreeOpen
-                    this.subTreeStyle = this.subTreeStyle.replace("Close", "Open");
-                    this.node.setAdditionalProperty("open", true);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                });
-        }
+        this.owlService.getSubClasses(this.node.getURI()).subscribe(
+            subClasses => {
+                this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
+                //change the class of the subTree div from subtreeClose to subtreeOpen
+                this.subTreeStyle = "subTree subtreeOpen";
+                this.node.setAdditionalProperty("open", true);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            });
     }
     
     /**
@@ -64,8 +118,8 @@ export class ClassTreeNodeComponent {
    	 */
     private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
-		//instead of removing node.children (that will cause an immediate/not-animated collapse of the div), simply collapse the div
-        this.subTreeStyle = this.subTreeStyle.replace("Open", "Close");
+        this.subTreeStyle = "subTree subtreeClose";
+        this.node.setAdditionalProperty("children", []);
     }
     
     /**

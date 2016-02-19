@@ -1,25 +1,29 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
+import {SearchServices} from "../../services/searchServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
 
 @Component({
 	selector: "class-tree",
 	templateUrl: "app/src/tree/classTree/classTreeComponent.html",
     directives: [ClassTreeNodeComponent],
-    providers: [OwlServices],
+    providers: [OwlServices, SearchServices],
 })
 export class ClassTreeComponent {
 	@Input('rootclass') rootClass:ARTURIResource;
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    
+    //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
+    @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
     
     public roots:ARTURIResource[];
     private selectedNode:ARTURIResource;
     
     private eventSubscriptions = [];
 	
-	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(classURI => this.onClassDeleted(classURI)));
     }
@@ -45,6 +49,23 @@ export class ClassTreeComponent {
     
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+    
+    public openTreeAt(node: ARTURIResource) {
+        this.searchService.getPathFromRoot(node.getURI(), "class").subscribe(
+            path => {
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                //open tree from root to node
+                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                        //let the found node expand itself and the remaining path
+                        path.splice(0, 1);
+                        childrenNodeComponent[i].expandPath(path);
+                        break;
+                    }
+                }
+            }
+        );
     }
     
     
