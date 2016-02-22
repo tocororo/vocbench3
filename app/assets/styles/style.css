@@ -1,5 +1,6 @@
 html, body {
-    height: 100%
+    height: 100%;
+    margin: 0;
 }
 
 /* Div visible only in some scenario when there is need to block event from user */
@@ -30,6 +31,7 @@ app {
 
 project-component, class-component, property-component, concept-component, scheme-component, sparql-component {
     flex: 1;
+    min-height: 0;
     display: flex;
     padding: 15px;
     overflow-y: hidden;
@@ -39,48 +41,56 @@ project-component, class-component, property-component, concept-component, schem
     display: flex;
     flex-flow: column;
     flex: 1;
+    min-height: 0;
 }
 
 .hbox {
     display: flex;
     flex-flow: row;
     flex: 1;
+    min-width: 0;
 }
 
 .sidebar {
     display: flex;
     flex-flow: column;
     flex: 1;
+    min-height: 0;
 }
 
 .resViewContainer {
     display: flex;
     flex-flow: column;
     margin-left: 15px;
-    flex: 4;  
+    flex: 4;
+    min-height: 0;
 }
 
 resource-view {
     display: flex;
     flex-flow: column;
     flex: 1;
+    min-height: 0;
 }
 
 concept-tree-panel, concept-scheme-panel, class-tree-panel, property-tree-panel {
     display: flex;
     flex-flow: column;
     flex: 1;
+    min-height: 0;
 }
 
 concept-tree-panel>.panel, concept-scheme-panel>.panel, class-tree-panel>.panel, property-tree-panel>.panel, resource-view>.panel {
     display: flex;
     flex-flow: column;
     flex: 1;
+    min-height: 0;
 }
 
 concept-tree-panel>.panel>.panel-body, concept-scheme-panel>.panel>.panel-body,
 class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, resource-view>.panel>.panel-body {
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-flow: column;
 }
@@ -88,12 +98,14 @@ class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, res
 concept-tree, class-tree, property-tree {
     display: flex;
     flex: 1;
+    min-height: 0;
 }
 
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */
 .scrollableContainer {
     overflow: auto;
     flex: 1;
+    min-height: 0;
     /* CHECK THIS for the problem with chrome
      http://stackoverflow.com/questions/33681562/why-does-chrome-not-properly-handle-flexbox-items-added-with-jquery
     */
@@ -144,17 +156,12 @@ rdf-resource > span {
 }
 
 .subtreeOpen {
-	max-height: 1600px; /* A big value possibly not exceeded by the content (to allow the transition) */
-    /* Temporarly removed opening animation: it cause problem when scrolling the tree to focus on searched item */
-	/*transition: max-height 0.5s ease-in;*/
+	/*max-height: 1600px;*/
 	overflow: hidden;
 }
 
 .subtreeClose {
 	max-height: 0;
-    /* Temporarly removed closing animation: it works only if the children node are not removed
-      when the subtree collapses, but this causes problem in the search in trees */
-    /*transition: max-height 0.3s ease-out;*/
     overflow: hidden;
 }
 
