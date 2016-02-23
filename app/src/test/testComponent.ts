@@ -8,11 +8,4 @@ export class TestComponent {
     
     constructor() {}
     
-    public test() {
-        var name = prompt("Insert concept name");
-        if (name != null) {
-            console.log("name " + name);
-        }
-    }
-    
 }

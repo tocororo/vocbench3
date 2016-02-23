@@ -1,5 +1,7 @@
 import {Component} from "angular2/core";
+import {Router} from 'angular2/router';
 import {SparqlServices} from "../services/sparqlServices";
+import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Component({
 	selector: "sparql-component",
@@ -16,7 +18,12 @@ export class SparqlComponent {
     private queryTime: string;
     private inferred: boolean = false;
     
-    constructor(private sparqlService:SparqlServices) {}
+    constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices) {
+        //navigate to Projects view if a project is not selected
+        if (vbCtx.getProject() == "SYSTEM") {
+            router.navigate(['Projects']);
+        }
+    }
     
     private doQuery() {
         var lang = "SPARQL";

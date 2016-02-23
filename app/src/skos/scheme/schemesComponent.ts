@@ -1,7 +1,9 @@
-import {Component, ViewChild} from "angular2/core";
+import {Component} from "angular2/core";
+import {Router} from 'angular2/router';
 import {ConceptSchemePanelComponent} from "./conceptSchemePanel/conceptSchemePanelComponent";
 import {ResourceViewComponent} from "../../resourceView/resourceViewComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {VocbenchCtx} from '../../utils/VocbenchCtx';
 
 @Component({
 	selector: "scheme-component",
@@ -12,7 +14,12 @@ export class SchemesComponent {
     
     public resource:ARTURIResource;
     
-    constructor() {}
+    constructor(private vbCtx: VocbenchCtx, private router: Router) {
+        //navigate to Projects view if a project is not selected
+        if (vbCtx.getProject() == "SYSTEM") {
+            router.navigate(['Projects']);
+        }
+    }
     
     //EVENT LISTENERS 
     private onSchemeSelected(node) {
