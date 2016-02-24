@@ -1,3 +1,7 @@
- <div class="scrollableContainer">
+<div class="scrollableContainer">
     <concept-tree-node *ngFor="#r of roots" [node]="r" [scheme]="scheme"></concept-tree-node>
- </div>
+</div>
+
+<div id="blockDivTree" class="blockingDiv" style="display:none">
+    <div>Loading...</div>
+</div>

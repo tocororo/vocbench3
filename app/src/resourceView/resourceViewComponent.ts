@@ -57,47 +57,48 @@ export class ResourceViewComponent {
     }
     
     private buildResourceView(res: ARTURIResource) {
-        this.resViewService.getResourceView(res.getURI())
-            .subscribe(
-                stResp => {
-                    var respResourceElement = stResp.getElementsByTagName("resource")[0];
-                    var respPartitions = stResp.children;
-                    
-                    for (var i = 0; i < respPartitions.length; i++) {
-                        var partition = respPartitions[i];
-                        var partitionName = partition.tagName;
-                        if (partitionName == "resource") {
-                            this.resource = this.deserializer.createURI(partition.children[0]);
-                        } else if (partitionName == "types") {
-                            this.typesColl = this.deserializer.createURIArray(partition);
-                        } else if (partitionName == "classaxioms") {
-                            this.classAxiomColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
-                        } else if (partitionName == "topconceptof") {
-                            this.topconceptofColl = this.deserializer.createURIArray(partition);
-                        } else if (partitionName == "schemes") {
-                            this.schemesColl = this.deserializer.createURIArray(partition);
-                        } else if (partitionName == "broaders") {
-                            this.broadersColl = this.deserializer.createURIArray(partition);
-                        } else if (partitionName == "superproperties") {
-                            this.superpropertiesColl = this.deserializer.createURIArray(partition);
-                        } else if (partitionName == "facets") {
-                            this.parseFacetsPartition(partition);
-                        } else if (partitionName == "domains") {
-                            this.domainsColl = this.deserializer.createRDFArray(partition);
-                        } else if (partitionName == "ranges") {
-                            this.rangesColl = this.deserializer.createRDFArray(partition);
-                        } else if (partitionName == "lexicalizations") {
-                            this.lexicalizationsColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
-                        } else if (partitionName == "properties") {
-                            this.propertiesColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
-                        }
+        document.getElementById("blockDivResView").style.display = "block";
+        this.resViewService.getResourceView(res.getURI()).subscribe(
+            stResp => {
+                var respResourceElement = stResp.getElementsByTagName("resource")[0];
+                var respPartitions = stResp.children;
+
+                for (var i = 0; i < respPartitions.length; i++) {
+                    var partition = respPartitions[i];
+                    var partitionName = partition.tagName;
+                    if (partitionName == "resource") {
+                        this.resource = this.deserializer.createURI(partition.children[0]);
+                    } else if (partitionName == "types") {
+                        this.typesColl = this.deserializer.createURIArray(partition);
+                    } else if (partitionName == "classaxioms") {
+                        this.classAxiomColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
+                    } else if (partitionName == "topconceptof") {
+                        this.topconceptofColl = this.deserializer.createURIArray(partition);
+                    } else if (partitionName == "schemes") {
+                        this.schemesColl = this.deserializer.createURIArray(partition);
+                    } else if (partitionName == "broaders") {
+                        this.broadersColl = this.deserializer.createURIArray(partition);
+                    } else if (partitionName == "superproperties") {
+                        this.superpropertiesColl = this.deserializer.createURIArray(partition);
+                    } else if (partitionName == "facets") {
+                        this.parseFacetsPartition(partition);
+                    } else if (partitionName == "domains") {
+                        this.domainsColl = this.deserializer.createRDFArray(partition);
+                    } else if (partitionName == "ranges") {
+                        this.rangesColl = this.deserializer.createRDFArray(partition);
+                    } else if (partitionName == "lexicalizations") {
+                        this.lexicalizationsColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
+                    } else if (partitionName == "properties") {
+                        this.propertiesColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
                     }
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err.stack);
                 }
-            );
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            },
+            () => document.getElementById("blockDivResView").style.display = "none"
+        );
     }
     
     private parseFacetsPartition(facetsElement) {
@@ -139,10 +140,25 @@ export class ResourceViewComponent {
     }
     
     /**
+     * Cancel the renaming of the resource and restore the original UI
+     */
+    private cancelRename(inputEl: HTMLInputElement) {
+        inputEl.value = this.resource.getLocalName();
+        this.renameLocked = true;
+    }
+    
+    /**
      * Apply the renaming of the resource and restore the original UI
      */
-    private renameResource(newUri: string) {
+    private renameResource(inputEl: HTMLInputElement) {
         this.renameLocked = true;
+        var newLocalName = inputEl.value;
+        if (newLocalName.trim() == "") {
+            alert("You have to write a valid local name");
+            inputEl.value = this.resource.getLocalName();
+            return;
+        }
+        var newUri = this.resource.getBaseURI() + newLocalName;
         if (this.resource.getURI() != newUri) { //if the uri has changed 
             this.refactorService.changeResourceURI(this.resource.getURI(), newUri).subscribe(
                 newResource => {
@@ -156,14 +172,6 @@ export class ResourceViewComponent {
                 }
             );    
         }
-    }
-    
-    /**
-     * Cancel the renaming of the resource and restore the original UI
-     */
-    private cancelRename(inputEl: HTMLInputElement) {
-        inputEl.value = this.resource.getURI();
-        this.renameLocked = true;
     }
     
 }

@@ -109,10 +109,10 @@ export class ProjectComponent implements OnInit {
         if (ctxProject.getName() != "SYSTEM") { //a project is already open
             //first disconnect from old project
             //(don't call this.closeProject cause I need to execute connectToProject in syncronous way)
-            document.getElementById("blockDiv").style.display = "block";
+            document.getElementById("blockDivFullScreen").style.display = "block";
             this.projectService.disconnectFromProject(ctxProject.getName()).subscribe(
                 stResp => {
-                    document.getElementById("blockDiv").style.display = "none";
+                    document.getElementById("blockDivFullScreen").style.display = "none";
                     ctxProject.setOpen(false);
                     this.vbCtx.setProject("SYSTEM");
                     this.vbCtx.removeScheme();
@@ -122,7 +122,7 @@ export class ProjectComponent implements OnInit {
                 err => {
                     alert("Error: " + err);
                     console.error(err.stack);
-                    document.getElementById("blockDiv").style.display = "none";
+                    document.getElementById("blockDivFullScreen").style.display = "none";
                 });
         } else { //no project open
             this.connectToProject(project);
@@ -134,7 +134,7 @@ export class ProjectComponent implements OnInit {
     }
     
     private connectToProject(project: Project) {
-        document.getElementById("blockDiv").style.display = "block";
+        document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.accessProject(project.getName()).subscribe(
             stResp => {
                 this.vbCtx.setProject(project.getName());
@@ -144,11 +144,11 @@ export class ProjectComponent implements OnInit {
                 alert("Error: " + err);
                 console.error(err.stack);
             },
-            () => document.getElementById("blockDiv").style.display = "none");
+            () => document.getElementById("blockDivFullScreen").style.display = "none");
     }
 
     private disconnectFromProject(project: Project) {
-        document.getElementById("blockDiv").style.display = "block";
+        document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.disconnectFromProject(project.getName()).subscribe(
             stResp => {
                 this.vbCtx.setProject("SYSTEM");
@@ -159,7 +159,7 @@ export class ProjectComponent implements OnInit {
                 alert("Error: " + err);
                 console.error(err.stack);
             },
-            () => document.getElementById("blockDiv").style.display = "none");
+            () => document.getElementById("blockDivFullScreen").style.display = "none");
     }
     
     //get the project object from projectList with the given name

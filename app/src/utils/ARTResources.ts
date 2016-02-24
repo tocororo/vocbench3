@@ -49,6 +49,22 @@ export class ARTURIResource implements ARTResource {
     isBNode(): boolean {
         return false;
     }
+    
+    getBaseURI() {
+        if (this.uri.lastIndexOf("#") > -1) {
+            return this.uri.substring(0, this.uri.lastIndexOf("#")+1);
+        } else {
+            return this.uri.substring(0, this.uri.lastIndexOf("/")+1);
+        }
+    }
+    
+    getLocalName() {
+        if (this.uri.lastIndexOf("#") > -1) {
+            return this.uri.substring(this.uri.lastIndexOf("#")+1);
+        } else {
+            return this.uri.substring(this.uri.lastIndexOf("/")+1);
+        }
+    }
 
     getShow(): string {
         return this.show;

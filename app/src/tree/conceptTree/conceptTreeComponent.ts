@@ -41,16 +41,17 @@ export class ConceptTreeComponent {
         if (this.scheme != undefined) {
             schemeUri = this.scheme.getURI();
         }
-        this.skosService.getTopConcepts(schemeUri)
-            .subscribe(
-                topConcepts => {
-                    this.roots = topConcepts;
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        document.getElementById("blockDivTree").style.display = "block";
+        this.skosService.getTopConcepts(schemeUri).subscribe(
+            topConcepts => {
+                this.roots = topConcepts;
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            },
+            () => document.getElementById("blockDivTree").style.display = "none"
+        );
     }
     
     ngOnDestroy() {

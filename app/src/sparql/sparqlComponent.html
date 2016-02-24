@@ -8,7 +8,7 @@
         </select>
     </div>
 
-    <textarea [(ngModel)]="query" rows="10" style="width:100%;"></textarea>
+    <textarea [(ngModel)]="query" style="resize: vertical; min-height: 150px; width:100%;"></textarea>
 
     <div style="margin: 5px 0;">
         <button class="btn btn-sm btn-primary" type="button" (click)="doQuery()" [disabled]="queryInProgress">Submit query</button>
@@ -20,7 +20,7 @@
     </div>
 
 
-    <div *ngIf="queryResult" class="vbox">
+    <div *ngIf="queryResult" class="vbox" style="min-height: 200px;">
         <div>
             <label>Result of the query </label>
             <p *ngIf="queryTime != null" style="display: inline; margin-left: 5px;">(Done in {{queryTime}})</p>

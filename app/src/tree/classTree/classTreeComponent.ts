@@ -35,16 +35,17 @@ export class ClassTreeComponent {
         } else {
             rootClassUri = this.rootClass.getURI();
         }
-        this.owlService.getClassesInfoAsRootsForTree(rootClassUri)
-            .subscribe(
-                roots => {
-                    this.roots = roots;
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        document.getElementById("blockDivTree").style.display = "block";
+        this.owlService.getClassesInfoAsRootsForTree(rootClassUri).subscribe(
+            roots => {
+                this.roots = roots;
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            },
+            () => document.getElementById("blockDivTree").style.display = "none"
+        );
     }
     
     ngOnDestroy() {
