@@ -32,16 +32,28 @@ import { VBEventHandler } from "./utils/VBEventHandler";
 ])
 
 export class App {
+    
     constructor(private location:Location, private vbCtx:VocbenchCtx) {}
     
-    //returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links 
-    private isActive(viewLocation) {
+    /**
+     * returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links
+     */ 
+    private isActive(viewLocation): boolean {
         return this.location.path() == viewLocation;
     }
     
-    //returns true if a project is open. Useful to enable/disable navbar links 
-    private isProjectOpen() {
-        return this.vbCtx.getProject() != "SYSTEM";
+    /**
+     * returns true if a project is open. Useful to enable/disable navbar links
+     */ 
+    private isProjectOpen(): boolean {
+        return this.vbCtx.getProject() != undefined;
+    }
+    
+    /**
+     * returns true if a project is SKOS or SKOS-XL. Useful to show/hide navbar links available only in SKOS (ex. concept, scheme)
+     */
+    private isProjectSKOS(): boolean {
+        return (this.vbCtx.getProject().getPrettyPrintOntoType().indexOf("SKOS") > -1);
     }
     
 }

@@ -16,7 +16,7 @@ export class SchemesComponent {
     
     constructor(private vbCtx: VocbenchCtx, private router: Router) {
         //navigate to Projects view if a project is not selected
-        if (vbCtx.getProject() == "SYSTEM") {
+        if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);
         }
     }

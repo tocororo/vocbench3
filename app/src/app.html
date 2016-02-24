@@ -11,19 +11,19 @@
                 <li [ngClass]="{active: isActive('/Projects')}">
                     <a [routerLink]="['Projects']">Projects</a>
                 </li>
-                <li [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">
+                <li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Class']">Class</a>
                 </li>
-                <li [ngClass]="{active: isActive('/Property'), disabled: !isProjectOpen()}">
+                <li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Property'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Property']">Property</a>
                 </li>
-                <li [ngClass]="{active: isActive('/Concepts'), disabled: !isProjectOpen()}">
+                <li *ngIf="isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Concepts'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Concepts']">Concepts</a>
                 </li>
-				<li [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
+				<li *ngIf="isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Schemes']">Schemes</a>
                 </li>
-				<li [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
+				<li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Sparql']">SPARQL</a>
                 </li>
 				<li [ngClass]="{active: isActive('/Test')}">

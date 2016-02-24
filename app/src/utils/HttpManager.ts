@@ -40,7 +40,9 @@ export class HttpManager {
         }
         
         //add parameters
-        url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject()) + "&";
+        if (this.vbCtx.getProject() != undefined) {
+            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
+        }
         for (var key in params) {
             url += key + "=" + encodeURIComponent(params[key]) + "&";
         }
@@ -89,7 +91,9 @@ export class HttpManager {
         }
         
         //add ctx parameters
-        url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject()) + "&";
+        if (this.vbCtx.getProject() != undefined) {
+            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
+        }
 
         console.log("[POST]: " + url); //CHECK FOR LOGGER MODULE IN ANGULAR 2
         

@@ -1,6 +1,7 @@
 import {Component, OnInit, OnDestroy} from "angular2/core";
 import {ProjectServices} from "../services/projectServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
+import {Project} from '../utils/Project';
 
 @Component({
     selector: "project-component",
@@ -42,10 +43,10 @@ export class ProjectComponent implements OnInit {
                 }
                     
                 //Init closing potential multiple open projects. If just one, connect to it.
-                var ctxProjectName = this.vbCtx.getProject();
+                var ctxProject = this.vbCtx.getProject();
                 var openProjectList: Project[] = [];
-                if (ctxProjectName == "SYSTEM") { //project in context is SYSTEM (probably first start)
-                    for (var i = 0; i < this.projectList.length; i++) { //collect projects remained open
+                if (ctxProject == undefined) { //no project in context (first start or all projects are closed)
+                    for (var i = 0; i < this.projectList.length; i++) { //collect projects remained open (in case of first start)
                         if (this.projectList[i].isOpen()) {
                             openProjectList.push(this.projectList[i]);
                         }
@@ -105,16 +106,16 @@ export class ProjectComponent implements OnInit {
     }
 
     private openProject(project: Project) {
-        var ctxProject = this.getProjectObject(this.vbCtx.getProject());
-        if (ctxProject.getName() != "SYSTEM") { //a project is already open
+        var ctxProject = this.vbCtx.getProject();
+        if (ctxProject != undefined) { //a project is already open
             //first disconnect from old project
             //(don't call this.closeProject cause I need to execute connectToProject in syncronous way)
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.projectService.disconnectFromProject(ctxProject.getName()).subscribe(
                 stResp => {
                     document.getElementById("blockDivFullScreen").style.display = "none";
-                    ctxProject.setOpen(false);
-                    this.vbCtx.setProject("SYSTEM");
+                    this.getProjectFromList(ctxProject.getName()).setOpen(false); //set as close the previous open project
+                    this.vbCtx.setProject(undefined);
                     this.vbCtx.removeScheme();
                     //then connect to the new one
                     this.connectToProject(project);
@@ -137,7 +138,7 @@ export class ProjectComponent implements OnInit {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.accessProject(project.getName()).subscribe(
             stResp => {
-                this.vbCtx.setProject(project.getName());
+                this.vbCtx.setProject(project);
                 project.setOpen(true);
             },
             err => {
@@ -151,7 +152,7 @@ export class ProjectComponent implements OnInit {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.disconnectFromProject(project.getName()).subscribe(
             stResp => {
-                this.vbCtx.setProject("SYSTEM");
+                this.vbCtx.setProject(undefined);
                 this.vbCtx.removeScheme();
                 project.setOpen(false);
             },
@@ -162,127 +163,13 @@ export class ProjectComponent implements OnInit {
             () => document.getElementById("blockDivFullScreen").style.display = "none");
     }
     
-    //get the project object from projectList with the given name
-    private getProjectObject(projName): Project {
+    // get the project from projectList with the given name
+    private getProjectFromList(projName): Project {
         for (var i = 0; i < this.projectList.length; i++) {
             if (this.projectList[i].getName() == projName) {
                 return this.projectList[i];
             }
         }
-        return new Project("SYSTEM");
     }
 
-}
-
-class Project {
-    private name: string;
-    private accessible: boolean;
-    private modelConfigType: string;
-    private ontmgr: string;
-    private ontoType: string;
-    private open: boolean;
-    private status: Object;
-    private type: string;
-    
-    private knownRDFModelInterfaces = {
-        "it.uniroma2.art.owlart.models.RDFModel" : "RDF",
-        "it.uniroma2.art.owlart.models.RDFSModel" : "RDFS",
-        "it.uniroma2.art.owlart.models.OWLModel" : "OWL",
-        "it.uniroma2.art.owlart.models.SKOSModel" : "SKOS",
-        "it.uniroma2.art.owlart.models.SKOSXLModel" : "SKOS-XL"
-    };
-    
-    private knownOntoMgrInterfaces = {
-        "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl" : "Sesame2"
-    }
-    
-    // constructor() {}
-    
-    constructor(name?: string) {
-        if (name != undefined) {
-            this.name = name;       
-        }
-    }
-    
-    public setName(name: string) {
-        this.name = name;
-    }
-    
-    public getName(): string {
-        return this.name;
-    }
-    
-    public setAccessible(accessible: boolean) {
-        this.accessible = accessible;
-    }
-    
-    public isAccessible(): boolean {
-        return this.accessible;
-    }
-    
-    public setModelConfigType(modelConfigType: string) {
-        this.modelConfigType = modelConfigType;
-    }
-    
-    public getModelConfigType(): string {
-        return this.modelConfigType;
-    }
-    
-    public setOntoMgr(ontmgr: string) {
-        this.ontmgr = ontmgr;
-    }
-    
-    public getOntoMgr(): string {
-        return this.ontmgr;
-    }
-    
-    public getPrettyPrintOntoMgr(): string {
-        var prettyPrint = null;
-        prettyPrint = this.knownOntoMgrInterfaces[this.ontmgr];
-        if (prettyPrint == null) {
-            prettyPrint = this.ontmgr.substring(this.ontmgr.lastIndexOf("."));
-        }
-        return prettyPrint;
-    }
-    
-    public setOntoType(ontoType: string) {
-        this.ontoType = ontoType;
-    }
-    
-    public getOntoType(): string {
-        return this.ontoType;
-    }
-    
-    public getPrettyPrintOntoType(): string {
-        var prettyPrint = null;
-        prettyPrint = this.knownRDFModelInterfaces[this.ontoType];
-        if (prettyPrint == null) {
-            prettyPrint = this.ontoType.substring(this.ontoType.lastIndexOf("."));
-        }
-        return prettyPrint;
-    }
-    
-    public setOpen(open: boolean) {
-        this.open = open;
-    }
-    
-    public isOpen(): boolean {
-        return this.open;
-    }
-    
-    public setStatus(status: Object) {
-        this.status = status;
-    }
-    
-    public getStatus(): Object {
-        return this.status;
-    }
-    
-    public setType(type: string) {
-        this.type = type;
-    }
-    
-    public getType(): string {
-        return this.type;
-    }
 }
