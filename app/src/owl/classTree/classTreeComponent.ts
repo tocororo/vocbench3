@@ -7,7 +7,7 @@ import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
 
 @Component({
 	selector: "class-tree",
-	templateUrl: "app/src/tree/classTree/classTreeComponent.html",
+	templateUrl: "app/src/owl/classTree/classTreeComponent.html",
     directives: [ClassTreeNodeComponent],
     providers: [OwlServices, SearchServices],
 })
@@ -25,7 +25,7 @@ export class ClassTreeComponent {
 	
 	constructor(private owlService:OwlServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node)));
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(classURI => this.onClassDeleted(classURI)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
     ngOnInit() {
@@ -84,10 +84,10 @@ export class ClassTreeComponent {
         this.itemSelected.emit(node);
     }
     
-    private onClassDeleted(classURI: string) {
+    private onClassDeleted(cls: ARTURIResource) {
         //check if the class to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == classURI) {
+            if (this.roots[i].getURI() == cls.getURI()) {
                 this.roots.splice(i, 1);
                 break;
             }

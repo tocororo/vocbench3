@@ -11,11 +11,13 @@
         </div>
     </div>
     <div class="panel-body">
-        <div *ngFor="#s of schemeList" class="conceptSchemeItem">
-            <!--Currently radio input are not fully supported, the set of checked property is not "angular way"-->
-            <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="activateScheme(input.value);"
-                [checked]="isActive(s)"/>
-            <rdf-resource [resource]="s" (click)="selectScheme(s)" [ngClass]="{selectedResource : isSelected(s)}"></rdf-resource>
+        <div class="scrollableContainer">
+            <div *ngFor="#s of schemeList" class="conceptSchemeItem">
+                <!--Currently radio input are not fully supported, the set of checked property is not "angular way"-->
+                <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="activateScheme(input.value);"
+                    [checked]="isActive(s)"/>
+                <rdf-resource [resource]="s" (click)="selectScheme(s)" [ngClass]="{selectedResource : isSelected(s)}"></rdf-resource>
+            </div>
         </div>
     </div>
 </div>

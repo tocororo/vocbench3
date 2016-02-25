@@ -1,23 +1,22 @@
-import {Component, Input, ViewChildren, ViewChild, QueryList} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
-import {SkosServices} from "../../services/skosServices";
+import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
-	selector: "concept-tree-node",
-	templateUrl: "app/src/tree/conceptTree/conceptTreeNodeComponent.html",
-    directives: [RdfResourceComponent, ConceptTreeNodeComponent],
-    providers: [SkosServices],
+	selector: "class-tree-node",
+	templateUrl: "app/src/owl/classTree/classTreeNodeComponent.html",
+    directives: [RdfResourceComponent, ClassTreeNodeComponent],
+    providers: [OwlServices],
 })
-export class ConceptTreeNodeComponent {
-    @Input() node: ARTURIResource;
-    @Input() scheme: ARTURIResource;
+export class ClassTreeNodeComponent {
+	@Input() node:ARTURIResource;
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
-    //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
-    @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
+    //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
+    @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
     //structure to support the tree opening
     private pendingSearch = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
@@ -26,23 +25,30 @@ export class ConceptTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
+    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
 	
-	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-            deletedConceptURI => this.onConceptDeleted(deletedConceptURI)));
-        this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
-            data => this.onNarrowerCreated(data.narrower, data.broaderURI)));
-        this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.conceptURI, data.schemeURI)));
-        this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
-            data => this.onBroaderRemoved(data.conceptURI, data.broaderURI)));
+	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
+            data => this.onSubClassCreated(data.subClass, data.superClass)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
+        this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
+            data => this.onSubClassRemoved(data.cls, data.subClass)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource))); 
+            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+        this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
+            data => this.onInstanceDeleted(data.clsURI)));
+        this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
+            data => this.onInstanceCreated(data.instance, data.cls)));
+    }
+    
+    ngOnInit() {
+        if (this.node.getURI() == "http://www.w3.org/2002/07/owl#Thing") {
+            this.expandNode();
+        }
     }
     
     ngAfterViewInit() {
-        //when ConceptTreeNodeComponent children are added, looks for a pending search to resume
+        //when ClassTreeNodeComponent children are added, looks for a pending search to resume
         this.viewChildrenNode.changes.subscribe(
             c => {
                 if (this.pendingSearch.pending) {//there is a pending search
@@ -92,18 +98,14 @@ export class ConceptTreeNodeComponent {
     }
     
     /**
- 	 * Function called when "+" button is clicked.
- 	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
- 	 * then expands the subtree div.
- 	 */
+	 * Function called when "+" button is clicked.
+	 * Gets a node as parameter and retrieve with an http call the subClass of the node,
+	 * then expands the subtree div.
+	 */
     public expandNode() {
-      	var schemeUri = null; //no scheme mode
-        if (this.scheme != undefined) {
-            schemeUri = this.scheme.getURI();
-        }
-        this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri).subscribe(
-            narrower => {
-                this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
+        this.owlService.getSubClasses(this.node.getURI(), true, true).subscribe(
+            subClasses => {
+                this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
                 //change the class of the subTree div from subtreeClose to subtreeOpen
                 this.subTreeStyle = "subTree subtreeOpen";
                 this.node.setAdditionalProperty("open", true);
@@ -128,15 +130,15 @@ export class ConceptTreeNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.eventHandler.conceptTreeNodeSelectedEvent.emit(this.node);
+        this.eventHandler.classTreeNodeSelectedEvent.emit(this.node);
     }
     
     //EVENT LISTENERS
     
-    private onConceptDeleted(deletedConceptURI: string) {
+    private onClassDeleted(cls: ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
-            if (children[i].getURI() == deletedConceptURI) {
+            if (children[i].getURI() == cls.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
@@ -148,23 +150,17 @@ export class ConceptTreeNodeComponent {
         }
     }
     
-    private onNarrowerCreated(narrower: ARTURIResource, broaderURI: string) {
-        //add the new concept as children only if the parent is the current concept
-        if (this.node.getURI() == broaderURI) {
-            this.node.getAdditionalProperty("children").push(narrower);
+    private onSubClassCreated(subClass: ARTURIResource, superClass: ARTURIResource) {
+        //add the new class as children only if the parent is the current class
+        if (this.node.getURI() == superClass.getURI()) {
+            this.node.getAdditionalProperty("children").push(subClass);
             this.node.setAdditionalProperty("more", 1);
         }
     }
     
-    private onConceptRemovedFromScheme(conceptURI: string, schemeURI: string) {
-        if (this.scheme != undefined && this.scheme.getURI() == schemeURI) {
-            this.onConceptDeleted(conceptURI);
-        }
-    }
-    
-    private onBroaderRemoved(conceptURI: string, broaderURI: string) {
-        if (broaderURI == this.node.getURI()) {
-            this.onConceptDeleted(conceptURI);
+    private onSubClassRemoved(cls: ARTURIResource, subClass: ARTURIResource) {
+        if (cls.getURI() == this.node.getURI()) {
+            this.onClassDeleted(subClass);
         }
     }
     
@@ -174,5 +170,20 @@ export class ConceptTreeNodeComponent {
             this.node['uri'] = newResource.getURI();
         }
     }
+	
+    //decrease numInst property when an instance of the current class is deleted
+    onInstanceDeleted(clsURI: string) {
+        if (this.node.getURI() == clsURI) {
+            var numInst = this.node.getAdditionalProperty("numInst");
+            this.node.setAdditionalProperty("numInst", numInst-1);
+        }
+    }
     
+    //increase numInst property when an instance of the current class is created
+    onInstanceCreated(instance: ARTURIResource, cls: ARTURIResource) {
+        if (this.node.getURI() == cls.getURI()) {
+            var numInst = this.node.getAdditionalProperty("numInst");
+            this.node.setAdditionalProperty("numInst", numInst+1);
+        }
+    }
 }

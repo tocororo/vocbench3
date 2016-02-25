@@ -27,22 +27,28 @@ export class VBEventHandler {
     
     //CLASS EVENTS
     public classTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contain an object with "subClass" (the subClass created) and "superClassURI"
+    //event should contain an object with "subClass" (the subClass created) and "superClass"
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain the URI of the deleted class
-    public classDeletedEvent: EventEmitter<string> = new EventEmitter();
+    //event should contain the deleted class
+    public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contain an object with "cls" and "type"
     public typeDeletedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain an object with "classURI" and "subClassURI"
+    //event should contain an object with "cls" and "subClass"
     public subClassRemovedEvent: EventEmitter<any> = new EventEmitter();
+    
+    //INSTANCE EVENTS
+    //event should contain an object with "instance" and "cls" (the class of the instance)
+    public instanceCreatedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "instance" and "clsURI" (the class of the instance)
+    public instanceDeletedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
     public propertyTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contain an object with "subProperty" (the subproperty created) and "superPropertyURI"
+    //event should contain an object with "subProperty" (the subproperty created) and "superProperty"
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain the URI of the deleted property
-    public propertyDeletedEvent: EventEmitter<string> = new EventEmitter();
+    //event should contain the deleted property
+    public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contain an object with "propertyURI" and "superPropertyURI"
     public superPropertyRemovedEvent: EventEmitter<any> = new EventEmitter();
     

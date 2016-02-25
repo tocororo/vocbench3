@@ -15,7 +15,7 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 
 @Component({
 	selector: "property-tree-node",
-	templateUrl: "app/src/tree/propertyTree/propertyTreeNodeComponent.html",
+	templateUrl: "app/src/property/propertyTree/propertyTreeNodeComponent.html",
     directives: [RdfResourceComponent, PropertyTreeNodeComponent],
 })
 export class PropertyTreeNodeComponent {
@@ -37,8 +37,8 @@ export class PropertyTreeNodeComponent {
 	
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
-            data => this.onSubPropertyCreated(data.subProperty, data.superPropertyURI)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(propertyURI => this.onPropertyDeleted(propertyURI)));
+            data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property.getURI())));
         this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
             data => this.onSuperPropertyRemoved(data.propertyURI, data.superPropertyURI)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
@@ -139,9 +139,9 @@ export class PropertyTreeNodeComponent {
         }
     }
     
-    private onSubPropertyCreated(subProperty: ARTURIResource, superPropertyURI: string) {
+    private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {
         //add the new property as children only if the parent is the current property
-        if (this.node.getURI() == superPropertyURI) {
+        if (this.node.getURI() == superProperty.getURI()) {
             this.node.getAdditionalProperty("children").push(subProperty);
             this.node.setAdditionalProperty("more", 1);
         }

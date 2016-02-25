@@ -88,7 +88,7 @@ project-component, class-component, property-component, concept-component, schem
 .resViewContainer {
     display: flex;
     flex-flow: column;
-    margin-left: 15px;
+    margin-left: 10px;
     flex: 4;
     min-height: 0;
 }
@@ -122,27 +122,32 @@ class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, res
     flex-flow: column;
 }
 
-concept-tree, class-tree, property-tree, resource-view {
+concept-tree, class-tree, property-tree, resource-view, instance-list {
     display: flex;
     flex: 1;
     min-height: 0;
     position: relative; /* to allow blockDiv with absolute position inside these divs */
 }
 
+concept-tree, class-tree, property-tree, instance-list {
+    border: 1px solid #ddd;
+}
+
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */
 .scrollableContainer {
+    padding: 4px;
     overflow: auto;
     flex: 1;
     min-height: 0;
-    /* CHECK THIS for the problem with chrome
-     http://stackoverflow.com/questions/33681562/why-does-chrome-not-properly-handle-flexbox-items-added-with-jquery
-    */
+    display: flex;
+    flex-flow: column;
 }
 
 rdf-resource {
 	min-height: 24px;
     display: inline-flex;
     align-items: center;
+    border-radius: 2px;
 }
 
 rdf-resource > .rdfResourceIcon {
@@ -152,6 +157,11 @@ rdf-resource > .rdfResourceIcon {
 
 rdf-resource > span {
     flex: 1;
+}
+
+class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
+property-tree rdf-resource:hover, concept-scheme-panel rdf-resource:hover {
+    background-color: #e5f3ff;
 }
 
 .selectedResource {
@@ -171,12 +181,7 @@ rdf-resource > span {
 }
 
 .treeNode rdf-resource {
-	border-radius: 2px;
     flex: 1;
-}
-
-.treeNode rdf-resource:hover {
-    background-color: #e5f3ff;
 }
 
 .subTree {
@@ -194,7 +199,6 @@ rdf-resource > span {
 }
 
 .conceptSchemeItem {
-	height: 24px;
     display: flex;
     align-items: center;
 }
@@ -206,10 +210,6 @@ rdf-resource > span {
 .conceptSchemeItem rdf-resource {
 	border-radius: 2px;
 	flex: 1;
-}
-
-.conceptSchemeItem rdf-resource:hover {
-    background-color: #e5f3ff;
 }
 
 input[type="image"]:disabled  {

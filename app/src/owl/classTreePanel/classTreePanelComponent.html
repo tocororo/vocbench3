@@ -12,12 +12,22 @@
                     [disabled]="!selectedClass || !selectedClass.getAdditionalProperty('explicit')">
                 <img src="app/assets/images/class_delete.png" />
             </button>
-        </div>    
+        </div>
+        <div class="btn-group btn-group-xs" role="group">
+            <button class="btn btn-default" title="Create Instance" (click)="createInstance()" [disabled]="!selectedClass">
+                <img src="app/assets/images/individual_create.png" />
+            </button>
+            <button class="btn btn-default" title="Delete Instance" (click)="deleteInstance()"
+                [disabled]="!selectedClass || !selectedInstance">
+                <img src="app/assets/images/individual_delete.png" />
+            </button>
+        </div>   
     </div>
     
     <!-- Tree -->
     <div class="panel-body">
-        <class-tree [rootclass]="rootClass" (itemSelected)="onNodeSelected($event)"></class-tree>
+        <class-tree [rootclass]="rootClass" (itemSelected)="onClassSelected($event)" style="flex: 3"></class-tree>
+        <instance-list [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)" style="margin-top: 4px;"></instance-list>
     </div>
     
     <!-- Search -->

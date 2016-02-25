@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
-import {ClassTreeComponent} from "../../tree/classTree/classTreeComponent";
+import {ClassTreeComponent} from "../classTree/classTreeComponent";
+import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../services/searchServices";
 import {OwlServices} from "../../services/owlServices";
 import {ARTURIResource} from "../../utils/ARTResources";
@@ -7,16 +8,18 @@ import {ARTURIResource} from "../../utils/ARTResources";
 @Component({
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
-	directives: [ClassTreeComponent],
+	directives: [ClassTreeComponent, InstanceListComponent],
     providers: [OwlServices, SearchServices],
 })
 export class ClassTreePanelComponent {
     @Input('rootclass') rootClass:ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() classSelected = new EventEmitter<ARTURIResource>();
+    @Output() instanceSelected = new EventEmitter<ARTURIResource>();
     
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
     
     private selectedClass:ARTURIResource;
+    private selectedInstance:ARTURIResource;
     
 	constructor(private owlService:OwlServices, private searchService: SearchServices) {}
     
@@ -29,41 +32,59 @@ export class ClassTreePanelComponent {
     private createClass() {
         var className = prompt("Insert class name");
         if (className == null) return;
-        this.owlService.createClass(this.rootClass.getURI(), className)
-            .subscribe(
-                stResp => {},
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.owlService.createClass(this.rootClass.getURI(), className).subscribe(
+            stResp => {},
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private createSubClass() {
         var className = prompt("Insert class name");
         if (className == null) return;
-        this.owlService.createClass(this.selectedClass.getURI(), className)
-            .subscribe(
-                stResp => {},
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.owlService.createClass(this.selectedClass.getURI(), className).subscribe(
+            stResp => {},
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private deleteClass() {
-        this.owlService.removeClass(this.selectedClass.getURI())
-            .subscribe(
-                stResp => {
-                    this.selectedClass = null;
-                    this.itemSelected.emit(undefined);
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            )
+        this.owlService.removeClass(this.selectedClass.getURI()).subscribe(
+            stResp => {
+                this.selectedClass = null;
+                this.classSelected.emit(undefined);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
+    }
+    
+    private createInstance() {
+        var instanceName = prompt("Insert instance name");
+        if (instanceName == null) return;
+        this.owlService.createInstance(this.selectedClass.getURI(), instanceName).subscribe(
+            stResp => {},
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
+    }
+    
+    private deleteInstance() {
+        this.owlService.removeInstance(this.selectedInstance.getURI(), this.selectedClass.getURI()).subscribe(
+            stResp => {
+                this.selectedInstance = null;
+                this.instanceSelected.emit(undefined);
+            }
+        )
     }
     
     private doSearch(searchedText: string) {
@@ -99,8 +120,13 @@ export class ClassTreePanelComponent {
     }
     
     //EVENT LISTENERS
-    private onNodeSelected(node:ARTURIResource) {
-        this.selectedClass = node;
-        this.itemSelected.emit(node);
+    private onClassSelected(cls:ARTURIResource) {
+        this.selectedClass = cls;
+        this.classSelected.emit(cls);
+    }
+    
+    private onInstanceSelected(instance:ARTURIResource) {
+        this.selectedInstance = instance;
+        this.instanceSelected.emit(instance);
     }
 }

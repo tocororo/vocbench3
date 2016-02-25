@@ -51,13 +51,28 @@ export class ResourceViewComponent {
     }
     
     ngOnChanges(changes) {
-        if (changes.resource) {
+        if (changes.resource.currentValue) {
             this.buildResourceView(this.resource);//refresh resource view when Input resource changes       
         }
     }
     
     private buildResourceView(res: ARTURIResource) {
         document.getElementById("blockDivResView").style.display = "block";
+        
+        //reset all partitions
+        this.typesColl = null;
+        this.classAxiomColl = null;
+        this.topconceptofColl = null;
+        this.schemesColl = null;
+        this.broadersColl = null;
+        this.superpropertiesColl = null;
+        this.domainsColl = null;
+        this.rangesColl = null;
+        this.lexicalizationsColl = null;
+        this.propertiesColl = null;
+        this.propertyFacets = null;
+        this.inverseofColl = null;
+        
         this.resViewService.getResourceView(res.getURI()).subscribe(
             stResp => {
                 var respResourceElement = stResp.getElementsByTagName("resource")[0];

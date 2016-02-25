@@ -5,8 +5,9 @@
             <rdf-resource [resource]="resource"></rdf-resource>
             <div style="margin-left: 10px; flex: 1; min-width: 300px;">
                 <div class="input-group input-group-sm">
-                    <span class="input-group-addon">{{resource.getBaseURI()}}</span>
-                    <input #renameinput type="text" class="form-control" [value]="resource.getLocalName()" [readonly]="renameLocked">
+                    <span class="input-group-addon" style="padding-right: 2px;">{{resource.getBaseURI()}}</span>
+                    <input #renameinput type="text" class="form-control" style="padding-left: 2px;" 
+                        [value]="resource.getLocalName()" [readonly]="renameLocked">
                     <div class="input-group-btn">
                         <button *ngIf="renameLocked" class="btn btn-default" style="width:60px" type="button" 
                             (click)="startRename(renameinput)" [disabled]="!resource.getAdditionalProperty('explicit')">Rename</button>
@@ -39,5 +40,5 @@
 </div>
 
 <div id="blockDivResView" class="blockingDiv" style="display:none">
-    <div>Loading...</div>
+    <div>Loading</div>
 </div>

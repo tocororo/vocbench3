@@ -32,12 +32,12 @@ export class OwlServices {
 	 * tree: boolean that indicates if the response should contains info about tree structure
 	 * instNum: boolean that indicates if the response should contains for each classes the number of instances
 	 */
-    getSubClasses(clsName: string) {
+    getSubClasses(clsName: string, tree: boolean, instNum: boolean) {
         console.log("[owlServices] getSubClasses");
         var params: any = {
             clsName: clsName,
-            tree: true,
-            instNum: true
+            tree: tree,
+            instNum: instNum
         };
         return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, this.oldTypeService).map(
             stResp => {
@@ -46,6 +46,19 @@ export class OwlServices {
                     subClasses[i].setAdditionalProperty("children", []);
                 }
                 return subClasses;
+            }
+        );
+    }
+    
+    getClassAndInstancesInfo(clsName: string) {
+        console.log("[owlServices] getClassAndInstancesInfo");
+        var params: any = {
+            clsName: clsName,
+        };
+        return this.httpMgr.doGet(this.serviceName, "getClassAndInstancesInfo", params, this.oldTypeService).map(
+            stResp => {
+                var instancesElem = stResp.getElementsByTagName("Instances")[0];
+                return this.deserializer.createURIArray(instancesElem);
             }
         );
     }
@@ -60,7 +73,8 @@ export class OwlServices {
             stResp => {
                 var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
                 newClass.setAdditionalProperty("children", []);
-                this.eventHandler.subClassCreatedEvent.emit({"subClass": newClass, "superClassURI": superClassName});
+                var superClass = this.deserializer.createURI(stResp.getElementsByTagName("SuperClass")[0]);
+                this.eventHandler.subClassCreatedEvent.emit({"subClass": newClass, "superClass": superClass});
                 return stResp;
             }
         );
@@ -74,7 +88,8 @@ export class OwlServices {
         };
         return this.httpMgr.doGet("delete", "removeClass", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.classDeletedEvent.emit(className);
+                var cls = this.deserializer.createURI(stResp);
+                this.eventHandler.classDeletedEvent.emit(cls);
                 return stResp;
             }
         );
@@ -97,7 +112,43 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "removeSuperCls", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.subClassRemovedEvent.emit({classURI: superclsqname, subClassURI: clsqname});
+                var superClass = this.deserializer.createURI(stResp.getElementsByTagName("SuperClass")[0]);
+                var cls = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                this.eventHandler.subClassRemovedEvent.emit({cls: superClass, subClass: cls});
+                return stResp;
+            }
+        );
+    }
+    
+    createInstance(clsName: string, instanceName: string) {
+        console.log("[owlServices] createInstance");
+        var params: any = {
+            clsName: clsName,
+            instanceName: instanceName,
+        };
+        return this.httpMgr.doGet(this.serviceName, "createInstance", params, this.oldTypeService).map(
+            stResp => {
+                var instance = this.deserializer.createURI(stResp.getElementsByTagName("Instance")[0]);
+                var cls = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
+                return stResp;
+            }
+        );
+    }
+    
+    /**
+     * parameter cls is not necessary for the request, it is simply useful for the event
+     */
+    removeInstance(name: string, cls?: string) {
+        console.log("[owlServices] removeInstance");
+        var params: any = {
+            name: name,
+            type: "Instance",
+        };
+        return this.httpMgr.doGet("delete", "removeInstance", params, this.oldTypeService).map(
+            stResp => {
+                var instance = this.deserializer.createURI(stResp);
+                this.eventHandler.instanceDeletedEvent.emit({instance: instance, clsURI: cls});
                 return stResp;
             }
         );

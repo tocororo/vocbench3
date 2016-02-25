@@ -24,8 +24,12 @@ export class ClassComponent {
     
     
     //EVENT LISTENERS 
-    private onNodeSelected(node) {
-        this.resource = node;
+    private onClassSelected(cls) {
+        this.resource = cls;
+    }
+    
+    private onInstanceSelected(instance) {
+        this.resource = instance;
     }
     
 }

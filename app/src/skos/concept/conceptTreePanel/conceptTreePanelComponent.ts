@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
-import {ConceptTreeComponent} from "../../../tree/conceptTree/conceptTreeComponent";
+import {ConceptTreeComponent} from "../conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ARTURIResource} from "../../../utils/ARTResources";

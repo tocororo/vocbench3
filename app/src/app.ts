@@ -56,6 +56,13 @@ export class App {
         return (this.vbCtx.getProject().getPrettyPrintOntoType().indexOf("SKOS") > -1);
     }
     
+    /**
+     * returns true if a project is OWL. Useful to show/hide navbar links available only in OWL (ex. class)
+     */
+    private isProjectOWL(): boolean {
+        return (this.vbCtx.getProject().getPrettyPrintOntoType() == "OWL");
+    }
+    
 }
 
 bootstrap(App, [

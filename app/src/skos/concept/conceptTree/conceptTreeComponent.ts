@@ -1,13 +1,13 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
-import {ARTURIResource} from "../../utils/ARTResources";
-import {VBEventHandler} from "../../utils/VBEventHandler";
-import {SkosServices} from "../../services/skosServices";
-import {SearchServices} from "../../services/searchServices";
+import {ARTURIResource} from "../../../utils/ARTResources";
+import {VBEventHandler} from "../../../utils/VBEventHandler";
+import {SkosServices} from "../../../services/skosServices";
+import {SearchServices} from "../../../services/searchServices";
 import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 
 @Component({
     selector: "concept-tree",
-    templateUrl: "app/src/tree/conceptTree/conceptTreeComponent.html",
+    templateUrl: "app/src/skos/concept/conceptTree/conceptTreeComponent.html",
     directives: [ConceptTreeNodeComponent],
     providers: [SkosServices, SearchServices],
 })

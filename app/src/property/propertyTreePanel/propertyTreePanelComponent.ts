@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
-import {PropertyTreeComponent} from "../../tree/propertyTree/propertyTreeComponent";
+import {PropertyTreeComponent} from "../propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";

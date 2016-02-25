@@ -7,7 +7,7 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
 
 @Component({
 	selector: "property-tree",
-	templateUrl: "app/src/tree/propertyTree/propertyTreeComponent.html",
+	templateUrl: "app/src/property/propertyTree/propertyTreeComponent.html",
     providers: [PropertyServices, SearchServices],
     directives: [PropertyTreeNodeComponent],
 })
@@ -25,7 +25,7 @@ export class PropertyTreeComponent {
 	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onPropertySelected(node)));
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(propertyURI => this.onPropertyDeleted(propertyURI)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
     }
     
     ngOnInit() {
@@ -80,10 +80,10 @@ export class PropertyTreeComponent {
         this.propertyTree.push(property);
     }
     
-    private onPropertyDeleted(propertyURI: string) {
+    private onPropertyDeleted(property: ARTURIResource) {
         //check if the property to delete is a topProperty
         for (var i = 0; i < this.propertyTree.length; i++) {
-            if (this.propertyTree[i].getURI() == propertyURI) {
+            if (this.propertyTree[i].getURI() == property.getURI()) {
                 this.propertyTree.splice(i, 1);
                 break;
             }

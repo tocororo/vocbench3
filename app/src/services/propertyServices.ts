@@ -60,8 +60,9 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet("delete", "removeProperty", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.propertyDeletedEvent.emit(name);
-                return stResp;
+                var property = this.deserializer.createURI(stResp);
+                this.eventHandler.propertyDeletedEvent.emit(property);
+                return property;
             }
         );
     }
@@ -91,9 +92,10 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
             stResp => {
-                var newProp = this.deserializer.createURI(stResp);
+                var newProp = this.deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
                 newProp.setAdditionalProperty("children", []);
-                this.eventHandler.subPropertyCreatedEvent.emit({"subProperty": newProp, "superPropertyURI": superPropertyQName});
+                var superProp = this.deserializer.createURI(stResp.getElementsByTagName("SuperProperty")[0]);
+                this.eventHandler.subPropertyCreatedEvent.emit({"subProperty": newProp, "superProperty": superProp});
                 return newProp;
             }
         );
