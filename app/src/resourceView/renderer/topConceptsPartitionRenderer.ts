@@ -30,16 +30,15 @@ export class TopConceptsPartitionRenderer {
     }
     
     private remove(scheme: ARTURIResource) {
-        this.skosService.removeTopConcept(this.resource.getURI(), scheme.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.skosService.removeTopConcept(this.resource, scheme).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
 }

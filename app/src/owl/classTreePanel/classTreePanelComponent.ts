@@ -32,7 +32,7 @@ export class ClassTreePanelComponent {
     private createClass() {
         var className = prompt("Insert class name");
         if (className == null) return;
-        this.owlService.createClass(this.rootClass.getURI(), className).subscribe(
+        this.owlService.createClass(this.rootClass, className).subscribe(
             stResp => {},
             err => {
                 alert("Error: " + err);
@@ -44,7 +44,7 @@ export class ClassTreePanelComponent {
     private createSubClass() {
         var className = prompt("Insert class name");
         if (className == null) return;
-        this.owlService.createClass(this.selectedClass.getURI(), className).subscribe(
+        this.owlService.createClass(this.selectedClass, className).subscribe(
             stResp => {},
             err => {
                 alert("Error: " + err);
@@ -54,7 +54,7 @@ export class ClassTreePanelComponent {
     }
     
     private deleteClass() {
-        this.owlService.removeClass(this.selectedClass.getURI()).subscribe(
+        this.owlService.removeClass(this.selectedClass).subscribe(
             stResp => {
                 this.selectedClass = null;
                 this.classSelected.emit(undefined);
@@ -69,7 +69,7 @@ export class ClassTreePanelComponent {
     private createInstance() {
         var instanceName = prompt("Insert instance name");
         if (instanceName == null) return;
-        this.owlService.createInstance(this.selectedClass.getURI(), instanceName).subscribe(
+        this.owlService.createInstance(this.selectedClass, instanceName).subscribe(
             stResp => {},
             err => {
                 alert("Error: " + err);
@@ -79,7 +79,7 @@ export class ClassTreePanelComponent {
     }
     
     private deleteInstance() {
-        this.owlService.removeInstance(this.selectedInstance.getURI(), this.selectedClass.getURI()).subscribe(
+        this.owlService.removeInstance(this.selectedInstance, this.selectedClass).subscribe(
             stResp => {
                 this.selectedInstance = null;
                 this.instanceSelected.emit(undefined);

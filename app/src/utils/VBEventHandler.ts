@@ -14,15 +14,15 @@ export class VBEventHandler {
     //CONCEPT EVENTS
     public conceptTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     public topConceptCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contain an object with "narrower" (the narrower created) and "broaderURI"
+    //event should contain an object with "narrower" (the narrower created) and "broader"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain the URI of the deleted concept
-    public conceptDeletedEvent: EventEmitter<string> = new EventEmitter();
-    //event should contain an object with "conceptURI" and "schemeURI"
+    //event should contain the deleted concept
+    public conceptDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    //event should contain an object with "concept" and "scheme"
     public conceptRemovedFromSchemeEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain an object with "conceptURI" and "schemeURI"
+    //event should contain an object with "concept" and "scheme"
     public conceptRemovedAsTopConceptEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain an object with "conceptURI" and "broaderURI"
+    //event should contain an object with "concept" and "broader"
     public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //CLASS EVENTS
@@ -39,7 +39,7 @@ export class VBEventHandler {
     //INSTANCE EVENTS
     //event should contain an object with "instance" and "cls" (the class of the instance)
     public instanceCreatedEvent: EventEmitter<any> = new EventEmitter();
-    //event should contain an object with "instance" and "clsURI" (the class of the instance)
+    //event should contain an object with "instance" and "cls"
     public instanceDeletedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
@@ -49,10 +49,10 @@ export class VBEventHandler {
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted property
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contain an object with "propertyURI" and "superPropertyURI"
+    //event should contain an object with "property" and "superProperty"
     public superPropertyRemovedEvent: EventEmitter<any> = new EventEmitter();
     
-    //event should contain an object with "oldResource" and "newResource", both of them ARTURIResource
+    //event should contain an object with "oldResource" and "newResource"
     public resourceRenamedEvent: EventEmitter<any> = new EventEmitter();
     
 	constructor() {}

@@ -42,41 +42,38 @@ export class PropertyTreePanelComponent {
     private createPropertyForType(type) {
         var propertyName = prompt("Insert property name");
         if (propertyName == null) return;
-        this.propService.addProperty(propertyName, type)
-            .subscribe(
-                stResp => {},
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.propService.addProperty(propertyName, type).subscribe(
+            stResp => { },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private createSubProperty() {
         var propertyName = prompt("Insert property name");
         if (propertyName == null) return;
-        this.propService.addSubProperty(propertyName, this.selectedProperty.getRole(), this.selectedProperty.getURI())
-            .subscribe(
-                stResp => {},
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.propService.addSubProperty(propertyName, this.selectedProperty).subscribe(
+            stResp => { },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private deleteProperty() {
-        this.propService.removeProperty(this.selectedProperty.getURI())
-            .subscribe(
-                stResp => {
-                    this.selectedProperty = null;
-                    this.itemSelected.emit(undefined);
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            );
+        this.propService.removeProperty(this.selectedProperty).subscribe(
+            stResp => {
+                this.selectedProperty = null;
+                this.itemSelected.emit(undefined);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private doSearch(searchedText: string) {

@@ -29,16 +29,15 @@ export class DomainsPartitionRenderer {
     }
     
     private remove(domain: ARTURIResource) {
-        this.propService.removePropertyDomain(this.resource.getURI(), domain.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            );
+        this.propService.removePropertyDomain(this.resource, domain).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
 }

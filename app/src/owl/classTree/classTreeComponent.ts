@@ -29,14 +29,11 @@ export class ClassTreeComponent {
     }
     
     ngOnInit() {
-        var rootClassUri = null;
-        if (this.rootClass == undefined) {
-            rootClassUri = "http://www.w3.org/2002/07/owl#Thing";
-        } else {
-            rootClassUri = this.rootClass.getURI();
-        }
         document.getElementById("blockDivTree").style.display = "block";
-        this.owlService.getClassesInfoAsRootsForTree(rootClassUri).subscribe(
+        if (this.rootClass == undefined) {
+            this.rootClass = new ARTURIResource("http://www.w3.org/2002/07/owl#Thing", "owl:Thing", "cls");
+        }
+        this.owlService.getClassesInfoAsRootsForTree(this.rootClass).subscribe(
             roots => {
                 this.roots = roots;
             },
@@ -76,7 +73,7 @@ export class ClassTreeComponent {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);    
-        } else if (this.selectedNode.getURI() != node.getURI()) {
+        } else {
             this.selectedNode.deleteAdditionalProperty("selected");
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);

@@ -29,16 +29,15 @@ export class PropertyTreeComponent {
     }
     
     ngOnInit() {
-        this.propertyService.getPropertiesTree()
-            .subscribe(
-                propertyTree => {
-                    this.propertyTree = propertyTree;
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.propertyService.getPropertiesTree().subscribe(
+            propertyTree => {
+                this.propertyTree = propertyTree;
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     ngOnDestroy() {
@@ -68,7 +67,7 @@ export class PropertyTreeComponent {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);    
-        } else if (this.selectedNode.getURI() != node.getURI()) {
+        } else {
             this.selectedNode.deleteAdditionalProperty("selected");
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);

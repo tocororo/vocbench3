@@ -12,6 +12,7 @@ export class PropertyServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private deserializer: Deserializer) { }
 
+    //check parameters, maybe they're useless
     getPropertiesTree(instanceQName?: string, method?: string) {
         console.log("[PropertyServices] getPropertiesTree");
         var params: any = {}
@@ -52,25 +53,24 @@ export class PropertyServices {
         return p;
     }
 
-    removeProperty(name: string) {
+    removeProperty(property: ARTURIResource) {
         console.log("[PropertyServices] removeProperty");
         var params: any = {
-            name: name,
+            name: property.getURI(),
             type: "Property",
         };
         return this.httpMgr.doGet("delete", "removeProperty", params, this.oldTypeService).map(
             stResp => {
-                var property = this.deserializer.createURI(stResp);
                 this.eventHandler.propertyDeletedEvent.emit(property);
                 return property;
             }
         );
     }
 
-    addProperty(propertyQName: string, propertyType: string) {
+    addProperty(propertyName: string, propertyType: string) {
         console.log("[PropertyServices] addProperty");
         var params: any = {
-            propertyQName: propertyQName,
+            propertyQName: propertyName,
             propertyType: propertyType,
         };
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
@@ -83,29 +83,28 @@ export class PropertyServices {
         );
     }
 
-    addSubProperty(propertyQName: string, propertyType: string, superPropertyQName: string) {
+    addSubProperty(propertyQName: string, superProperty: ARTURIResource) {
         console.log("[PropertyServices] addSubProperty");
         var params: any = {
             propertyQName: propertyQName,
-            propertyType: propertyType,
-            superPropertyQName: superPropertyQName,
+            propertyType: superProperty.getRole(),
+            superPropertyQName: superProperty.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
             stResp => {
                 var newProp = this.deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
                 newProp.setAdditionalProperty("children", []);
-                var superProp = this.deserializer.createURI(stResp.getElementsByTagName("SuperProperty")[0]);
-                this.eventHandler.subPropertyCreatedEvent.emit({"subProperty": newProp, "superProperty": superProp});
+                this.eventHandler.subPropertyCreatedEvent.emit({"subProperty": newProp, "superProperty": superProperty});
                 return newProp;
             }
         );
     }
 
-    removePropValue(instanceQName: string, propertyQName: string, value: string, rangeQName: string, type: string, lang?: string) {
+    removePropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: string, lang?: string) {
         console.log("[PropertyServices] removePropValue");
         var params: any = {
-            instanceQName: instanceQName,
-            propertyQName: propertyQName,
+            instanceQName: subject.getURI(),
+            propertyQName: property.getURI(),
             value: value,
             rangeQName: rangeQName,
             type: type,
@@ -116,11 +115,11 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "removePropValue", params, this.oldTypeService);
     }
 
-    createAndAddPropValue(instanceQName: string, propertyQName: string, value: string, rangeQName: string, type: string, lang?: string) {
+    createAndAddPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: string, lang?: string) {
         console.log("[PropertyServices] createAndAddPropValue");
         var params: any = {
-            instanceQName: instanceQName,
-            propertyQName: propertyQName,
+            instanceQName: subject.getURI(),
+            propertyQName: property.getURI(),
             value: value,
             rangeQName: rangeQName,
             type: type,
@@ -131,54 +130,54 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "createAndAddPropValue", params, this.oldTypeService);
     }
 
-    addExistingPropValue(instanceQName: string, propertyQName: string, value: string, type: string) {
+    addExistingPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, type: string) {
         console.log("[PropertyServices] addExistingPropValue");
         var params: any = {
-            instanceQName: instanceQName,
-            propertyQName: propertyQName,
+            instanceQName: subject.getURI(),
+            propertyQName: property.getURI(),
             value: value,
             type: type,
         };
         return this.httpMgr.doGet(this.serviceName, "addExistingPropValue", params, this.oldTypeService);
     }
 
-    addSuperProperty(propertyQName: string, superPropertyQName: string) {
+    addSuperProperty(property: ARTURIResource, superProperty: ARTURIResource) {
         console.log("[PropertyServices] addSuperProperty");
         var params: any = {
-            propertyQName: propertyQName,
-            superPropertyQName: superPropertyQName,
+            propertyQName: property.getURI(),
+            superPropertyQName: superProperty.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "addSuperProperty", params, this.oldTypeService);
     }
 
-    removeSuperProperty(propertyQName: string, superPropertyQName: string) {
+    removeSuperProperty(property: ARTURIResource, superProperty: ARTURIResource) {
         console.log("[PropertyServices] removeSuperProperty");
         var params: any = {
-            propertyQName: propertyQName,
-            superPropertyQName: superPropertyQName,
+            propertyQName: property.getURI(),
+            superPropertyQName: superProperty.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "removeSuperProperty", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.superPropertyRemovedEvent.emit({propertyURI: propertyQName, superPropertyURI: superPropertyQName});
+                this.eventHandler.superPropertyRemovedEvent.emit({property: property, superProperty: superProperty});
                 return stResp;
             }
         );
     }
 
-    removePropertyDomain(propertyQName: string, domainPropertyQName: string) {
+    removePropertyDomain(property: ARTURIResource, domainProperty: ARTURIResource) {
         console.log("[PropertyServices] removePropertyDomain");
         var params: any = {
-            propertyQName: propertyQName,
-            domainPropertyQName: domainPropertyQName,
+            propertyQName: property.getURI(),
+            domainPropertyQName: domainProperty.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "removePropertyDomain", params, this.oldTypeService);
     }
 
-    removePropertyRange(propertyQName: string, rangePropertyQName: string) {
+    removePropertyRange(property: ARTURIResource, rangeProperty: ARTURIResource) {
         console.log("[PropertyServices] removePropertyRange");
         var params: any = {
-            propertyQName: propertyQName,
-            rangePropertyQName: rangePropertyQName,
+            propertyQName: property.getURI(),
+            rangePropertyQName: rangeProperty.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "removePropertyRange", params, this.oldTypeService);
     }

@@ -27,16 +27,15 @@ export class ConceptSchemePanelComponent {
     }
     
     ngOnInit() {
-        this.skosService.getAllSchemesList()
-            .subscribe(
-                schemeList => {
-                    this.schemeList = schemeList;
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.skosService.getAllSchemesList().subscribe(
+            schemeList => {
+                this.schemeList = schemeList;
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
         this.activeScheme = this.vbCtx.getScheme();
     }
     
@@ -56,7 +55,7 @@ export class ConceptSchemePanelComponent {
     
     private deleteScheme() {
         //TODO check if scheme has concept and eventually ask the user whether delete the dangling concept (determines 2nd param of request)
-        this.skosService.deleteScheme(this.selectedScheme.getURI(), false).subscribe(
+        this.skosService.deleteScheme(this.selectedScheme, false).subscribe(
             stResp => {
                 for (var i = 0; i < this.schemeList.length; i++) {
                     if (this.schemeList[i].getURI() == this.selectedScheme.getURI()) {

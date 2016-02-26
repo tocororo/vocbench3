@@ -30,41 +30,38 @@ export class ConceptTreePanelComponent {
     private createConcept() {
         var conceptName = prompt("Insert concept name");
         if (conceptName == null) return;
-        this.skosService.createTopConcept(conceptName, this.vbCtx.getScheme().getURI(), null, null)
-            .subscribe(
-                newConc => {},
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.skosService.createTopConcept(conceptName, this.vbCtx.getScheme(), null, null).subscribe(
+            newConc => { },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private createNarrower() {
         var conceptName = prompt("Insert concept name");
         if (conceptName == null) return;
-        this.skosService.createNarrower(conceptName, this.selectedConcept.getURI(), this.vbCtx.getScheme().getURI(), null, null)
-            .subscribe(
-                newConc => {},
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            )
+        this.skosService.createNarrower(conceptName, this.selectedConcept, this.vbCtx.getScheme(), null, null).subscribe(
+            newConc => { },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
     private deleteConcept() {
-        this.skosService.deleteConcept(this.selectedConcept.getURI())
-            .subscribe(
-                stResp => {
-                    this.selectedConcept = null;
-                    this.itemSelected.emit(undefined);
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            )
+        this.skosService.deleteConcept(this.selectedConcept).subscribe(
+            stResp => {
+                this.selectedConcept = null;
+                this.itemSelected.emit(undefined);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
     private doSearch(searchedText: string) {

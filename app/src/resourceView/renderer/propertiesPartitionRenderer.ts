@@ -51,11 +51,10 @@ export class PropertiesPartitionRenderer {
                 type = "literal";
             }
         }
-        this.propertyService.removePropValue(this.resource.getURI(), predicate.getURI(), object.getNominalValue(), null, type, lang)
-            .subscribe(
-                stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
-            );
+        this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, type, lang).subscribe(
+            stResp => this.update.emit(null),
+            err => { alert("Error: " + err); console.error(err.stack); }
+        );
     }
     
     

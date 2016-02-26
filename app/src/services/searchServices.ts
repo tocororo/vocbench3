@@ -33,22 +33,6 @@ export class SearchServices {
         );
     }
     
-    searchOntology(inputString: string, types: string, scheme?: string) {
-        console.log("[OntoSearchServices] searchOntology");
-        var params: any = {
-            inputString: inputString,
-            types: types
-        };
-        if (scheme != undefined) {
-            params.scheme = scheme;
-        }
-        return this.httpMgr.doGet("OntoSearch", "searchOntology", params, true).map(
-            stResp => {
-                return this.deserializer.createURIArray(stResp);
-            }
-        );
-    }
-    
     /**
      * Returns the shortest path from a root to the given resource
      */

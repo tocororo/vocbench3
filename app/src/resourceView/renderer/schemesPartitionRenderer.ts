@@ -30,16 +30,15 @@ export class SchemesPartitionRenderer {
     }
     
     private remove(scheme: ARTURIResource) {
-        this.skosService.removeConceptFromScheme(this.resource.getURI(), scheme.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.skosService.removeConceptFromScheme(this.resource, scheme).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
 }

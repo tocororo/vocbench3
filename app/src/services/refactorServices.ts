@@ -2,6 +2,7 @@ import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
+import {ARTURIResource} from "../utils/ARTResources";
 
 @Injectable()
 export class RefactorServices {
@@ -11,20 +12,18 @@ export class RefactorServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private deserializer: Deserializer) { }
 
-    changeResourceURI(oldResource: string, newResource: string) {
+    changeResourceURI(oldResource: ARTURIResource, newResource: string) {
         console.log("[RefactorServices] changeResourceURI");
         var params: any = {
-            oldResource : oldResource,
+            oldResource : oldResource.getURI(),
             newResource : newResource
         };
         return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params, this.oldTypeService).map(
             stResp => {
-                var oldResElem = stResp.getElementsByTagName("oldResource")[0];
-                var oldURIResource = this.deserializer.createURI(oldResElem);
                 var newResElem = stResp.getElementsByTagName("newResource")[0];
-                var newURIResource = this.deserializer.createURI(newResElem);
-                this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldURIResource, newResource: newURIResource });
-                return newURIResource;
+                var newResource = this.deserializer.createURI(newResElem);
+                this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldResource, newResource: newResource });
+                return newResource;
             }
         );
     }

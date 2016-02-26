@@ -29,16 +29,15 @@ export class RangesPartitionRenderer {
     }
     
     private remove(range: ARTURIResource) {
-        this.propService.removePropertyRange(this.resource.getURI(), range.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            );
+        this.propService.removePropertyRange(this.resource, range).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
 }

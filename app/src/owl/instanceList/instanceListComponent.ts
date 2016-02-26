@@ -21,7 +21,7 @@ export class InstanceListComponent {
     
     constructor(private owlServices: OwlServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
-            data => this.onInstanceDeleted(data.instance, data.clsURI)));
+            data => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             data => this.onInstanceCreated(data.instance, data.cls)));
     }
@@ -29,7 +29,7 @@ export class InstanceListComponent {
     ngOnChanges(changes) {
         this.selectedInstance = null;
         if (changes.cls.currentValue) {
-            this.owlServices.getClassAndInstancesInfo(this.cls.getURI()).subscribe(
+            this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
                 instances => {
                     this.instanceList = instances;
                 },
@@ -59,8 +59,8 @@ export class InstanceListComponent {
     }
     
     //EVENT LISTENERS
-    onInstanceDeleted(instance: ARTURIResource, clsURI) {
-        if (this.cls.getURI() == clsURI) {
+    onInstanceDeleted(instance: ARTURIResource, cls: ARTURIResource) {
+        if (this.cls.getURI() == cls.getURI()) {
             for (var i = 0; i < this.instanceList.length; i++) {
                 if (this.instanceList[i].getURI() == instance.getURI()) {
                     this.instanceList.splice(i, 1);

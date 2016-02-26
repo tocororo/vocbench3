@@ -175,7 +175,7 @@ export class ResourceViewComponent {
         }
         var newUri = this.resource.getBaseURI() + newLocalName;
         if (this.resource.getURI() != newUri) { //if the uri has changed 
-            this.refactorService.changeResourceURI(this.resource.getURI(), newUri).subscribe(
+            this.refactorService.changeResourceURI(this.resource, newUri).subscribe(
                 newResource => {
                     //here pass newResource instead of this.resource since this.resource is not still
                     //updated/injected from the NodeComponent that catch the rename event 

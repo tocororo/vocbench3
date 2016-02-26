@@ -30,16 +30,15 @@ export class BroadersPartitionRenderer {
     }
     
     private remove(broader: ARTURIResource) {
-        this.skosService.removeBroaderConcept(this.resource.getURI(), broader.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
+        this.skosService.removeBroaderConcept(this.resource, broader).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
     
 }

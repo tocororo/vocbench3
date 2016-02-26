@@ -30,16 +30,15 @@ export class TypesPartitionRenderer {
     }
     
     private remove(type: ARTURIResource) {
-        this.owlService.removeType(this.resource.getURI(), type.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            )
+        this.owlService.removeType(this.resource, type).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
     

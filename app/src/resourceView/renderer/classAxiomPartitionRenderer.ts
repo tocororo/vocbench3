@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
-import {ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {PropertyServices} from "../../services/propertyServices";
@@ -48,49 +48,42 @@ export class ClassAxiomPartitionPartitionRenderer {
         var objectType = object.isURIResource() ? "uri" : "bnode"; 
         //switch between the predicates handled by this Renderer
         if (predicate.getURI() == "http://www.w3.org/2002/07/owl#equivalentClass") {
-            this.propertyService.removePropValue(this.resource.getURI(), predicate.getURI(), object.getNominalValue(), null, objectType)
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack);} 
-                );
+            this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
         } else if (predicate.getURI() == "http://www.w3.org/2000/01/rdf-schema#subClassOf") {
-            this.owlService.removeSuperCls(this.resource.getURI(), object.getNominalValue())
-                .subscribe(
-                    stResp => {
-                        this.update.emit(null);
-                    },
-                    err => { alert("Error: " + err); console.error(err['stack']);} 
-                );
+            this.owlService.removeSuperCls(this.resource, <ARTURIResource>object).subscribe(
+                stResp => {
+                    this.update.emit(null);
+                },
+                err => { alert("Error: " + err); console.error(err['stack']); }
+            );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#disjointWith") {
-            this.propertyService.removePropValue(this.resource.getURI(), predicate.getURI(), object.getNominalValue(), null, objectType)
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack);} 
-                );
+            this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#complementOf") {
-            this.propertyService.removePropValue(this.resource.getURI(), predicate.getURI(), object.getNominalValue(), null, objectType)
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack);} 
-                );
+            this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#intersectionOf") {
-            this.owlService.removeIntersectionOf(this.resource.getURI(), object.getNominalValue())
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack);} 
-                );
+            this.owlService.removeIntersectionOf(this.resource, object).subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#oneOf") {
-            this.owlService.removeOneOf(this.resource.getURI(), object.getNominalValue())
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack);} 
-                );
+            this.owlService.removeOneOf(this.resource, object).subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#unionOf") {
-            this.owlService.removeUnionOf(this.resource.getURI(), object.getNominalValue())
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack);} 
-                );
+            this.owlService.removeUnionOf(this.resource, object).subscribe(
+                stResp => this.update.emit(null),
+                err => { alert("Error: " + err); console.error(err.stack); }
+            );
         }
     }
     

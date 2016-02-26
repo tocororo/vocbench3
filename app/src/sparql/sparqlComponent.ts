@@ -28,22 +28,21 @@ export class SparqlComponent {
     private doQuery() {
         var lang = "SPARQL";
         var initTime = new Date().getTime();
-        this.sparqlService.resolveQuery(this.query, lang, this.inferred, this.queryMode)
-            .subscribe(
-                data => {
-                    //calculates the time spent in query
-                    var finishTime = new Date().getTime();
-                    var diffTime = finishTime - initTime;
-                    this.queryTime = this.getPrettyPrintTime(diffTime);
-                    //process result
-                    this.headers = data.sparql.head.vars;
-                    this.queryResult = data.sparql.results.bindings;       
-                },
-                err => { 
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            );
+        this.sparqlService.resolveQuery(this.query, lang, this.inferred, this.queryMode).subscribe(
+            data => {
+                //calculates the time spent in query
+                var finishTime = new Date().getTime();
+                var diffTime = finishTime - initTime;
+                this.queryTime = this.getPrettyPrintTime(diffTime);
+                //process result
+                this.headers = data.sparql.head.vars;
+                this.queryResult = data.sparql.results.bindings;
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
     private clear() {

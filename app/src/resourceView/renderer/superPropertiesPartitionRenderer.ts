@@ -29,16 +29,15 @@ export class SuperPropertiesPartitionRenderer {
     }
     
     private remove(superProp: ARTURIResource) {
-        this.propService.removeSuperProperty(this.resource.getURI(), superProp.getURI())
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            );
+        this.propService.removeSuperProperty(this.resource, superProp).subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
 }

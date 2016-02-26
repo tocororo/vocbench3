@@ -36,7 +36,7 @@ export class ClassTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             data => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
-            data => this.onInstanceDeleted(data.clsURI)));
+            data => this.onInstanceDeleted(data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             data => this.onInstanceCreated(data.instance, data.cls)));
     }
@@ -103,7 +103,7 @@ export class ClassTreeNodeComponent {
 	 * then expands the subtree div.
 	 */
     public expandNode() {
-        this.owlService.getSubClasses(this.node.getURI(), true, true).subscribe(
+        this.owlService.getSubClasses(this.node, true, true).subscribe(
             subClasses => {
                 this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
                 //change the class of the subTree div from subtreeClose to subtreeOpen
@@ -172,8 +172,8 @@ export class ClassTreeNodeComponent {
     }
 	
     //decrease numInst property when an instance of the current class is deleted
-    onInstanceDeleted(clsURI: string) {
-        if (this.node.getURI() == clsURI) {
+    onInstanceDeleted(cls: ARTURIResource) {
+        if (this.node.getURI() == cls.getURI()) {
             var numInst = this.node.getAdditionalProperty("numInst");
             this.node.setAdditionalProperty("numInst", numInst-1);
         }

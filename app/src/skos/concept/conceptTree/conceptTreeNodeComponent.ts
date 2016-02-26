@@ -30,13 +30,13 @@ export class ConceptTreeNodeComponent {
 	
 	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-            deletedConceptURI => this.onConceptDeleted(deletedConceptURI)));
+            deletedConcept => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
-            data => this.onNarrowerCreated(data.narrower, data.broaderURI)));
+            data => this.onNarrowerCreated(data.narrower, data.broader)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.conceptURI, data.schemeURI)));
+            data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
-            data => this.onBroaderRemoved(data.conceptURI, data.broaderURI)));
+            data => this.onBroaderRemoved(data.concept, data.broader)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             data => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
@@ -97,11 +97,7 @@ export class ConceptTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-      	var schemeUri = null; //no scheme mode
-        if (this.scheme != undefined) {
-            schemeUri = this.scheme.getURI();
-        }
-        this.skosService.getNarrowerConcepts(this.node.getURI(), schemeUri).subscribe(
+        this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
             narrower => {
                 this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
                 //change the class of the subTree div from subtreeClose to subtreeOpen
@@ -133,10 +129,10 @@ export class ConceptTreeNodeComponent {
     
     //EVENT LISTENERS
     
-    private onConceptDeleted(deletedConceptURI: string) {
+    private onConceptDeleted(deletedConcept: ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
-            if (children[i].getURI() == deletedConceptURI) {
+            if (children[i].getURI() == deletedConcept.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
@@ -148,23 +144,23 @@ export class ConceptTreeNodeComponent {
         }
     }
     
-    private onNarrowerCreated(narrower: ARTURIResource, broaderURI: string) {
+    private onNarrowerCreated(narrower: ARTURIResource, broader: ARTURIResource) {
         //add the new concept as children only if the parent is the current concept
-        if (this.node.getURI() == broaderURI) {
+        if (this.node.getURI() == broader.getURI()) {
             this.node.getAdditionalProperty("children").push(narrower);
             this.node.setAdditionalProperty("more", 1);
         }
     }
     
-    private onConceptRemovedFromScheme(conceptURI: string, schemeURI: string) {
-        if (this.scheme != undefined && this.scheme.getURI() == schemeURI) {
-            this.onConceptDeleted(conceptURI);
+    private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
+        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
+            this.onConceptDeleted(concept);
         }
     }
     
-    private onBroaderRemoved(conceptURI: string, broaderURI: string) {
-        if (broaderURI == this.node.getURI()) {
-            this.onConceptDeleted(conceptURI);
+    private onBroaderRemoved(concept: ARTURIResource, broader: ARTURIResource) {
+        if (broader.getURI() == this.node.getURI()) {
+            this.onConceptDeleted(concept);
         }
     }
     

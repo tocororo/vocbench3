@@ -1,5 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
+import {ARTURIResource} from "../utils/ARTResources";
 
 @Injectable()
 export class SkosxlServices {
@@ -15,10 +16,10 @@ export class SkosxlServices {
     
     //Label services
     
-    setPrefLabel(concept: string, label: string, lang: string, mode: string) {
+    setPrefLabel(concept: ARTURIResource, label: string, lang: string, mode: string) {
         console.log("[SkosxlServices] setPrefLabel");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
             label: label,
             lang: lang,
             mode: mode,
@@ -29,10 +30,10 @@ export class SkosxlServices {
         return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService);
     }
     
-    removePrefLabel(concept: string, label: string, lang?: string) {
+    removePrefLabel(concept: ARTURIResource, label: string, lang?: string) {
         console.log("[SkosxlServices] removePrefLabel");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
             label: label,
         };
         if (lang != undefined) {
@@ -41,10 +42,10 @@ export class SkosxlServices {
         return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService);
 	}
     
-    addAltLabel(concept: string, label: string, lang: string, mode: string) {
+    addAltLabel(concept: ARTURIResource, label: string, lang: string, mode: string) {
         console.log("[SkosxlServices] addAltLabel");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
             label: label,
             lang: lang,
             mode: mode,
@@ -55,10 +56,10 @@ export class SkosxlServices {
         return this.httpMgr.doGet(this.serviceName, "addAltLabel", params, this.oldTypeService);
     }
     
-    removeAltLabel(concept: string, label: string, lang?: string) {
+    removeAltLabel(concept: ARTURIResource, label: string, lang?: string) {
         console.log("[SkosxlServices] removeAltLabel");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
             label: label,
         };
         if (lang != undefined) {
@@ -67,10 +68,10 @@ export class SkosxlServices {
         return this.httpMgr.doGet(this.serviceName, "removeAltLabel", params, this.oldTypeService);
 	}
     
-    addHiddenLabel(concept: string, label: string, lang: string, mode: string) {
+    addHiddenLabel(concept: ARTURIResource, label: string, lang: string, mode: string) {
         console.log("[SkosxlServices] addHiddenLabel");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
             label: label,
             lang: lang,
             mode: mode,
@@ -81,10 +82,10 @@ export class SkosxlServices {
         return this.httpMgr.doGet(this.serviceName, "addHiddenLabel", params, this.oldTypeService);
     }
     
-    removeHiddenLabel(concept: string, label: string, lang?: string) {
+    removeHiddenLabel(concept: ARTURIResource, label: string, lang?: string) {
         console.log("[SkosxlServices] removeHiddenLabel");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
             label: label,
         };
         if (lang != undefined) {

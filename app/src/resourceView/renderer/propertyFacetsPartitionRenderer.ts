@@ -23,8 +23,8 @@ export class PropertyFacetsPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove inverse property";
     
-    private rdfTypeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
-    private inverseOfUri = "http://www.w3.org/2002/07/owl#inverseOf";
+    private rdfType: ARTURIResource = new ARTURIResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "rdf:type", "property");
+    private inverseOf: ARTURIResource = new ARTURIResource("http://www.w3.org/2002/07/owl#inverseOf", "rdf:type", "property");
     
     constructor(private propService:PropertyServices) {}
     
@@ -34,16 +34,15 @@ export class PropertyFacetsPartitionRenderer {
     }
     
     private remove(property: ARTURIResource) {
-        this.propService.removePropValue(this.resource.getURI(), this.inverseOfUri, property.getURI(), null, "uri")
-            .subscribe(
-                stResp => {
-                    this.update.emit(null);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                }
-            );
+        this.propService.removePropValue(this.resource, this.inverseOf, property.getURI(), null, "uri").subscribe(
+            stResp => {
+                this.update.emit(null);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err.stack);
+            }
+        );
     }
     
     private changeFacet(facetName: string, checked: boolean) {
@@ -60,23 +59,21 @@ export class PropertyFacetsPartitionRenderer {
     
     private setPropertyFacet(propertyClass: string, value: boolean) {
         if (value) {
-            this.propService.addExistingPropValue(this.resource.getURI(), this.rdfTypeUri, propertyClass, "uri")
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => {
-                        alert("Error: " + err);
-                        console.error(err.stack);
-                    }
-                );
+            this.propService.addExistingPropValue(this.resource, this.rdfType, propertyClass, "uri").subscribe(
+                stResp => this.update.emit(null),
+                err => {
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
+            );
         } else {
-            this.propService.removePropValue(this.resource.getURI(), this.rdfTypeUri, propertyClass, null, "uri")
-                .subscribe(
-                    stResp => this.update.emit(null),
-                    err => {
-                        alert("Error: " + err);
-                        console.error(err.stack);
-                    }
-                );
+            this.propService.removePropValue(this.resource, this.rdfType, propertyClass, null, "uri").subscribe(
+                stResp => this.update.emit(null),
+                err => {
+                    alert("Error: " + err);
+                    console.error(err.stack);
+                }
+            );
         }
     }
     

@@ -38,9 +38,9 @@ export class PropertyTreeNodeComponent {
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property.getURI())));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
         this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
-            data => this.onSuperPropertyRemoved(data.propertyURI, data.superPropertyURI)));
+            data => this.onSuperPropertyRemoved(data.property, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             data => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
@@ -124,10 +124,10 @@ export class PropertyTreeNodeComponent {
     
     //EVENT LISTENERS
     
-    private onPropertyDeleted(propertyURI: string) {
+    private onPropertyDeleted(property: ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");
         for (var i=0; i<children.length; i++) {
-            if (children[i].getURI() == propertyURI) {
+            if (children[i].getURI() == property.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
@@ -147,9 +147,9 @@ export class PropertyTreeNodeComponent {
         }
     }
     
-    private onSuperPropertyRemoved(propertyURI: string, superPropertyURI: string) {
-        if (superPropertyURI == this.node.getURI()) {
-            this.onPropertyDeleted(propertyURI);
+    private onSuperPropertyRemoved(property: ARTURIResource, superProperty: ARTURIResource) {
+        if (superProperty.getURI() == this.node.getURI()) {
+            this.onPropertyDeleted(property);
         }
     }
 	

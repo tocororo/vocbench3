@@ -29,20 +29,16 @@ export class ConceptTreeComponent {
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             concept => this.onTopConceptCreated(concept)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-            deletedConceptURI => this.onConceptDeleted(deletedConceptURI)));
+            deletedConcept => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.conceptURI, data.schemeURI)));
+            data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.conceptURI, data.schemeURI)));
+            data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
     }
     
     ngOnInit() {
-        var schemeUri = null;
-        if (this.scheme != undefined) {
-            schemeUri = this.scheme.getURI();
-        }
         document.getElementById("blockDivTree").style.display = "block";
-        this.skosService.getTopConcepts(schemeUri).subscribe(
+        this.skosService.getTopConcepts(this.scheme).subscribe(
             topConcepts => {
                 this.roots = topConcepts;
             },
@@ -82,7 +78,7 @@ export class ConceptTreeComponent {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);
-        } else if (this.selectedNode.getURI() != node.getURI()) {
+        } else {
             this.selectedNode.deleteAdditionalProperty("selected");
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);
@@ -94,10 +90,10 @@ export class ConceptTreeComponent {
         this.roots.push(concept);
     }
 
-    private onConceptDeleted(deletedConceptURI: string) {
+    private onConceptDeleted(deletedConcept: ARTURIResource) {
         //check if the concept to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == deletedConceptURI) {
+            if (this.roots[i].getURI() == deletedConcept.getURI()) {
                 this.roots.splice(i, 1);
                 break;
             }
@@ -107,9 +103,9 @@ export class ConceptTreeComponent {
     }
     
     //data contains "concept" and "scheme"
-    private onConceptRemovedFromScheme(conceptURI: string, schemeURI: string) {
-        if (this.scheme != undefined && this.scheme.getURI() == schemeURI) {
-            this.onConceptDeleted(conceptURI);
+    private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
+        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
+            this.onConceptDeleted(concept);
         }
     }
 
