@@ -20,17 +20,23 @@
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
     
+    <!-- ng2-bootstrap -->
+    <script src="node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
+    
     <link rel="stylesheet" href="app/assets/styles/style.css">
 
     <!-- 2. Configure SystemJS -->
     <script>
-      System.config({
-        packages: {        
-          app: {
-            format: 'register',
-            defaultExtension: 'js'
-          }
-        }
+        System.config({
+            packages: {        
+                app: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            },
+            map: {
+                moment: 'node_modules/moment/moment.js'
+            }
       });
       System.import('app/src/app')
             .then(null, console.error.bind(console));
@@ -41,7 +47,11 @@
   <!-- 3. Display the application -->
   <body>
     <div id="blockDivFullScreen" class="blockingDiv" style="display:none">
-        <div>Loading</div>
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="app/assets/images/loading.gif"/>
+            </div>
+        </div>
     </div>
     <app>Loading...</app>  
   </body>

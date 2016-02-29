@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers, HTTP_PROVIDERS} from 'angular2/http';
-import 'rxjs/add/operator/map'; //CHECK IF THIS STILL BE NEEDED IN FUTURE VERSION
+import 'rxjs/Rx'; //for map function
 import {STResponseUtils} from "../utils/STResponseUtils";
 
 import {VocbenchCtx} from './VocbenchCtx';

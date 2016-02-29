@@ -62,7 +62,7 @@ export class Deserializer {
         }
 		var numInst = uriElement.getAttribute("numInst");
         if (numInst != undefined) {
-            artURIRes.setAdditionalProperty("numInst", numInst);
+            artURIRes.setAdditionalProperty("numInst", parseInt(numInst));
         }
 		var hasCustomRange = uriElement.getAttribute("hasCustomRange") == "true";//indicates if a property has a CustomRange
         if (hasCustomRange != undefined) {

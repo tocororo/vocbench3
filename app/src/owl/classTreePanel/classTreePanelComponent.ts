@@ -54,6 +54,10 @@ export class ClassTreePanelComponent {
     }
     
     private deleteClass() {
+        if (this.selectedClass.getAdditionalProperty("numInst") != 0) {
+            alert("Cannot delete " + this.selectedClass.getURI() + " since it has instance(s). Please delete the instance(s) and retry.");
+            return;
+        }
         this.owlService.removeClass(this.selectedClass).subscribe(
             stResp => {
                 this.selectedClass = null;
@@ -83,6 +87,10 @@ export class ClassTreePanelComponent {
             stResp => {
                 this.selectedInstance = null;
                 this.instanceSelected.emit(undefined);
+                //no more selected instance => select the class, so the resource view show the description of this class
+                if (this.selectedClass != null) {
+                    this.classSelected.emit(this.selectedClass);
+                }
             }
         )
     }
