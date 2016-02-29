@@ -53,7 +53,7 @@ project-component, class-component, property-component, concept-component, schem
     flex: 1;
     min-height: 0;
     display: flex;
-    padding: 15px;
+    padding: 10px;
     overflow-y: hidden;
 }
 

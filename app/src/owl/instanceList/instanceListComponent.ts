@@ -24,6 +24,8 @@ export class InstanceListComponent {
             data => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             data => this.onInstanceCreated(data.instance, data.cls)));
+        this.eventSubscriptions.push(eventHandler.typeDeletedEvent.subscribe(
+            data => this.onTypeDeleted(data.resource, data.type)));
     }
     
     ngOnChanges(changes) {
@@ -73,6 +75,17 @@ export class InstanceListComponent {
     onInstanceCreated(instance: ARTURIResource, cls: ARTURIResource) {
         if (this.cls.getURI() == cls.getURI()) {
             this.instanceList.push(instance);
+        }
+    }
+    
+    onTypeDeleted(instance: ARTURIResource, cls: ARTURIResource) {
+        if (this.cls.getURI() == cls.getURI()) {
+            for (var i=0; i < this.instanceList.length; i++) {
+                if (this.instanceList[i].getURI() == instance.getURI()) {
+                    this.instanceList.splice(i, 1);
+                    break;       
+                }
+            }
         }
     }
     

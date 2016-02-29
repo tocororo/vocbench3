@@ -31,7 +31,7 @@ export class VBEventHandler {
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted class
     public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
-    //event should contain an object with "cls" and "type"
+    //event should contain an object with "resource" and "type"
     public typeDeletedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "cls" and "subClass"
     public subClassRemovedEvent: EventEmitter<any> = new EventEmitter();

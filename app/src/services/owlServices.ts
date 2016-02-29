@@ -158,15 +158,15 @@ export class OwlServices {
     //     return this.httpMgr.doGet(this.serviceName, "addType", params, this.oldTypeService);
     // }
 
-    removeType(cls: ARTURIResource, type: ARTURIResource) {
+    removeType(resource: ARTURIResource, type: ARTURIResource) {
         console.log("[owlServices] removeType");
         var params: any = {
-            clsqname: cls.getURI(),
+            indqname: resource.getURI(),
             typeqname: type.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removeType", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("individual", "removeType", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.typeDeletedEvent.emit({cls: cls, type: type});
+                this.eventHandler.typeDeletedEvent.emit({resource: resource, type: type});
                 return stResp;      
             }
         );

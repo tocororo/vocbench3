@@ -30,7 +30,8 @@ export class ClassTreeNodeComponent {
 	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             data => this.onSubClassCreated(data.subClass, data.superClass)));
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
+            cls => this.onClassDeleted(cls)));
         this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
             data => this.onSubClassRemoved(data.cls, data.subClass)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
@@ -39,6 +40,8 @@ export class ClassTreeNodeComponent {
             data => this.onInstanceDeleted(data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             data => this.onInstanceCreated(data.instance, data.cls)));
+        this.eventSubscriptions.push(eventHandler.typeDeletedEvent.subscribe(
+            data => this.onInstanceDeleted(data.type)));
     }
     
     ngOnInit() {

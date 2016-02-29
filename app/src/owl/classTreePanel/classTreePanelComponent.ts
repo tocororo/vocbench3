@@ -130,6 +130,10 @@ export class ClassTreePanelComponent {
     //EVENT LISTENERS
     private onClassSelected(cls:ARTURIResource) {
         this.selectedClass = cls;
+        if (this.selectedInstance != null) {
+            this.selectedInstance.setAdditionalProperty("selected", false);
+            this.selectedInstance = null;    
+        }
         this.classSelected.emit(cls);
     }
     
