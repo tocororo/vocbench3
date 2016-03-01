@@ -24,7 +24,6 @@ export class ClassTreeComponent {
     private eventSubscriptions = [];
 	
 	constructor(private owlService:OwlServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.classTreeNodeSelectedEvent.subscribe(node => this.onClassSelected(node)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
@@ -69,7 +68,7 @@ export class ClassTreeComponent {
     
     //EVENT LISTENERS
     
-    private onClassSelected(node:ARTURIResource) {
+    private onNodeSelected(node:ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);    

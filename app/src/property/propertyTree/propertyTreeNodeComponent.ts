@@ -19,7 +19,8 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
     directives: [RdfResourceComponent, PropertyTreeNodeComponent],
 })
 export class PropertyTreeNodeComponent {
-	@Input() node:ARTURIResource;
+    @Input() node: ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
@@ -33,8 +34,6 @@ export class PropertyTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
-	
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
@@ -101,8 +100,6 @@ export class PropertyTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        //change the class of the subTree div from subtreeClose to subtreeOpen
-        this.subTreeStyle = "subTree subtreeOpen";
         this.node.setAdditionalProperty("open", true);
     }
     
@@ -112,17 +109,20 @@ export class PropertyTreeNodeComponent {
    	 */
     private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
-        this.subTreeStyle = "subTree subtreeClose";
     }
     
     /**
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.eventHandler.propertyTreeNodeSelectedEvent.emit(this.node);
+        this.itemSelected.emit(this.node);
     }
     
     //EVENT LISTENERS
+    
+    private onNodeSelected(node: ARTURIResource) {
+        this.itemSelected.emit(node);
+    }
     
     private onPropertyDeleted(property: ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");

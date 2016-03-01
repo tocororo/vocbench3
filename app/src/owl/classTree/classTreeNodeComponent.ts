@@ -12,6 +12,7 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 })
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
@@ -25,8 +26,6 @@ export class ClassTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (open/close) 
-	
 	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             data => this.onSubClassCreated(data.subClass, data.superClass)));
@@ -109,8 +108,6 @@ export class ClassTreeNodeComponent {
         this.owlService.getSubClasses(this.node, true, true).subscribe(
             subClasses => {
                 this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
-                //change the class of the subTree div from subtreeClose to subtreeOpen
-                this.subTreeStyle = "subTree subtreeOpen";
                 this.node.setAdditionalProperty("open", true);
             },
             err => {
@@ -124,8 +121,7 @@ export class ClassTreeNodeComponent {
    	 * Collapse the subtree div.
    	 */
     private collapseNode() {
-		this.node.setAdditionalProperty("open", false);
-        this.subTreeStyle = "subTree subtreeClose";
+        this.node.setAdditionalProperty("open", false);
         this.node.setAdditionalProperty("children", []);
     }
     
@@ -133,10 +129,14 @@ export class ClassTreeNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.eventHandler.classTreeNodeSelectedEvent.emit(this.node);
+        this.itemSelected.emit(this.node);
     }
     
     //EVENT LISTENERS
+    
+    private onNodeSelected(node: ARTURIResource) {
+        this.itemSelected.emit(node);
+    }
     
     private onClassDeleted(cls: ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");

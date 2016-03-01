@@ -24,8 +24,6 @@ export class ConceptTreeComponent {
     private eventSubscriptions = [];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.conceptTreeNodeSelectedEvent.subscribe(
-            concept => this.onConceptSelected(concept)));
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             concept => this.onTopConceptCreated(concept)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
@@ -74,7 +72,7 @@ export class ConceptTreeComponent {
     
     //EVENT LISTENERS
     
-    private onConceptSelected(node: ARTURIResource) {
+    private onNodeSelected(node: ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);

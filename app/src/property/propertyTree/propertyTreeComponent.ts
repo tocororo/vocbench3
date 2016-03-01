@@ -23,7 +23,6 @@ export class PropertyTreeComponent {
     private eventSubscriptions = [];
 	
 	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.propertyTreeNodeSelectedEvent.subscribe(node => this.onPropertySelected(node)));
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
     }
@@ -63,7 +62,7 @@ export class PropertyTreeComponent {
     
     //EVENT LISTENERS
     
-    private onPropertySelected(node:ARTURIResource) {
+    private onNodeSelected(node:ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
             this.selectedNode.setAdditionalProperty("selected", true);    

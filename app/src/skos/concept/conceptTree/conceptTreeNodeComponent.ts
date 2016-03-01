@@ -1,4 +1,4 @@
-import {Component, Input, ViewChildren, ViewChild, QueryList} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {SkosServices} from "../../../services/skosServices";
@@ -13,6 +13,7 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Input() scheme: ARTURIResource;
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
@@ -26,8 +27,6 @@ export class ConceptTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-    private subTreeStyle: string = "subTree subtreeClose"; //to change dynamically the subtree style (subtreeOpen/Close) 
-	
 	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             deletedConcept => this.onConceptDeleted(deletedConcept)));
@@ -100,8 +99,6 @@ export class ConceptTreeNodeComponent {
         this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
             narrower => {
                 this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
-                //change the class of the subTree div from subtreeClose to subtreeOpen
-                this.subTreeStyle = "subTree subtreeOpen";
                 this.node.setAdditionalProperty("open", true);
             },
             err => {
@@ -116,7 +113,6 @@ export class ConceptTreeNodeComponent {
    	 */
     private collapseNode() {
 		this.node.setAdditionalProperty("open", false);
-        this.subTreeStyle = "subTree subtreeClose";
         this.node.setAdditionalProperty("children", []);
     }
     
@@ -124,10 +120,14 @@ export class ConceptTreeNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.eventHandler.conceptTreeNodeSelectedEvent.emit(this.node);
+        this.itemSelected.emit(this.node);
     }
     
     //EVENT LISTENERS
+    
+    private onNodeSelected(node: ARTURIResource) {
+        this.itemSelected.emit(node);
+    }
     
     private onConceptDeleted(deletedConcept: ARTURIResource) {
         var children = this.node.getAdditionalProperty("children");

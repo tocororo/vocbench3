@@ -12,7 +12,6 @@ import {ARTURIResource} from './ARTResources';
 export class VBEventHandler {
     
     //CONCEPT EVENTS
-    public conceptTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     public topConceptCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contain an object with "narrower" (the narrower created) and "broader"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
@@ -26,7 +25,6 @@ export class VBEventHandler {
     public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
     
     //CLASS EVENTS
-    public classTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contain an object with "subClass" (the subClass created) and "superClass"
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted class
@@ -43,7 +41,6 @@ export class VBEventHandler {
     public instanceDeletedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
-    public propertyTreeNodeSelectedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
     //event should contain an object with "subProperty" (the subproperty created) and "superProperty"
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();

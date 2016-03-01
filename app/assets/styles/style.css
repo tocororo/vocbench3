@@ -150,6 +150,7 @@ rdf-resource > .rdfResourceIcon {
 
 rdf-resource > span {
     flex: 1;
+    white-space: nowrap;
 }
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
@@ -179,16 +180,6 @@ property-tree rdf-resource:hover, concept-scheme-panel rdf-resource:hover {
 
 .subTree {
 	padding-left:15px;
-}
-
-.subtreeOpen {
-	/*max-height: 1600px;*/
-	overflow: hidden;
-}
-
-.subtreeClose {
-	max-height: 0;
-    overflow: hidden;
 }
 
 .conceptSchemeItem {

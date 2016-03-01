@@ -11,6 +11,7 @@
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
 </div>
 
-<div [ngClass]="subTreeStyle" *ngIf="node.getAdditionalProperty('children').length > 0">
-	<property-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"></property-tree-node>
+<div class="subTree" [hidden]="!node.getAdditionalProperty('open')" *ngIf="node.getAdditionalProperty('children').length > 0">
+	<property-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" (itemSelected)="onNodeSelected($event)">
+    </property-tree-node>
 </div>

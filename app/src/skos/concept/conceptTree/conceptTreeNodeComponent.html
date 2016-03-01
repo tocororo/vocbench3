@@ -11,6 +11,8 @@
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
 </div>
 
-<div [ngClass]="subTreeStyle" *ngIf="node.getAdditionalProperty('more')==1">
-	<concept-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"></concept-tree-node>
+<div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
+	<concept-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"
+        (itemSelected)="onNodeSelected($event)">
+    </concept-tree-node>
 </div>

@@ -61,7 +61,7 @@ export class SkosServices {
         console.log("[SkosServices] createConcept");
         var params: any = {
             concept: concept,
-            scheme: scheme,
+            scheme: scheme.getURI(),
         };
         if (prefLabel != undefined && prefLabelLang != undefined) {
             params.prefLabel = prefLabel;
@@ -79,7 +79,7 @@ export class SkosServices {
     deleteConcept(concept: ARTURIResource) {
         console.log("[SkosServices] deleteConcept");
         var params: any = {
-            concept: concept,
+            concept: concept.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService).map(
             stResp => {
