@@ -68,7 +68,9 @@ export class PropertyTreeNodeComponent {
         if (path.length == 0) { //this is the last node of the path. Focus it in the tree
             this.treeNodeElement.nativeElement.scrollIntoView();
             //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
-            //this.selectNode();
+            if (!this.node.getAdditionalProperty("selected")) { //select the searched node only if is not yet selected
+                this.selectNode();    
+            }
         } else {
             if (!this.node.getAdditionalProperty("open")) { //if node is close, expand itself
                 this.expandNode();

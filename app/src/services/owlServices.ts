@@ -12,6 +12,9 @@ export class OwlServices {
 
     constructor(private httpMgr: HttpManager, private deserializer: Deserializer, private eventHandler: VBEventHandler) { }
 
+    /**
+     * @param cls root class of the tree 
+     */
     getClassesInfoAsRootsForTree(cls: ARTURIResource) {
         console.log("[owlServices] getClassesInfoAsRootsForTree");
         var params: any = {
@@ -30,8 +33,10 @@ export class OwlServices {
     }
 	
 	/**
-	 * tree: boolean that indicates if the response should contains info about tree structure
-	 * instNum: boolean that indicates if the response should contains for each classes the number of instances
+     * Returns a list of ARTURIResource subClasses of the given class
+     * @param cls class of which retrieve its subClasses
+	 * @param tree boolean that indicates if the response should contains info about tree structure
+	 * @param instNum boolean that indicates if the response should contains for each classes the number of instances
 	 */
     getSubClasses(cls: ARTURIResource, tree: boolean, instNum: boolean) {
         console.log("[owlServices] getSubClasses");
@@ -51,6 +56,10 @@ export class OwlServices {
         );
     }
     
+    /**
+     * Returns a list of ARTURIResource instances of the given class
+     * @param cls class of which retrieve its instances
+     */
     getClassAndInstancesInfo(cls: ARTURIResource) {
         console.log("[owlServices] getClassAndInstancesInfo");
         var params: any = {
@@ -64,6 +73,12 @@ export class OwlServices {
         );
     }
 
+    /**
+     * Creates a class (subClass of the given superClass) with the given name.
+     * Emits also a subClassCreatedEvent containing the newClass and the superClass, both of them are ARTURIResource
+     * @param superClass the superClass of the new created class
+     * @param newClassName local name of the new class
+     */
     createClass(superClass: ARTURIResource, newClassName: string) {
         console.log("[owlServices] createClass");
         var params: any = {
@@ -80,6 +95,10 @@ export class OwlServices {
         );
     }
 
+    /**
+     * Removes a class. Emits also a classDeletedEvent with the removed class
+     * @param cls class to remove
+     */
     removeClass(cls: ARTURIResource) {
         console.log("[owlServices] deleteClass");
         var params: any = {
@@ -94,6 +113,11 @@ export class OwlServices {
         );
     }
     
+    /**
+     * Adds a superClass to a class
+     * @param cls the class to which add the superClass
+     * @param superClass class to add as superClass
+     */
     addSuperCls(cls: ARTURIResource, superClass: ARTURIResource) {
         console.log("[owlServices] deleteClass");
         var params: any = {
@@ -103,6 +127,13 @@ export class OwlServices {
         return this.httpMgr.doGet(this.serviceName, "addSuperCls", params, this.oldTypeService);
     }
     
+    /**
+     * Removes a superClass from a class.
+     * Emits also a subClassRemovedEvent with cls (the superClass removed) and subClass
+     * (the class to which su superClass has been removed)
+     * @param cls class to which remove a superClass
+     * @param superClass superClass to be removed
+     */
     removeSuperCls(cls: ARTURIResource, superClass: ARTURIResource) {
         console.log("[owlServices] removeSuperCls");
         var params: any = {
@@ -117,6 +148,12 @@ export class OwlServices {
         );
     }
     
+    /**
+     * Creates an instance for the given class. Emits also a instanceCreatedEvent with cls (the class of the created instance)
+     * and instance (the new created instance)
+     * @param cls the class of the new instance
+     * @instanceName localName of the new instance
+     */
     createInstance(cls: ARTURIResource, instanceName: string) {
         console.log("[owlServices] createInstance");
         var params: any = {
@@ -133,9 +170,12 @@ export class OwlServices {
     }
     
     /**
-     * parameter cls is not necessary for the request, it is simply useful for the event
+     * Removes an instance. Emits also an instanceDeletedEvent with instance (the removed instance) and
+     * cls (the type of the instance)
+     * @param instance the instance to remove
+     * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
      */
-    removeInstance(instance: ARTURIResource, cls?: ARTURIResource) {
+    removeInstance(instance: ARTURIResource, cls: ARTURIResource) {
         console.log("[owlServices] removeInstance");
         var params: any = {
             name: instance.getURI(),
@@ -149,6 +189,22 @@ export class OwlServices {
         );
     }
     
+    /**
+     * Returns a collection of direct (not inferred) types for the given instance
+     * @param instance the instance whose types are requested
+     */
+    getDirectNamedTypes(instance: ARTURIResource) {
+        console.log("[owlServices] getDirectNamedTypes");
+        var params: any = {
+            indqname: instance.getURI(),
+        };
+        return this.httpMgr.doGet("individual", "getDirectNamedTypes", params, this.oldTypeService).map(
+            stResp => {
+                return this.deserializer.createURIArray(stResp.getElementsByTagName("Types")[0]);
+            }
+        );
+    }
+    
     // addType(cls: ARTURIResource, type: ARTURIResource) {
     //     console.log("[owlServices] addType");
     //     var params: any = {
@@ -158,6 +214,12 @@ export class OwlServices {
     //     return this.httpMgr.doGet(this.serviceName, "addType", params, this.oldTypeService);
     // }
 
+    /**
+     * Removes the type of a resource. Emits also a typeDeletedEvent with resource (the resource to which the type is removed)
+     * and type (the removed type)
+     * @resource the resource whose the type need to be removed
+     * @type type to remove 
+     */
     removeType(resource: ARTURIResource, type: ARTURIResource) {
         console.log("[owlServices] removeType");
         var params: any = {
@@ -181,6 +243,11 @@ export class OwlServices {
     //     return this.httpMgr.doGet(this.serviceName, "addIntersectionOf", params, this.oldTypeService);
     // }
     
+    /**
+     * ?????
+     * @param cls
+     * @param collectionNode
+     */
     removeIntersectionOf(cls: ARTURIResource, collectionNode: ARTNode) {
         console.log("[owlServices] removeIntersectionOf");
         var params: any = {
@@ -199,6 +266,11 @@ export class OwlServices {
     //     return this.httpMgr.doGet(this.serviceName, "addOneOf", params, this.oldTypeService);
     // }
 
+    /**
+     * ???
+     * @param cls
+     * @param collectionNode
+     */
     removeOneOf(cls: ARTURIResource, collectionNode: ARTNode) {
         console.log("[owlServices] removeOneOf");
         var params: any = {
@@ -217,6 +289,11 @@ export class OwlServices {
     //     return this.httpMgr.doGet(this.serviceName, "addUnionOf", params, this.oldTypeService);
     // }
 
+    /**
+     * ???
+     * @param cls
+     * @param collectionNode
+     */
     removeUnionOf(cls: ARTURIResource, collectionNode: ARTNode) {
         console.log("[owlServices] removeUnionOf");
         var params: any = {

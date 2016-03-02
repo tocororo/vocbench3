@@ -12,6 +12,11 @@ export class RefactorServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private deserializer: Deserializer) { }
 
+    /**
+     * Changes the URI of a resource. Emits also a resourceRenamedEvent with the oldResource and the newResource
+     * @param oldResource the resource to rename
+     * @param newResource the new URI
+     */
     changeResourceURI(oldResource: ARTURIResource, newResource: string) {
         console.log("[RefactorServices] changeResourceURI");
         var params: any = {

@@ -9,6 +9,13 @@ export class SparqlServices {
 
     constructor(private httpMgr: HttpManager) { }
 
+    /**
+     * Executes a query
+     * @param query 
+     * @param lang query language (e.g. SPARQL)
+     * @param infer tells if the query should be evaluated with the inferrence
+     * @param mode query or update
+     */
     resolveQuery(query: string, lang: string, infer: boolean, mode: string) {
         console.log("[SparqlServices] resolveQuery");
         var data = {
@@ -17,7 +24,6 @@ export class SparqlServices {
             infer: infer,
             mode: mode
         }
-
         return this.httpMgr.doPost(this.serviceName, "resolveQuery", data, this.oldTypeService, true);
     }
 

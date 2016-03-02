@@ -53,7 +53,7 @@ export class ConceptTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node.getURI(), "concept", this.scheme.getURI()).subscribe(
+        this.searchService.getPathFromRoot(node, "concept", this.scheme).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

@@ -49,7 +49,7 @@ export class ClassTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node.getURI(), "class").subscribe(
+        this.searchService.getPathFromRoot(node, "cls").subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

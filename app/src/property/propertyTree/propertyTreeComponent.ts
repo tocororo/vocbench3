@@ -44,7 +44,7 @@ export class PropertyTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node.getURI(), "property").subscribe(
+        this.searchService.getPathFromRoot(node, "property").subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

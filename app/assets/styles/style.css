@@ -325,4 +325,5 @@ label { margin-bottom: 0px; }
     flex: 1;
     display: flex;
     flex-flow: column;
+    min-height: 0px;
 }

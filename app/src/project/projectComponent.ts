@@ -17,31 +17,8 @@ export class ProjectComponent implements OnInit {
 
     ngOnInit() {
         this.projectService.listProjects().subscribe(
-            stResp => {
-                var projColl = stResp.getElementsByTagName("project");
-                this.projectList = [];
-                for (var i = 0; i < projColl.length; i++) {
-                    var proj = new Project();
-                    proj.setAccessible(projColl[i].getAttribute("accessible") == "true");
-                    proj.setModelConfigType(projColl[i].getAttribute("modelConfigType"));
-                    proj.setOntoMgr(projColl[i].getAttribute("ontmgr"));
-                    proj.setOntoType(projColl[i].getAttribute("ontoType"));
-                    proj.setOpen(projColl[i].getAttribute("open") == "true");
-                    var status: any = new Object();
-                    var hasIssues = projColl[i].getAttribute("status") != "ok";
-                    if (hasIssues) {
-                        status.class = "glyphicon glyphicon-exclamation-sign";
-                        status.message = projColl[i].getAttribute("stMsg");
-                    } else {
-                        status.class = "glyphicon glyphicon-ok-circle";
-                        status.message = projColl[i].getAttribute("status");
-                    }
-                    proj.setStatus(status);
-                    proj.setType(projColl[i].getAttribute("type"));
-                    proj.setName(projColl[i].textContent);
-                    this.projectList.push(proj);
-                }
-                    
+            projectList => {
+                this.projectList = projectList;
                 //Init closing potential multiple open projects. If just one, connect to it.
                 var ctxProject = this.vbCtx.getProject();
                 var openProjectList: Project[] = [];
@@ -62,7 +39,7 @@ export class ProjectComponent implements OnInit {
             },
             err => {
                 alert("Error: " + err);
-                console.error(err.stack);
+                console.error(err['stack']);
             });
     }
 
@@ -84,7 +61,7 @@ export class ProjectComponent implements OnInit {
             alert(this.selectedProject.getName() + " is currently open. Please, close the project and then retry.");
             return;
         } else {
-            this.projectService.deleteProject(this.selectedProject.getName()).subscribe(
+            this.projectService.deleteProject(this.selectedProject).subscribe(
                 stResp => {
                     for (var i = 0; i < this.projectList.length; i++) { //remove project from list
                         if (this.projectList[i].getName() == this.selectedProject.getName()) {
@@ -111,7 +88,7 @@ export class ProjectComponent implements OnInit {
             //first disconnect from old project
             //(don't call this.closeProject cause I need to execute connectToProject in syncronous way)
             document.getElementById("blockDivFullScreen").style.display = "block";
-            this.projectService.disconnectFromProject(ctxProject.getName()).subscribe(
+            this.projectService.disconnectFromProject(ctxProject).subscribe(
                 stResp => {
                     document.getElementById("blockDivFullScreen").style.display = "none";
                     this.getProjectFromList(ctxProject.getName()).setOpen(false); //set as close the previous open project
@@ -136,7 +113,7 @@ export class ProjectComponent implements OnInit {
     
     private connectToProject(project: Project) {
         document.getElementById("blockDivFullScreen").style.display = "block";
-        this.projectService.accessProject(project.getName()).subscribe(
+        this.projectService.accessProject(project).subscribe(
             stResp => {
                 this.vbCtx.setProject(project);
                 project.setOpen(true);
@@ -150,7 +127,7 @@ export class ProjectComponent implements OnInit {
 
     private disconnectFromProject(project: Project) {
         document.getElementById("blockDivFullScreen").style.display = "block";
-        this.projectService.disconnectFromProject(project.getName()).subscribe(
+        this.projectService.disconnectFromProject(project).subscribe(
             stResp => {
                 this.vbCtx.setProject(undefined);
                 this.vbCtx.removeScheme();

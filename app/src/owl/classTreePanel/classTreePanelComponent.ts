@@ -17,6 +17,7 @@ export class ClassTreePanelComponent {
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
     
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
+    @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
     
     private selectedClass:ARTURIResource;
     private selectedInstance:ARTURIResource;
@@ -96,17 +97,27 @@ export class ClassTreePanelComponent {
     }
     
     private doSearch(searchedText: string) {
-        this.searchService.searchResource(searchedText, ["cls"], true, "contain").subscribe(
+        this.searchService.searchResource(searchedText, ["cls", "individual"], true, "contain").subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
                     alert("No results found for '" + searchedText + "'");
                 } else if (searchResult.length == 1) {
-                    this.viewChildTree.openTreeAt(searchResult[0]);
+                    if (searchResult[0].getRole() == "cls") {
+                        this.viewChildTree.openTreeAt(searchResult[0]);    
+                    } else { // role "individual"
+                        //get type of individual, then open the tree to that class
+                        this.owlService.getDirectNamedTypes(searchResult[0]).subscribe(
+                            types => {
+                                this.viewChildTree.openTreeAt(types[0]);
+                                //center instanceList to the individual
+                                this.viewChildInstanceList.selectSearchedInstance(types[0], searchResult[0]);
+                            }
+                        )
+                    }
                 } else {
                     //modal dialog still not available, so it's not possible to let the user choose which result prefer
                     alert(searchResult.length + " results found. This function is currently not available for multiple results");
                 }
-                
             },
             err => {
                 alert("Error: " + err);

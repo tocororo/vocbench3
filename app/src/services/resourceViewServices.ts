@@ -1,5 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
+import {ARTURIResource} from "../utils/ARTResources";
+
 
 @Injectable()
 export class ResourceViewServices {
@@ -9,10 +11,14 @@ export class ResourceViewServices {
 
     constructor(private httpMgr: HttpManager) { }
 
-    getResourceView(resource: string) {
+    /**
+     * Returns the resource view of the given resource
+     * @param resource
+     */
+    getResourceView(resource: ARTURIResource) {
         console.log("[resourceViewServices] getResourceView");
         var params: any = {
-            resource: resource,
+            resource: resource.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "getResourceView", params, this.oldTypeService);
     }

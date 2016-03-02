@@ -12,8 +12,12 @@ export class SearchServices {
     constructor(private httpMgr: HttpManager, private deserializer: Deserializer) { }
 
     /**
-     * @param {string[]} rolesArray: available roles: "concept", "cls", "property", "individual"
-     * @param {string} searchMode: available searchMode values: "contain", "start", "end", "exact"
+     * Searches a resource in the model
+     * @param searchString the string to search
+     * @param rolesArray available roles: "concept", "cls", "property", "individual"
+     * @param useLocalName tells if the searched string should be searched in the local name (as well as in labels)
+     * @param searchMode available searchMode values: "contain", "start", "end", "exact"
+     * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string, scheme?: string) {
         console.log("[SearchServices] searchResource");
@@ -35,15 +39,18 @@ export class SearchServices {
     
     /**
      * Returns the shortest path from a root to the given resource
+     * @param resource
+     * @string role role of the given resource, available roles: "concept", "cls", "property"
+     * @scheme scheme where all the resource of the path should belong (optional and used only for concept)
      */
-    getPathFromRoot(resourceURI: string, role: string, schemeURI?: string) {
+    getPathFromRoot(resource: ARTURIResource, role: string, scheme?: ARTURIResource) {
         console.log("[SearchServices] getPathFromRoot");
         var params: any = {
             role: role,
-            resourceURI: resourceURI
+            resourceURI: resource.getURI()
         };
-        if (schemeURI != undefined) {
-            params.scheme = schemeURI;
+        if (scheme != undefined) {
+            params.scheme = scheme.getURI();
         }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService).map(
             stResp => {

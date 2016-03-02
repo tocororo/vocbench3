@@ -73,7 +73,7 @@ export class ResourceViewComponent {
         this.propertyFacets = null;
         this.inverseofColl = null;
         
-        this.resViewService.getResourceView(res.getURI()).subscribe(
+        this.resViewService.getResourceView(res).subscribe(
             stResp => {
                 var respResourceElement = stResp.getElementsByTagName("resource")[0];
                 var respPartitions = stResp.children;

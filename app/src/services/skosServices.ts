@@ -14,6 +14,11 @@ export class SkosServices {
     
     //Concept services 
     
+    /**
+     * Returns the topConcepts of the given scheme
+     * @param scheme
+     * @param lang
+     */
     getTopConcepts(scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] getTopConcepts");
         var params: any = {};
@@ -34,6 +39,12 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Returns the narrowers of the given concept
+     * @param concept
+     * @param scheme scheme where the narrower should belong
+     * @param lang
+     */
     getNarrowerConcepts(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params: any = {
@@ -57,6 +68,13 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Creates a top concept in the given scheme
+     * @param concept local name of the new top concept
+     * @param scheme scheme where new concept should belong
+     * @param prefLabel preferred label of the concept
+     * @param prefLabelLang language of the preferred label
+     */
     createTopConcept(concept: string, scheme: ARTURIResource, prefLabel: string, prefLabelLang: string) {
         console.log("[SkosServices] createConcept");
         var params: any = {
@@ -76,6 +94,10 @@ export class SkosServices {
             });
     }
 
+    /**
+     * Deletes the given concept
+     * @param concept the concept to delete
+     */
     deleteConcept(concept: ARTURIResource) {
         console.log("[SkosServices] deleteConcept");
         var params: any = {
@@ -89,6 +111,10 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
+     * @param concept local name of the narrower
+     */
     createNarrower(concept: string, broader: ARTURIResource, scheme: ARTURIResource, prefLabel: string, prefLabelLang: string) {
         console.log("[SkosServices] createNarrower");
         var params: any = {
@@ -109,6 +135,11 @@ export class SkosServices {
             });
     }
 
+    /**
+     * Removes a broader from the given concept. Emits a broaderRemovedEvent with concept and broader (the removed broader)
+     * @param concept 
+     * @param broaderConcept broader to remove
+     */
     removeBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
         console.log("[SkosServices] removeBroaderConcept");
         var params: any = {
@@ -123,6 +154,11 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Removes the given concept as top concept of a scheme. Emit a conceptRemovedAsTopConceptEvent with concept and scheme.
+     * @param concept the top concept
+     * @param scheme
+     */
     removeTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] removeTopConcept");
         var params: any = {
@@ -137,6 +173,11 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Adds a concept to a scheme.
+     * @param concept 
+     * @param scheme
+     */
     addConceptToScheme(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] addConceptToScheme");
         var params: any = {
@@ -149,6 +190,11 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "addConceptToScheme", params, this.oldTypeService);
     }
 
+    /**
+     * Removes a concept from the given scheme. Emits a conceptRemovedFromSchemeEvent with concept and scheme
+     * @param concept
+     * @param scheme
+     */
     removeConceptFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] removeConceptFromScheme");
         var params: any = {
@@ -165,6 +211,10 @@ export class SkosServices {
     
     //Scheme services
     
+    /**
+     * Returns the list of available skos:ConceptScheme
+     * @param lang
+     */
     getAllSchemesList(lang?: string) {
         console.log("[SkosServices] getAllSchemesList");
         var params: any = {};
@@ -178,6 +228,12 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Creates a new scheme
+     * @param local name of the scheme
+     * @prefLabel
+     * @prefLabelLang
+     */
     createScheme(scheme: string, prefLabel?: string, prefLabelLang?: string) {
         console.log("[SkosServices] createScheme");
         var params: any = {
@@ -194,6 +250,11 @@ export class SkosServices {
             });
     }
 
+    /**
+     * Deletes a scheme
+     * @param scheme the scheme to delete
+     * @param forceDeleteDanglingConcepts tells whether the dangling concept should be deleted
+     */
     deleteScheme(scheme: ARTURIResource, forceDeleteDanglingConcepts?: boolean) {
         console.log("[SkosServices] deleteScheme");
         var params: any = {
@@ -208,6 +269,12 @@ export class SkosServices {
     
     //Label services
     
+    /**
+     * Sets a preferred label to the given concept
+     * @param concept
+     * @param label lexical value of the label
+     * @param lang
+     */
     setPrefLabel(concept: ARTURIResource, label: string, lang: string) {
         console.log("[SkosServices] setPrefLabel");
         var params: any = {
@@ -217,7 +284,13 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService);
     }
-    
+
+    /**
+     * Removes a preferred label from the given concept
+     * @param concept 
+     * @param label label to remove
+     * @param lang
+     */
     removePrefLabel(concept: ARTURIResource, label: string, lang?: string) {
         console.log("[SkosServices] removePrefLabel");
         var params: any = {
@@ -229,7 +302,13 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService);
 	}
-    
+
+    /**
+     * Adds an alternative label to the given concept
+     * @param concept
+     * @param label lexical value of the label
+     * @param lang
+     */
     addAltLabel(concept: ARTURIResource, label: string, lang: string) {
         console.log("[SkosServices] addAltLabel");
         var params: any = {
@@ -239,7 +318,13 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addAltLabel", params, this.oldTypeService);
     }
-    
+
+    /**
+     * Removes an alternative label from the given concept
+     * @param concept 
+     * @param label label to remove
+     * @param lang
+     */
     removeAltLabel(concept: ARTURIResource, label: string, lang?: string) {
         console.log("[SkosServices] removeAltLabel");
         var params: any = {
@@ -251,7 +336,13 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "removeAltLabel", params, this.oldTypeService);
 	}
-    
+
+    /**
+     * Adds an hidden label to the given concept
+     * @param concept
+     * @param label lexical value of the label
+     * @param lang
+     */
     addHiddenLabel(concept: ARTURIResource, label: string, lang: string) {
         console.log("[SkosServices] addHiddenLabel");
         var params: any = {
@@ -261,7 +352,13 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addHiddenLabel", params, this.oldTypeService);
     }
-    
+
+    /**
+     * Removes an hidden label from the given concept
+     * @param concept 
+     * @param label label to remove
+     * @param lang
+     */
     removeHiddenLabel(concept: ARTURIResource, label: string, lang?: string) {
         console.log("[SkosServices] removeHiddenLabel");
         var params: any = {
