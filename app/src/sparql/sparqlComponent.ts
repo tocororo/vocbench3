@@ -1,7 +1,5 @@
-import {Component, ChangeDetectionStrategy} from "angular2/core";
+import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
-import {TAB_DIRECTIVES, Alert} from 'ng2-bootstrap/ng2-bootstrap';
-import {CORE_DIRECTIVES} from 'angular2/common';
 import {SparqlServices} from "../services/sparqlServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 
@@ -9,12 +7,22 @@ import {VocbenchCtx} from '../utils/VocbenchCtx';
 	selector: "sparql-component",
 	templateUrl: "app/src/sparql/sparqlComponent.html",
     providers: [SparqlServices],
-    directives: [TAB_DIRECTIVES, CORE_DIRECTIVES, Alert],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    directives: [],
 })
 export class SparqlComponent {
     
-    private tabs: Array<any> = [];
+    private tabs: Array<any> = [{
+        query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
+        queryMode: "query",
+        headers: null,
+        queryResult: null,
+        queryInProgress: false,
+        queryTime: null,
+        inferred: false,
+        removable: false,
+        active: true
+    }];
+    private activeTab = this.tabs[0];
     
     constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices) {
         //navigate to Projects view if a project is not selected
@@ -23,21 +31,7 @@ export class SparqlComponent {
         }
     }
     
-    private addTab() {
-        this.tabs.push({ 
-            query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
-            queryMode: "query", 
-            headers: null,
-            queryResult: null,
-            queryInProgress: false,
-            queryTime: null,
-            inferred: false,
-            removable: true,
-            active: true
-        });
-    }
-    
-    private doQuery(tab, queryTextArea: HTMLInputElement) {
+    private doQuery(tab) {
         var initTime = new Date().getTime();
         this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
             data => {
@@ -77,4 +71,42 @@ export class SparqlComponent {
         }
     }
     
+    //TAB HANDLER
+    
+    addTab() {
+        this.activeTab.active = false;
+        this.tabs.push({
+            query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
+            queryMode: "query",
+            headers: null,
+            queryResult: null,
+            queryInProgress: false,
+            queryTime: null,
+            inferred: false,
+            removable: true,
+            active: true
+        });
+        this.activeTab = this.tabs[this.tabs.length-1];
+    }
+    
+    selectTab(t) {
+        this.activeTab.active = false;
+        t.active = true;
+        this.activeTab = t;
+    }
+    
+    closeTab(t) {
+        var tabIdx = this.tabs.indexOf(t);
+        //if the closed tab is active, change the active tab
+        if (t.active) {
+            if (tabIdx == this.tabs.length-1) { //if the closed tab was the last one, active the previous
+                this.tabs[tabIdx-1].active = true;
+                this.activeTab = this.tabs[tabIdx-1];
+            } else { //otherwise active the next
+                this.tabs[tabIdx+1].active = true;
+                this.activeTab = this.tabs[tabIdx+1];
+            }
+        }
+        this.tabs.splice(tabIdx, 1);
+    }
 }

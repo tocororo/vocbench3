@@ -320,10 +320,12 @@ label { margin-bottom: 0px; }
     font-size: 11px;
 }
 
-/*NG2-BOOTSTRAP OVERRIDE*/
 .tab-content, .tab-content > tab.active {
     flex: 1;
     display: flex;
     flex-flow: column;
     min-height: 0px;
+    border: 1px solid #ddd;
+    border-top-color: transparent;
+    padding: 8px;
 }
