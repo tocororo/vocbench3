@@ -1,0 +1,14 @@
+<div class="container-fluid">
+    <!--Configuration of project data, not available when no project is open-->
+    <div *ngIf="isProjectOpen()" class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+            Global Data Management
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a [routerLink]="['/LoadData']"><span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load data</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data</a></li>
+        </ul>
+    </div>
+</div>

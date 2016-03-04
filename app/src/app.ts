@@ -1,13 +1,15 @@
 import { Component } from "angular2/core";
 import { bootstrap } from "angular2/platform/browser";
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Location } from "angular2/router";
-import { HTTP_PROVIDERS } from 'angular2/http';
+import { HTTP_PROVIDERS } from "angular2/http";
 import { ProjectComponent } from "./project/projectComponent";
 import { ConceptsComponent } from "./skos/concept/conceptsComponent";
 import { ClassComponent } from "./owl/classComponent";
 import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
+import { ConfigBarComponent } from "./config/configBar/configBarComponent";
+import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComponent";
 import { TestComponent } from "./test/testComponent";
 import { HttpManager } from "./utils/HttpManager";
 import { Deserializer } from "./utils/Deserializer";
@@ -18,17 +20,20 @@ import { VBEventHandler } from "./utils/VBEventHandler";
 @Component({
 	selector: "app",
     templateUrl: "app/src/app.html",
-	directives: [ROUTER_DIRECTIVES], //tells which directives are used in the template
+	directives: [ROUTER_DIRECTIVES, ConfigBarComponent], //tells which directives are used in the template
 })
 
 @RouteConfig([
-	{path: "/Projects", name: "Projects", component: ProjectComponent, useAsDefault: true},
-    {path: "/Class",    name: "Class",    component: ClassComponent},
+    // route config of navigation bar
+    {path: "/Projects", name: "Projects", component: ProjectComponent, useAsDefault: true},
+    {path: "/Class", name: "Class", component: ClassComponent},
     {path: "/Property", name: "Property", component: PropertyComponent},
     {path: "/Concepts", name: "Concepts", component: ConceptsComponent},
-    {path: "/Schemes",  name: "Schemes",  component: SchemesComponent},
-    {path: "/Sparql",   name: "Sparql",   component: SparqlComponent},
-    {path: "/Test",     name: "Test",     component: TestComponent},
+    {path: "/Schemes", name: "Schemes", component: SchemesComponent},
+    {path: "/Sparql", name: "Sparql", component: SparqlComponent},
+    {path: "/Test", name: "Test", component: TestComponent},
+    // route config of config bar
+    {path: "/LoadData", name: "LoadData", component: LoadDataComponent},
 ])
 
 export class App {

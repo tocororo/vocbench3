@@ -1,6 +1,7 @@
 import {Injectable} from 'angular2/core';
-import {Http, Headers, HTTP_PROVIDERS} from 'angular2/http';
+import {Http, Response, Headers, HTTP_PROVIDERS} from 'angular2/http';
 import 'rxjs/Rx'; //for map function
+import {Observable} from 'rxjs/Observable'; //for map function
 import {STResponseUtils} from "../utils/STResponseUtils";
 
 import {VocbenchCtx} from './VocbenchCtx';
@@ -22,15 +23,19 @@ export class HttpManager {
 
     constructor(private http: Http, private vbCtx: VocbenchCtx, private stRespUtils: STResponseUtils) { }
     
-    /*
-	 * params must be an object list like: 
-	 * { 
-	 * 	"urlParName1" : "urlParValue1",
-	 * 	"urlParName2" : "urlParValue2",
-	 * 	"urlParName3" : "urlParValue3",
-	 * }
-	 * oldType tells if the request is for the old services or new ones
-	 */
+    /**
+     * Performs an HTTP GET request.
+     * @param service the service name
+     * @param request the request name
+     * @param params the parameters to send in the GET request (as url parameter). This parameter must be an object like:
+     *  { 
+	 * 	   "urlParName1" : "urlParValue1",
+	 * 	   "urlParName2" : "urlParValue2",
+	 * 	   "urlParName3" : "urlParValue3",
+	 *  }
+     * @param oldType tells if the request is for the old services or new ones
+     * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
+     */
     doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean) {
         var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
         if (oldType) {
@@ -43,11 +48,11 @@ export class HttpManager {
         if (this.vbCtx.getProject() != undefined) {
             url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
         }
-        for (var key in params) {
-            url += key + "=" + encodeURIComponent(params[key]) + "&";
+        for (var paramName in params) {
+            url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
         }
 
-        console.log("[GET]: " + url); //CHECK FOR LOGGER MODULE IN ANGULAR 2
+        console.log("[GET]: " + url);
         
         var headers = new Headers();
         var acceptRespType = respJson ? "application/json" : "application/xml";
@@ -73,15 +78,19 @@ export class HttpManager {
             });
     }
     
-    /*
-	 * params must be an object list like: 
-	 * { 
-	 * 	"urlParName1" : "urlParValue1",
-	 * 	"urlParName2" : "urlParValue2",
-	 * 	"urlParName3" : "urlParValue3",
-	 * }
-	 * oldType tells if the request is for the old services or new ones
-	 */
+    /**
+     * Performs an HTTP POST request.
+     * @param service the service name
+     * @param request the request name
+     * @param params the parameters to send in the POST request. This parameter must be an object like:
+     *  { 
+	 * 	   "urlParName1" : "urlParValue1",
+	 * 	   "urlParName2" : "urlParValue2",
+	 * 	   "urlParName3" : "urlParValue3",
+	 *  }
+     * @param oldType tells if the request is for the old services or new ones
+     * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
+     */
     doPost(service: string, request: string, params, oldType: boolean, respJson?: boolean) {
         var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
         if (oldType) {
@@ -95,7 +104,7 @@ export class HttpManager {
             url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
         }
 
-        console.log("[POST]: " + url); //CHECK FOR LOGGER MODULE IN ANGULAR 2
+        console.log("[POST]: " + url);
         
         //prepare form data
         var headers = new Headers();
@@ -104,8 +113,8 @@ export class HttpManager {
         headers.append('Accept', acceptRespType);
         var postData;
         var strBuilder = [];
-        for (var i in params) {
-            strBuilder.push(encodeURIComponent(i) + "=" + encodeURIComponent(params[i]));
+        for (var paramName in params) {
+            strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(params[paramName]));
         }
         postData = strBuilder.join("&"); 
         
@@ -128,12 +137,77 @@ export class HttpManager {
                 }
             });
     }
+    
+    /**
+     * Upload a file through an HTTP POST request. 
+     * Note, this method doesn't use the Http module of Angular2 (since in Angular2 the FormData in the POST is non yet supported),
+     * but it uses a classic XMLHttpRequest and return an Observable to aligne this method response with the others.
+     * In the params object at least one parameter should be a File, otherwise there's no difference between this method and doPost.
+     * @param service the service name
+     * @param request the request name
+     * @param params the parameters to send in the POST request. This parameter must be an object like:
+     *  { 
+	 * 	   "urlParName1" : "urlParValue1",
+	 * 	   "urlParName2" : "urlParValue2",
+	 * 	   "urlParName3" : "urlParValue3",
+	 *  }
+     * @param oldType tells if the request is for the old services or new ones
+     * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
+     */
+    uploadFile(service: string, request: string, params, oldType: boolean) {
+        var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
+        if (oldType) {
+            url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
+        } else {
+            url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
+        }
+        
+        //add ctx parameters
+        if (this.vbCtx.getProject() != undefined) {
+            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
+        }
+        console.log("[POST]: " + url);
+        
+        var formData = new FormData();
+        for (var paramName in params) {
+            formData.append(paramName, params[paramName]);
+        }
+        
+        var httpReq = new XMLHttpRequest();
+        httpReq.open("POST", url, true);
+        //headers
+        httpReq.setRequestHeader("Accept", "application/xml");
+        
+        return new Observable(o => {
+            //handle the request completed
+            httpReq.onreadystatechange = function(event) {
+                if (httpReq.readyState === 4) { //request finished and response is ready
+                    if (httpReq.status === 200) {
+                        var parser = new DOMParser();
+                        var stResp = parser.parseFromString(httpReq.responseText, "application/xml");
+                        o.next(stResp);
+                    } else {
+                        throw new Error(httpReq.statusText);
+                    }
+                }
+            };
+            //execute the post
+            httpReq.send(formData);
+        }).map(stResp => {
+            if (this.stRespUtils.isErrorResponse(stResp)) {
+                throw new Error(this.stRespUtils.getErrorResponseMessage(stResp));
+            } else {
+                return this.stRespUtils.getResponseData(stResp);
+            }
+        });
+        
+    }
 
-    private isResponseXml(response): boolean {
+    private isResponseXml(response: Response): boolean {
         return response.headers.get("Content-Type").indexOf(this.contentTypeXml) != -1;
     }
 
-    private isResponseJson(response): boolean {
+    private isResponseJson(response: Response): boolean {
         return response.headers.get("Content-Type").indexOf(this.contentTypeJson) != -1;
     }
 

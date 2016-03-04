@@ -40,16 +40,24 @@ app {
     flex-flow: column;
 }
 
-.navbar li.disabled {
+li.disabled {
     cursor: not-allowed;    
 }
 
-.navbar li.disabled > a {
+li.disabled > a {
     pointer-events: none;
 }
 
+config-bar {
+    background: linear-gradient(#FFFFFF, #CACACA);
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
 /* Remove test-component when release */
-project-component, class-component, property-component, concept-component, scheme-component, sparql-component, test-component {
+project-component, class-component, property-component, concept-component,
+scheme-component, sparql-component, load-data-component,
+test-component {
     flex: 1;
     min-height: 0;
     display: flex;
@@ -150,7 +158,6 @@ rdf-resource > .rdfResourceIcon {
 
 rdf-resource > span {
     flex: 1;
-    white-space: nowrap;
 }
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
@@ -252,49 +259,21 @@ input[type="image"]:disabled  {
 
 /* BOOTSTRAP OVERRIDE */
 
-body {
-    font-size: 11px;
-}
-
 nav {
     font-size: 13px;
 }
 
-.navbar {
-    margin-bottom: 0px;
+.navbar-static-top {
+    z-index: 999;
+    border: 0;
 }
 
 .navbar-default {
 	background: linear-gradient(to right, #1B3671, #7486AB);
 }
 
-.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {
-	color: #fff;
-}
-
-.navbar-default .navbar-nav > li > a {
-	color: #fff;
-}
-
-.navbar-default .navbar-nav > li > a:hover {
-	color: #000;
-    background-color: #7486AB;
-}
-
-.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
-    background-color: #7486AB;
-}
-
-.navbar-default .navbar-nav>.disabled>a, .navbar-default .navbar-nav>.disabled>a:focus, .navbar-default .navbar-nav>.disabled>a:hover {
-    color: #777;
-}
-
-.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
-    color: #000;
-}
-
 .table {
-    font-size: 11px;
+    font-size: inherit;
     margin-bottom: 0px;
 }
 
@@ -303,22 +282,13 @@ nav {
 }
 
 .panel { margin-bottom: 0px; }
-.panel .panel { margin-bottom: 5px; } /*panel inside panel (resource view)*/
-.panel-heading { margin-bottom: 0px; padding: 5px 10px; }
+.panel .panel { margin-bottom: 5px; }/*panel inside panel (resource view)*/ 
 .panel-default > .panel-heading {
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }
-.panel-body { padding: 6px; }
-.panel-footer { padding: 5px; }
 
 label { margin-bottom: 0px; }
-
-.input-group-sm>.form-control, .input-group-sm>.input-group-addon, .input-group-sm>.input-group-btn>.btn {
-    height: 26px;
-    padding: 0px 6px;
-    font-size: 11px;
-}
 
 .tab-content, .tab-content > tab.active {
     flex: 1;
@@ -328,4 +298,12 @@ label { margin-bottom: 0px; }
     border: 1px solid #ddd;
     border-top-color: transparent;
     padding: 8px;
+}
+
+.dropdown-menu>li>a {
+    padding: 3px 10px;
+}
+
+.alert {
+    margin-bottom: 8px;
 }

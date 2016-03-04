@@ -1,0 +1,52 @@
+<div class="vbox">
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <label>Import:</label>
+        </div>
+       
+        <div class="panel-body">
+            <form role="form">
+                
+                <div class="form-group">
+                    <label>Base URI:</label>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" placeholder="baseURI">
+                    <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
+                        BaseURI is required
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Format:</label>
+                    <select class="form-control input-sm" [(ngModel)]="format">
+                        <option value="N3">N3</option>
+                        <option value="NQUADS">NQUADS</option>
+                        <option value="N-TRIPLES">N-TRIPLES</option>
+                        <option value="RDF/XML">RDF/XML</option>
+                        <option value="RDF/XML-ABBREV">RDF/XML-ABBREV</option>
+                        <option value="TRIG">TRIG</option>
+                        <option value="TRIX">TRIX</option>
+                        <option value="TRIX-EXT">TRIX-EXT</option>
+                        <option value="TURTLE">TURTLE</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>RDF file:</label>
+                    <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])" accept="application/rdf+xml"
+                        style="width: 100%; border: 1px solid #ccc; padding: 4px; border-radius: 3px; color: #555;">
+                    <div *ngIf="(!inputFile.files[0]) && submitted" class="alert alert-danger" style="margin-top: 2px">
+                        A file is required
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+        
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="upload()">Submit</button>
+            <span class="clearfix"></span>
+        </div>
+    </div>
+    
+</div>
