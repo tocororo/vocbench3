@@ -9,7 +9,8 @@ import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
-import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComponent";
+import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
+import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
 import { TestComponent } from "./test/testComponent";
 import { HttpManager } from "./utils/HttpManager";
 import { Deserializer } from "./utils/Deserializer";
@@ -33,7 +34,8 @@ import { VBEventHandler } from "./utils/VBEventHandler";
     {path: "/Sparql", name: "Sparql", component: SparqlComponent},
     {path: "/Test", name: "Test", component: TestComponent},
     // route config of config bar
-    {path: "/LoadData", name: "LoadData", component: LoadDataComponent},
+    {path: "/ImportData", name: "ImportData", component: ImportDataComponent},
+    {path: "/ExportData", name: "ExportData", component: ExportDataComponent},
 ])
 
 export class App {

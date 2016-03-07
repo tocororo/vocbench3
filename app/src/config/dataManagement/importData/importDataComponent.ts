@@ -1,15 +1,14 @@
 import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
-import {NgForm} from 'angular2/common';
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 
 @Component({
-	selector: "load-data-component",
-	templateUrl: "app/src/config/dataManagement/loadData/loadDataComponent.html",
+	selector: "import-data-component",
+	templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
     providers: [InputOutputServices]
 })
-export class LoadDataComponent {
+export class ImportDataComponent {
     
     private baseURI: string;
     private format: string = "RDF/XML";
@@ -28,14 +27,14 @@ export class LoadDataComponent {
         this.fileToUpload = file;
     }
     
-    private upload() {
+    private import() {
         this.submitted = true;
         if (this.baseURI && this.baseURI.trim() != "" && this.fileToUpload) {
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.format).subscribe(
                 stResp => {
                     document.getElementById("blockDivFullScreen").style.display = "none"
-                    alert("File uploaded successfully");
+                    alert("Data imported successfully");
                 },
                 err => {
                     document.getElementById("blockDivFullScreen").style.display = "none"

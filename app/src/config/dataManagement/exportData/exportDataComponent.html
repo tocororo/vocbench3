@@ -1,0 +1,43 @@
+<div class="vbox">
+    
+    <div class="alert alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        Currently the export function allows only to export in the available formats. It doesn't provide the same
+        capabilities of the export in VB2.x.x (export only a scheme, a subtree of a concept, ...) 
+        since VB3 uses the export service of SemanticTurkey. 
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <label>Export:</label>
+        </div>
+       
+        <div class="panel-body">
+            
+            <form role="form">
+                <div class="form-group">
+                    <label>Format:</label>
+                    <select class="form-control input-sm" [(ngModel)]="format">
+                        <option value="N3">N3</option>
+                        <option value="NQUADS">NQUADS</option>
+                        <option value="N-TRIPLES">N-TRIPLES</option>
+                        <option value="RDF/XML">RDF/XML</option>
+                        <option value="RDF/XML-ABBREV">RDF/XML-ABBREV</option>
+                        <option value="TRIG">TRIG</option>
+                        <option value="TRIX">TRIX</option>
+                        <option value="TRIX-EXT">TRIX-EXT</option>
+                        <option value="TURTLE">TURTLE</option>
+                    </select>
+                </div>
+            </form>
+            
+        </div>
+        
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="export()">Submit</button>
+            <span class="clearfix"></span> <!--To fix UI bug-->
+            <a id="dlLink" download="export.rdf" [href]="downloadLink" hidden></a> <!--hidden link to allow file download-->
+        </div>
+    </div>
+    
+</div>

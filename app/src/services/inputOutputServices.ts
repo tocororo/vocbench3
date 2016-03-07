@@ -19,9 +19,10 @@ export class InputOutputServices {
 
     saveRDF(format: string) {
         console.log("[InputOutputServices] saveRDF");
-        var data = {
-        }
-        return this.httpMgr.doPost(this.serviceName, "saveRDF", data, this.oldTypeService);
+        var params: any = {
+            format: format
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "saveRDF", params, this.oldTypeService);
     }
     
     loadRDF(file: File, baseURI: string, format: string) {
@@ -36,9 +37,8 @@ export class InputOutputServices {
     
     clearData() {
         console.log("[InputOutputServices] clearData");
-        var data = {
-        }
-        return this.httpMgr.doPost(this.serviceName, "clearData", data, this.oldTypeService);
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "clearData", params, this.oldTypeService);
     }
 
 }

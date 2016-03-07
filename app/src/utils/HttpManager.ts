@@ -141,7 +141,7 @@ export class HttpManager {
     /**
      * Upload a file through an HTTP POST request. 
      * Note, this method doesn't use the Http module of Angular2 (since in Angular2 the FormData in the POST is non yet supported),
-     * but it uses a classic XMLHttpRequest and return an Observable to aligne this method response with the others.
+     * but it uses a classic XMLHttpRequest and return an Observable to align this method response with the others.
      * In the params object at least one parameter should be a File, otherwise there's no difference between this method and doPost.
      * @param service the service name
      * @param request the request name
@@ -200,6 +200,44 @@ export class HttpManager {
                 return this.stRespUtils.getResponseData(stResp);
             }
         });
+        
+    }
+    
+    downloadFile(service: string, request: string, params, oldType: boolean) {
+        var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
+        if (oldType) {
+            url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
+        } else {
+            url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
+        }
+        
+        //add parameters
+        if (this.vbCtx.getProject() != undefined) {
+            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
+        }
+        for (var paramName in params) {
+            url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
+        }
+
+        console.log("[GET]: " + url);
+        
+        var httpReq = new XMLHttpRequest();
+        httpReq.open("GET", url, true);
+        
+        return new Observable(o => {
+            //handle the request completed
+            httpReq.onreadystatechange = function(event) {
+                if (httpReq.readyState === 4) { //request finished and response is ready
+                    if (httpReq.status === 200) {
+                        o.next(httpReq.responseText);
+                    } else {
+                        throw new Error(httpReq.statusText);
+                    }
+                }
+            };
+            //execute the get
+            httpReq.send(null);
+        })
         
     }
 

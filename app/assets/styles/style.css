@@ -44,6 +44,7 @@ li.disabled {
     cursor: not-allowed;    
 }
 
+/*Disable events when user clicks on a disabled link*/
 li.disabled > a {
     pointer-events: none;
 }
@@ -56,7 +57,7 @@ config-bar {
 
 /* Remove test-component when release */
 project-component, class-component, property-component, concept-component,
-scheme-component, sparql-component, load-data-component,
+scheme-component, sparql-component, import-data-component, export-data-component,
 test-component {
     flex: 1;
     min-height: 0;

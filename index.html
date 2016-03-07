@@ -12,6 +12,7 @@
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <!--Further Angular2 modules-->
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
     
@@ -22,7 +23,7 @@
     <link rel="stylesheet" href="app/assets/styles/custom_bootstrap/css/bootstrap.min.css">
     
     <!-- ng2-bootstrap -->
-    <script src="node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
+    <!--<script src="node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>-->
 
     <link rel="stylesheet" href="app/assets/styles/style.css">
 
@@ -34,9 +35,6 @@
                     format: 'register',
                     defaultExtension: 'js'
                 }
-            },
-            map: {
-                moment: 'node_modules/moment/moment.js'
             }
       });
       System.import('app/src/app')
