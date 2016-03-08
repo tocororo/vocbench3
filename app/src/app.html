@@ -28,6 +28,9 @@
 				<li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Sparql']">SPARQL</a>
                 </li>
+                <li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Icv'), disabled: !isProjectOpen()}">
+                    <a [routerLink]="['Icv']">ICV</a>
+                </li>
 				<li [ngClass]="{active: isActive('/Test')}">
                     <a [routerLink]="['Test']">Test</a>
                 </li>

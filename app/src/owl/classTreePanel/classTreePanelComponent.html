@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default vbox">
     <!-- Commands -->
     <div class="panel-heading">
         <div class="btn-group btn-group-xs" role="group">
@@ -25,7 +25,7 @@
     </div>
     
     <!-- Tree -->
-    <div class="panel-body">
+    <div class="panel-body vbox">
         <class-tree [rootclass]="rootClass" (itemSelected)="onClassSelected($event)" style="flex: 3"></class-tree>
         <instance-list [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)" style="margin-top: 4px;"></instance-list>
     </div>

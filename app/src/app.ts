@@ -8,6 +8,7 @@ import { ClassComponent } from "./owl/classComponent";
 import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
+import { IcvComponent } from "./icv/icvComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -32,6 +33,7 @@ import { VBEventHandler } from "./utils/VBEventHandler";
     {path: "/Concepts", name: "Concepts", component: ConceptsComponent},
     {path: "/Schemes", name: "Schemes", component: SchemesComponent},
     {path: "/Sparql", name: "Sparql", component: SparqlComponent},
+    {path: "/Icv", name: "Icv", component: IcvComponent},
     {path: "/Test", name: "Test", component: TestComponent},
     // route config of config bar
     {path: "/ImportData", name: "ImportData", component: ImportDataComponent},

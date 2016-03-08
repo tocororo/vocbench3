@@ -58,6 +58,7 @@ config-bar {
 /* Remove test-component when release */
 project-component, class-component, property-component, concept-component,
 scheme-component, sparql-component, import-data-component, export-data-component,
+icv-component,
 test-component {
     flex: 1;
     min-height: 0;
@@ -81,47 +82,19 @@ test-component {
 }
 
 .sidebar {
-    display: flex;
-    flex-flow: column;
     flex: 1;
-    min-height: 0;
 }
 
 .resViewContainer {
-    display: flex;
-    flex-flow: column;
     margin-left: 10px;
     flex: 4;
-    min-height: 0;
 }
 
-resource-view {
+concept-tree-panel, concept-scheme-panel, class-tree-panel, property-tree-panel, resource-view {
     display: flex;
     flex-flow: column;
     flex: 1;
     min-height: 0;
-}
-
-concept-tree-panel, concept-scheme-panel, class-tree-panel, property-tree-panel {
-    display: flex;
-    flex-flow: column;
-    flex: 1;
-    min-height: 0;
-}
-
-concept-tree-panel>.panel, concept-scheme-panel>.panel, class-tree-panel>.panel, property-tree-panel>.panel, resource-view>.panel {
-    display: flex;
-    flex-flow: column;
-    flex: 1;
-    min-height: 0;
-}
-
-concept-tree-panel>.panel>.panel-body, concept-scheme-panel>.panel>.panel-body,
-class-tree-panel>.panel>.panel-body, property-tree-panel>.panel>.panel-body, resource-view>.panel>.panel-body {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-flow: column;
 }
 
 concept-tree, class-tree, property-tree, resource-view, instance-list {
@@ -153,7 +126,7 @@ rdf-resource {
 }
 
 rdf-resource > .rdfResourceIcon {
-    width: 16px;
+    min-width: 16px;
     margin-right: 5px;
 }
 
@@ -261,7 +234,7 @@ input[type="image"]:disabled  {
 /* BOOTSTRAP OVERRIDE */
 
 nav {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .navbar-static-top {
@@ -271,6 +244,15 @@ nav {
 
 .navbar-default {
 	background: linear-gradient(to right, #1B3671, #7486AB);
+}
+
+.navbar-brand {
+    font-size: 18px;
+}
+
+.navbar-nav>li>a {
+    padding: 14px;
+    margin: 1px;
 }
 
 .table {
