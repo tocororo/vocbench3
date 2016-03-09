@@ -1,8 +1,8 @@
-<div class="resViewPartitionRendererPanel" *ngIf="objectList">
-    <div class="resViewPartitionRendererHeading">
-        <label>{{label}}:</label>
+<div class="subPanel" *ngIf="objectList">
+    <div class="subPanel-heading">
+        <label style="flex: 1">{{label}}:</label>
     </div>
-    <div class="resViewPartitionRendererBody">
+    <div class="subPanel-body">
         <div style="display: flex; padding: 8px;">
             <span *ngFor="#f of facets" style="flex:1; display: inline-flex; align-items: center;">
                 <input #cb type="checkbox" style="margin: 0px 3px 0px 0px;" value="transitive"
@@ -10,14 +10,14 @@
             </span>
         </div>
         
-        <div class="resViewPartitionRendererPanel" *ngIf="objectList">
-            <div class="resViewPartitionRendererHeading">
-                <label>Inverse of:</label>
+        <div class="subPanel" *ngIf="objectList">
+            <div class="subPanel-heading">
+                <label style="flex: 1">Inverse of:</label>
                 <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()">
             </div>
-            <div class="resViewPartitionRendererBody">
-                <div *ngFor="#p of objectList" class="resViewObjectItem">
-                    <rdf-resource [resource]="p"></rdf-resource>
+            <div class="subPanel-body">
+                <div *ngFor="#p of objectList" class="listItem">
+                    <rdf-resource [resource]="p" style="flex:1"></rdf-resource>
                     <input type="image" [title]="removeBtnImgTitle" [src]="removeBtnImgSrc" (click)="remove(p)" [disabled]="!p.getAdditionalProperty('explicit')">
                 </div>
             </div>

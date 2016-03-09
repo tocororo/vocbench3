@@ -194,28 +194,23 @@ input[type="image"]:disabled  {
     border: none;
 }
 
-.resViewObjectItem {
+.listItem {
     display: flex;
     align-items: center;
+    padding: 3px;
 }
 
-.resViewObjectItem:hover {
+.listItem:hover {
     background-color: #e5f3ff;
 }
 
-.resViewObjectItem > rdf-resource {
-    flex: 1;
-}
-
-.resViewPartitionRendererPanel {
-	display: flex;
-	flex-flow: column;
+.subPanel {
 	border: 1px solid #ddd;
 	border-radius: 4px;
 	margin-bottom: 5px;
 }
 
-.resViewPartitionRendererHeading {
+.subPanel-heading {
     display: flex;
     align-items: center;
 	background: linear-gradient(#fff, #ddd);
@@ -223,12 +218,8 @@ input[type="image"]:disabled  {
 	border-bottom: 1px solid #ccc;
 }
 
-.resViewPartitionRendererHeading > label {
-    flex: 1;
-}
-
-.resViewPartitionRendererBody {
-	padding: 8px;
+.subPanel-body {
+	padding: 4px;
 }
 
 /* BOOTSTRAP OVERRIDE */
@@ -262,6 +253,10 @@ nav {
 
 .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
     vertical-align: middle;
+}
+
+.table > tbody > tr:first-child > td {
+    border: none;
 }
 
 .panel { margin-bottom: 0px; }

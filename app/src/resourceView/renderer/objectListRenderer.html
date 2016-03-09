@@ -1,11 +1,11 @@
-<div class="resViewPartitionRendererPanel" *ngIf="objectList">
-    <div class="resViewPartitionRendererHeading">
-        <label>{{label}}:</label>
+<div class="subPanel" *ngIf="objectList">
+    <div class="subPanel-heading">
+        <label style="flex: 1">{{label}}:</label>
         <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()">
     </div>
-    <div class="resViewPartitionRendererBody">
-        <div *ngFor="#o of objectList" class="resViewObjectItem">
-            <rdf-resource [resource]="o"></rdf-resource>
+    <div class="subPanel-body">
+        <div *ngFor="#o of objectList" class="listItem">
+            <rdf-resource [resource]="o" style="flex:1"></rdf-resource>
             <input type="image" [title]="removeBtnImgTitle" [src]="removeBtnImgSrc" 
                     (click)="remove(o)" [disabled]="!o.getAdditionalProperty('explicit')">
         </div>

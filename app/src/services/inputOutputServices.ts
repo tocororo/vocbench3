@@ -1,13 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
-
-
-
-
 import {Headers, Http} from 'angular2/http';
-
-
-
 
 @Injectable()
 export class InputOutputServices {
