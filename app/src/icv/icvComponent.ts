@@ -5,13 +5,14 @@ import {VocbenchCtx} from "../utils/VocbenchCtx";
 @Component({
     selector: "icv-component",
     templateUrl: "app/src/icv/icvComponent.html",
+    host: { class: "pageComponent" }
 })
 export class IcvComponent {
     
     private structuralIcv = {
         open: true,
         list: [
-            { name: "Dangling concepts", ontoType: ["SKOS", "SKOS-XL"],
+            { name: "Dangling concepts", ontoType: ["SKOS", "SKOS-XL"], routeLink: "DanglingConcept",
             description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong"},
             { name: "Cyclic hierarchical concepts", ontoType: ["SKOS", "SKOS-XL"],
             description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"},
@@ -79,8 +80,12 @@ export class IcvComponent {
         }
     }
     
-    runIcv(icvName: string) {
-        alert(icvName + " still not available");
+    goToIcv(icvStruct) {
+        if (icvStruct.routerLink == undefined) {
+           alert(icvStruct.name + " still not available");
+           return; 
+        }
+        this.router.navigate([icvStruct.routeLink]);
     }
     
     /**

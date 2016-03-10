@@ -10,6 +10,7 @@ import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
     templateUrl: "app/src/skos/concept/conceptTree/conceptTreeComponent.html",
     directives: [ConceptTreeNodeComponent],
     providers: [SkosServices, SearchServices],
+    host: { class: "blockingDivHost" }
 })
 export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
@@ -25,7 +26,7 @@ export class ConceptTreeComponent {
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
-            concept => this.onTopConceptCreated(concept)));
+            data => this.onTopConceptCreated(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             deletedConcept => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
@@ -84,8 +85,12 @@ export class ConceptTreeComponent {
         this.itemSelected.emit(node);
     }
 
-    private onTopConceptCreated(concept: ARTURIResource) {
-        this.roots.push(concept);
+    private onTopConceptCreated(concept: ARTURIResource, scheme: ARTURIResource) {
+        if (this.scheme == undefined) {//in no-scheme mode add always to the roots
+            this.roots.push(concept);
+        } else if (this.scheme.getURI() == scheme.getURI()) {//otherwise add it only if it's been created in the current scheme 
+            this.roots.push(concept);       
+        }
     }
 
     private onConceptDeleted(deletedConcept: ARTURIResource) {

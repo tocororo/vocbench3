@@ -7,6 +7,7 @@ import {Project} from '../utils/Project';
     selector: "project-component",
     templateUrl: "app/src/project/projectComponent.html",
     providers: [ProjectServices],
+    host: { class : "pageComponent" }
 })
 export class ProjectComponent implements OnInit {
     private projectList: Project[];

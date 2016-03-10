@@ -12,6 +12,7 @@ export class IcvServices {
     constructor(private httpMgr: HttpManager) {}
 
     /**
+     * TODO: when refactored, this method should get also the scheme as parameter
      * Returns a list of records <concept-scheme>, where concept is a dangling skos:Concept, and scheme is the
 	 * skos:ConceptScheme where concept is dangling 
      * @param limit max number of results to return

@@ -69,7 +69,7 @@ export class SkosServices {
     }
 
     /**
-     * Creates a top concept in the given scheme
+     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent
      * @param concept local name of the new top concept
      * @param scheme scheme where new concept should belong
      * @param prefLabel preferred label of the concept
@@ -89,9 +89,47 @@ export class SkosServices {
             stResp => {
                 var newConc = this.deserializer.createURI(stResp);
                 newConc.setAdditionalProperty("children", []);
-                this.eventHandler.topConceptCreatedEvent.emit(newConc);
-                return newConc;
+                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: scheme});
+                return {concept: newConc, scheme: scheme};
             });
+    }
+    
+    /**
+     * Set a concept as top concept of a scheme. Emits a topConceptAddedEvent
+     * @param concept concept to set as top concept
+     * @param scheme where to add the top concept
+     */
+    addTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
+        console.log("[SkosServices] addTopConcept");
+        var params: any = {
+            concept: concept.getURI(),
+            scheme: scheme.getURI(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "addTopConcept", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.topConceptCreatedEvent.emit({concept: concept, scheme: scheme});
+                return {concept: concept, scheme: scheme};
+            }
+        );
+    }
+    
+    /**
+     * Removes the given concept as top concept of a scheme. Emit a conceptRemovedAsTopConceptEvent with concept and scheme.
+     * @param concept the top concept
+     * @param scheme
+     */
+    removeTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
+        console.log("[SkosServices] removeTopConcept");
+        var params: any = {
+            concept: concept.getURI(),
+            scheme: scheme.getURI(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeTopConcept", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: concept, scheme: scheme});
+                return stResp;
+            }   
+        );
     }
 
     /**
@@ -155,25 +193,6 @@ export class SkosServices {
     }
 
     /**
-     * Removes the given concept as top concept of a scheme. Emit a conceptRemovedAsTopConceptEvent with concept and scheme.
-     * @param concept the top concept
-     * @param scheme
-     */
-    removeTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
-        console.log("[SkosServices] removeTopConcept");
-        var params: any = {
-            concept: concept.getURI(),
-            scheme: scheme.getURI(),
-        };
-        return this.httpMgr.doGet(this.serviceName, "removeTopConcept", params, this.oldTypeService).map(
-            stResp => {
-                this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: concept, scheme: scheme});
-                return stResp;
-            }   
-        );
-    }
-
-    /**
      * Adds a concept to a scheme.
      * @param concept 
      * @param scheme
@@ -204,7 +223,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "removeConceptFromScheme", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.conceptRemovedFromSchemeEvent.emit({concept: concept, scheme: scheme});
-                return stResp;
+                return {concept: concept, scheme: scheme};
             }
         );
     }

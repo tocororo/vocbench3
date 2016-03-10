@@ -6,7 +6,8 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 @Component({
 	selector: "import-data-component",
 	templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
-    providers: [InputOutputServices]
+    providers: [InputOutputServices],
+    host: { class : "pageComponent" }
 })
 export class ImportDataComponent {
     
@@ -33,14 +34,13 @@ export class ImportDataComponent {
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.format).subscribe(
                 stResp => {
-                    document.getElementById("blockDivFullScreen").style.display = "none"
                     alert("Data imported successfully");
                 },
                 err => {
-                    document.getElementById("blockDivFullScreen").style.display = "none"
                     alert("Error: " + err);
                     console.error(err['stack']);
-                });
+                },
+                () => document.getElementById("blockDivFullScreen").style.display = "none");
         }
     }
     

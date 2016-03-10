@@ -9,6 +9,7 @@ import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { IcvComponent } from "./icv/icvComponent";
+import { DanglingConceptComponent } from "./icv/danglingConcept/danglingConceptComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -20,9 +21,9 @@ import { VocbenchCtx } from "./utils/VocbenchCtx";
 import { VBEventHandler } from "./utils/VBEventHandler";
 
 @Component({
-	selector: "app",
+    selector: "app",
     templateUrl: "app/src/app.html",
-	directives: [ROUTER_DIRECTIVES, ConfigBarComponent], //tells which directives are used in the template
+    directives: [ROUTER_DIRECTIVES, ConfigBarComponent],
 })
 
 @RouteConfig([
@@ -36,8 +37,10 @@ import { VBEventHandler } from "./utils/VBEventHandler";
     {path: "/Icv", name: "Icv", component: IcvComponent},
     {path: "/Test", name: "Test", component: TestComponent},
     // route config of config bar
-    {path: "/ImportData", name: "ImportData", component: ImportDataComponent},
-    {path: "/ExportData", name: "ExportData", component: ExportDataComponent},
+    {path: "/Config/ImportData", name: "ImportData", component: ImportDataComponent},
+    {path: "/Config/ExportData", name: "ExportData", component: ExportDataComponent},
+    // route config of ICV
+    {path: "/Icv/DanglingConcept", name: "DanglingConcept", component: DanglingConceptComponent},
 ])
 
 export class App {

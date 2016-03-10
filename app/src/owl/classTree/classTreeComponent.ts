@@ -10,6 +10,7 @@ import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
 	templateUrl: "app/src/owl/classTree/classTreeComponent.html",
     directives: [ClassTreeNodeComponent],
     providers: [OwlServices, SearchServices],
+    host: { class: "blockingDivHost" }
 })
 export class ClassTreeComponent {
 	@Input('rootclass') rootClass:ARTURIResource;

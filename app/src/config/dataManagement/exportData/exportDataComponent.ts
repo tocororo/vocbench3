@@ -6,7 +6,8 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 @Component({
 	selector: "export-data-component",
 	templateUrl: "app/src/config/dataManagement/exportData/exportDataComponent.html",
-    providers: [InputOutputServices]
+    providers: [InputOutputServices],
+    host: { class : "pageComponent" }
 })
 export class ExportDataComponent {
     
@@ -22,20 +23,20 @@ export class ExportDataComponent {
     }
     
     private export() {
+        document.getElementById("blockDivFullScreen").style.display = "block";
+        this.downloadLink = null;
         this.inOutService.saveRDF(this.format).subscribe(
             stResp => {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 this.downloadLink = window.URL.createObjectURL(data);
-                // window.open(this.downloadLink, "pippo.rdf");
-                var link = document.getElementById("dlLink");
-                console.log("innerHTML " + link.innerHTML);
-                link.click();
+                console.log(this.downloadLink);
             },
             err => {
-                document.getElementById("blockDivFullScreen").style.display = "none"
+                console.log("error");
                 alert("Error: " + err);
                 console.error(err['stack']);
-            });
+            },
+            () => document.getElementById("blockDivFullScreen").style.display = "none");
     }
     
 }

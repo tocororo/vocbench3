@@ -4,10 +4,10 @@ import {SparqlServices} from "../services/sparqlServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Component({
-	selector: "sparql-component",
-	templateUrl: "app/src/sparql/sparqlComponent.html",
+    selector: "sparql-component",
+    templateUrl: "app/src/sparql/sparqlComponent.html",
     providers: [SparqlServices],
-    directives: [],
+    host: { class: "pageComponent" }
 })
 export class SparqlComponent {
     

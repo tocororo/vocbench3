@@ -15,13 +15,13 @@
                             <span style="font-family: Courier New">{{structuralIcv.open ? '-' : '+' }}</span>
                         </button>
                     </div>
-                    <div class="subPanel-body" [hidden]="!structuralIcv.open">
+                    <div class="subPanel-body" *ngIf="structuralIcv.open">
                         <!--why template? see https://github.com/angular/angular/issues/4792-->
                         <template ngFor #icv [ngForOf]="structuralIcv.list">
                             <div *ngIf=(isCompatibleWithProject(icv)) class="listItem">
                                 <span style="width: 200px">{{icv.name}}</span>
                                 <span style="flex: 1"><i>{{icv.description}}</i></span>
-                                <button class="btn btn-default btn-xs" (click)="runIcv(icv)">Run</button>
+                                <button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button>
                             </div>
                         </template>
                     </div>
@@ -34,13 +34,13 @@
                             <span style="font-family: Courier New">{{labelIcv.open ? '-' : '+' }}</span>
                         </button>
                     </div>
-                    <div class="subPanel-body" [hidden]="!labelIcv.open">
+                    <div class="subPanel-body" *ngIf="labelIcv.open">
                         <!--why template? see https://github.com/angular/angular/issues/4792-->
                         <template ngFor #icv [ngForOf]="labelIcv.list">
                             <div *ngIf=(isCompatibleWithProject(icv)) class="listItem">
                                 <span style="width: 200px">{{icv.name}}</span>
                                 <span style="flex: 1"><i>{{icv.description}}</i></span>
-                                <button class="btn btn-default btn-xs" (click)="runIcv(icv)">Run</button>
+                                <button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button>
                             </div>
                         </template>
                     </div>
@@ -53,13 +53,13 @@
                             <span style="font-family: Courier New">{{genericIcv.open ? '-' : '+' }}</span>
                         </button>
                     </div>
-                    <div class="subPanel-body" [hidden]="!genericIcv.open">
+                    <div class="subPanel-body" *ngIf="genericIcv.open">
                         <!--why template? see https://github.com/angular/angular/issues/4792-->
                         <template ngFor #icv [ngForOf]="genericIcv.list">
                             <div *ngIf=(isCompatibleWithProject(icv)) class="listItem">
                                 <span style="width: 200px">{{icv.name}}</span>
                                 <span style="flex: 1"><i>{{icv.description}}</i></span>
-                                <button class="btn btn-default btn-xs" (click)="runIcv(icv)">Run</button>
+                                <button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button>
                             </div>
                         </template>
                     </div>

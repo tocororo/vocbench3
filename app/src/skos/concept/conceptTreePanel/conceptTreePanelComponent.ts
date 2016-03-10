@@ -4,12 +4,12 @@ import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {ROUTER_DIRECTIVES} from "angular2/router";
+import {RouterLink} from "angular2/router";
 
 @Component({
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
-	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES], //ROUTER_DIRECTIVES for routerLink in noScheme image button
+	directives: [ConceptTreeComponent, RouterLink],
     providers: [SkosServices, SearchServices],
 })
 export class ConceptTreePanelComponent {
@@ -31,7 +31,7 @@ export class ConceptTreePanelComponent {
         var conceptName = prompt("Insert concept name");
         if (conceptName == null) return;
         this.skosService.createTopConcept(conceptName, this.vbCtx.getScheme(), null, null).subscribe(
-            newConc => { },
+            data => { },
             err => {
                 alert("Error: " + err);
                 console.error(err['stack']);

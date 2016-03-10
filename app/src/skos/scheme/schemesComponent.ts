@@ -6,9 +6,10 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
 
 @Component({
-	selector: "scheme-component",
-	templateUrl: "app/src/skos/scheme/schemesComponent.html",
-	directives: [ConceptSchemePanelComponent, ResourceViewComponent],
+    selector: "scheme-component",
+    templateUrl: "app/src/skos/scheme/schemesComponent.html",
+    directives: [ConceptSchemePanelComponent, ResourceViewComponent],
+    host: { class: "pageComponent" }
 })
 export class SchemesComponent {
     

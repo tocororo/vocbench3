@@ -12,7 +12,8 @@ import {ARTURIResource} from './ARTResources';
 export class VBEventHandler {
     
     //CONCEPT EVENTS
-    public topConceptCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    //event should contain an object with "concept" and "scheme"
+    public topConceptCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "narrower" (the narrower created) and "broader"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted concept

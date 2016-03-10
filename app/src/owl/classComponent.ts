@@ -6,9 +6,10 @@ import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Component({
-	selector: "class-component",
-	templateUrl: "app/src/owl/classComponent.html",
-	directives: [ClassTreePanelComponent, ResourceViewComponent]
+    selector: "class-component",
+    templateUrl: "app/src/owl/classComponent.html",
+    directives: [ClassTreePanelComponent, ResourceViewComponent],
+    host: { class: "pageComponent" }
 })
 export class ClassComponent {
     

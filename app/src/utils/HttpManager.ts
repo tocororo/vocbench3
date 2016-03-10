@@ -186,6 +186,7 @@ export class HttpManager {
                         var parser = new DOMParser();
                         var stResp = parser.parseFromString(httpReq.responseText, "application/xml");
                         o.next(stResp);
+                        o.complete();
                     } else {
                         throw new Error(httpReq.statusText);
                     }
@@ -230,6 +231,7 @@ export class HttpManager {
                 if (httpReq.readyState === 4) { //request finished and response is ready
                     if (httpReq.status === 200) {
                         o.next(httpReq.responseText);
+                        o.complete();
                     } else {
                         throw new Error(httpReq.statusText);
                     }

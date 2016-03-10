@@ -3,6 +3,10 @@ html, body {
     margin: 0;
 }
 
+.blockingDivHost {
+    position: relative; /* to allow blockDiv with absolute position inside these divs */
+}
+
 /* Div visible only in some scenario when there is need to block event from user */
 .blockingDiv {
     position: absolute;
@@ -55,11 +59,8 @@ config-bar {
     padding-bottom: 3px;
 }
 
-/* Remove test-component when release */
-project-component, class-component, property-component, concept-component,
-scheme-component, sparql-component, import-data-component, export-data-component,
-icv-component,
-test-component {
+/* To style component that take place in main router outlet */
+.pageComponent {
     flex: 1;
     min-height: 0;
     display: flex;
@@ -101,7 +102,6 @@ concept-tree, class-tree, property-tree, resource-view, instance-list {
     display: flex;
     flex: 1;
     min-height: 0;
-    position: relative; /* to allow blockDiv with absolute position inside these divs */
 }
 
 concept-tree, class-tree, property-tree, instance-list {
@@ -260,8 +260,10 @@ nav {
 }
 
 .panel { margin-bottom: 0px; }
-.panel .panel { margin-bottom: 5px; }/*panel inside panel (resource view)*/ 
-.panel-default > .panel-heading {
+.panel-heading {
+    display: flex;
+    align-items: center;
+    min-height: 0px;
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }

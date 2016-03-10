@@ -6,9 +6,10 @@ import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({
-	selector: "property-component",
-	templateUrl: "app/src/property/propertyComponent.html",
-	directives: [PropertyTreePanelComponent, ResourceViewComponent]
+    selector: "property-component",
+    templateUrl: "app/src/property/propertyComponent.html",
+    directives: [PropertyTreePanelComponent, ResourceViewComponent],
+    host: { class: "pageComponent" }
 })
 export class PropertyComponent {
     

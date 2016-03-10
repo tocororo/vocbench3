@@ -4,9 +4,9 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
-	selector: "schemes-renderer",
-	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
-	directives: [RdfResourceComponent],
+    selector: "schemes-renderer",
+    templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
+    directives: [RdfResourceComponent],
     providers: [SkosServices],
 })
 export class SchemesPartitionRenderer {
@@ -31,7 +31,7 @@ export class SchemesPartitionRenderer {
     
     private remove(scheme: ARTURIResource) {
         this.skosService.removeConceptFromScheme(this.resource, scheme).subscribe(
-            stResp => {
+            data => {
                 this.update.emit(null);
             },
             err => {

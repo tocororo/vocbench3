@@ -8,7 +8,8 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 	selector: "instance-list",
 	templateUrl: "app/src/owl/instanceList/instanceListComponent.html",
     providers: [OwlServices],
-	directives: [RdfResourceComponent]
+	directives: [RdfResourceComponent],
+    host: { class: "blockingDivHost" }
 })
 export class InstanceListComponent {
     @Input('cls') cls:ARTURIResource;
@@ -37,6 +38,7 @@ export class InstanceListComponent {
     ngOnChanges(changes) {
         this.selectedInstance = null;
         if (changes.cls.currentValue) {
+            document.getElementById("blockDivInstanceList").style.display = "block";
             this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
                 instances => {
                     this.instanceList = instances;
@@ -53,13 +55,12 @@ export class InstanceListComponent {
                             }
                         }
                     }
-                    
                 },
                 err => {
                     alert("Error: " + err);
                     console.error(err['stack']);
-                }
-            );
+                },
+                () => document.getElementById("blockDivInstanceList").style.display = "none");
         }
     }
     

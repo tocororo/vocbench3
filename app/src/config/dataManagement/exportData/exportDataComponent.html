@@ -30,13 +30,13 @@
                     </select>
                 </div>
             </form>
+            <a [href]="downloadLink" class="pull-right" download="export.rdf" [hidden]="!downloadLink">Download link</a>
             
         </div>
         
         <div class="panel-footer">
             <button type="submit" class="btn btn-default btn-sm pull-right" (click)="export()">Submit</button>
             <span class="clearfix"></span> <!--To fix UI bug-->
-            <a id="dlLink" download="export.rdf" [href]="downloadLink" hidden></a> <!--hidden link to allow file download-->
         </div>
     </div>
     

@@ -18,13 +18,14 @@ import {RangesPartitionRenderer} from "./renderer/rangesPartitionRenderer";
 import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitionRenderer";
 
 @Component({
-	selector: "resource-view",
-	templateUrl: "app/src/resourceView/resourceViewComponent.html",
-	directives: [RdfResourceComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, SchemesPartitionRenderer,
-            BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer, 
-            SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-            RangesPartitionRenderer, PropertyFacetsPartitionRenderer],
+    selector: "resource-view",
+    templateUrl: "app/src/resourceView/resourceViewComponent.html",
+    directives: [RdfResourceComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, SchemesPartitionRenderer,
+        BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
+        SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
+        RangesPartitionRenderer, PropertyFacetsPartitionRenderer],
     providers: [ResourceViewServices, RefactorServices],
+    host: { class: "blockingDivHost" }
 })
 export class ResourceViewComponent {
     

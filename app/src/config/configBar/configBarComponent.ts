@@ -1,5 +1,5 @@
 import {Component} from "angular2/core";
-import {Router, ROUTER_DIRECTIVES} from "angular2/router";
+import {Router, RouterLink} from "angular2/router";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {InputOutputServices} from "../../services/inputOutputServices";
 import {ProjectServices} from "../../services/projectServices";
@@ -7,7 +7,7 @@ import {ProjectServices} from "../../services/projectServices";
 @Component({
 	selector: "config-bar",
 	templateUrl: "app/src/config/configBar/configBarComponent.html",
-    directives: [ROUTER_DIRECTIVES], //for routerLink
+    directives: [RouterLink],
     providers: [InputOutputServices, ProjectServices]
 })
 export class ConfigBarComponent {
@@ -25,6 +25,7 @@ export class ConfigBarComponent {
     private clearData() {
         if (confirm("This operation will erase all the data stored in the project." +
                 " Then you will be redirect to the home page. Are you sure to proceed?")) {
+            document.getElementById("blockDivFullScreen").style.display = "block";
             this.inOutService.clearData().subscribe(
                 stResp => {
                     alert("All data cleared succesfully");
@@ -40,10 +41,10 @@ export class ConfigBarComponent {
                         });
                 },
                 err => {
-                    document.getElementById("blockDivFullScreen").style.display = "none"
                     alert("Error: " + err);
                     console.error(err['stack']);
-                });
+                },
+                () => document.getElementById("blockDivFullScreen").style.display = "none");
         }        
     }
     

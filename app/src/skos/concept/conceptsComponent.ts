@@ -8,7 +8,8 @@ import {VocbenchCtx} from "../../utils/VocbenchCtx";
 @Component({
     selector: "concept-component",
     templateUrl: "app/src/skos/concept/conceptsComponent.html",
-    directives: [ConceptTreePanelComponent, ResourceViewComponent]
+    directives: [ConceptTreePanelComponent, ResourceViewComponent],
+    host: { class : "pageComponent" }
 })
 export class ConceptsComponent implements OnInit {
 

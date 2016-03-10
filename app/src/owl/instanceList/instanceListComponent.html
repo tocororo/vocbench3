@@ -1,11 +1,15 @@
 <div class="scrollableContainer">
-    <!--<div *ngFor="#i of instanceList">
-        <rdf-resource [resource]="i" (click)="selectInstance(i)" 
-            [ngClass]="{selectedResource : i.getAdditionalProperty('selected')}"></rdf-resource>
-    </div>-->
-        <rdf-resource *ngFor="#i of instanceList" [resource]="i" (click)="selectInstance(i)" 
-            [ngClass]="{selectedResource : i.getAdditionalProperty('selected')}"></rdf-resource>
+    <rdf-resource *ngFor="#i of instanceList" [resource]="i" (click)="selectInstance(i)" 
+        [ngClass]="{selectedResource : i.getAdditionalProperty('selected')}"></rdf-resource>
     <div *ngIf="instanceList && instanceList.length==0">
         No instances
+    </div>
+</div>
+
+<div id="blockDivInstanceList" class="blockingDiv" style="display:none">
+    <div class="loadingDiv">
+        <div>
+            <p>Loading...</p><img src="app/assets/images/loading.gif" />
+        </div>
     </div>
 </div>
