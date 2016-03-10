@@ -1,0 +1,63 @@
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label style="flex: 1;">Concepts in no scheme</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+        
+        <div class="alert alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <i>
+                skos:Concept(s) that don't belong to any skos:ConceptScheme.
+			    Warning: adding the concept to a skos:ConceptScheme may be not enough to ensure
+			    that it is visible in the concept tree. The concept may be still dangling.
+            </i>
+        </div>
+
+        <div *ngIf="!brokenConceptList" style="padding: 4px;">
+            Press <strong>Run</strong> button to run the check.
+        </div>
+        <div *ngIf="brokenConceptList" class="scrollableContainer">
+            <table class="table table-condensed" style="flex: 1;">
+                <thead>
+                    <tr>
+                        <th class="text-center">Concept</th>
+                        <th class="text-center" style="width: 1%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="#concept of brokenConceptList">
+                        <td>
+                            <rdf-resource [resource]="concept"></rdf-resource>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <button class="btn btn-xs btn-default" (click)="addToScheme(concept)">Add to a skos:ConceptScheme</button>
+                            <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="dropup pull-right">
+            <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+                Quick action
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a (click)="addAllToScheme()" style="cursor: pointer;">Add all to a skos:ConceptScheme</a></li>
+                <li><a (click)="deleteAllConcept()" style="cursor: pointer;">Delete all concepts</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="app/assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

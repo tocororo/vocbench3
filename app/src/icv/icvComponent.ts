@@ -12,16 +12,16 @@ export class IcvComponent {
     private structuralIcv = {
         open: true,
         list: [
-            { name: "Dangling concepts", ontoType: ["SKOS", "SKOS-XL"], routeLink: "DanglingConcept",
+            { name: "Dangling concepts", ontoType: ["SKOS", "SKOS-XL"], routeName: "DanglingConcept",
             description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong"},
-            { name: "Cyclic hierarchical concepts", ontoType: ["SKOS", "SKOS-XL"],
-            description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"},
-            { name: "Omitted top concept", ontoType: ["SKOS", "SKOS-XL"],
+            { name: "Omitted top concept", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoTopConceptScheme",
             description: "skos:ConceptScheme(s) that have no top concept"},
-            { name: "Concepts in no scheme", ontoType: ["SKOS", "SKOS-XL"],
+            { name: "Concepts in no scheme", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoSchemeConcept",
             description: "skos:Concept(s) that doesn't belong to any scheme"},
             { name: "TopConcept with broader", ontoType: ["SKOS", "SKOS-XL"],
             description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept"},
+            { name: "Cyclic hierarchical concepts", ontoType: ["SKOS", "SKOS-XL"],
+            description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"},
             { name: "Hierarchical redundancy", ontoType: ["SKOS", "SKOS-XL"],
             description: "skos:Concept(s) that have redundant hierarchical relations"}
         ]
@@ -80,12 +80,15 @@ export class IcvComponent {
         }
     }
     
+    /**
+     * Listener of the "Go" button. It redirect to the page of the requested ICV.
+     */
     goToIcv(icvStruct) {
-        if (icvStruct.routerLink == undefined) {
+        if (icvStruct.routeName == undefined) {
            alert(icvStruct.name + " still not available");
            return; 
         }
-        this.router.navigate([icvStruct.routeLink]);
+        this.router.navigate([icvStruct.routeName]);
     }
     
     /**

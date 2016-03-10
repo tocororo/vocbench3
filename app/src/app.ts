@@ -10,6 +10,8 @@ import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { IcvComponent } from "./icv/icvComponent";
 import { DanglingConceptComponent } from "./icv/danglingConcept/danglingConceptComponent";
+import { NoSchemeConceptComponent } from "./icv/noSchemeConcept/noSchemeConceptComponent";
+import { NoTopConceptSchemeComponent } from "./icv/noTopConceptScheme/noTopConceptSchemeComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -41,6 +43,8 @@ import { VBEventHandler } from "./utils/VBEventHandler";
     {path: "/Config/ExportData", name: "ExportData", component: ExportDataComponent},
     // route config of ICV
     {path: "/Icv/DanglingConcept", name: "DanglingConcept", component: DanglingConceptComponent},
+    {path: "/Icv/NoSchemeConcept", name: "NoSchemeConcept", component: NoSchemeConceptComponent},
+    {path: "/Icv/NoTopConceptScheme", name: "NoTopConceptScheme", component: NoTopConceptSchemeComponent},
 ])
 
 export class App {

@@ -4,16 +4,15 @@
         <button class="btn btn-xs btn-default" (click)="runIcv()" [disabled]="!scheme">Run</button>
     </div>
     <div class="panel-body vbox">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <i>
-                        skos:Concept(s) that are not reachable in a concept tree because they have no broader
-                        concept and are not top concept of its scheme.
-                        (memo: change service so that it returns just the dangling concepts of the scheme in use.
-                        In this way, the quick fixes "set all as topConcept" and "select a broader for all" can be applied.
-                        Moreover the serialization should respect the uri element serialization)
-                    </i>
-            </div>
+        
+        <div class="alert alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <i>
+                skos:Concept(s) that are not reachable in a concept tree because they have no broader
+                concept and are not top concept of its scheme.
+                (memo: change service so that it returns just the dangling concepts of the scheme in use.
+                In this way, the quick fixes "set all as topConcept" and "select a broader for all" can be applied)
+            </i>
         </div>
 
         <div *ngIf="!scheme" style="padding: 4px;">
@@ -22,10 +21,10 @@
         </div>
 
         <div *ngIf="scheme">
-            <div *ngIf="!danglingConceptList" style="padding: 4px;">
+            <div *ngIf="!brokenConceptList" style="padding: 4px;">
                 Press <strong>Run</strong> button to run the check.
             </div>
-            <div *ngIf="danglingConceptList" class="scrollableContainer">
+            <div *ngIf="brokenConceptList" class="scrollableContainer">
                 <table class="table table-condensed" style="flex: 1;">
                     <thead>
                         <tr>
@@ -34,14 +33,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="#c of danglingConceptList">
+                        <tr *ngFor="#concept of brokenConceptList">
                             <td>
-                                <rdf-resource [resource]="c"></rdf-resource>
+                                <rdf-resource [resource]="concept"></rdf-resource>
                             </td>
                             <td style="white-space: nowrap">
-                                <button class="btn btn-xs btn-default" (click)="selectBroader(c)">Select skos:broader</button>
-                                <button class="btn btn-xs btn-default" (click)="setAsTopConcept(c)">Set as skos:topConceptOf</button>
-                                <button class="btn btn-xs btn-default" (click)="removeFromScheme(c)">Removing from scheme</button>
+                                <button class="btn btn-xs btn-default" (click)="selectBroader(concept)">Select skos:broader</button>
+                                <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept)">Set as skos:topConceptOf</button>
+                                <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept)">Remove from scheme</button>
                             </td>
                         </tr>
                     </tbody>
@@ -50,7 +49,7 @@
         </div>
     </div>
     <div class="panel-footer">
-        <div *ngIf="danglingConceptList && !danglingConceptList.length == 0" class="dropup pull-right">
+        <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="dropup pull-right">
             <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
                 Quick action
                 <span class="caret"></span>
