@@ -39,7 +39,9 @@ export class DanglingConceptComponent {
             }
         );
         this.selectedScheme = this.vbCtx.getScheme();
-        this.selectedSchemeURI = this.selectedScheme.getURI();
+        if (this.selectedScheme != undefined) {
+            this.selectedSchemeURI = this.selectedScheme.getURI();
+        }
     }
     
     /**
@@ -55,8 +57,8 @@ export class DanglingConceptComponent {
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
                     if (recordColl[i].getAttribute("scheme") == this.selectedScheme.getURI()) {
-                        var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), "concept"); 
-                        this.brokenConceptList.push(dc);       
+                        var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), "concept");
+                        this.brokenConceptList.push(dc);
                     }
                 }
             },
@@ -64,7 +66,8 @@ export class DanglingConceptComponent {
                 alert("Error: " + err);
                 console.error(err['stack']);
             },
-            () => document.getElementById("blockDivIcv").style.display = "none");
+            () => document.getElementById("blockDivIcv").style.display = "none"
+        );
     }
     
     /**
@@ -74,12 +77,7 @@ export class DanglingConceptComponent {
         this.skosService.addTopConcept(concept, this.selectedScheme).subscribe(
             data => {
                 //remove the concept from the danglingConceptList
-                for (var i = 0; i < this.brokenConceptList.length; i++) {
-                    if (this.brokenConceptList[i].getURI() == concept.getURI()) {
-                        this.brokenConceptList.splice(i, 1);
-                        break;
-                    }
-                }
+                this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
             },
             err => {
                 alert("Error: " + err);
@@ -121,12 +119,7 @@ export class DanglingConceptComponent {
             this.skosService.removeConceptFromScheme(concept, this.selectedScheme).subscribe(
                 data => {
                     //remove the concept from the danglingConceptList
-                    for (var i = 0; i < this.brokenConceptList.length; i++) {
-                        if (this.brokenConceptList[i].getURI() == concept.getURI()) {
-                            this.brokenConceptList.splice(i, 1);
-                            break;
-                        }
-                    }
+                    this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
                 },
                 err => {
                     alert("Error: " + err);

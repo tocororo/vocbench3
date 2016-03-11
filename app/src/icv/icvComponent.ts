@@ -14,23 +14,23 @@ export class IcvComponent {
         list: [
             { name: "Dangling concepts", ontoType: ["SKOS", "SKOS-XL"], routeName: "DanglingConcept",
             description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong"},
-            { name: "Omitted top concept", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoTopConceptScheme",
+            { name: "Omitted topConcept", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoTopConceptScheme",
             description: "skos:ConceptScheme(s) that have no top concept"},
             { name: "Concepts in no scheme", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoSchemeConcept",
             description: "skos:Concept(s) that doesn't belong to any scheme"},
-            { name: "TopConcept with broader", ontoType: ["SKOS", "SKOS-XL"],
+            { name: "TopConcept with broader", ontoType: ["SKOS", "SKOS-XL"], routeName: "TopConceptWithBroader",
             description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept"},
+            { name: "Hierarchical redundancy", ontoType: ["SKOS", "SKOS-XL"], routeName: "HierarchicalRedundancy",
+            description: "skos:Concept(s) that have redundant hierarchical relations"},
             { name: "Cyclic hierarchical concepts", ontoType: ["SKOS", "SKOS-XL"],
-            description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"},
-            { name: "Hierarchical redundancy", ontoType: ["SKOS", "SKOS-XL"],
-            description: "skos:Concept(s) that have redundant hierarchical relations"}
+            description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"}
         ]
     };
     
     private labelIcv = {
         open: true,
         list: [
-            { name: "No skos:prefLabel concep", ontoType: ["SKOS"],
+            { name: "No skos:prefLabel concept", ontoType: ["SKOS"],
             description: "skos:Concept(s) that have no skos:prefLabel"},
             { name: "No skosxl:prefLabel concept", ontoType: ["SKOS-XL"],
             description: "skos:Concept(s) that have no skosxl:prefLabel"},
@@ -61,7 +61,9 @@ export class IcvComponent {
             { name: "Multiple skos:prefLabel concepts", ontoType: ["SKOS"],
             description: "skos:Concept(s) that have multiple skos:prefLabel in the same language"},
             { name: "Multiple skosxl:prefLabel concepts", ontoType: ["SKOS-XL"],
-            description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"}
+            description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"},
+            { name: "skosxl:Label without skos:literalForm", ontoType: ["SKOS-XL"],
+            description: "skosxl:Label(s) that don't specify a literal form"}
         ]
     };
     

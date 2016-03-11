@@ -1,0 +1,62 @@
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label style="flex: 1;">Top concepts with broader</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+        
+        <div class="alert alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <i>
+                skos:Concept(s) that are skos:topConceptOf a skos:ConceptScheme 
+                and have some broader concept in the same skos:ConceptScheme
+            </i>
+        </div>
+
+        <div *ngIf="!brokenRecordList" style="padding: 4px;">
+            Press <strong>Run</strong> button to run the check.
+        </div>
+        
+        <div *ngIf="brokenRecordList" class="scrollableContainer">
+            <table class="table table-condensed" style="flex: 1;">
+                <thead>
+                    <tr>
+                        <th class="text-center">Concept</th>
+                        <th class="text-center">Scheme</th>
+                        <th class="text-center" style="width: 1%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="#record of brokenRecordList">
+                        <td>
+                            <rdf-resource [resource]="record.concept"></rdf-resource>
+                        </td>
+                        <td>
+                            <rdf-resource [resource]="record.scheme"></rdf-resource>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <button class="btn btn-xs btn-default" (click)="fix(record)">Fix concept</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div  class="dropup pull-right">
+            <button *ngIf="brokenRecordList && !brokenRecordList.length == 0" class="btn btn-default btn-xs" type="button"
+                (click)="quickFix()">
+                Fix all concepts
+            </button>
+        </div>
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="app/assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -53,21 +53,16 @@ export class NoSchemeConceptComponent {
     addToScheme(concept: ARTURIResource) {
         alert("Fix not yet available");
         //TODO here open a modal to select a scheme
-        
         // this.skosService.addConceptToScheme(concept, this.vbCtx.getScheme()).subscribe(
         //     data => {
-        //         //remove the concept from the noSchemeConceptList
-        //         for (var i = 0; i < this.noSchemeConceptList.length; i++) {
-        //             if (this.noSchemeConceptList[i].getURI() == concept.getURI()) {
-        //                 this.noSchemeConceptList.splice(i, 1);
-        //                 break;
-        //             }
-        //         }
+        //         //remove the concept from the list
+        //         this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
         //     },
         //     err => {
         //         alert("Error: " + err);
         //         console.error(err['stack']);
-        //     });
+        //     }
+        // );
     }
     
     /**
@@ -85,13 +80,8 @@ export class NoSchemeConceptComponent {
     deleteConcept(concept: ARTURIResource) {
         this.skosService.deleteConcept(concept).subscribe(
             stResp => {
-                //remove the concept from the noSchemeConceptList
-                for (var i = 0; i < this.brokenConceptList.length; i++) {
-                    if (this.brokenConceptList[i].getURI() == concept.getURI()) {
-                        this.brokenConceptList.splice(i, 1);
-                        break;
-                    }
-                }
+                //remove the concept from the list
+                this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
             }
         );
     }

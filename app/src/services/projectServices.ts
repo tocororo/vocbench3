@@ -88,5 +88,17 @@ export class ProjectServices {
         };
         return this.httpMgr.doGet(this.serviceName, "deleteProject", params, this.oldTypeService);
     }
+    
+    /**
+     * Exports the given project in a zip file
+     * @param project the project to export
+     */
+    exportProject(project: Project) {
+        console.log("[ProjectServices] exportProject");
+        var params = {
+            projectName: project.getName()
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, this.oldTypeService);
+    }
 
 }

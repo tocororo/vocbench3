@@ -12,6 +12,8 @@ import { IcvComponent } from "./icv/icvComponent";
 import { DanglingConceptComponent } from "./icv/danglingConcept/danglingConceptComponent";
 import { NoSchemeConceptComponent } from "./icv/noSchemeConcept/noSchemeConceptComponent";
 import { NoTopConceptSchemeComponent } from "./icv/noTopConceptScheme/noTopConceptSchemeComponent";
+import { TopConceptWithBroaderComponent } from "./icv/topConceptWithBroader/topConceptWithBroaderComponent";
+import { HierarchicalRedundancyComponent } from "./icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -45,6 +47,8 @@ import { VBEventHandler } from "./utils/VBEventHandler";
     {path: "/Icv/DanglingConcept", name: "DanglingConcept", component: DanglingConceptComponent},
     {path: "/Icv/NoSchemeConcept", name: "NoSchemeConcept", component: NoSchemeConceptComponent},
     {path: "/Icv/NoTopConceptScheme", name: "NoTopConceptScheme", component: NoTopConceptSchemeComponent},
+    {path: "/Icv/TopConceptWithBroader", name: "TopConceptWithBroader", component: TopConceptWithBroaderComponent},
+    {path: "/Icv/HierarchicalRedundancy", name: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent},
 ])
 
 export class App {

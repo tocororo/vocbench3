@@ -256,7 +256,7 @@ nav {
 }
 
 .table > tbody > tr:first-child > td {
-    border: none;
+    border-top: none;
 }
 
 .panel { margin-bottom: 0px; }

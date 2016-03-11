@@ -64,12 +64,7 @@ export class NoTopConceptSchemeComponent {
         if (conceptName == null) return;
         this.skosService.createTopConcept(conceptName, scheme, null, null).subscribe(
             data => {
-                for (var i = 0; i < this.brokenSchemeList.length; i++) {
-                    if (this.brokenSchemeList[i].getURI() == scheme.getURI()) {
-                        this.brokenSchemeList.splice(i, 1);
-                        break;
-                    }
-                }
+                this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
             },
             err => {
                 alert("Error: " + err);
@@ -82,15 +77,10 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        if (confirm("Warning, deleting this scheme, if it contains some scheme, you'll generate concept in no scheme. Are you sure to proceed?")) {
+        if (confirm("Warning, deleting this scheme, if it contains some scheme, will generate concept in no scheme. Are you sure to proceed?")) {
             this.skosService.deleteScheme(scheme).subscribe(
                 stResp => {
-                    for (var i = 0; i < this.brokenSchemeList.length; i++) {
-                        if (this.brokenSchemeList[i].getURI() == scheme.getURI()) {
-                            this.brokenSchemeList.splice(i, 1);
-                            break;
-                        }
-                    }
+                    this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
                 },
                 err => {
                     alert("Error: " + err);
