@@ -1,7 +1,13 @@
 <div class="panel panel-default vbox" style="position: relative">
     <div class="panel-heading">
         <label style="flex: 1;">Dangling concepts</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()" [disabled]="!scheme">Run</button>
+        <!-- currently select option is not fully supported. This is a workaroung
+            see issue https://github.com/angular/angular/issues/4843 -->
+        <select class="form-control input-xs" style="width: initial; margin-right: 4px;"
+                [(ngModel)]="selectedSchemeURI" (ngModelChange)="changeScheme()">
+            <option *ngFor="#s of schemeList" [value]="s.getURI()">{{s.getURI()}}</option>
+        </select>
+        <button class="btn btn-xs btn-default" (click)="runIcv()" [disabled]="!selectedScheme">Run</button>
     </div>
     <div class="panel-body vbox">
         
@@ -15,12 +21,12 @@
             </i>
         </div>
 
-        <div *ngIf="!scheme" style="padding: 4px;">
+        <div *ngIf="!selectedScheme" style="padding: 4px;">
             No scheme selected. In order to run this check you need to
             <a [routerLink]="['/Schemes']">select a skos:conceptScheme</a>
         </div>
 
-        <div *ngIf="scheme">
+        <div *ngIf="selectedScheme">
             <div *ngIf="!brokenConceptList" style="padding: 4px;">
                 Press <strong>Run</strong> button to run the check.
             </div>

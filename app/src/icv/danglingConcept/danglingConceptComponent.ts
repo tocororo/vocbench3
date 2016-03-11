@@ -15,7 +15,9 @@ import {SkosServices} from "../../services/skosServices";
 })
 export class DanglingConceptComponent {
     
-    private scheme: ARTURIResource;
+    private schemeList: Array<ARTURIResource>;
+    private selectedScheme: ARTURIResource;
+    private selectedSchemeURI: string; //workaround for 2 way binding still not supported for <select>
     private brokenConceptList: Array<ARTURIResource>;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, 
@@ -24,14 +26,27 @@ export class DanglingConceptComponent {
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);
         }
-        
-        this.scheme = vbCtx.getScheme();
+    }
+    
+    ngOnInit() {
+        this.skosService.getAllSchemesList().subscribe(
+            schemeList => {
+                this.schemeList = schemeList;
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
+        this.selectedScheme = this.vbCtx.getScheme();
+        this.selectedSchemeURI = this.selectedScheme.getURI();
     }
     
     /**
      * Run the check
      */
-    runIcv() {
+    private runIcv() {
+        console.log("scheme " + JSON.stringify(this.selectedScheme));
         //TODO check when service will be refactored
         document.getElementById("blockDivIcv").style.display = "block";
         this.icvService.listDanglingConcepts().subscribe(
@@ -39,7 +54,7 @@ export class DanglingConceptComponent {
                 this.brokenConceptList = new Array();
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
-                    if (recordColl[i].getAttribute("scheme") == this.scheme.getURI()) {
+                    if (recordColl[i].getAttribute("scheme") == this.selectedScheme.getURI()) {
                         var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), "concept"); 
                         this.brokenConceptList.push(dc);       
                     }
@@ -55,8 +70,8 @@ export class DanglingConceptComponent {
     /**
      * Fixes concept by setting the concept as topConceptOf the current scheme 
      */
-    setAsTopConcept(concept: ARTURIResource) {
-        this.skosService.addTopConcept(concept, this.scheme).subscribe(
+    private setAsTopConcept(concept: ARTURIResource) {
+        this.skosService.addTopConcept(concept, this.selectedScheme).subscribe(
             data => {
                 //remove the concept from the danglingConceptList
                 for (var i = 0; i < this.brokenConceptList.length; i++) {
@@ -75,7 +90,7 @@ export class DanglingConceptComponent {
     /**
      * Fixes all concepts by setting them all as topConceptOf the current scheme
      */
-    setAllTopConcept() {
+    private setAllTopConcept() {
         //TODO this fix requires a new service server side that takes a list of concept and sets them as topConcept of a scheme
         alert("Fix not yet available");
     }
@@ -83,7 +98,7 @@ export class DanglingConceptComponent {
     /**
      * Fixes concept by selecting a broader concept
      */
-    selectBroader(concept: ARTURIResource) {
+    private selectBroader(concept: ARTURIResource) {
         alert("Fix not yet available");
         //TODO here I should open a modal to show the concept tree and select a concept
     }
@@ -91,7 +106,7 @@ export class DanglingConceptComponent {
     /**
      * Fixes all concepts by selecting a broader concept for them all 
      */
-    selectBroaderForAll() {
+    private selectBroaderForAll() {
         //TODO this fix requires a new service server side that takes a list of concept and sets for them a broader concept
         alert("Fix not yet available");
         //TODO here I should open a modal to show the concept tree and select a concept
@@ -100,10 +115,10 @@ export class DanglingConceptComponent {
     /**
      * Fixes concept by removing the concept from the current scheme 
      */
-    removeFromScheme(concept: ARTURIResource) {
+    private removeFromScheme(concept: ARTURIResource) {
         if (confirm("Warning, if this concept has narrowers, removing the dangling concept from the scheme " +
                 "may generate other dangling concepts. Are you sure to proceed?")) {
-            this.skosService.removeConceptFromScheme(concept, this.scheme).subscribe(
+            this.skosService.removeConceptFromScheme(concept, this.selectedScheme).subscribe(
                 data => {
                     //remove the concept from the danglingConceptList
                     for (var i = 0; i < this.brokenConceptList.length; i++) {
@@ -124,9 +139,16 @@ export class DanglingConceptComponent {
     /**
      * Fixes concepts by removing them all from the current scheme 
      */
-    removeAllFromScheme() {
+    private removeAllFromScheme() {
         //TODO this fix requires a new service server side that takes a list of concept removes them from a scheme
         alert("Fix not yet available");
+    }
+    
+    //workaround for 2 way binding still not supported for <select>
+    private changeScheme(schemeURI: string) {
+        this.selectedScheme = this.schemeList.find(
+            scheme => scheme.getURI() == this.selectedSchemeURI
+        );
     }
     
 }

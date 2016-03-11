@@ -24,19 +24,18 @@ export class ExportDataComponent {
     
     private export() {
         document.getElementById("blockDivFullScreen").style.display = "block";
-        this.downloadLink = null;
+        window.URL.revokeObjectURL(this.downloadLink);
         this.inOutService.saveRDF(this.format).subscribe(
             stResp => {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 this.downloadLink = window.URL.createObjectURL(data);
-                console.log(this.downloadLink);
             },
             err => {
-                console.log("error");
                 alert("Error: " + err);
                 console.error(err['stack']);
             },
-            () => document.getElementById("blockDivFullScreen").style.display = "none");
+            () => document.getElementById("blockDivFullScreen").style.display = "none"
+        );
     }
     
 }

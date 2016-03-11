@@ -287,3 +287,12 @@ label { margin-bottom: 0px; }
 .alert {
     margin-bottom: 8px;
 }
+
+/*not available in bootstrap*/
+.input-xs {
+    height: 20px;
+    padding: 1px 5px;
+    font-size: 10px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
