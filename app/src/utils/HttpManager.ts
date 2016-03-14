@@ -224,13 +224,14 @@ export class HttpManager {
         
         var httpReq = new XMLHttpRequest();
         httpReq.open("GET", url, true);
+        httpReq.responseType = "blob";
         
         return new Observable(o => {
             //handle the request completed
             httpReq.onreadystatechange = function(event) {
                 if (httpReq.readyState === 4) { //request finished and response is ready
                     if (httpReq.status === 200) {
-                        o.next(httpReq.responseText);
+                        o.next(httpReq.response);
                         o.complete();
                     } else {
                         throw new Error(httpReq.statusText);

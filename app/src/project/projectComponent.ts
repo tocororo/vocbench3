@@ -13,6 +13,8 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private currentProject: Project; //project currently open
     private selectedProject: Project; //project selected in the list
+    
+    private exportLink: string;
 
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx) {}
 
@@ -81,6 +83,26 @@ export class ProjectComponent implements OnInit {
     //TODO
     private importProject() {
         alert("import project");
+    }
+    
+    /**
+     * Exports current selected project (only if it's open) as a zip archive
+     */
+    private exportProject() {
+        if (!this.selectedProject.isOpen()) {
+            alert("You can export only open projects");
+            return;
+        }
+        this.projectService.exportProject(this.selectedProject).subscribe(
+            stResp => {
+                var data = new Blob([stResp], {type: "octet/stream"});
+                this.exportLink = window.URL.createObjectURL(data);
+            },
+            err => {
+                alert("Error: " + err);
+                console.error(err['stack']);
+            }
+        );
     }
 
     private openProject(project: Project) {
