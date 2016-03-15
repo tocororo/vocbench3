@@ -204,6 +204,9 @@ export class HttpManager {
         
     }
     
+    /**
+     * Executes an XMLHttpRequest GET to get a file
+     */
     downloadFile(service: string, request: string, params, oldType: boolean) {
         var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
         if (oldType) {

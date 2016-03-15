@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{context.title}}</h4>
+</div>
+<div class="modal-body">
+    <form role="form">
+        <div class="form-group">
+            <label>{{context.label}}</label>
+            <input type="text" class="form-control input-sm" [(ngModel)]="inputTxt" 
+                (keypress)="onKeypress($event)" autofocus>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="isOkDisabled()">{{context.yesText}}</button>
+    <button *ngIf="!context.hideNo" class="btn btn-default btn-sm" (click)="cancel()">{{context.noText}}</button>
+</div>

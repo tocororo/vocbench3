@@ -34,6 +34,8 @@ export class IcvComponent {
             description: "skos:Concept(s) that have no skos:prefLabel"},
             { name: "No skosxl:prefLabel concept", ontoType: ["SKOS-XL"],
             description: "skos:Concept(s) that have no skosxl:prefLabel"},
+            { name: "No rdfs:label resource", ontoType: ["OWL"],
+            description: "Classes or instances that have no rdfs:label"},
             { name: "No skos:prefLabel scheme", ontoType: ["SKOS"],
             description: "skos:ConceptScheme(s) that have no skos:prefLabel"},
             { name: "No skosxl:prefLabel scheme", ontoType: ["SKOS-XL"],
