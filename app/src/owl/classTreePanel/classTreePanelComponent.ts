@@ -3,13 +3,14 @@ import {ClassTreeComponent} from "../classTree/classTreeComponent";
 import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../services/searchServices";
 import {OwlServices} from "../../services/owlServices";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 
 @Component({
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
 	directives: [ClassTreeComponent, InstanceListComponent],
-    providers: [OwlServices, SearchServices],
+    providers: [OwlServices, SearchServices, ModalServices],
 })
 export class ClassTreePanelComponent {
     @Input('rootclass') rootClass:ARTURIResource;
@@ -22,7 +23,7 @@ export class ClassTreePanelComponent {
     private selectedClass:ARTURIResource;
     private selectedInstance:ARTURIResource;
     
-	constructor(private owlService:OwlServices, private searchService: SearchServices) {}
+	constructor(private owlService:OwlServices, private searchService: SearchServices, private modalService: ModalServices) {}
     
     ngOnInit() {
         if (this.rootClass == undefined) {
@@ -31,25 +32,40 @@ export class ClassTreePanelComponent {
     }
     
     private createClass() {
-        var className = prompt("Insert class name");
-        if (className == null) return;
-        this.owlService.createClass(this.rootClass, className).subscribe(
-            stResp => {},
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
+        this.modalService.prompt("Create new owl:Class", "Name").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.owlService.createClass(this.rootClass, result).subscribe(
+                            stResp => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
+        
     }
     
     private createSubClass() {
-        var className = prompt("Insert class name");
-        if (className == null) return;
-        this.owlService.createClass(this.selectedClass, className).subscribe(
-            stResp => {},
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
+        this.modalService.prompt("Create new owl:Class", "Name").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.owlService.createClass(this.selectedClass, result).subscribe(
+                            stResp => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
     }
@@ -72,13 +88,20 @@ export class ClassTreePanelComponent {
     }
     
     private createInstance() {
-        var instanceName = prompt("Insert instance name");
-        if (instanceName == null) return;
-        this.owlService.createInstance(this.selectedClass, instanceName).subscribe(
-            stResp => {},
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
+        this.modalService.prompt("Create new instance", "Name").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.owlService.createInstance(this.selectedClass, result).subscribe(
+                            stResp => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
     }

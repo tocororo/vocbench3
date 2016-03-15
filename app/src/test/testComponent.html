@@ -1,11 +1,48 @@
-<div class="vbox">
+<div>
 
     <p>Here it is some test</p>
     
-    <button class="btn btn-success btn-sm" (click)="yesNo()">Yes No Modal</button>
+    <div style="margin-bottom: 15px;">
+        <label>Confirm Modal:</label>
+        <div>
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmTitle">
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmMessage">
+            <select [(ngModel)]="confirmType" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;">
+                <option *ngFor="#t of typeList" [value]="t">{{t}}</option>
+            </select>
+            <br/><button class="btn btn-primary btn-sm" (click)="confirm()">Test</button>
+            <span>Last result: <strong>{{confirmResult}}</strong></span>
+        </div>
+    </div>
     
-    <button class="btn btn-success btn-sm" (click)="prompt()">Prompt Modal</button>
+    <div style="margin-bottom: 15px;">
+        <label>Prompt Modal:</label>
+        <div>
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="promptTitle">
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="promptLabel">
+            <br/><button class="btn btn-primary btn-sm" (click)="prompt()">Test</button>
+            <span>Last result: <strong>{{promptResult}}</strong></span>
+        </div>
+    </div>
     
-    <button class="btn btn-success btn-sm" (click)="alert()">Alert Modal</button>
-  
+    <div style="margin-bottom: 15px;">
+        <label>Alert Modal:</label>
+        <div>
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="alertTitle">
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="alertMessage">
+            <select [(ngModel)]="alertType" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;">
+                <option *ngFor="#t of typeList" [value]="t">{{t}}</option>
+            </select>
+            <br/><button class="btn btn-primary btn-sm" (click)="alert()">Test</button>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label>New Resource Modal:</label>
+        <div>
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="newResourceTitle">
+            <br/><button class="btn btn-primary btn-sm" (click)="newResource()">Test</button>
+            <span>New resource: <strong>{{newResourceResult | json}}</strong></span>
+        <div>
+    </div>
 </div>

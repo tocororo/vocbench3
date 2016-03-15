@@ -2,15 +2,15 @@
     <h4 class="modal-title">{{context.title}}</h4>
 </div>
 <div class="modal-body">
-    <form role="form">
-        <div class="form-group">
-            <label>{{context.label}}</label>
-            <input type="text" class="form-control input-sm" [(ngModel)]="inputTxt" 
-                (keypress)="onKeypress($event)" autofocus>
-        </div>
-    </form>
+    <div class="hbox" style="align-items: center;">
+        <label style="margin-right: 4px;">{{context.label}}:</label>
+        <input type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="inputTxt" (keypress)="onKeypress($event)" autofocus>
+    </div>
+    <div *ngIf="!isInputValid() && !context.inputOptional && submitted" class="alert alert-danger">
+        <strong>{{context.label}}</strong> is required
+    </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="isOkDisabled()">{{context.yesText}}</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!context.inputOptional && !isInputValid()">{{context.yesText}}</button>
     <button *ngIf="!context.hideNo" class="btn btn-default btn-sm" (click)="cancel()">{{context.noText}}</button>
 </div>

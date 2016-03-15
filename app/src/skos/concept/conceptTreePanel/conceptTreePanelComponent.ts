@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
 import {ConceptTreeComponent} from "../conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
+import {ModalServices} from "../../../widget/modal/modalServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {RouterLink} from "angular2/router";
@@ -10,7 +11,7 @@ import {RouterLink} from "angular2/router";
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
 	directives: [ConceptTreeComponent, RouterLink],
-    providers: [SkosServices, SearchServices],
+    providers: [ModalServices, SkosServices, SearchServices],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
@@ -21,32 +22,45 @@ export class ConceptTreePanelComponent {
     private selectedConcept:ARTURIResource;
     private searchInputPlaceholder: string;
     
-	constructor(private skosService:SkosServices, private searchService: SearchServices, private vbCtx:VocbenchCtx) {}
+	constructor(private skosService:SkosServices, private searchService: SearchServices, 
+        private modalService: ModalServices, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
         this.searchInputPlaceholder = this.scheme ? "Search..." : "Search not available in no-scheme mode"; 
     }
     
     private createConcept() {
-        var conceptName = prompt("Insert concept name");
-        if (conceptName == null) return;
-        this.skosService.createTopConcept(conceptName, this.vbCtx.getScheme(), null, null).subscribe(
-            data => { },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        this.modalService.newResource("Create new skos:Concept").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.skosService.createTopConcept(result.name, this.vbCtx.getScheme(), result.label, result.lang).subscribe(
+                            data => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
     }
     
     private createNarrower() {
-        var conceptName = prompt("Insert concept name");
-        if (conceptName == null) return;
-        this.skosService.createNarrower(conceptName, this.selectedConcept, this.vbCtx.getScheme(), null, null).subscribe(
-            newConc => { },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        this.modalService.newResource("Create a skos:narrower").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.skosService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(), result.label, result.lang).subscribe(
+                            data => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
     }

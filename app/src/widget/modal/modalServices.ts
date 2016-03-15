@@ -3,9 +3,10 @@ import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-mo
 import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
+import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
 
 @Injectable()
-export class ModalService {
+export class ModalServices {
     
     constructor(private modal: Modal) {}
     
@@ -77,6 +78,22 @@ export class ModalService {
         ]);
         //set the modal configuration (small dimension, blocking and without key to dismiss)
         var modConf = new ModalConfig("sm", true, null);
+        
+        dialog = this.modal.open(<any>component, bindings, modConf);
+        return dialog;
+    }
+    
+    newResource(title: string) {
+        let dialog: Promise<ModalDialogInstance>;
+        let component = NewResourceModal;
+        
+        //bind the modal content
+        var modalContent = new NewResourceModalContent(title);
+        let bindings = Injector.resolve([
+            provide(ICustomModal, {useValue: modalContent})
+        ]);
+        //set the modal configuration (medium dimension, blocking and without key to dismiss)
+        var modConf = new ModalConfig("md", true, null);
         
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog;

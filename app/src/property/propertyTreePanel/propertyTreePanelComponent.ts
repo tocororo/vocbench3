@@ -3,12 +3,13 @@ import {PropertyTreeComponent} from "../propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";
+import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "property-tree-panel",
 	templateUrl: "app/src/property/propertyTreePanel/propertyTreePanelComponent.html",
 	directives: [PropertyTreeComponent],
-    providers: [PropertyServices, SearchServices],
+    providers: [PropertyServices, SearchServices, ModalServices],
 })
 export class PropertyTreePanelComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
@@ -17,7 +18,7 @@ export class PropertyTreePanelComponent {
     
     private selectedProperty:ARTURIResource;
     
-	constructor(private propService:PropertyServices, private searchService: SearchServices) {}
+	constructor(private propService:PropertyServices, private searchService: SearchServices, private modalService: ModalServices) {}
     
     private createProperty() {
         this.createPropertyForType("rdf:Property");
@@ -40,25 +41,39 @@ export class PropertyTreePanelComponent {
     }
     
     private createPropertyForType(type) {
-        var propertyName = prompt("Insert property name");
-        if (propertyName == null) return;
-        this.propService.addProperty(propertyName, type).subscribe(
-            stResp => { },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        //currently uses prompt instead of newResource since addProperty service doesn't allow to provide a label
+        this.modalService.prompt("Create a new " + type, "Name").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.propService.addProperty(result, type).subscribe(
+                            stResp => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
     }
     
     private createSubProperty() {
-        var propertyName = prompt("Insert property name");
-        if (propertyName == null) return;
-        this.propService.addSubProperty(propertyName, this.selectedProperty).subscribe(
-            stResp => { },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        //currently uses prompt instead of newResource since addSubProperty service doesn't allow to provide a label
+        this.modalService.prompt("Create a subProperty", "Name").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.propService.addSubProperty(result, this.selectedProperty).subscribe(
+                            stResp => {},
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
         );
     }

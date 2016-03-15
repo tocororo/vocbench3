@@ -1,6 +1,7 @@
 import {Component, Output, EventEmitter} from "angular2/core";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {SkosServices} from "../../../services/skosServices";
+import {ModalServices} from "../../../widget/modal/modalServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
@@ -9,7 +10,7 @@ import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 	selector: "concept-scheme-panel",
 	templateUrl: "app/src/skos/scheme/conceptSchemePanel/conceptSchemePanelComponent.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices],
+    providers: [SkosServices, ModalServices],
 })
 export class ConceptSchemePanelComponent {
     
@@ -21,7 +22,8 @@ export class ConceptSchemePanelComponent {
     
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private vbCtx: VocbenchCtx, private eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, private vbCtx: VocbenchCtx, 
+            private eventHandler: VBEventHandler, private modalService: ModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             data => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
@@ -40,17 +42,23 @@ export class ConceptSchemePanelComponent {
     }
     
     private createScheme() {
-        var schemeName = prompt("Insert conceptScheme name");
-        if (schemeName == null) return;
-        this.skosService.createScheme(schemeName).subscribe(
-            newScheme => {
-                this.schemeList.push(newScheme);
-            },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
+        this.modalService.newResource("Create new skos:ConceptScheme").then(
+            resultPromise => {
+                return resultPromise.result.then(
+                    result => {
+                        this.skosService.createScheme(result.name, result.label, result.lang).subscribe(
+                            newScheme => {
+                                this.schemeList.push(newScheme);
+                            },
+                            err => {
+                                alert("Error: " + err);
+                                console.error(err['stack']);
+                            }
+                        );
+                    }
+                );
             }
-        )
+        );
     }
     
     private deleteScheme() {
