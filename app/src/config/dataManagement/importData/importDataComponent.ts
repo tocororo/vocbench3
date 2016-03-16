@@ -2,6 +2,7 @@ import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
+import {ModalServices} from "../../../widget/modal/modalServices";
 
 @Component({
 	selector: "import-data-component",
@@ -17,7 +18,8 @@ export class ImportDataComponent {
     
     private submitted: boolean = false;
     
-    constructor(private inOutService: InputOutputServices, private vbCtx: VocbenchCtx, private router: Router) {
+    constructor(private inOutService: InputOutputServices, private vbCtx: VocbenchCtx,
+            private modalService: ModalServices, private router: Router) {
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);
@@ -34,13 +36,14 @@ export class ImportDataComponent {
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.format).subscribe(
                 stResp => {
-                    alert("Data imported successfully");
+                    this.modalService.alert("Import data", "Data imported successfully");
                 },
                 err => {
-                    alert("Error: " + err);
+                    this.modalService.alert("Error", err, "error");
                     console.error(err['stack']);
                 },
-                () => document.getElementById("blockDivFullScreen").style.display = "none");
+                () => document.getElementById("blockDivFullScreen").style.display = "none"
+            );
         }
     }
     

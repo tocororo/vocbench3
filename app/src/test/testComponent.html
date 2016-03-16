@@ -43,6 +43,15 @@
             <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="newResourceTitle">
             <br/><button class="btn btn-primary btn-sm" (click)="newResource()">Test</button>
             <span>New resource: <strong>{{newResourceResult | json}}</strong></span>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label>New Literal Lang Modal:</label>
         <div>
+            <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="newLiteralLangTitle">
+            <br/><button class="btn btn-primary btn-sm" (click)="newLiteralLang()">Test</button>
+            <span>New resource: <strong>{{newLiteralLangResult | json}}</strong></span>
+        </div>
     </div>
 </div>

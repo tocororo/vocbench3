@@ -4,6 +4,7 @@ import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
+import {NewLiteralLangModal, NewLiteralLangModalContent} from "./newLiteralLangModal/newLiteralLangModal";
 
 @Injectable()
 export class ModalServices {
@@ -20,16 +21,19 @@ export class ModalServices {
         let dialog: Promise<ModalDialogInstance>;
         let component = PromptModal;
         
-        //bind the modal content
+        //inject the modal content in the modal Component
         var modalContent = new PromptModalContent(title, label, false);
-        let bindings = Injector.resolve([
-            provide(ICustomModal, {useValue: modalContent})
-        ]);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
         //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("sm", true, null);
+        var modConf = new ModalConfig("md", true, null);
         
         dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog;
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result
+            }
+        );
     }
     
     /**
@@ -46,16 +50,19 @@ export class ModalServices {
         
         var modalType = type ? type : "warning"; //set default type to warning if not defined
         
-        //bind the modal content
+        //inject the modal content in the modal Component
         var modalContent = new ConfirmModalContent(title, message, modalType);
-        let bindings = Injector.resolve([
-            provide(ICustomModal, {useValue: modalContent})
-        ]);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
         //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("sm", true, null);
+        var modConf = new ModalConfig("md", true, null);
         
         dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog;
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result
+            }
+        );
     }
     
     /**
@@ -71,13 +78,12 @@ export class ModalServices {
         
         var modalType = type ? type : "info"; //set default type to info if not defined
         
-        //bind the modal content
+        //inject the modal content in the modal Component
         var modalContent = new AlertModalContent(title, message, modalType);
-        let bindings = Injector.resolve([
-            provide(ICustomModal, {useValue: modalContent})
-        ]);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
         //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("sm", true, null);
+        var modConf = new ModalConfig("md", true, null);
         
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog;
@@ -87,16 +93,38 @@ export class ModalServices {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewResourceModal;
         
-        //bind the modal content
+        //inject the modal content in the modal Component
         var modalContent = new NewResourceModalContent(title);
-        let bindings = Injector.resolve([
-            provide(ICustomModal, {useValue: modalContent})
-        ]);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
         //set the modal configuration (medium dimension, blocking and without key to dismiss)
         var modConf = new ModalConfig("md", true, null);
         
         dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog;
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result
+            }
+        );
+    }
+    
+    newLiteralLang(title: string) {
+        let dialog: Promise<ModalDialogInstance>;
+        let component = NewLiteralLangModal;
+        
+        //inject the modal content in the modal Component
+        var modalContent = new NewLiteralLangModalContent(title);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
+        //set the modal configuration (medium dimension, blocking and without key to dismiss)
+        var modConf = new ModalConfig("md", true, null);
+        
+        dialog = this.modal.open(<any>component, bindings, modConf);
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result
+            }
+        );
     }
     
 }

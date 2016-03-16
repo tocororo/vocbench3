@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
@@ -22,7 +23,7 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove property value";
     
-    constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
+    constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils, private modalService: ModalServices) {}
         
     private add() {
         alert("add property to resource " + this.resource.getShow());
@@ -53,7 +54,7 @@ export class PropertiesPartitionRenderer {
         }
         this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, type, lang).subscribe(
             stResp => this.update.emit(null),
-            err => { alert("Error: " + err); console.error(err.stack); }
+            err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
         );
     }
     

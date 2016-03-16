@@ -10,7 +10,7 @@ import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 	selector: "concept-scheme-panel",
 	templateUrl: "app/src/skos/scheme/conceptSchemePanel/conceptSchemePanelComponent.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, ModalServices],
+    providers: [SkosServices],
 })
 export class ConceptSchemePanelComponent {
     
@@ -34,7 +34,7 @@ export class ConceptSchemePanelComponent {
                 this.schemeList = schemeList;
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );
@@ -43,18 +43,14 @@ export class ConceptSchemePanelComponent {
     
     private createScheme() {
         this.modalService.newResource("Create new skos:ConceptScheme").then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.skosService.createScheme(result.name, result.label, result.lang).subscribe(
-                            newScheme => {
-                                this.schemeList.push(newScheme);
-                            },
-                            err => {
-                                alert("Error: " + err);
-                                console.error(err['stack']);
-                            }
-                        );
+            result => {
+                this.skosService.createScheme(result.name, result.label, result.lang).subscribe(
+                    newScheme => {
+                        this.schemeList.push(newScheme);
+                    },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
                     }
                 );
             }
@@ -79,7 +75,7 @@ export class ConceptSchemePanelComponent {
                 this.itemSelected.emit(undefined);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             }
         );

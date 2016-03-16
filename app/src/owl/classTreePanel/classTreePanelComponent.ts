@@ -10,7 +10,7 @@ import {ARTURIResource} from "../../utils/ARTResources";
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
 	directives: [ClassTreeComponent, InstanceListComponent],
-    providers: [OwlServices, SearchServices, ModalServices],
+    providers: [OwlServices, SearchServices],
 })
 export class ClassTreePanelComponent {
     @Input('rootclass') rootClass:ARTURIResource;
@@ -34,16 +34,12 @@ export class ClassTreePanelComponent {
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name").then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.owlService.createClass(this.rootClass, result).subscribe(
-                            stResp => {},
-                            err => {
-                                alert("Error: " + err);
-                                console.error(err['stack']);
-                            }
-                        );
+            result => {
+                this.owlService.createClass(this.rootClass, result).subscribe(
+                    stResp => { },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
                     }
                 );
             }
@@ -54,16 +50,12 @@ export class ClassTreePanelComponent {
     private createSubClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name").then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.owlService.createClass(this.selectedClass, result).subscribe(
-                            stResp => {},
-                            err => {
-                                alert("Error: " + err);
-                                console.error(err['stack']);
-                            }
-                        );
+            result => {
+                this.owlService.createClass(this.selectedClass, result).subscribe(
+                    stResp => { },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
                     }
                 );
             }
@@ -72,7 +64,8 @@ export class ClassTreePanelComponent {
     
     private deleteClass() {
         if (this.selectedClass.getAdditionalProperty("numInst") != 0) {
-            alert("Cannot delete " + this.selectedClass.getURI() + " since it has instance(s). Please delete the instance(s) and retry.");
+            this.modalService.alert("Operation denied", "Cannot delete " + this.selectedClass.getURI() + 
+                " since it has instance(s). Please delete the instance(s) and retry.", "warning");
             return;
         }
         this.owlService.removeClass(this.selectedClass).subscribe(
@@ -81,7 +74,7 @@ export class ClassTreePanelComponent {
                 this.classSelected.emit(undefined);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );
@@ -90,16 +83,12 @@ export class ClassTreePanelComponent {
     private createInstance() {
         //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
         this.modalService.prompt("Create new instance", "Name").then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.owlService.createInstance(this.selectedClass, result).subscribe(
-                            stResp => {},
-                            err => {
-                                alert("Error: " + err);
-                                console.error(err['stack']);
-                            }
-                        );
+            result => {
+                this.owlService.createInstance(this.selectedClass, result).subscribe(
+                    stResp => { },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
                     }
                 );
             }
@@ -120,32 +109,37 @@ export class ClassTreePanelComponent {
     }
     
     private doSearch(searchedText: string) {
-        this.searchService.searchResource(searchedText, ["cls", "individual"], true, "contain").subscribe(
-            searchResult => {
-                if (searchResult.length == 0) {
-                    alert("No results found for '" + searchedText + "'");
-                } else if (searchResult.length == 1) {
-                    if (searchResult[0].getRole() == "cls") {
-                        this.viewChildTree.openTreeAt(searchResult[0]);    
-                    } else { // role "individual"
-                        //get type of individual, then open the tree to that class
-                        this.owlService.getDirectNamedTypes(searchResult[0]).subscribe(
-                            types => {
-                                this.viewChildTree.openTreeAt(types[0]);
-                                //center instanceList to the individual
-                                this.viewChildInstanceList.selectSearchedInstance(types[0], searchResult[0]);
-                            }
-                        )
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, ["cls", "individual"], true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else if (searchResult.length == 1) {
+                        if (searchResult[0].getRole() == "cls") {
+                            this.viewChildTree.openTreeAt(searchResult[0]);    
+                        } else { // role "individual"
+                            //get type of individual, then open the tree to that class
+                            this.owlService.getDirectNamedTypes(searchResult[0]).subscribe(
+                                types => {
+                                    this.viewChildTree.openTreeAt(types[0]);
+                                    //center instanceList to the individual
+                                    this.viewChildInstanceList.selectSearchedInstance(types[0], searchResult[0]);
+                                }
+                            )
+                        }
+                    } else {
+                        //modal dialog still not available, so it's not possible to let the user choose which result prefer
+                        alert(searchResult.length + " results found. This function is currently not available for multiple results");
                     }
-                } else {
-                    //modal dialog still not available, so it's not possible to let the user choose which result prefer
-                    alert(searchResult.length + " results found. This function is currently not available for multiple results");
+                },
+                err => {
+                    this.modalService.alert("Error", err, "error");
+                    console.error(err['stack']);
                 }
-            },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
-            });
+            );
+        }
     }
     
     /**
@@ -153,11 +147,7 @@ export class ClassTreePanelComponent {
      */
     private searchKeyHandler(keyIdentifier, searchedText) {
         if (keyIdentifier == "Enter") {
-            if (searchedText.trim() == "") {
-                alert("Please enter a valid string to search");
-            } else {
-                this.doSearch(searchedText);           
-            }
+            this.doSearch(searchedText);           
         }
     }
     

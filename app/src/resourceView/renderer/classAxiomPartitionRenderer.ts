@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTResource, ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {PropertyServices} from "../../services/propertyServices";
 import {OwlServices} from "../../services/owlServices";
@@ -23,7 +24,8 @@ export class ClassAxiomPartitionPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove class axiom";
     
-    constructor(private propertyService:PropertyServices, private owlService:OwlServices, private resUtils:ResourceUtils) {}
+    constructor(private propertyService:PropertyServices, private owlService:OwlServices, 
+        private resUtils:ResourceUtils, private modalService: ModalServices) {}
         
     private add() {
         alert("add class axiom to resource " + this.resource.getShow());
@@ -50,39 +52,39 @@ export class ClassAxiomPartitionPartitionRenderer {
         if (predicate.getURI() == "http://www.w3.org/2002/07/owl#equivalentClass") {
             this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2000/01/rdf-schema#subClassOf") {
             this.owlService.removeSuperCls(this.resource, <ARTURIResource>object).subscribe(
                 stResp => {
                     this.update.emit(null);
                 },
-                err => { alert("Error: " + err); console.error(err['stack']); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#disjointWith") {
             this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#complementOf") {
             this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#intersectionOf") {
             this.owlService.removeIntersectionOf(this.resource, object).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#oneOf") {
             this.owlService.removeOneOf(this.resource, object).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#unionOf") {
             this.owlService.removeUnionOf(this.resource, object).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         }
     }

@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
@@ -21,7 +22,7 @@ export class SuperPropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove superproperty";
     
-    constructor(private propService:PropertyServices) {}
+    constructor(private propService:PropertyServices, private modalService: ModalServices) {}
     
     private add() {
         alert("add superproperty to " + this.resource.getShow());
@@ -34,7 +35,7 @@ export class SuperPropertiesPartitionRenderer {
                 this.update.emit(null);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             }
         );

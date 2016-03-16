@@ -1,6 +1,7 @@
 import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
@@ -18,7 +19,7 @@ export class NoTopConceptSchemeComponent {
     private brokenSchemeList: Array<ARTURIResource>;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, 
-            private vbCtx: VocbenchCtx, private router: Router) {
+            private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);
@@ -41,7 +42,7 @@ export class NoTopConceptSchemeComponent {
                 }
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             },
             () => document.getElementById("blockDivIcv").style.display = "none"
@@ -67,7 +68,7 @@ export class NoTopConceptSchemeComponent {
                 this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );
@@ -77,17 +78,20 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        if (confirm("Warning, deleting this scheme, if it contains some scheme, will generate concept in no scheme. Are you sure to proceed?")) {
-            this.skosService.deleteScheme(scheme).subscribe(
-                stResp => {
-                    this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err['stack']);
-                }
-            );
-        }
+        this.modalService.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some scheme, " +
+                "will generate concepts in no scheme. Are you sure to proceed?").then(
+            result => {
+                this.skosService.deleteScheme(scheme).subscribe(
+                    stResp => {
+                        this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                    },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
+                    }
+                );
+            }
+        );
     }
     
     /**

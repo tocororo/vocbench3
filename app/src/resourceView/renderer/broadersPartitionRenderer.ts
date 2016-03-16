@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
@@ -21,7 +22,7 @@ export class BroadersPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/concept_delete.png";
     private removeBtnImgTitle = "Remove broader";
     
-    constructor(private skosService:SkosServices) {}
+    constructor(private skosService:SkosServices, private modalService: ModalServices) {}
     
     //add a broader
     private add() {
@@ -35,7 +36,7 @@ export class BroadersPartitionRenderer {
                 this.update.emit(null);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );

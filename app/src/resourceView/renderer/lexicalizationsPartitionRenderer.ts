@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {SkosServices} from "../../services/skosServices";
 import {SkosxlServices} from "../../services/skosxlServices";
 import {OwlServices} from "../../services/owlServices";
@@ -26,7 +27,7 @@ export class LexicalizationsPartitionRenderer {
     private removeBtnImgTitle = "Remove lexicalization";
     
     constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
-        private propertyService:PropertyServices, private resUtils:ResourceUtils) {}
+        private propertyService:PropertyServices, private resUtils:ResourceUtils, private modalService: ModalServices) {}
     
     private add() {
         alert("add lexicalization to resource " + this.resource.getShow());
@@ -35,91 +36,115 @@ export class LexicalizationsPartitionRenderer {
     }
     
     private enrichProperty(predicate: ARTURIResource) {
-        alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
-        
-        // var label, lang; //TODO to obtain through dialog
-        // 
-        // if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#prefLabel") {
-        //     this.skosxlService.setPrefLabel(this.resource.getURI(), label, lang, "bnode")
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // } else if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#altLabel") {
-        //     this.skosxlService.addAltLabel(this.resource.getURI(), label, lang, "bnode")
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // } else if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#hiddenLabel") {
-        //     this.skosxlService.addHiddenLabel(this.resource.getURI(), label, lang, "bnode")
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // } else if (predicate.getURI() == "http://www.w3.org/2004/02/skos/core#prefLabel") {
-        //     this.skosService.setPrefLabel(this.resource.getURI(), label, lang)
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // } else if (predicate.getURI() == "http://www.w3.org/2004/02/skos/core#altLabel") {
-        //     this.skosService.addAltLabel(this.resource.getURI(), label, lang)
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // } else if (predicate.getURI() == "http://www.w3.org/2004/02/skos/core#hiddenLabel") {
-        //     this.skosService.addAltLabel(this.resource.getURI(), label, lang)
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // } else if (predicate.getURI() == "http://www.w3.org/2000/01/rdf-schema#label") {
-        //     this.propertyService.createAndAddPropValue(this.resource.getURI(), predicate.getURI(), label, null, "plainLiteral", lang)
-        //         .subscribe(
-        //             stResp => this.update.emit(null),
-        //             err => { alert("Error: " + err); console.error(err.stack);} 
-        //         );
-        // }
+        this.modalService.newLiteralLang("Add " + predicate.getShow()).then(
+            result => {
+                switch (predicate.getURI()) {
+                    case "http://www.w3.org/2008/05/skos-xl#prefLabel":
+                        this.skosxlService.setPrefLabel(this.resource, result.label, result.lang, "bnode").subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                        );
+                        break;
+                    case "http://www.w3.org/2008/05/skos-xl#altLabel":
+                        this.skosxlService.addAltLabel(this.resource, result.label, result.lang, "bnode").subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                        );
+                        break;
+                    case "http://www.w3.org/2008/05/skos-xl#hiddenLabel":
+                        this.skosxlService.addHiddenLabel(this.resource, result.label, result.lang, "bnode").subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                        );
+                        break;
+                    //TODO other lexicalizations
+                    case "http://www.w3.org/2004/02/skos/core#prefLabel":
+                        this.skosService.setPrefLabel(this.resource, result.label, result.lang).subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                        );
+                        break;
+                    case "http://www.w3.org/2004/02/skos/core#altLabel":
+                        this.skosService.addAltLabel(this.resource, result.label, result.lang).subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                        );
+                        break;
+                    case "http://www.w3.org/2004/02/skos/core#hiddenLabel":
+                        this.skosService.addHiddenLabel(this.resource, result.label, result.lang).subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                        );
+                        break;
+                    case "http://www.w3.org/2000/01/rdf-schema#label":
+                        this.propertyService.createAndAddPropValue(
+                            this.resource, predicate, result.label, null, "plainLiteral", result.lang).subscribe(
+                            stResp => this.update.emit(null),
+                            err => {
+                                this.modalService.alert("Error", err, "error");
+                                console.error(err['stack']);
+                            }
+                            );
+                        break;
+                }
+            }
+        );
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#prefLabel") {
             this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#altLabel") {
             this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2008/05/skos-xl#hiddenLabel") {
             this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2004/02/skos/core#prefLabel") {
             this.skosService.removePrefLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2004/02/skos/core#altLabel") {
             this.skosService.removeAltLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2004/02/skos/core#hiddenLabel") {
             this.skosService.removeHiddenLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                 stResp => this.update.emit(null),
-                err => { alert("Error: " + err); console.error(err.stack); }
+                err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
             );
         } else if (predicate.getURI() == "http://www.w3.org/2000/01/rdf-schema#label") {
             this.propertyService.removePropValue(this.resource, predicate, (<ARTLiteral>object).getLabel(),
                 null, "plainLiteral", (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
-                    err => { alert("Error: " + err); console.error(err.stack); }
+                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
         }
     }

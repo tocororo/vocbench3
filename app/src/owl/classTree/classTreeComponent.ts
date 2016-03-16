@@ -4,6 +4,7 @@ import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {SearchServices} from "../../services/searchServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "class-tree",
@@ -24,7 +25,8 @@ export class ClassTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private owlService:OwlServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private searchService: SearchServices,
+            private eventHandler:VBEventHandler, private modalService: ModalServices) {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
@@ -38,7 +40,7 @@ export class ClassTreeComponent {
                 this.roots = roots;
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             },
             () => document.getElementById("blockDivTree").style.display = "none"

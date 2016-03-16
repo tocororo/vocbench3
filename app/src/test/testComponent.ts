@@ -4,7 +4,6 @@ import {ModalServices} from "../widget/modal/modalServices";
 @Component({
     selector: "test-component",
     templateUrl: "app/src/test/testComponent.html",
-    providers: [ModalServices],
     host: { class : "pageComponent" }
 })
 export class TestComponent {
@@ -20,13 +19,10 @@ export class TestComponent {
     
     confirm() {
         this.modalService.confirm(this.confirmTitle, this.confirmMessage, this.confirmType).then(
-            resultPromise => {
-                return resultPromise.result.then(result => {
-                    this.confirmResult = "Yes"
-                },
-                    () => this.confirmResult = "No"
-                );
-            }
+            result => {
+                this.confirmResult = "Yes"
+            },
+            () => this.confirmResult = "No"
         );
     }
 
@@ -37,13 +33,10 @@ export class TestComponent {
 
     prompt() {
         this.modalService.prompt(this.promptTitle, this.promptLabel).then(
-            resultPromise => {
-                return resultPromise.result.then(result => {
-                    this.promptResult = result;
-                },
-                    () => this.promptResult = null
-                );
-            }
+            result => {
+                this.promptResult = result;
+            },
+            () => this.promptResult = null
         );
     }
     
@@ -61,13 +54,22 @@ export class TestComponent {
     
     newResource() {
         this.modalService.newResource(this.newResourceTitle).then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.newResourceResult = result;
-                    }
-                );
-            }
+            result => {
+                this.newResourceResult = result;
+            },
+            () => this.newResourceResult = null
+        );
+    }
+    
+    private newLiteralLangResult;
+    private newLiteralLangTitle = "Create new label";
+    
+    newLiteralLang() {
+        this.modalService.newLiteralLang(this.newLiteralLangTitle).then(
+            result => {
+                this.newLiteralLangResult = result;
+            },
+            () => this.newLiteralLangResult = null
         );
     }
     

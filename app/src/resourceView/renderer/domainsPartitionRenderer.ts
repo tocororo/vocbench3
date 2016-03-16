@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
@@ -21,7 +22,7 @@ export class DomainsPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove domain";
     
-    constructor(private propService:PropertyServices) {}
+    constructor(private propService:PropertyServices, private modalService: ModalServices) {}
     
     private add() {
         alert("add domain to " + this.resource.getShow());
@@ -34,7 +35,7 @@ export class DomainsPartitionRenderer {
                 this.update.emit(null);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             }
         );

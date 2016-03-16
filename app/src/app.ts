@@ -3,6 +3,7 @@ import { bootstrap } from "angular2/platform/browser";
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Location } from "angular2/router";
 import { HTTP_PROVIDERS } from "angular2/http";
 import { Modal } from 'angular2-modal/angular2-modal';
+import { ModalServices } from "./widget/modal/modalServices";
 import { ProjectComponent } from "./project/projectComponent";
 import { ConceptsComponent } from "./skos/concept/conceptsComponent";
 import { ClassComponent } from "./owl/classComponent";
@@ -88,7 +89,7 @@ export class App {
 
 bootstrap(App, [
     ROUTER_PROVIDERS, HTTP_PROVIDERS,
-    HttpManager, VocbenchCtx, VBEventHandler, STResponseUtils, Deserializer, Modal
+    HttpManager, VocbenchCtx, VBEventHandler, STResponseUtils, Deserializer, Modal, ModalServices
 ]);
 /**
  * 2nd argument is an array of providers injectable 

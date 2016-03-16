@@ -9,7 +9,7 @@ import {ModalServices} from "../../widget/modal/modalServices";
 	selector: "property-tree-panel",
 	templateUrl: "app/src/property/propertyTreePanel/propertyTreePanelComponent.html",
 	directives: [PropertyTreeComponent],
-    providers: [PropertyServices, SearchServices, ModalServices],
+    providers: [PropertyServices, SearchServices],
 })
 export class PropertyTreePanelComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
@@ -43,16 +43,12 @@ export class PropertyTreePanelComponent {
     private createPropertyForType(type) {
         //currently uses prompt instead of newResource since addProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a new " + type, "Name").then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.propService.addProperty(result, type).subscribe(
-                            stResp => {},
-                            err => {
-                                alert("Error: " + err);
-                                console.error(err['stack']);
-                            }
-                        );
+            result => {
+                this.propService.addProperty(result, type).subscribe(
+                    stResp => { },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
                     }
                 );
             }
@@ -62,16 +58,12 @@ export class PropertyTreePanelComponent {
     private createSubProperty() {
         //currently uses prompt instead of newResource since addSubProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a subProperty", "Name").then(
-            resultPromise => {
-                return resultPromise.result.then(
-                    result => {
-                        this.propService.addSubProperty(result, this.selectedProperty).subscribe(
-                            stResp => {},
-                            err => {
-                                alert("Error: " + err);
-                                console.error(err['stack']);
-                            }
-                        );
+            result => {
+                this.propService.addSubProperty(result, this.selectedProperty).subscribe(
+                    stResp => { },
+                    err => {
+                        this.modalService.alert("Error", err, "error");
+                        console.error(err['stack']);
                     }
                 );
             }
@@ -85,29 +77,35 @@ export class PropertyTreePanelComponent {
                 this.itemSelected.emit(undefined);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );
     }
     
     private doSearch(searchedText: string) {
-        this.searchService.searchResource(searchedText, ["property"], true, "contain").subscribe(
-            searchResult => {
-                if (searchResult.length == 0) {
-                    alert("No results found for '" + searchedText + "'");
-                } else if (searchResult.length == 1) {
-                    this.viewChildTree.openTreeAt(searchResult[0]);
-                } else {
-                    //modal dialog still not available, so it's not possible to let the user choose which result prefer
-                    alert(searchResult.length + " results found. This function is currently not available for multiple results");
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, ["property"], true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'");
+                    } else if (searchResult.length == 1) {
+                        this.viewChildTree.openTreeAt(searchResult[0]);
+                    } else {
+                        //modal dialog still not available, so it's not possible to let the user choose which result prefer
+                        alert(searchResult.length + " results found. This function is currently not available for multiple results");
+                    }
+                    
+                },
+                err => {
+                    this.modalService.alert("Error", err, "error");
+                    console.error(err['stack']);
                 }
-                
-            },
-            err => {
-                alert("Error: " + err);
-                console.error(err['stack']);
-            });
+            );
+        }
+        
     }
     
     /**
@@ -115,11 +113,7 @@ export class PropertyTreePanelComponent {
      */
     private searchKeyHandler(keyIdentifier, searchedText) {
         if (keyIdentifier == "Enter") {
-            if (searchedText.trim() == "") {
-                alert("Please enter a valid string to search");
-            } else {
-                this.doSearch(searchedText);           
-            }
+            this.doSearch(searchedText);           
         }
     }
     

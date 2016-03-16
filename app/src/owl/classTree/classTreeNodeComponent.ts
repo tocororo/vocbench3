@@ -3,6 +3,7 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "class-tree-node",
@@ -26,7 +27,7 @@ export class ClassTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
+	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler, private modalService: ModalServices) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             data => this.onSubClassCreated(data.subClass, data.superClass)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
@@ -113,7 +114,7 @@ export class ClassTreeNodeComponent {
                 this.node.setAdditionalProperty("open", true);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             });
     }

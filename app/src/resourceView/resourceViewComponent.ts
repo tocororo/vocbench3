@@ -2,6 +2,7 @@ import {Component, Input} from "angular2/core";
 import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../widget/modal/modalServices";
 import {ResourceViewServices} from "../services/resourceViewServices";
 import {RefactorServices} from "../services/refactorServices";
 
@@ -48,7 +49,7 @@ export class ResourceViewComponent {
     private inverseofColl: ARTURIResource[];
     
 	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices, 
-        private deserializer:Deserializer) {
+        private deserializer:Deserializer, private modalService: ModalServices) {
     }
     
     ngOnChanges(changes) {
@@ -110,7 +111,7 @@ export class ResourceViewComponent {
                 }
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             },
             () => document.getElementById("blockDivResView").style.display = "none"
@@ -170,7 +171,7 @@ export class ResourceViewComponent {
         this.renameLocked = true;
         var newLocalName = inputEl.value;
         if (newLocalName.trim() == "") {
-            alert("You have to write a valid local name");
+            this.modalService.alert("Rename", "You have to write a valid local name", "error");
             inputEl.value = this.resource.getLocalName();
             return;
         }
@@ -183,7 +184,7 @@ export class ResourceViewComponent {
                     this.buildResourceView(newResource);
                 },
                 err => { 
-                    alert("Error: " + err);
+                    this.modalService.alert("Error", err, "error");
                     console.error(err['stack']);
                 }
             );    

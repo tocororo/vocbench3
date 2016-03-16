@@ -1,6 +1,7 @@
 import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
@@ -18,7 +19,7 @@ export class HierarchicalRedundancyComponent {
     private brokenRecordList: Array<any>;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, 
-            private vbCtx: VocbenchCtx, private router: Router) {
+            private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);
@@ -42,7 +43,7 @@ export class HierarchicalRedundancyComponent {
                 }
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             },
             () => document.getElementById("blockDivIcv").style.display = "none"
@@ -60,7 +61,7 @@ export class HierarchicalRedundancyComponent {
                 this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );

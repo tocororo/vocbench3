@@ -1,30 +1,29 @@
 import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 
-export class NewResourceModalContent {
-    constructor(public title: string) {}
+export class NewLiteralLangModalContent {
+    constructor(public title: string = 'Create new label') {}
 }
 
 @Component({
-    selector: "new-resource-modal",
-    templateUrl: "app/src/widget/modal/newResourceModal/newResourceModal.html",
+    selector: "new-label-modal",
+    templateUrl: "app/src/widget/modal/newLiteralLangModal/newLiteralLangModal.html",
 })
-export class NewResourceModal implements ICustomModalComponent {
+export class NewLiteralLangModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     
-    private name: string;
     private label: string;
     private lang: string = "en";
     private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
         "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
     
     dialog: ModalDialogInstance;
-    context: NewResourceModalContent;
+    context: NewLiteralLangModalContent;
 
     constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
         this.dialog = dialog;
-        this.context = <NewResourceModalContent>modelContentData;
+        this.context = <NewLiteralLangModalContent>modelContentData;
     }
     
     ngOnInit() {
@@ -34,7 +33,7 @@ export class NewResourceModal implements ICustomModalComponent {
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({name: this.name, label: this.label, lang: this.lang});
+        this.dialog.close({label: this.label, lang: this.lang});
     }
 
     cancel() {
@@ -51,7 +50,7 @@ export class NewResourceModal implements ICustomModalComponent {
     }
     
     private isInputValid(): boolean {
-        return (this.name != undefined && this.name.trim() != "");
+        return (this.label != undefined && this.label.trim() != "");
     }
     
     private getFlagImgSrc(): string {

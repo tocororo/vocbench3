@@ -3,6 +3,7 @@ import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {SkosServices} from "../../../services/skosServices";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../../widget/modal/modalServices";
 
 @Component({
 	selector: "concept-tree-node",
@@ -27,7 +28,7 @@ export class ConceptTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {
+	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private modalService: ModalServices) {
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             deletedConcept => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
@@ -104,7 +105,7 @@ export class ConceptTreeNodeComponent {
                 this.node.setAdditionalProperty("open", true);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             });
     }

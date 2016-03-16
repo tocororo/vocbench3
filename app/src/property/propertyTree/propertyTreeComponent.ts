@@ -1,6 +1,7 @@
 import {Component, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";
 import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
@@ -22,7 +23,8 @@ export class PropertyTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
+	constructor(private propertyService:PropertyServices, private searchService: SearchServices, 
+            private eventHandler:VBEventHandler, private modalService: ModalServices) {
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
     }
@@ -33,7 +35,7 @@ export class PropertyTreeComponent {
                 this.propertyTree = propertyTree;
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );

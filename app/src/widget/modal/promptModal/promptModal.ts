@@ -29,6 +29,10 @@ export class PromptModal implements ICustomModalComponent {
         this.dialog = dialog;
         this.context = <PromptModalContent>modelContentData;
     }
+    
+    ngOnInit() {
+        document.getElementById("toFocus").focus();
+    }
 
     ok(event) {
         event.stopPropagation();
@@ -41,6 +45,7 @@ export class PromptModal implements ICustomModalComponent {
     }
     
     private onKeypress(event) {
+        console.log("active element " + document.activeElement.innerHTML);
         if (event.keyIdentifier == "Enter") {
             this.submitted = true;
             if (this.isInputValid()) {

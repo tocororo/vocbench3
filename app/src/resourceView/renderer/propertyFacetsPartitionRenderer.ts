@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
@@ -26,7 +27,7 @@ export class PropertyFacetsPartitionRenderer {
     private rdfType: ARTURIResource = new ARTURIResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "rdf:type", "property");
     private inverseOf: ARTURIResource = new ARTURIResource("http://www.w3.org/2002/07/owl#inverseOf", "rdf:type", "property");
     
-    constructor(private propService:PropertyServices) {}
+    constructor(private propService:PropertyServices, private modalService: ModalServices) {}
     
     private add() {
         alert("add inverse property to " + this.resource.getShow());
@@ -39,7 +40,7 @@ export class PropertyFacetsPartitionRenderer {
                 this.update.emit(null);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             }
         );
@@ -62,7 +63,7 @@ export class PropertyFacetsPartitionRenderer {
             this.propService.addExistingPropValue(this.resource, this.rdfType, propertyClass, "uri").subscribe(
                 stResp => this.update.emit(null),
                 err => {
-                    alert("Error: " + err);
+                    this.modalService.alert("Error", err, "error");
                     console.error(err.stack);
                 }
             );
@@ -70,7 +71,7 @@ export class PropertyFacetsPartitionRenderer {
             this.propService.removePropValue(this.resource, this.rdfType, propertyClass, null, "uri").subscribe(
                 stResp => this.update.emit(null),
                 err => {
-                    alert("Error: " + err);
+                    this.modalService.alert("Error", err, "error");
                     console.error(err.stack);
                 }
             );

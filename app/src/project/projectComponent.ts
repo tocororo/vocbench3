@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy} from "angular2/core";
 import {ProjectServices} from "../services/projectServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {Project} from '../utils/Project';
+import {ModalServices} from "../widget/modal/modalServices";
 
 @Component({
     selector: "project-component",
@@ -16,7 +17,7 @@ export class ProjectComponent implements OnInit {
     
     private exportLink: string;
 
-    constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx) {}
+    constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
 
     ngOnInit() {
         this.projectService.listProjects().subscribe(
@@ -41,7 +42,7 @@ export class ProjectComponent implements OnInit {
                 }
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             });
     }
@@ -61,22 +62,29 @@ export class ProjectComponent implements OnInit {
 
     private deleteProject() {
         if (this.selectedProject.isOpen()) {
-            alert(this.selectedProject.getName() + " is currently open. Please, close the project and then retry.");
+            this.modalService.alert("Delete project", this.selectedProject.getName() + 
+                    " is currently open. Please, close the project and then retry.", "warning");
             return;
         } else {
-            this.projectService.deleteProject(this.selectedProject).subscribe(
-                stResp => {
-                    for (var i = 0; i < this.projectList.length; i++) { //remove project from list
-                        if (this.projectList[i].getName() == this.selectedProject.getName()) {
-                            this.projectList.splice(i, 1);
+            this.modalService.confirm("Delete project", "Attention, this operation will delete the project " +
+                    this.selectedProject.getName() + ". Are you sure to proceed?", "warning").then(
+                result => {
+                    this.projectService.deleteProject(this.selectedProject).subscribe(
+                        stResp => {
+                            for (var i = 0; i < this.projectList.length; i++) { //remove project from list
+                                if (this.projectList[i].getName() == this.selectedProject.getName()) {
+                                    this.projectList.splice(i, 1);
+                                }
+                            }
+                            this.selectedProject = null;
+                        },
+                        err => {
+                            this.modalService.alert("Error", err, "error");
+                            console.error(err.stack);
                         }
-                    }
-                    this.selectedProject = null;
-                },
-                err => {
-                    alert("Error: " + err);
-                    console.error(err.stack);
-                })
+                    );
+                }
+            );
         }
     }
     
@@ -90,7 +98,7 @@ export class ProjectComponent implements OnInit {
      */
     private exportProject() {
         if (!this.selectedProject.isOpen()) {
-            alert("You can export only open projects");
+            this.modalService.alert("Export project", "You can export only open projects", "error");
             return;
         }
         this.projectService.exportProject(this.selectedProject).subscribe(
@@ -99,7 +107,7 @@ export class ProjectComponent implements OnInit {
                 this.exportLink = window.URL.createObjectURL(data);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             }
         );
@@ -121,7 +129,7 @@ export class ProjectComponent implements OnInit {
                     this.connectToProject(project);
                 },
                 err => {
-                    alert("Error: " + err);
+                    this.modalService.alert("Error", err, "error");
                     console.error(err.stack);
                     document.getElementById("blockDivFullScreen").style.display = "none";
                 });
@@ -142,7 +150,7 @@ export class ProjectComponent implements OnInit {
                 project.setOpen(true);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             },
             () => document.getElementById("blockDivFullScreen").style.display = "none");
@@ -157,7 +165,7 @@ export class ProjectComponent implements OnInit {
                 project.setOpen(false);
             },
             err => {
-                alert("Error: " + err);
+                this.modalService.alert("Error", err, "error");
                 console.error(err.stack);
             },
             () => document.getElementById("blockDivFullScreen").style.display = "none");
