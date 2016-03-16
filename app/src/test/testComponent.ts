@@ -1,9 +1,11 @@
 import {Component, ViewChild} from "angular2/core";
 import {ModalServices} from "../widget/modal/modalServices";
+import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 
 @Component({
     selector: "test-component",
     templateUrl: "app/src/test/testComponent.html",
+    directives: [SanitizerDirective],
     host: { class : "pageComponent" }
 })
 export class TestComponent {
@@ -13,8 +15,8 @@ export class TestComponent {
     constructor(public modalService: ModalServices) {}
     
     private confirmResult;
-    private confirmTitle = "Confirm";
-    private confirmMessage = "Are you sure to continue?";
+    private confirmTitle = "Confirm title";
+    private confirmMessage = "Confirm message";
     private confirmType = "info";
     
     confirm() {
@@ -28,11 +30,12 @@ export class TestComponent {
 
     
     private promptResult;
-    private promptTitle = "What's your name?";
-    private promptLabel = "Name";
+    private promptTitle = "Prompt title";
+    private promptLabel = "Field label";
+    private promptSanitized = false;
 
     prompt() {
-        this.modalService.prompt(this.promptTitle, this.promptLabel).then(
+        this.modalService.prompt(this.promptTitle, this.promptLabel, this.promptSanitized).then(
             result => {
                 this.promptResult = result;
             },
@@ -40,8 +43,8 @@ export class TestComponent {
         );
     }
     
-    private alertTitle = "Alert";
-    private alertMessage = "Operation completed";
+    private alertTitle = "Alert title";
+    private alertMessage = "Alert message";
     private alertType = "info";
     
     alert() {
@@ -50,7 +53,7 @@ export class TestComponent {
     
     
     private newResourceResult;
-    private newResourceTitle = "Create new resource";
+    private newResourceTitle = "NewResource title";
     
     newResource() {
         this.modalService.newResource(this.newResourceTitle).then(
@@ -62,7 +65,7 @@ export class TestComponent {
     }
     
     private newLiteralLangResult;
-    private newLiteralLangTitle = "Create new label";
+    private newLiteralLangTitle = "NewLiteralLang title";
     
     newLiteralLang() {
         this.modalService.newLiteralLang(this.newLiteralLangTitle).then(
@@ -72,5 +75,7 @@ export class TestComponent {
             () => this.newLiteralLangResult = null
         );
     }
+    
+    private sanitizable = false;
     
 }

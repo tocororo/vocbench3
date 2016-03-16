@@ -1,6 +1,7 @@
 import {Component, Input} from "angular2/core";
 import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
+import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../widget/modal/modalServices";
 import {ResourceViewServices} from "../services/resourceViewServices";
@@ -24,9 +25,8 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
     directives: [RdfResourceComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, SchemesPartitionRenderer,
         BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
         SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-        RangesPartitionRenderer, PropertyFacetsPartitionRenderer],
+        RangesPartitionRenderer, PropertyFacetsPartitionRenderer, SanitizerDirective],
     providers: [ResourceViewServices, RefactorServices],
-    host: { class: "blockingDivHost" }
 })
 export class ResourceViewComponent {
     

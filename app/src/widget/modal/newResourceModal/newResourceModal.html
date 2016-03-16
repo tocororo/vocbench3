@@ -5,7 +5,7 @@
     <div (keypress)="onKeypress($event)">
         <div class="hbox" style="align-items: center; margin-bottom: 4px;">
             <label style="width: 50px;">Name:</label>
-            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="name">
+            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="name" sanitized>
         </div>
         <div class="hbox" style="align-items: center; margin-bottom: 4px;">
             <label style="width: 50px;">Label:</label>

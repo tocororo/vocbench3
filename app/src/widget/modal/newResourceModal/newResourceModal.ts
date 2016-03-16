@@ -1,5 +1,6 @@
 import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 
 export class NewResourceModalContent {
     constructor(public title: string) {}
@@ -8,6 +9,7 @@ export class NewResourceModalContent {
 @Component({
     selector: "new-resource-modal",
     templateUrl: "app/src/widget/modal/newResourceModal/newResourceModal.html",
+    directives: [SanitizerDirective]
 })
 export class NewResourceModal implements ICustomModalComponent {
     

@@ -33,7 +33,7 @@ export class ClassTreePanelComponent {
     
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
-        this.modalService.prompt("Create new owl:Class", "Name").then(
+        this.modalService.prompt("Create new owl:Class", "Name", true).then(
             result => {
                 this.owlService.createClass(this.rootClass, result).subscribe(
                     stResp => { },
@@ -49,7 +49,7 @@ export class ClassTreePanelComponent {
     
     private createSubClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
-        this.modalService.prompt("Create new owl:Class", "Name").then(
+        this.modalService.prompt("Create new owl:Class", "Name", true).then(
             result => {
                 this.owlService.createClass(this.selectedClass, result).subscribe(
                     stResp => { },
@@ -82,7 +82,7 @@ export class ClassTreePanelComponent {
     
     private createInstance() {
         //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
-        this.modalService.prompt("Create new instance", "Name").then(
+        this.modalService.prompt("Create new instance", "Name", true).then(
             result => {
                 this.owlService.createInstance(this.selectedClass, result).subscribe(
                     stResp => { },

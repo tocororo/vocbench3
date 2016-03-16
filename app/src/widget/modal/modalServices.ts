@@ -16,13 +16,14 @@ export class ModalServices {
      * Returns a Promise with the result.
      * @param title the title of the modal dialog
      * @param label the label of the input field
+     * @param inputSanitized tells if the text in the input field should be sanitized
      */
-    prompt(title: string, label: string) {
+    prompt(title: string, label: string, inputSanitized?: boolean) {
         let dialog: Promise<ModalDialogInstance>;
         let component = PromptModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new PromptModalContent(title, label, false);
+        var modalContent = new PromptModalContent(title, label, false, "Ok", "Cancel", false, inputSanitized);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (small dimension, blocking and without key to dismiss)

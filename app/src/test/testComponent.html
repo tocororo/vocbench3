@@ -1,4 +1,4 @@
-<div>
+<div class="scrollableContainer">
 
     <p>Here it is some test</p>
     
@@ -20,6 +20,7 @@
         <div>
             <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="promptTitle">
             <input type="text" class="form-control input-sm" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="promptLabel">
+            sanitize: <input type="checkbox" [checked]="promptSanitized" (change)="promptSanitized = $event.target.checked">
             <br/><button class="btn btn-primary btn-sm" (click)="prompt()">Test</button>
             <span>Last result: <strong>{{promptResult}}</strong></span>
         </div>
@@ -54,4 +55,16 @@
             <span>New resource: <strong>{{newLiteralLangResult | json}}</strong></span>
         </div>
     </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label>Sanitized input:</label>
+        <input type="text" class="form-control input-sm" sanitized>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+        <label>Sanitizable input:</label>
+        sanitize: <input type="checkbox" [checked]="sanitizable" (change)="sanitizable = $event.target.checked">
+        <input type="text" class="form-control input-sm" [sanitized]="sanitizable">
+    </div>
+    
 </div>
