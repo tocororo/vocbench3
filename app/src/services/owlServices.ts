@@ -152,7 +152,7 @@ export class OwlServices {
      * Creates an instance for the given class. Emits also a instanceCreatedEvent with cls (the class of the created instance)
      * and instance (the new created instance)
      * @param cls the class of the new instance
-     * @instanceName localName of the new instance
+     * @param instanceName localName of the new instance
      */
     createInstance(cls: ARTURIResource, instanceName: string) {
         console.log("[owlServices] createInstance");
@@ -205,20 +205,30 @@ export class OwlServices {
         );
     }
     
-    // addType(cls: ARTURIResource, type: ARTURIResource) {
-    //     console.log("[owlServices] addType");
-    //     var params: any = {
-    //         clsqname: cls.getURI(),
-    //         typeqname: type.getURI(),
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "addType", params, this.oldTypeService);
-    // }
+    /**
+     * Adds a type to a resource. Emits a typeDeletedEvent with resource and type
+     * @param resource the resource to which add a type
+     * @param type the type to add to the individual
+     */
+    addType(resource: ARTURIResource, type: ARTURIResource) {
+        console.log("[owlServices] addType");
+        var params: any = {
+            indqname: resource.getURI(),
+            typeqname: type.getURI(),
+        };
+        return this.httpMgr.doGet("individual", "addType", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.typeAddedEvent.emit({resource: resource, type: type});
+                return stResp;
+            }
+        );
+    }
 
     /**
      * Removes the type of a resource. Emits also a typeDeletedEvent with resource (the resource to which the type is removed)
      * and type (the removed type)
-     * @resource the resource whose the type need to be removed
-     * @type type to remove 
+     * @param resource the resource whose the type need to be removed
+     * @param type type to remove 
      */
     removeType(resource: ARTURIResource, type: ARTURIResource) {
         console.log("[owlServices] removeType");

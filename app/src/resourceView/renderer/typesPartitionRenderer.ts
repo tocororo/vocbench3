@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {OwlServices} from "../../services/owlServices";
 
 @Component({
@@ -14,7 +15,7 @@ export class TypesPartitionRenderer {
     
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
-    @Output() update = new EventEmitter();
+    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
     private label = "Types";
     private addBtnImgSrc = "app/assets/images/class_create.png";
@@ -22,12 +23,18 @@ export class TypesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove type"; 
     
-    constructor(private owlService:OwlServices, private modalService: ModalServices) {}
+    constructor(private owlService:OwlServices, private modalService: ModalServices,
+        private browsingService: BrowsingServices) {}
     
     //add type
     private add() {
-        alert("add type to resource " + this.resource.getShow());
-        this.update.emit(null);
+        this.browsingService.browseClassTree("Select a class").then(
+            selectedClass => {
+                this.owlService.addType(this.resource, selectedClass).subscribe(
+                    stResp => this.update.emit(null)
+                )
+            }
+        );
     }
     
     private remove(type: ARTURIResource) {

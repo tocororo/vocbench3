@@ -98,6 +98,8 @@ export class SkosServices {
      * Set a concept as top concept of a scheme. Emits a topConceptAddedEvent
      * @param concept concept to set as top concept
      * @param scheme where to add the top concept
+     * 
+     * @return object with concept and scheme
      */
     addTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] addTopConcept");
@@ -171,6 +173,25 @@ export class SkosServices {
                 this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broader});
                 return newConc;
             });
+    }
+    
+    /**
+     * Adds the broader relation between two concepts. Emits a narrowerCreatedEvent with narrower and broader
+     * @param concept concept to which add the broader
+     * @param broaderConcept the broader concept
+     */
+    addBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
+        console.log("[SkosServices] addBroaderConcept");
+        var params: any = {
+            concept: concept.getURI(),
+            broaderConcept: broaderConcept.getURI(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "addBroaderConcept", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.narrowerCreatedEvent.emit({narrower: concept, broader: broaderConcept});
+                return stResp;
+            }
+        );
     }
 
     /**

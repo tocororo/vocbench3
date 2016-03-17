@@ -16,7 +16,7 @@ export class ClassAxiomPartitionPartitionRenderer {
     
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource:ARTURIResource;
-    @Output() update = new EventEmitter();
+    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
     private label = "Class Axioms";
     private addBtnImgSrc = "app/assets/images/class_create.png";

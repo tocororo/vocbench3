@@ -15,7 +15,7 @@ export class PropertiesPartitionRenderer {
     
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource:ARTURIResource;
-    @Output() update = new EventEmitter();
+    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
     private label = "Properties";
     private addBtnImgSrc = "app/assets/images/prop_create.png";

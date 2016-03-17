@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
@@ -14,7 +15,7 @@ export class TopConceptsPartitionRenderer {
     
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
-    @Output() update = new EventEmitter();
+    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
     private label = "Top Concepts";
     private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
@@ -22,12 +23,18 @@ export class TopConceptsPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
     private removeBtnImgTitle = "Remove as topConcept";
     
-    constructor(private skosService:SkosServices, private modalService: ModalServices) {}
+    constructor(private skosService:SkosServices, private modalService: ModalServices,
+        private browsingService: BrowsingServices) {}
     
     //add as top concept
     private add() {
-        alert("add resource " + this.resource.getShow() + " as top concept to a scheme");
-        this.update.emit(null);
+        this.browsingService.browseSchemeList("Select a scheme").then(
+            selectedScheme => {
+                this.skosService.addTopConcept(this.resource, selectedScheme).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            }
+        );
     }
     
     private remove(scheme: ARTURIResource) {

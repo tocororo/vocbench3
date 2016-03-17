@@ -7,7 +7,7 @@ import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 @Component({
     selector: "test-component",
     templateUrl: "app/src/test/testComponent.html",
-    providers: [BrowsingServices],
+    providers: [],
     directives: [SanitizerDirective],
     host: { class : "pageComponent" }
 })

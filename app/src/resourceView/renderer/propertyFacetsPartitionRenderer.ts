@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
@@ -16,7 +17,7 @@ export class PropertyFacetsPartitionRenderer {
     @Input('facets') facets: any[]; /** array of data structure {name: string, explicit: boolean, value: boolean}, 
             name of the facet (symmetric/functional/inverseFunctional), if the info is explicit, the value (true/false) */
     @Input() resource: ARTURIResource;
-    @Output() update = new EventEmitter();
+    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
     private label = "Property facets";
     private addBtnImgSrc = "app/assets/images/prop_create.png";
@@ -27,11 +28,17 @@ export class PropertyFacetsPartitionRenderer {
     private rdfType: ARTURIResource = new ARTURIResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "rdf:type", "property");
     private inverseOf: ARTURIResource = new ARTURIResource("http://www.w3.org/2002/07/owl#inverseOf", "rdf:type", "property");
     
-    constructor(private propService:PropertyServices, private modalService: ModalServices) {}
+    constructor(private propService:PropertyServices, private modalService: ModalServices,
+        private browsingService: BrowsingServices) {}
     
     private add() {
-        alert("add inverse property to " + this.resource.getShow());
-        this.update.emit(null);
+        this.browsingService.browsePropertyTree("Select an inverse property").then(
+            selectedProp => {
+                this.propService.addExistingPropValue(this.resource, this.inverseOf, selectedProp.getURI(), "resource").subscribe(
+                    stResp => this.update.emit(null)
+                )
+            }
+        )
     }
     
     private remove(property: ARTURIResource) {

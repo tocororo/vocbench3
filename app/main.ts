@@ -3,6 +3,7 @@ import { ROUTER_PROVIDERS } from "angular2/router";
 import { HTTP_PROVIDERS } from "angular2/http";
 import { Modal } from 'angular2-modal/angular2-modal';
 import { ModalServices } from "./src/widget/modal/modalServices";
+import { BrowsingServices } from "./src/widget/modal/browsingModal/browsingServices";
 import { HttpManager } from "./src/utils/HttpManager";
 import { Deserializer } from "./src/utils/Deserializer";
 import { STResponseUtils } from "./src/utils/STResponseUtils";
@@ -18,5 +19,5 @@ import {App} from "./src/app";
  */
 bootstrap(App, [
     ROUTER_PROVIDERS, HTTP_PROVIDERS,
-    HttpManager, VocbenchCtx, VBEventHandler, STResponseUtils, Deserializer, Modal, ModalServices
+    HttpManager, VocbenchCtx, VBEventHandler, STResponseUtils, Deserializer, Modal, ModalServices, BrowsingServices
 ]);

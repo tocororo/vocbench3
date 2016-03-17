@@ -91,7 +91,7 @@ export class PropertyServices {
     }
 
     /**
-     * Creates a subproperty
+     * Creates a subproperty. Emits a subPropertyCreatedEvent with subProperty and superProperty
      * @param propertyQName local name of the subproperty to create
      * @param superProperty the superProperty of the creating property
      */
@@ -106,14 +106,14 @@ export class PropertyServices {
             stResp => {
                 var newProp = this.deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
                 newProp.setAdditionalProperty("children", []);
-                this.eventHandler.subPropertyCreatedEvent.emit({"subProperty": newProp, "superProperty": superProperty});
+                this.eventHandler.subPropertyCreatedEvent.emit({subProperty: newProp, superProperty: superProperty});
                 return newProp;
             }
         );
     }
     
     /**
-     * Adds a superProperty to the given property
+     * Adds a superProperty to the given property. Emits a subPropertyCreatedEvent with subProperty and superProperty
      * @param property property to which add a super property
      * @param superProperty the superProperty to add
      */
@@ -123,7 +123,12 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             superPropertyQName: superProperty.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "addSuperProperty", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addSuperProperty", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.subPropertyCreatedEvent.emit({subProperty: property, superProperty: superProperty});
+                return stResp;
+            }
+        );
     }
 
     /**
@@ -211,20 +216,58 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "addExistingPropValue", params, this.oldTypeService);
     }
 
-    removePropertyDomain(property: ARTURIResource, domainProperty: ARTURIResource) {
+    /**
+     * Adds a class as domain of a property
+     * @param property property to which add the domain
+     * @param domain the domain class of the property
+     */
+    addPropertyDomain(property: ARTURIResource, domain: ARTURIResource) {
+        console.log("[PropertyServices] addPropertyDomain");
+        var params: any = {
+            propertyQName: property.getURI(),
+            domainPropertyQName: domain.getURI()
+        };
+        return this.httpMgr.doGet(this.serviceName, "addPropertyDomain", params, this.oldTypeService);
+    }
+    
+    /**
+     * Removes the domain of a property
+     * @param property property to which remove the domain
+     * @param domain the domain class of the property
+     */
+    removePropertyDomain(property: ARTURIResource, domain: ARTURIResource) {
         console.log("[PropertyServices] removePropertyDomain");
         var params: any = {
             propertyQName: property.getURI(),
-            domainPropertyQName: domainProperty.getURI(),
+            domainPropertyQName: domain.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "removePropertyDomain", params, this.oldTypeService);
     }
+    
+    /**
+     * Adds a class as range of a property
+     * @param property property to which add the domain
+     * @param range the range class of the property
+     */
+    addPropertyRange(property: ARTURIResource, range: ARTURIResource) {
+        console.log("[PropertyServices] addPropertyRange");
+        var params: any = {
+            propertyQName: property.getURI(),
+            rangePropertyQName: range.getURI()
+        };
+        return this.httpMgr.doGet(this.serviceName, "addPropertyRange", params, this.oldTypeService);
+    }
 
-    removePropertyRange(property: ARTURIResource, rangeProperty: ARTURIResource) {
+    /**
+     * Removes the range of a property
+     * @param property property to which remove the range
+     * @param range the range class of the property
+     */
+    removePropertyRange(property: ARTURIResource, range: ARTURIResource) {
         console.log("[PropertyServices] removePropertyRange");
         var params: any = {
             propertyQName: property.getURI(),
-            rangePropertyQName: rangeProperty.getURI(),
+            rangePropertyQName: range.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "removePropertyRange", params, this.oldTypeService);
     }

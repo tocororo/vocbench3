@@ -39,9 +39,11 @@ export class ClassTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             data => this.onInstanceDeleted(data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
-            data => this.onInstanceCreated(data.instance, data.cls)));
+            data => this.onInstanceCreated(data.cls)));
         this.eventSubscriptions.push(eventHandler.typeDeletedEvent.subscribe(
             data => this.onInstanceDeleted(data.type)));
+        this.eventSubscriptions.push(eventHandler.typeAddedEvent.subscribe(
+            data => this.onInstanceCreated(data.type)));
     }
     
     ngOnInit() {
@@ -186,7 +188,7 @@ export class ClassTreeNodeComponent {
     }
     
     //increase numInst property when an instance of the current class is created
-    onInstanceCreated(instance: ARTURIResource, cls: ARTURIResource) {
+    onInstanceCreated(cls: ARTURIResource) {
         if (this.node.getURI() == cls.getURI()) {
             var numInst = this.node.getAdditionalProperty("numInst");
             this.node.setAdditionalProperty("numInst", numInst+1);
