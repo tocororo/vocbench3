@@ -64,9 +64,9 @@ export class Deserializer {
         if (numInst != undefined) {
             artURIRes.setAdditionalProperty("numInst", parseInt(numInst));
         }
-		var hasCustomRange = uriElement.getAttribute("hasCustomRange") == "true";//indicates if a property has a CustomRange
+		var hasCustomRange = uriElement.getAttribute("hasCustomRange");//indicates if a property has a CustomRange
         if (hasCustomRange != undefined) {
-            artURIRes.setAdditionalProperty("hasCustomRange", hasCustomRange);
+            artURIRes.setAdditionalProperty("hasCustomRange", (hasCustomRange == "true"));
         }
 		var resourcePosition = uriElement.getAttribute("resourcePosition");//indicates the position of the resource
         if (resourcePosition != undefined) {

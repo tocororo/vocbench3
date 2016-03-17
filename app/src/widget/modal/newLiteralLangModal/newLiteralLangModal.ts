@@ -6,14 +6,14 @@ export class NewLiteralLangModalContent {
 }
 
 @Component({
-    selector: "new-label-modal",
+    selector: "new-literal-lang-modal",
     templateUrl: "app/src/widget/modal/newLiteralLangModal/newLiteralLangModal.html",
 })
 export class NewLiteralLangModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     
-    private label: string;
+    private literal: string;
     private lang: string = "en";
     private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
         "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
@@ -33,7 +33,7 @@ export class NewLiteralLangModal implements ICustomModalComponent {
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({label: this.label, lang: this.lang});
+        this.dialog.close({literal: this.literal, lang: this.lang});
     }
 
     cancel() {
@@ -50,7 +50,7 @@ export class NewLiteralLangModal implements ICustomModalComponent {
     }
     
     private isInputValid(): boolean {
-        return (this.label != undefined && this.label.trim() != "");
+        return (this.literal != undefined && this.literal.trim() != "");
     }
     
     private getFlagImgSrc(): string {

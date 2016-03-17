@@ -4,8 +4,8 @@
 <div class="modal-body">
     <div (keypress)="onKeypress($event)">
         <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-            <label style="width: 50px;">Label:</label>
-            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="label">
+            <label style="width: 50px;">Value:</label>
+            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="literal">
             <select [(ngModel)]="lang" class="form-control input-sm" style="width: initial; margin-right: 4px;">
                 <option *ngFor="#lang of languageList" [value]="lang">{{lang}}</option>
             </select>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div *ngIf="!isInputValid() && submitted" class="alert alert-danger">
-        <strong>Label</strong> is required
+        <strong>Value</strong> is required
     </div>
 </div>
 <div class="modal-footer">

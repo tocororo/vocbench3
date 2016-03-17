@@ -40,7 +40,7 @@ export class LexicalizationsPartitionRenderer {
             result => {
                 switch (predicate.getURI()) {
                     case "http://www.w3.org/2008/05/skos-xl#prefLabel":
-                        this.skosxlService.setPrefLabel(this.resource, result.label, result.lang, "bnode").subscribe(
+                        this.skosxlService.setPrefLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
@@ -49,7 +49,7 @@ export class LexicalizationsPartitionRenderer {
                         );
                         break;
                     case "http://www.w3.org/2008/05/skos-xl#altLabel":
-                        this.skosxlService.addAltLabel(this.resource, result.label, result.lang, "bnode").subscribe(
+                        this.skosxlService.addAltLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
@@ -58,7 +58,7 @@ export class LexicalizationsPartitionRenderer {
                         );
                         break;
                     case "http://www.w3.org/2008/05/skos-xl#hiddenLabel":
-                        this.skosxlService.addHiddenLabel(this.resource, result.label, result.lang, "bnode").subscribe(
+                        this.skosxlService.addHiddenLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
@@ -66,9 +66,8 @@ export class LexicalizationsPartitionRenderer {
                             }
                         );
                         break;
-                    //TODO other lexicalizations
                     case "http://www.w3.org/2004/02/skos/core#prefLabel":
-                        this.skosService.setPrefLabel(this.resource, result.label, result.lang).subscribe(
+                        this.skosService.setPrefLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
@@ -77,7 +76,7 @@ export class LexicalizationsPartitionRenderer {
                         );
                         break;
                     case "http://www.w3.org/2004/02/skos/core#altLabel":
-                        this.skosService.addAltLabel(this.resource, result.label, result.lang).subscribe(
+                        this.skosService.addAltLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
@@ -86,7 +85,7 @@ export class LexicalizationsPartitionRenderer {
                         );
                         break;
                     case "http://www.w3.org/2004/02/skos/core#hiddenLabel":
-                        this.skosService.addHiddenLabel(this.resource, result.label, result.lang).subscribe(
+                        this.skosService.addHiddenLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
@@ -96,13 +95,13 @@ export class LexicalizationsPartitionRenderer {
                         break;
                     case "http://www.w3.org/2000/01/rdf-schema#label":
                         this.propertyService.createAndAddPropValue(
-                            this.resource, predicate, result.label, null, "plainLiteral", result.lang).subscribe(
+                            this.resource, predicate, result.literal, null, "plainLiteral", result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => {
                                 this.modalService.alert("Error", err, "error");
                                 console.error(err['stack']);
                             }
-                            );
+                        );
                         break;
                 }
             }

@@ -1,10 +1,13 @@
 import {Component, ViewChild} from "angular2/core";
 import {ModalServices} from "../widget/modal/modalServices";
+import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
+import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 
 @Component({
     selector: "test-component",
     templateUrl: "app/src/test/testComponent.html",
+    providers: [BrowsingServices],
     directives: [SanitizerDirective],
     host: { class : "pageComponent" }
 })
@@ -12,7 +15,7 @@ export class TestComponent {
     
     private typeList = ["info", "error", "warning"];
     
-    constructor(public modalService: ModalServices) {}
+    constructor(public modalService: ModalServices, private browsingService: BrowsingServices, private vbCtx: VocbenchCtx) {}
     
     private confirmResult;
     private confirmTitle = "Confirm title";
@@ -77,5 +80,50 @@ export class TestComponent {
     }
     
     private sanitizable = false;
+    
+    
+    private browseClassTreeResult;
+    
+    browseClassTree() {
+        this.browsingService.browseClassTree("Select a class").then(
+            result => {
+                this.browseClassTreeResult = result;
+            },
+            () => this.browseClassTreeResult = null
+        )
+    }
+    
+    private browseInstanceListResult;
+    
+    browseInstanceList() {
+        this.browsingService.browseInstanceList("Select an instance", this.browseClassTreeResult).then(
+            result => {
+                this.browseInstanceListResult = result;
+            },
+            () => this.browseInstanceListResult = null
+        )
+    }
+    
+    private browseConceptTreeResult;
+    
+    browseConceptTree() {
+        this.browsingService.browseConceptTree("Select a concept", this.vbCtx.getScheme()).then(
+            result => {
+                this.browseConceptTreeResult = result;
+            },
+            () => this.browseConceptTreeResult = null
+        )
+    }
+    
+    private browsePropertyTreeResult;
+    
+    browsePropertyTree() {
+        this.browsingService.browsePropertyTree("Select a property").then(
+            result => {
+                this.browsePropertyTreeResult = result;
+            },
+            () => this.browsePropertyTreeResult = null
+        )
+    }
     
 }

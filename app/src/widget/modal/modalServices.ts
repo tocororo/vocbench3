@@ -17,6 +17,7 @@ export class ModalServices {
      * @param title the title of the modal dialog
      * @param label the label of the input field
      * @param inputSanitized tells if the text in the input field should be sanitized
+     * @return if the modal closes with ok returns a promise containing the input text
      */
     prompt(title: string, label: string, inputSanitized?: boolean) {
         let dialog: Promise<ModalDialogInstance>;
@@ -32,7 +33,7 @@ export class ModalServices {
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog.then(
             resultPromise => {
-                return resultPromise.result
+                return resultPromise.result;
             }
         );
     }
@@ -44,6 +45,7 @@ export class ModalServices {
      * @param message the message to show in the modal dialog body
      * @param type tells the type of the dialog. Determines the style of the message in the dialog.
      * Available values: info (default), error, warning
+     * @return if the modal closes with ok returns a promise containing a boolean true
      */
     confirm(title: string, message: string, type?: string) {
         let dialog: Promise<ModalDialogInstance>;
@@ -61,7 +63,7 @@ export class ModalServices {
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog.then(
             resultPromise => {
-                return resultPromise.result
+                return resultPromise.result;
             }
         );
     }
@@ -90,6 +92,11 @@ export class ModalServices {
         return dialog;
     }
     
+    /**
+     * Opens a modal to create a new resource with name, label and language tag
+     * @param title the title of the modal dialog
+     * @return if the modal closes with ok returns a promise containing an object with name, label and lang
+     */
     newResource(title: string) {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewResourceModal;
@@ -104,11 +111,16 @@ export class ModalServices {
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog.then(
             resultPromise => {
-                return resultPromise.result
+                return resultPromise.result;
             }
         );
     }
     
+    /**
+     * Opens a modal to create a new literal with language tag
+     * @param title the title of the modal dialog
+     * @return if the modal closes with ok returns a promise containing an object with value and lang
+     */
     newLiteralLang(title: string) {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewLiteralLangModal;
@@ -123,7 +135,7 @@ export class ModalServices {
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog.then(
             resultPromise => {
-                return resultPromise.result
+                return resultPromise.result;
             }
         );
     }
