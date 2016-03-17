@@ -1,9 +1,6 @@
 import { Component } from "angular2/core";
-import { bootstrap } from "angular2/platform/browser";
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Location } from "angular2/router";
-import { HTTP_PROVIDERS } from "angular2/http";
-import { Modal } from 'angular2-modal/angular2-modal';
-import { ModalServices } from "./widget/modal/modalServices";
+import { RouteConfig, ROUTER_DIRECTIVES, Location } from "angular2/router";
+import { VocbenchCtx } from "./utils/VocbenchCtx";
 import { ProjectComponent } from "./project/projectComponent";
 import { ConceptsComponent } from "./skos/concept/conceptsComponent";
 import { ClassComponent } from "./owl/classComponent";
@@ -20,11 +17,6 @@ import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
 import { TestComponent } from "./test/testComponent";
-import { HttpManager } from "./utils/HttpManager";
-import { Deserializer } from "./utils/Deserializer";
-import { STResponseUtils } from "./utils/STResponseUtils";
-import { VocbenchCtx } from "./utils/VocbenchCtx";
-import { VBEventHandler } from "./utils/VBEventHandler";
 
 @Component({
     selector: "app",
@@ -86,13 +78,3 @@ export class App {
     }
     
 }
-
-bootstrap(App, [
-    ROUTER_PROVIDERS, HTTP_PROVIDERS,
-    HttpManager, VocbenchCtx, VBEventHandler, STResponseUtils, Deserializer, Modal, ModalServices
-]);
-/**
- * 2nd argument is an array of providers injectable 
- * Providers can be injected punctually in a Component if needed (using the proviers: [] array), or
- * in the bootstrap function so that they can be widely used in the application, without specifying them in providers
- */

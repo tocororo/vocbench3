@@ -24,9 +24,6 @@
     <!--<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />-->
     <link rel="stylesheet" href="app/assets/styles/custom_bootstrap/css/bootstrap.min.css">
     
-    <!-- ng2-bootstrap -->
-    <!--<script src="node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>-->
-
     <link rel="stylesheet" href="app/assets/styles/style.css">
 
     <!-- 2. Configure SystemJS -->
@@ -45,7 +42,7 @@
                 'angular2-modal': 'node_modules/angular2-modal/dist'
             }
       });
-      System.import('app/src/app')
+      System.import('app/main')
             .then(null, console.error.bind(console));
     </script>
 
