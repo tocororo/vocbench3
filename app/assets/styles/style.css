@@ -91,20 +91,20 @@ config-bar {
     flex: 4;
 }
 
-concept-tree-panel, concept-scheme-panel, class-tree-panel, property-tree-panel, resource-view {
+concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, resource-view {
     display: flex;
     flex-flow: column;
     flex: 1;
     min-height: 0;
 }
 
-concept-tree, class-tree, property-tree, resource-view, instance-list {
+concept-tree, class-tree, property-tree, resource-view, instance-list, scheme-list {
     display: flex;
     flex: 1;
     min-height: 0;
 }
 
-concept-tree, class-tree, property-tree, instance-list {
+concept-tree, class-tree, property-tree, instance-list, scheme-list {
     border: 1px solid #ddd;
 }
 
@@ -135,7 +135,7 @@ rdf-resource > span {
 }
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
-property-tree rdf-resource:hover, concept-scheme-panel rdf-resource:hover {
+scheme-list rdf-resource:hover, property-tree rdf-resource:hover, scheme-list-panel rdf-resource:hover {
     background-color: #e5f3ff;
 }
 
@@ -163,16 +163,16 @@ property-tree rdf-resource:hover, concept-scheme-panel rdf-resource:hover {
 	padding-left:15px;
 }
 
-.conceptSchemeItem {
+.schemeItem {
     display: flex;
     align-items: center;
 }
 
-.conceptSchemeItem input[type=radio] {
+.schemeItem input[type=radio] {
 	margin: 0px 5px 0px 0px; /* override input margin defined in bootstrap */
 }
 
-.conceptSchemeItem rdf-resource {
+.schemeItem rdf-resource {
 	border-radius: 2px;
 	flex: 1;
 }

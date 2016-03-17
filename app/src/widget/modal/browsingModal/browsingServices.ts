@@ -3,6 +3,7 @@ import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-mo
 import {ClassTreeModal, ClassTreeModalContent} from "../browsingModal/classTreeModal/classTreeModal";
 import {InstanceListModal, InstanceListModalContent} from "../browsingModal/instanceListModal/instanceListModal";
 import {ConceptTreeModal, ConceptTreeModalContent} from "../browsingModal/conceptTreeModal/conceptTreeModal";
+import {SchemeListModal, SchemeListModalContent} from "../browsingModal/schemeListModal/schemeListModal";
 import {PropertyTreeModal, PropertyTreeModalContent} from "../browsingModal/propertyTreeModal/propertyTreeModal";
 import {ARTURIResource} from "../../../utils/ARTResources";
 
@@ -79,6 +80,30 @@ export class BrowsingServices {
         
         //inject the modal content in the modal Component
         var modalContent = new ConceptTreeModalContent(title, scheme);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
+        //set the modal configuration (medium dimension, blocking and without key to dismiss)
+        var modConf = new ModalConfig("md", true, null);
+        
+        dialog = this.modal.open(<any>component, bindings, modConf);
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result;
+            }
+        );
+    }
+    
+    /**
+     * Opens a modal to browse the scheme list
+     * @param title the title of the modal
+     * @return if the modal closes with ok returns a promise containing the selected scheme
+     */
+    browseSchemeList(title: string) {
+        let dialog: Promise<ModalDialogInstance>;
+        let component = SchemeListModal;
+        
+        //inject the modal content in the modal Component
+        var modalContent = new SchemeListModalContent(title);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)

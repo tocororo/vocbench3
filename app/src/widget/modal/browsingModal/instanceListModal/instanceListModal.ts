@@ -8,7 +8,7 @@ export class InstanceListModalContent {
 }
 
 @Component({
-    selector: "concept-tree-modal",
+    selector: "instance-list-modal",
     templateUrl: "app/src/widget/modal/browsingModal/instanceListModal/instanceListModal.html",
     directives: [InstanceListComponent]
 })

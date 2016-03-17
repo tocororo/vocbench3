@@ -1,6 +1,6 @@
 <div class="hbox">
     <div class="sidebar vbox">
-        <concept-scheme-panel (itemSelected)="onSchemeSelected($event)"></concept-scheme-panel>
+        <scheme-list-panel (itemSelected)="onSchemeSelected($event)"></scheme-list-panel>
     </div>
     <div class="resViewContainer vbox" *ngIf="resource">
         <resource-view [resource]="resource"></resource-view>

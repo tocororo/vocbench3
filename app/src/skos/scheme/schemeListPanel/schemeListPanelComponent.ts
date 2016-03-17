@@ -7,12 +7,12 @@ import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 
 @Component({
-	selector: "concept-scheme-panel",
-	templateUrl: "app/src/skos/scheme/conceptSchemePanel/conceptSchemePanelComponent.html",
+	selector: "scheme-list-panel",
+	templateUrl: "app/src/skos/scheme/schemeListPanel/schemeListPanelComponent.html",
 	directives: [RdfResourceComponent],
     providers: [SkosServices],
 })
-export class ConceptSchemePanelComponent {
+export class SchemeListPanelComponent {
     
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     

@@ -21,7 +21,6 @@ export class TestComponent {
     private confirmTitle = "Confirm title";
     private confirmMessage = "Confirm message";
     private confirmType = "info";
-    
     confirm() {
         this.modalService.confirm(this.confirmTitle, this.confirmMessage, this.confirmType).then(
             result => {
@@ -30,13 +29,11 @@ export class TestComponent {
             () => this.confirmResult = "No"
         );
     }
-
     
     private promptResult;
     private promptTitle = "Prompt title";
     private promptLabel = "Field label";
     private promptSanitized = false;
-
     prompt() {
         this.modalService.prompt(this.promptTitle, this.promptLabel, this.promptSanitized).then(
             result => {
@@ -49,15 +46,12 @@ export class TestComponent {
     private alertTitle = "Alert title";
     private alertMessage = "Alert message";
     private alertType = "info";
-    
     alert() {
         this.modalService.alert(this.alertTitle, this.alertMessage, this.alertType);
     }
     
-    
     private newResourceResult;
     private newResourceTitle = "NewResource title";
-    
     newResource() {
         this.modalService.newResource(this.newResourceTitle).then(
             result => {
@@ -69,7 +63,7 @@ export class TestComponent {
     
     private newLiteralLangResult;
     private newLiteralLangTitle = "NewLiteralLang title";
-    
+    private sanitizable = false;
     newLiteralLang() {
         this.modalService.newLiteralLang(this.newLiteralLangTitle).then(
             result => {
@@ -79,11 +73,7 @@ export class TestComponent {
         );
     }
     
-    private sanitizable = false;
-    
-    
     private browseClassTreeResult;
-    
     browseClassTree() {
         this.browsingService.browseClassTree("Select a class").then(
             result => {
@@ -94,7 +84,6 @@ export class TestComponent {
     }
     
     private browseInstanceListResult;
-    
     browseInstanceList() {
         this.browsingService.browseInstanceList("Select an instance", this.browseClassTreeResult).then(
             result => {
@@ -104,10 +93,19 @@ export class TestComponent {
         )
     }
     
-    private browseConceptTreeResult;
+    private browseSchemeListResult;
+    browseSchemeList() {
+        this.browsingService.browseSchemeList("Select a scheme").then(
+            result => {
+                this.browseSchemeListResult = result;
+            },
+            () => this.browseSchemeListResult = null
+        )
+    }
     
+    private browseConceptTreeResult;
     browseConceptTree() {
-        this.browsingService.browseConceptTree("Select a concept", this.vbCtx.getScheme()).then(
+        this.browsingService.browseConceptTree("Select a concept", this.browseSchemeListResult).then(
             result => {
                 this.browseConceptTreeResult = result;
             },
@@ -116,7 +114,6 @@ export class TestComponent {
     }
     
     private browsePropertyTreeResult;
-    
     browsePropertyTree() {
         this.browsingService.browsePropertyTree("Select a property").then(
             result => {

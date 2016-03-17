@@ -1,6 +1,6 @@
 import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
-import {ConceptSchemePanelComponent} from "./conceptSchemePanel/conceptSchemePanelComponent";
+import {SchemeListPanelComponent} from "./schemeListPanel/schemeListPanelComponent";
 import {ResourceViewComponent} from "../../resourceView/resourceViewComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
@@ -8,7 +8,7 @@ import {VocbenchCtx} from '../../utils/VocbenchCtx';
 @Component({
     selector: "scheme-component",
     templateUrl: "app/src/skos/scheme/schemesComponent.html",
-    directives: [ConceptSchemePanelComponent, ResourceViewComponent],
+    directives: [SchemeListPanelComponent, ResourceViewComponent],
     host: { class: "pageComponent" }
 })
 export class SchemesComponent {
