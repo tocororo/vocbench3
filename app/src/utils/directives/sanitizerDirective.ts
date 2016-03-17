@@ -18,12 +18,19 @@ import {Directive, ElementRef, Input} from 'angular2/core';
 })
 export class SanitizerDirective {
     
-    @Input('sanitized') active: boolean = true;
+    @Input('sanitized') active: boolean;
     
     private sourceChar = " ";
     private targetChar = "_";
     
     constructor(private el: ElementRef) {}
+    
+    ngOnChanges(changes) {
+        //check needed when sanitized is used as <input type="text" sanitized>, so active is bound as ""
+        if (changes.active.currentValue === "") {
+            this.active = true;
+        }
+    }
     
     /**
 	 * Sanitizes the input text replacing the white space with underscore.
@@ -64,6 +71,7 @@ export class SanitizerDirective {
      * Sanitizes typed text
      */
     onKeypressListener = function(event) {
+        console.log("sanitized " + this.active);
         if (this.active) {
             var inputElement = this.el.nativeElement;
             var txtContent = inputElement.value;
