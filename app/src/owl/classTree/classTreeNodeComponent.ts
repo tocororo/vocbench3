@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
+import {OWL} from "../../utils/Vocabulary";
 import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -47,7 +48,7 @@ export class ClassTreeNodeComponent {
     }
     
     ngOnInit() {
-        if (this.node.getURI() == "http://www.w3.org/2002/07/owl#Thing") {
+        if (this.node.getURI() == OWL.thing.getURI()) {
             this.expandNode();
         }
     }

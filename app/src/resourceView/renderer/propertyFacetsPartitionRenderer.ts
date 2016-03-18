@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDF, OWL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -19,16 +20,13 @@ export class PropertyFacetsPartitionRenderer {
     @Input() resource: ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
-    private rdfType: ARTURIResource = new ARTURIResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "rdf:type", "property");
-    private inverseOf: ARTURIResource = new ARTURIResource("http://www.w3.org/2002/07/owl#inverseOf", "rdf:type", "property");
-    
     constructor(private propService:PropertyServices, private modalService: ModalServices,
         private browsingService: BrowsingServices) {}
     
     private add() {
         this.browsingService.browsePropertyTree("Select an inverse property").then(
             selectedProp => {
-                this.propService.addExistingPropValue(this.resource, this.inverseOf, selectedProp.getURI(), "resource").subscribe(
+                this.propService.addExistingPropValue(this.resource, OWL.inverseOf, selectedProp.getURI(), "resource").subscribe(
                     stResp => this.update.emit(null)
                 )
             }
@@ -36,7 +34,7 @@ export class PropertyFacetsPartitionRenderer {
     }
     
     private remove(property: ARTURIResource) {
-        this.propService.removePropValue(this.resource, this.inverseOf, property.getURI(), null, "uri").subscribe(
+        this.propService.removePropValue(this.resource, OWL.inverseOf, property.getURI(), null, "uri").subscribe(
             stResp => {
                 this.update.emit(null);
             },
@@ -49,19 +47,19 @@ export class PropertyFacetsPartitionRenderer {
     
     private changeFacet(facetName: string, checked: boolean) {
         if (facetName == "symmetric") {
-            this.setPropertyFacet("http://www.w3.org/2002/07/owl#SymmetricProperty", checked);
+            this.setPropertyFacet(OWL.symmetricProperty, checked);
         } else if (facetName == "functional") {
-            this.setPropertyFacet("http://www.w3.org/2002/07/owl#FunctionalProperty", checked);
+            this.setPropertyFacet(OWL.functionalProperty, checked);
         } else if (facetName == "inverseFunctional") {
-            this.setPropertyFacet("http://www.w3.org/2002/07/owl#InverseFunctionalProperty", checked);
+            this.setPropertyFacet(OWL.inverseFunctionalProperty, checked);
         } else if (facetName == "transitive") {
-            this.setPropertyFacet("http://www.w3.org/2002/07/owl#TransitiveProperty", checked);
+            this.setPropertyFacet(OWL.transitiveProperty, checked);
         }
     }
     
-    private setPropertyFacet(propertyClass: string, value: boolean) {
+    private setPropertyFacet(propertyClass: ARTURIResource, value: boolean) {
         if (value) {
-            this.propService.addExistingPropValue(this.resource, this.rdfType, propertyClass, "uri").subscribe(
+            this.propService.addExistingPropValue(this.resource, RDF.type, propertyClass.getURI(), "uri").subscribe(
                 stResp => this.update.emit(null),
                 err => {
                     this.modalService.alert("Error", err, "error");
@@ -69,7 +67,7 @@ export class PropertyFacetsPartitionRenderer {
                 }
             );
         } else {
-            this.propService.removePropValue(this.resource, this.rdfType, propertyClass, null, "uri").subscribe(
+            this.propService.removePropValue(this.resource, RDF.type, propertyClass.getURI(), null, "uri").subscribe(
                 stResp => this.update.emit(null),
                 err => {
                     this.modalService.alert("Error", err, "error");

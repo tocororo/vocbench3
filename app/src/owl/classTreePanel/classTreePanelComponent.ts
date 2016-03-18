@@ -5,6 +5,7 @@ import {SearchServices} from "../../services/searchServices";
 import {OwlServices} from "../../services/owlServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDF, OWL} from "../../utils/Vocabulary";
 
 @Component({
 	selector: "class-tree-panel",
@@ -27,7 +28,7 @@ export class ClassTreePanelComponent {
     
     ngOnInit() {
         if (this.rootClass == undefined) {
-            this.rootClass = new ARTURIResource("http://www.w3.org/2002/07/owl#Thing", "owl:Thing", "cls");
+            this.rootClass = OWL.thing;
         }
     }
     

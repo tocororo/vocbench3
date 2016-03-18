@@ -1,9 +1,8 @@
 import {Injectable} from 'angular2/core';
 import {Http, Response, Headers, HTTP_PROVIDERS} from 'angular2/http';
 import 'rxjs/Rx'; //for map function
-import {Observable} from 'rxjs/Observable'; //for map function
+import {Observable} from 'rxjs/Observable';
 import {STResponseUtils} from "../utils/STResponseUtils";
-
 import {VocbenchCtx} from './VocbenchCtx';
 
 @Injectable()

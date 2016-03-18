@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {OWL} from "../../utils/Vocabulary";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {SearchServices} from "../../services/searchServices";
@@ -40,7 +41,7 @@ export class ClassTreeComponent {
     ngAfterViewInit() {
         this.blockDivElement.nativeElement.style.display = "block";
         if (this.rootClass == undefined) {
-            this.rootClass = new ARTURIResource("http://www.w3.org/2002/07/owl#Thing", "owl:Thing", "cls");
+            this.rootClass = OWL.thing;
         }
         this.owlService.getClassesInfoAsRootsForTree(this.rootClass).subscribe(
             roots => {

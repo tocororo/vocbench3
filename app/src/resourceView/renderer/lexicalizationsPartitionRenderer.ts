@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
+import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {SkosServices} from "../../services/skosServices";
@@ -23,17 +24,9 @@ export class LexicalizationsPartitionRenderer {
     
     private showAllLexicalProp = false;
     
-    private skosxlPrefLabel = new ARTURIResource("http://www.w3.org/2008/05/skos-xl#prefLabel", "skosxl:prefLabel", "objectProperty");
-    private skosxlAltLabel = new ARTURIResource("http://www.w3.org/2008/05/skos-xl#altLabel", "skosxl:altLabel", "objectProperty");
-    private skosxlHiddenLabel = new ARTURIResource("http://www.w3.org/2008/05/skos-xl#hiddenLabel", "skosxl:hiddenLabel", "objectProperty");
-    private skosPrefLabel = new ARTURIResource("http://www.w3.org/2004/02/skos/core#prefLabel", "skos:prefLabel", "annotationProperty");
-    private skosAltLabel = new ARTURIResource("http://www.w3.org/2004/02/skos/core#altLabel", "skos:altLabel", "annotationProperty");
-    private skosHiddenLabel = new ARTURIResource("http://www.w3.org/2004/02/skos/core#hiddenLabel", "skos:hiddenLabel", "annotationProperty");
-    private rdfsLabel = new ARTURIResource("http://www.w3.org/2000/01/rdf-schema#label", "rdfs:label", "annotationProperty");
-    
     private lexicalizationProperties = [
-        this.skosxlPrefLabel, this.skosxlAltLabel, this.skosxlHiddenLabel,
-        this.skosPrefLabel, this.skosAltLabel, this.skosHiddenLabel, this.rdfsLabel
+        SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel,
+        SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel, RDFS.label
     ];
     
     constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
@@ -43,43 +36,43 @@ export class LexicalizationsPartitionRenderer {
         this.modalService.newLiteralLang("Add " + predicate.getShow()).then(
             result => {
                 switch (predicate.getURI()) {
-                    case this.skosxlPrefLabel.getURI():
+                    case SKOSXL.prefLabel.getURI():
                         this.skosxlService.setPrefLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
-                    case this.skosxlAltLabel.getURI():
+                    case SKOSXL.altLabel.getURI():
                         this.skosxlService.addAltLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
-                    case this.skosxlHiddenLabel.getURI():
+                    case SKOSXL.hiddenLabel.getURI():
                         this.skosxlService.addHiddenLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
-                    case this.skosPrefLabel.getURI():
+                    case SKOS.prefLabel.getURI():
                         this.skosService.setPrefLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
-                    case this.skosAltLabel.getURI():
+                    case SKOS.altLabel.getURI():
                         this.skosService.addAltLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
-                    case this.skosHiddenLabel.getURI():
+                    case SKOS.hiddenLabel.getURI():
                         this.skosService.addHiddenLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
-                    case this.rdfsLabel.getURI():
+                    case RDFS.label.getURI():
                         this.propertyService.createAndAddPropValue(
                             this.resource, predicate, result.literal, null, "plainLiteral", result.lang).subscribe(
                             stResp => this.update.emit(null),
@@ -93,43 +86,43 @@ export class LexicalizationsPartitionRenderer {
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         switch (predicate.getURI()) {
-            case this.skosxlPrefLabel.getURI():
+            case SKOSXL.prefLabel.getURI():
                 this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                     stResp => this.update.emit(null),
                     err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
                 break;
-            case this.skosxlAltLabel.getURI():
+            case SKOSXL.altLabel.getURI():
                 this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                     stResp => this.update.emit(null),
                     err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
                 break;
-            case this.skosxlHiddenLabel.getURI():
+            case SKOSXL.hiddenLabel.getURI():
                 this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                     stResp => this.update.emit(null),
                     err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
                 break;
-            case this.skosPrefLabel.getURI():
+            case SKOS.prefLabel.getURI():
                 this.skosService.removePrefLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
                     err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
                 break;
-            case this.skosAltLabel.getURI():
+            case SKOS.altLabel.getURI():
                 this.skosService.removeAltLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
                     err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
                 break;
-            case this.skosHiddenLabel.getURI():
+            case SKOS.hiddenLabel.getURI():
                 this.skosService.removeHiddenLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
                     err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                 );
                 break;
-            case this.rdfsLabel.getURI():
+            case RDFS.label.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, (<ARTLiteral>object).getLabel(),
                     null, "plainLiteral", (<ARTLiteral>object).getLang()).subscribe(
                         stResp => this.update.emit(null),
