@@ -10,7 +10,7 @@ export class SkosServices {
     private serviceName = "skos";
     private oldTypeService = true;
 
-    constructor(private httpMgr: HttpManager, private deserializer: Deserializer, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
     
     //Concept services 
     
@@ -31,7 +31,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService).map(
             stResp => {
-                var topConcepts = this.deserializer.createURIArray(stResp);
+                var topConcepts = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topConcepts.length; i++) {
                     topConcepts[i].setAdditionalProperty("children", []);
                 }
@@ -61,7 +61,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService).map(
             stResp => {
-                var narrower = this.deserializer.createURIArray(stResp);
+                var narrower = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < narrower.length; i++) {
                     narrower[i].setAdditionalProperty("children", []);
                 }
@@ -90,7 +90,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
             stResp => {
-                var newConc = this.deserializer.createURI(stResp);
+                var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty("children", []);
                 this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: scheme});
                 return {concept: newConc, scheme: scheme};
@@ -171,7 +171,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
             stResp => {
-                var newConc = this.deserializer.createURI(stResp);
+                var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty("children", []);
                 this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broader});
                 return newConc;
@@ -268,7 +268,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getAllSchemesList", params, this.oldTypeService).map(
             stResp => {
-                return this.deserializer.createURIArray(stResp);
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -291,7 +291,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService).map(
             stResp => {
-                var newScheme = this.deserializer.createURI(stResp);
+                var newScheme = Deserializer.createURI(stResp);
                 return newScheme;
             });
     }

@@ -5,15 +5,14 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 @Component({
 	selector: "rdf-resource",
 	templateUrl: "app/src/widget/rdfResource/rdfResourceComponent.html",
-    providers: [ResourceUtils],
 })
 export class RdfResourceComponent {
 	@Input() resource:ARTResource;
 	
-	constructor(private resUtils:ResourceUtils) {}
+	constructor() {}
     
     private getImgSrc() {
-        return this.resUtils.getImageSrc(this.resource);
+        return ResourceUtils.getImageSrc(this.resource);
     }
 
 }

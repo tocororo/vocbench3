@@ -1,13 +1,11 @@
-import {Injectable} from 'angular2/core';
 import {ARTNode, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects} from "./ARTResources";
 
-@Injectable()
 export class Deserializer {
     
     /**
      * creates an array of mixed resources (ARTBNode, ARTLiteral, ARTURIResource)
      */
-    createRDFArray(response): ARTNode[] {
+    static createRDFArray(response): ARTNode[] {
 		var collectionElement = response.getElementsByTagName('collection')[0];
 		var childElements = collectionElement.childNodes;
 		return this.createRDFArrayGivenList(childElements);
@@ -16,7 +14,7 @@ export class Deserializer {
     /**
      * creates an array of only ARTURIResource
      */
-    createURIArray(response): ARTURIResource[] {
+    static createURIArray(response): ARTURIResource[] {
         var uriResourceArray: ARTURIResource[] = new Array();
         var collectionElement = response.getElementsByTagName('collection')[0];
 		var uriElemens = collectionElement.getElementsByTagName('uri');
@@ -26,7 +24,7 @@ export class Deserializer {
         return uriResourceArray;
     }
 	
-    createRDFArrayGivenList(childElements): ARTNode[] {
+    static createRDFArrayGivenList(childElements): ARTNode[] {
         var collectionArray: ARTNode[] = new Array();
         if (typeof childElements.length == "undefined")
             return null;
@@ -38,7 +36,7 @@ export class Deserializer {
         return collectionArray;
     };
 	
-	createURI(response): ARTURIResource {
+	static createURI(response): ARTURIResource {
 		var uriElement;
 		if(response.tagName == 'uri') {
 			uriElement = response;
@@ -80,7 +78,7 @@ export class Deserializer {
 		return artURIRes;
 	}
 	
-	createBlankNode(bnodeElement): ARTBNode {
+	static createBlankNode(bnodeElement): ARTBNode {
 		var bnodeElement;
 		if(bnodeElement.tagName == 'bnode') {
 			bnodeElement = bnodeElement;
@@ -110,7 +108,7 @@ export class Deserializer {
 		return bNodeRes;
 	}
 	
-	createLiteral(response): ARTLiteral{
+	static createLiteral(response): ARTLiteral{
 		var isTypedLiteral;
 		var literalElement;
 		if(response.tagName == 'plainLiteral' || response.tagName == 'typedLiteral') {
@@ -153,7 +151,7 @@ export class Deserializer {
 		return artLiteralRes;
 	}
 	
-    createRDFNode(element): ARTNode {
+    static createRDFNode(element): ARTNode {
         var tagName = element.tagName;
         if (tagName == 'uri') {
             return this.createURI(element);
@@ -166,7 +164,7 @@ export class Deserializer {
         }
     }
 	
-	createRDFResource(element): ARTNode {
+	static createRDFResource(element): ARTNode {
 		var tagName = element.tagName;
 		if(tagName == 'uri' || tagName == 'bnode'){
 			return this.createRDFNode(element);
@@ -175,7 +173,7 @@ export class Deserializer {
 		}
 	}
 	
-	createPredicateObjectsList(element): ARTPredicateObjects[] {
+	static createPredicateObjectsList(element): ARTPredicateObjects[] {
 		if (element.tagName != "collection") {
 			throw new Error("Not a collection");
 		}

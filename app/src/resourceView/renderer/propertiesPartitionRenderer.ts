@@ -10,7 +10,7 @@ import {PropertyServices} from "../../services/propertyServices";
 	selector: "properties-renderer",
 	templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [ResourceUtils, PropertyServices],
+    providers: [PropertyServices],
 })
 export class PropertiesPartitionRenderer {
     
@@ -24,8 +24,8 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove property value";
     
-    constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils, 
-        private modalService: ModalServices, private browsingService: BrowsingServices) {}
+    constructor(private propertyService:PropertyServices, private modalService: ModalServices, 
+        private browsingService: BrowsingServices) {}
         
     private add() {
         this.browsingService.browsePropertyTree("Select a property").then(
@@ -74,11 +74,11 @@ export class PropertiesPartitionRenderer {
     }
     
     private getAddPropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "create");
+        return ResourceUtils.getActionPropImageSrc(predicate, "create");
     }
     
     private getRemovePropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "delete");
+        return ResourceUtils.getActionPropImageSrc(predicate, "delete");
     }
     
 }

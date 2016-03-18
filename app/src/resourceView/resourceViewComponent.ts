@@ -49,7 +49,7 @@ export class ResourceViewComponent {
     private inverseofColl: ARTURIResource[];
     
 	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices, 
-        private deserializer:Deserializer, private modalService: ModalServices) {
+        private modalService: ModalServices) {
     }
     
     ngOnChanges(changes) {
@@ -84,29 +84,29 @@ export class ResourceViewComponent {
                     var partition = respPartitions[i];
                     var partitionName = partition.tagName;
                     if (partitionName == "resource") {
-                        this.resource = this.deserializer.createURI(partition.children[0]);
+                        this.resource = Deserializer.createURI(partition.children[0]);
                     } else if (partitionName == "types") {
-                        this.typesColl = this.deserializer.createURIArray(partition);
+                        this.typesColl = Deserializer.createURIArray(partition);
                     } else if (partitionName == "classaxioms") {
-                        this.classAxiomColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
+                        this.classAxiomColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                     } else if (partitionName == "topconceptof") {
-                        this.topconceptofColl = this.deserializer.createURIArray(partition);
+                        this.topconceptofColl = Deserializer.createURIArray(partition);
                     } else if (partitionName == "schemes") {
-                        this.schemesColl = this.deserializer.createURIArray(partition);
+                        this.schemesColl = Deserializer.createURIArray(partition);
                     } else if (partitionName == "broaders") {
-                        this.broadersColl = this.deserializer.createURIArray(partition);
+                        this.broadersColl = Deserializer.createURIArray(partition);
                     } else if (partitionName == "superproperties") {
-                        this.superpropertiesColl = this.deserializer.createURIArray(partition);
+                        this.superpropertiesColl = Deserializer.createURIArray(partition);
                     } else if (partitionName == "facets") {
                         this.parseFacetsPartition(partition);
                     } else if (partitionName == "domains") {
-                        this.domainsColl = this.deserializer.createRDFArray(partition);
+                        this.domainsColl = Deserializer.createRDFArray(partition);
                     } else if (partitionName == "ranges") {
-                        this.rangesColl = this.deserializer.createRDFArray(partition);
+                        this.rangesColl = Deserializer.createRDFArray(partition);
                     } else if (partitionName == "lexicalizations") {
-                        this.lexicalizationsColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
+                        this.lexicalizationsColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                     } else if (partitionName == "properties") {
-                        this.propertiesColl = this.deserializer.createPredicateObjectsList(partition.children[0]);
+                        this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                     }
                 }
             },
@@ -143,7 +143,7 @@ export class ResourceViewComponent {
                     }
                 }
             } else if (facetName == "inverseof") {
-                this.inverseofColl = this.deserializer.createURIArray(facetsChildren[i]);
+                this.inverseofColl = Deserializer.createURIArray(facetsChildren[i]);
             }
         }
     }

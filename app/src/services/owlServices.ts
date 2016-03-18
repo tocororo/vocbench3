@@ -10,7 +10,7 @@ export class OwlServices {
     private serviceName = "cls";
     private oldTypeService = true;
 
-    constructor(private httpMgr: HttpManager, private deserializer: Deserializer, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * @param cls root class of the tree
@@ -24,7 +24,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getClassesInfoAsRootsForTree", params, this.oldTypeService).map(
             stResp => {
-                var roots = this.deserializer.createURIArray(stResp);
+                var roots = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < roots.length; i++) {
                     roots[i].setAdditionalProperty("children", []);
                 }
@@ -49,7 +49,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, this.oldTypeService).map(
             stResp => {
-                var subClasses = this.deserializer.createURIArray(stResp);
+                var subClasses = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < subClasses.length; i++) {
                     subClasses[i].setAdditionalProperty("children", []);
                 }
@@ -71,7 +71,7 @@ export class OwlServices {
         return this.httpMgr.doGet(this.serviceName, "getClassAndInstancesInfo", params, this.oldTypeService).map(
             stResp => {
                 var instancesElem = stResp.getElementsByTagName("Instances")[0];
-                return this.deserializer.createURIArray(instancesElem);
+                return Deserializer.createURIArray(instancesElem);
             }
         );
     }
@@ -90,7 +90,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "createClass", params, this.oldTypeService).map(
             stResp => {
-                var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                var newClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
                 newClass.setAdditionalProperty("children", []);
                 this.eventHandler.subClassCreatedEvent.emit({subClass: newClass, superClass: superClass});
                 return stResp;
@@ -165,7 +165,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "createInstance", params, this.oldTypeService).map(
             stResp => {
-                var instance = this.deserializer.createURI(stResp.getElementsByTagName("Instance")[0]);
+                var instance = Deserializer.createURI(stResp.getElementsByTagName("Instance")[0]);
                 this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
                 return stResp;
             }
@@ -204,7 +204,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet("individual", "getDirectNamedTypes", params, this.oldTypeService).map(
             stResp => {
-                return this.deserializer.createURIArray(stResp.getElementsByTagName("Types")[0]);
+                return Deserializer.createURIArray(stResp.getElementsByTagName("Types")[0]);
             }
         );
     }

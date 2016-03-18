@@ -13,7 +13,7 @@ import {PropertyServices} from "../../services/propertyServices";
 	selector: "lexicalizations-renderer",
 	templateUrl: "app/src/resourceView/renderer/lexicalizationsPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, SkosxlServices, OwlServices, PropertyServices, ResourceUtils],
+    providers: [SkosServices, SkosxlServices, OwlServices, PropertyServices],
 })
 export class LexicalizationsPartitionRenderer {
     
@@ -37,8 +37,7 @@ export class LexicalizationsPartitionRenderer {
     ];
     
     constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
-        private propertyService:PropertyServices, private modalService: ModalServices, private resUtils:ResourceUtils, 
-        private vbCtx: VocbenchCtx) {}
+        private propertyService:PropertyServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
     
     private add(predicate: ARTURIResource) {
         this.modalService.newLiteralLang("Add " + predicate.getShow()).then(
@@ -167,10 +166,10 @@ export class LexicalizationsPartitionRenderer {
     }
     
     private getAddPropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "create");
+        return ResourceUtils.getActionPropImageSrc(predicate, "create");
     }
     
     private getRemovePropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "delete");
+        return ResourceUtils.getActionPropImageSrc(predicate, "delete");
     }
 }

@@ -9,7 +9,7 @@ export class SearchServices {
     private serviceName = "Search";
     private oldTypeService = false;
     
-    constructor(private httpMgr: HttpManager, private deserializer: Deserializer) { }
+    constructor(private httpMgr: HttpManager) { }
 
     /**
      * Searches a resource in the model
@@ -33,7 +33,7 @@ export class SearchServices {
         }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService).map(
             stResp => {
-                return this.deserializer.createURIArray(stResp);
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -67,7 +67,7 @@ export class SearchServices {
                         shortestPathLength = pathLength;
                     }
                 }
-                path = this.deserializer.createURIArray(shortestPathElem);
+                path = Deserializer.createURIArray(shortestPathElem);
                 return path;
             }
         );

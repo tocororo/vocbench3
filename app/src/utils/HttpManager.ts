@@ -21,7 +21,7 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private vbCtx: VocbenchCtx, private stRespUtils: STResponseUtils) { }
+    constructor(private http: Http, private vbCtx: VocbenchCtx) { }
     
     /**
      * Performs an HTTP GET request.
@@ -70,10 +70,10 @@ export class HttpManager {
                 }
             })
             .map(stResp => {
-                if (this.stRespUtils.isErrorResponse(stResp)) {
-                    throw new Error(this.stRespUtils.getErrorResponseMessage(stResp));
+                if (STResponseUtils.isErrorResponse(stResp)) {
+                    throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
                 } else {
-                    return this.stRespUtils.getResponseData(stResp);
+                    return STResponseUtils.getResponseData(stResp);
                 }
             });
     }
@@ -130,10 +130,10 @@ export class HttpManager {
                 }
             })
             .map(stResp => {
-                if (this.stRespUtils.isErrorResponse(stResp)) {
-                    throw new Error(this.stRespUtils.getErrorResponseMessage(stResp));
+                if (STResponseUtils.isErrorResponse(stResp)) {
+                    throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
                 } else {
-                    return this.stRespUtils.getResponseData(stResp);
+                    return STResponseUtils.getResponseData(stResp);
                 }
             });
     }
@@ -195,10 +195,10 @@ export class HttpManager {
             //execute the post
             httpReq.send(formData);
         }).map(stResp => {
-            if (this.stRespUtils.isErrorResponse(stResp)) {
-                throw new Error(this.stRespUtils.getErrorResponseMessage(stResp));
+            if (STResponseUtils.isErrorResponse(stResp)) {
+                throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
             } else {
-                return this.stRespUtils.getResponseData(stResp);
+                return STResponseUtils.getResponseData(stResp);
             }
         });
         

@@ -10,7 +10,7 @@ export class PropertyServices {
     private serviceName = "property";
     private oldTypeService = true;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private deserializer: Deserializer) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * Gets a static property tree
@@ -86,7 +86,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
             stResp => {
-                var newProp = this.deserializer.createURI(stResp);
+                var newProp = Deserializer.createURI(stResp);
                 newProp.setAdditionalProperty("children", []);
                 this.eventHandler.topPropertyCreatedEvent.emit(newProp);
                 return newProp;
@@ -109,7 +109,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
             stResp => {
-                var newProp = this.deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
+                var newProp = Deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
                 newProp.setAdditionalProperty("children", []);
                 this.eventHandler.subPropertyCreatedEvent.emit({subProperty: newProp, superProperty: superProperty});
                 return newProp;

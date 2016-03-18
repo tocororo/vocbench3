@@ -1,13 +1,11 @@
-import {Injectable} from 'angular2/core';
 import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects} from "./ARTResources";
 
-@Injectable()
 export class ResourceUtils {
     
-    private availableFlagLang = ["ar", "cs", "de", "el", "en", "es", "fr", "hi", "it", "ja", 
+    private static availableFlagLang = ["ar", "cs", "de", "el", "en", "es", "fr", "hi", "it", "ja", 
             "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
 
-    getImageSrc(rdfResource: ARTNode): string {
+    static getImageSrc(rdfResource: ARTNode): string {
         var imgSrc;
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
@@ -88,7 +86,7 @@ export class ResourceUtils {
     /**
      * Available values for action are: "create" and "delete"
      */
-    getActionPropImageSrc(rdfResource: ARTURIResource, action: string): string {
+    static getActionPropImageSrc(rdfResource: ARTURIResource, action: string): string {
         var imgSrc;
         var role = rdfResource.getRole().toLowerCase();
         if (role == "cls") {

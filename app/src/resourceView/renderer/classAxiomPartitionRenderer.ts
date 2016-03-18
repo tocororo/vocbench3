@@ -10,7 +10,7 @@ import {OwlServices} from "../../services/owlServices";
 	selector: "class-axiom-renderer",
 	templateUrl: "app/src/resourceView/renderer/classAxiomPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [ResourceUtils, OwlServices, PropertyServices],
+    providers: [OwlServices, PropertyServices],
 })
 export class ClassAxiomPartitionPartitionRenderer {
     
@@ -31,8 +31,7 @@ export class ClassAxiomPartitionPartitionRenderer {
         this.owlComplementOf, this.owlIntersectionOf, this.owlOneOf, this.owlUnionOf
     ];
     
-    constructor(private propertyService:PropertyServices, private owlService:OwlServices, 
-        private resUtils:ResourceUtils, private modalService: ModalServices) {}
+    constructor(private propertyService:PropertyServices, private owlService:OwlServices, private modalService: ModalServices) {}
         
     private add(property: ARTURIResource) {
         switch (property.getURI()) {
@@ -121,11 +120,11 @@ export class ClassAxiomPartitionPartitionRenderer {
     }
     
     private getAddPropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "create");
+        return ResourceUtils.getActionPropImageSrc(predicate, "create");
     }
     
     private getRemovePropImgSrc(predicate: ARTURIResource) {
-        return this.resUtils.getActionPropImageSrc(predicate, "delete");
+        return ResourceUtils.getActionPropImageSrc(predicate, "delete");
     }
     
 }
