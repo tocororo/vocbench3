@@ -18,6 +18,7 @@ export class SearchServices {
      * @param useLocalName tells if the searched string should be searched in the local name (as well as in labels)
      * @param searchMode available searchMode values: "contain", "start", "end", "exact"
      * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
+     * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string, scheme?: string) {
         console.log("[SearchServices] searchResource");
@@ -40,8 +41,9 @@ export class SearchServices {
     /**
      * Returns the shortest path from a root to the given resource
      * @param resource
-     * @string role role of the given resource, available roles: "concept", "cls", "property"
-     * @scheme scheme where all the resource of the path should belong (optional and used only for concept)
+     * @param role role of the given resource, available roles: "concept", "cls", "property"
+     * @param scheme where all the resource of the path should belong (optional and used only for concept)
+     * @return an array of resources
      */
     getPathFromRoot(resource: ARTURIResource, role: string, scheme?: ARTURIResource) {
         console.log("[SearchServices] getPathFromRoot");

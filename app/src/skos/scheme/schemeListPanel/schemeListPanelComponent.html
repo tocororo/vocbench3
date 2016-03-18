@@ -14,8 +14,8 @@
         <div class="scrollableContainer">
             <div *ngFor="#s of schemeList" class="schemeItem">
                 <!--Currently radio input are not fully supported, the set of checked property is not "angular way"-->
-                <input #input type="radio" name="scheme" [value]="s.getURI()" (click)="activateScheme(input.value);"
-                    [checked]="isActive(s)"/>
+                <input #input style="margin-right: 5px" type="radio" name="scheme" [value]="s.getURI()" 
+                    (click)="activateScheme(input.value)" [checked]="isActive(s)"/>
                 <rdf-resource [resource]="s" (click)="selectScheme(s)" [ngClass]="{selectedResource : isSelected(s)}"></rdf-resource>
             </div>
         </div>

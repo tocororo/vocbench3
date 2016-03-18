@@ -18,6 +18,7 @@ export class SkosServices {
      * Returns the topConcepts of the given scheme
      * @param scheme
      * @param lang
+     * @return an array of top concepts
      */
     getTopConcepts(scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] getTopConcepts");
@@ -44,6 +45,7 @@ export class SkosServices {
      * @param concept
      * @param scheme scheme where the narrower should belong
      * @param lang
+     * @return an array of narrowers
      */
     getNarrowerConcepts(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] getNarrowerConcepts");
@@ -69,11 +71,12 @@ export class SkosServices {
     }
 
     /**
-     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent
+     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme
      * @param concept local name of the new top concept
      * @param scheme scheme where new concept should belong
      * @param prefLabel preferred label of the concept
      * @param prefLabelLang language of the preferred label
+     * @return an object containing concept and scheme
      */
     createTopConcept(concept: string, scheme: ARTURIResource, prefLabel: string, prefLabelLang: string) {
         console.log("[SkosServices] createConcept");
@@ -95,10 +98,9 @@ export class SkosServices {
     }
     
     /**
-     * Set a concept as top concept of a scheme. Emits a topConceptAddedEvent
+     * Set a concept as top concept of a scheme. Emits a topConceptAddedEvent with concept and scheme
      * @param concept concept to set as top concept
      * @param scheme where to add the top concept
-     * 
      * @return object with concept and scheme
      */
     addTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
@@ -135,7 +137,7 @@ export class SkosServices {
     }
 
     /**
-     * Deletes the given concept
+     * Deletes the given concept. Emits a conceptDeletedEvent with the deleted concept
      * @param concept the concept to delete
      */
     deleteConcept(concept: ARTURIResource) {
@@ -154,6 +156,7 @@ export class SkosServices {
     /**
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
      * @param concept local name of the narrower
+     * @return the new concept
      */
     createNarrower(concept: string, broader: ARTURIResource, scheme: ARTURIResource, prefLabel: string, prefLabelLang: string) {
         console.log("[SkosServices] createNarrower");
@@ -234,6 +237,7 @@ export class SkosServices {
      * Removes a concept from the given scheme. Emits a conceptRemovedFromSchemeEvent with concept and scheme
      * @param concept
      * @param scheme
+     * @return an object with concept and scheme
      */
     removeConceptFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] removeConceptFromScheme");
@@ -254,6 +258,7 @@ export class SkosServices {
     /**
      * Returns the list of available skos:ConceptScheme
      * @param lang
+     * @return an array of schemes
      */
     getAllSchemesList(lang?: string) {
         console.log("[SkosServices] getAllSchemesList");
@@ -271,8 +276,9 @@ export class SkosServices {
     /**
      * Creates a new scheme
      * @param local name of the scheme
-     * @prefLabel
-     * @prefLabelLang
+     * @param prefLabel
+     * @param prefLabelLang
+     * @return the new scheme
      */
     createScheme(scheme: string, prefLabel?: string, prefLabelLang?: string) {
         console.log("[SkosServices] createScheme");

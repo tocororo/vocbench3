@@ -13,7 +13,8 @@ export class OwlServices {
     constructor(private httpMgr: HttpManager, private deserializer: Deserializer, private eventHandler: VBEventHandler) { }
 
     /**
-     * @param cls root class of the tree 
+     * @param cls root class of the tree
+     * @return roots an array of root classes 
      */
     getClassesInfoAsRootsForTree(cls: ARTURIResource) {
         console.log("[owlServices] getClassesInfoAsRootsForTree");
@@ -37,6 +38,7 @@ export class OwlServices {
      * @param cls class of which retrieve its subClasses
 	 * @param tree boolean that indicates if the response should contains info about tree structure
 	 * @param instNum boolean that indicates if the response should contains for each classes the number of instances
+     * @return subClasses an array of subClasses
 	 */
     getSubClasses(cls: ARTURIResource, tree: boolean, instNum: boolean) {
         console.log("[owlServices] getSubClasses");
@@ -59,6 +61,7 @@ export class OwlServices {
     /**
      * Returns a list of ARTURIResource instances of the given class
      * @param cls class of which retrieve its instances
+     * @return an array of instances
      */
     getClassAndInstancesInfo(cls: ARTURIResource) {
         console.log("[owlServices] getClassAndInstancesInfo");
@@ -75,7 +78,7 @@ export class OwlServices {
 
     /**
      * Creates a class (subClass of the given superClass) with the given name.
-     * Emits also a subClassCreatedEvent containing the newClass and the superClass, both of them are ARTURIResource
+     * Emits subClassCreatedEvent containing the newClass and the superClass
      * @param superClass the superClass of the new created class
      * @param newClassName local name of the new class
      */
@@ -89,14 +92,14 @@ export class OwlServices {
             stResp => {
                 var newClass = this.deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
                 newClass.setAdditionalProperty("children", []);
-                this.eventHandler.subClassCreatedEvent.emit({"subClass": newClass, "superClass": superClass});
+                this.eventHandler.subClassCreatedEvent.emit({subClass: newClass, superClass: superClass});
                 return stResp;
             }
         );
     }
 
     /**
-     * Removes a class. Emits also a classDeletedEvent with the removed class
+     * Removes a class. Emits a classDeletedEvent with the removed class
      * @param cls class to remove
      */
     removeClass(cls: ARTURIResource) {
@@ -129,7 +132,7 @@ export class OwlServices {
     
     /**
      * Removes a superClass from a class.
-     * Emits also a subClassRemovedEvent with cls (the superClass removed) and subClass
+     * Emits a subClassRemovedEvent with cls (the superClass removed) and subClass
      * (the class to which su superClass has been removed)
      * @param cls class to which remove a superClass
      * @param superClass superClass to be removed
@@ -149,7 +152,7 @@ export class OwlServices {
     }
     
     /**
-     * Creates an instance for the given class. Emits also a instanceCreatedEvent with cls (the class of the created instance)
+     * Creates an instance for the given class. Emits a instanceCreatedEvent with cls (the class of the created instance)
      * and instance (the new created instance)
      * @param cls the class of the new instance
      * @param instanceName localName of the new instance
@@ -170,7 +173,7 @@ export class OwlServices {
     }
     
     /**
-     * Removes an instance. Emits also an instanceDeletedEvent with instance (the removed instance) and
+     * Removes an instance. Emits an instanceDeletedEvent with instance (the removed instance) and
      * cls (the type of the instance)
      * @param instance the instance to remove
      * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
@@ -192,6 +195,7 @@ export class OwlServices {
     /**
      * Returns a collection of direct (not inferred) types for the given instance
      * @param instance the instance whose types are requested
+     * @return an array of types
      */
     getDirectNamedTypes(instance: ARTURIResource) {
         console.log("[owlServices] getDirectNamedTypes");
@@ -225,7 +229,7 @@ export class OwlServices {
     }
 
     /**
-     * Removes the type of a resource. Emits also a typeDeletedEvent with resource (the resource to which the type is removed)
+     * Removes the type of a resource. Emits a typeDeletedEvent with resource (the resource to which the type is removed)
      * and type (the removed type)
      * @param resource the resource whose the type need to be removed
      * @param type type to remove 

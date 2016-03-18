@@ -1,0 +1,45 @@
+<div class="subPanel" *ngIf="predicateObjectList">
+    <div class="subPanel-heading">
+        <label style="flex: 1">{{label}}:</label>
+        
+        <span style="margin-right: 2px;">Show All</span>
+        <input type="checkbox" [checked]="showAllLexicalProp" (change)="showAllLexicalProp=$event.target.checked"
+            title="Show all the properties, including those not compliant with the current project type">
+        
+        <div class="dropdown pull-right">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
+                    [title]="addBtnImgTitle" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <img [src]="addBtnImgSrc" style="height: 16px"/>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <!--why template? see https://github.com/angular/angular/issues/4792-->
+                <template ngFor #lp [ngForOf]="lexicalizationProperties">
+                    <li *ngIf="isPropOntoTypeCompliant(lp)">
+                        <a (click)="add(lp)">
+                            <rdf-resource [resource]="lp"></rdf-resource>
+                        </a>
+                    </li>
+                </template>
+            </ul>
+        </div>
+        
+    </div>
+    <div class="subPanel-body">
+        <div class="subPanel" *ngFor="#po of predicateObjectList">
+            <!-- each item is a predicateObjects -->
+            <div class="subPanel-heading">
+                <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
+                        (click)="add(po.getPredicate())">
+            </div>
+            <div class="subPanel-body">
+                <div *ngFor="#obj of po.getObjects()" class="listItem">
+                    <rdf-resource [resource]="obj" style="flex:1"></rdf-resource>
+                    <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
+                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

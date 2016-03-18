@@ -3,6 +3,7 @@ import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../ut
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
@@ -23,16 +24,21 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove property value";
     
-    constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils, private modalService: ModalServices) {}
+    constructor(private propertyService:PropertyServices, private resUtils:ResourceUtils, 
+        private modalService: ModalServices, private browsingService: BrowsingServices) {}
         
     private add() {
-        alert("add property to resource " + this.resource.getShow());
-        this.update.emit(null);
+        this.browsingService.browsePropertyTree("Select a property").then(
+            selectedProp => {
+                alert("enriching " + selectedProp.getShow() + " to resource " + this.resource.getShow());
+            }
+        );
+        // this.update.emit(null);
     }
     
     private enrichProperty(predicate: ARTURIResource) {
         alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
-        this.update.emit(null);
+        // this.update.emit(null);
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

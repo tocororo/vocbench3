@@ -11,7 +11,8 @@ export class ProjectServices {
     constructor(private httpMgr: HttpManager) { }
 
     /**
-     * Returns a list of projects
+     * Gets the current available projects in ST
+     * @return an array of Project
      */
     listProjects() {
         console.log("[ProjectServices] listProjects");

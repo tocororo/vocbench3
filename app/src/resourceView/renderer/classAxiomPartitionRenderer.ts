@@ -29,7 +29,7 @@ export class ClassAxiomPartitionPartitionRenderer {
         
     private add() {
         alert("add class axiom to resource " + this.resource.getShow());
-        this.update.emit(null);
+        // this.update.emit(null);
     }
     
     private enrichProperty(predicate: ARTURIResource) {
@@ -43,7 +43,7 @@ export class ClassAxiomPartitionPartitionRenderer {
         // } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#oneOf") {
         // } else if (predicate.getURI() == "http://www.w3.org/2002/07/owl#unionOf") {
         // }
-        this.update.emit(null);
+        // this.update.emit(null);
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

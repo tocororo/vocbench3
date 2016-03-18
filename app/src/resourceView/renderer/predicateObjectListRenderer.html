@@ -1,7 +1,8 @@
 <div class="subPanel" *ngIf="predicateObjectList">
     <div class="subPanel-heading">
         <label style="flex: 1">{{label}}:</label>
-        <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()">
+        <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()"
+            [disabled]="!resource.getAdditionalProperty('explicit')">
     </div>
     <div class="subPanel-body">
         <div class="subPanel" *ngFor="#po of predicateObjectList">
@@ -9,7 +10,7 @@
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
                 <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
-                        (click)="enrichProperty(po.getPredicate())">
+                        (click)="enrichProperty(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
             </div>
             <div class="subPanel-body">
                 <div *ngFor="#obj of po.getObjects()" class="listItem">

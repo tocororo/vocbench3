@@ -13,7 +13,8 @@ export class PropertyServices {
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private deserializer: Deserializer) { }
 
     /**
-     * Returns a nested array of ARTURIResource representing the properties tree
+     * Gets a static property tree
+     * @return a nested array of ARTURIResource representing the properties tree
      */
     getPropertiesTree() {
         console.log("[PropertyServices] getPropertiesTree");
@@ -54,6 +55,7 @@ export class PropertyServices {
     /**
      * Removes the given property. Emits a propertyDeletedEvent with property (the deleted property)
      * @param property the property to remove
+     * @return the deleted property
      */
     removeProperty(property: ARTURIResource) {
         console.log("[PropertyServices] removeProperty");
@@ -70,9 +72,11 @@ export class PropertyServices {
     }
 
     /**
-     * Creates a property with the given name of the given type
+     * Creates a property with the given name of the given type.
+     * Emits a topPropertyCreatedEvent with the new property
      * @param propertyName local name of the property
      * @param propertyType type of the property (property, objectProperty, datatypeProperty, ...) 
+     * @return the created property
      */
     addProperty(propertyName: string, propertyType: string) {
         console.log("[PropertyServices] addProperty");
@@ -94,6 +98,7 @@ export class PropertyServices {
      * Creates a subproperty. Emits a subPropertyCreatedEvent with subProperty and superProperty
      * @param propertyQName local name of the subproperty to create
      * @param superProperty the superProperty of the creating property
+     * @return the created sub property
      */
     addSubProperty(propertyQName: string, superProperty: ARTURIResource) {
         console.log("[PropertyServices] addSubProperty");
@@ -132,7 +137,8 @@ export class PropertyServices {
     }
 
     /**
-     * Removes a superProperty from the given property
+     * Removes a superProperty from the given property.
+     * Emits a superPropertyRemovedEvent with property and superProperty
      * @param property property to which remove a super property
      * @param superProperty the superProperty to remove
      */

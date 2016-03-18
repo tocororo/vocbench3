@@ -168,10 +168,6 @@ scheme-list rdf-resource:hover, property-tree rdf-resource:hover, scheme-list-pa
     align-items: center;
 }
 
-.schemeItem input[type=radio] {
-	margin: 0px 5px 0px 0px; /* override input margin defined in bootstrap */
-}
-
 .schemeItem rdf-resource {
 	border-radius: 2px;
 	flex: 1;
@@ -269,6 +265,10 @@ nav {
 }
 
 label { margin-bottom: 0px; }
+
+input[type="radio"], input[type="checkbox"] {
+    margin: 0px;
+}
 
 .tab-content, .tab-content > tab.active {
     flex: 1;
