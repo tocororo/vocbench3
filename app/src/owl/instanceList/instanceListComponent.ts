@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, ViewChild, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
@@ -15,6 +15,9 @@ import {ModalServices} from "../../widget/modal/modalServices";
 export class InstanceListComponent {
     @Input('cls') cls:ARTURIResource;
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    
+    //get the element in the view referenced with #blockDivTree
+    @ViewChild('blockDivInstanceList') blockDivElement;
     
     private pendingSearch = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
@@ -39,7 +42,7 @@ export class InstanceListComponent {
     ngOnChanges(changes) {
         this.selectedInstance = null;
         if (changes.cls.currentValue) {
-            document.getElementById("blockDivInstanceList").style.display = "block";
+            this.blockDivElement.nativeElement.style.display = "block";
             this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
                 instances => {
                     this.instanceList = instances;
@@ -61,7 +64,8 @@ export class InstanceListComponent {
                     this.modalService.alert("Error", err, "error");
                     console.error(err['stack']);
                 },
-                () => document.getElementById("blockDivInstanceList").style.display = "none");
+                () => this.blockDivElement.nativeElement.style.display = "none"
+            );
         }
     }
     

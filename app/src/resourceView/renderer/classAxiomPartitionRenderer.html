@@ -1,29 +1,22 @@
 <div class="subPanel" *ngIf="predicateObjectList">
     <div class="subPanel-heading">
-        <label style="flex: 1">Lexicalizations:</label>
-        
-        <span style="margin-right: 2px;">Show All</span>
-        <input type="checkbox" [checked]="showAllLexicalProp" (change)="showAllLexicalProp=$event.target.checked"
-            title="Show all the properties, including those not compliant with the current project type">
-        
+        <label style="flex: 1">Class Axioms:</label>
+    
         <div class="dropdown pull-right">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
-                    title="Add a lexicalization" [disabled]="!resource.getAdditionalProperty('explicit')">
-                <img src="app/assets/images/propAnnotation_create.png" style="height: 16px"/>
+                    title="Add a class axiom" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <img src="app/assets/images/prop_create.png" style="height: 16px"/>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <!--why template? see https://github.com/angular/angular/issues/4792-->
-                <template ngFor #lp [ngForOf]="lexicalizationProperties">
-                    <li *ngIf="isPropOntoTypeCompliant(lp)">
-                        <a (click)="add(lp)">
-                            <rdf-resource [resource]="lp"></rdf-resource>
+                    <li *ngFor="#cap of clsAxiomProperties">
+                        <a (click)="add(cap)">
+                            <rdf-resource [resource]="cap"></rdf-resource>
                         </a>
                     </li>
-                </template>
             </ul>
-        </div>
-        
+        </div>    
+            
     </div>
     <div class="subPanel-body">
         <div class="subPanel" *ngFor="#po of predicateObjectList">
@@ -31,7 +24,7 @@
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
                 <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
-                        (click)="add(po.getPredicate())">
+                        (click)="add(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
             </div>
             <div class="subPanel-body">
                 <div *ngFor="#obj of po.getObjects()" class="listItem">

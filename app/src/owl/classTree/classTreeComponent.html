@@ -2,7 +2,7 @@
     <class-tree-node *ngFor="#r of roots" [node]="r" (itemSelected)="onNodeSelected($event)"></class-tree-node>
 </div>
 
-<div id="blockDivTree" class="blockingDiv" style="display:none">
+<div #blockDivTree class="blockingDiv" style="display:none">
     <div class="loadingDiv">
         <div>
             <p>Loading...</p><img src="app/assets/images/loading.gif" />

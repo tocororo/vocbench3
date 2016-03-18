@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {SkosServices} from "../../../services/skosServices";
@@ -19,6 +19,9 @@ export class ConceptTreeComponent {
     
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
+    
+    //get the element in the view referenced with #blockDivTree
+    @ViewChild('blockDivTree') blockDivElement;
 
     public roots: ARTURIResource[];
     private selectedNode: ARTURIResource;
@@ -37,8 +40,12 @@ export class ConceptTreeComponent {
             data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
     }
     
-    ngOnInit() {
-        document.getElementById("blockDivTree").style.display = "block";
+    /**
+     * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
+     * the view #blockDivTree is initialized
+     */
+    ngAfterViewInit() {
+        this.blockDivElement.nativeElement.style.display = "block";
         this.skosService.getTopConcepts(this.scheme).subscribe(
             topConcepts => {
                 this.roots = topConcepts;
@@ -47,7 +54,7 @@ export class ConceptTreeComponent {
                 this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             },
-            () => document.getElementById("blockDivTree").style.display = "none"
+            () => this.blockDivElement.nativeElement.style.display = "none"
         );
     }
     

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
@@ -20,6 +20,9 @@ export class ClassTreeComponent {
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
     
+    //get the element in the view referenced with #blockDivTree
+    @ViewChild('blockDivTree') blockDivElement;
+    
     public roots:ARTURIResource[];
     private selectedNode:ARTURIResource;
     
@@ -30,8 +33,12 @@ export class ClassTreeComponent {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
-    ngOnInit() {
-        document.getElementById("blockDivTree").style.display = "block";
+    /**
+     * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
+     * the view #blockDivTree is initialized
+     */
+    ngAfterViewInit() {
+        this.blockDivElement.nativeElement.style.display = "block";
         if (this.rootClass == undefined) {
             this.rootClass = new ARTURIResource("http://www.w3.org/2002/07/owl#Thing", "owl:Thing", "cls");
         }
@@ -43,7 +50,7 @@ export class ClassTreeComponent {
                 this.modalService.alert("Error", err, "error");
                 console.error(err['stack']);
             },
-            () => document.getElementById("blockDivTree").style.display = "none"
+            () => this.blockDivElement.nativeElement.style.display = "none"
         );
     }
     

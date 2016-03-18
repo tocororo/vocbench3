@@ -19,12 +19,6 @@ export class PropertyFacetsPartitionRenderer {
     @Input() resource: ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
-    private label = "Property facets";
-    private addBtnImgSrc = "app/assets/images/prop_create.png";
-    private addBtnImgTitle = "Add a inverse property";
-    private removeBtnImgSrc = "app/assets/images/prop_delete.png";
-    private removeBtnImgTitle = "Remove inverse property";
-    
     private rdfType: ARTURIResource = new ARTURIResource("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "rdf:type", "property");
     private inverseOf: ARTURIResource = new ARTURIResource("http://www.w3.org/2002/07/owl#inverseOf", "rdf:type", "property");
     

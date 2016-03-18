@@ -21,12 +21,6 @@ export class LexicalizationsPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
-    private label = "Lexicalizations";
-    private addBtnImgSrc = "app/assets/images/propAnnotation_create.png";
-    private addBtnImgTitle = "Add a lexicalization";
-    private removeBtnImgSrc = "app/assets/images/propAnnotation_delete.png";
-    private removeBtnImgTitle = "Remove lexicalization";
-    
     private showAllLexicalProp = false;
     
     private skosxlPrefLabel = new ARTURIResource("http://www.w3.org/2008/05/skos-xl#prefLabel", "skosxl:prefLabel", "objectProperty");

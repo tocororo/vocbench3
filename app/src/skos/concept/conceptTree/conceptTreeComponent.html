@@ -2,7 +2,7 @@
     <concept-tree-node *ngFor="#r of roots" [node]="r" [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree-node>
 </div>
 
-<div id="blockDivTree" class="blockingDiv" style="display:none">
+<div #blockDivTree class="blockingDiv" style="display:none">
     <div class="loadingDiv">
         <div>
             <p>Loading...</p><img src="app/assets/images/loading.gif" />
