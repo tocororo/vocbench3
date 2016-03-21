@@ -41,10 +41,8 @@ export class ProjectComponent implements OnInit {
                     }
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            });
+            err => { }
+        );
     }
 
     private selectProject(project) {
@@ -78,10 +76,7 @@ export class ProjectComponent implements OnInit {
                             }
                             this.selectedProject = null;
                         },
-                        err => {
-                            this.modalService.alert("Error", err, "error");
-                            console.error(err.stack);
-                        }
+                        err => { }
                     );
                 }
             );
@@ -106,10 +101,7 @@ export class ProjectComponent implements OnInit {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 this.exportLink = window.URL.createObjectURL(data);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
 
@@ -129,8 +121,6 @@ export class ProjectComponent implements OnInit {
                     this.connectToProject(project);
                 },
                 err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err.stack);
                     document.getElementById("blockDivFullScreen").style.display = "none";
                 });
         } else { //no project open
@@ -149,10 +139,7 @@ export class ProjectComponent implements OnInit {
                 this.vbCtx.setProject(project);
                 project.setOpen(true);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            },
+            err => { },
             () => document.getElementById("blockDivFullScreen").style.display = "none");
     }
 
@@ -164,10 +151,7 @@ export class ProjectComponent implements OnInit {
                 this.vbCtx.removeScheme();
                 project.setOpen(false);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            },
+            err => { },
             () => document.getElementById("blockDivFullScreen").style.display = "none");
     }
     

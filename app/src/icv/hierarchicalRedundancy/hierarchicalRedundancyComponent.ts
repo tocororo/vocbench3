@@ -43,10 +43,7 @@ export class HierarchicalRedundancyComponent {
                     this.brokenRecordList.push({broader: b, narrower: n});
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => document.getElementById("blockDivIcv").style.display = "none"
         );
     }
@@ -61,10 +58,7 @@ export class HierarchicalRedundancyComponent {
             stResp => {
                 this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     

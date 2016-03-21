@@ -32,10 +32,7 @@ export class ExportDataComponent {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 this.downloadLink = window.URL.createObjectURL(data);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => document.getElementById("blockDivFullScreen").style.display = "none"
         );
     }

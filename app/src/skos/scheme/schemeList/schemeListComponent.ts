@@ -23,10 +23,7 @@ export class SchemeListComponent {
             schemeList => {
                 this.schemeList = schemeList;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     

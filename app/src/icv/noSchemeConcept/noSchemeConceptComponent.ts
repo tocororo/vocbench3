@@ -42,10 +42,7 @@ export class NoSchemeConceptComponent {
                     this.brokenConceptList.push(c);       
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => document.getElementById("blockDivIcv").style.display = "none");
     }
     
@@ -60,10 +57,7 @@ export class NoSchemeConceptComponent {
         //         //remove the concept from the list
         //         this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
         //     },
-        //     err => {
-        //         alert(err);
-        //         console.error(err['stack']);
-        //     }
+        //     err => { }
         // );
     }
     

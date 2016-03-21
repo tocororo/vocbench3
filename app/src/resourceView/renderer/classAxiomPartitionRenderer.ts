@@ -62,43 +62,43 @@ export class ClassAxiomPartitionPartitionRenderer {
                     stResp => {
                         this.update.emit(null);
                     },
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case OWL.equivalentClass.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case OWL.disjointWith.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case OWL.complementOf.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, objectType).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case OWL.intersectionOf.getURI():
                 this.owlService.removeIntersectionOf(this.resource, object).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case OWL.unionOf.getURI():
                 this.owlService.removeUnionOf(this.resource, object).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case OWL.unionOf.getURI():
                 this.owlService.removeOneOf(this.resource, object).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
         }

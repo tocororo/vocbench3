@@ -71,7 +71,6 @@ export class SanitizerDirective {
      * Sanitizes typed text
      */
     onKeypressListener = function(event) {
-        console.log("sanitized " + this.active);
         if (this.active) {
             var inputElement = this.el.nativeElement;
             var txtContent = inputElement.value;

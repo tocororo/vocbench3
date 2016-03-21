@@ -35,10 +35,7 @@ export class DanglingConceptComponent {
             schemeList => {
                 this.schemeList = schemeList;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
         this.selectedScheme = this.vbCtx.getScheme();
         if (this.selectedScheme != undefined) {
@@ -63,10 +60,7 @@ export class DanglingConceptComponent {
                     }
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => document.getElementById("blockDivIcv").style.display = "none"
         );
     }
@@ -80,10 +74,8 @@ export class DanglingConceptComponent {
                 //remove the concept from the danglingConceptList
                 this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            });
+            err => { }
+        );
     }
     
     /**
@@ -123,10 +115,7 @@ export class DanglingConceptComponent {
                         //remove the concept from the danglingConceptList
                         this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
                     },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );

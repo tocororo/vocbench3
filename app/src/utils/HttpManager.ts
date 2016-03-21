@@ -4,6 +4,7 @@ import 'rxjs/Rx'; //for map function
 import {Observable} from 'rxjs/Observable';
 import {STResponseUtils} from "../utils/STResponseUtils";
 import {VocbenchCtx} from './VocbenchCtx';
+import { ModalServices } from "../widget/modal/modalServices";
 
 @Injectable()
 export class HttpManager {
@@ -12,6 +13,7 @@ export class HttpManager {
     private contentTypeJson: string = "application/json";
 
     private serverhost: string = "127.0.0.1";
+    // private serverhost: string = "160.80.84.190";
     private serverport: string = "1979";
     //new services url parts
     private serverpath: string = "semanticturkey";
@@ -20,7 +22,7 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private vbCtx: VocbenchCtx) { }
+    constructor(private http: Http, private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
     
     /**
      * Performs an HTTP GET request.
@@ -74,6 +76,11 @@ export class HttpManager {
                 } else {
                     return STResponseUtils.getResponseData(stResp);
                 }
+            })
+            .catch(error => {
+                console.error(error);
+                this.modalService.alert("Error", error, "error");
+                return Observable.throw(error);
             });
     }
     
@@ -134,6 +141,11 @@ export class HttpManager {
                 } else {
                     return STResponseUtils.getResponseData(stResp);
                 }
+            })
+            .catch(error => {
+                console.error(error);
+                this.modalService.alert("Error", error, "error");
+                return Observable.throw(error);
             });
     }
     
@@ -193,12 +205,18 @@ export class HttpManager {
             };
             //execute the post
             httpReq.send(formData);
-        }).map(stResp => {
+        })
+        .map(stResp => {
             if (STResponseUtils.isErrorResponse(stResp)) {
                 throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
             } else {
                 return STResponseUtils.getResponseData(stResp);
             }
+        })
+        .catch(error => {
+            console.error(error);
+            this.modalService.alert("Error", error, "error");
+            return Observable.throw(error);
         });
         
     }
@@ -243,6 +261,11 @@ export class HttpManager {
             //execute the get
             httpReq.send(null);
         })
+        .catch(error => {
+            console.error(error);
+            this.modalService.alert("Error", error, "error");
+            return Observable.throw(error);
+        });
         
     }
 

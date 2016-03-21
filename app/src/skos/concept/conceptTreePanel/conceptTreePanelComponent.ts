@@ -35,10 +35,7 @@ export class ConceptTreePanelComponent {
             result => {
                 this.skosService.createTopConcept(result.name, this.vbCtx.getScheme(), result.label, result.lang).subscribe(
                     data => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -49,10 +46,7 @@ export class ConceptTreePanelComponent {
             result => {
                 this.skosService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(), result.label, result.lang).subscribe(
                     data => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -64,10 +58,7 @@ export class ConceptTreePanelComponent {
                 this.selectedConcept = null;
                 this.itemSelected.emit(undefined);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            }
+            err => { }
         );
     }
     
@@ -87,10 +78,7 @@ export class ConceptTreePanelComponent {
                     }
                     
                 },
-                err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err['stack']);
-                }
+                err => { }
             );
         }
     }

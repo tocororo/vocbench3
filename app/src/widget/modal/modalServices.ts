@@ -6,6 +6,8 @@ import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
 import {NewLiteralLangModal, NewLiteralLangModalContent} from "./newLiteralLangModal/newLiteralLangModal";
 
+type ModalType = "info" | "error" | "warning";
+
 @Injectable()
 export class ModalServices {
     
@@ -47,7 +49,7 @@ export class ModalServices {
      * Available values: info (default), error, warning
      * @return if the modal closes with ok returns a promise containing a boolean true
      */
-    confirm(title: string, message: string, type?: string) {
+    confirm(title: string, message: string, type?: ModalType) {
         let dialog: Promise<ModalDialogInstance>;
         let component = ConfirmModal;
         
@@ -75,7 +77,7 @@ export class ModalServices {
      * @param type tells the type of the dialog. Determines the style of the message in the dialog.
      * Available values: info (default), error, warning
      */
-    alert(title: string, message: string, type?: string) {
+    alert(title: string, message: string, type?: ModalType) {
         let dialog: Promise<ModalDialogInstance>;
         let component = AlertModal;
         

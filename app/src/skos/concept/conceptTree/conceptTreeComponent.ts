@@ -51,10 +51,7 @@ export class ConceptTreeComponent {
             topConcepts => {
                 this.roots = topConcepts;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => this.blockDivElement.nativeElement.style.display = "none"
         );
     }

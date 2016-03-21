@@ -1,4 +1,5 @@
 import { bootstrap } from "angular2/platform/browser";
+import { enableProdMode } from "angular2/core";
 import { ROUTER_PROVIDERS } from "angular2/router";
 import { HTTP_PROVIDERS } from "angular2/http";
 import { Modal } from 'angular2-modal/angular2-modal';
@@ -10,6 +11,7 @@ import { VBEventHandler } from "./src/utils/VBEventHandler";
 
 import {App} from "./src/app";
 
+// enableProdMode();
 /**
  * 2nd argument is an array of providers injectable 
  * Providers can be injected punctually in a Component if needed (using the proviers: [] array), or

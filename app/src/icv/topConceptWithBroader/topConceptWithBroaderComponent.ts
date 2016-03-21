@@ -43,10 +43,7 @@ export class TopConceptWithBroaderComponent {
                     this.brokenRecordList.push({concept: c, scheme: s});
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => document.getElementById("blockDivIcv").style.display = "none"
         );
     }

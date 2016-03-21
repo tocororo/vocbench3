@@ -110,10 +110,7 @@ export class ResourceViewComponent {
                     }
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            },
+            err => { },
             () => document.getElementById("blockDivResView").style.display = "none"
         );
     }
@@ -183,10 +180,7 @@ export class ResourceViewComponent {
                     //updated/injected from the NodeComponent that catch the rename event 
                     this.buildResourceView(newResource);
                 },
-                err => { 
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err['stack']);
-                }
+                err => { }
             );    
         }
     }

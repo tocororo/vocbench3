@@ -35,10 +35,7 @@ export class PropertyTreeComponent {
             propertyTree => {
                 this.propertyTree = propertyTree;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     

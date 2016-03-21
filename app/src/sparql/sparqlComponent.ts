@@ -45,10 +45,7 @@ export class SparqlComponent {
                 tab.headers = data.sparql.head.vars;
                 tab.queryResult = data.sparql.results.bindings;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            }
+            err => { }
         );
     }
     

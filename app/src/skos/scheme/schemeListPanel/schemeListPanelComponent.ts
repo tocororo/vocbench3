@@ -33,10 +33,7 @@ export class SchemeListPanelComponent {
             schemeList => {
                 this.schemeList = schemeList;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
         this.activeScheme = this.vbCtx.getScheme();
     }
@@ -48,10 +45,7 @@ export class SchemeListPanelComponent {
                     newScheme => {
                         this.schemeList.push(newScheme);
                     },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -74,10 +68,7 @@ export class SchemeListPanelComponent {
                 this.selectedScheme = null;
                 this.itemSelected.emit(undefined);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            }
+            err => { }
         );
     }
     

@@ -39,10 +39,7 @@ export class ClassTreePanelComponent {
             result => {
                 this.owlService.createClass(this.rootClass, result).subscribe(
                     stResp => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -55,10 +52,7 @@ export class ClassTreePanelComponent {
             result => {
                 this.owlService.createClass(this.selectedClass, result).subscribe(
                     stResp => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -75,10 +69,7 @@ export class ClassTreePanelComponent {
                 this.selectedClass = null;
                 this.classSelected.emit(undefined);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     
@@ -88,10 +79,7 @@ export class ClassTreePanelComponent {
             result => {
                 this.owlService.createInstance(this.selectedClass, result).subscribe(
                     stResp => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -136,10 +124,7 @@ export class ClassTreePanelComponent {
                         alert(searchResult.length + " results found. This function is currently not available for multiple results");
                     }
                 },
-                err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err['stack']);
-                }
+                err => { }
             );
         }
     }

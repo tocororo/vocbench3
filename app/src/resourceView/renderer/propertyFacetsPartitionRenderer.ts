@@ -39,10 +39,7 @@ export class PropertyFacetsPartitionRenderer {
             stResp => {
                 this.update.emit(null);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err.stack);
-            }
+            err => { }
         );
     }
     
@@ -62,18 +59,12 @@ export class PropertyFacetsPartitionRenderer {
         if (value) {
             this.propService.addExistingPropValue(this.resource, RDF.type, propertyClass.getURI(), RDFTypesEnum.uri).subscribe(
                 stResp => this.update.emit(null),
-                err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err.stack);
-                }
+                err => { }
             );
         } else {
             this.propService.removePropValue(this.resource, RDF.type, propertyClass.getURI(), null, RDFTypesEnum.uri).subscribe(
                 stResp => this.update.emit(null),
-                err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err.stack);
-                }
+                err => { }
             );
         }
     }

@@ -104,10 +104,8 @@ export class ConceptTreeNodeComponent {
                 this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty("open", true);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            });
+            err => { }
+        );
     }
     
     /**

@@ -42,10 +42,7 @@ export class TopConceptsPartitionRenderer {
             stResp => {
                 this.update.emit(null);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     

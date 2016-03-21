@@ -61,7 +61,7 @@ export class PropertiesPartitionRenderer {
         }
         this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, type, lang).subscribe(
             stResp => this.update.emit(null),
-            err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+            err => { }
         );
     }
     

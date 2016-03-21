@@ -40,44 +40,44 @@ export class LexicalizationsPartitionRenderer {
                     case SKOSXL.prefLabel.getURI():
                         this.skosxlService.setPrefLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
                         this.skosxlService.addAltLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
                         this.skosxlService.addHiddenLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                     case SKOS.prefLabel.getURI():
                         this.skosService.setPrefLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                     case SKOS.altLabel.getURI():
                         this.skosService.addAltLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                     case SKOS.hiddenLabel.getURI():
                         this.skosService.addHiddenLabel(this.resource, result.literal, result.lang).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                     case RDFS.label.getURI():
                         this.propertyService.createAndAddPropValue(
                             this.resource, predicate, result.literal, null, RDFTypesEnum.plainLiteral, result.lang).subscribe(
                             stResp => this.update.emit(null),
-                            err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
+                            err => { }
                         );
                         break;
                 }
@@ -90,44 +90,44 @@ export class LexicalizationsPartitionRenderer {
             case SKOSXL.prefLabel.getURI():
                 this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case SKOSXL.altLabel.getURI():
                 this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case SKOSXL.hiddenLabel.getURI():
                 this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case SKOS.prefLabel.getURI():
                 this.skosService.removePrefLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case SKOS.altLabel.getURI():
                 this.skosService.removeAltLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case SKOS.hiddenLabel.getURI():
                 this.skosService.removeHiddenLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null),
-                    err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                    err => { }
                 );
                 break;
             case RDFS.label.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, (<ARTLiteral>object).getLabel(),
                     null, RDFTypesEnum.plainLiteral, (<ARTLiteral>object).getLang()).subscribe(
                         stResp => this.update.emit(null),
-                        err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
+                        err => { }
                     );
                 break;
             }

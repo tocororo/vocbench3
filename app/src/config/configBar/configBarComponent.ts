@@ -37,15 +37,10 @@ export class ConfigBarComponent {
                                 //then redirect to home page
                                 this.router.navigate(['Projects']);
                             },
-                            err => {
-                                this.modalService.alert("Error", err, "error");
-                                console.error(err['stack']);
-                            });
+                            err => { }
+                        );
                     },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    },
+                    err => { },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 );
             }

@@ -42,10 +42,7 @@ export class NoTopConceptSchemeComponent {
                     this.brokenSchemeList.push(s);
                 }
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => document.getElementById("blockDivIcv").style.display = "none"
         );
     }
@@ -68,10 +65,7 @@ export class NoTopConceptSchemeComponent {
             data => {
                 this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     
@@ -86,10 +80,7 @@ export class NoTopConceptSchemeComponent {
                     stResp => {
                         this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
                     },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );

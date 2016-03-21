@@ -47,10 +47,7 @@ export class PropertyTreePanelComponent {
             result => {
                 this.propService.addProperty(result, type).subscribe(
                     stResp => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -62,10 +59,7 @@ export class PropertyTreePanelComponent {
             result => {
                 this.propService.addSubProperty(result, this.selectedProperty).subscribe(
                     stResp => { },
-                    err => {
-                        this.modalService.alert("Error", err, "error");
-                        console.error(err['stack']);
-                    }
+                    err => { }
                 );
             }
         );
@@ -77,10 +71,7 @@ export class PropertyTreePanelComponent {
                 this.selectedProperty = null;
                 this.itemSelected.emit(undefined);
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            }
+            err => { }
         );
     }
     
@@ -100,10 +91,7 @@ export class PropertyTreePanelComponent {
                     }
                     
                 },
-                err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err['stack']);
-                }
+                err => { }
             );
         }
         

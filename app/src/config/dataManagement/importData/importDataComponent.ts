@@ -38,10 +38,7 @@ export class ImportDataComponent {
                 stResp => {
                     this.modalService.alert("Import data", "Data imported successfully");
                 },
-                err => {
-                    this.modalService.alert("Error", err, "error");
-                    console.error(err['stack']);
-                },
+                err => { },
                 () => document.getElementById("blockDivFullScreen").style.display = "none"
             );
         }

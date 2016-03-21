@@ -48,10 +48,7 @@ export class ClassTreeComponent {
             roots => {
                 this.roots = roots;
             },
-            err => {
-                this.modalService.alert("Error", err, "error");
-                console.error(err['stack']);
-            },
+            err => { },
             () => this.blockDivElement.nativeElement.style.display = "none"
         );
     }
