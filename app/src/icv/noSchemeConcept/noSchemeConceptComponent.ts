@@ -3,6 +3,7 @@ import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -37,7 +38,7 @@ export class NoSchemeConceptComponent {
                 this.brokenConceptList = new Array();
                 var conceptColl = stResp.getElementsByTagName("concept");
                 for (var i = 0; i < conceptColl.length; i++) {
-                    var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, "concept"); 
+                    var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept); 
                     this.brokenConceptList.push(c);       
                 }
             },

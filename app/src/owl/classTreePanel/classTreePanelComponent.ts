@@ -6,6 +6,7 @@ import {OwlServices} from "../../services/owlServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 
 @Component({
 	selector: "class-tree-panel",
@@ -113,12 +114,12 @@ export class ClassTreePanelComponent {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, ["cls", "individual"], true, "contain").subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual], true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else if (searchResult.length == 1) {
-                        if (searchResult[0].getRole() == "cls") {
+                        if (searchResult[0].getRole() == RDFResourceRolesEnum.cls) {
                             this.viewChildTree.openTreeAt(searchResult[0]);    
                         } else { // role "individual"
                             //get type of individual, then open the tree to that class

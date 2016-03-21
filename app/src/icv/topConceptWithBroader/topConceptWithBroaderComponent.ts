@@ -3,6 +3,7 @@ import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -37,8 +38,8 @@ export class TopConceptWithBroaderComponent {
                 this.brokenRecordList = new Array();
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
-                    var c = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), "concept");
-                    var s = new ARTURIResource(recordColl[i].getAttribute("scheme"), recordColl[i].getAttribute("scheme"), "conceptScheme"); 
+                    var c = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), RDFResourceRolesEnum.concept);
+                    var s = new ARTURIResource(recordColl[i].getAttribute("scheme"), recordColl[i].getAttribute("scheme"), RDFResourceRolesEnum.conceptScheme); 
                     this.brokenRecordList.push({concept: c, scheme: s});
                 }
             },

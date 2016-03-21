@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
 import {PropertyTreeComponent} from "../propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -87,7 +88,7 @@ export class PropertyTreePanelComponent {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, ["property"], true, "contain").subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'");

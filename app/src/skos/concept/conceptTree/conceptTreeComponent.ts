@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
+import {RDFResourceRolesEnum} from "../../../utils/Enums";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
@@ -63,7 +64,7 @@ export class ConceptTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, "concept", this.scheme).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.scheme).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

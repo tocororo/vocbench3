@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryLi
 import {ARTURIResource} from "../../utils/ARTResources";
 import {OWL} from "../../utils/Vocabulary";
 import {VBEventHandler} from "../../utils/VBEventHandler";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {OwlServices} from "../../services/owlServices";
 import {SearchServices} from "../../services/searchServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
@@ -60,7 +61,7 @@ export class ClassTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, "cls").subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

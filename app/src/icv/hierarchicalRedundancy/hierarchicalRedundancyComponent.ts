@@ -3,6 +3,7 @@ import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -37,8 +38,8 @@ export class HierarchicalRedundancyComponent {
                 this.brokenRecordList = new Array();
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
-                    var b = new ARTURIResource(recordColl[i].getAttribute("broader"), recordColl[i].getAttribute("broader"), "concept");
-                    var n = new ARTURIResource(recordColl[i].getAttribute("narrower"), recordColl[i].getAttribute("narrower"), "concept"); 
+                    var b = new ARTURIResource(recordColl[i].getAttribute("broader"), recordColl[i].getAttribute("broader"), RDFResourceRolesEnum.concept);
+                    var n = new ARTURIResource(recordColl[i].getAttribute("narrower"), recordColl[i].getAttribute("narrower"), RDFResourceRolesEnum.concept); 
                     this.brokenRecordList.push({broader: b, narrower: n});
                 }
             },

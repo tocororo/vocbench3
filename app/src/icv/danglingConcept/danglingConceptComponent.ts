@@ -3,6 +3,7 @@ import {Router, RouterLink} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -57,7 +58,7 @@ export class DanglingConceptComponent {
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
                     if (recordColl[i].getAttribute("scheme") == this.selectedScheme.getURI()) {
-                        var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), "concept");
+                        var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), RDFResourceRolesEnum.concept);
                         this.brokenConceptList.push(dc);
                     }
                 }

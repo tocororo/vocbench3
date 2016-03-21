@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
+import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -26,7 +27,7 @@ export class PropertyFacetsPartitionRenderer {
     private add() {
         this.browsingService.browsePropertyTree("Select an inverse property").then(
             selectedProp => {
-                this.propService.addExistingPropValue(this.resource, OWL.inverseOf, selectedProp.getURI(), "resource").subscribe(
+                this.propService.addExistingPropValue(this.resource, OWL.inverseOf, selectedProp.getURI(), RDFTypesEnum.resource).subscribe(
                     stResp => this.update.emit(null)
                 )
             }
@@ -34,7 +35,7 @@ export class PropertyFacetsPartitionRenderer {
     }
     
     private remove(property: ARTURIResource) {
-        this.propService.removePropValue(this.resource, OWL.inverseOf, property.getURI(), null, "uri").subscribe(
+        this.propService.removePropValue(this.resource, OWL.inverseOf, property.getURI(), null, RDFTypesEnum.uri).subscribe(
             stResp => {
                 this.update.emit(null);
             },
@@ -59,7 +60,7 @@ export class PropertyFacetsPartitionRenderer {
     
     private setPropertyFacet(propertyClass: ARTURIResource, value: boolean) {
         if (value) {
-            this.propService.addExistingPropValue(this.resource, RDF.type, propertyClass.getURI(), "uri").subscribe(
+            this.propService.addExistingPropValue(this.resource, RDF.type, propertyClass.getURI(), RDFTypesEnum.uri).subscribe(
                 stResp => this.update.emit(null),
                 err => {
                     this.modalService.alert("Error", err, "error");
@@ -67,7 +68,7 @@ export class PropertyFacetsPartitionRenderer {
                 }
             );
         } else {
-            this.propService.removePropValue(this.resource, RDF.type, propertyClass.getURI(), null, "uri").subscribe(
+            this.propService.removePropValue(this.resource, RDF.type, propertyClass.getURI(), null, RDFTypesEnum.uri).subscribe(
                 stResp => this.update.emit(null),
                 err => {
                     this.modalService.alert("Error", err, "error");

@@ -3,6 +3,7 @@ import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -37,7 +38,7 @@ export class NoTopConceptSchemeComponent {
                 this.brokenSchemeList = new Array();
                 var schemeColl = stResp.getElementsByTagName("conceptScheme");
                 for (var i = 0; i < schemeColl.length; i++) {
-                    var s = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, "conceptScheme"); 
+                    var s = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme); 
                     this.brokenSchemeList.push(s);
                 }
             },

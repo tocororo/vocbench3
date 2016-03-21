@@ -4,6 +4,7 @@ import {RDFS, OWL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ResourceUtils} from "../../utils/ResourceUtils";
+import {RDFTypesEnum} from "../../utils/Enums";
 import {PropertyServices} from "../../services/propertyServices";
 import {OwlServices} from "../../services/owlServices";
 
@@ -54,7 +55,7 @@ export class ClassAxiomPartitionPartitionRenderer {
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        var objectType = object.isURIResource() ? "uri" : "bnode";
+        var objectType = object.isURIResource() ? RDFTypesEnum.uri : RDFTypesEnum.bnode;
         switch (predicate.getURI()) {
             case RDFS.subClassOf.getURI():
                 this.owlService.removeSuperCls(this.resource, <ARTURIResource>object).subscribe(

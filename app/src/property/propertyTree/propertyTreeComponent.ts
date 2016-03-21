@@ -1,6 +1,7 @@
 import {Component, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
+import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";
@@ -46,7 +47,7 @@ export class PropertyTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, "property").subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

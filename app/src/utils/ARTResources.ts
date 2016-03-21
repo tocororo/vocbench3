@@ -1,3 +1,5 @@
+import {RDFResourceRolesEnum} from "./Enums";
+
 export interface ARTNode {
     isResource(): boolean;
     isURIResource(): boolean;
@@ -12,15 +14,15 @@ export interface ARTNode {
 }
 
 export interface ARTResource extends ARTNode {
-    getRole(): string;
+    getRole(): RDFResourceRolesEnum;
 }
 
 export class ARTURIResource implements ARTResource {
     private uri: string;
     private show: string;
-    private role: string;
+    private role: RDFResourceRolesEnum;
 
-    constructor(uri: string, show: string, role: string) {
+    constructor(uri: string, show: string, role: RDFResourceRolesEnum) {
         this.uri = uri;
         this.show = show;
         this.role = role;
@@ -30,7 +32,7 @@ export class ARTURIResource implements ARTResource {
         return this.uri;
     }
 
-    getRole(): string {
+    getRole(): RDFResourceRolesEnum {
         return this.role;
     }
 
@@ -95,9 +97,9 @@ export class ARTURIResource implements ARTResource {
 export class ARTBNode implements ARTResource {
     private id: string;
     private show: string;
-    private role: string;
+    private role: RDFResourceRolesEnum;
 
-    constructor(id: string, show: string, role: string) {
+    constructor(id: string, show: string, role: RDFResourceRolesEnum) {
         this.id = id;
         this.show = show;
         this.role = role;
@@ -107,7 +109,7 @@ export class ARTBNode implements ARTResource {
         return this.id;
     }
 
-    getRole(): string {
+    getRole(): RDFResourceRolesEnum {
         return this.role;
     }
 

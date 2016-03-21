@@ -3,6 +3,7 @@ import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTURIResource} from "../utils/ARTResources";
+import {RDFTypesEnum} from "../utils/Enums";
 
 @Injectable()
 export class PropertyServices {
@@ -165,7 +166,7 @@ export class PropertyServices {
      * @param type
      * @param lang
      */
-    removePropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: string, lang?: string) {
+    removePropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: RDFTypesEnum, lang?: string) {
         console.log("[PropertyServices] removePropValue");
         var params: any = {
             instanceQName: subject.getURI(),
@@ -189,7 +190,7 @@ export class PropertyServices {
      * @param type
      * @param lang
      */
-    createAndAddPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: string, lang?: string) {
+    createAndAddPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: RDFTypesEnum, lang?: string) {
         console.log("[PropertyServices] createAndAddPropValue");
         var params: any = {
             instanceQName: subject.getURI(),

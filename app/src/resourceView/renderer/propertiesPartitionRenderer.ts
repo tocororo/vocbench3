@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
+import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -45,17 +46,17 @@ export class PropertiesPartitionRenderer {
         var type;
         var lang;
         if (object.isBNode()) {
-            type = "bnode";
+            type = RDFTypesEnum.bnode;
         } else if (object.isURIResource()) {
-            type = "uri";
+            type = RDFTypesEnum.uri;
         } else if (object.isLiteral()) {
             if ((<ARTLiteral>object).isTypedLiteral()) {
-                type = "typedLiteral";
+                type = RDFTypesEnum.typedLiteral;
             } else if ((<ARTLiteral>object).getLang() != null) {
-                type = "plainLiteral";
+                type = RDFTypesEnum.plainLiteral;
                 lang = (<ARTLiteral>object).getLang();
             } else {
-                type = "literal";
+                type = RDFTypesEnum.literal;
             }
         }
         this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, type, lang).subscribe(

@@ -3,6 +3,7 @@ import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
+import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {SkosServices} from "../../services/skosServices";
@@ -37,19 +38,19 @@ export class LexicalizationsPartitionRenderer {
             result => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
-                        this.skosxlService.setPrefLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
+                        this.skosxlService.setPrefLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
-                        this.skosxlService.addAltLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
+                        this.skosxlService.addAltLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
-                        this.skosxlService.addHiddenLabel(this.resource, result.literal, result.lang, "bnode").subscribe(
+                        this.skosxlService.addHiddenLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
@@ -74,7 +75,7 @@ export class LexicalizationsPartitionRenderer {
                         break;
                     case RDFS.label.getURI():
                         this.propertyService.createAndAddPropValue(
-                            this.resource, predicate, result.literal, null, "plainLiteral", result.lang).subscribe(
+                            this.resource, predicate, result.literal, null, RDFTypesEnum.plainLiteral, result.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { this.modalService.alert("Error", err, "error"); console.error(err['stack']); }
                         );
@@ -124,7 +125,7 @@ export class LexicalizationsPartitionRenderer {
                 break;
             case RDFS.label.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, (<ARTLiteral>object).getLabel(),
-                    null, "plainLiteral", (<ARTLiteral>object).getLang()).subscribe(
+                    null, RDFTypesEnum.plainLiteral, (<ARTLiteral>object).getLang()).subscribe(
                         stResp => this.update.emit(null),
                         err => { this.modalService.alert("Error", err, "error"); console.error(err.stack); }
                     );
