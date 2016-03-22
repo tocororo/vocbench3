@@ -2,19 +2,20 @@ import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 
 export class AlertModalContent {
+    public title: string = 'Modal Title';
+    public message: string = 'Modal Body!';
+    public type: string = 'info';
     /**
      * @param title modal title
      * @param message modal message
      * @param type type of the modal. Determines the style of the message alert.
      *      Available values: "info", "warning", "error"
-     * @param yesText text of the yes button
      */
-    constructor(
-        public title: string = 'Modal Title',
-        public message: string = 'Modal Body!',
-        public type: string = 'info',
-        public yesText: string = 'Ok'
-    ) {}
+    constructor(title: string, message: string, type: string) {
+        this.title = title;
+        this.message = message;
+        this.type = type;
+    }
 }
 
 @Component({

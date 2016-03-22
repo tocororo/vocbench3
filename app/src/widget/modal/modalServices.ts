@@ -5,6 +5,7 @@ import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
 import {NewLiteralLangModal, NewLiteralLangModalContent} from "./newLiteralLangModal/newLiteralLangModal";
+import {SelectionModal, SelectionModalContent} from "./selectionModal/selectionModal";
 
 type ModalType = "info" | "error" | "warning";
 
@@ -17,16 +18,16 @@ export class ModalServices {
      * Opens a modal with an input text and two buttons (Ok and Cancel) with the given title and content message.
      * Returns a Promise with the result.
      * @param title the title of the modal dialog
-     * @param label the label of the input field
+     * @param label the label of the input field (optional)
      * @param inputSanitized tells if the text in the input field should be sanitized
      * @return if the modal closes with ok returns a promise containing the input text
      */
-    prompt(title: string, label: string, inputSanitized?: boolean) {
+    prompt(title: string, label?: string, inputSanitized?: boolean) {
         let dialog: Promise<ModalDialogInstance>;
         let component = PromptModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new PromptModalContent(title, label, false, "Ok", "Cancel", false, inputSanitized);
+        var modalContent = new PromptModalContent(title, label, false, false, inputSanitized);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (small dimension, blocking and without key to dismiss)
@@ -92,6 +93,31 @@ export class ModalServices {
         
         dialog = this.modal.open(<any>component, bindings, modConf);
         return dialog;
+    }
+    
+    /**
+     * Opens a modal with an message and a list of selectable options.
+     * @param title the title of the modal dialog
+     * @param message the message to show in the modal dialog body. If null no message will be in the modal
+     * @param options array of options
+     */
+    select(title: string, message: string, options: Array<string>) {
+        let dialog: Promise<ModalDialogInstance>;
+        let component = SelectionModal;
+        
+        //inject the modal content in the modal Component
+        var modalContent = new SelectionModalContent(title, message, options);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
+        //set the modal configuration (small dimension, blocking and without key to dismiss)
+        var modConf = new ModalConfig("md", true, null);
+        
+        dialog = this.modal.open(<any>component, bindings, modConf);
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result;
+            }
+        );
     }
     
     /**

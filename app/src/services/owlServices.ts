@@ -78,7 +78,7 @@ export class OwlServices {
 
     /**
      * Creates a class (subClass of the given superClass) with the given name.
-     * Emits subClassCreatedEvent containing the newClass and the superClass
+     * Emits subClassCreatedEvent containing the subClass and the superClass
      * @param superClass the superClass of the new created class
      * @param newClassName local name of the new class
      */
@@ -118,6 +118,7 @@ export class OwlServices {
     
     /**
      * Adds a superClass to a class
+     * Emits subClassCreatedEvent containing the subClass and the superClass
      * @param cls the class to which add the superClass
      * @param superClass class to add as superClass
      */
@@ -127,7 +128,12 @@ export class OwlServices {
             clsqname: cls.getURI(),
             superclsqname: superClass.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "addSuperCls", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addSuperCls", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.subClassCreatedEvent.emit({subClass: cls, superClass: superClass});
+                return stResp;
+            }
+        );
     }
     
     /**

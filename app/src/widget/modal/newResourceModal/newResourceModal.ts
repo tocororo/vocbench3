@@ -3,7 +3,10 @@ import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 
 export class NewResourceModalContent {
-    constructor(public title: string) {}
+    public title: string = "Modal title";
+    constructor(title: string) {
+        this.title = title;
+    }
 }
 
 @Component({

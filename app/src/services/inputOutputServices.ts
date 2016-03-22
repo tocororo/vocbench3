@@ -1,6 +1,5 @@
 import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
-import {Headers, Http} from 'angular2/http';
 
 @Injectable()
 export class InputOutputServices {
@@ -8,7 +7,7 @@ export class InputOutputServices {
     private serviceName = "InputOutput";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private http: Http) { }
+    constructor(private httpMgr: HttpManager) { }
 
     saveRDF(format: string) {
         console.log("[InputOutputServices] saveRDF");

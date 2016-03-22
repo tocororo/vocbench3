@@ -2,7 +2,10 @@ import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 
 export class NewLiteralLangModalContent {
-    constructor(public title: string = 'Create new label') {}
+    public title: string = 'Create new label';
+    constructor(title: string) {
+        this.title = title;
+    }
 }
 
 @Component({

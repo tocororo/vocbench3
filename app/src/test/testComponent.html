@@ -39,6 +39,16 @@
     </div>
     
     <div style="margin-bottom: 15px;">
+        <label>Selection Modal:</label>
+        <div>
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="selectionTitle">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="selectionMessage">
+            <br/><button class="btn btn-primary btn-xs" (click)="select()">Test</button>
+            <span>Last result: <strong>{{selectionResult}}</strong></span>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
         <label>New Resource Modal:</label>
         <div>
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="newResourceTitle">

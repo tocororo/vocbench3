@@ -50,6 +50,18 @@ export class TestComponent {
         this.modalService.alert(this.alertTitle, this.alertMessage, this.alertType);
     }
     
+    private selectionResult;
+    private selectionTitle = "Selection title";
+    private selectionMessage = "Selection message";
+    select() {
+        this.modalService.select(this.selectionTitle, this.selectionMessage, ["pippo", "pluto", "paperino"]).then(
+            result => {
+                this.selectionResult = result;
+            },
+            () => this.selectionResult = null
+        );
+    }
+    
     private newResourceResult;
     private newResourceTitle = "NewResource title";
     newResource() {
