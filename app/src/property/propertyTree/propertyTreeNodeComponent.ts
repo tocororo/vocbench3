@@ -3,16 +3,6 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
-/**
- * Currently the propertyTree is built statically, that means the server provide to the client
- * all the hierarchy, and not like the conceptTree and classTree where the trees are built
- * dynamically starting from the roots and retrieving the children of a given node.
- * Given that, the code that opens a path in the tree (for the search function) doesn't require to wait for the
- * initalization of the children views (since they are already initialized at the initalization of the whole tree).
- * So, the code pieces that deals with this thing are commented at the moment. Once the property services will be
- * refactored, this code will be useful again and decommented.
- */
-
 @Component({
 	selector: "property-tree-node",
 	templateUrl: "app/src/property/propertyTree/propertyTreeNodeComponent.html",
@@ -27,10 +17,10 @@ export class PropertyTreeNodeComponent {
     //PropertyTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
     //structure to support the tree opening
-    // private pendingSearch = {
-    //     pending: false, //tells if there is a pending search waiting that children view are initialized 
-    //     path: [], //remaining path of the tree to open
-    // }
+    private pendingSearch = {
+        pending: false, //tells if there is a pending search waiting that children view are initialized 
+        path: [], //remaining path of the tree to open
+    }
     
     private eventSubscriptions = [];
     
@@ -46,12 +36,13 @@ export class PropertyTreeNodeComponent {
     
     ngAfterViewInit() {
         //when ClassTreeNodeComponent children are added, looks for a pending search to resume
-        // this.viewChildrenNode.changes.subscribe(
-        //     c => {
-        //         if (this.pendingSearch.pending) {//there is a pending search
-        //             this.expandPath(this.pendingSearch.path);
-        //         }
-        //     });
+        this.viewChildrenNode.changes.subscribe(
+            c => {
+                if (this.pendingSearch.pending) {//there is a pending search
+                    this.expandPath(this.pendingSearch.path);
+                }
+            }
+        );
     }
     
     ngOnDestroy() {
@@ -76,15 +67,16 @@ export class PropertyTreeNodeComponent {
                 this.expandNode();
             }
             var nodeChildren = this.viewChildrenNode.toArray();
-            // if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
-            //     //save pending search so it can resume when the children are initialized
-            //     this.pendingSearch.pending = true;
-            //     this.pendingSearch.path = path;
-            // } else if (this.pendingSearch.pending) {
-            //     //the tree expansion is resumed, reset the pending search
-            //     this.pendingSearch.pending = false;
-            //     this.pendingSearch.path = [];
-            // }
+            
+            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
+                //save pending search so it can resume when the children are initialized
+                this.pendingSearch.pending = true;
+                this.pendingSearch.path = path;
+            } else if (this.pendingSearch.pending) {
+                //the tree expansion is resumed, reset the pending search
+                this.pendingSearch.pending = false;
+                this.pendingSearch.path = [];
+            }
             for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
                 if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
                     //let the child node expand the remaining path

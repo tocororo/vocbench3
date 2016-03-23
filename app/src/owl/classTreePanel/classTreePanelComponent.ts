@@ -106,26 +106,40 @@ export class ClassTreePanelComponent {
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else if (searchResult.length == 1) {
-                        if (searchResult[0].getRole() == RDFResourceRolesEnum.cls) {
-                            this.viewChildTree.openTreeAt(searchResult[0]);    
-                        } else { // role "individual"
-                            //get type of individual, then open the tree to that class
-                            this.owlService.getDirectNamedTypes(searchResult[0]).subscribe(
-                                types => {
-                                    this.viewChildTree.openTreeAt(types[0]);
-                                    //center instanceList to the individual
-                                    this.viewChildInstanceList.selectSearchedInstance(types[0], searchResult[0]);
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.selectSearchedResource(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.selectSearchedResource(selectedResource);
                                 }
-                            )
+                            );
                         }
-                    } else {
-                        //modal dialog still not available, so it's not possible to let the user choose which result prefer
-                        alert(searchResult.length + " results found. This function is currently not available for multiple results");
                     }
                 },
                 err => { }
             );
+        }
+    }
+    
+    /**
+     * If resource is a class expands the class tree and select the resource,
+     * otherwise (resource is an instance) expands the class tree to the class of the instance and
+     * select the instance in the instance list
+     */
+    private selectSearchedResource(resource: ARTURIResource) {
+        if (resource.getRole() == RDFResourceRolesEnum.cls) {
+            this.viewChildTree.openTreeAt(resource);
+        } else { // resource is an instance
+            //get type of instance, then open the tree to that class
+            this.owlService.getDirectNamedTypes(resource).subscribe(
+                types => {
+                    this.viewChildTree.openTreeAt(types[0]);
+                    //center instanceList to the individual
+                    this.viewChildInstanceList.selectSearchedInstance(types[0], resource);
+                }
+            )
         }
     }
     

@@ -1,11 +1,13 @@
 import {Injectable, Injector, provide} from 'angular2/core';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
+import {ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
 import {NewLiteralLangModal, NewLiteralLangModalContent} from "./newLiteralLangModal/newLiteralLangModal";
 import {SelectionModal, SelectionModalContent} from "./selectionModal/selectionModal";
+import {ResourceSelectionModal, ResourceSelectionModalContent} from "./selectionModal/resourceSelectionModal";
 
 type ModalType = "info" | "error" | "warning";
 
@@ -107,6 +109,31 @@ export class ModalServices {
         
         //inject the modal content in the modal Component
         var modalContent = new SelectionModalContent(title, message, options);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
+        //set the modal configuration (small dimension, blocking and without key to dismiss)
+        var modConf = new ModalConfig("md", true, null);
+        
+        dialog = this.modal.open(<any>component, bindings, modConf);
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result;
+            }
+        );
+    }
+    
+    /**
+     * Opens a modal with an message and a list of selectable options.
+     * @param title the title of the modal dialog
+     * @param message the message to show in the modal dialog body. If null no message will be in the modal
+     * @param resourceList array of available resources
+     */
+    selectResource(title: string, message: string, resourceList: Array<ARTURIResource>) {
+        let dialog: Promise<ModalDialogInstance>;
+        let component = ResourceSelectionModal;
+        
+        //inject the modal content in the modal Component
+        var modalContent = new ResourceSelectionModalContent(title, message, resourceList);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (small dimension, blocking and without key to dismiss)

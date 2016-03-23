@@ -70,13 +70,17 @@ export class ConceptTreePanelComponent {
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else if (searchResult.length == 1) {
-                        this.viewChildTree.openTreeAt(searchResult[0]);
-                    } else {
-                        //modal dialog still not available, so it's not possible to let the user choose which result prefer
-                        alert(searchResult.length + " results found. This function is currently not available for multiple results");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.viewChildTree.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.viewChildTree.openTreeAt(selectedResource);
+                                }
+                            );
+                        }
                     }
-                    
                 },
                 err => { }
             );
