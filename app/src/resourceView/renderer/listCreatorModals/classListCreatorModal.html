@@ -1,0 +1,46 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body" id="toFocus">
+    <div class="vbox" style="min-height:70%; max-height: 70%;">
+        <div class="hbox">
+            <class-tree (itemSelected)="onTreeClassSelected($event)"></class-tree>
+        
+            <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
+                <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addClassToList()" [disabled]="!selectedTreeClass">
+                    Add
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+                <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeFromList()" [disabled]="!selectedListElement">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    Remove
+                </button>
+            </div>
+            
+            <div class="scrollableContainer" style="border: 1px solid #ddd">
+                <div *ngFor="#c of classList">
+                    <rdf-resource [resource]="c" class="listItem" (click)="onListElementSelected(c)" 
+                        [ngClass]="{selectedResource : isListElementSelected(c)}">
+                    </rdf-resource>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-group" style="margin-top: 5px;">
+            <input type="text" class="form-control input-sm" [(ngModel)]="manchExpr" placeholder="Manchester expression">
+            <span class="input-group-btn">
+                <button class="btn btn-default btn-sm" (click)="addExpressionToList()">Add expression</button>
+            </span>
+        </div>
+        
+        <div *ngIf="duplicateResource" class="alert alert-danger" style="margin-top: 4px;" role="alert">
+            <strong>{{duplicateResource.getShow()}}</strong> is already in the list!
+        </div>
+        
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="classList.length == 0">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

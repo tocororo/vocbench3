@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {OwlServices} from "../../services/owlServices";
 
@@ -23,8 +22,7 @@ export class TypesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove type"; 
     
-    constructor(private owlService:OwlServices, private modalService: ModalServices,
-        private browsingService: BrowsingServices) {}
+    constructor(private owlService:OwlServices, private browsingService: BrowsingServices) {}
     
     //add type
     private add() {

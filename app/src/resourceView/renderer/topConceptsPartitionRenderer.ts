@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {SkosServices} from "../../services/skosServices";
 
@@ -23,8 +22,7 @@ export class TopConceptsPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
     private removeBtnImgTitle = "Remove as topConcept";
     
-    constructor(private skosService:SkosServices, private modalService: ModalServices,
-        private browsingService: BrowsingServices) {}
+    constructor(private skosService:SkosServices, private browsingService: BrowsingServices) {}
     
     //add as top concept
     private add() {

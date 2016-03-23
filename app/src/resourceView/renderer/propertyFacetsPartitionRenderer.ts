@@ -3,7 +3,6 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
@@ -21,8 +20,7 @@ export class PropertyFacetsPartitionRenderer {
     @Input() resource: ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
-    constructor(private propService:PropertyServices, private modalService: ModalServices,
-        private browsingService: BrowsingServices) {}
+    constructor(private propService:PropertyServices, private browsingService: BrowsingServices) {}
     
     private add() {
         this.browsingService.browsePropertyTree("Select an inverse property").then(

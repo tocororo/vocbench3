@@ -4,6 +4,7 @@ import {RDFS, OWL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
+import {ListCreatorServices} from "./listCreatorModals/listCreatorServices";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {PropertyServices} from "../../services/propertyServices";
@@ -14,7 +15,7 @@ import {ManchesterServices} from "../../services/manchesterServices";
 	selector: "class-axiom-renderer",
 	templateUrl: "app/src/resourceView/renderer/classAxiomPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [OwlServices, PropertyServices, ManchesterServices],
+    providers: [OwlServices, PropertyServices, ManchesterServices, ListCreatorServices],
 })
 export class ClassAxiomPartitionPartitionRenderer {
     
@@ -28,31 +29,25 @@ export class ClassAxiomPartitionPartitionRenderer {
     ];
     
     constructor(private propertyService:PropertyServices, private owlService:OwlServices, private manchService: ManchesterServices,
-        private modalService: ModalServices, private browsingService: BrowsingServices) {}
+        private modalService: ModalServices, private browsingService: BrowsingServices, private listCreatorService: ListCreatorServices) {}
         
+    /**
+     * Based on the property opens the proper dialog to enrich it
+     * oneOf opens a modal to create a list of instances
+     * intersectionOf and unionOf opens a modal to create a list of classes (or expression)
+     * subClassOf, equivalentClass, disjointWith, complementOf asks the user if choose an existing class
+     * (then opens a class tree modal) or to create a manchester expression (then opens a prompt modal) 
+     */
     private add(property: ARTURIResource) {
         //if the property is oneOf open a modal to create an instance list, otherwise ask the user to make a further decision
         if (property.getURI() == OWL.oneOf.getURI()) {
             this.createInstanceList(property);
-        } else { 
-            this.chooseAction(property);
-        }
-    }
-        
-    /**
-     * Based on the property open a dialog to choose action to do between
-     * add existing class
-     * create and add class expression
-     * create and add class list
-     */
-    private chooseAction(property: ARTURIResource) {
-        var existingClassOpt = "Add an existing class";
-        var classListOpt = "Create and add a class list";
-        var classExpressionOpt = "Create and add a class expression";
-        
-        var propUri = property.getURI();
-        if (propUri == RDFS.subClassOf.getURI() || propUri == OWL.equivalentClass.getURI() || 
-                propUri == OWL.disjointWith.getURI() || propUri == OWL.complementOf.getURI()) {
+        } else if (property.getURI() == OWL.intersectionOf.getURI() || property.getURI() == OWL.unionOf.getURI()) {
+            this.createClassList(property);
+        } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
+            //ask the user to choose to add an existing class or to add a class expression
+            var existingClassOpt = "Add an existing class";
+            var classExpressionOpt = "Create and add a class expression";
             this.modalService.select("Add " + property.getShow(), "Select an option", [existingClassOpt, classExpressionOpt]).then(
                 chosenOption => {
                     if (chosenOption == existingClassOpt) {
@@ -62,21 +57,13 @@ export class ClassAxiomPartitionPartitionRenderer {
                     }
                 }
             );
-        } else if (propUri == OWL.intersectionOf.getURI() || propUri == OWL.unionOf.getURI()) {
-            this.modalService.select("Add " + property.getShow(), "Select an option", [classListOpt, classExpressionOpt]).then(
-                chosenOption => {
-                    if (chosenOption == classListOpt) {
-                        this.createClassList(property);
-                    } else if (chosenOption == classExpressionOpt) {
-                        this.createClassExpression(property);
-                    }
-                }
-            );
         }
     }
-    
+        
     /**
-     * Opens a modal to browse the class tree and select a class, then executes the class axiom action
+     * Opens a modal to browse the class tree and select a class, then executes the class axiom action.
+     * Called if the user chooses to select an existing class to enrich 
+     * subClassOf, equivalentClass, disjointWith, complementOf
      */
     private addExistingClass(property: ARTURIResource) {
         this.browsingService.browseClassTree("Select a class").then(
@@ -98,6 +85,8 @@ export class ClassAxiomPartitionPartitionRenderer {
     
     /**
      * Opens a prompt modal to write a class expression in manchester syntax
+     * Called if the user chooses to create a manchester expression to enrich 
+     * subClassOf, equivalentClass, disjointWith, complementOf
      */
     private createClassExpression(property: ARTURIResource) {
         this.modalService.prompt("Class Expression (Manchester Syntax)").then(
@@ -116,80 +105,89 @@ export class ClassAxiomPartitionPartitionRenderer {
     }
     
     /**
-     * Opens a modal to create a class list
+     * Opens a modal to create a class list.
+     * Called to enrich intersectionOf and unionOf
      */
     private createClassList(property: ARTURIResource) {
-        alert("Opening modal to create list of classes for property " + 
-            property.getShow() + " and resource " + this.resource.getShow());
+        this.listCreatorService.createClassList("Add " + property.getShow()).then(
+            classes => {
+                if (property.getURI() == OWL.intersectionOf.getURI()) {
+                    this.owlService.addIntersectionOf(this.resource, classes).subscribe(
+                        stResp => this.update.emit(null),
+                        err => {}
+                    );    
+                } else if (property.getURI() == OWL.unionOf.getURI()) {
+                    this.owlService.addUnionOf(this.resource, classes).subscribe(
+                        stResp => this.update.emit(null),
+                        err => {}
+                    );
+                }
+            }
+        );
     }
     
     /**
      * Opens a modal to create an instance list
+     * Called to enrich oneOf
      */
     private createInstanceList(property: ARTURIResource) {
-        alert("Opening modal to create list of instances for property " + 
-            property.getShow() + " and resource " + this.resource.getShow());
+        this.listCreatorService.createInstanceList("Add " + property.getShow()).then(
+            instances => {
+                this.owlService.addOneOf(this.resource, instances).subscribe(
+                    stResp => this.update.emit(null),
+                    err => {}
+                );
+            }
+        );
     }
     
+    /**
+     * Removes a class axiom.
+     * Depending on the property and the type of the object calls the proper service 
+     */
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        if (object.isBNode()) {
-            this.manchService.removeExpression(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null),
-                err => {}
-            )
-        } else {
-            switch (predicate.getURI()) {
-                case RDFS.subClassOf.getURI():
-                    this.owlService.removeSuperCls(this.resource, <ARTURIResource>object).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
-                case OWL.equivalentClass.getURI():
-                    this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
-                case OWL.disjointWith.getURI():
-                    this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
-                case OWL.complementOf.getURI():
-                    this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
-                //intersectionOf and unionOf cannot have object as ARTURIResource,
-                //they can have only list of ARTURIResource or manchester expression as object,
-                //so this cases are reachable? 
-                case OWL.intersectionOf.getURI():
-                    this.owlService.removeIntersectionOf(this.resource, object).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
-                case OWL.unionOf.getURI():
-                    this.owlService.removeUnionOf(this.resource, object).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
-                //oneOf cannot have object as ARTURIResource,
-                //it can have only list of ARTURIResource, so this case is reachable? 
-                case OWL.oneOf.getURI():
-                    this.owlService.removeOneOf(this.resource, object).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
-                    );
-                    break;
+        if (predicate.getURI() == RDFS.subClassOf.getURI()) {
+            if (object.isBNode()) {
+                this.manchService.removeExpression(this.resource, predicate, object).subscribe(
+                    stResp => this.update.emit(null),
+                    err => { }
+                )
+            } else {
+                this.owlService.removeSuperCls(this.resource, <ARTURIResource>object).subscribe(
+                    stResp => this.update.emit(null),
+                    err => { }
+                );
             }
+        } else if (predicate.getURI() == OWL.equivalentClass.getURI() || predicate.getURI() == OWL.disjointWith.getURI() ||
+                predicate.getURI() == OWL.complementOf.getURI()) {
+            if (object.isBNode()) {
+                this.manchService.removeExpression(this.resource, predicate, object).subscribe(
+                    stResp => this.update.emit(null),
+                    err => { }
+                )
+            } else {
+                this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
+                    stResp => this.update.emit(null),
+                    err => { }
+                );
+            }
+        } else if (predicate.getURI() == OWL.intersectionOf.getURI()) {
+            this.owlService.removeIntersectionOf(this.resource, object).subscribe(
+                stResp => this.update.emit(null),
+                err => { }
+            );
+        } else if (predicate.getURI() == OWL.unionOf.getURI()) {
+            this.owlService.removeUnionOf(this.resource, object).subscribe(
+                stResp => this.update.emit(null),
+                err => { }
+            );
+        } else if (predicate.getURI() == OWL.oneOf.getURI()) {
+            this.owlService.removeOneOf(this.resource, object).subscribe(
+                stResp => this.update.emit(null),
+                err => { }
+            );
         }
     }
-    
     
     private getAddPropImgTitle(predicate: ARTURIResource) {
         return "Add a " + predicate.getShow();

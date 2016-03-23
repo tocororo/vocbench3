@@ -3,7 +3,6 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "instance-list",
@@ -30,7 +29,7 @@ export class InstanceListComponent {
     
     private eventSubscriptions = [];
     
-    constructor(private owlServices: OwlServices, private eventHandler: VBEventHandler, private modalService: ModalServices) {
+    constructor(private owlServices: OwlServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             data => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(

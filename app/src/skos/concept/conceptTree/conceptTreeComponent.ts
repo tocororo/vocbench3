@@ -4,7 +4,6 @@ import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {RDFResourceRolesEnum} from "../../../utils/Enums";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
-import {ModalServices} from "../../../widget/modal/modalServices";
 import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 
 @Component({
@@ -29,8 +28,7 @@ export class ConceptTreeComponent {
 
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, 
-            private eventHandler: VBEventHandler, private modalService: ModalServices) {
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             data => this.onTopConceptCreated(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(

@@ -2,7 +2,6 @@ import {Component, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {SkosServices} from "../../../services/skosServices";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../../widget/modal/modalServices";
 
 @Component({
 	selector: "scheme-list",
@@ -16,7 +15,7 @@ export class SchemeListComponent {
     private schemeList: ARTURIResource[];
     private selectedScheme: ARTURIResource;
     
-    constructor(private skosService: SkosServices, private modalService: ModalServices) {}
+    constructor(private skosService: SkosServices) {}
     
     ngOnInit() {
         this.skosService.getAllSchemesList().subscribe(

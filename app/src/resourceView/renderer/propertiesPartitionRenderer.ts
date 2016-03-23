@@ -3,7 +3,6 @@ import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../ut
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
@@ -25,8 +24,7 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove property value";
     
-    constructor(private propertyService:PropertyServices, private modalService: ModalServices, 
-        private browsingService: BrowsingServices) {}
+    constructor(private propertyService:PropertyServices, private browsingService: BrowsingServices) {}
         
     private add() {
         this.browsingService.browsePropertyTree("Select a property").then(

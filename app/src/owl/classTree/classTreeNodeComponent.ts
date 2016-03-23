@@ -4,7 +4,6 @@ import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OWL} from "../../utils/Vocabulary";
 import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "class-tree-node",
@@ -28,7 +27,7 @@ export class ClassTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler, private modalService: ModalServices) {
+	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             data => this.onSubClassCreated(data.subClass, data.superClass)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(

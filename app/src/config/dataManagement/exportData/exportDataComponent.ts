@@ -2,7 +2,6 @@ import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {ModalServices} from "../../../widget/modal/modalServices";
 
 @Component({
 	selector: "export-data-component",
@@ -16,8 +15,7 @@ export class ExportDataComponent {
     
     private downloadLink;
     
-    constructor(private inOutService: InputOutputServices, private vbCtx: VocbenchCtx, 
-            private modalService: ModalServices, private router: Router) {
+    constructor(private inOutService: InputOutputServices, private vbCtx: VocbenchCtx, private router: Router) {
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);

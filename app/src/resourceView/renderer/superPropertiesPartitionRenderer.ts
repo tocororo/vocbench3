@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
@@ -23,8 +22,7 @@ export class SuperPropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove superproperty";
     
-    constructor(private propService:PropertyServices, private modalService: ModalServices,
-        private browsingService: BrowsingServices) {}
+    constructor(private propService:PropertyServices, private browsingService: BrowsingServices) {}
     
     private add() {
         this.browsingService.browsePropertyTree("Select a super property").then(

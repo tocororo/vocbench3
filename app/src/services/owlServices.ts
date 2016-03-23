@@ -2,7 +2,7 @@ import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTBNode} from "../utils/ARTResources";
 
 @Injectable()
 export class OwlServices {
@@ -254,19 +254,35 @@ export class OwlServices {
         );
     }
     
-    // addIntersectionOf(clsName: string, clsDescriptions: string[]) {
-    //     console.log("[owlServices] addIntersectionOf");
-    //     var params: any = {
-    //         clsName: clsName,
-    //         collectionNode: clsDescriptions.join("|_|"),
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "addIntersectionOf", params, this.oldTypeService);
-    // }
+    /**
+     * Adds a collection of class as intersectionOf a class.
+     * @param cls the resource whose the enriching the intersectionOf
+     * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
+     */
+    addIntersectionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
+        console.log("[owlServices] addIntersectionOf");
+        var collNodeArray = new Array<string>();
+        for (var i=0; i<collectionNode.length; i++) {
+            if (collectionNode[i] instanceof ARTBNode) {
+                //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
+                //created manually, the id is the expression (something like :A and :B) so the nominal value
+                //will be invalid (_::A and :B) 
+                collNodeArray.push(collectionNode[i].getShow());
+            } else if (collectionNode[i] instanceof ARTURIResource) {
+                collNodeArray.push("<"+collectionNode[i].getNominalValue()+">");
+            }
+        }
+        var params: any = {
+            clsName: cls.getURI(),
+            clsDescriptions: collNodeArray.join("|_|"),
+        };
+        return this.httpMgr.doGet(this.serviceName, "addIntersectionOf", params, this.oldTypeService);
+    }
     
     /**
-     * ?????
-     * @param cls
-     * @param collectionNode
+     * Removes an intersectionOf class axiom
+     * @param cls class to which remove the intersectionOf axiom
+     * @param collectionNode the node representing the intersectionOf expression
      */
     removeIntersectionOf(cls: ARTURIResource, collectionNode: ARTNode) {
         console.log("[owlServices] removeIntersectionOf");
@@ -277,42 +293,35 @@ export class OwlServices {
         return this.httpMgr.doGet(this.serviceName, "removeIntersectionOf", params, this.oldTypeService);
     }
     
-    // addOneOf(clsName: string, individuals: string[]) {
-    //     console.log("[owlServices] addOneOf");
-    //     var params: any = {
-    //         clsName: clsName,
-    //         individuals: individuals.join("|_|"),
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "addOneOf", params, this.oldTypeService);
-    // }
-
     /**
-     * ???
-     * @param cls
-     * @param collectionNode
+     * Adds a collection of class as unionOf a class.
+     * @param cls the resource whose the enriching the unionOf
+     * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
-    removeOneOf(cls: ARTURIResource, collectionNode: ARTNode) {
-        console.log("[owlServices] removeOneOf");
+    addUnionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
+        console.log("[owlServices] addUnionOf");
+        var collNodeArray = new Array<string>();
+        for (var i=0; i<collectionNode.length; i++) {
+            if (collectionNode[i] instanceof ARTBNode) {
+                //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
+                //created manually, the id is the expression (something like :A and :B) so the nominal value
+                //will be invalid (_::A and :B) 
+                collNodeArray.push(collectionNode[i].getShow());
+            } else if (collectionNode[i] instanceof ARTURIResource) {
+                collNodeArray.push("<"+collectionNode[i].getNominalValue()+">");
+            }
+        }
         var params: any = {
             clsName: cls.getURI(),
-            individuals: collectionNode.getNominalValue(),
+            clsDescriptions: collNodeArray.join("|_|"),
         };
-        return this.httpMgr.doGet(this.serviceName, "removeOneOf", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addUnionOf", params, this.oldTypeService);
     }
-    
-    // addUnionOf(clsName: string, clsDescriptions: string[]) {
-    //     console.log("[owlServices] addUnionOf");
-    //     var params: any = {
-    //         clsName: clsName,
-    //         individuals: clsDescriptions.join("|_|"),
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "addUnionOf", params, this.oldTypeService);
-    // }
 
     /**
-     * ???
-     * @param cls
-     * @param collectionNode
+     * Removes an unionOf class axiom
+     * @param cls class to which remove the unionOf axiom
+     * @param collectionNode the node representing the unionOf expression
      */
     removeUnionOf(cls: ARTURIResource, collectionNode: ARTNode) {
         console.log("[owlServices] removeUnionOf");
@@ -322,5 +331,37 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "removeUnionOf", params, this.oldTypeService);
     }
+    
+    /**
+     * Adds a collection of instances as oneOf a class.
+     * @param cls the resource whose the enriching the unionOf
+     * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
+     */
+    addOneOf(cls: ARTURIResource, individuals: ARTURIResource[]) {
+        console.log("[owlServices] addOneOf");
+        var collIndividualArray = new Array<string>();
+        for (var i=0; i<individuals.length; i++) {
+            collIndividualArray.push(individuals[i].getURI());
+        }
+        var params: any = {
+            clsName: cls.getURI(),
+            individuals: collIndividualArray.join("|_|"),
+        };
+        return this.httpMgr.doGet(this.serviceName, "addOneOf", params, this.oldTypeService);
+    }
 
+    /**
+     * Removes an oneOf class axiom
+     * @param cls class to which remove the oneOf axiom
+     * @param collectionNode the node representing the oneOf expression
+     */
+    removeOneOf(cls: ARTURIResource, collectionNode: ARTNode) {
+        console.log("[owlServices] removeOneOf");
+        var params: any = {
+            clsName: cls.getURI(),
+            collectionNode: collectionNode.getNominalValue(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeOneOf", params, this.oldTypeService);
+    }
+    
 }

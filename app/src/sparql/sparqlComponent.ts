@@ -2,7 +2,6 @@ import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {SparqlServices} from "../services/sparqlServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {ModalServices} from "../widget/modal/modalServices";
 
 @Component({
     selector: "sparql-component",
@@ -25,8 +24,7 @@ export class SparqlComponent {
     }];
     private activeTab = this.tabs[0];
     
-    constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices,
-            private modalService: ModalServices) {
+    constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices) {
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);

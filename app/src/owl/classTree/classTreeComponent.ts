@@ -6,7 +6,6 @@ import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {OwlServices} from "../../services/owlServices";
 import {SearchServices} from "../../services/searchServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
-import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "class-tree",
@@ -30,8 +29,7 @@ export class ClassTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private owlService:OwlServices, private searchService: SearchServices,
-            private eventHandler:VBEventHandler, private modalService: ModalServices) {
+	constructor(private owlService:OwlServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     

@@ -2,7 +2,6 @@ import {Component, Output, EventEmitter, ViewChildren, QueryList} from "angular2
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";
 import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
@@ -24,8 +23,7 @@ export class PropertyTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private propertyService:PropertyServices, private searchService: SearchServices, 
-            private eventHandler:VBEventHandler, private modalService: ModalServices) {
+	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
     }
