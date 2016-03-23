@@ -5,7 +5,7 @@
     <div class="hbox" style="align-items: center;">
         <label *ngIf="context.label" style="margin-right: 4px;">{{context.label}}:</label>
         <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="inputTxt"
-            (keypress)="onKeypress($event)" [sanitized]="context.inputSanitized">
+            (keydown)="onKeydown($event)" [sanitized]="context.inputSanitized">
     </div>
     <div *ngIf="!isInputValid() && !context.inputOptional && submitted" class="alert alert-danger">
         <strong>{{context.label}}</strong> is required

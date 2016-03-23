@@ -2,7 +2,7 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body">
-    <div (keypress)="onKeypress($event)">
+    <div (keydown)="onKeydown($event)">
         <div class="hbox" style="align-items: center; margin-bottom: 4px;">
             <label style="width: 50px;">Name:</label>
             <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="name" sanitized>

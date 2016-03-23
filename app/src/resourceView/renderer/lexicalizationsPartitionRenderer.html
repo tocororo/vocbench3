@@ -2,8 +2,9 @@
     <div class="subPanel-heading">
         <label style="flex: 1">Lexicalizations:</label>
         
-        <span style="margin-right: 2px;">Show All</span>
-        <input type="checkbox" [checked]="showAllLexicalProp" (change)="showAllLexicalProp=$event.target.checked"
+        <span>Show All</span>
+        <input type="checkbox" style="margin: 0 3px;" [checked]="showAllLexicalProp" 
+            (change)="showAllLexicalProp=$event.target.checked"
             title="Show all the properties, including those not compliant with the current project type">
         
         <div class="dropdown pull-right">

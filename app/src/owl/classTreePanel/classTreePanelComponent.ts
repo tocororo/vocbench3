@@ -113,7 +113,7 @@ export class ClassTreePanelComponent {
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 selectedResource => {
                                     this.selectSearchedResource(selectedResource);
-                                }
+                                } 
                             );
                         }
                     }
@@ -144,10 +144,10 @@ export class ClassTreePanelComponent {
     }
     
     /**
-     * Handles the keypress event in search text field (when enter key is pressed execute the search)
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(keyIdentifier, searchedText) {
-        if (keyIdentifier == "Enter") {
+    private searchKeyHandler(key, searchedText) {
+        if (key == "13") {
             this.doSearch(searchedText);           
         }
     }

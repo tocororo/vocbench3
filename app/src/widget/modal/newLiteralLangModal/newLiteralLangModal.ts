@@ -43,8 +43,8 @@ export class NewLiteralLangModal implements ICustomModalComponent {
         this.dialog.dismiss();
     }
     
-    private onKeypress(event) {
-        if (event.keyIdentifier == "Enter") {
+    private onKeydown(event) {
+        if (event.which == "13") {
             this.submitted = true;
             if (this.isInputValid()) {
                 this.ok(event);
