@@ -1,0 +1,125 @@
+<div class="vbox">
+    
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Create project:</label>
+        </div>
+        
+        <div class="panel-body scrollableContainer">
+
+            <!--Project basic params-->
+            <form role="form">
+                <div class="form-group">
+                    <label>Project name:</label>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="projectName" placeholder="Name">
+                    <div *ngIf="(!projectName || projectName.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
+                        A <strong>project name</strong> is required
+                    </div>
+                </div>
+                <form role="form">
+                    <div class="form-group">
+                        <label>Type:</label>
+                        <select class="form-control input-sm" [(ngModel)]="ontoType">
+                            <option value="it.uniroma2.art.owlart.models.OWLModel">OWL</option>
+                            <option value="it.uniroma2.art.owlart.models.SKOSModel">SKOS</option>
+                            <option value="it.uniroma2.art.owlart.models.SKOSXLModel">SKOS-XL</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="form-group">
+                    <label>URI:</label>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" placeholder="BaseURI">
+                    <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
+                        A <strong>base URI</strong> is required
+                    </div>
+                </div>
+            </form>
+
+            <!--Triple store configuration-->
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label>Triple Store</label>
+                </div>
+                <div class="subPanel-body">
+                    
+                    <div class="form-group">
+                        <label>OntoManager:</label>
+                        <input type="text" class="form-control input-sm" style="cursor: default" [(ngModel)]="ontoMgrId" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Configuration:</label>
+                        <div class="input-group">
+                            <!-- currently select option is not fully supported with object array. This is a workaroung
+                                    see issue https://github.com/angular/angular/issues/4843 -->
+                            <select class="form-control input-sm" [(ngModel)]="selectedOntoMgrConfigType" (ngModelChange)="changeOntoMgr()">
+                                <option *ngFor="#conf of ontoMgrConfigList" [value]="conf.type">{{conf.shortName}}</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" (click)="configureOntoMgr()">Configure</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Extention points configuration-->
+            <!--Unavailable untill issue https://github.com/angular/angular/issues/4843 is not resolved-->
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Optional settings:</label>
+                    <button type="button" class="close" (click)="toggleExtPointPanel()">
+                        <span style="font-family: Courier New">{{extPointPanelOpen ? '-' : '+'}}</span>
+                    </button>
+                </div>
+                <div class="subPanel-body" *ngIf="extPointPanelOpen">
+
+                    <div *ngFor="#xp of extPointStructList">
+                        <div class="subPanel">
+                            <div class="subPanel-heading" style="background: #f5f5f5">
+                                <label>{{xp.id.substring(xp.id.lastIndexOf('.')+1)}}:</label>
+                            </div>
+                            <div class="subPanel-body">
+                                
+                                <div class="form-group">
+                                    <label>Plugin:</label>
+                                        <!-- currently select option is not fully supported with object array. This is a workaroung
+                                                see issue https://github.com/angular/angular/issues/4843 -->
+                                    <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPluginId" (ngModelChange)="changeExtPointPlugin(xp)">
+                                        <option value="---">---</option>
+                                        <option *ngFor="#plugin of xp.plugins" [value]="plugin">{{plugin.substring(plugin.lastIndexOf('.')+1)}}</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Configuration:</label>
+                                    <div class="input-group">
+                                        <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPlugin.selectedConfigType" 
+                                            [disabled]="!xp.selectedExtPointPlugin.configurations">
+                                            <option *ngFor="#conf of xp.selectedExtPointPlugin.configurations" [value]="conf.type">
+                                                {{conf.shortName}}
+                                            </option>
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-sm" (click)="configurePluginConfig(xp)"
+                                                [disabled]="!xp.selectedExtPointPlugin.selectedConfigType">Configure</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="create()">Create</button>
+            <span class="clearfix"></span> <!--To fix UI bug-->
+        </div>
+    </div>
+    
+</div>

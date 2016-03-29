@@ -111,7 +111,8 @@ concept-tree, class-tree, property-tree, instance-list, scheme-list {
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */
 .scrollableContainer {
     padding: 4px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     flex: 1;
     min-height: 0;
     display: flex;

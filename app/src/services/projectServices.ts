@@ -76,6 +76,52 @@ export class ProjectServices {
         };
         return this.httpMgr.doGet(this.serviceName, "accessProject", params, this.oldTypeService);
     }
+    
+    /**
+     * Creates a project
+     * @param projectName
+     * @param modelType
+     * @param baseURI
+     * @param ontManagerFactoryID
+     * @param modelConfigurationClass
+     * @param modelConfigurationArray array of param .name-.value pairs
+     * @param uriGeneratorFactoryID
+     * @param uriGenConfigurationClass
+     * @param uriGenConfigurationArray array of param .name-.value pairs
+     * @param renderingEngineFactoryID
+     * @param renderingEngineConfigurationClass
+     * @param renderingEngineConfigurationArray array of param .name-.value pairs
+     */
+    createProject(projectName: string, modelType: string, baseURI: string,
+        ontManagerFactoryID: string, modelConfigurationClass: string, modelConfigurationArray: Array<any>,
+        uriGeneratorFactoryID?: string, uriGenConfigurationClass?: string, uriGenConfigurationArray?: Array<any>,
+		renderingEngineFactoryID?: string, renderingEngineConfigurationClass?: string, renderingEngineConfigurationArray?: Array<any>) {
+            
+        console.log("[ProjectServices] createProject");
+        var params: any = {
+            consumer: "SYSTEM",
+            projectName: projectName,
+            modelType: modelType,
+            baseURI: baseURI,
+            ontManagerFactoryID: ontManagerFactoryID,
+            modelConfigurationClass: modelConfigurationClass,
+            modelConfiguration: modelConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n"),
+        };
+        
+        if (uriGeneratorFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
+            params.uriGeneratorFactoryID = uriGeneratorFactoryID;
+            params.uriGenConfigurationClass = uriGenConfigurationClass;
+            params.uriGenConfiguration = uriGenConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
+        }
+        
+        if (renderingEngineFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
+            params.renderingEngineFactoryID = renderingEngineFactoryID;
+            params.renderingEngineConfigurationClass = renderingEngineConfigurationClass;
+            params.renderingEngineConfiguration = renderingEngineConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
+        }
+        
+        return this.httpMgr.doGet(this.serviceName, "createProject", params, this.oldTypeService);
+    }
 
     /**
      * Deletes the given project
@@ -88,6 +134,20 @@ export class ProjectServices {
             projectName: project.getName(),
         };
         return this.httpMgr.doGet(this.serviceName, "deleteProject", params, this.oldTypeService);
+    }
+    
+    /**
+     * Imports a project archieve previously exported
+     * @param projectName the name of the new project
+     * @param projectFile the archieve of the project to import
+     */
+    importProject(projectName: string, projectFile: File) {
+        console.log("[ProjectServices] importProject");
+        var data = {
+            newProjectName: projectName,
+            importPackage: projectFile
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "importProject", data, this.oldTypeService);
     }
     
     /**

@@ -94,7 +94,11 @@ export class ModalServices {
         var modConf = new ModalConfig("md", true, null);
         
         dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog;
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result;
+            }
+        );
     }
     
     /**

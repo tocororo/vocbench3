@@ -12,7 +12,7 @@
                     <label>Base URI:</label>
                     <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" placeholder="baseURI">
                     <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
-                        BaseURI is required
+                        <strong>BaseURI</strong> is required
                     </div>
                 </div>
                 
@@ -36,7 +36,7 @@
                     <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])" accept="application/rdf+xml"
                         style="width: 100%; border: 1px solid #ccc; padding: 4px; border-radius: 3px; color: #555;">
                     <div *ngIf="(!inputFile.files[0]) && submitted" class="alert alert-danger" style="margin-top: 2px">
-                        A file is required
+                        A <strong>file</strong> is required
                     </div>
                 </div>
                 

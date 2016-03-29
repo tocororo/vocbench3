@@ -129,8 +129,8 @@ export class DanglingConceptComponent {
         alert("Fix not yet available");
     }
     
-    //workaround for 2 way binding still not supported for <select>
-    private changeScheme(schemeURI: string) {
+    //workaround for 2 way binding still not supported for <select> https://github.com/angular/angular/issues/4843
+    private changeScheme() {
         this.selectedScheme = this.schemeList.find(
             scheme => scheme.getURI() == this.selectedSchemeURI
         );

@@ -15,7 +15,7 @@ export class ManchesterServices {
      * @param manchExpr manchester expression to check
      */
     checkExpression(manchExpr: string) {
-        console.log("[ManchesterHandler] checkExpression");
+        console.log("[ManchesterServices] checkExpression");
         var params = {
             manchExpr: manchExpr
         };
@@ -29,7 +29,7 @@ export class ManchesterServices {
      * @param manchExpr manchester expression used to create restriction
      */
     createRestriction(cls: ARTURIResource, predicate: ARTURIResource, manchExpr: string) {
-        console.log("[ManchesterHandler] createRestriction");
+        console.log("[ManchesterServices] createRestriction");
         var params = {
             classUri: cls.getURI(),
             exprType: predicate.getURI(),
@@ -45,7 +45,7 @@ export class ManchesterServices {
      * @param manchExpr manchester expression to check
      */
     removeExpression(cls: ARTURIResource, predicate: ARTURIResource, artNode: ARTNode) {
-        console.log("[ManchesterHandler] removeExpression");
+        console.log("[ManchesterServices] removeExpression");
         var params = {
             classUri: cls.getURI(),
             exprType: predicate.getURI(),

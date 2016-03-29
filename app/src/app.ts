@@ -8,6 +8,8 @@ import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { IcvComponent } from "./icv/icvComponent";
+import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
+import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
 import { DanglingConceptComponent } from "./icv/danglingConcept/danglingConceptComponent";
 import { NoSchemeConceptComponent } from "./icv/noSchemeConcept/noSchemeConceptComponent";
 import { NoTopConceptSchemeComponent } from "./icv/noTopConceptScheme/noTopConceptSchemeComponent";
@@ -37,6 +39,9 @@ import { TestComponent } from "./test/testComponent";
     // route config of config bar
     {path: "/Config/ImportData", name: "ImportData", component: ImportDataComponent},
     {path: "/Config/ExportData", name: "ExportData", component: ExportDataComponent},
+    // route config for project management
+    {path: "/Projects/ImportProject", name: "ImportProject", component: ImportProjectComponent},
+    {path: "/Projects/CreateProject", name: "CreateProject", component: CreateProjectComponent},
     // route config of ICV
     {path: "/Icv/DanglingConcept", name: "DanglingConcept", component: DanglingConceptComponent},
     {path: "/Icv/NoSchemeConcept", name: "NoSchemeConcept", component: NoSchemeConceptComponent},

@@ -1,4 +1,5 @@
 import {Component, OnInit, OnDestroy} from "angular2/core";
+import {Router} from 'angular2/router';
 import {ProjectServices} from "../services/projectServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {Project} from '../utils/Project';
@@ -17,7 +18,8 @@ export class ProjectComponent implements OnInit {
     
     private exportLink: string;
 
-    constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
+    constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
+        private modalService: ModalServices) {}
 
     ngOnInit() {
         this.projectService.listProjects().subscribe(
@@ -53,9 +55,11 @@ export class ProjectComponent implements OnInit {
         return this.selectedProject == project;
     }
     
-    //TODO
+    /**
+     * Redirects to the import project page
+     */
     private createProject() {
-        alert("create project");
+        this.router.navigate(["CreateProject"]);
     }
 
     private deleteProject() {
@@ -83,9 +87,11 @@ export class ProjectComponent implements OnInit {
         }
     }
     
-    //TODO
+    /**
+     * Redirects to the import project page
+     */
     private importProject() {
-        alert("import project");
+        this.router.navigate(["ImportProject"]);
     }
     
     /**
