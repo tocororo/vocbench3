@@ -37,7 +37,8 @@ export class ConceptTreePanelComponent {
                     data => { },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     
@@ -48,7 +49,8 @@ export class ConceptTreePanelComponent {
                     data => { },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     
@@ -77,7 +79,8 @@ export class ConceptTreePanelComponent {
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 selectedResource => {
                                     this.viewChildTree.openTreeAt(selectedResource);
-                                }
+                                },
+                                () => {}
                             );
                         }
                     }

@@ -55,7 +55,8 @@ export class ClassAxiomPartitionPartitionRenderer {
                     } else if (chosenOption == classExpressionOpt) {
                         this.createClassExpression(property);
                     }
-                }
+                },
+                () => {}
             );
         }
     }
@@ -100,7 +101,8 @@ export class ClassAxiomPartitionPartitionRenderer {
                     },
                     err => {}
                 )
-            }
+            },
+            () => {}
         );
     }
     

@@ -81,7 +81,8 @@ export class LexicalizationsPartitionRenderer {
                         );
                         break;
                 }
-            }
+            },
+            () => {}
         );
     }
     

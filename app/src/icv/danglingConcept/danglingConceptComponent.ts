@@ -117,7 +117,8 @@ export class DanglingConceptComponent {
                     },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     

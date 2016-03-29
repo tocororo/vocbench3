@@ -82,7 +82,8 @@ export class NoTopConceptSchemeComponent {
                     },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     

@@ -43,7 +43,8 @@ export class ConfigBarComponent {
                     err => { },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 );
-            }
+            },
+            () => {}
         );
     }
     

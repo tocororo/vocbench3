@@ -40,8 +40,9 @@ export class ClassTreePanelComponent {
                 this.owlService.createClass(this.rootClass, result).subscribe(
                     stResp => { },
                     err => { }
-                );
-            }
+                )
+            },
+            () => {}
         );
         
     }
@@ -54,7 +55,8 @@ export class ClassTreePanelComponent {
                     stResp => { },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     
@@ -81,7 +83,8 @@ export class ClassTreePanelComponent {
                     stResp => { },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     
@@ -113,7 +116,8 @@ export class ClassTreePanelComponent {
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 selectedResource => {
                                     this.selectSearchedResource(selectedResource);
-                                } 
+                                },
+                                () => {}
                             );
                         }
                     }

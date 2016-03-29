@@ -82,7 +82,8 @@ export class ProjectComponent implements OnInit {
                         },
                         err => { }
                     );
-                }
+                },
+                () => {}
             );
         }
     }

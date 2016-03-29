@@ -49,7 +49,8 @@ export class PropertyTreePanelComponent {
                     stResp => { },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     
@@ -61,7 +62,8 @@ export class PropertyTreePanelComponent {
                     stResp => { },
                     err => { }
                 );
-            }
+            },
+            () => {}
         );
     }
     
@@ -90,7 +92,8 @@ export class PropertyTreePanelComponent {
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 selectedResource => {
                                     this.viewChildTree.openTreeAt(selectedResource);
-                                }
+                                },
+                                () => {}
                             );
                         }
                     }
