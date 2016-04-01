@@ -179,11 +179,10 @@ input[type="image"]:disabled  {
 	opacity: 0.5;
 }
 
-.table tr:hover td {
+project-component .table tr:hover td {
     background-color: #e5f3ff !important;
 }
-
-.table tr.active td {
+project-component .table tr.active td {
     background-color: #cde8ff !important;
 }
 
@@ -217,6 +216,13 @@ input[type="image"]:disabled  {
 
 .subPanel-body {
 	padding: 4px;
+}
+
+input.ng-invalid.submitted {
+    border-left: 4px solid #a94442;
+}
+input.invalid {
+    background: #ffaaaa;
 }
 
 /* BOOTSTRAP OVERRIDE */

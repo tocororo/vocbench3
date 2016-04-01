@@ -18,6 +18,8 @@ import { HierarchicalRedundancyComponent } from "./icv/hierarchicalRedundancy/hi
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
+import { RegistrationComponent } from "./user/registrationComponent";
+
 import { TestComponent } from "./test/testComponent";
 
 @Component({
@@ -36,6 +38,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Sparql", name: "Sparql", component: SparqlComponent},
     {path: "/Icv", name: "Icv", component: IcvComponent},
     {path: "/Test", name: "Test", component: TestComponent},
+    {path: "/Registration", name: "Registration", component: RegistrationComponent},
     // route config of config bar
     {path: "/Config/ImportData", name: "ImportData", component: ImportDataComponent},
     {path: "/Config/ExportData", name: "ExportData", component: ExportDataComponent},
