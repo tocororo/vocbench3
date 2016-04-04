@@ -9,26 +9,26 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li [ngClass]="{active: isActive('/Projects')}">
+                <li *ngIf="isUserLogged()" [ngClass]="{active: isActive('/Projects')}">
                     <a [routerLink]="['Projects']">Projects</a>
                 </li>
-                <li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">
                 <!--<li *ngIf="isProjectOpen() && isProjectOWL()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">-->
                     <a [routerLink]="['Class']">Class</a>
                 </li>
-                <li *ngIf="isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Concepts'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Concepts'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Concepts']">Concepts</a>
                 </li>
-                <li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Property'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Property'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Property']">Property</a>
                 </li>
-				<li *ngIf="isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
+				<li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Schemes']">Schemes</a>
                 </li>
-				<li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
+				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Sparql']">SPARQL</a>
                 </li>
-                <li *ngIf="isProjectOpen()" [ngClass]="{active: isActive('/Icv'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Icv'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Icv']">ICV</a>
                 </li>
 				<li [ngClass]="{active: isActive('/Test')}">
@@ -36,12 +36,16 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a [routerLink]="['Registration']"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <!--<li><a [routerLink]="['Registration']"><span class="glyphicon glyphicon-user"></span> Register</a></li>-->
+                <li *ngIf="isUserLogged()"><a (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
             </ul>
         </div>    
     </div>
 </nav>
 <div class="vbox">
     <router-outlet></router-outlet>
+</div>
+<div class="bottom-bar text-right">
+    © <a href="http://www.fao.org/contact-us/terms/en/">FAO</a>
+    & <a href="http://art.uniroma2.it/">ART Group</a>, 2016
 </div>

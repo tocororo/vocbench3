@@ -59,6 +59,18 @@ config-bar {
     padding-bottom: 3px;
 }
 
+.bottom-bar {
+    background: linear-gradient(#95A5BC, #7180AB);
+    border-top: 1px solid #C5D5E4;
+    color: white;
+    padding: 2px 20px;    
+}
+
+.bottom-bar a {
+    text-decoration: none;
+    color: white
+}
+
 /* To style component that take place in main router outlet */
 .pageComponent {
     flex: 1;

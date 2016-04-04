@@ -19,7 +19,12 @@ export class ProjectComponent implements OnInit {
     private exportLink: string;
 
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
-        private modalService: ModalServices) {}
+        private modalService: ModalServices) {
+        // navigate to Home view if not authenticated
+        if (vbCtx.getAuthenticationToken() == undefined) {
+            router.navigate(['Home']);
+        }        
+    }
 
     ngOnInit() {
         this.projectService.listProjects().subscribe(

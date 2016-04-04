@@ -16,6 +16,10 @@ export class PropertyComponent {
     private resource:ARTURIResource;
     
 	constructor(private vbCtx: VocbenchCtx, private router: Router) {
+        // navigate to Home view if not authenticated
+        if (vbCtx.getAuthenticationToken() == undefined) {
+            router.navigate(['Home']);
+        }
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);

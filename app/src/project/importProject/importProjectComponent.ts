@@ -18,6 +18,10 @@ export class ImportProjectComponent {
     
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
             private modalService: ModalServices) {
+        // navigate to Home view if not authenticated
+        if (vbCtx.getAuthenticationToken() == undefined) {
+            router.navigate(['Home']);
+        }
     }
     
     private fileChangeEvent(file: File) {

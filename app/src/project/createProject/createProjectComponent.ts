@@ -58,7 +58,14 @@ export class CreateProjectComponent {
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, 
         private pluginService: PluginsServices, private vbCtx: VocbenchCtx, private router: Router, 
         private modalService: ModalServices, private modal: Modal) {
-
+            
+        // navigate to Home view if not authenticated
+        if (vbCtx.getAuthenticationToken() == undefined) {
+            router.navigate(['Home']);
+        }
+    }
+    
+    ngOnInit() {
         this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
             configList => {
                 this.ontoMgrConfigList = configList;
@@ -87,7 +94,6 @@ export class CreateProjectComponent {
                 }
             );
         }
-        
     }
     
     //workaround for 2 way binding still not supported for <select> https://github.com/angular/angular/issues/4843

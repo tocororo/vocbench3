@@ -1,6 +1,7 @@
 import { Component } from "angular2/core";
-import { RouteConfig, ROUTER_DIRECTIVES, Location } from "angular2/router";
+import { RouteConfig, ROUTER_DIRECTIVES, Location, Router } from "angular2/router";
 import { VocbenchCtx } from "./utils/VocbenchCtx";
+import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
 import { ConceptsComponent } from "./skos/concept/conceptsComponent";
 import { ClassComponent } from "./owl/classComponent";
@@ -29,8 +30,9 @@ import { TestComponent } from "./test/testComponent";
 })
 
 @RouteConfig([
+    {path: "/", name: "Home", component: HomeComponent, useAsDefault: true},
     // route config of navigation bar
-    {path: "/Projects", name: "Projects", component: ProjectComponent, useAsDefault: true},
+    {path: "/Projects", name: "Projects", component: ProjectComponent},
     {path: "/Class", name: "Class", component: ClassComponent},
     {path: "/Property", name: "Property", component: PropertyComponent},
     {path: "/Concepts", name: "Concepts", component: ConceptsComponent},
@@ -55,13 +57,28 @@ import { TestComponent } from "./test/testComponent";
 
 export class App {
     
-    constructor(private location:Location, private vbCtx:VocbenchCtx) {}
+    constructor(private location:Location, private router: Router, private vbCtx:VocbenchCtx) {}
     
     /**
      * returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links
      */ 
     private isActive(viewLocation): boolean {
         return this.location.path() == viewLocation;
+    }
+    
+    /**
+     * Returns true if the user is logged (an authentication token is stored)
+     */
+    private isUserLogged(): boolean {
+        return this.vbCtx.getAuthenticationToken() != undefined;
+    }
+    
+    /**
+     * Removes the authentication token and redirect to home page
+     */
+    private logout() {
+        this.vbCtx.removeAutheticationToken();
+        this.router.navigate(["Home"]);
     }
     
     /**

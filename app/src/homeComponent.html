@@ -1,0 +1,84 @@
+<div class="vbox">
+
+    <div class="hbox">
+        <div class="vbox" style="flex: 4">
+            <label style="font-size: 13px; margin-bottom: 5px;">Welcome to VocBench</label>
+            <p  style="font-size: 12px; padding: 6px;">
+                VocBench is a web-based, multilingual, editing and workflow tool that manages thesauri,
+                authority lists and glossaries.
+            </p>
+        </div>
+        <div class="sidebar vbox" style="align-items: center; padding-left: 10px; margin-bottom: 5px; border-left: 1px solid #ddd">
+            <div style="margin-bottom: 5px; font-weight: bold; font-size: 13px;">
+                <span class="glyphicon glyphicon-log-in"></span>
+                <span> User login</span>
+            </div>
+            <input type="text" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="email" placeholder="E-mail address">
+            <input type="password" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="password" placeholder="Password">
+            <button class="btn btn-sm btn-primary" style="margin-bottom: 5px;" (click)="login()">Log in</button>
+            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                Remember me
+                <input type="checkbox" style="margin-left: 3px;" [checked]="rememberMe" (change)="rememberMe=$event.target.checked">
+            </div>
+            <a href="#">Forgot password?</a>
+            <a [routerLink]="['Registration']">Sign up</a>
+        </div>
+        
+    </div>
+    
+    <table class="table" style="background-color: #E7F0FF">
+        <tbody>
+            <tr>
+                <td colspan="2"><label>VocBench has been developed by:</label></td>
+            </tr>
+            <tr>
+                <td style="border: none;">
+                    <div style="display: flex; align-items: center;">
+                        <img style="float: left; margin-right: 5px" src="app/assets/images/logos/logo_fao.gif">
+                        <div>
+                            <div style="color: #002244; font-weight:bold;">Food and Agriculture Organization of the United Nations</div>
+                            <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">for a world without hunger</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="border: none;">
+                    <div style="display: flex; align-items: center;">
+                        <img style="float: left; margin-right: 5px" src="app/assets/images/logos/logo_tv.png">
+                        <div>
+                            <div style="color: #002244; font-weight:bold;">Università degli Studi di Roma</div>
+                            <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">Tor Vergata</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><label>VocBench is partially funded by:</label></td>
+            </tr>
+            <tr>
+                <td style="border: none;">
+                    <div style="display: flex; align-items: center;">
+                        <img style="float: left; margin-right: 5px" src="app/assets/images/logos/logo_agINFRA.jpg">
+                        <div>
+                            <div style="color: #002244; font-weight:bold;">agINFRA</div>
+                            <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">
+                                (EC 7th framework program INFRA-2011-1.2.2, Grant agreement no: 283770)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td style="border: none;">
+                    <div style="display: flex; align-items: center;">
+                        <img style="float: left; margin-right: 5px" src="app/assets/images/logos/logo_SemaGrow.jpg">
+                        <div>
+                            <div style="color: #002244; font-weight:bold;">SemaGrow</div>
+                            <div style="color: #aa4400; font-size: 10px; font-weight: bold; font-style: italic;">
+                                (EC 7th framework program ICT-2011.4.4, Grant agreement no: 318497)
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>

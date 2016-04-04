@@ -5,10 +5,23 @@ import {Project} from './Project';
 @Injectable()
 export class VocbenchCtx {
 
-    project: Project;
-    scheme: ARTURIResource;
+    private authToken 
+    private project: Project;
+    private scheme: ARTURIResource;
 
     constructor() { }
+    
+    setAuthenticationToken(token: string) {
+        this.authToken = token
+    }
+    
+    getAuthenticationToken(): string {
+        return this.authToken;
+    }
+    
+    removeAutheticationToken() {
+        this.authToken = undefined;
+    }
 
     setProject(project: Project) {
         this.project = project;

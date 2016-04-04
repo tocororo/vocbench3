@@ -23,6 +23,13 @@ export class ConfigBarComponent {
         return this.vbCtx.getProject() != undefined;
     }
     
+    /**
+     * Returns true if the user is logged (an authentication token is stored).
+     */
+    private isUserLogged(): boolean {
+        return this.vbCtx.getAuthenticationToken() != undefined;
+    }
+    
     private clearData() {
         this.modalService.confirm("Clear data", "This operation will erase all the data stored in the project." +
                 " Then you will be redirect to the home page. Are you sure to proceed?", "warning").then(

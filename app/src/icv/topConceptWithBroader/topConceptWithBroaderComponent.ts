@@ -20,6 +20,10 @@ export class TopConceptWithBroaderComponent {
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, 
             private vbCtx: VocbenchCtx, private router: Router) {
+        //navigate to Home view if not authenticated
+        if (vbCtx.getAuthenticationToken() == undefined) {
+            router.navigate(['Home']);
+        }
         //navigate to Projects view if a project is not selected
         if (vbCtx.getProject() == undefined) {
             router.navigate(['Projects']);

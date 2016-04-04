@@ -67,7 +67,7 @@ export class RegistrationComponent {
     private submit() {
         this.submitted = true;
         if (this.email && this.email.trim() != "" && new RegExp(this.EMAIL_PATTERN).test(this.email) &&
-            this.password && this.password.trim() != "" && this.password && this.password.trim() != "" && this.isConfirmPwdOk() &&
+            this.password && this.password.trim() != "" && this.isConfirmPwdOk() &&
             this.firstName && this.firstName.trim() != "" && this.lastName && this.lastName.trim() != "") {
             //call service
             console.log("email:", this.email, "\npassword", this.password, "\nfirstName:", this.firstName,
