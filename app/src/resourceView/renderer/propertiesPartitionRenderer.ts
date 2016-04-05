@@ -1,16 +1,19 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
+import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
+import {SkosxlServices} from "../../services/skosxlServices";
 
 @Component({
-	selector: "properties-renderer",
-	templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [PropertyServices],
+    selector: "properties-renderer",
+    templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
+    directives: [RdfResourceComponent],
+    providers: [PropertyServices, SkosxlServices],
 })
 export class PropertiesPartitionRenderer {
     
@@ -24,20 +27,114 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove property value";
     
-    constructor(private propertyService:PropertyServices, private browsingService: BrowsingServices) {}
+    constructor(private propertyService:PropertyServices, private skosxlService: SkosxlServices,  
+        private browsingService: BrowsingServices, private modalService: ModalServices) {}
         
     private add() {
         this.browsingService.browsePropertyTree("Select a property").then(
             selectedProp => {
-                alert("enriching " + selectedProp.getShow() + " to resource " + this.resource.getShow());
+                this.enrichProperty(selectedProp);
             }
         );
-        // this.update.emit(null);
     }
     
     private enrichProperty(predicate: ARTURIResource) {
-        alert("add " + predicate.getShow() + " to resource " + this.resource.getShow());
+        //particular cases SKOSXL label
+        if (predicate.getURI() == SKOSXL.prefLabel.getURI() || 
+            predicate.getURI() == SKOSXL.altLabel.getURI() ||
+            predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
+            this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
+                literal => {
+                    switch (predicate.getURI()) {
+                        case SKOSXL.prefLabel.getURI():
+                            this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
+                                stResp => this.update.emit(null),
+                                err => { }
+                            );
+                            break;
+                        case SKOSXL.altLabel.getURI():
+                            this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
+                                stResp => this.update.emit(null),
+                                err => { }
+                            );
+                            break;
+                        case SKOSXL.hiddenLabel.getURI():
+                            this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
+                                stResp => this.update.emit(null),
+                                err => { }
+                            );
+                            break;
+                    }
+                },
+                () => {}
+            );
+        } else { //other cases: handle based the property range
+            this.propertyService.getRange(predicate).subscribe(
+                range => {
+                    var rngType = range.rngType;
+                    var ranges = range.ranges;
+                    //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
+                    if (rngType == RDFTypesEnum.resource) {
+                        
+                    } else if (rngType == RDFTypesEnum.plainLiteral) {
+                        this.enrichPlainLiteral(predicate);
+                    } else if (rngType == RDFTypesEnum.typedLiteral) {
+                        this.enrichTypedLiteral(predicate);
+                    } else if (rngType == RDFTypesEnum.literal) {
+                        var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
+                        this.modalService.select("Select range type", null, options).then(
+                            selectedRange => {
+                                if (selectedRange == RDFTypesEnum.typedLiteral) {
+                                    this.enrichTypedLiteral(predicate);
+                                } else if (selectedRange == RDFTypesEnum.plainLiteral) {
+                                    this.enrichPlainLiteral(predicate);
+                                }
+                            },
+                            () => {}
+                        )
+                    } else if (rngType == RDFTypesEnum.undetermined) {
+                        var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
+                        this.modalService.select("Select range type", null, options).then(
+                            selectedRange => {
+                                if (selectedRange == RDFTypesEnum.resource) {
+                                    
+                                } else if (selectedRange == RDFTypesEnum.typedLiteral) {
+                                    this.enrichTypedLiteral(predicate);
+                                } else if (selectedRange == RDFTypesEnum.plainLiteral) {
+                                    this.enrichPlainLiteral(predicate);
+                                }
+                            },
+                            () => {}
+                        )
+                    } else if (rngType == "inconsistent") {
+                        this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
+                    }
+                }
+            );
+        }
         // this.update.emit(null);
+    }
+    
+    /**
+     * Opens a newPlainLiteral modal to enrich the predicate with a plain literal value 
+     */
+    private enrichPlainLiteral(predicate: ARTURIResource) {
+        this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
+            literal => {
+                this.propertyService.createAndAddPropValue(
+                    this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
+                    stResp => { this.update.emit(null) }
+                );
+            },
+            () => { }
+        );
+    }
+    
+    /**
+     * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
+     */
+    private enrichTypedLiteral(predicate: ARTURIResource) {
+        //TODO
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

@@ -16,11 +16,17 @@
                         <col span="1" style="width: 35%;">
                     </colgroup>
                     <tbody>
+                        <!--The class submitted is useful to apply "input.ng-invalid.submitted"" only when form is submitted-->
                         <tr>
                             <td><label>E-mail:</label><span style="color: red">*</span></td>
-                            <td colspan="3">
+                            <td>
                                 <input type="email" class="form-control input-sm" [ngClass]="{submitted : submitted}" 
                                     placeholder="e-mail address" [(ngModel)]="email" ngControl="email" required>
+                            </td>
+                            <td><label>Username:</label><span style="color: red">*</span></td>
+                            <td>
+                                <input type="text" class="form-control input-sm"  [ngClass]="{submitted : submitted}"
+                                    placeholder="username" [(ngModel)]="username" required>
                             </td>
                         </tr>
                         <tr>
@@ -39,12 +45,12 @@
                             <td><label>First name:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="text" class="form-control input-sm" [ngClass]="{submitted : submitted}"
-                                    placeholder="First Name" [(ngModel)]="firstName" ngControl="firstName" required>
+                                    placeholder="first name" [(ngModel)]="firstName" ngControl="firstName" required>
                             </td>
                             <td><label>Last name:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="text" class="form-control input-sm"  [ngClass]="{submitted : submitted}"
-                                    placeholder="Last Name" [(ngModel)]="lastName" required>
+                                    placeholder="last name" [(ngModel)]="lastName" required>
                             </td>
                         </tr>
                         <tr>
@@ -68,23 +74,23 @@
                             </td>
                             <td><label>Address:</label></td>
                             <td>
-                                <input type="text" class="form-control input-sm" [(ngModel)]="address">
+                                <input type="text" class="form-control input-sm" [(ngModel)]="address" placeholder="address">
                             </td>
                         </tr>
                         <tr>
                             <td><label>Phone:</label></td>
                             <td>
-                                <input type="text" class="form-control input-sm" [(ngModel)]="phone">
+                                <input type="text" class="form-control input-sm" [(ngModel)]="phone" placeholder="phone number">
                             </td>
                             <td><label>Url:</label></td>
                             <td>
-                                <input type="text" class="form-control input-sm" [(ngModel)]="url">
+                                <input type="text" class="form-control input-sm" [(ngModel)]="url" placeholder="url">
                             </td>
                         </tr>
                         <tr>
                             <td><label>Affiliation:</label></td>
                             <td>
-                                <input type="text" class="form-control input-sm" [(ngModel)]="affiliation">
+                                <input type="text" class="form-control input-sm" [(ngModel)]="affiliation" placeholder="affiliation">
                             </td>
                         </tr>
                     </tbody>

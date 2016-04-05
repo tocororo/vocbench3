@@ -8,7 +8,7 @@ import {ARTURIResource} from "../../../utils/ARTResources";
  * Service to open modals that allow to create a classes list or instances list
  */
 @Injectable()
-export class ListCreatorServices {
+export class ResViewModalServices {
     
     constructor(private modal: Modal) {}
     

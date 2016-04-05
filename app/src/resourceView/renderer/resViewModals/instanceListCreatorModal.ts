@@ -11,7 +11,7 @@ export class InstanceListCreatorModalContent {
 
 @Component({
     selector: "instance-list-creator-modal",
-    templateUrl: "app/src/resourceView/renderer/listCreatorModals/instanceListCreatorModal.html",
+    templateUrl: "app/src/resourceView/renderer/resViewModals/instanceListCreatorModal.html",
     directives: [ClassTreeComponent, InstanceListComponent, RdfResourceComponent],
 })
 export class InstanceListCreatorModal implements ICustomModalComponent {

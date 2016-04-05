@@ -5,7 +5,7 @@ import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
-import {NewLiteralLangModal, NewLiteralLangModalContent} from "./newLiteralLangModal/newLiteralLangModal";
+import {NewPlainLiteralModal, NewPlainLiteralModalContent} from "./newPlainLiteralModal/newPlainLiteralModal";
 import {SelectionModal, SelectionModalContent} from "./selectionModal/selectionModal";
 import {ResourceSelectionModal, ResourceSelectionModalContent} from "./selectionModal/resourceSelectionModal";
 
@@ -106,6 +106,7 @@ export class ModalServices {
      * @param title the title of the modal dialog
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
      * @param options array of options
+     * @return if the modal closes with ok returns a promise containing the selected option
      */
     select(title: string, message: string, options: Array<string>) {
         let dialog: Promise<ModalDialogInstance>;
@@ -131,6 +132,7 @@ export class ModalServices {
      * @param title the title of the modal dialog
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
      * @param resourceList array of available resources
+     * @return if the modal closes with ok returns a promise containing the selected resource
      */
     selectResource(title: string, message: string, resourceList: Array<ARTURIResource>) {
         let dialog: Promise<ModalDialogInstance>;
@@ -180,12 +182,12 @@ export class ModalServices {
      * @param title the title of the modal dialog
      * @return if the modal closes with ok returns a promise containing an object with value and lang
      */
-    newLiteralLang(title: string) {
+    newPlainLiteral(title: string) {
         let dialog: Promise<ModalDialogInstance>;
-        let component = NewLiteralLangModal;
+        let component = NewPlainLiteralModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new NewLiteralLangModalContent(title);
+        var modalContent = new NewPlainLiteralModalContent(title);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)

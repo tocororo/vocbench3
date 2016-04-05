@@ -31,9 +31,6 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
         return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService);
     }
     
@@ -70,9 +67,6 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
         return this.httpMgr.doGet(this.serviceName, "addAltLabel", params, this.oldTypeService);
     }
     
@@ -109,9 +103,6 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
         return this.httpMgr.doGet(this.serviceName, "addHiddenLabel", params, this.oldTypeService);
     }
     

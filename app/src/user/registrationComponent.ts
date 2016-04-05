@@ -44,6 +44,7 @@ export class RegistrationComponent {
     private submitted: boolean = false;
         
     private email: string;
+    private username: string;
     private password: string;
     private confirmedPassword: string;
     private firstName: string;
@@ -67,13 +68,13 @@ export class RegistrationComponent {
     private submit() {
         this.submitted = true;
         if (this.email && this.email.trim() != "" && new RegExp(this.EMAIL_PATTERN).test(this.email) &&
-            this.password && this.password.trim() != "" && this.isConfirmPwdOk() &&
+            this.username && this.username.trim() != "" && this.password && this.password.trim() != "" && this.isConfirmPwdOk() &&
             this.firstName && this.firstName.trim() != "" && this.lastName && this.lastName.trim() != "") {
             //call service
-            console.log("email:", this.email, "\npassword", this.password, "\nfirstName:", this.firstName,
-                "\nlastName:", this.lastName, "\nbirthday:", this.birthday, "\ngender:", this.gender,
-                "\ncountry:", this.country, "\naddress:", this.address, "\naffiliation:", this.affiliation,
-                "\nurl:", this.url, "\nphone:", this.phone);
+            console.log("email:", this.email, "\nusername", this.username, "\npassword", this.password, 
+                "\nfirstName:", this.firstName, "\nlastName:", this.lastName, "\nbirthday:", this.birthday,
+                "\ngender:", this.gender, "\ncountry:", this.country, "\naddress:", this.address,
+                "\naffiliation:", this.affiliation, "\nurl:", this.url, "\nphone:", this.phone);
         } else {
             this.modalService.alert("Registration error", "Please, check the inserted data.", "warning");
         }

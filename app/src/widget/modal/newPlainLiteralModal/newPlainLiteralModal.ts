@@ -1,7 +1,7 @@
 import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 
-export class NewLiteralLangModalContent {
+export class NewPlainLiteralModalContent {
     public title: string = 'Create new label';
     constructor(title: string) {
         this.title = title;
@@ -10,9 +10,9 @@ export class NewLiteralLangModalContent {
 
 @Component({
     selector: "new-literal-lang-modal",
-    templateUrl: "app/src/widget/modal/newLiteralLangModal/newLiteralLangModal.html",
+    templateUrl: "app/src/widget/modal/newPlainLiteralModal/newPlainLiteralModal.html",
 })
-export class NewLiteralLangModal implements ICustomModalComponent {
+export class NewPlainLiteralModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     
@@ -22,11 +22,11 @@ export class NewLiteralLangModal implements ICustomModalComponent {
         "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
     
     dialog: ModalDialogInstance;
-    context: NewLiteralLangModalContent;
+    context: NewPlainLiteralModalContent;
 
     constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
         this.dialog = dialog;
-        this.context = <NewLiteralLangModalContent>modelContentData;
+        this.context = <NewPlainLiteralModalContent>modelContentData;
     }
     
     ngOnInit() {
@@ -36,7 +36,7 @@ export class NewLiteralLangModal implements ICustomModalComponent {
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({literal: this.literal, lang: this.lang});
+        this.dialog.close({value: this.literal, lang: this.lang});
     }
 
     cancel() {

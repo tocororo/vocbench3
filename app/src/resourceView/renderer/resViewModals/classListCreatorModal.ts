@@ -12,7 +12,7 @@ export class ClassListCreatorModalContent {
 
 @Component({
     selector: "class-list-creator-modal",
-    templateUrl: "app/src/resourceView/renderer/listCreatorModals/classListCreatorModal.html",
+    templateUrl: "app/src/resourceView/renderer/resViewModals/classListCreatorModal.html",
     directives: [ClassTreeComponent, RdfResourceComponent],
     providers: [ManchesterServices]
 })

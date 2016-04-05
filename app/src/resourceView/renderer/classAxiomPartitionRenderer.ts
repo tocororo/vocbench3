@@ -4,7 +4,7 @@ import {RDFS, OWL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ListCreatorServices} from "./listCreatorModals/listCreatorServices";
+import {ResViewModalServices} from "./resViewModals/resViewModalServices";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {PropertyServices} from "../../services/propertyServices";
@@ -12,10 +12,10 @@ import {OwlServices} from "../../services/owlServices";
 import {ManchesterServices} from "../../services/manchesterServices";
 
 @Component({
-	selector: "class-axiom-renderer",
-	templateUrl: "app/src/resourceView/renderer/classAxiomPartitionRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [OwlServices, PropertyServices, ManchesterServices, ListCreatorServices],
+    selector: "class-axiom-renderer",
+    templateUrl: "app/src/resourceView/renderer/classAxiomPartitionRenderer.html",
+    directives: [RdfResourceComponent],
+    providers: [OwlServices, PropertyServices, ManchesterServices, ResViewModalServices],
 })
 export class ClassAxiomPartitionPartitionRenderer {
     
@@ -29,7 +29,7 @@ export class ClassAxiomPartitionPartitionRenderer {
     ];
     
     constructor(private propertyService:PropertyServices, private owlService:OwlServices, private manchService: ManchesterServices,
-        private modalService: ModalServices, private browsingService: BrowsingServices, private listCreatorService: ListCreatorServices) {}
+        private modalService: ModalServices, private browsingService: BrowsingServices, private resViewModalService: ResViewModalServices) {}
         
     /**
      * Based on the property opens the proper dialog to enrich it
@@ -111,7 +111,7 @@ export class ClassAxiomPartitionPartitionRenderer {
      * Called to enrich intersectionOf and unionOf
      */
     private createClassList(property: ARTURIResource) {
-        this.listCreatorService.createClassList("Add " + property.getShow()).then(
+        this.resViewModalService.createClassList("Add " + property.getShow()).then(
             classes => {
                 if (property.getURI() == OWL.intersectionOf.getURI()) {
                     this.owlService.addIntersectionOf(this.resource, classes).subscribe(
@@ -133,7 +133,7 @@ export class ClassAxiomPartitionPartitionRenderer {
      * Called to enrich oneOf
      */
     private createInstanceList(property: ARTURIResource) {
-        this.listCreatorService.createInstanceList("Add " + property.getShow()).then(
+        this.resViewModalService.createInstanceList("Add " + property.getShow()).then(
             instances => {
                 this.owlService.addOneOf(this.resource, instances).subscribe(
                     stResp => this.update.emit(null),

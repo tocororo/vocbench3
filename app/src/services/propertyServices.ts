@@ -252,6 +252,35 @@ export class PropertyServices {
     }
     
     /**
+     * Returns the range of a property (two element: ranges and customRanges)
+     * @param property
+     * @return an object with rngType (available values: 
+     * resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent)
+     * and ranges, an array of ARTURIResource (available only if rngType is resource or typedLiteral)
+     */
+    getRange(property: ARTURIResource) {
+        console.log("[PropertyServices] getRange");
+        var params: any = {
+            propertyQName: property.getURI(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService).map(
+            stResp => {
+                console.log(JSON.stringify(stResp.innerHTML));
+                var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
+                var rngType = rangesElem.getAttribute("rngType");
+                if (rngType != "undetermined") {
+                    var rangesUriColl = Deserializer.createRDFArrayGivenList(rangesElem.childNodes);
+                }
+                //TODO handle custom ranges
+                // if (stResp.getElementsByTagName("customRanges") != undefined) {
+                //     var rangesElem: Element = stResp.getElementsByTagName("customRanges")[0];
+                // }
+                return {rngType: rngType, ranges: rangesUriColl};
+            }
+        );
+    }
+    
+    /**
      * Adds a class as range of a property
      * @param property property to which add the domain
      * @param range the range class of the property

@@ -12,9 +12,9 @@ import {OwlServices} from "../../services/owlServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
-	selector: "lexicalizations-renderer",
-	templateUrl: "app/src/resourceView/renderer/lexicalizationsPartitionRenderer.html",
-	directives: [RdfResourceComponent],
+    selector: "lexicalizations-renderer",
+    templateUrl: "app/src/resourceView/renderer/lexicalizationsPartitionRenderer.html",
+    directives: [RdfResourceComponent],
     providers: [SkosServices, SkosxlServices, OwlServices, PropertyServices],
 })
 export class LexicalizationsPartitionRenderer {
@@ -34,48 +34,48 @@ export class LexicalizationsPartitionRenderer {
         private propertyService:PropertyServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
     
     private add(predicate: ARTURIResource) {
-        this.modalService.newLiteralLang("Add " + predicate.getShow()).then(
-            result => {
+        this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
+            literal => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
-                        this.skosxlService.setPrefLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
+                        this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
-                        this.skosxlService.addAltLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
+                        this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
-                        this.skosxlService.addHiddenLabel(this.resource, result.literal, result.lang, RDFTypesEnum.bnode).subscribe(
+                        this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
                         break;
                     case SKOS.prefLabel.getURI():
-                        this.skosService.setPrefLabel(this.resource, result.literal, result.lang).subscribe(
+                        this.skosService.setPrefLabel(this.resource, literal.value, literal.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
                         break;
                     case SKOS.altLabel.getURI():
-                        this.skosService.addAltLabel(this.resource, result.literal, result.lang).subscribe(
+                        this.skosService.addAltLabel(this.resource, literal.value, literal.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
                         break;
                     case SKOS.hiddenLabel.getURI():
-                        this.skosService.addHiddenLabel(this.resource, result.literal, result.lang).subscribe(
+                        this.skosService.addHiddenLabel(this.resource, literal.value, literal.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
                         break;
                     case RDFS.label.getURI():
                         this.propertyService.createAndAddPropValue(
-                            this.resource, predicate, result.literal, null, RDFTypesEnum.plainLiteral, result.lang).subscribe(
+                            this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
                             stResp => this.update.emit(null),
                             err => { }
                         );
