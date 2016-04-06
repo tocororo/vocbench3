@@ -85,6 +85,17 @@ export class TestComponent {
         );
     }
     
+    private newTypedLiteralResult;
+    private newTypedLiteralTitle = "NewTypedLiteral title";
+    newTypedLiteral() {
+        this.modalService.newTypedLiteral(this.newLiteralLangTitle).then(
+            result => {
+                this.newTypedLiteralResult = result;
+            },
+            () => this.newTypedLiteralResult = null
+        );
+    }
+    
     private browseClassTreeResult;
     browseClassTree() {
         this.browsingService.browseClassTree("Select a class").then(

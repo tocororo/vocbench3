@@ -108,48 +108,51 @@ export class Deserializer {
 		return bNodeRes;
 	}
 	
-	static createLiteral(response): ARTLiteral{
-		var isTypedLiteral;
-		var literalElement;
-		if(response.tagName == 'plainLiteral' || response.tagName == 'typedLiteral') {
-			literalElement = response;
-		} else {
-			literalElement = response.getElementsByTagName('typedLiteral');
-			if(literalElement.lenght != 0) {
-				literalElement = response.getElementsByTagName('typedLiteral')[0];
-				isTypedLiteral = true;
-			} else {
-				literalElement = response.getElementsByTagName('plainLiteral')[0];
-				isTypedLiteral = false;
-			}
-		}
-		
-		var label = literalElement.textContent;
-		var datatype;
-		if (isTypedLiteral) {
-			datatype = literalElement.getAttribute("type");
-		} else {
-			datatype = "";
-		}
-		var lang;
-		if(isTypedLiteral) {
-			lang = "";
-		} else {
-			lang = literalElement.getAttribute("lang");
-		}
-		var artLiteralRes = new ARTLiteral(label, datatype, lang, isTypedLiteral);
+    static createLiteral(response): ARTLiteral {
+        var isTypedLiteral;
+        var literalElement;
+        if (response.tagName == 'plainLiteral' || response.tagName == 'typedLiteral') {
+            literalElement = response;
+        } else {
+            literalElement = response.getElementsByTagName('typedLiteral');
+            if (literalElement.lenght != 0) {
+                literalElement = response.getElementsByTagName('typedLiteral')[0];
+            } else {
+                literalElement = response.getElementsByTagName('plainLiteral')[0];
+            }
+        }
+        if (literalElement.tagName == 'typedLiteral') {
+            isTypedLiteral = true;
+        } else {
+            isTypedLiteral = false;
+        }
+        
+        var label = literalElement.textContent;
+        var datatype;
+        if (isTypedLiteral) {
+            datatype = literalElement.getAttribute("type");
+        } else {
+            datatype = "";
+        }
+        var lang;
+        if (isTypedLiteral) {
+            lang = "";
+        } else {
+            lang = literalElement.getAttribute("lang");
+        }
+        var artLiteralRes = new ARTLiteral(label, datatype, lang, isTypedLiteral);
         //optional properties
         var show = literalElement.getAttribute("show");
         if (show != undefined) {
-             artLiteralRes.setAdditionalProperty("show", show);
+            artLiteralRes.setAdditionalProperty("show", show);
         }
-		var explicit = literalElement.getAttribute('explicit');
+        var explicit = literalElement.getAttribute('explicit');
         if (explicit != undefined) {
-             artLiteralRes.setAdditionalProperty("explicit", (explicit == "true"));
+            artLiteralRes.setAdditionalProperty("explicit", (explicit == "true"));
         }
-        
-		return artLiteralRes;
-	}
+
+        return artLiteralRes;
+    }
 	
     static createRDFNode(element): ARTNode {
         var tagName = element.tagName;

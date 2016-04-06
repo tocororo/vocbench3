@@ -6,6 +6,7 @@ import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
 import {NewPlainLiteralModal, NewPlainLiteralModalContent} from "./newPlainLiteralModal/newPlainLiteralModal";
+import {NewTypedLiteralModal, NewTypedLiteralModalContent} from "./newTypedLiteralModal/newTypedLiteralModal";
 import {SelectionModal, SelectionModalContent} from "./selectionModal/selectionModal";
 import {ResourceSelectionModal, ResourceSelectionModalContent} from "./selectionModal/resourceSelectionModal";
 
@@ -188,6 +189,30 @@ export class ModalServices {
         
         //inject the modal content in the modal Component
         var modalContent = new NewPlainLiteralModalContent(title);
+        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
+        
+        //set the modal configuration (medium dimension, blocking and without key to dismiss)
+        var modConf = new ModalConfig("md", true, null);
+        
+        dialog = this.modal.open(<any>component, bindings, modConf);
+        return dialog.then(
+            resultPromise => {
+                return resultPromise.result;
+            }
+        );
+    }
+    
+    /**
+     * Opens a modal to create a new literal with datatype
+     * @param title the title of the modal dialog
+     * @return if the modal closes with ok returns a promise containing an object with value and datatype
+     */
+    newTypedLiteral(title: string) {
+        let dialog: Promise<ModalDialogInstance>;
+        let component = NewTypedLiteralModal;
+        
+        //inject the modal content in the modal Component
+        var modalContent = new NewTypedLiteralModalContent(title);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)

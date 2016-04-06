@@ -75,7 +75,7 @@ export class ResourceUtils {
             }
         } else if (rdfResource.isLiteral()) {
             var lang = (<ARTLiteral>rdfResource).getLang();
-            if (lang != undefined && lang != null) {
+            if (lang != undefined && lang != null && lang != "") {
                 if (this.availableFlagLang.indexOf(lang) != -1) {
                     imgSrc = "app/assets/images/flags/flag_" + lang + ".png";
                 } else {

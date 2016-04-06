@@ -150,3 +150,55 @@ export class SKOSXL {
     public static literalForm = new ARTURIResource(SKOSXL.namespace + "literalForm", "skosxl:literalForm", RDFResourceRolesEnum.datatypeProperty);
     public static prefLabel = new ARTURIResource(SKOSXL.namespace + "prefLabel", "skosxl:prefLabel", RDFResourceRolesEnum.objectProperty);
 }
+
+export class XmlSchema {
+    public static uri = "http://www.w3.org/2001/XMLSchema";
+    public static namespace = XmlSchema.uri + "#";
+    
+    public static anyURI = new ARTURIResource(XmlSchema.namespace + "anyURI", "xsd:anyURI", null);
+    public static base64Binary = new ARTURIResource(XmlSchema.namespace + "base64Binary", "xsd:base64Binary", null);
+    public static boolean = new ARTURIResource(XmlSchema.namespace + "boolean", "xsd:boolean", null);
+    public static date = new ARTURIResource(XmlSchema.namespace + "date", "xsd:date", null);
+    public static dateTime = new ARTURIResource(XmlSchema.namespace + "dateTime", "xsd:dateTime", null);
+    public static decimal = new ARTURIResource(XmlSchema.namespace + "decimal", "xsd:decimal", null);
+	public static double = new ARTURIResource(XmlSchema.namespace + "double", "xsd:double", null);
+	public static duration = new ARTURIResource(XmlSchema.namespace + "duration", "xsd:duration", null);
+    public static float = new ARTURIResource(XmlSchema.namespace + "float", "xsd:float", null);
+    public static gDay = new ARTURIResource(XmlSchema.namespace + "gDay", "xsd:gDay", null);
+	public static gMonth = new ARTURIResource(XmlSchema.namespace + "gMonth", "xsd:gMonth", null);
+    public static gMonthDay = new ARTURIResource(XmlSchema.namespace + "gMonthDay", "xsd:gMonthDay", null);
+	public static gYear = new ARTURIResource(XmlSchema.namespace + "gYear", "xsd:gYear", null);
+	public static gYearMonth = new ARTURIResource(XmlSchema.namespace + "gYearMonth", "xsd:gYearMonth", null);
+    public static hexBinary = new ARTURIResource(XmlSchema.namespace + "hexBinary", "xsd:hexBinary", null);
+    public static NOTATION = new ARTURIResource(XmlSchema.namespace + "NOTATION", "xsd:NOTATION", null);
+    public static QName = new ARTURIResource(XmlSchema.namespace + "QName", "xsd:QName", null);
+    public static string = new ARTURIResource(XmlSchema.namespace + "string", "xsd:string", null);
+	public static time = new ARTURIResource(XmlSchema.namespace + "time", "xsd:time", null);
+	//Derived datatypes
+    public static byte = new ARTURIResource(XmlSchema.namespace + "byte", "xsd:byte", null);
+    public static ENTITIES = new ARTURIResource(XmlSchema.namespace + "ENTITIES", "xsd:ENTITIES", null);
+    public static ENTITY = new ARTURIResource(XmlSchema.namespace + "ENTITY", "xsd:ENTITY", null);
+    public static ID = new ARTURIResource(XmlSchema.namespace + "ID", "xsd:ID", null);
+	public static IDREF = new ARTURIResource(XmlSchema.namespace + "IDREF", "xsd:IDREF", null);
+	public static IDREFS = new ARTURIResource(XmlSchema.namespace + "IDREFS", "xsd:IDREFS", null);
+    public static int = new ARTURIResource(XmlSchema.namespace + "int", "xsd:int", null);
+    public static integer = new ARTURIResource(XmlSchema.namespace + "integer", "xsd:integer", null);
+    public static language = new ARTURIResource(XmlSchema.namespace + "language", "xsd:language", null);
+    public static long = new ARTURIResource(XmlSchema.namespace + "long", "xsd:long", null);
+    public static Name = new ARTURIResource(XmlSchema.namespace + "Name", "xsd:Name", null);
+    public static NCName = new ARTURIResource(XmlSchema.namespace + "NCName", "xsd:NCName", null);
+    public static negativeInteger = new ARTURIResource(XmlSchema.namespace + "negativeInteger", "xsd:negativeInteger", null);
+    public static NMTOKEN = new ARTURIResource(XmlSchema.namespace + "NMTOKEN", "xsd:NMTOKEN", null);
+	public static NMTOKENS = new ARTURIResource(XmlSchema.namespace + "NMTOKENS", "xsd:NMTOKENS", null);
+    public static nonNegativeInteger = new ARTURIResource(XmlSchema.namespace + "nonNegativeInteger", "xsd:nonNegativeInteger", null);
+    public static nonPositiveInteger = new ARTURIResource(XmlSchema.namespace + "nonPositiveInteger", "xsd:nonPositiveInteger", null);
+	public static normalizedString = new ARTURIResource(XmlSchema.namespace + "normalizedString", "xsd:normalizedString", null);
+    public static positiveInteger = new ARTURIResource(XmlSchema.namespace + "positiveInteger", "xsd:positiveInteger", null);
+    public static short = new ARTURIResource(XmlSchema.namespace + "short", "xsd:short", null);
+	public static token = new ARTURIResource(XmlSchema.namespace + "token", "xsd:token", null);
+	public static unsignedByte = new ARTURIResource(XmlSchema.namespace + "unsignedByte", "xsd:unsignedByte", null);
+	public static unsignedInt = new ARTURIResource(XmlSchema.namespace + "unsignedInt", "xsd:unsignedInt", null);
+    public static unsignedLong = new ARTURIResource(XmlSchema.namespace + "unsignedLong", "xsd:unsignedLong", null);
+	public static unsignedShort = new ARTURIResource(XmlSchema.namespace + "unsignedShort", "xsd:unsignedShort", null);
+
+}

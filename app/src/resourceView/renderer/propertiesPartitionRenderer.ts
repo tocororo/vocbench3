@@ -8,12 +8,13 @@ import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SkosxlServices} from "../../services/skosxlServices";
+import {ResourceServices} from "../../services/resourceServices";
 
 @Component({
     selector: "properties-renderer",
     templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
     directives: [RdfResourceComponent],
-    providers: [PropertyServices, SkosxlServices],
+    providers: [PropertyServices, SkosxlServices, ResourceServices],
 })
 export class PropertiesPartitionRenderer {
     
@@ -27,7 +28,7 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove property value";
     
-    constructor(private propertyService:PropertyServices, private skosxlService: SkosxlServices,  
+    constructor(private propertyService:PropertyServices, private skosxlService: SkosxlServices, private resourceService: ResourceServices,
         private browsingService: BrowsingServices, private modalService: ModalServices) {}
         
     private add() {
@@ -134,29 +135,20 @@ export class PropertiesPartitionRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichTypedLiteral(predicate: ARTURIResource) {
-        //TODO
+        this.modalService.newTypedLiteral("Add " + predicate.getShow()).then(
+            literal => {
+                this.propertyService.createAndAddPropValue(
+                    this.resource, predicate, literal.value, literal.datatype, RDFTypesEnum.typedLiteral).subscribe(
+                    stResp => { this.update.emit(null) }    
+                );
+            },
+            () => {}
+        );
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        var type;
-        var lang;
-        if (object.isBNode()) {
-            type = RDFTypesEnum.bnode;
-        } else if (object.isURIResource()) {
-            type = RDFTypesEnum.uri;
-        } else if (object.isLiteral()) {
-            if ((<ARTLiteral>object).isTypedLiteral()) {
-                type = RDFTypesEnum.typedLiteral;
-            } else if ((<ARTLiteral>object).getLang() != null) {
-                type = RDFTypesEnum.plainLiteral;
-                lang = (<ARTLiteral>object).getLang();
-            } else {
-                type = RDFTypesEnum.literal;
-            }
-        }
-        this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, type, lang).subscribe(
-            stResp => this.update.emit(null),
-            err => { }
+        this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+            stResp => this.update.emit(null)
         );
     }
     

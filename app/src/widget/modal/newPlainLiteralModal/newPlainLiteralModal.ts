@@ -9,7 +9,7 @@ export class NewPlainLiteralModalContent {
 }
 
 @Component({
-    selector: "new-literal-lang-modal",
+    selector: "new-plain-literal-modal",
     templateUrl: "app/src/widget/modal/newPlainLiteralModal/newPlainLiteralModal.html",
 })
 export class NewPlainLiteralModal implements ICustomModalComponent {
