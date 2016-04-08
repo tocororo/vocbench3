@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "angular2/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
@@ -13,13 +13,14 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
     directives: [PropertyTreeNodeComponent],
 })
 export class PropertyTreeComponent {
+    @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource 
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
     
-    private propertyTree: ARTURIResource[] = [];
-    private selectedNode:ARTURIResource;
+    private propertyTree: ARTURIResource[];
+    private selectedNode: ARTURIResource;
     
     private eventSubscriptions = [];
 	
@@ -28,8 +29,31 @@ export class PropertyTreeComponent {
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
     }
     
+    /**
+     * Following check needed to avoid to call 2 times the service if the @Input resource is provided:
+     * - 1st time in ngOnChanges when resource is binded (so changes value)
+     * - 2nd time here in ngOnInit
+     * I cannot resolve by deleting this method since if @Input resource is not provided at all,
+     * ngOnChanges is not called
+     */
     ngOnInit() {
-        this.propertyService.getPropertiesTree().subscribe(
+        if (this.propertyTree == undefined) {
+            this.initTree();
+        }
+    }
+    
+    /**
+     * Called when @Input resource changes, reinitialize the tree
+     */
+    ngOnChanges(changes) {
+        if (changes.resource) {
+            this.propertyTree = []; //so ngOnInit will not be called a 2nd time
+            this.initTree();
+        }
+    }
+    
+    private initTree() {
+        this.propertyService.getPropertiesTree(this.resource).subscribe(
             propertyTree => {
                 this.propertyTree = propertyTree;
             },

@@ -8,6 +8,12 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
 
+/**
+ * While classTreeComponent has as @Input rootClasses this componente cannot
+ * because if it allows multiple roots, when the user wants to add a class (not a sublcass)
+ * I don't know wich class consider as superClass of the new added class
+ */
+
 @Component({
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
@@ -15,7 +21,6 @@ import {RDFResourceRolesEnum} from "../../utils/Enums";
     providers: [OwlServices, SearchServices],
 })
 export class ClassTreePanelComponent {
-    @Input('rootclass') rootClass:ARTURIResource;
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
     
@@ -27,17 +32,11 @@ export class ClassTreePanelComponent {
     
 	constructor(private owlService:OwlServices, private searchService: SearchServices, private modalService: ModalServices) {}
     
-    ngOnInit() {
-        if (this.rootClass == undefined) {
-            this.rootClass = OWL.thing;
-        }
-    }
-    
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", true).then(
             result => {
-                this.owlService.createClass(this.rootClass, result).subscribe(
+                this.owlService.createClass(OWL.thing, result).subscribe(
                     stResp => { },
                     err => { }
                 )

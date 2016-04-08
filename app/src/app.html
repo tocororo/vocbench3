@@ -31,9 +31,9 @@
                 <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Icv'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Icv']">ICV</a>
                 </li>
-				<li [ngClass]="{active: isActive('/Test')}">
+				<!--<li [ngClass]="{active: isActive('/Test')}">
                     <a [routerLink]="['Test']">Test</a>
-                </li>
+                </li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <!--<li><a [routerLink]="['Registration']"><span class="glyphicon glyphicon-user"></span> Register</a></li>-->

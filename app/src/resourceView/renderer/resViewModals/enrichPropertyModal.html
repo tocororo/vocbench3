@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body" id="toFocus">
+    <div class="vbox" style="min-height:70%; max-height: 70%;">
+        <div style="display: flex; align-items: center; margin-bottom: 5px;">
+            Show all classes
+            <input type="checkbox" style="margin-left: 3px;" [checked]="allClasses" 
+                (change)="onCheckboxChange($event.target.checked)" [disabled]="!context.rangeClasses">
+        </div>
+        <div class="hbox">
+            <class-tree [roots]="treeRoots" (itemSelected)="onTreeClassSelected($event)"></class-tree>
+            <instance-list [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)" style="margin-left: 4px;">
+            </instance-list>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedInstance">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

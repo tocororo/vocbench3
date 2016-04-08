@@ -5,6 +5,7 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {ResViewModalServices} from "./resViewModals/resViewModalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SkosxlServices} from "../../services/skosxlServices";
@@ -14,7 +15,7 @@ import {ResourceServices} from "../../services/resourceServices";
     selector: "properties-renderer",
     templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
     directives: [RdfResourceComponent],
-    providers: [PropertyServices, SkosxlServices, ResourceServices],
+    providers: [PropertyServices, SkosxlServices, ResourceServices, ResViewModalServices],
 })
 export class PropertiesPartitionRenderer {
     
@@ -29,13 +30,14 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgTitle = "Remove property value";
     
     constructor(private propertyService:PropertyServices, private skosxlService: SkosxlServices, private resourceService: ResourceServices,
-        private browsingService: BrowsingServices, private modalService: ModalServices) {}
+        private browsingService: BrowsingServices, private modalService: ModalServices, private resViewModalService: ResViewModalServices) {}
         
     private add() {
-        this.browsingService.browsePropertyTree("Select a property").then(
+        this.browsingService.browsePropertyTree("Select a property", this.resource).then(
             selectedProp => {
                 this.enrichProperty(selectedProp);
-            }
+            },
+            () => {}
         );
     }
     
@@ -76,19 +78,23 @@ export class PropertiesPartitionRenderer {
                     var ranges = range.ranges;
                     //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                     if (rngType == RDFTypesEnum.resource) {
-                        
+                        this.enrichWithResource(predicate, ranges);
                     } else if (rngType == RDFTypesEnum.plainLiteral) {
-                        this.enrichPlainLiteral(predicate);
+                        this.enrichWithPlainLiteral(predicate);
                     } else if (rngType == RDFTypesEnum.typedLiteral) {
-                        this.enrichTypedLiteral(predicate);
+                        var datatypes = [];
+                        for (var i = 0; i < ranges.length; i++) {
+                            datatypes.push(ranges[i].getNominalValue());
+                        }
+                        this.enrichWithTypedLiteral(predicate, datatypes);  
                     } else if (rngType == RDFTypesEnum.literal) {
                         var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                         this.modalService.select("Select range type", null, options).then(
                             selectedRange => {
                                 if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                    this.enrichTypedLiteral(predicate);
+                                    this.enrichWithTypedLiteral(predicate);
                                 } else if (selectedRange == RDFTypesEnum.plainLiteral) {
-                                    this.enrichPlainLiteral(predicate);
+                                    this.enrichWithPlainLiteral(predicate);
                                 }
                             },
                             () => {}
@@ -98,11 +104,11 @@ export class PropertiesPartitionRenderer {
                         this.modalService.select("Select range type", null, options).then(
                             selectedRange => {
                                 if (selectedRange == RDFTypesEnum.resource) {
-                                    
+                                    this.enrichWithResource(predicate);
                                 } else if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                    this.enrichTypedLiteral(predicate);
+                                    this.enrichWithTypedLiteral(predicate);
                                 } else if (selectedRange == RDFTypesEnum.plainLiteral) {
-                                    this.enrichPlainLiteral(predicate);
+                                    this.enrichWithPlainLiteral(predicate);
                                 }
                             },
                             () => {}
@@ -119,7 +125,7 @@ export class PropertiesPartitionRenderer {
     /**
      * Opens a newPlainLiteral modal to enrich the predicate with a plain literal value 
      */
-    private enrichPlainLiteral(predicate: ARTURIResource) {
+    private enrichWithPlainLiteral(predicate: ARTURIResource) {
         this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
             literal => {
                 this.propertyService.createAndAddPropValue(
@@ -134,16 +140,31 @@ export class PropertiesPartitionRenderer {
     /**
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
-    private enrichTypedLiteral(predicate: ARTURIResource) {
-        this.modalService.newTypedLiteral("Add " + predicate.getShow()).then(
+    private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: string[]) {
+        this.modalService.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
             literal => {
                 this.propertyService.createAndAddPropValue(
                     this.resource, predicate, literal.value, literal.datatype, RDFTypesEnum.typedLiteral).subscribe(
-                    stResp => { this.update.emit(null) }    
+                    stResp => this.update.emit(null)    
                 );
             },
             () => {}
         );
+    }
+    
+    /**
+     * Opens a modal to enrich the predicate with a resource 
+     */
+    private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
+        this.resViewModalService.enrichProperty("Add property value", predicate, resourceTypes).then(
+            resource => {
+                this.propertyService.addExistingPropValue(
+                    this.resource, predicate, resource.getNominalValue(), RDFTypesEnum.resource).subscribe(
+                    stResp => this.update.emit(null)
+                )
+            },
+            () => {}
+        )
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

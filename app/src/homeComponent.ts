@@ -12,7 +12,7 @@ import {VocbenchCtx} from "./utils/VocbenchCtx";
 export class HomeComponent {
     
     //login params
-    private rememberMe: boolean;
+    private rememberMe: boolean = false;
     private email: string;
     private password: string;
     

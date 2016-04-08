@@ -5,8 +5,14 @@ import {XmlSchema, SKOS} from "../../../utils/Vocabulary";
 
 export class NewTypedLiteralModalContent {
     public title: string = 'Create new label';
-    constructor(title: string) {
+    public allowedDatatypes: Array<string>;
+    /**
+     * @param allowedDatatypes array of datatype URIs of the allowed datatypes in the typed literal creation.
+     * If null all the datatypes are allowed
+     */
+    constructor(title: string, allowedDatatypes?: Array<string>) {
         this.title = title;
+        this.allowedDatatypes = allowedDatatypes;
     }
 }
 
@@ -22,7 +28,7 @@ export class NewTypedLiteralModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     private value: any;
-    private datatype: string = XmlSchema.string.getURI();
+    private datatype: string;
     
     dialog: ModalDialogInstance;
     context: NewTypedLiteralModalContent;
@@ -34,6 +40,16 @@ export class NewTypedLiteralModal implements ICustomModalComponent {
     
     ngOnInit() {
         document.getElementById("toFocus").focus();
+        //initialize default datatype to xsd:string if allowed, to the first allowed otherwise
+        if (this.context.allowedDatatypes == undefined) {
+            this.datatype = XmlSchema.string.getURI();
+        } else {
+            if (this.context.allowedDatatypes.indexOf(XmlSchema.string.getURI()) != -1) {
+                this.datatype = XmlSchema.string.getURI();       
+            } else {
+                this.datatype = this.context.allowedDatatypes[0];
+            }       
+        }
     }
     
     /**
@@ -43,6 +59,18 @@ export class NewTypedLiteralModal implements ICustomModalComponent {
     private isDatatypeBound() {
         return (this.datatype == XmlSchema.boolean.getURI() || this.datatype == XmlSchema.date.getURI() ||
             this.datatype == XmlSchema.dateTime.getURI() || this.datatype == XmlSchema.time.getURI());
+    }
+    
+    /**
+     * Tells if the given datatype is allowed in the current typed literal creation
+     * Useful to enable/disable the selection of the <option> in the <select> of the datatypes
+     */
+    private isDatatypeAllowed(datatype: string): boolean {
+        if (this.context.allowedDatatypes == undefined) {
+            return true; //if no allowedDatatypes array is provided, then all datatypes are allowed
+        } else {
+            return this.context.allowedDatatypes.indexOf(datatype) != -1;
+        }
     }
     
     private isInputValid(): boolean {

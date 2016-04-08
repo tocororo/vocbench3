@@ -207,12 +207,12 @@ export class ModalServices {
      * @param title the title of the modal dialog
      * @return if the modal closes with ok returns a promise containing an object with value and datatype
      */
-    newTypedLiteral(title: string) {
+    newTypedLiteral(title: string, allowedDatatypes: string[]) {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewTypedLiteralModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new NewTypedLiteralModalContent(title);
+        var modalContent = new NewTypedLiteralModalContent(title, allowedDatatypes);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)

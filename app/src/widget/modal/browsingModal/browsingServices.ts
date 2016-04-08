@@ -120,14 +120,16 @@ export class BrowsingServices {
     /**
      * Opens a modal to browse the property tree
      * @param title the title of the modal
+     * @param resource optional, if provided the returned propertyTree contains 
+     * just the properties that have as domain the type of the resource 
      * @return if the modal closes with ok returns a promise containing the selected property
      */
-    browsePropertyTree(title: string) {
+    browsePropertyTree(title: string, resource?: ARTURIResource) {
         let dialog: Promise<ModalDialogInstance>;
         let component = PropertyTreeModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new PropertyTreeModalContent(title);
+        var modalContent = new PropertyTreeModalContent(title, resource);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)

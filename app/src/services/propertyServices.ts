@@ -15,11 +15,16 @@ export class PropertyServices {
 
     /**
      * Gets a static property tree
+     * @param resource optional, if provided the returned propertyTree contains 
+     * just the properties that have as domain the type of the resource 
      * @return a nested array of ARTURIResource representing the properties tree
      */
-    getPropertiesTree() {
+    getPropertiesTree(resource?: ARTURIResource) {
         console.log("[PropertyServices] getPropertiesTree");
         var params: any = {}
+        if (resource != undefined) {
+            params.instanceQName = resource.getURI();
+        }
         return this.httpMgr.doGet(this.serviceName, "getPropertiesTree", params, this.oldTypeService).map(
             stResp => {
                 var propertyTree: ARTURIResource[] = new Array()
@@ -50,6 +55,9 @@ export class PropertyServices {
             subProperties.push(subP);
         }
         p.setAdditionalProperty("children", subProperties);
+        if (subProperties.length > 0) {
+            p.setAdditionalProperty("open", true); //to initialize tree all expanded
+        }
         return p;
     }
 
@@ -210,9 +218,9 @@ export class PropertyServices {
      * @param subject subject of the triple
      * @param property property whose the value will be created
      * @param value value to add
-     * @param type
+     * @param type 
      */
-    addExistingPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, type: string) {
+    addExistingPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, type: RDFTypesEnum) {
         console.log("[PropertyServices] addExistingPropValue");
         var params: any = {
             instanceQName: subject.getURI(),
@@ -256,7 +264,9 @@ export class PropertyServices {
      * @param property
      * @return an object with rngType (available values: 
      * resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent)
-     * and ranges, an array of ARTURIResource (available only if rngType is resource or typedLiteral)
+     * and ranges, an array of ARTURIResource
+     * (available only if rngType is resource, then represent the admitted range classes,
+     * or typedLiteral, then represent the admitted datatypes)
      */
     getRange(property: ARTURIResource) {
         console.log("[PropertyServices] getRange");
@@ -265,11 +275,10 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService).map(
             stResp => {
-                console.log(JSON.stringify(stResp.innerHTML));
                 var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
                 var rngType = rangesElem.getAttribute("rngType");
                 if (rngType != "undetermined") {
-                    var rangesUriColl = Deserializer.createRDFArrayGivenList(rangesElem.childNodes);
+                    var rangesUriColl = Deserializer.createURIArrayGivenList(rangesElem.childNodes);
                 }
                 //TODO handle custom ranges
                 // if (stResp.getElementsByTagName("customRanges") != undefined) {
@@ -306,6 +315,29 @@ export class PropertyServices {
             rangePropertyQName: range.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "removePropertyRange", params, this.oldTypeService);
+    }
+    
+    /**
+     * Returns class tree information for the range of the given property.
+     * (e.g. property P has class C as range, so this method returns the same response of 
+     * getClassesInfoAsRootsForTree in owlService for the class C)
+     * @return
+     */
+    getRangeClassesTree(property: ARTURIResource) {
+        console.log("[PropertyServices] getRangeClassesTree");
+        var params: any = {
+            propertyQName: property.getURI(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "getRangeClassesTree", params, this.oldTypeService).map(
+            stResp => {
+                // var classElemColl: Element[] = stResp.getElementsByTagName("Class");
+                // for (var i = 0; i < classElemColl.length; i++) {
+                //     var cls = new ARTURIResource()
+                //     classElemColl[i].
+                // }
+                return stResp;
+            }
+        );
     }
     
 }

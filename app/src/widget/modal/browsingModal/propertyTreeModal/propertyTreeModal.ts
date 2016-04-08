@@ -4,7 +4,16 @@ import {ARTURIResource} from '../../../../utils/ARTResources';
 import {PropertyTreeComponent} from '../../../../property/propertyTree/propertyTreeComponent';
 
 export class PropertyTreeModalContent {
-    constructor(public title: string = 'Modal Title') {}
+    public title: string = 'Modal Title';
+    public resource: ARTURIResource;
+    /**
+     * @param resource optional, if provided the returned propertyTree contains 
+     * just the properties that have as domain the type of the resource 
+     */
+    constructor(title: string, resource?: ARTURIResource) {
+        this.title = title;
+        this.resource = resource;
+    }
 }
 
 @Component({
@@ -15,6 +24,7 @@ export class PropertyTreeModalContent {
 export class PropertyTreeModal implements ICustomModalComponent {
     
     private selectedProperty;
+    private domainRes: ARTURIResource;
     
     dialog: ModalDialogInstance;
     context: PropertyTreeModalContent;
@@ -26,6 +36,25 @@ export class PropertyTreeModal implements ICustomModalComponent {
     
     ngOnInit() {
         document.getElementById("toFocus").focus();
+        this.domainRes = this.context.resource;
+    }
+    
+    private onPropertySelected(property: ARTURIResource) {
+        this.selectedProperty = property;
+    }
+    
+    /**
+     * When the checkbox "select all properties" changes status
+     * Resets the selectedProperty and update the domainRes that represents 
+     * the resource which its type should be the domain of the properties in the tree
+     */
+    private onCheckboxChange(checked: boolean) {
+        this.selectedProperty = null;
+        if (checked) {
+            this.domainRes = null;
+        } else {
+            this.domainRes = this.context.resource;
+        }
     }
 
     ok(event) {
@@ -38,8 +67,4 @@ export class PropertyTreeModal implements ICustomModalComponent {
         this.dialog.dismiss();
     }
     
-    private onPropertySelected(property: ARTURIResource) {
-        this.selectedProperty = property;
-    }
-
 }

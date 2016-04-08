@@ -4,6 +4,7 @@ export class Deserializer {
     
     /**
      * creates an array of mixed resources (ARTBNode, ARTLiteral, ARTURIResource)
+     * from a <collection> element.
      */
     static createRDFArray(response): ARTNode[] {
 		var collectionElement = response.getElementsByTagName('collection')[0];
@@ -12,7 +13,22 @@ export class Deserializer {
 	};
     
     /**
-     * creates an array of only ARTURIResource
+     * creates an array of mixed resources (ARTBNode, ARTLiteral, ARTURIResource)
+     */
+    static createRDFArrayGivenList(childElements): ARTNode[] {
+        var collectionArray: ARTNode[] = new Array();
+        if (typeof childElements.length == "undefined")
+            return null;
+        for (var i = 0; i < childElements.length; i++) {
+            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
+                collectionArray.push(this.createRDFNode(childElements[i]));
+            }
+        }
+        return collectionArray;
+    };
+    
+    /**
+     * creates an array of only ARTURIResource from a <collection> element.
      */
     static createURIArray(response): ARTURIResource[] {
         var uriResourceArray: ARTURIResource[] = new Array();
@@ -23,14 +39,17 @@ export class Deserializer {
         }
         return uriResourceArray;
     }
-	
-    static createRDFArrayGivenList(childElements): ARTNode[] {
-        var collectionArray: ARTNode[] = new Array();
+    
+    /**
+     * creates an array of ARTURIResource
+     */
+    static createURIArrayGivenList(childElements): ARTURIResource[] {
+        var collectionArray: ARTURIResource[] = new Array();
         if (typeof childElements.length == "undefined")
             return null;
         for (var i = 0; i < childElements.length; i++) {
-            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
-                collectionArray.push(this.createRDFNode(childElements[i]));
+            if (childElements[i].nodeType == 1 && childElements[i].tagName == "uri") {// == ELEMENT_NODE
+                collectionArray.push(this.createURI(childElements[i]));
             }
         }
         return collectionArray;
