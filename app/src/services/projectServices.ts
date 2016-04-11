@@ -161,5 +161,17 @@ export class ProjectServices {
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, this.oldTypeService);
     }
+    
+    /**
+     * Saves the given (not persistent) project
+     * @param project the project to save
+     */
+    saveProject(project: Project) {
+        console.log("[ProjectServices] saveProject");
+        var params = {
+            project: project.getName()
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "saveProject", params, this.oldTypeService);
+    }
 
 }

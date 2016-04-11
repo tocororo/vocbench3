@@ -1,5 +1,6 @@
 import {Component, OnInit, OnDestroy} from "angular2/core";
 import {Router} from 'angular2/router';
+import {Observable} from 'rxjs/Observable';
 import {ProjectServices} from "../services/projectServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {Project} from '../utils/Project';
@@ -121,59 +122,102 @@ export class ProjectComponent implements OnInit {
         var ctxProject = this.vbCtx.getProject();
         if (ctxProject != undefined) { //a project is already open
             //first disconnect from old project
-            //(don't call this.closeProject cause I need to execute connectToProject in syncronous way)
-            document.getElementById("blockDivFullScreen").style.display = "block";
-            this.projectService.disconnectFromProject(ctxProject).subscribe(
-                stResp => {
-                    document.getElementById("blockDivFullScreen").style.display = "none";
-                    this.getProjectFromList(ctxProject.getName()).setOpen(false); //set as close the previous open project
-                    this.vbCtx.setProject(undefined);
-                    this.vbCtx.removeScheme();
-                    //then connect to the new one
+            this.saveAndCloseProject(ctxProject).subscribe(
+                stResp => {//then connect to the new project
                     this.connectToProject(project);
-                },
-                err => {
-                    document.getElementById("blockDivFullScreen").style.display = "none";
-                });
-        } else { //no project open
+                }
+            );
+        } else { //no project open, open new project
             this.connectToProject(project);
         }
     }
-
+    
+    /**
+     * Called when double clicking on "open folder" icon. Call in turn saveAndCloseProject.
+     * I cannot invoke directly saveAndCloseProject from the view cause I need to subscribe to the
+     * observable in order to execute the observable code.
+     */
     private closeProject(project: Project) {
-        this.disconnectFromProject(project);
+        this.saveAndCloseProject(project).subscribe();
+    }
+
+    /**
+     * Performs checks on persistent/non-persistent status, so eventually saves the project and then closes it.
+     * Returns an observable so I can disconnect and connect to a new project in synchronous way
+     */
+    private saveAndCloseProject(project: Project) {
+        return new Observable(observer => {
+            if (project.getType() == "saveToStore") {
+                //if closing project is non-persistent ask to save
+                this.modalService.confirm("Save project", "You're closing a non-persistent project " + project.getName() 
+                    + ". Do you want to save changes?", "warning").then(
+                        
+                    confirm => {//save then disconnect
+                        this.projectService.saveProject(project).subscribe(
+                            stResp => {
+                                this.disconnectFromProject(project).subscribe(
+                                    stResp => {
+                                        observer.next(stResp);
+                                        observer.complete();
+                                    }
+                                );
+                            }
+                        );
+                    },
+                    () => {//disconnect without saving
+                        this.disconnectFromProject(project).subscribe(
+                            stResp => {
+                                observer.next(stResp);
+                                observer.complete();    
+                            }
+                        );
+                    }
+                );
+            } else {//persisten project => just disconnect
+                this.disconnectFromProject(project).subscribe(
+                    stResp => {
+                        observer.next(stResp);
+                        observer.complete();      
+                    }
+                );
+            }
+        });
     }
     
+    /**
+     * Calls the proper service in order to connect to the given project
+     */
     private connectToProject(project: Project) {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.accessProject(project).subscribe(
             stResp => {
                 this.vbCtx.setProject(project);
                 project.setOpen(true);
+                document.getElementById("blockDivFullScreen").style.display = "none";
             },
-            err => { },
-            () => document.getElementById("blockDivFullScreen").style.display = "none");
+            err => document.getElementById("blockDivFullScreen").style.display = "none"
+        );
     }
 
+    /**
+     * Calls the proper service in order to disconnect from the given project.
+     * Returns an observable so I can disconnect and connect to a new project in synchronous way
+     */
     private disconnectFromProject(project: Project) {
-        document.getElementById("blockDivFullScreen").style.display = "block";
-        this.projectService.disconnectFromProject(project).subscribe(
-            stResp => {
-                this.vbCtx.setProject(undefined);
-                this.vbCtx.removeScheme();
-                project.setOpen(false);
-            },
-            err => { },
-            () => document.getElementById("blockDivFullScreen").style.display = "none");
+        return new Observable(observer => {
+            document.getElementById("blockDivFullScreen").style.display = "block";
+            this.projectService.disconnectFromProject(project).subscribe(
+                stResp => {
+                    this.vbCtx.setProject(undefined);
+                    this.vbCtx.removeScheme();
+                    project.setOpen(false);
+                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    observer.next(stResp);
+                    observer.complete();
+                },
+                err => document.getElementById("blockDivFullScreen").style.display = "none"
+            );
+        });
     }
     
-    // get the project from projectList with the given name
-    private getProjectFromList(projName): Project {
-        for (var i = 0; i < this.projectList.length; i++) {
-            if (this.projectList[i].getName() == projName) {
-                return this.projectList[i];
-            }
-        }
-    }
-
 }

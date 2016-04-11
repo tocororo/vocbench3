@@ -53,23 +53,32 @@ export class SchemeListPanelComponent {
     }
     
     private deleteScheme() {
-        //TODO check if scheme has concept and eventually ask the user whether delete the dangling concept (determines 2nd param of request)
-        this.skosService.deleteScheme(this.selectedScheme, false).subscribe(
-            stResp => {
-                for (var i = 0; i < this.schemeList.length; i++) {
-                    if (this.schemeList[i].getURI() == this.selectedScheme.getURI()) {
-                        this.schemeList.splice(i, 1);
-                        break;
-                    }
-                }
-                if (this.activeScheme != undefined && (this.selectedScheme.getURI() == this.activeScheme.getURI())) {
-                    this.vbCtx.removeScheme();
-                    this.activeScheme = null;
-                }
-                this.selectedScheme = null;
-                this.itemSelected.emit(undefined);
+        var retainOpt = "Retain dangling concepts";
+        var deleteOpt = "Delete dangling concepts";
+        this.modalService.select("Delete scheme", "The operation could produce dangling concepts," 
+            + " because the scheme is not empty. What do you want to do?", [retainOpt, deleteOpt]).then(
+           
+            selection => {
+                var deleteDanglingConc = selection == deleteOpt;
+                this.skosService.deleteScheme(this.selectedScheme, deleteDanglingConc).subscribe(
+                    stResp => {
+                        for (var i = 0; i < this.schemeList.length; i++) {
+                            if (this.schemeList[i].getURI() == this.selectedScheme.getURI()) {
+                                this.schemeList.splice(i, 1);
+                                break;
+                            }
+                        }
+                        if (this.activeScheme != undefined && (this.selectedScheme.getURI() == this.activeScheme.getURI())) {
+                            this.vbCtx.removeScheme();
+                            this.activeScheme = null;
+                        }
+                        this.selectedScheme = null;
+                        this.itemSelected.emit(undefined);
+                    },
+                    err => { }
+                );
             },
-            err => { }
+            () => {}
         );
     }
     
