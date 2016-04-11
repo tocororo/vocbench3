@@ -1,0 +1,28 @@
+<div class="subPanel" *ngIf="objectList">
+    <div class="subPanel-heading">
+        <label style="flex: 1">Ranges:</label>
+        
+        <div *ngIf="!isDatatypeProperty()" class="dropdown pull-right">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
+                    title="Add a range" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <img src="app/assets/images/class_create.png" style="height: 16px"/>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a (click)="addExistingClass()">Add existing class</a></li>
+                <li><a (click)="addClassExpression()">Create and add class expression</a></li>
+            </ul>
+        </div>
+        
+        <input *ngIf="isDatatypeProperty()" type="image" title="Add a range" src="app/assets/images/class_create.png"
+            (click)="addRangeDatatype()" [disabled]="!resource.getAdditionalProperty('explicit')">
+            
+    </div>
+    <div class="subPanel-body">
+        <div *ngFor="#o of objectList" class="listItem">
+            <rdf-resource [resource]="o" style="flex:1"></rdf-resource>
+            <input type="image" title="Remove range" src="app/assets/images/class_delete.png" 
+                    (click)="remove(o)" [disabled]="!o.getAdditionalProperty('explicit')">
+        </div>
+    </div>
+</div>

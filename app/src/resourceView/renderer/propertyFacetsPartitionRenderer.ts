@@ -8,7 +8,7 @@ import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
 	selector: "property-facets-renderer",
-	templateUrl: "app/src/resourceView/renderer/propertyFacetsRenderer.html",
+	templateUrl: "app/src/resourceView/renderer/propertyFacetsPartitionRenderer.html",
 	directives: [RdfResourceComponent],
     providers: [PropertyServices],
 })

@@ -1,11 +1,8 @@
 <div class="panel panel-default vbox" style="position: relative">
     <div class="panel-heading">
         <label style="flex: 1;">Dangling concepts</label>
-        <!-- currently select option is not fully supported with object array. This is a workaroung
-            see issue https://github.com/angular/angular/issues/4843 -->
-        <select class="form-control input-xs" style="width: initial; margin-right: 4px;"
-                [(ngModel)]="selectedSchemeURI" (ngModelChange)="changeScheme()">
-            <option *ngFor="#s of schemeList" [value]="s.getURI()">{{s.getURI()}}</option>
+        <select class="form-control input-xs" style="width: initial; margin-right: 4px;" [(ngModel)]="selectedScheme">
+            <option *ngFor="#s of schemeList" [ngValue]="s">{{s.getURI()}}</option>
         </select>
         <button class="btn btn-xs btn-default" (click)="runIcv()" [disabled]="!selectedScheme">Run</button>
     </div>

@@ -1,14 +1,17 @@
 import {Component, Input, Output, EventEmitter} from "angular2/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
+import {RDFS} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
+import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
+import {ManchesterServices} from "../../services/manchesterServices";
 
 @Component({
 	selector: "domains-renderer",
-	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
+	templateUrl: "app/src/resourceView/renderer/domainsPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [PropertyServices],
+    providers: [PropertyServices, ManchesterServices],
 })
 export class DomainsPartitionRenderer {
     
@@ -16,31 +19,50 @@ export class DomainsPartitionRenderer {
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     
-    private label = "Domains";
-    private addBtnImgSrc = "app/assets/images/class_create.png";
-    private addBtnImgTitle = "Add a domain";
-    private removeBtnImgSrc = "app/assets/images/class_delete.png";
-    private removeBtnImgTitle = "Remove domain";
+    constructor(private propService:PropertyServices, private manchService: ManchesterServices,
+        private browsingService: BrowsingServices, private modalService: ModalServices) {}
     
-    constructor(private propService:PropertyServices, private browsingService: BrowsingServices) {}
-    
-    private add() {
+    private addExistingClass() {
         this.browsingService.browseClassTree("Select a domain class").then(
             selectedClass => {
                 this.propService.addPropertyDomain(this.resource, selectedClass).subscribe(
                     stResp => this.update.emit(null)
                 );
-            }
+            },
+            () => {}
         );
     }
     
-    private remove(domain: ARTURIResource) {
-        this.propService.removePropertyDomain(this.resource, domain).subscribe(
-            stResp => {
-                this.update.emit(null);
+    private addClassExpression() {
+        this.modalService.prompt("Class Expression (Manchester Syntax)").then(
+            manchExpr => {
+                this.manchService.checkExpression(manchExpr).subscribe(
+                    stResp => {
+                        this.manchService.createRestriction(this.resource, RDFS.domain, manchExpr).subscribe(
+                            stResp => this.update.emit(null)
+                        );
+                    },
+                    err => {}
+                )
             },
-            err => { }
+            () => {}
         );
+    }
+    
+    private remove(domain: ARTNode) {
+        if (domain.isBNode()) {
+            this.manchService.removeExpression(this.resource, RDFS.domain, domain).subscribe(
+                stResp => this.update.emit(null),
+                err => { }
+            )
+        } else {
+            this.propService.removePropertyDomain(this.resource, <ARTURIResource>domain).subscribe(
+                stResp => {
+                    this.update.emit(null);
+                },
+                err => { }
+            );
+        }
     }
     
 }

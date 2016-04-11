@@ -41,7 +41,6 @@ export class CreateProjectComponent {
     
     private ontoMgrId = "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl";
     private ontoMgrConfigList: Array<any>;
-    private selectedOntoMgrConfigType: string;
     private selectedOntoMgrConfig: any = {};
     //config represents the configuration of the ontology manager (shortName, type, params, ...)
     //open tells if the panel is open or close 
@@ -70,7 +69,6 @@ export class CreateProjectComponent {
             configList => {
                 this.ontoMgrConfigList = configList;
                 this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
-                this.selectedOntoMgrConfigType = this.ontoMgrConfigList[0].type;
             }
         );
         
@@ -96,17 +94,11 @@ export class CreateProjectComponent {
         }
     }
     
-    //workaround for 2 way binding still not supported for <select> https://github.com/angular/angular/issues/4843
-    private changeOntoMgr() {
-        this.selectedOntoMgrConfig = this.ontoMgrConfigList.find(
-            config => config.type == this.selectedOntoMgrConfigType
-        );
-    }
-    
     /**
      * Opens a modal to configure ontology manager triple store
      */
     private configureOntoMgr() {
+        console.log("selected onto mgr config " + JSON.stringify(this.selectedOntoMgrConfig));
         this.openConfigurationModal(this.selectedOntoMgrConfig);
     }
     
@@ -152,11 +144,11 @@ export class CreateProjectComponent {
      */
     private create() {
         
+        this.submitted = true;
+        
         if (!this.projectName || this.projectName.trim() == "" || !this.baseURI || this.baseURI.trim() == "") {
             return; //project name or baseURI not valid
         }
-        
-        this.submitted = true;
         
         if (this.projectName && this.projectName.trim() != "" && this.baseURI && this.baseURI.trim() != "") {
             
@@ -201,7 +193,7 @@ export class CreateProjectComponent {
             
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.projectService.createProject(this.projectName, this.ontoType, this.baseURI, 
-                this.ontoMgrId, this.selectedOntoMgrConfigType, this.selectedOntoMgrConfig.params,
+                this.ontoMgrId, this.selectedOntoMgrConfig.type, this.selectedOntoMgrConfig.params,
                 uriGenFactoryID, uriGenConfigurationClass, uriGenConfigurationArray,
                 renderingEngineFactoryID, renderingEngineConfigurationClass, renderingEngineConfigurationArray).subscribe(
                 stResp => {

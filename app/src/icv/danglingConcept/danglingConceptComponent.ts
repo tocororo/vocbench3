@@ -19,7 +19,6 @@ export class DanglingConceptComponent {
     
     private schemeList: Array<ARTURIResource>;
     private selectedScheme: ARTURIResource;
-    private selectedSchemeURI: string; //workaround for 2 way binding still not supported for <select>
     private brokenConceptList: Array<ARTURIResource>;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, 
@@ -42,9 +41,6 @@ export class DanglingConceptComponent {
             err => { }
         );
         this.selectedScheme = this.vbCtx.getScheme();
-        if (this.selectedScheme != undefined) {
-            this.selectedSchemeURI = this.selectedScheme.getURI();
-        }
     }
     
     /**
@@ -132,13 +128,6 @@ export class DanglingConceptComponent {
     private removeAllFromScheme() {
         //TODO this fix requires a new service server side that takes a list of concept removes them from a scheme
         alert("Fix not yet available");
-    }
-    
-    //workaround for 2 way binding still not supported for <select> https://github.com/angular/angular/issues/4843
-    private changeScheme() {
-        this.selectedScheme = this.schemeList.find(
-            scheme => scheme.getURI() == this.selectedSchemeURI
-        );
     }
     
 }

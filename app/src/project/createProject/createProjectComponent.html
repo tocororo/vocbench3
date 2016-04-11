@@ -50,10 +50,8 @@
                     <div class="form-group">
                         <label>Configuration:</label>
                         <div class="input-group">
-                            <!-- currently select option is not fully supported with object array. This is a workaroung
-                                    see issue https://github.com/angular/angular/issues/4843 -->
-                            <select class="form-control input-sm" [(ngModel)]="selectedOntoMgrConfigType" (ngModelChange)="changeOntoMgr()">
-                                <option *ngFor="#conf of ontoMgrConfigList" [value]="conf.type">{{conf.shortName}}</option>
+                            <select class="form-control input-sm" [(ngModel)]="selectedOntoMgrConfig">
+                                <option *ngFor="#conf of ontoMgrConfigList" [ngValue]="conf">{{conf.shortName}}</option>
                             </select>
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-sm" (click)="configureOntoMgr()">Configure</button>
