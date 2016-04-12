@@ -2,6 +2,7 @@ import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -11,7 +12,7 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "no-top-concept-scheme-component",
     templateUrl: "app/src/icv/noTopConceptScheme/noTopConceptSchemeComponent.html",
-    providers: [IcvServices, SkosServices],
+    providers: [IcvServices, SkosServices, BrowsingServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
@@ -19,8 +20,8 @@ export class NoTopConceptSchemeComponent {
     
     private brokenSchemeList: Array<ARTURIResource>;
     
-    constructor(private icvService: IcvServices, private skosService: SkosServices, 
-            private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private vbCtx: VocbenchCtx,
+        private modalService: ModalServices, private browsingService: BrowsingServices, private router: Router) {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
@@ -55,21 +56,31 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by selecting a top concept 
      */
     selectTopConcept(scheme: ARTURIResource) {
-        alert("Fix not yet available");
-        //TODO here open a modal with a list of concept in the given scheme to select a top concept
+        this.browsingService.browseConceptTree("Select a top concept", scheme).then(
+            concept => {
+                this.skosService.addTopConcept(concept, scheme).subscribe(
+                    stResp => {
+                        this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                    }
+                );
+            },
+            () => {}
+        );
     }
     
     /**
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        var conceptName = prompt("Insert concept name");
-        if (conceptName == null) return;
-        this.skosService.createTopConcept(conceptName, scheme, null, null).subscribe(
+        this.modalService.newResource("Create top Concept").then(
             data => {
-                this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                this.skosService.createTopConcept(data.name, scheme, data.label, data.lang).subscribe(
+                    stResp => {
+                        this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                    }
+                )
             },
-            err => { }
+            () => {}
         );
     }
     
@@ -77,7 +88,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        this.modalService.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some scheme, " +
+        this.modalService.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some concepts, " +
                 "will generate concepts in no scheme. Are you sure to proceed?").then(
             result => {
                 this.skosService.deleteScheme(scheme).subscribe(

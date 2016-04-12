@@ -75,9 +75,10 @@ export class TestComponent {
     
     private newLiteralLangResult;
     private newLiteralLangTitle = "NewLiteralLang title";
-    private sanitizable = false;
+    private lang = "en";
+    private langReadonly = false;
     newLiteralLang() {
-        this.modalService.newPlainLiteral(this.newLiteralLangTitle).then(
+        this.modalService.newPlainLiteral(this.newLiteralLangTitle, this.lang, this.langReadonly).then(
             result => {
                 this.newLiteralLangResult = result;
             },

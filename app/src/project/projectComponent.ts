@@ -44,7 +44,7 @@ export class ProjectComponent implements OnInit {
                         this.connectToProject(openProjectList[0]);
                     } else if (openProjectList.length > 1) { //multiple open projects
                         for (var i = 0; i < openProjectList.length; i++) { //close all open projects
-                            this.disconnectFromProject(openProjectList[i]);
+                            this.disconnectFromProject(openProjectList[i]).subscribe();
                         }
                     }
                 }
@@ -210,7 +210,13 @@ export class ProjectComponent implements OnInit {
                 stResp => {
                     this.vbCtx.setProject(undefined);
                     this.vbCtx.removeScheme();
-                    project.setOpen(false);
+                    //here I need to get the project to close from projectList because, in some scenarios,
+                    //the project passed as parameter is taken from the context and it is a different object
+                    //from the one in projectList, so when I set open as false, it doesn't update the view
+                    var closedProject = this.projectList.find(
+                        proj => proj.getName() == project.getName()
+                    );
+                    closedProject.setOpen(false)
                     document.getElementById("blockDivFullScreen").style.display = "none";
                     observer.next(stResp);
                     observer.complete();

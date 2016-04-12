@@ -2,10 +2,16 @@ import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 
 export class NewPlainLiteralModalContent {
-    public title: string = 'Create new label';
-    constructor(title: string) {
-        this.title = title;
-    }
+    /**
+     * @param title the title of the modal dialog
+     * @param lang the language selected as default
+     * @param langReadonly if true the language selection is disable and language cannot be changed
+     */
+    constructor(
+        public title: string = 'Create new label',
+        public lang: string = 'en',
+        public langReadonly: boolean = false
+    ) {}
 }
 
 @Component({
@@ -17,7 +23,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     private submitted: boolean = false;
     
     private literal: string;
-    private lang: string = "en";
+    private lang: string;
     private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
         "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
     
@@ -27,6 +33,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
         this.dialog = dialog;
         this.context = <NewPlainLiteralModalContent>modelContentData;
+        this.lang = this.context.lang;
     }
     
     ngOnInit() {

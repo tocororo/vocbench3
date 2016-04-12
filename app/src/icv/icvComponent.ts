@@ -1,6 +1,7 @@
 import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {VocbenchCtx} from "../utils/VocbenchCtx";
+import {RDFResourceRolesEnum} from "../utils/Enums";
 
 @Component({
     selector: "icv-component",
@@ -30,20 +31,24 @@ export class IcvComponent {
     private labelIcv = {
         open: true,
         list: [
-            { name: "No skos:prefLabel concept", ontoType: ["SKOS"],
-            description: "skos:Concept(s) that have no skos:prefLabel"},
-            { name: "No skosxl:prefLabel concept", ontoType: ["SKOS-XL"],
-            description: "skos:Concept(s) that have no skosxl:prefLabel"},
-            { name: "No rdfs:label resource", ontoType: ["OWL"],
-            description: "Classes or instances that have no rdfs:label"},
-            { name: "No skos:prefLabel scheme", ontoType: ["SKOS"],
-            description: "skos:ConceptScheme(s) that have no skos:prefLabel"},
-            { name: "No skosxl:prefLabel scheme", ontoType: ["SKOS-XL"],
-            description: "skos:ConceptScheme(s) that have no skosxl:prefLabel"},
-            { name: "Only skos:altLabel concept", ontoType: ["SKOS"],
+            { name: "No skos:prefLabel concept", ontoType: ["SKOS"], routeName: "NoLabelResource", 
+            param: {type: RDFResourceRolesEnum.concept}, description: "skos:Concept(s) that have no skos:prefLabel"},
+            { name: "No skosxl:prefLabel concept", ontoType: ["SKOS-XL"], routeName: "NoLabelResource",
+            param: {type: RDFResourceRolesEnum.concept}, description: "skos:Concept(s) that have no skosxl:prefLabel"},
+            { name: "No rdfs:label resource", ontoType: ["OWL"], routeName: "NoLabelResource",
+            param: {type: RDFResourceRolesEnum.cls}, description: "Classes or instances that have no rdfs:label"},
+            { name: "No skos:prefLabel scheme", ontoType: ["SKOS"], routeName: "NoLabelResource",
+            param: {type: RDFResourceRolesEnum.conceptScheme}, description: "skos:ConceptScheme(s) that have no skos:prefLabel"},
+            { name: "No skosxl:prefLabel scheme", ontoType: ["SKOS-XL"], routeName: "NoLabelResource",
+            param: {type: RDFResourceRolesEnum.conceptScheme}, description: "skos:ConceptScheme(s) that have no skosxl:prefLabel"},
+            { name: "Only skos:altLabel concept", ontoType: ["SKOS"], param: {type: RDFResourceRolesEnum.concept},
             description: "skos:Concept(s) that have a skos:altLabel but not a skos:prefLabel in the same language"},
-            { name: "Only skosxl:altLabel concept", ontoType: ["SKOS-XL"],
+            { name: "Only skosxl:altLabel concept", ontoType: ["SKOS-XL"], param: {type: RDFResourceRolesEnum.concept},
             description: "skos:Concept(s) that have a skosxl:prefLabel but not a skosxl:prefLabel in the same language"},
+            { name: "Only skos:altLabel scheme", ontoType: ["SKOS"], param: {type: RDFResourceRolesEnum.conceptScheme},
+            description: "skos:ConceptScheme(s) that have a skos:prefLabel but not a skos:prefLabel in the same language"},
+            { name: "Only skosxl:altLabel scheme", ontoType: ["SKOS-XL"], param: {type: RDFResourceRolesEnum.conceptScheme},
+            description: "skos:ConceptScheme(s) that have a skosxl:prefLabel but not a skosxl:prefLabel in the same language"},
             { name: "No language tag skos label", ontoType: ["SKOS"],
             description: "skos:Concept(s) that have a SKOS label without language tag"},
             { name: "No language tag skosxl label", ontoType: ["SKOS-XL"],
@@ -96,7 +101,11 @@ export class IcvComponent {
            alert(icvStruct.name + " still not available");
            return; 
         }
-        this.router.navigate([icvStruct.routeName]);
+        if (icvStruct.param) {
+            this.router.navigate([icvStruct.routeName, icvStruct.param]);
+        } else {
+            this.router.navigate([icvStruct.routeName]);
+        }
     }
     
     /**

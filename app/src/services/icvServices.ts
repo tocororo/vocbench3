@@ -118,9 +118,9 @@ export class IcvServices {
      * Returns a list of concepts that have no skosxl:prefLabel
      */
     listConceptsWithNoSKOSXLPrefLabel() {
-        console.log("[IcvServices] listConceptSchemesWithNoTopConcept");
+        console.log("[IcvServices] listConceptsWithNoSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoSKOSXLPrefLabel", params, this.oldTypeService);
     }
     
     /**

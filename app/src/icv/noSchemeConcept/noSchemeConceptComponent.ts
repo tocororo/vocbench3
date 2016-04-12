@@ -1,6 +1,7 @@
 import {Component} from "angular2/core";
 import {Router} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -10,7 +11,7 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "no-scheme-concept-component",
     templateUrl: "app/src/icv/noSchemeConcept/noSchemeConceptComponent.html",
-    providers: [IcvServices, SkosServices],
+    providers: [IcvServices, SkosServices, BrowsingServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
@@ -18,7 +19,7 @@ export class NoSchemeConceptComponent {
     
     private brokenConceptList: Array<ARTURIResource>;
     
-    constructor(private icvService: IcvServices, private skosService: SkosServices, 
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingService: BrowsingServices,
             private vbCtx: VocbenchCtx, private router: Router) {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
@@ -53,24 +54,30 @@ export class NoSchemeConceptComponent {
      * Fixes concept by adding it to a scheme 
      */
     addToScheme(concept: ARTURIResource) {
-        alert("Fix not yet available");
-        //TODO here open a modal to select a scheme
-        // this.skosService.addConceptToScheme(concept, this.vbCtx.getScheme()).subscribe(
-        //     data => {
-        //         //remove the concept from the list
-        //         this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
-        //     },
-        //     err => { }
-        // );
+        this.browsingService.browseSchemeList("Select a scheme").then(
+            scheme => {
+                this.skosService.addConceptToScheme(concept, scheme).subscribe(
+                    stResp => {
+                        //remove the concept from the list
+                        this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                    }
+                )
+            },
+            () => {}
+        )
     }
     
     /**
      * Fixes concepts by adding them all to a scheme
      */
     addAllToScheme() {
-        //TODO this fix requires a new service server side that takes a list of concept and adds them to a scheme
-        alert("Fix not yet available");
-        //TODO here open a modal to select a scheme
+        this.browsingService.browseSchemeList("Select a scheme").then(
+            scheme => {
+                //TODO this fix requires a new service server side that takes a list of concept and adds them to a scheme
+                alert("Fix not yet available. Add all concepts to " + scheme.getShow());
+            },
+            () => {}
+        )
     }
     
     /**

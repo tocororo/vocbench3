@@ -54,6 +54,7 @@ export class TopConceptWithBroaderComponent {
     /**
      * Fixes concept by ...
      * How to fix a topConcept with broader(s)?
+     * Currently in ST the "fix" button just open the resource view to let the user fix the problem. I don't like it.
      * The idea is to remove the skos:broader relations with concept in the same skos:ConceptScheme,
      * namely remove triples like
      * topConcept - skos:broader - broader

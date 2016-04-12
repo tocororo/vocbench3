@@ -1,5 +1,27 @@
 <div class="container-fluid">
-    <!--Configuration of project data, not available when no project is open-->
+    
+    <div class="dropdown pull-left">
+        <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+            About VocBench
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="http://aims.fao.org/vest-registry/tools/vocbench" target="_blank">
+                <span class="glyphicon glyphicon-globe" style="margin-right: 5px"></span>VocBench website
+            </a></li>
+            <li><a href="http://aims.fao.org/vest-registry/tools/vocbench/partners" target="_blank">
+                <span class="glyphicon glyphicon-briefcase" style="margin-right: 5px"></span>Partners
+            </a></li>
+            <li><a href="http://aims.fao.org/standards/agrovoc/contact" target="_blank">
+                <span class="glyphicon glyphicon-comment" style="margin-right: 5px"></span>Contact us
+            </a></li>
+            <li><a href="http://aims.fao.org/vest-registry/tools/vocbench/support-material" target="_blank">
+                <span class="glyphicon glyphicon-question-sign" style="margin-right: 5px"></span>Support
+            </a></li>
+        </ul>
+    </div>
+    
+    <!--Configuration of project data, not available when there is no project open-->
     <div *ngIf="isUserLogged() && isProjectOpen()" class="dropdown pull-right">
         <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
             Global Data Management
@@ -11,4 +33,5 @@
             <li><a (click)="clearData()"><span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data</a></li>
         </ul>
     </div>
+    
 </div>

@@ -39,7 +39,12 @@ export class NewResourceModal implements ICustomModalComponent {
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({name: this.name, label: this.label, lang: this.lang});
+        if (this.label && this.label.trim() == "") {//if label has no content return null label
+            this.dialog.close({name: this.name, label: null, lang: null});    
+        } else {
+            this.dialog.close({name: this.name, label: this.label, lang: this.lang});
+        }
+        
     }
 
     cancel() {

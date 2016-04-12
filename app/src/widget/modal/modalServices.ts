@@ -181,14 +181,16 @@ export class ModalServices {
     /**
      * Opens a modal to create a new literal with language tag
      * @param title the title of the modal dialog
+     * @param lang the language selected as default
+     * @param langReadonly if true the language selection is disable and language cannot be changed
      * @return if the modal closes with ok returns a promise containing an object with value and lang
      */
-    newPlainLiteral(title: string) {
+    newPlainLiteral(title: string, lang?: string, langReadonly?: boolean) {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewPlainLiteralModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new NewPlainLiteralModalContent(title);
+        var modalContent = new NewPlainLiteralModalContent(title, lang, langReadonly);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)
@@ -205,9 +207,10 @@ export class ModalServices {
     /**
      * Opens a modal to create a new literal with datatype
      * @param title the title of the modal dialog
+     * @param allowedDatatypes datatypes allowed in the datatype selection list
      * @return if the modal closes with ok returns a promise containing an object with value and datatype
      */
-    newTypedLiteral(title: string, allowedDatatypes: string[]) {
+    newTypedLiteral(title: string, allowedDatatypes?: string[]) {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewTypedLiteralModal;
         

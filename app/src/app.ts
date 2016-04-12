@@ -16,6 +16,7 @@ import { NoSchemeConceptComponent } from "./icv/noSchemeConcept/noSchemeConceptC
 import { NoTopConceptSchemeComponent } from "./icv/noTopConceptScheme/noTopConceptSchemeComponent";
 import { TopConceptWithBroaderComponent } from "./icv/topConceptWithBroader/topConceptWithBroaderComponent";
 import { HierarchicalRedundancyComponent } from "./icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
+import { NoLabelResourceComponent } from "./icv/noLabelResource/noLabelResourceComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -53,6 +54,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Icv/NoTopConceptScheme", name: "NoTopConceptScheme", component: NoTopConceptSchemeComponent},
     {path: "/Icv/TopConceptWithBroader", name: "TopConceptWithBroader", component: TopConceptWithBroaderComponent},
     {path: "/Icv/HierarchicalRedundancy", name: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent},
+    {path: "/Icv/NoLabelResource/:type", name: "NoLabelResource", component: NoLabelResourceComponent},
 ])
 
 export class App {

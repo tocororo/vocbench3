@@ -8,7 +8,7 @@ export class Project {
     private status: Object;
     private type: string;
     
-    private knownRDFModelInterfaces = {
+    private static knownRDFModelInterfaces = {
         "it.uniroma2.art.owlart.models.RDFModel" : "RDF",
         "it.uniroma2.art.owlart.models.RDFSModel" : "RDFS",
         "it.uniroma2.art.owlart.models.OWLModel" : "OWL",
@@ -16,7 +16,7 @@ export class Project {
         "it.uniroma2.art.owlart.models.SKOSXLModel" : "SKOS-XL"
     };
     
-    private knownOntoMgrInterfaces = {
+    private static knownOntoMgrInterfaces = {
         "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl" : "Sesame2"
     }
     
@@ -62,7 +62,7 @@ export class Project {
     
     public getPrettyPrintOntoMgr(): string {
         var prettyPrint = null;
-        prettyPrint = this.knownOntoMgrInterfaces[this.ontmgr];
+        prettyPrint = Project.knownOntoMgrInterfaces[this.ontmgr];
         if (prettyPrint == null) {
             prettyPrint = this.ontmgr.substring(this.ontmgr.lastIndexOf("."));
         }
@@ -79,7 +79,7 @@ export class Project {
     
     public getPrettyPrintOntoType(): string {
         var prettyPrint = null;
-        prettyPrint = this.knownRDFModelInterfaces[this.ontoType];
+        prettyPrint = Project.knownRDFModelInterfaces[this.ontoType];
         if (prettyPrint == null) {
             prettyPrint = this.ontoType.substring(this.ontoType.lastIndexOf("."));
         }

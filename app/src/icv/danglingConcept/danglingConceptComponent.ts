@@ -2,6 +2,7 @@ import {Component} from "angular2/core";
 import {Router, RouterLink} from 'angular2/router';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -11,7 +12,7 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "dangling-concept-component",
     templateUrl: "app/src/icv/danglingConcept/danglingConceptComponent.html",
-    providers: [IcvServices, SkosServices],
+    providers: [IcvServices, SkosServices, BrowsingServices],
     directives: [RdfResourceComponent, RouterLink],
     host: { class : "pageComponent" }
 })
@@ -21,8 +22,8 @@ export class DanglingConceptComponent {
     private selectedScheme: ARTURIResource;
     private brokenConceptList: Array<ARTURIResource>;
     
-    constructor(private icvService: IcvServices, private skosService: SkosServices, 
-            private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private vbCtx: VocbenchCtx, 
+        private modalService: ModalServices, private browsingService: BrowsingServices, private router: Router) {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
@@ -83,24 +84,38 @@ export class DanglingConceptComponent {
      */
     private setAllTopConcept() {
         //TODO this fix requires a new service server side that takes a list of concept and sets them as topConcept of a scheme
-        alert("Fix not yet available");
+        alert("Fix not yet available. Adding all concept as topConceptOf current scheme");
     }
     
     /**
      * Fixes concept by selecting a broader concept
      */
     private selectBroader(concept: ARTURIResource) {
-        alert("Fix not yet available");
-        //TODO here I should open a modal to show the concept tree and select a concept
+        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme).then(
+            broader => {
+                this.skosService.addBroaderConcept(concept, broader).subscribe(
+                    stResp => {
+                        //remove the concept from the danglingConceptList
+                        this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                    }
+                )
+            },
+            () => {}
+        );
     }
     
     /**
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        //TODO this fix requires a new service server side that takes a list of concept and sets for them a broader concept
-        alert("Fix not yet available");
-        //TODO here I should open a modal to show the concept tree and select a concept
+        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme).then(
+            broader => {
+                //TODO this fix requires a new service server side that takes a list of concept and sets for them a broader concept
+                alert("Fix not yet available, added " + broader.getShow() + " as broader for all dangling concept");
+                //then this.brokenConceptList = [];
+            },
+            () => {}
+        );
     }
     
     /**
