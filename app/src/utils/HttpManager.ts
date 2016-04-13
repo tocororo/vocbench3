@@ -12,8 +12,7 @@ export class HttpManager {
     private contentTypeXml: string = "application/xml";
     private contentTypeJson: string = "application/json";
 
-    private serverhost: string = "127.0.0.1";
-    // private serverhost: string = "160.80.84.190";
+    private serverhost: string;
     private serverport: string = "1979";
     //new services url parts
     private serverpath: string = "semanticturkey";
@@ -22,7 +21,15 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
+    constructor(private http: Http, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
+        //get from vb_config.json the serverhost ip
+        this.http.get("vb_config.json").subscribe(
+            resp => {
+                var vbConf = resp.json();
+                this.serverhost = vbConf.serverhost;
+            }
+        )
+    }
     
     /**
      * Performs an HTTP GET request.

@@ -181,16 +181,18 @@ export class ModalServices {
     /**
      * Opens a modal to create a new literal with language tag
      * @param title the title of the modal dialog
+     * @param value the value inserted by default
+     * @param valueReadonly if true the input field is disable and cannot be changed
      * @param lang the language selected as default
      * @param langReadonly if true the language selection is disable and language cannot be changed
      * @return if the modal closes with ok returns a promise containing an object with value and lang
      */
-    newPlainLiteral(title: string, lang?: string, langReadonly?: boolean) {
+    newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean) {
         let dialog: Promise<ModalDialogInstance>;
         let component = NewPlainLiteralModal;
         
         //inject the modal content in the modal Component
-        var modalContent = new NewPlainLiteralModalContent(title, lang, langReadonly);
+        var modalContent = new NewPlainLiteralModalContent(title, value, valueReadonly, lang, langReadonly);
         let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
         
         //set the modal configuration (medium dimension, blocking and without key to dismiss)

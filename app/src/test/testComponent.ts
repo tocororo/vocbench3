@@ -75,10 +75,12 @@ export class TestComponent {
     
     private newLiteralLangResult;
     private newLiteralLangTitle = "NewLiteralLang title";
+    private newLiteralLangValue = "input"
+    private valueReadonly = false;
     private lang = "en";
     private langReadonly = false;
     newLiteralLang() {
-        this.modalService.newPlainLiteral(this.newLiteralLangTitle, this.lang, this.langReadonly).then(
+        this.modalService.newPlainLiteral(this.newLiteralLangTitle, this.newLiteralLangValue, this.valueReadonly, this.lang, this.langReadonly).then(
             result => {
                 this.newLiteralLangResult = result;
             },

@@ -6,7 +6,7 @@
         Show all properties
         <input type="checkbox" style="margin-left: 3px;" (change)="onCheckboxChange($event.target.checked)">
     </div>
-    <property-tree style="min-height:70%; max-height: 70%" [resource]="domainRes" (itemSelected)="onPropertySelected($event)">
+    <property-tree style="height:70vh;" [resource]="domainRes" (itemSelected)="onPropertySelected($event)">
     </property-tree>
 </div>
 <div class="modal-footer">

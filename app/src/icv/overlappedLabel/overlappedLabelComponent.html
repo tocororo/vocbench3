@@ -1,0 +1,61 @@
+<!--TODO-->
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label style="flex: 1;">SKOS resources with overlapped preferred and alternative labels</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+        
+        <div class="alert alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <i *ngIf="ontoType == 'SKOS'">
+                SKOS resources (skos:Concept or skos:ConceptScheme) that have a skos:prefLabel and a skos:altLabel with the same value
+                for the same language
+            </i>
+            <i *ngIf="ontoType == 'SKOS-XL'">
+                SKOS resources (skos:Concept or skos:ConceptScheme) that have a skosxl:prefLabel and a skosxl:altLabel with the same
+                literal form for the same language
+            </i>
+        </div>
+
+        <div *ngIf="!brokenRecordList" style="padding: 4px;">
+            Press <strong>Run</strong> button to run the check.
+        </div>
+        <div *ngIf="brokenRecordList" class="scrollableContainer">
+            <table class="table table-condensed" style="flex: 1;">
+                <thead>
+                    <tr>
+                        <th class="text-center">Resource</th>
+                        <th class="text-center">Label</th>
+                        <th class="text-center" style="width: 1%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="#record of brokenRecordList">
+                        <td>
+                            <rdf-resource [resource]="record.resource"></rdf-resource>
+                        </td>
+                        <td>
+                            <rdf-resource [resource]="record.label"></rdf-resource>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <button class="btn btn-xs btn-default" (click)="changePrefLabel(record)">Change pref label</button>
+                            <button class="btn btn-xs btn-default" (click)="removePrefLabel(record)">Remove pref label</button>
+                            <button class="btn btn-xs btn-default" (click)="changeAltLabel(record)">Change alt label</button>
+                            <button class="btn btn-xs btn-default" (click)="removeAltLabel(record)">Remove alt label</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="app/assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

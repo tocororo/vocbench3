@@ -61,6 +61,8 @@
         <label>New Plain Literal Modal:</label>
         <div>
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="newLiteralLangTitle">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="newLiteralLangValue">
+            value readOnly: <input type="checkbox" [checked]="valueReadonly" (change)="valueReadonly = $event.target.checked">
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="lang">
             lang readOnly: <input type="checkbox" [checked]="langReadonly" (change)="langReadonly = $event.target.checked">
             <br/><button class="btn btn-primary btn-xs" (click)="newLiteralLang()">Test</button>

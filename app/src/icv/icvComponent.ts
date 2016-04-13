@@ -37,6 +37,7 @@ export class IcvComponent {
             param: {type: RDFResourceRolesEnum.concept}, description: "skos:Concept(s) that have no skosxl:prefLabel"},
             { name: "No rdfs:label resource", ontoType: ["OWL"], routeName: "NoLabelResource",
             param: {type: RDFResourceRolesEnum.cls}, description: "Classes or instances that have no rdfs:label"},
+            //TODO make a unique ICV for both scheme and concept, so param can be removed and I can base the check on the ontoType
             { name: "No skos:prefLabel scheme", ontoType: ["SKOS"], routeName: "NoLabelResource",
             param: {type: RDFResourceRolesEnum.conceptScheme}, description: "skos:ConceptScheme(s) that have no skos:prefLabel"},
             { name: "No skosxl:prefLabel scheme", ontoType: ["SKOS-XL"], routeName: "NoLabelResource",
@@ -57,6 +58,7 @@ export class IcvComponent {
             description: "skos:Concept(s) that have the same skos:prefLabel in the same language"},
             { name: "Same skosxl:prefLabel concepts", ontoType: ["SKOS-XL"],
             description: "skos:Concept(s) that have the same skosxl:prefLabel in the same language"},
+            //TODO refactor service to check for conceptScheme too
             { name: "Overlapped skos label concepts", ontoType: ["SKOS"],
             description: "skos:Concept(s) that have the same value as skos:prefLabel and skos:altLabel in the same language"},
             { name: "Overlapped skosxl label concepts", ontoType: ["SKOS-XL"],

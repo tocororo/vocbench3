@@ -18,7 +18,7 @@ import {SkosxlServices} from "../../services/skosxlServices";
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
-export class NoLabelResourceComponent {
+export class OnlyAltLabelResourceComponent {
     
     private brokenRecordList: Array<any>; //TODO should be {resource: ..., lang: ..., altLabels: [...]}
     //idea: make lang a ARTLiteral so in the view is rendered as rdf-resource with the flag

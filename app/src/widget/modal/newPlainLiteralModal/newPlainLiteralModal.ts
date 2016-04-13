@@ -4,11 +4,15 @@ import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2
 export class NewPlainLiteralModalContent {
     /**
      * @param title the title of the modal dialog
-     * @param lang the language selected as default
+     * @param value the value inserted by default
+     * @param valueReadonly if true the input field is disable and cannot be changed
+     * @param lang the language selected by default
      * @param langReadonly if true the language selection is disable and language cannot be changed
      */
     constructor(
         public title: string = 'Create new label',
+        public value: string,
+        public valueReadonly: boolean = false,
         public lang: string = 'en',
         public langReadonly: boolean = false
     ) {}
@@ -22,7 +26,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     
-    private literal: string;
+    private value: string;
     private lang: string;
     private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
         "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
@@ -34,6 +38,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
         this.dialog = dialog;
         this.context = <NewPlainLiteralModalContent>modelContentData;
         this.lang = this.context.lang;
+        this.value = this.context.value;
     }
     
     ngOnInit() {
@@ -43,7 +48,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({value: this.literal, lang: this.lang});
+        this.dialog.close({value: this.value, lang: this.lang});
     }
 
     cancel() {
@@ -60,7 +65,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     }
     
     private isInputValid(): boolean {
-        return (this.literal != undefined && this.literal.trim() != "");
+        return (this.value != undefined && this.value.trim() != "");
     }
     
     private getFlagImgSrc(): string {
