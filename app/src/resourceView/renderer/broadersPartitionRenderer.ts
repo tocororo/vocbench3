@@ -32,7 +32,8 @@ export class BroadersPartitionRenderer {
                 this.skosService.addBroaderConcept(this.resource, selectedConcept).subscribe(
                     stResp => this.update.emit(null) 
                 );
-            }
+            },
+            () => {}
         );
     }
     

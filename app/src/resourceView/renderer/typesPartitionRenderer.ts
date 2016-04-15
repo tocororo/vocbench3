@@ -31,7 +31,8 @@ export class TypesPartitionRenderer {
                 this.owlService.addType(this.resource, selectedClass).subscribe(
                     stResp => this.update.emit(null)
                 )
-            }
+            },
+            () => {}
         );
     }
     

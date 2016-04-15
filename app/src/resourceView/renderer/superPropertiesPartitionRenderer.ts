@@ -30,7 +30,8 @@ export class SuperPropertiesPartitionRenderer {
                 this.propService.addSuperProperty(this.resource, selectedProp).subscribe(
                     stResp => this.update.emit(null) 
                 );
-            }
+            },
+            () => {}
         );
     }
     

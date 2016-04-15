@@ -20,22 +20,15 @@ export class ResViewModalServices {
      * classes (ARTURIResource) and expressions (ARTBNode)
      */
     createClassList(title: string) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = ClassListCreatorModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new ClassListCreatorModalContent(title);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (large dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("lg", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ClassListCreatorModal,
+                resolvedBindings,
+                new ModalConfig('lg', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -44,22 +37,15 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing an array of instances
      */
     createInstanceList(title: string) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = InstanceListCreatorModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new InstanceListCreatorModalContent(title);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (large dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("lg", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>InstanceListCreatorModal,
+                resolvedBindings,
+                new ModalConfig('lg', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -68,22 +54,15 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
     enrichProperty(title: string, property: ARTURIResource, ranges: ARTURIResource[]) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = EnrichPropertyModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new EnrichPropertyModalContent(title, property, ranges);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (large dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("lg", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>EnrichPropertyModal,
+                resolvedBindings,
+                new ModalConfig('lg', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

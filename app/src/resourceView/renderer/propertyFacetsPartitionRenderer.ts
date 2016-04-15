@@ -28,7 +28,8 @@ export class PropertyFacetsPartitionRenderer {
                 this.propService.addExistingPropValue(this.resource, OWL.inverseOf, selectedProp.getURI(), RDFTypesEnum.resource).subscribe(
                     stResp => this.update.emit(null)
                 )
-            }
+            },
+            () => {}
         )
     }
     

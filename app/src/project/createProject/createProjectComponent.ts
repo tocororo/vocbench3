@@ -212,19 +212,15 @@ export class CreateProjectComponent {
      * Opens a modal to change configurations
      */
     private openConfigurationModal(configuration: any) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = OntoMgrConfigModal;
-        //inject the modal content in the modal Component
         var modalContent = new OntoMgrConfigModalContent(configuration);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>OntoMgrConfigModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

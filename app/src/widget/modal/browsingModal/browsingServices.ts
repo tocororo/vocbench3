@@ -25,22 +25,15 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected class
      */
     browseClassTree(title: string) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = ClassTreeModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new ClassTreeModalContent(title);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ClassTreeModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -50,22 +43,15 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected instance
      */
     browseInstanceList(title: string, cls: ARTURIResource) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = InstanceListModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new InstanceListModalContent(title, cls);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>InstanceListModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -75,22 +61,15 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected concept
      */
     browseConceptTree(title: string, scheme?: ARTURIResource) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = ConceptTreeModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new ConceptTreeModalContent(title, scheme);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ConceptTreeModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -99,22 +78,15 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected scheme
      */
     browseSchemeList(title: string) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = SchemeListModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new SchemeListModalContent(title);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>SchemeListModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -125,22 +97,15 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected property
      */
     browsePropertyTree(title: string, resource?: ARTURIResource) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = PropertyTreeModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new PropertyTreeModalContent(title, resource);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>PropertyTreeModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

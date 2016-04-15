@@ -31,7 +31,8 @@ export class TopConceptsPartitionRenderer {
                 this.skosService.addTopConcept(this.resource, selectedScheme).subscribe(
                     stResp => this.update.emit(null)
                 );
-            }
+            },
+            () => {}
         );
     }
     

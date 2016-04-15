@@ -31,7 +31,8 @@ export class SchemesPartitionRenderer {
                 this.skosService.addConceptToScheme(this.resource, selectedScheme).subscribe(
                     stResp => this.update.emit(null)
                 );
-            }
+            },
+            () => {}
         );
     }
     

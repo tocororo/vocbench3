@@ -164,7 +164,8 @@ export class MetadataManagementComponent {
                         this.refactorService.replaceBaseURI(newBaseURI);
                     }
                 }
-            }
+            },
+            () => {}
         );
     }
     
@@ -247,19 +248,15 @@ export class MetadataManagementComponent {
      * @return returns a mapping object containing "prefix" and "namespace"
      */
     private openMappingModal(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = PrefixNamespaceModal;
-        //inject the modal content in the modal Component
         var modalContent = new PrefixNamespaceModalContent(title, prefix, namespace, namespaceReadonly);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>PrefixNamespaceModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     //======= IMPORTS MANAGEMENT =======
@@ -451,19 +448,15 @@ export class MetadataManagementComponent {
      * fromOntologyMirror) mirror object contains "namespace" and "file".
      */
     private openImportModal(title: string, importType: ImportType) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = ImportOntologyModal;
-        //inject the modal content in the modal Component
         var modalContent = new ImportOntologyModalContent(title, importType);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ImportOntologyModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
 

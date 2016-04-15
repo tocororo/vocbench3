@@ -28,22 +28,15 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing the input text
      */
     prompt(title: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = PromptModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new PromptModalContent(title, label, value, false, inputOptional, inputSanitized);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>PromptModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -56,24 +49,16 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing a boolean true
      */
     confirm(title: string, message: string, type?: ModalType) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = ConfirmModal;
-        
         var modalType = type ? type : "warning"; //set default type to warning if not defined
-        
-        //inject the modal content in the modal Component
         var modalContent = new ConfirmModalContent(title, message, modalType);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ConfirmModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -84,24 +69,16 @@ export class ModalServices {
      * Available values: info (default), error, warning
      */
     alert(title: string, message: string, type?: ModalType) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = AlertModal;
-        
         var modalType = type ? type : "info"; //set default type to info if not defined
-        
-        //inject the modal content in the modal Component
         var modalContent = new AlertModalContent(title, message, modalType);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>AlertModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -112,22 +89,15 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing the selected option
      */
     select(title: string, message: string, options: Array<string>) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = SelectionModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new SelectionModalContent(title, message, options);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>SelectionModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -138,22 +108,15 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
     selectResource(title: string, message: string, resourceList: Array<ARTURIResource>) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = ResourceSelectionModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new ResourceSelectionModalContent(title, message, resourceList);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (small dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ResourceSelectionModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -162,22 +125,15 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing an object with name, label and lang
      */
     newResource(title: string) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = NewResourceModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new NewResourceModalContent(title);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>NewResourceModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -190,22 +146,15 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing an object with value and lang
      */
     newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = NewPlainLiteralModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new NewPlainLiteralModalContent(title, value, valueReadonly, lang, langReadonly);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>NewPlainLiteralModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -215,22 +164,15 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing an object with value and datatype
      */
     newTypedLiteral(title: string, allowedDatatypes?: string[]) {
-        let dialog: Promise<ModalDialogInstance>;
-        let component = NewTypedLiteralModal;
-        
-        //inject the modal content in the modal Component
         var modalContent = new NewTypedLiteralModalContent(title, allowedDatatypes);
-        let bindings = Injector.resolve([provide(ICustomModal, {useValue: modalContent})]);
-        
-        //set the modal configuration (medium dimension, blocking and without key to dismiss)
-        var modConf = new ModalConfig("md", true, null);
-        
-        dialog = this.modal.open(<any>component, bindings, modConf);
-        return dialog.then(
-            resultPromise => {
-                return resultPromise.result;
-            }
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>NewTypedLiteralModal,
+                resolvedBindings,
+                new ModalConfig('md', true, null)
         );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

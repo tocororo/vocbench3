@@ -80,7 +80,8 @@ export class ClassAxiomPartitionPartitionRenderer {
                         err => {}
                     );
                 }
-            }
+            },
+            () => {}
         );
     }
     
