@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+    
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td><label>Prefix:</label></td>
+                <td>
+                    <input id="toFocus" type="text" class="form-control input-sm" [(ngModel)]="prefix">
+                </td>
+            </tr>
+            <tr>
+                <td><label>Namespace:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="namespace" [disabled]="context.namespaceReadonly">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button *ngIf="!context.hideNo" class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

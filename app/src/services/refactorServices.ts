@@ -33,5 +33,22 @@ export class RefactorServices {
             }
         );
     }
+    
+    /**
+     * Replaces the baseURI with a new one
+     * @param targetBaseURI
+     * @param sourceBaseURI the baseURI to replace.
+     * If not provided the service replace the default baseURI of the repository
+     */
+    replaceBaseURI(targetBaseURI: string, sourceBaseURI?: string) {
+        console.log("[RefactorServices] replaceBaseURI");
+        var params: any = {
+            targetBaseURI : targetBaseURI
+        }
+        if (sourceBaseURI != undefined) {
+            params.sourceBaseURI = sourceBaseURI;
+        }
+        return this.httpMgr.doGet(this.serviceName, "replaceBaseURI", params, this.oldTypeService)
+    }
 
 }

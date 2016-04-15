@@ -3,25 +3,22 @@ import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 
 export class PromptModalContent {
-    public title: string = "Modal Title";
-    public label: string;
-    public hideNo: boolean = false;
-    public inputOptional: boolean = false;
-    public inputSanitized: boolean = false;
     /**
      * @param title modal title
      * @param label label of the input field
+     * @param value the default value to show in input field
      * @param hideNo tells if the no button should be hide
      * @param inputOptional tells if the input field is optional or mandatory
      * @param inputSanitized tells if the input field should be sanitized
      */
-    constructor(title: string, label: string, hideNo: boolean, inputOptional: boolean, inputSanitized: boolean) {
-        this.title = title;
-        this.label = label;
-        this.hideNo = hideNo;
-        this.inputOptional = inputOptional;
-        this.inputSanitized = inputSanitized;
-    }
+    constructor(
+        public title: string = "Modal Title",
+        public label: string,
+        public value: string,
+        public hideNo: boolean = false,
+        public inputOptional: boolean = false,
+        public inputSanitized: boolean = false
+    ) {}
 }
 
 @Component({
@@ -41,6 +38,7 @@ export class PromptModal implements ICustomModalComponent {
     constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
         this.dialog = dialog;
         this.context = <PromptModalContent>modelContentData;
+        this.inputTxt = this.context.value;
     }
     
     ngOnInit() {

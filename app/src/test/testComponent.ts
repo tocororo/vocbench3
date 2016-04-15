@@ -35,7 +35,7 @@ export class TestComponent {
     private promptLabel = "Field label";
     private promptSanitized = false;
     prompt() {
-        this.modalService.prompt(this.promptTitle, this.promptLabel, this.promptSanitized).then(
+        this.modalService.prompt(this.promptTitle, this.promptLabel, null, false, this.promptSanitized).then(
             result => {
                 this.promptResult = result;
             },

@@ -1,0 +1,90 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body" id="toFocus">
+    
+    <!--
+        This modal is used for add import from
+        - Web) field to show: baseURI, alernative URL, format
+        - Web to mirror) field to show: baseURI, mirror file, alernative URL, format
+        - Local file) field to show: baseURI, local file, mirror file
+        - Ontology mirror) field to show:
+        Based on the input parameter "context.importType" this modal shows/hides the proper fields
+    -->
+    
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr *ngIf="context.importType == 'fromWeb' || context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">
+                <td><label>BaseURI:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI">
+                </td>
+            </tr>
+            <tr *ngIf="context.importType == 'fromLocalFile'">
+                <td><label>Local file:</label></td>
+                <td>
+                    <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])"
+                        style="width: 100%; border: 1px solid #ccc; padding: 4px; border-radius: 3px; color: #555;">
+                </td>
+            </tr>
+            <tr *ngIf="context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">
+                <td nowrap><label>Mirror file name:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="mirrorFile">
+                </td>
+            </tr>
+            <tr *ngIf="context.importType == 'fromWeb' || context.importType == 'fromWebToMirror'">
+                <td nowrap>
+                    <div style="display: flex; align-items: center">
+                        <label>Alternative URL:</label>
+                        <input type="checkbox" style="margin-left: 3px;" [checked]="altURLCheck" (change)="altURLCheck=$event.target.checked">
+                    </div>
+                </td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="altURL" [disabled]="!altURLCheck">
+                </td>
+            </tr>
+            <tr *ngIf="context.importType == 'fromWeb' || context.importType == 'fromWebToMirror'">
+                <td nowrap>
+                    <div style="display: flex; align-items: center">
+                        <label>Force format:</label>
+                        <input type="checkbox" style="margin-left: 3px;" [checked]="forceFormatCheck" (change)="forceFormatCheck=$event.target.checked">
+                    </div>
+                </td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="rdfFormat" [disabled]="!forceFormatCheck">
+                        <option value="N3">N3</option>
+                        <option value="NQUADS">NQUADS</option>
+                        <option value="N-TRIPLES">N-TRIPLES</option>
+                        <option value="RDF/XML">RDF/XML</option>
+                        <option value="RDF/XML-ABBREV">RDF/XML-ABBREV</option>
+                        <option value="TRIG">TRIG</option>
+                        <option value="TRIX">TRIX</option>
+                        <option value="TRIX-EXT">TRIX-EXT</option>
+                        <option value="TURTLE">TURTLE</option>
+                    </select>
+                </td>
+            </tr>
+            <tr *ngIf="context.importType == 'fromOntologyMirror'">
+                <td><label>Namespace:</label></td>
+                <td>
+                    <select *ngIf="mirrorList" class="form-control input-sm" [(ngModel)]="selectedMirror">
+                        <option *ngFor="#m of mirrorList" [ngValue]="m">{{m.namespace}}</option>
+                    </select>
+                    <select *ngIf="!mirrorList" class="form-control input-sm" disabled>
+                        <option>No ontologies mirrored</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button *ngIf="!context.hideNo" class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

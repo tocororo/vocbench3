@@ -54,13 +54,13 @@ export class ProjectComponent implements OnInit {
     }
 
     private selectProject(project) {
-        this.selectedProject = project;
+        if (this.selectedProject == project) {
+            this.selectedProject = null;
+        } else {
+            this.selectedProject = project;
+        }
     }
 
-    private isSelected(project) {
-        return this.selectedProject == project;
-    }
-    
     /**
      * Redirects to the import project page
      */

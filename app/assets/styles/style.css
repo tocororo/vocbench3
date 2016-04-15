@@ -190,10 +190,12 @@ input[type="image"]:disabled  {
 	opacity: 0.5;
 }
 
-project-component .table tr:hover td {
+/* table which rows are colored when hovered */
+.table-hoverable tr:hover td { 
     background-color: #e5f3ff !important;
 }
-project-component .table tr.active td {
+/*project-component .table tr.active td {*/
+.table tr.active td {
     background-color: #cde8ff !important;
 }
 
@@ -227,6 +229,14 @@ project-component .table tr.active td {
 
 .subPanel-body {
 	padding: 4px;
+}
+
+.subPanel-footer {
+    padding: 4px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 input.ng-invalid.submitted {
@@ -322,4 +332,17 @@ input[type="radio"], input[type="checkbox"] {
     font-size: 10px;
     line-height: 1.5;
     border-radius: 3px;
+}
+.input-group-xs>.form-control,
+.input-group-xs>.input-group-addon,
+.input-group-xs>.input-group-btn>.btn {
+    height: 20px;
+    padding: 1px 5px;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/*if a element has (click) instead of href doesn't show pointer cursor. This css rule fixes it*/
+.dropdown-menu a:hover {
+    cursor: pointer
 }

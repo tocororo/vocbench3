@@ -43,7 +43,7 @@ export class PropertyTreePanelComponent {
     
     private createPropertyForType(type) {
         //currently uses prompt instead of newResource since addProperty service doesn't allow to provide a label
-        this.modalService.prompt("Create a new " + type, "Name", true).then(
+        this.modalService.prompt("Create a new " + type, "Name", null, false, true).then(
             result => {
                 this.propService.addProperty(result, type).subscribe(
                     stResp => { },
@@ -56,7 +56,7 @@ export class PropertyTreePanelComponent {
     
     private createSubProperty() {
         //currently uses prompt instead of newResource since addSubProperty service doesn't allow to provide a label
-        this.modalService.prompt("Create a subProperty", "Name", true).then(
+        this.modalService.prompt("Create a subProperty", "Name", null, false, true).then(
             result => {
                 this.propService.addSubProperty(result, this.selectedProperty).subscribe(
                     stResp => { },

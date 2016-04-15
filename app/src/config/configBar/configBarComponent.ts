@@ -32,7 +32,7 @@ export class ConfigBarComponent {
     
     private clearData() {
         this.modalService.confirm("Clear data", "This operation will erase all the data stored in the project." +
-                " Then you will be redirect to the home page. Are you sure to proceed?", "warning").then(
+                " Then you will be redirect to the projects page. Are you sure to proceed?", "warning").then(
             result => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.inOutService.clearData().subscribe(

@@ -28,9 +28,26 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a [routerLink]="['/ImportData']"><span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Import data</a></li>
-            <li><a [routerLink]="['/ExportData']"><span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data</a></li>
-            <li><a (click)="clearData()"><span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data</a></li>
+            <li>
+                <a [routerLink]="['/ImportData']">
+                    <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Import data
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/ExportData']">
+                    <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
+                </a>
+            </li>
+            <li>
+                <a (click)="clearData()">
+                    <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/Metadata']">
+                    <span class="glyphicon glyphicon-console" style="margin-right: 5px"></span>Metadata management
+                </a>
+            </li>
         </ul>
     </div>
     
