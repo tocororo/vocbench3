@@ -1,3 +1,11 @@
+<div *ngIf="schemeChangeable" style="padding: 3px; border-bottom: 1px solid #ddd">
+    <select class="form-control input-xs" 
+        [(ngModel)]="selectedScheme" (ngModelChange)="changeSelectedScheme($event)">
+        <option>---</option>
+        <option *ngFor="#s of schemeList" [ngValue]="s">{{s.getURI()}}</option>
+    </select>
+</div>
+
 <div class="scrollableContainer">
     <concept-tree-node *ngFor="#r of roots" [node]="r" [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree-node>
 </div>

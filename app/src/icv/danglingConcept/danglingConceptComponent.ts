@@ -38,10 +38,16 @@ export class DanglingConceptComponent {
         this.skosService.getAllSchemesList().subscribe(
             schemeList => {
                 this.schemeList = schemeList;
+                var currentScheme = this.vbCtx.getScheme();
+                for (var i = 0; i < this.schemeList.length; i++) {
+                    if (this.schemeList[i].getURI() == currentScheme.getURI()) {
+                        this.selectedScheme = this.schemeList[i];
+                        break;
+                    }
+                }
             },
             err => { }
         );
-        this.selectedScheme = this.vbCtx.getScheme();
     }
     
     /**
@@ -91,7 +97,7 @@ export class DanglingConceptComponent {
      * Fixes concept by selecting a broader concept
      */
     private selectBroader(concept: ARTURIResource) {
-        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme).then(
+        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, true).then(
             broader => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
@@ -108,7 +114,7 @@ export class DanglingConceptComponent {
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme).then(
+        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, true).then(
             broader => {
                 //TODO this fix requires a new service server side that takes a list of concept and sets for them a broader concept
                 alert("Fix not yet available, added " + broader.getShow() + " as broader for all dangling concept");

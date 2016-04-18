@@ -56,7 +56,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by selecting a top concept 
      */
     selectTopConcept(scheme: ARTURIResource) {
-        this.browsingService.browseConceptTree("Select a top concept", scheme).then(
+        this.browsingService.browseConceptTree("Select a top concept", scheme, true).then(
             concept => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
                     stResp => {

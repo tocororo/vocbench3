@@ -15,6 +15,7 @@ import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 })
 export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
+    @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
@@ -25,6 +26,10 @@ export class ConceptTreeComponent {
 
     public roots: ARTURIResource[];
     private selectedNode: ARTURIResource;
+    
+    private schemeList: Array<ARTURIResource>;
+    private selectedScheme: ARTURIResource; //keep track of the selected scheme 
+        //(useful expecially when schemeChangeable is true so changes don't effect the scheme in context)
 
     private eventSubscriptions = [];
 
@@ -39,13 +44,39 @@ export class ConceptTreeComponent {
             data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
     }
     
+    ngOnInit() {
+        this.selectedScheme = this.scheme;
+        if (this.schemeChangeable) {
+            this.skosService.getAllSchemesList().subscribe(
+                schemes => {
+                    this.schemeList = schemes;
+                    if (this.scheme != undefined) {
+                        // take selected scheme from the passed input scheme
+                        for (var i = 0; i < this.schemeList.length; i++) {
+                            if (this.schemeList[i].getURI() == this.scheme.getURI()) {
+                                this.selectedScheme = this.schemeList[i];
+                                console.log("selected scheme updated " + JSON.stringify(this.selectedScheme));
+                                break;
+                            }
+                        }
+                    }
+                }
+            );
+        }
+    }
+    
     /**
      * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
      * the view #blockDivTree is initialized
      */
     ngAfterViewInit() {
+        this.initTree();
+    }
+    
+    private initTree() {
+        console.log("init tree with scheme " + JSON.stringify(this.selectedScheme));
         this.blockDivElement.nativeElement.style.display = "block";
-        this.skosService.getTopConcepts(this.scheme).subscribe(
+        this.skosService.getTopConcepts(this.selectedScheme).subscribe(
             topConcepts => {
                 this.roots = topConcepts;
             },
@@ -59,7 +90,7 @@ export class ConceptTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.scheme).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.selectedScheme).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node
@@ -73,6 +104,20 @@ export class ConceptTreeComponent {
                 }
             }
         );
+    }
+    
+    /**
+     * Listener to <select> element that allows to change dynamically the scheme of the 
+     * concept tree (visible only if @Input schemeChangeable is true).
+     * Input object could be an ARTURIResource (a scheme) or a string ("---" for no-scheme mode)
+     */
+    private changeSelectedScheme(scheme: any) {
+        if (scheme instanceof ARTURIResource) {
+            this.selectedScheme = scheme;
+        } else { //selected <option> is "---", so no-scheme mode
+            this.selectedScheme = null;
+        }
+        this.initTree();
     }
     
     
@@ -112,7 +157,7 @@ export class ConceptTreeComponent {
     
     //data contains "concept" and "scheme"
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
+        if (this.selectedScheme != undefined && this.selectedScheme.getURI() == scheme.getURI()) {
             this.onConceptDeleted(concept);
         }
     }

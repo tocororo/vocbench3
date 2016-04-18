@@ -58,10 +58,11 @@ export class BrowsingServices {
      * Opens a modal to browse the concept tree
      * @param title the title of the modal
      * @param scheme the scheme of the concept tree. If not provided the modal contains a tree in no-scheme mode
+     * @param schemeChangeable if true a menu is shown and the user can browse not only the selected scheme
      * @return if the modal closes with ok returns a promise containing the selected concept
      */
-    browseConceptTree(title: string, scheme?: ARTURIResource) {
-        var modalContent = new ConceptTreeModalContent(title, scheme);
+    browseConceptTree(title: string, scheme?: ARTURIResource, schemeChangeable?: boolean) {
+        var modalContent = new ConceptTreeModalContent(title, scheme, schemeChangeable);
         let resolvedBindings = Injector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(

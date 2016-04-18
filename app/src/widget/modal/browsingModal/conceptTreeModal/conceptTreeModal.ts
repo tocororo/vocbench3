@@ -4,7 +4,15 @@ import {ARTURIResource} from '../../../../utils/ARTResources';
 import {ConceptTreeComponent} from '../../../../skos/concept/conceptTree/conceptTreeComponent';
 
 export class ConceptTreeModalContent {
-    constructor(public title: string = 'Modal Title', public scheme: ARTURIResource) {}
+    /**
+     * @param title the title of the modal
+     * @param scheme the scheme of the concept tree. If not provided the modal contains a tree in no-scheme mode
+     * @param schemeChangeable if true a menu is shown and the user can browse not only the selected scheme
+     */
+    constructor(
+        public title: string = 'Modal Title',
+        public scheme: ARTURIResource,
+        public schemeChangeable: boolean = false) {}
 }
 
 @Component({

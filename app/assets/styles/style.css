@@ -114,6 +114,7 @@ concept-tree, class-tree, property-tree, resource-view, instance-list, scheme-li
     display: flex;
     flex: 1;
     min-height: 0;
+    flex-flow: column;
 }
 
 concept-tree, class-tree, property-tree, instance-list, scheme-list {

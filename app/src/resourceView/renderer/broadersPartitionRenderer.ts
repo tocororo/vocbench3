@@ -27,7 +27,7 @@ export class BroadersPartitionRenderer {
     
     //add a broader
     private add() {
-        this.browsingService.browseConceptTree("Select a broader concept", this.vbCtx.getScheme()).then(
+        this.browsingService.browseConceptTree("Select a broader concept", this.vbCtx.getScheme(), true).then(
             selectedConcept => {
                 this.skosService.addBroaderConcept(this.resource, selectedConcept).subscribe(
                     stResp => this.update.emit(null) 
