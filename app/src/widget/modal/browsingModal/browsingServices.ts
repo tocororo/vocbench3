@@ -31,7 +31,7 @@ export class BrowsingServices {
             dialog = this.modal.open(
                 <any>ClassTreeModal,
                 resolvedBindings,
-                new ModalConfig('md', true, null)
+                new ModalConfig(null, true, null, "modal-dialog")
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -49,7 +49,7 @@ export class BrowsingServices {
             dialog = this.modal.open(
                 <any>InstanceListModal,
                 resolvedBindings,
-                new ModalConfig('md', true, null)
+                new ModalConfig(null, true, null, "modal-dialog")
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -67,7 +67,7 @@ export class BrowsingServices {
             dialog = this.modal.open(
                 <any>ConceptTreeModal,
                 resolvedBindings,
-                new ModalConfig('md', true, null)
+                new ModalConfig(null, true, null, "modal-dialog")
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -84,7 +84,7 @@ export class BrowsingServices {
             dialog = this.modal.open(
                 <any>SchemeListModal,
                 resolvedBindings,
-                new ModalConfig('md', true, null)
+                new ModalConfig(null, true, null, "modal-dialog")
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -103,7 +103,7 @@ export class BrowsingServices {
             dialog = this.modal.open(
                 <any>PropertyTreeModal,
                 resolvedBindings,
-                new ModalConfig('md', true, null)
+                new ModalConfig(null, true, null, "modal-dialog")
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
