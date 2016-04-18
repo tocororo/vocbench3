@@ -1,6 +1,7 @@
 import {Component} from "angular2/core";
 import {Router, RouterLink} from "angular2/router";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {Project} from "../../utils/Project";
 import {InputOutputServices} from "../../services/inputOutputServices";
 import {ProjectServices} from "../../services/projectServices";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -13,6 +14,8 @@ import {ModalServices} from "../../widget/modal/modalServices";
 })
 export class ConfigBarComponent {
     
+    private currentProject: Project;
+    
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, 
         private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {}
     
@@ -20,6 +23,7 @@ export class ConfigBarComponent {
      * returns true if a project is open. Useful to enable/disable navbar links
      */ 
     private isProjectOpen(): boolean {
+        this.currentProject = this.vbCtx.getProject();
         return this.vbCtx.getProject() != undefined;
     }
     

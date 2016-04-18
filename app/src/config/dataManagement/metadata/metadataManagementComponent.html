@@ -9,10 +9,7 @@
             
             <div class="subPanel">
                 <div class="subPanel-heading">
-                    <label style="flex: 1">Repository settings (TODO):</label>
-                    <button class="btn btn-sm btn-default" title="Replace baseURI" (click)="replaceBaseURI()">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
+                    <label style="flex: 1">Refactor:</label>
                 </div>
                 <div class="subPanel-body">
                     <table class="table table-condensed table-borderless">
@@ -50,7 +47,7 @@
                 <div class="subPanel-footer">
                     <button class="btn btn-default btn-sm pull-right" title="Apply namespace baseURI changes" 
                         (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged()">
-                        <span class="glyphicon glyphicon-ok"></span>
+                        <span class="glyphicon glyphicon-ok" [ngClass]="{greenText : areNamespaceBaseURIChanged()}"></span>
                     </button>
                     <span class="clearfix"></span>
                 </div>

@@ -23,6 +23,7 @@
     
     <!--Configuration of project data, not available when there is no project open-->
     <div *ngIf="isUserLogged() && isProjectOpen()" class="dropdown pull-right">
+        <span style="margin-right: 5px;">Current project: <strong>{{currentProject.getName()}}</strong></span>
         <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
             Global Data Management
             <span class="caret"></span>

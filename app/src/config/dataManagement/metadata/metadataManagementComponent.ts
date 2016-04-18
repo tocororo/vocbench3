@@ -13,7 +13,7 @@ import {ImportOntologyModal, ImportOntologyModalContent, ImportType} from "./imp
 	templateUrl: "app/src/config/dataManagement/metadata/metadataManagementComponent.html",
     providers: [MetadataServices, RefactorServices],
     host: { class : "pageComponent" },
-    styles: [ ".greyText { color: #999 }" ] //to grey the non-explicit mappings
+    styles: [ ".greyText { color: #999 } .greenText { color: green }" ] //to grey the non-explicit mappings
 })
 export class MetadataManagementComponent {
     
@@ -45,23 +45,43 @@ export class MetadataManagementComponent {
     }
     
     ngOnInit() {
+        this.refreshBaseURI();
+        this.refreshDefaultNamespace();
+        this.refreshImports();
+        this.refreshNSPrefixMappings();
+    }
+    
+    //inits or refreshes baseURI
+    private refreshBaseURI() {
         this.metadataService.getBaseuri().subscribe(
             baseURI => {
                 this.pristineBaseURI = baseURI;
                 this.baseURI = baseURI;
             }
         );
+    }
+    
+    //inits or refreshes default namespace
+    private refreshDefaultNamespace() {
         this.metadataService.getDefaultNamespace().subscribe(
             ns => {
                 this.pristineNamespace = ns;
                 this.namespace = ns;
             }
         );
+    }
+    
+    //inits or refreshes imports
+    private refreshImports() {
         this.metadataService.getImports().subscribe(
             importedOntologies => {
                 this.importList = importedOntologies;
             }
         );
+    }
+    
+    //inits or refreshes namespace prefix mappings
+    private refreshNSPrefixMappings() {
         this.metadataService.getNSPrefixMappings().subscribe(
             mappings => {
                 this.nsPrefMappingList = mappings;
@@ -130,43 +150,34 @@ export class MetadataManagementComponent {
     private applyNamespaceBaseURI() {
         this.nsBaseURISubmitted = true;
         if (this.isBaseURIValid() && this.isNamespaceValid()) {
-            document.getElementById("blockDivFullScreen").style.display = "block";
-            this.refactorService.replaceBaseURI(this.baseURI).subscribe(
-                stResp => {
-                    this.metadataService.setDefaultNamespace(this.namespace).subscribe(
-                        stResp => {
-                            document.getElementById("blockDivFullScreen").style.display = "none";
-                            this.modalService.alert("Refactor", "BaseURI and namespace have been updated successfully");
-                        },
-                        () => document.getElementById("blockDivFullScreen").style.display = "none"
-                    );
+            this.modalService.confirm("Refactor", 
+                "Attention, this refactoring operation could be a long process. Are you sure to proceed?", "warning").then(
+                confirm => {
+                    document.getElementById("blockDivFullScreen").style.display = "block";
+                        this.refactorService.replaceBaseURI(this.baseURI).subscribe(
+                            stResp => {
+                                this.metadataService.setDefaultNamespace(this.namespace).subscribe(
+                                    stResp => {
+                                        document.getElementById("blockDivFullScreen").style.display = "none";
+                                        this.modalService.alert("Refactor", "BaseURI and namespace have been updated successfully");
+                                        //refreshes baseURI and namespace
+                                        this.refreshBaseURI();
+                                        this.refreshDefaultNamespace();
+                                    },
+                                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                                );
+                            }
+                        )
+                },
+                () => {
+                    //restore baseURI and namespace
+                    this.baseURI = this.pristineBaseURI;
+                    this.namespace = this.pristineNamespace;
                 }
-            )
+            );
         } else {
             this.modalService.alert("Error", "Please insert valid namespace and baseURI", "error");
         }
-    }
-    
-    /**
-     * Replaces the baseURI
-     */
-    private replaceBaseURI() {
-        console.log("open modal to modify baseURI");
-        this.modalService.prompt("Replace baseURI", "New baseURI", this.pristineBaseURI, false, true).then(
-            newBaseURI => {
-                if (!this.isBaseURIValid()) {
-                    this.modalService.alert("Error", "The inserted baseURI is not valid", "error");
-                } else {
-                    if (this.baseURI == this.pristineBaseURI) {
-                        this.modalService.alert("Replace baseURI", "The inserted baseURI is equal to the current baseURI", "warning");
-                    } else {
-                        //service
-                        this.refactorService.replaceBaseURI(newBaseURI);
-                    }
-                }
-            },
-            () => {}
-        );
     }
     
     //======= PREFIX NAMESPACE MAPPINGS MANAGEMENT =======
@@ -266,26 +277,15 @@ export class MetadataManagementComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     private importFromWeb() {
-        // this.metadataService.addFromWeb()
         this.openImportModal("Import from web", ImportType.fromWeb).then(
             data => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromWeb(data.baseURI, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        //Updates the imports
-                        this.metadataService.getImports().subscribe(
-                            imports => {
-                                this.importList = imports;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
-                        //updates the namespace prefix mapping
-                        this.metadataService.getNSPrefixMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        //Refreshes the imports and the namespace prefix mapping
+                        this.refreshImports();
+                        this.refreshNSPrefixMappings();
                     },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
@@ -304,20 +304,10 @@ export class MetadataManagementComponent {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        //Updates the imports
-                        this.metadataService.getImports().subscribe(
-                            imports => {
-                                this.importList = imports;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
-                        //updates the namespace prefix mapping
-                        this.metadataService.getNSPrefixMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        //Refreshes the imports and the namespace prefix mapping
+                        this.refreshImports();
+                        this.refreshNSPrefixMappings();
                     },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
@@ -336,20 +326,10 @@ export class MetadataManagementComponent {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile).subscribe(
                     stResp => {
-                        //Updates the imports
-                        this.metadataService.getImports().subscribe(
-                            imports => {
-                                this.importList = imports;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
-                        //updates the namespace prefix mapping
-                        this.metadataService.getNSPrefixMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        //Refreshes the imports and the namespace prefix mapping
+                        this.refreshImports();
+                        this.refreshNSPrefixMappings();
                     },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
@@ -368,20 +348,10 @@ export class MetadataManagementComponent {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromOntologyMirror(mirror.namespace, mirror.file).subscribe(
                     stResp => {
-                        //Updates the imports
-                        this.metadataService.getImports().subscribe(
-                            imports => {
-                                this.importList = imports;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
-                        //updates the namespace prefix mapping
-                        this.metadataService.getNSPrefixMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                                document.getElementById("blockDivFullScreen").style.display = "none";
-                            }
-                        )
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        //Refreshes the imports and the namespace prefix mapping
+                        this.refreshImports();
+                        this.refreshNSPrefixMappings();
                     },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
@@ -398,18 +368,9 @@ export class MetadataManagementComponent {
             mirrorFileName => {
                 this.metadataService.mirrorOntology(importedOntology.uri, mirrorFileName).subscribe(
                     stResp => {
-                        //updates the imports (a WEB imported ontology changed to LOCAL)
-                        this.metadataService.getImports().subscribe(
-                            imports => {
-                                this.importList = imports;
-                            }
-                        )
-                        //updates the namespace prefix mapping
-                        this.metadataService.getNSPrefixMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                            }
-                        )
+                        //Refreshes the imports and the namespace prefix mapping
+                        this.refreshImports();
+                        this.refreshNSPrefixMappings();
                     }
                 );
             }
@@ -422,16 +383,9 @@ export class MetadataManagementComponent {
     private removeImport(importedOntology) {
         this.metadataService.removeImport(importedOntology.uri).subscribe(
             stResp => {
-                this.metadataService.getImports().subscribe(
-                    imports => {
-                        this.importList = imports;
-                    }
-                )
-                this.metadataService.getNSPrefixMappings().subscribe(
-                    mappings => {
-                        this.nsPrefMappingList = mappings;
-                    }
-                )
+                //Refreshes the imports and the namespace prefix mapping
+                this.refreshImports();
+                this.refreshNSPrefixMappings();
             }
         );
     }
