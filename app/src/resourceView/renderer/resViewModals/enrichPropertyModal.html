@@ -10,8 +10,12 @@
         </div>
         <div class="hbox">
             <class-tree [roots]="treeRoots" (itemSelected)="onTreeClassSelected($event)"></class-tree>
-            <instance-list [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)" style="margin-left: 4px;">
-            </instance-list>
+            <instance-list *ngIf="!isRangeConcept()" style="margin-left: 4px;"
+                [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)"></instance-list>
+            <concept-tree *ngIf="isRangeConcept()" style="margin-left: 4px;" 
+                (itemSelected)="onInstanceSelected($event)" [schemeChangeable]="true"
+                [scheme]="currentScheme" (schemeChanged)="onConceptTreeSchemeChange($event)">
+            </concept-tree>
         </div>
     </div>
 </div>

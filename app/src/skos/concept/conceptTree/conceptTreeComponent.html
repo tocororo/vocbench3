@@ -1,6 +1,6 @@
 <div *ngIf="schemeChangeable" style="padding: 3px; border-bottom: 1px solid #ddd; display: flex; align-items: center">
     <span style="white-space: nowrap; margin: 0px 3px;">Concept Scheme:</span>
-    <select class="form-control input-xs" [(ngModel)]="selectedSchemeUri" (ngModelChange)="onSelectedSchemeChange()">
+    <select class="form-control input-xs" [(ngModel)]="selectedSchemeUri" (ngModelChange)="onSchemeChange()">
         <option value="---">no-scheme</option>
         <option *ngFor="#s of schemeList" [value]="s.getURI()">{{s.getURI()}}</option>
     </select>

@@ -24,6 +24,8 @@ export class InstanceListComponent {
         cls: null //class of the searched instance
     }
     
+    private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
+    
     private instanceList: ARTURIResource[];
     private selectedInstance: ARTURIResource;
     
@@ -40,29 +42,41 @@ export class InstanceListComponent {
     
     ngOnChanges(changes) {
         this.selectedInstance = null;
-        if (changes.cls.currentValue) {
-            this.blockDivElement.nativeElement.style.display = "block";
-            this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
-                instances => {
-                    this.instanceList = instances;
-                    //if there is some pending instance search and the searched instance is of the same type of the current class
-                    if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
-                        for (var i = 0; i < this.instanceList.length; i++) { //look for the searched instance
-                            if (this.instanceList[i].getURI() == this.pendingSearch.instance.getURI()) {
-                                //select the instance and reset the pending search
-                                this.selectInstance(this.instanceList[i]);
-                                this.pendingSearch.pending = false;
-                                this.pendingSearch.cls = null;
-                                this.pendingSearch.instance = null;
-                                break;
-                            }
+        //viewInitialized needed to avoid to initialize list before view is initialized
+        if (changes.cls.currentValue && this.viewInitialized) {
+            this.initList();
+        }
+    }
+    
+    ngAfterViewInit() {
+        this.viewInitialized = true;
+        if (this.cls != undefined) {
+            this.initList();
+        }
+    }
+    
+    initList() {
+        this.blockDivElement.nativeElement.style.display = "block";
+        this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
+            instances => {
+                this.instanceList = instances;
+                //if there is some pending instance search and the searched instance is of the same type of the current class
+                if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
+                    for (var i = 0; i < this.instanceList.length; i++) { //look for the searched instance
+                        if (this.instanceList[i].getURI() == this.pendingSearch.instance.getURI()) {
+                            //select the instance and reset the pending search
+                            this.selectInstance(this.instanceList[i]);
+                            this.pendingSearch.pending = false;
+                            this.pendingSearch.cls = null;
+                            this.pendingSearch.instance = null;
+                            break;
                         }
                     }
-                },
-                err => { },
-                () => this.blockDivElement.nativeElement.style.display = "none"
-            );
-        }
+                }
+            },
+            err => { },
+            () => this.blockDivElement.nativeElement.style.display = "none"
+        );
     }
     
     ngOnDestroy() {

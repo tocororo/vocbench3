@@ -18,6 +18,7 @@ export class ConceptTreeComponent {
     @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();
+    @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
     
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
@@ -108,9 +109,10 @@ export class ConceptTreeComponent {
      * Listener to <select> element that allows to change dynamically the scheme of the 
      * concept tree (visible only if @Input schemeChangeable is true).
      */
-    private onSelectedSchemeChange() {
+    private onSchemeChange() {
         this.workingScheme = this.getSchemeResourceFromUri(this.selectedSchemeUri);
         this.initTree();
+        this.schemeChanged.emit(this.workingScheme);
     }
     
     /**
