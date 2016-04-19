@@ -84,11 +84,17 @@ export class SchemeListPanelComponent {
     
     //this is not Angular-way, is a workaround, radio button is not still fully supported, check it again in the future
     private activateScheme(selSchemeUri) {
-        for (var i = 0; i < this.schemeList.length; i++) {
-            if (this.schemeList[i].getURI() == selSchemeUri) {
-                this.activeScheme = this.schemeList[i];
-                this.vbCtx.setScheme(this.activeScheme);
-                break;
+        //if the scheme that is trying to activate it was already active, pass to no-scheme mode
+        if (this.activeScheme != undefined && this.activeScheme.getURI() == selSchemeUri) {
+            this.activeScheme = null;
+            this.vbCtx.removeScheme();
+        } else {
+            for (var i = 0; i < this.schemeList.length; i++) {
+                if (this.schemeList[i].getURI() == selSchemeUri) {
+                    this.activeScheme = this.schemeList[i];
+                    this.vbCtx.setScheme(this.activeScheme);
+                    break;
+                }
             }
         }
     }

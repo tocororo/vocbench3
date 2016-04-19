@@ -19,7 +19,9 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <concept-tree [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree>
+        <concept-tree [scheme]="scheme" (itemSelected)="onNodeSelected($event)" 
+            (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
+        </concept-tree>
     </div>
     
     <!-- Search -->

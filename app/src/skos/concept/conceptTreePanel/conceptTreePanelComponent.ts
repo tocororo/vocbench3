@@ -105,4 +105,10 @@ export class ConceptTreePanelComponent {
         this.itemSelected.emit(node);
     }
     
+    //when a concept is removed from a scheme, it should be still visible in res view,
+    //but no more selected in the tree if it was in the current scheme 
+    private onConceptRemovedFromScheme(concept: ARTURIResource) {
+        this.selectedConcept = null;
+    }
+    
 }

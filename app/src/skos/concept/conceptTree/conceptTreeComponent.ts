@@ -17,6 +17,7 @@ export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
     @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();
     
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
@@ -28,8 +29,10 @@ export class ConceptTreeComponent {
     private selectedNode: ARTURIResource;
     
     private schemeList: Array<ARTURIResource>;
-    private selectedScheme: ARTURIResource; //keep track of the selected scheme 
-        //(useful expecially when schemeChangeable is true so changes don't effect the scheme in context)
+    private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
+        //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
+    private workingScheme: ARTURIResource;//keep track of the selected scheme 
+        //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     private eventSubscriptions = [];
 
@@ -45,20 +48,16 @@ export class ConceptTreeComponent {
     }
     
     ngOnInit() {
-        this.selectedScheme = this.scheme;
+        this.workingScheme = this.scheme;
+        //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
             this.skosService.getAllSchemesList().subscribe(
                 schemes => {
                     this.schemeList = schemes;
                     if (this.scheme != undefined) {
-                        // take selected scheme from the passed input scheme
-                        for (var i = 0; i < this.schemeList.length; i++) {
-                            if (this.schemeList[i].getURI() == this.scheme.getURI()) {
-                                this.selectedScheme = this.schemeList[i];
-                                console.log("selected scheme updated " + JSON.stringify(this.selectedScheme));
-                                break;
-                            }
-                        }
+                        this.selectedSchemeUri = this.scheme.getURI();
+                    } else {
+                        this.selectedSchemeUri = "---";
                     }
                 }
             );
@@ -74,14 +73,13 @@ export class ConceptTreeComponent {
     }
     
     private initTree() {
-        console.log("init tree with scheme " + JSON.stringify(this.selectedScheme));
         this.blockDivElement.nativeElement.style.display = "block";
-        this.skosService.getTopConcepts(this.selectedScheme).subscribe(
+        this.skosService.getTopConcepts(this.workingScheme).subscribe(
             topConcepts => {
                 this.roots = topConcepts;
+                this.blockDivElement.nativeElement.style.display = "none";
             },
-            err => { },
-            () => this.blockDivElement.nativeElement.style.display = "none"
+            err => { this.blockDivElement.nativeElement.style.display = "none"; }
         );
     }
     
@@ -90,7 +88,7 @@ export class ConceptTreeComponent {
     }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.selectedScheme).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.workingScheme).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node
@@ -109,15 +107,23 @@ export class ConceptTreeComponent {
     /**
      * Listener to <select> element that allows to change dynamically the scheme of the 
      * concept tree (visible only if @Input schemeChangeable is true).
-     * Input object could be an ARTURIResource (a scheme) or a string ("---" for no-scheme mode)
      */
-    private changeSelectedScheme(scheme: any) {
-        if (scheme instanceof ARTURIResource) {
-            this.selectedScheme = scheme;
-        } else { //selected <option> is "---", so no-scheme mode
-            this.selectedScheme = null;
-        }
+    private onSelectedSchemeChange() {
+        this.workingScheme = this.getSchemeResourceFromUri(this.selectedSchemeUri);
         this.initTree();
+    }
+    
+    /**
+     * Retrieves the ARTURIResource of a scheme URI from the available scheme. Returns null
+     * if the URI doesn't represent a scheme in the list.
+     */
+    private getSchemeResourceFromUri(schemeUri: string): ARTURIResource {
+        for (var i = 0; i < this.schemeList.length; i++) {
+            if (this.schemeList[i].getURI() == schemeUri) {
+                return this.schemeList[i];
+            }
+        }
+        return null; //schemeUri was probably "---", so for no-scheme mode return a null object
     }
     
     
@@ -136,7 +142,13 @@ export class ConceptTreeComponent {
     }
 
     private onTopConceptCreated(concept: ARTURIResource, scheme: ARTURIResource) {
-        if (this.scheme == undefined) {//in no-scheme mode add always to the roots
+        if (this.scheme == undefined) {//in no-scheme mode add to the root if doesn't already in
+            for (var i = 0; i < this.roots.length; i++) {
+                if (this.roots[i].getURI() == concept.getURI()) {
+                    return; //concept set as top concept already in roots => do not add
+                    //this could happen in no-scheme mode when a concept not in scheme is set as topConcept of a scheme
+                }
+            }
             this.roots.push(concept);
         } else if (this.scheme.getURI() == scheme.getURI()) {//otherwise add it only if it's been created in the current scheme 
             this.roots.push(concept);       
@@ -157,8 +169,14 @@ export class ConceptTreeComponent {
     
     //data contains "concept" and "scheme"
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        if (this.selectedScheme != undefined && this.selectedScheme.getURI() == scheme.getURI()) {
-            this.onConceptDeleted(concept);
+        if (this.workingScheme != undefined && this.workingScheme.getURI() == scheme.getURI()) {
+            for (var i = 0; i < this.roots.length; i++) {
+                if (this.roots[i].getURI() == concept.getURI()) {
+                    this.roots.splice(i, 1);
+                    this.conceptRemovedFromScheme.emit(concept);
+                    break;
+                }
+            }
         }
     }
 

@@ -98,7 +98,6 @@ export class CreateProjectComponent {
      * Opens a modal to configure ontology manager triple store
      */
     private configureOntoMgr() {
-        console.log("selected onto mgr config " + JSON.stringify(this.selectedOntoMgrConfig));
         this.openConfigurationModal(this.selectedOntoMgrConfig);
     }
     

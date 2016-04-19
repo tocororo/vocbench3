@@ -235,7 +235,6 @@ export class MetadataManagementComponent {
     private changeMapping() {
         this.openMappingModal("Change prefix namespace mapping", this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
             mapping => {
-                console.log("prefix " + mapping.prefix + " namespace " + mapping.namespace);
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
                         this.metadataService.getNSPrefixMappings().subscribe(
