@@ -1,11 +1,15 @@
-import {Component, Input} from "angular2/core";
+import {Component, Input, Injector, provide} from "angular2/core";
 import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
+import {RDFTypesEnum} from "../utils/Enums";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../widget/modal/modalServices";
 import {ResourceViewServices} from "../services/resourceViewServices";
 import {RefactorServices} from "../services/refactorServices";
+import {AlignmentServices} from "../services/alignmentServices";
+import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
+import {ResourceAlignmentModal, ResourceAlignmentModalContent} from "../alignment/resourceAlignment/resourceAlignmentModal"
 
 import {TypesPartitionRenderer} from "./renderer/typesPartitionRenderer";
 import {TopConceptsPartitionRenderer} from "./renderer/topConceptsPartitionRenderer";
@@ -26,7 +30,7 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
         BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
         SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
         RangesPartitionRenderer, PropertyFacetsPartitionRenderer, SanitizerDirective],
-    providers: [ResourceViewServices, RefactorServices],
+    providers: [ResourceViewServices, RefactorServices, AlignmentServices],
 })
 export class ResourceViewComponent {
     
@@ -48,8 +52,8 @@ export class ResourceViewComponent {
     private propertyFacets: any[];
     private inverseofColl: ARTURIResource[];
     
-	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices, 
-        private modalService: ModalServices) {
+	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices,
+        private alignServices: AlignmentServices, private modalService: ModalServices, private modal: Modal) {
     }
     
     ngOnChanges(changes) {
@@ -133,7 +137,7 @@ export class ResourceViewComponent {
                     value: (facetsChildren[i].getAttribute("value") == "true")
                 };
                 //replace the default facets
-                for (var j=0; j<this.propertyFacets.length; j++) {
+                for (var j = 0; j < this.propertyFacets.length; j++) {
                     if (this.propertyFacets[j].name == facetName) {
                         this.propertyFacets[j] = facet;
                         break;
@@ -183,6 +187,34 @@ export class ResourceViewComponent {
                 err => { }
             );    
         }
+    }
+    
+    private alignResource() {
+        this.openAlignmentModal().then(
+            data => {
+                this.alignServices.addAlignment(this.resource, data.property, data.object).subscribe(
+                    stResp => { this.buildResourceView(this.resource); }
+                );
+            },
+            () => {}
+        );
+    }
+    
+    /**
+     * Opens a modal to create an alignment.
+     * @return an object containing "property" and "object", namely the mapping property and the 
+     * aligned object
+     */
+    private openAlignmentModal() {
+        var modalContent = new ResourceAlignmentModalContent(this.resource);
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ResourceAlignmentModal,
+                resolvedBindings,
+                new ModalConfig(null, true, null, "modal-dialog")
+        );
+        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

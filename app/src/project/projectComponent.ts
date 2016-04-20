@@ -32,7 +32,7 @@ export class ProjectComponent implements OnInit {
             projectList => {
                 this.projectList = projectList;
                 //Init closing potential multiple open projects. If just one, connect to it.
-                var ctxProject = this.vbCtx.getProject();
+                var ctxProject = this.vbCtx.getWorkingProject();
                 var openProjectList: Project[] = [];
                 if (ctxProject == undefined) { //no project in context (first start or all projects are closed)
                     for (var i = 0; i < this.projectList.length; i++) { //collect projects remained open (in case of first start)
@@ -119,7 +119,7 @@ export class ProjectComponent implements OnInit {
     }
 
     private openProject(project: Project) {
-        var ctxProject = this.vbCtx.getProject();
+        var ctxProject = this.vbCtx.getWorkingProject();
         if (ctxProject != undefined) { //a project is already open
             //first disconnect from old project
             this.saveAndCloseProject(ctxProject).subscribe(
@@ -191,7 +191,7 @@ export class ProjectComponent implements OnInit {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.accessProject(project).subscribe(
             stResp => {
-                this.vbCtx.setProject(project);
+                this.vbCtx.setWorkingProject(project);
                 project.setOpen(true);
                 document.getElementById("blockDivFullScreen").style.display = "none";
             },
@@ -208,7 +208,7 @@ export class ProjectComponent implements OnInit {
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.projectService.disconnectFromProject(project).subscribe(
                 stResp => {
-                    this.vbCtx.setProject(undefined);
+                    this.vbCtx.setWorkingProject(undefined);
                     this.vbCtx.removeScheme();
                     //here I need to get the project to close from projectList because, in some scenarios,
                     //the project passed as parameter is taken from the context and it is a different object

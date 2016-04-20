@@ -14,7 +14,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+    z-index: 2000;
     text-align: center;
     color: black;
     font-size: 13px;
@@ -346,4 +346,23 @@ input[type="radio"], input[type="checkbox"] {
 /*if a element has (click) instead of href doesn't show pointer cursor. This css rule fixes it*/
 .dropdown-menu a:hover {
     cursor: pointer
+}
+
+/* To center vertically the modals. Note: this solution is not well tested. 
+If modals  show layout problems try to remove it.*/
+.modal {
+  text-align: center;
+}
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }

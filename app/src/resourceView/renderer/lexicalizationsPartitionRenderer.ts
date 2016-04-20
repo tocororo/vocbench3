@@ -141,7 +141,7 @@ export class LexicalizationsPartitionRenderer {
      * If the property is rdfs:label, returns true if the project is OWL
      */
     private isPropOntoTypeCompliant(property: ARTURIResource) {
-        var ontoType = this.vbCtx.getProject().getPrettyPrintOntoType();
+        var ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
         return (
             this.showAllLexicalProp ||
             (

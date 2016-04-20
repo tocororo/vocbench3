@@ -89,21 +89,21 @@ export class App {
      * returns true if a project is open. Useful to enable/disable navbar links
      */ 
     private isProjectOpen(): boolean {
-        return this.vbCtx.getProject() != undefined;
+        return this.vbCtx.getWorkingProject() != undefined;
     }
     
     /**
      * returns true if a project is SKOS or SKOS-XL. Useful to show/hide navbar links available only in SKOS (ex. concept, scheme)
      */
     private isProjectSKOS(): boolean {
-        return (this.vbCtx.getProject().getPrettyPrintOntoType().indexOf("SKOS") > -1);
+        return (this.vbCtx.getWorkingProject().getPrettyPrintOntoType().indexOf("SKOS") > -1);
     }
     
     /**
      * returns true if a project is OWL. Useful to show/hide navbar links available only in OWL (ex. class)
      */
     private isProjectOWL(): boolean {
-        return (this.vbCtx.getProject().getPrettyPrintOntoType() == "OWL");
+        return (this.vbCtx.getWorkingProject().getPrettyPrintOntoType() == "OWL");
     }
     
 }

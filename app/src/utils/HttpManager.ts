@@ -4,7 +4,7 @@ import 'rxjs/Rx'; //for map function
 import {Observable} from 'rxjs/Observable';
 import {STResponseUtils} from "../utils/STResponseUtils";
 import {VocbenchCtx} from './VocbenchCtx';
-import { ModalServices } from "../widget/modal/modalServices";
+import {ModalServices} from "../widget/modal/modalServices";
 
 @Injectable()
 export class HttpManager {
@@ -53,9 +53,7 @@ export class HttpManager {
         }
         
         //add parameters
-        if (this.vbCtx.getProject() != undefined) {
-            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
-        }
+        url += this.getContextParametersForUrl();
         for (var paramName in params) {
             url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
         }
@@ -85,6 +83,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
+                console.log("Error during get " + url); //TODO remove (temp to debug createProject error)
                 console.error(error);
                 this.modalService.alert("Error", error, "error");
                 return Observable.throw(error);
@@ -113,9 +112,7 @@ export class HttpManager {
         }
         
         //add ctx parameters
-        if (this.vbCtx.getProject() != undefined) {
-            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
-        }
+        url += this.getContextParametersForUrl();
 
         console.log("[POST]: " + url);
         
@@ -181,9 +178,7 @@ export class HttpManager {
         }
         
         //add ctx parameters
-        if (this.vbCtx.getProject() != undefined) {
-            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
-        }
+        url += this.getContextParametersForUrl();
         console.log("[POST]: " + url);
         
         var formData = new FormData();
@@ -240,9 +235,7 @@ export class HttpManager {
         }
         
         //add parameters
-        if (this.vbCtx.getProject() != undefined) {
-            url += "ctx_project=" + encodeURIComponent(this.vbCtx.getProject().getName()) + "&";    
-        }
+        url += this.getContextParametersForUrl();
         for (var paramName in params) {
             url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
         }
@@ -274,6 +267,20 @@ export class HttpManager {
             return Observable.throw(error);
         });
         
+    }
+    
+    /**
+     * Returns the request context parameters.
+     */
+    private getContextParametersForUrl(): string {
+        //if a (temp) context project is set, use it
+        if (this.vbCtx.getContextProject() != undefined) {
+            return "ctx_project=" + encodeURIComponent(this.vbCtx.getContextProject().getName()) + "&";
+        } else if (this.vbCtx.getWorkingProject() != undefined) { //use the working project otherwise
+            return "ctx_project=" + encodeURIComponent(this.vbCtx.getWorkingProject().getName()) + "&";    
+        } else { //no project open
+            return "";
+        }
     }
 
     private isResponseXml(response: Response): boolean {

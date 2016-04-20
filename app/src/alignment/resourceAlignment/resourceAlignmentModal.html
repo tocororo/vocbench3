@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h3 class="modal-title">Add new alignment</h3>
+</div>
+<div class="modal-body" id="toFocus">
+    
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+            <col style="width: 1%;">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td><label>Value:</label></td>
+                <td>
+                    <!--<input type="text" class="form-control input-sm">-->
+                    <div class="input-sm" style="border: 1px solid #ccc; background-color: #eee; opacity: 1; padding: 2px 10px;">
+                        <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-default btn-sm" (click)="browse()">Browse</button>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Property:</label></td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="mappingProperty">
+                        <option *ngFor="#p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
+                    </select>
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center" title="Show all mapping properties">
+                        <span>All prop:</span>
+                        <input type="checkbox" style="margin-left: 3px;" [checked]="allPropCheck" 
+                            (change)="onAllPropCheckChange($event.target.checked)">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

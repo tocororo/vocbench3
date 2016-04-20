@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body" id="toFocus2">
+    
+    <div style="padding: 3px; display: flex; align-items: center">
+        <span style="white-space: nowrap; margin: 0px 3px;">Project:</span>
+        <select class="form-control input-xs" [(ngModel)]="project" (ngModelChange)="onProjectChange()">
+            <option *ngFor="#p of projectList" [ngValue]="p">{{p.getName()}}</option>
+        </select>
+    </div>
+    
+    <div style="height:60vh; display: flex;">
+        <class-tree *ngIf="showClassTree()" (itemSelected)="onResourceSelected($event)">
+        </class-tree>
+            
+        <concept-tree *ngIf="showConceptTree()" (itemSelected)="onResourceSelected($event)" 
+            [schemeChangeable]="true" [scheme]="currentScheme" (schemeChanged)="onSchemeChanged()">
+        </concept-tree>
+            
+        <property-tree *ngIf="showPropertyTree()" (itemSelected)="onResourceSelected($event)">
+        </property-tree>
+        
+        <scheme-list *ngIf="showSchemeList()" (itemSelected)="onResourceSelected($event)">
+        </scheme-list>
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

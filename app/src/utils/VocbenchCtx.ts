@@ -5,9 +5,10 @@ import {Project} from './Project';
 @Injectable()
 export class VocbenchCtx {
 
-    private authToken 
-    private project: Project;
-    private scheme: ARTURIResource;
+    private authToken; //if provided it means that the user is authenticated
+    private workingProject: Project; //working project
+    private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
+    private scheme: ARTURIResource; //working scheme (used only in SKOS(-XL) projects)
 
     constructor() { }
     
@@ -23,12 +24,24 @@ export class VocbenchCtx {
         this.authToken = undefined;
     }
 
-    setProject(project: Project) {
-        this.project = project;
+    setWorkingProject(project: Project) {
+        this.workingProject = project;
     }
 
-    getProject(): Project {
-        return this.project;
+    getWorkingProject(): Project {
+        return this.workingProject;
+    }
+    
+    setContextProject(project: Project) {
+        this.ctxProject = project;
+    }
+
+    getContextProject(): Project {
+        return this.ctxProject;
+    }
+    
+    removeContextProject() {
+        this.ctxProject = undefined;
     }
 
     setScheme(scheme: ARTURIResource) {

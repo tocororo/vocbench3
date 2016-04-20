@@ -24,7 +24,7 @@ export class CyclicConceptComponent {
             router.navigate(['Home']);
         }
         //navigate to Projects view if a project is not selected
-        if (vbCtx.getProject() == undefined) {
+        if (vbCtx.getWorkingProject() == undefined) {
             router.navigate(['Projects']);
         }
     }

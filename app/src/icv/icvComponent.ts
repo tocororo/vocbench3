@@ -90,7 +90,7 @@ export class IcvComponent {
             router.navigate(['Home']);
         }
         //navigate to Projects view if a project is not selected
-        if (vbCtx.getProject() == undefined) {
+        if (vbCtx.getWorkingProject() == undefined) {
             router.navigate(['Projects']);
         }
     }
@@ -122,7 +122,7 @@ export class IcvComponent {
      * Useful to show/hide the icv.
      */
     private isCompatibleWithProject(icvStruct): boolean {
-        return icvStruct.ontoType.indexOf(this.vbCtx.getProject().getPrettyPrintOntoType()) != -1;
+        return icvStruct.ontoType.indexOf(this.vbCtx.getWorkingProject().getPrettyPrintOntoType()) != -1;
     }
     
 }

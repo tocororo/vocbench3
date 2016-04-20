@@ -4,7 +4,7 @@
             <label style="margin-right: 8px;">Resource:</label>
             <rdf-resource [resource]="resource"></rdf-resource>
             <div style="margin-left: 10px; flex: 1; min-width: 300px;">
-                <div class="input-group input-group-sm">
+                <div class="input-group input-group-xs">
                     <span class="input-group-addon" style="padding-right: 2px;">{{resource.getBaseURI()}}</span>
                     <input #renameinput type="text" class="form-control" style="padding-left: 2px;" 
                         [value]="resource.getLocalName()" [readonly]="renameLocked" sanitized>
@@ -22,6 +22,7 @@
                     </div>
                 </div>
             </div>
+            <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="alignResource()">Align</button> 
         </div>
     </div>
     <div class="panel-body scrollableContainer blockingDivHost">

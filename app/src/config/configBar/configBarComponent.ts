@@ -23,8 +23,8 @@ export class ConfigBarComponent {
      * returns true if a project is open. Useful to enable/disable navbar links
      */ 
     private isProjectOpen(): boolean {
-        this.currentProject = this.vbCtx.getProject();
-        return this.vbCtx.getProject() != undefined;
+        this.currentProject = this.vbCtx.getWorkingProject();
+        return this.vbCtx.getWorkingProject() != undefined;
     }
     
     /**
@@ -43,7 +43,7 @@ export class ConfigBarComponent {
                     stResp => {
                         this.modalService.alert("Clear data", "All data cleared successfully!");
                         //close the project (to avoid exception)
-                        this.projectService.disconnectFromProject(this.vbCtx.getProject()).subscribe(
+                        this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
                             stResp => {
                                 //then redirect to home page
                                 this.router.navigate(['Projects']);

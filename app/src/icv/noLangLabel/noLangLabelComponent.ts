@@ -32,13 +32,13 @@ export class NoLangLabelComponent {
             router.navigate(['Home']);
         }
         //navigate to Projects view if a project is not selected
-        if (vbCtx.getProject() == undefined) {
+        if (vbCtx.getWorkingProject() == undefined) {
             router.navigate(['Projects']);
         }
     }
     
     ngOnInit() {
-        this.ontoType = this.vbCtx.getProject().getPrettyPrintOntoType();
+        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
     }
     
     /**
