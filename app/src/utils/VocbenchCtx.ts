@@ -32,6 +32,10 @@ export class VocbenchCtx {
         return this.workingProject;
     }
     
+    removeWorkingProject() {
+        this.workingProject = undefined;
+    }
+    
     setContextProject(project: Project) {
         this.ctxProject = project;
     }

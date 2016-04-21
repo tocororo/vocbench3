@@ -14,7 +14,8 @@
         <table class="table table-condensed table-hoverable" style="flex: 1">
             <thead>
                 <tr>
-                    <th class="text-center">Open/Close</th>
+                    <th class="text-center">Accessed</th>
+                    <th class="text-center" nowrap>Open/Close</th>
                     <th class="text-center">Project Name</th>
                     <th class="text-center">Triple Store</th>
                     <th class="text-center">Type</th>
@@ -25,8 +26,14 @@
             <tbody>
                 <tr *ngFor="#p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
                     <td class="text-center">
-                        <img *ngIf="!p.isOpen()" src="app/assets/images/folder.gif" (dblclick)="openProject(p)">
-                        <img *ngIf="p.isOpen()" src="app/assets/images/folder-open.gif" (dblclick)="closeProject(p)">
+                        <input #input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="accessProject(input.value)"
+                            [checked]="isWorkingProject(input.value)" [disabled]="!p.isOpen()"/>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" (click)="openOrCloseProject(p)">
+                            <img *ngIf="!p.isOpen()" src="app/assets/images/folder.gif">
+                            <img *ngIf="p.isOpen()" src="app/assets/images/folder-open.gif">
+                        </button>
                     </td>
                     <td class="text-center">{{p.getName()}}</td>
                     <td class="text-center">{{p.getPrettyPrintOntoMgr()}}</td>

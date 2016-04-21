@@ -14,7 +14,6 @@ import {ModalServices} from "../widget/modal/modalServices";
 })
 export class ProjectComponent implements OnInit {
     private projectList: Project[];
-    private currentProject: Project; //project currently open
     private selectedProject: Project; //project selected in the list
     
     private exportLink: string;
@@ -31,33 +30,23 @@ export class ProjectComponent implements OnInit {
         this.projectService.listProjects().subscribe(
             projectList => {
                 this.projectList = projectList;
-                //Init closing potential multiple open projects. If just one, connect to it.
-                var ctxProject = this.vbCtx.getWorkingProject();
-                var openProjectList: Project[] = [];
-                if (ctxProject == undefined) { //no project in context (first start or all projects are closed)
-                    for (var i = 0; i < this.projectList.length; i++) { //collect projects remained open (in case of first start)
-                        if (this.projectList[i].isOpen()) {
-                            openProjectList.push(this.projectList[i]);
-                        }
-                    }
-                    if (openProjectList.length == 1) { //just one open project => connect to it
-                        this.connectToProject(openProjectList[0]);
-                    } else if (openProjectList.length > 1) { //multiple open projects
-                        for (var i = 0; i < openProjectList.length; i++) { //close all open projects
-                            this.disconnectFromProject(openProjectList[i]).subscribe();
-                        }
-                    }
-                }
             },
             err => { }
         );
     }
 
-    private selectProject(project) {
+    private selectProject(project: Project) {
         if (this.selectedProject == project) {
             this.selectedProject = null;
         } else {
             this.selectedProject = project;
+        }
+    }
+    
+    private accessProject(projectName: string) {
+        var workingProj = this.vbCtx.getWorkingProject();
+        if (workingProj == undefined || workingProj.getName() != projectName) {
+            this.openProject(this.getProjectObjectFromName(projectName));
         }
     }
 
@@ -117,77 +106,19 @@ export class ProjectComponent implements OnInit {
             err => { }
         );
     }
-
-    private openProject(project: Project) {
-        var ctxProject = this.vbCtx.getWorkingProject();
-        if (ctxProject != undefined) { //a project is already open
-            //first disconnect from old project
-            this.saveAndCloseProject(ctxProject).subscribe(
-                stResp => {//then connect to the new project
-                    this.connectToProject(project);
-                }
-            );
-        } else { //no project open, open new project
-            this.connectToProject(project);
+    
+    private openOrCloseProject(project: Project) {
+        if (project.isOpen()) {
+            this.closeProject(project);
+        } else {
+            this.openProject(project);
         }
     }
     
     /**
-     * Called when double clicking on "open folder" icon. Call in turn saveAndCloseProject.
-     * I cannot invoke directly saveAndCloseProject from the view cause I need to subscribe to the
-     * observable in order to execute the observable code.
+     * Called when double clicking on the "closed folder" icon
      */
-    private closeProject(project: Project) {
-        this.saveAndCloseProject(project).subscribe();
-    }
-
-    /**
-     * Performs checks on persistent/non-persistent status, so eventually saves the project and then closes it.
-     * Returns an observable so I can disconnect and connect to a new project in synchronous way
-     */
-    private saveAndCloseProject(project: Project) {
-        return new Observable(observer => {
-            if (project.getType() == "saveToStore") {
-                //if closing project is non-persistent ask to save
-                this.modalService.confirm("Save project", "You're closing a non-persistent project " + project.getName() 
-                    + ". Do you want to save changes?", "warning").then(
-                        
-                    confirm => {//save then disconnect
-                        this.projectService.saveProject(project).subscribe(
-                            stResp => {
-                                this.disconnectFromProject(project).subscribe(
-                                    stResp => {
-                                        observer.next(stResp);
-                                        observer.complete();
-                                    }
-                                );
-                            }
-                        );
-                    },
-                    () => {//disconnect without saving
-                        this.disconnectFromProject(project).subscribe(
-                            stResp => {
-                                observer.next(stResp);
-                                observer.complete();    
-                            }
-                        );
-                    }
-                );
-            } else {//persisten project => just disconnect
-                this.disconnectFromProject(project).subscribe(
-                    stResp => {
-                        observer.next(stResp);
-                        observer.complete();      
-                    }
-                );
-            }
-        });
-    }
-    
-    /**
-     * Calls the proper service in order to connect to the given project
-     */
-    private connectToProject(project: Project) {
+    private openProject(project: Project) {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.accessProject(project).subscribe(
             stResp => {
@@ -198,32 +129,75 @@ export class ProjectComponent implements OnInit {
             err => document.getElementById("blockDivFullScreen").style.display = "none"
         );
     }
-
+    
+    /**
+     * Called when double clicking on "open folder" icon
+     */
+    private closeProject(project: Project) {
+        if (project.getType() == "saveToStore") {
+            //if closing project is non-persistent ask to save
+            this.modalService.confirm("Save project", "You're closing a non-persistent project " + project.getName()
+                + ". Do you want to save changes?", "warning").then(
+                confirm => {//save then disconnect
+                    this.projectService.saveProject(project).subscribe(
+                        stResp => {
+                            this.disconnectFromProject(project);
+                        }
+                    );
+                },
+                () => {//disconnect without saving
+                    this.disconnectFromProject(project);
+                }
+            );
+        } else {//persistent project => just disconnect
+            this.disconnectFromProject(project);
+        }
+        //if the closed project is the working, remove it from context
+        if (this.vbCtx.getWorkingProject() != undefined && this.vbCtx.getWorkingProject().getName() == project.getName()) {
+            this.vbCtx.removeWorkingProject();
+            this.vbCtx.removeScheme();
+        }
+    }
+    
     /**
      * Calls the proper service in order to disconnect from the given project.
      * Returns an observable so I can disconnect and connect to a new project in synchronous way
      */
     private disconnectFromProject(project: Project) {
-        return new Observable(observer => {
-            document.getElementById("blockDivFullScreen").style.display = "block";
-            this.projectService.disconnectFromProject(project).subscribe(
-                stResp => {
-                    this.vbCtx.setWorkingProject(undefined);
-                    this.vbCtx.removeScheme();
-                    //here I need to get the project to close from projectList because, in some scenarios,
-                    //the project passed as parameter is taken from the context and it is a different object
-                    //from the one in projectList, so when I set open as false, it doesn't update the view
-                    var closedProject = this.projectList.find(
-                        proj => proj.getName() == project.getName()
-                    );
-                    closedProject.setOpen(false)
-                    document.getElementById("blockDivFullScreen").style.display = "none";
-                    observer.next(stResp);
-                    observer.complete();
-                },
-                err => document.getElementById("blockDivFullScreen").style.display = "none"
-            );
-        });
+        document.getElementById("blockDivFullScreen").style.display = "block";
+        this.projectService.disconnectFromProject(project).subscribe(
+            stResp => {
+                project.setOpen(false);
+                document.getElementById("blockDivFullScreen").style.display = "none";
+            },
+            err => document.getElementById("blockDivFullScreen").style.display = "none"
+        );
+    }
+    
+    /**
+     * Useful to set as selected the radio button of the working project
+     */
+    private isWorkingProject(projectName: string): boolean {
+        var workingProj = this.vbCtx.getWorkingProject();
+        return (workingProj != undefined && workingProj.getName() == projectName);
+    }
+    
+    /**
+     * Useful to enable/disable the "Close all projects" button
+     */
+    private existOpenProject(): boolean {
+        var foundOpen = false;
+        for (var i = 0; i < this.projectList.length; i++) {
+            if (this.projectList[i].isOpen()) {
+                foundOpen = true;
+                break;
+            }
+        }
+        return foundOpen;
+    }
+    
+    private getProjectObjectFromName(projectName: string): Project {
+        return this.projectList.find(proj => proj.getName() == projectName);
     }
     
 }
