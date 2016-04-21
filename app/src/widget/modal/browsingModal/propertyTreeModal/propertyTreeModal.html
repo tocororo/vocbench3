@@ -1,12 +1,12 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body" id="toFocus">
+<div class="modal-body vbox" style="height:70vh;" id="toFocus">
     <div *ngIf="context.resource" style="display: flex; align-items: center; margin-bottom: 5px;">
         Show all properties
         <input type="checkbox" style="margin-left: 3px;" (change)="onCheckboxChange($event.target.checked)">
     </div>
-    <property-tree style="height:70vh;" [resource]="domainRes" (itemSelected)="onPropertySelected($event)">
+    <property-tree [resource]="domainRes" (itemSelected)="onPropertySelected($event)">
     </property-tree>
 </div>
 <div class="modal-footer">

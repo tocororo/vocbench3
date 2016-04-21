@@ -110,7 +110,7 @@ concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, re
     min-height: 0;
 }
 
-concept-tree, class-tree, property-tree, resource-view, instance-list, scheme-list {
+concept-tree, class-tree, property-tree, resource-view, instance-list, scheme-list, class-individual-tree {
     display: flex;
     flex: 1;
     min-height: 0;

@@ -1,0 +1,72 @@
+import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {ARTURIResource} from "../../utils/ARTResources";
+import {VocbenchCtx} from '../../utils/VocbenchCtx';
+import {SKOS} from '../../utils/Vocabulary';
+import {ClassTreeComponent} from '../../owl/classTree/classTreeComponent';
+import {InstanceListComponent} from '../../owl/instanceList/instanceListComponent';
+import {ConceptTreeComponent} from '../../skos/concept/conceptTree/conceptTreeComponent';
+
+@Component({
+    selector: "class-individual-tree",
+    templateUrl: "app/src/owl/classIndividualTree/classIndividualTreeComponent.html",
+    directives: [ClassTreeComponent, InstanceListComponent, ConceptTreeComponent],
+})
+export class ClassIndividualTreeComponent {
+    
+    @Input() roots: ARTURIResource[];//roots of the class three
+    @Output() itemSelected = new EventEmitter<ARTURIResource>();//when an instance or a concept is selected
+    /*in the future I might need an Output for selected class. In case, change itemSelected in instanceSelected and
+    create classSelected Output. (Memo: itemSelected is to maintain the same Output of the other tree components)*/
+    
+    private selectedClass: ARTURIResource; //the class selected from class tree
+    private currentScheme: ARTURIResource;//the scheme selecte in the concept tree (only if selected class is skos:Concept)
+    private selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
+    
+    constructor(private vbCtx: VocbenchCtx) {}
+    
+    ngOnInit() {
+        this.currentScheme = this.vbCtx.getScheme();
+    }
+    
+    ngOnChanges(changes) {
+        if (changes.roots) { //when roots changes, deselect eventals class and instance selected
+            this.selectedClass = null;
+            this.selectedInstance = null;
+        }
+    }
+    
+    /**
+     * Listener to the event itemSelected thrown by the class-tree. Updates the selectedClass
+     */
+    private onTreeClassSelected(cls: ARTURIResource) {
+        if (this.selectedClass == undefined || (this.selectedClass != undefined && this.selectedClass.getURI() != cls.getURI())) {
+            this.selectedInstance = null; //reset the instance only if selected class changes
+            this.itemSelected.emit(null);
+        }
+        this.selectedClass = cls;
+    }
+    
+    /**
+     * Listener to click on element in the instance list. Updates the selectedInstance
+     */
+    private onInstanceSelected(instance: ARTURIResource) {
+        this.selectedInstance = instance;
+        this.itemSelected.emit(this.selectedInstance);
+    }
+    
+    /**
+     * Listener to schemeChanged event emitted by concept-tree when range class is skos:Concept.
+     */
+    private onConceptTreeSchemeChange() {
+        this.selectedInstance = null;
+    }
+    
+    /**
+     * Tells if the current selected range class is skos:Concept. It's useful to show concept tree
+     * instead of instance list in the modal
+     */
+    private isRangeConcept(): boolean {
+        return (this.selectedClass != undefined && this.selectedClass.getURI() == SKOS.concept.getURI());
+    }
+    
+}

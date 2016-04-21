@@ -1,23 +1,15 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body" id="toFocus">
-    <div class="vbox" style="height:70vh;">
-        <div style="display: flex; align-items: center; margin-bottom: 5px;">
-            Show all classes
-            <input type="checkbox" style="margin-left: 3px;" [checked]="allClasses" 
-                (change)="onCheckboxChange($event.target.checked)" [disabled]="!context.rangeClasses">
-        </div>
-        <div class="hbox">
-            <class-tree [roots]="treeRoots" (itemSelected)="onTreeClassSelected($event)"></class-tree>
-            <instance-list *ngIf="!isRangeConcept()" style="margin-left: 4px;"
-                [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)"></instance-list>
-            <concept-tree *ngIf="isRangeConcept()" style="margin-left: 4px;" 
-                (itemSelected)="onInstanceSelected($event)" [schemeChangeable]="true"
-                [scheme]="currentScheme" (schemeChanged)="onConceptTreeSchemeChange($event)">
-            </concept-tree>
-        </div>
+<div class="modal-body vbox" style="height:70vh;" id="toFocus">
+    <div style="display: flex; align-items: center; margin-bottom: 5px;">
+        Show all classes
+        <input type="checkbox" style="margin-left: 3px;" [checked]="allClasses" 
+            (change)="onCheckboxChange($event.target.checked)" [disabled]="!context.rangeClasses">
     </div>
+    <class-individual-tree [roots]="treeRoots" (itemSelected)="onInstanceSelected($event)">
+    </class-individual-tree>
+    
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedInstance">Ok</button>

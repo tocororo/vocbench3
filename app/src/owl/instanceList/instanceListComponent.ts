@@ -42,9 +42,13 @@ export class InstanceListComponent {
     
     ngOnChanges(changes) {
         this.selectedInstance = null;
-        //viewInitialized needed to avoid to initialize list before view is initialized
-        if (changes.cls.currentValue && this.viewInitialized) {
-            this.initList();
+        //viewInitialized needed to prevent the initialization of the list before view is initialized
+        if (this.viewInitialized) {
+            if (changes.cls.currentValue) {
+                this.initList();
+            } else { //cls is null => reset instanceList
+                this.instanceList = null;
+            }
         }
     }
     

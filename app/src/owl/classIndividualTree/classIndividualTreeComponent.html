@@ -1,0 +1,11 @@
+<div class="hbox">
+    <class-tree [roots]="roots" (itemSelected)="onTreeClassSelected($event)"></class-tree>
+
+    <!-- Show instance-list or concept-tree depending on the selected class in class-tree -->
+    <instance-list *ngIf="!isRangeConcept()" style="margin-left: 4px;" [cls]="selectedClass"
+        (itemSelected)="onInstanceSelected($event)">
+    </instance-list>
+    <concept-tree *ngIf="isRangeConcept()" style="margin-left: 4px;" (itemSelected)="onInstanceSelected($event)"
+        [schemeChangeable]="true" [scheme]="currentScheme" (schemeChanged)="onConceptTreeSchemeChange($event)">
+    </concept-tree>
+</div>

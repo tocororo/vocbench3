@@ -6,6 +6,7 @@ import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {Project} from "../../utils/Project";
 import {ProjectServices} from "../../services/projectServices";
 import {ClassTreeComponent} from "../../owl/classTree/classTreeComponent";
+import {ClassIndividualTreeComponent} from "../../owl/classIndividualTree/classIndividualTreeComponent";
 import {ConceptTreeComponent} from "../../skos/concept/conceptTree/conceptTreeComponent";
 import {SchemeListComponent} from "../../skos/scheme/schemeList/schemeListComponent";
 import {PropertyTreeComponent} from "../../property/propertyTree/propertyTreeComponent";
@@ -22,7 +23,8 @@ export class BrowseExternalResourceModalContent {
     selector: "browse-external-resource-modal",
     templateUrl: "app/src/alignment/resourceAlignment/browseExternalResourceModal.html",
     providers: [ProjectServices],
-    directives: [ClassTreeComponent, ConceptTreeComponent, PropertyTreeComponent, SchemeListComponent]
+    directives: [ClassTreeComponent, ClassIndividualTreeComponent, ConceptTreeComponent,
+        PropertyTreeComponent, SchemeListComponent]
 })
 export class BrowseExternalResourceModal implements ICustomModalComponent {
     
@@ -60,7 +62,7 @@ export class BrowseExternalResourceModal implements ICustomModalComponent {
                             this.projectList.push(projects[i]);
                         } else if (this.context.resRole == RDFResourceRolesEnum.property) {
                             this.projectList.push(projects[i]);
-                        } else if (this.context.resRole == RDFResourceRolesEnum.individual) {
+                        } else if (this.context.resRole == RDFResourceRolesEnum.individual && ontoType == "OWL") {
                             this.projectList.push(projects[i]);
                         }
                     }
@@ -106,6 +108,9 @@ export class BrowseExternalResourceModal implements ICustomModalComponent {
     }
     private showSchemeList(): boolean {
         return (this.context.resRole == RDFResourceRolesEnum.conceptScheme && this.vbCtx.getContextProject() != undefined);
+    }
+    private showClassIndividualTree(): boolean {
+        return (this.context.resRole == RDFResourceRolesEnum.individual && this.vbCtx.getContextProject() != undefined);
     }
     
     private isOkClickable(): boolean {

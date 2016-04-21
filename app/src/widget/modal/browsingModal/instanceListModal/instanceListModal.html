@@ -1,8 +1,8 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body" id="toFocus">
-    <instance-list style="height:70vh;" [cls]="context.cls" (itemSelected)="onInstanceSelected($event)">
+<div class="modal-body vbox" style="height:70vh;" id="toFocus">
+    <instance-list [cls]="context.cls" (itemSelected)="onInstanceSelected($event)">
     </instance-list>
 </div>
 <div class="modal-footer">

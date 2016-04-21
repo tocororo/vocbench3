@@ -156,7 +156,7 @@ export class PropertiesPartitionRenderer {
      * Opens a modal to enrich the predicate with a resource 
      */
     private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
-        this.resViewModalService.enrichProperty("Add property value", predicate, resourceTypes).then(
+        this.resViewModalService.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
             resource => {
                 this.propertyService.addExistingPropValue(
                     this.resource, predicate, resource.getNominalValue(), RDFTypesEnum.resource).subscribe(

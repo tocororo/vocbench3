@@ -1,8 +1,8 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body" id="toFocus">
-    <concept-tree style="height:70vh;" [scheme]="context.scheme" [schemeChangeable]="context.schemeChangeable"
+<div class="modal-body vbox" style="height:70vh;" id="toFocus">
+    <concept-tree [scheme]="context.scheme" [schemeChangeable]="context.schemeChangeable"
         (itemSelected)="onConceptSelected($event)">
     </concept-tree>
 </div>
