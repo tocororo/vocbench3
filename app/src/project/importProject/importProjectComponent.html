@@ -19,9 +19,9 @@
                 
                 <div class="form-group">
                     <label>Project file:</label>
-                    <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])" accept="application/zip"
-                        style="width: 100%; border: 1px solid #ccc; padding: 4px; border-radius: 3px; color: #555;">
-                    <div *ngIf="(!inputFile.files[0]) && submitted" class="alert alert-danger" style="margin-top: 2px">
+                    <file-picker (change)="fileChangeEvent($event)" [accept]="'application/zip'" 
+                        [placeholder]="'Select a project archive...'"></file-picker>
+                    <div *ngIf="!fileToUpload && submitted" class="alert alert-danger" style="margin-top: 2px">
                         A <strong>file</strong> is required
                     </div>
                 </div>

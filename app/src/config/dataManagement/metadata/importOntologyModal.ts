@@ -1,6 +1,7 @@
 import {Component} from "angular2/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {AdministrationServices} from '../../../services/administrationServices';
+import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
 export class ImportOntologyModalContent {
     /**
@@ -15,7 +16,8 @@ export class ImportOntologyModalContent {
 @Component({
     selector: "import-ontology-modal",
     templateUrl: "app/src/config/dataManagement/metadata/importOntologyModal.html",
-    providers: [AdministrationServices]
+    providers: [AdministrationServices],
+    directives: [FilePickerComponent]
 })
 export class ImportOntologyModal implements ICustomModalComponent {
     

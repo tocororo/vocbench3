@@ -27,8 +27,7 @@
             <tr *ngIf="context.importType == 'fromLocalFile'">
                 <td><label>Local file:</label></td>
                 <td>
-                    <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])"
-                        style="width: 100%; border: 1px solid #ccc; padding: 4px; border-radius: 3px; color: #555;">
+                    <file-picker (change)="fileChangeEvent($event)"></file-picker>
                 </td>
             </tr>
             <tr *ngIf="context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">

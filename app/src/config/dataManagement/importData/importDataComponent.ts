@@ -3,11 +3,13 @@ import {Router} from 'angular2/router';
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ModalServices} from "../../../widget/modal/modalServices";
+import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
 @Component({
 	selector: "import-data-component",
 	templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
     providers: [InputOutputServices],
+    directives: [FilePickerComponent],
     host: { class : "pageComponent" }
 })
 export class ImportDataComponent {
@@ -23,9 +25,7 @@ export class ImportDataComponent {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
-        }
-        //navigate to Projects view if a project is not selected
-        if (vbCtx.getWorkingProject() == undefined) {
+        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
             router.navigate(['Projects']);
         }
     }

@@ -24,9 +24,7 @@ export class NoSchemeConceptComponent {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
-        }
-        //navigate to Projects view if a project is not selected
-        if (vbCtx.getWorkingProject() == undefined) {
+        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
             router.navigate(['Projects']);
         }
     }
