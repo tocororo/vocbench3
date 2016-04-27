@@ -273,14 +273,19 @@ export class HttpManager {
      * Returns the request context parameters.
      */
     private getContextParametersForUrl(): string {
+        var params: string = "";
+        
         //if a (temp) context project is set, use it
         if (this.vbCtx.getContextProject() != undefined) {
-            return "ctx_project=" + encodeURIComponent(this.vbCtx.getContextProject().getName()) + "&";
+            params += "ctx_project=" + encodeURIComponent(this.vbCtx.getContextProject().getName()) + "&";
         } else if (this.vbCtx.getWorkingProject() != undefined) { //use the working project otherwise
-            return "ctx_project=" + encodeURIComponent(this.vbCtx.getWorkingProject().getName()) + "&";    
-        } else { //no project open
-            return "";
+            params += "ctx_project=" + encodeURIComponent(this.vbCtx.getWorkingProject().getName()) + "&";    
         }
+        
+        if (this.vbCtx.getSessionToken() != undefined) {
+            params += "ctx_token=" + encodeURIComponent(this.vbCtx.getSessionToken()) + "&";
+        }
+        return params;
     }
 
     private isResponseXml(response: Response): boolean {

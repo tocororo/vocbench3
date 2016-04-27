@@ -2,6 +2,8 @@ import {Injectable} from 'angular2/core';
 import {HttpManager} from "../utils/HttpManager";
 import {ARTURIResource} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
+import {RDFResourceRolesEnum} from "../utils/Enums";
+import {AlignmentCell} from "../alignment/alignmentValidation/AlignmentCell";
 
 @Injectable()
 export class AlignmentServices {
@@ -10,6 +12,8 @@ export class AlignmentServices {
     private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
+    
+    //======= Alignment creation (in Res. view) services ===========
 
     /**
      * Returns the available alignment properties depending on the project and resource type (property,
@@ -48,5 +52,221 @@ export class AlignmentServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addAlignment", params, this.oldTypeService);
     }
+    
+    //======= Alignment Validation services ===========
+    
+    /**
+     * Loads the alignment file
+     * @param file alignment file to upload
+     * @return return an object with "onto1" and "onto2", namely the baseURI of the two aligned ontologies
+     */
+    loadAlignment(file: File) {
+        console.log("[AlignmentServices] loadAlignment");
+        var data = {
+            inputFile: file
+        }
+        return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data, this.oldTypeService).map(
+            stResp => {
+                var onto1 = stResp.getElementsByTagName("onto1")[0].getElementsByTagName("Ontology")[0].textContent;
+                var onto2 = stResp.getElementsByTagName("onto2")[0].getElementsByTagName("Ontology")[0].textContent;
+                return { onto1: onto1, onto2: onto2 };
+            }
+        );
+    }
+    
+    /**
+     * Lists the alignment cells of the loaded alignment file.
+     * The cells to return could be splitted in subsets of the total cells set
+     * (in order to lightweight the response). In this case, a range and a pageIdx could be provided
+     * (e.g. an alignment file with 100 cells can be splitted in 10 page of range 10, or 5 page of range 20...)
+     * @param pageIdx index of the page.
+     * @param range number of cells of each page.
+     */
+    listCells(pageIdx?: number, range?: number) {
+        console.log("[AlignmentServices] listCells");
+        var params: any = {};
+        if (pageIdx != undefined && range != undefined) {
+            params.pageIdx = pageIdx,
+            params.range = range
+        }
+        return this.httpMgr.doGet(this.serviceName, "listCells", params, this.oldTypeService).map(
+            stResp => {
+                var alignmentMap: any = {};
+                var mapElem: Element = stResp.getElementsByTagName("map")[0];
+                var page: number = +(mapElem.getAttribute("page"));
+                var totPage: number = +(mapElem.getAttribute("totPage"));
+                var cells: Array<AlignmentCell> = [];
+                var cellElemColl: Array<Element> = stResp.getElementsByTagName("cell");
+                for (var i = 0; i < cellElemColl.length; i++) {
+                    cells.push(this.parseAlignmentCell(cellElemColl[i]));
+                }
+                alignmentMap.page = page;
+                alignmentMap.totPage = totPage;
+                alignmentMap.cells = cells;
+                return alignmentMap;
+            }
+        );
+    }
+    
+    /**
+     * Accepts an alignment and return the cell with the result of the action.
+     * @param entity1
+     * @param entity2
+     * @param relation the relation of the alignment
+     * @return a cell resulting from the action
+     */
+    acceptAlignment(entity1: string, entity2: string, relation: string) {
+	    console.log("[AlignmentServices] acceptAlignment");
+	    var params = {
+            entity1: entity1,
+            entity2: entity2,
+            relation: relation
+        };
+	    return this.httpMgr.doGet(this.serviceName, "acceptAlignment", params, this.oldTypeService).map(
+            stResp => {
+                return this.parseAlignmentCell(stResp.getElementsByTagName("cell")[0]);
+            }
+        );
+    }
+    
+    /**
+     * Accepts all the alignment and return the cells with the result of the action.
+     * @return all cells resulting from the action
+     */
+    acceptAllAlignment() {
+        console.log("[AlignmentServices] acceptAllAlignment");
+	    var params = {};
+        return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params, this.oldTypeService).map(
+            stResp => {
+                var cells: Array<AlignmentCell> = [];
+                var cellElemColl: Array<Element> = stResp.getElementsByTagName("cell");
+                for (var i = 0; i < cellElemColl.length; i++) {
+                    cells.push(this.parseAlignmentCell(cellElemColl[i]));
+                }
+                return cells;
+            }
+        );
+    }
+    
+    /**
+     * Accepts all the alignment with measure above the given threshold and return the cells with the result of the action.
+     * @param threshold
+     * @return all cells resulting from the action
+     */
+    acceptAllAbove(threshold: number) {
+        console.log("[AlignmentServices] acceptAllAbove");
+	    var params = {
+            threshold: threshold
+        };
+        return this.httpMgr.doGet(this.serviceName, "acceptAllAbove", params, this.oldTypeService).map(
+            stResp => {
+                var cells: Array<AlignmentCell> = [];
+                var cellElemColl: Array<Element> = stResp.getElementsByTagName("cell");
+                for (var i = 0; i < cellElemColl.length; i++) {
+                    cells.push(this.parseAlignmentCell(cellElemColl[i]));
+                }
+                return cells;
+            }
+        );
+    }
+    
+    /**
+     * Rejects an alignment and return the cell with the result of the action.
+     * @param entity1
+     * @param entity2
+     * @param relation the relation of the alignment
+     * @return a cell resulting from the action
+     */
+    rejectAlignment(entity1: string, entity2: string, relation: string) {
+	    console.log("[AlignmentServices] acceptAlignment");
+	    var params = {
+            entity1: entity1,
+            entity2: entity2,
+            relation: relation
+        };
+	    return this.httpMgr.doGet(this.serviceName, "rejectAlignment", params, this.oldTypeService).map(
+            stResp => {
+                return this.parseAlignmentCell(stResp.getElementsByTagName("cell")[0]);
+            }
+        );
+    }
+    
+    /**
+     * Rejects all the alignment and return the cells with the result of the action.
+     * @return all cells resulting from the action
+     */
+    rejectAllAlignment() {
+        console.log("[AlignmentServices] rejectAllAlignment");
+	    var params = {};
+        return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params, this.oldTypeService).map(
+            stResp => {
+                var cells: Array<AlignmentCell> = [];
+                var cellElemColl: Array<Element> = stResp.getElementsByTagName("cell");
+                for (var i = 0; i < cellElemColl.length; i++) {
+                    cells.push(this.parseAlignmentCell(cellElemColl[i]));
+                }
+                return cells;
+            }
+        );
+    }
+    
+    /**
+     * Rejects all the alignment with measure under the given threshold and return the cells with the result of the action.
+     * @param threshold
+     * @return all cells resulting from the action
+     */
+    rejectAllUnder(threshold: number) {
+        console.log("[AlignmentServices] rejectAllUnder");
+	    var params = {
+            threshold: threshold
+        };
+        return this.httpMgr.doGet(this.serviceName, "rejectAllUnder", params, this.oldTypeService).map(
+            stResp => {
+                var cells: Array<AlignmentCell> = [];
+                var cellElemColl: Array<Element> = stResp.getElementsByTagName("cell");
+                for (var i = 0; i < cellElemColl.length; i++) {
+                    cells.push(this.parseAlignmentCell(cellElemColl[i]));
+                }
+                return cells;
+            }
+        );
+    }
+    
+    private parseAlignmentCell(cellElement: Element): AlignmentCell {
+        let entity1: string = cellElement.getElementsByTagName("entity1")[0].textContent;
+        let entity2: string = cellElement.getElementsByTagName("entity2")[0].textContent;
+        let measure: number = +(cellElement.getElementsByTagName("measure")[0].textContent);
+        let relation: string = cellElement.getElementsByTagName("relation")[0].textContent;
+        let mappingProperty: ARTURIResource;
+        let mapPropElemColl = cellElement.getElementsByTagName("mappingProperty");
+        if (mapPropElemColl.length != 0) {
+            mappingProperty = new ARTURIResource(
+                mapPropElemColl[0].textContent,
+                mapPropElemColl[0].getAttribute("show"),
+                RDFResourceRolesEnum.property);
+        }
+        let status: string;
+        let statusElemColl = cellElement.getElementsByTagName("status");
+        if (statusElemColl.length != 0) {
+            status = statusElemColl[0].textContent;
+        }
+        let comment: string;
+        let commentElemColl = cellElement.getElementsByTagName("comment");
+        if (commentElemColl.length != 0) {
+            comment = commentElemColl[0].textContent;
+        }
+        let c = new AlignmentCell(entity1, entity2, measure, relation);
+        if (mappingProperty != undefined) {
+            c.setMappingProperty(mappingProperty)
+        }
+        if (status != undefined) {
+            c.setStatus(status);
+        }
+        if (comment != undefined) {
+            c.setComment(comment);
+        }
+        return c;
+    }
+    
     
 }

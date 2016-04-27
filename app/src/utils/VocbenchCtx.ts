@@ -5,10 +5,11 @@ import {Project} from './Project';
 @Injectable()
 export class VocbenchCtx {
 
-    private authToken; //if provided it means that the user is authenticated
+    private authToken: string; //if provided it means that the user is authenticated
     private workingProject: Project; //working project
     private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
     private scheme: ARTURIResource; //working scheme (used only in SKOS(-XL) projects)
+    private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
 
     constructor() { }
     
@@ -58,6 +59,18 @@ export class VocbenchCtx {
 
     removeScheme() {
         this.scheme = undefined;
+    }
+    
+    setSessionToken(token: string) {
+        this.sessionToken = token
+    }
+    
+    getSessionToken(): string {
+        return this.sessionToken;
+    }
+    
+    removeSessionToken() {
+        this.sessionToken = undefined;
     }
 
 }

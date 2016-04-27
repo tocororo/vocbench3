@@ -22,7 +22,6 @@ export class FilePickerComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        console.log("size " + this.size);
         if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
             this.btnClass += this.size;
             this.txtClass += this.size;

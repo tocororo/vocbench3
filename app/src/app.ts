@@ -9,6 +9,7 @@ import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { IcvComponent } from "./icv/icvComponent";
+import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
 import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
 import { DanglingConceptComponent } from "./icv/danglingConcept/danglingConceptComponent";
@@ -41,6 +42,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Schemes", name: "Schemes", component: SchemesComponent},
     {path: "/Sparql", name: "Sparql", component: SparqlComponent},
     {path: "/Icv", name: "Icv", component: IcvComponent},
+    {path: "/AlignmentValidation", name: "AlignmentValidation", component: AlignmentValidationComponent},
     {path: "/Test", name: "Test", component: TestComponent},
     {path: "/Registration", name: "Registration", component: RegistrationComponent},
     // route config of config bar

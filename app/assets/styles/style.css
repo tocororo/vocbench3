@@ -277,6 +277,19 @@ input[type=number]::-webkit-outer-spin-button {
     display: block;
 }
 
+/**
+ * Progress bars text in Bootstrap are centered according the progress bar, not the "background" bar. This classes fix.
+ */
+.progress {
+    position: relative;
+}
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: white;
+ }
+
 /* BOOTSTRAP OVERRIDE */
 
 nav {

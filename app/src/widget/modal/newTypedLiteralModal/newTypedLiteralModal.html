@@ -33,10 +33,10 @@
             [(ngModel)]="value" disabled>
             
         <!--input for other datatypes-->
-        <input *ngIf="datatype=='http://www.w3.org/2001/XMLSchema#float'" type="number" step="any" class="form-control input-sm" 
-            style="margin-top: 6px;" [(ngModel)]="value">
-        <input *ngIf="datatype=='http://www.w3.org/2001/XMLSchema#integer'" type="number" step="1" class="form-control input-sm" 
-            style="margin-top: 6px;" [(ngModel)]="value">
+        <input *ngIf="datatype=='http://www.w3.org/2001/XMLSchema#float'" type="number" step="any"
+            class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value">
+        <input *ngIf="datatype=='http://www.w3.org/2001/XMLSchema#integer'" type="number" step="1"
+            class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value">
         <input *ngIf="datatype=='http://www.w3.org/2001/XMLSchema#string'" type="text" class="form-control input-sm" 
             style="margin-top: 6px;" [(ngModel)]="value">
             
