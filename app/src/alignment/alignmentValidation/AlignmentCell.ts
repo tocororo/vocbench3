@@ -7,6 +7,7 @@ export class AlignmentCell {
     private measure: number;
     private relation: string;
     private mappingProperty: ARTURIResource;
+    private suggestedMappingProperties: Array<ARTURIResource>;
     private status: string;
     private comment: string;
     
@@ -49,13 +50,20 @@ export class AlignmentCell {
         return this.relation;
     }
     
-    
     public setMappingProperty(prop: ARTURIResource) {
         this.mappingProperty = prop;
     }
     
     public getMappingProperty(): ARTURIResource {
         return this.mappingProperty;
+    }
+    
+    public setSuggestedMappingProperties(properties: Array<ARTURIResource>) {
+        this.suggestedMappingProperties = properties;
+    }
+    
+    public getSuggestedMappingProperties(): Array<ARTURIResource> {
+        return this.suggestedMappingProperties;
     }
     
     public setStatus(status: string) {

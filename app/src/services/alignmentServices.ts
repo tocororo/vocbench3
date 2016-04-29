@@ -110,8 +110,8 @@ export class AlignmentServices {
     
     /**
      * Accepts an alignment and return the cell with the result of the action.
-     * @param entity1
-     * @param entity2
+     * @param entity1 uri of the source entity of the alignment
+     * @param entity2 uri of the target entity of the alignment
      * @param relation the relation of the alignment
      * @return a cell resulting from the action
      */
@@ -172,8 +172,8 @@ export class AlignmentServices {
     
     /**
      * Rejects an alignment and return the cell with the result of the action.
-     * @param entity1
-     * @param entity2
+     * @param entity1 uri of the source entity of the alignment
+     * @param entity2 uri of the target entity of the alignment
      * @param relation the relation of the alignment
      * @return a cell resulting from the action
      */
@@ -231,6 +231,128 @@ export class AlignmentServices {
             }
         );
     }
+    
+    /**
+     * Changes the relation of a alignment
+     * @param entity1 uri of the source entity of the alignment
+     * @param entity2 uri of the target entity of the alignment
+     * @param relation the new relation of the alignment
+     * @return a cell resulting from the action 
+     */    
+    changeRelation(entity1: string, entity2: string, relation: string) {
+        console.log("[AlignmentServices] changeRelation");
+        var params = {
+            entity1: entity1,
+            entity2: entity2,
+            relation: relation
+        };
+        return this.httpMgr.doGet(this.serviceName, "changeRelation", params, this.oldTypeService).map(
+            stResp => {
+                return this.parseAlignmentCell(stResp.getElementsByTagName("cell")[0]);
+            }
+        );
+    }
+
+    /**
+     * Changes the mapping property of a alignment
+     * @param entity1 uri of the source entity of the alignment
+     * @param entity2 uri of the target entity of the alignment
+     * @param mappingProperty the new mappingProperty of the alignment
+     * @return a cell resulting from the action
+     */
+    changeMappingProperty(entity1: string, entity2: string, mappingProperty: string) {
+        console.log("[AlignmentServices] changeMappingProperty");
+        var params = {
+            entity1: entity1,
+            entity2: entity2,
+            mappingProperty: mappingProperty
+        };
+        return this.httpMgr.doGet(this.serviceName, "changeMappingProperty", params, this.oldTypeService).map(
+            stResp => {
+                return this.parseAlignmentCell(stResp.getElementsByTagName("cell")[0]);
+            }
+        );
+    }
+
+    /**
+     * Apply the alignments to the model. Add the triples related to the accepted alignments and
+     * eventually removes the rejected alignments
+     * @param deleteRejected tells whether the rejected alignments should be deleted 
+     * @return returns a collection of objects (with entity1, entity2, property and action)
+     * representing a report of the changes.
+     */
+    applyValidation(deleteRejected: boolean) {
+        console.log("[AlignmentServices] applyValidation");
+        var params = {
+            deleteRejected: deleteRejected
+        };
+        return this.httpMgr.doGet(this.serviceName, "applyValidation", params, this.oldTypeService).map(
+            stResp => {
+                var cells: Array<any> = [];
+                var cellElemColl: Array<Element> = stResp.getElementsByTagName("cell");
+                for (var i = 0; i < cellElemColl.length; i++) {
+                    var c = {
+                        entity1: cellElemColl[i].getAttribute("entity1"),
+                        entity2: cellElemColl[i].getAttribute("entity2"),
+                        property: cellElemColl[i].getAttribute("property"),
+                        action: cellElemColl[i].getAttribute("action")
+                    }
+                    cells.push(c);
+                }
+                return cells;
+            }
+        );
+    }
+
+    /**
+     * Returns a list of mapping properties suggested for the given entity and the alignment relation
+     * @param entity the source entity of the alignment
+     * @param relation the relation of the alignment cell
+     * @return collection of ARTURIResource representing suggested mapping property
+     */
+    listSuggestedProperties(entity, relation) {
+	    console.log("[AlignmentServices] listSuggestedProperties");
+        var params = {
+            entity: entity,
+            relation: relation
+        };
+        return this.httpMgr.doGet(this.serviceName, "listSuggestedProperties", params, this.oldTypeService).map(
+            stResp => {
+                var props: Array<ARTURIResource> = [];
+                var mapPropElemColl: Array<Element> = stResp.getElementsByTagName("mappingProperty");
+                for (var i = 0; i < mapPropElemColl.length; i++) {
+                    var uri = mapPropElemColl[i].textContent;
+                    var show = mapPropElemColl[i].getAttribute("show");
+                    var p = new ARTURIResource(uri, show, RDFResourceRolesEnum.property);
+                    props.push(p);
+                }
+                return props;
+            }
+        );
+    }
+
+    /**
+     * Exports the alignment at the current status.
+     */
+    exportAlignment() {
+	    console.log("[AlignmentServices] exportAlignment");
+        var params = {};
+        return this.httpMgr.downloadFile(this.serviceName, "exportAlignment", params, this.oldTypeService);
+    }
+
+    /**
+     * Tells to the server that the sessione is closed and the alignment files can be deleted
+     */
+    closeSession(){
+	    console.log("[AlignmentServices] closeSession");
+        var params = {};
+        return this.httpMgr.doGet(this.serviceName, "closeSession", params, this.oldTypeService);
+    }
+    
+    
+    
+    
+    
     
     private parseAlignmentCell(cellElement: Element): AlignmentCell {
         let entity1: string = cellElement.getElementsByTagName("entity1")[0].textContent;
