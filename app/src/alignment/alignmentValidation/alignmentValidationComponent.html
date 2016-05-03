@@ -58,7 +58,7 @@
                                 <div class="progress" style="margin-bottom: 0; background-color: #d9534f;">
                                     <div class="progress-bar progress-bar-success progress-bar-striped active"
                                         role="progressbar" [ngStyle]="{'width': a.getMeasure()*100+'%'}">
-                                        <span>{{a.getRelation()}}</span>
+                                        <span style="white-space: nowrap">{{getRelationRendered(a)}}</span>
                                     </div>
                                 </div>
                                 <div #editRel class="btn-group" style="position: absolute; top: 0; right: 0; display: none;">
@@ -104,7 +104,7 @@
                                     </button>
                                 </span>
                             </td>
-                            <td style="font-size: 16px;">
+                            <td style="font-size: 14px;">
                                 <span *ngIf="a.getStatus() == 'accepted'" class="glyphicon glyphicon-ok" style="color: #5cb85c"></span>
                                 <span *ngIf="a.getStatus() == 'rejected'" class="glyphicon glyphicon-remove" style="color: #d9534f"></span>
                                 <span *ngIf="a.getStatus() == 'error'" class="glyphicon glyphicon-warning-sign" style="color: #f0ad4e"
@@ -114,7 +114,21 @@
                     </tbody>
                 </table>
             </div>
-            
+            <div *ngIf="totPage && totPage != 1">
+                <div class="btn-group btn-group-xs pull-right" style="margin-top: 4px;" role="group">
+                    <button class="btn btn-default" title="Previous page" (click)="prevPage()" [disabled]="page==0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                        <!--&laquo;-->
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{page+1}} of {{totPage}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="page==totPage-1">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                        <!--&raquo;-->
+                    </button>
+                </div>
+            </div>
         </div>
         
         <div class="panel-footer">

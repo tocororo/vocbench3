@@ -192,7 +192,7 @@ input[type="image"]:disabled  {
 }
 
 /* table which rows are colored when hovered */
-.table-hoverable tr:hover td { 
+.table-hoverable tbody tr:hover td { 
     background-color: #e5f3ff !important;
 }
 /*project-component .table tr.active td {*/
@@ -283,7 +283,7 @@ input[type=number]::-webkit-outer-spin-button {
 .progress {
     position: relative;
 }
-.progress span {
+.progress > .progress-bar > span {
     position: absolute;
     display: block;
     width: 100%;
@@ -291,6 +291,10 @@ input[type=number]::-webkit-outer-spin-button {
  }
 
 /* BOOTSTRAP OVERRIDE */
+
+.glyphicon {
+    line-height: 1.5;
+}
 
 nav {
     font-size: 12px;

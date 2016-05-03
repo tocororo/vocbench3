@@ -81,6 +81,7 @@ export class AlignmentServices {
      * (e.g. an alignment file with 100 cells can be splitted in 10 page of range 10, or 5 page of range 20...)
      * @param pageIdx index of the page.
      * @param range number of cells of each page.
+     * @return returns an object containing "cells" (an array of AlignmentCell), "page" and "totPage"
      */
     listCells(pageIdx?: number, range?: number) {
         console.log("[AlignmentServices] listCells");

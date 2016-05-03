@@ -3,7 +3,9 @@ import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-mo
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
+import {ConfirmCheckModal, ConfirmCheckModalContent} from "./confirmModal/confirmCheckModal";
 import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
+import {DownloadModal, DownloadModalContent} from "./downloadModal/downloadModal";
 import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
 import {NewPlainLiteralModal, NewPlainLiteralModalContent} from "./newPlainLiteralModal/newPlainLiteralModal";
 import {NewTypedLiteralModal, NewTypedLiteralModalContent} from "./newTypedLiteralModal/newTypedLiteralModal";
@@ -62,6 +64,29 @@ export class ModalServices {
     }
     
     /**
+     * Opens a modal with two buttons (Yes and No) with the given title and content message.
+     * Returns a Promise with the result
+     * @param title the title of the modal dialog
+     * @param message the message to show in the modal dialog body
+     * @param checkboxLabel the label of the checkbox in the modal body
+     * @param type tells the type of the dialog. Determines the style of the message in the dialog.
+     * Available values: info, error, warning (default)
+     * @return if the modal closes with ok returns a promise containing a boolean true
+     */
+    confirmCheck(title: string, message: string, checkboxLabel: string, type?: ModalType) {
+        var modalType = type ? type : "warning"; //set default type to warning if not defined
+        var modalContent = new ConfirmCheckModalContent(title, message, checkboxLabel, modalType);
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>ConfirmCheckModal,
+                resolvedBindings,
+                new ModalConfig(null, true, null, "modal-dialog")
+        );
+        return dialog.then(resultPromise => resultPromise.result);
+    }
+    
+    /**
      * Opens a modal with an info message and a single button to dismiss the modal.
      * @param title the title of the modal dialog
      * @param message the message to show in the modal dialog body
@@ -94,6 +119,25 @@ export class ModalServices {
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>SelectionModal,
+                resolvedBindings,
+                new ModalConfig(null, true, null, "modal-dialog")
+        );
+        return dialog.then(resultPromise => resultPromise.result);
+    }
+    
+    /**
+     * Opens a modal with a link to download a file
+     * @param title the title of the modal dialog
+     * @param message the message to show in the modal dialog body. If null no message will be in the modal
+     * @param downloadLink link for download
+     * @param fileName name of the file to download
+     */
+    downloadLink(title: string, message: string, downloadLink: string, fileName: string) {
+        var modalContent = new DownloadModalContent(title, message, downloadLink, fileName);
+        let resolvedBindings = Injector.resolve(
+            [provide(ICustomModal, {useValue: modalContent})]),
+            dialog = this.modal.open(
+                <any>DownloadModal,
                 resolvedBindings,
                 new ModalConfig(null, true, null, "modal-dialog")
         );

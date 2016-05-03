@@ -45,6 +45,7 @@ export class ConfigBarComponent {
                         //close the project (to avoid exception)
                         this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
                             stResp => {
+                                this.vbCtx.removeWorkingProject();
                                 //then redirect to home page
                                 this.router.navigate(['Projects']);
                             },

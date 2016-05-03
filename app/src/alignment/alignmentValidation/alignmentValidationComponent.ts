@@ -1,12 +1,14 @@
-import { Component, Injector, provide } from 'angular2/core';
+import {Component, Injector, provide} from 'angular2/core';
 import {Router} from 'angular2/router';
 import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";
+import {Cookie} from "../../utils/Cookie";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 import {AlignmentCell} from "./AlignmentCell";
 import {ValidationSettingsModal, ValidationSettingsModalContent} from "./validationSettingsModal/validationSettingsModal"
+import {ValidationReportModal, ValidationReportModalContent} from "./validationReportModal/validationReportModal"
 import {AlignmentServices} from "../../services/AlignmentServices";
 
 @Component({
@@ -23,6 +25,11 @@ export class AlignmentValidationComponent {
     private sourceBaseURI: string;
     private targetBaseURI: string;
     
+    //for pagination
+    private page: number = 0;
+    private totPage: number;
+    
+    //quick actions
     private qaNull = "---";
     private qaAcceptAll = "Accept all";
     private qaAcceptAllAbove = "Accept all above threshold";
@@ -32,6 +39,12 @@ export class AlignmentValidationComponent {
     private chosenQuickAction: any = this.quickActionList[0];
     private threshold: number = 0.0;
     
+    //settings
+    private rejectedAlignmentAction: string; //ask, delete or skip
+    private showRelationType: string; //relation, dlSymbol or text
+    private confOnMeter: boolean; //tells if relation confidence should be shown on meter
+    private alignmentPerPage: number; //max alignments per page
+    
     private relationSymbols: Array<any> = [
         {relation: "=", dlSymbol: "\u2261", text: "equivalent"},
         {relation: ">", dlSymbol: "\u2292", text: "subsumes"},
@@ -40,7 +53,6 @@ export class AlignmentValidationComponent {
         {relation: "HasInstance", dlSymbol: "\u2192", text: "has instance"},
         {relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of"}
     ];
-
     
     constructor(private vbCtx: VocbenchCtx, private router: Router, private alignmentService: AlignmentServices,
         private modalService: ModalServices, private modal: Modal) {
@@ -49,6 +61,26 @@ export class AlignmentValidationComponent {
             router.navigate(['Home']);
         } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
             router.navigate(['Projects']);
+        }
+    }
+    
+    ngOnInit() {
+        //init settings (where not provided, set a default)
+        this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
+        if (this.rejectedAlignmentAction == null) {
+            this.rejectedAlignmentAction = "ask";
+            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION, this.rejectedAlignmentAction);
+        }
+        this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
+        if (this.showRelationType == null) {
+            this.showRelationType = "relation";
+            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW, this.showRelationType);
+        }
+        this.confOnMeter = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
+        this.alignmentPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+        if (this.alignmentPerPage == 0) {
+            this.alignmentPerPage = 15;
+            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE, this.alignmentPerPage + "");
         }
     }
 
@@ -65,34 +97,73 @@ export class AlignmentValidationComponent {
         }
     }
     
+    /**
+     * Updates the file to load when user change file on from filepicker
+     */
     private fileChangeEvent(file: File) {
         this.alignmentFile = file;
     }
     
+    /**
+     * Loads the alignment file and the mapping cells
+     */
     private loadAlignment() {
         this.vbCtx.setSessionToken(this.generateSessionRandomToken());
         this.alignmentService.loadAlignment(this.alignmentFile).subscribe(
             alignedOnto => {
                 this.sourceBaseURI = alignedOnto.onto1;
                 this.targetBaseURI = alignedOnto.onto2;
-                this.alignmentService.listCells().subscribe(
-                    map => {
-                        this.alignmentCellList = map.cells;
-                    }
-                );
+                this.updateAlignmentCells();
             }
         );
     }
     
+    /**
+     * Gets alignment cells so updates the tables 
+     */
+    private updateAlignmentCells() {
+        this.alignmentService.listCells(this.page, this.alignmentPerPage).subscribe(
+            map => {
+                this.totPage = map.totPage;
+                this.alignmentCellList = map.cells;
+            }
+        );
+    }
+    
+    /**
+     * List cells of previous page.
+     */
+    private prevPage() {
+        this.page--;
+        this.updateAlignmentCells();
+    }
+    
+    /**
+     * List cells of next page.
+     */
+    private nextPage() {
+        this.page++;
+        this.updateAlignmentCells();
+    }
+    
+    /**
+     * Listener to the "Accept" button. Accepts the alignment and updates the UI
+     */
     private acceptAlignment(cell: AlignmentCell) {
         this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation()).subscribe(
             resultCell => {
                 //replace the accepted alignment cell with the returned one
                 this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                if ((<AlignmentCell>resultCell).getStatus() == "error") {
+                    this.modalService.alert("Error", (<AlignmentCell>resultCell).getComment(), "error");
+                }
             }
         )
     }
     
+    /**
+     * Listener to the "Reject" button. Rejects the alignment and updates the UI
+     */
     private rejectAlignment(cell: AlignmentCell) {
         this.alignmentService.rejectAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation()).subscribe(
             resultCell => {
@@ -102,6 +173,27 @@ export class AlignmentValidationComponent {
         )
     }
     
+    /**
+     * Returns the relation symbol rendered according to the show type in settings (relation, dlSymbol or text)
+     */
+    private getRelationRendered(cell: AlignmentCell): string {
+        var result = "";
+        var rel = cell.getRelation();
+        for (var i = 0; i < this.relationSymbols.length; i++) {
+            if (this.relationSymbols[i].relation == rel) {
+                result = this.relationSymbols[i][this.showRelationType];
+                break;
+            }
+        }
+        if (this.confOnMeter) {
+            result += " (" + cell.getMeasure() + ")";
+        }
+        return result;
+    }
+    
+    /**
+     * Called when user changes the relation of an alignment. Changes the relation and updates the UI.
+     */
     private changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
@@ -120,6 +212,11 @@ export class AlignmentValidationComponent {
         }
     }
     
+    /**
+     * Called when user click on menu to change the mapping property of an alignment.
+     * Useful to populate the menu of the mapping properties.
+     * Retrieves the suggested mapping properties and set them to the alignment cell.
+     */
     private getSuggestedMappingProperties(cell: AlignmentCell) {
         this.alignmentService.listSuggestedProperties(cell.getEntity1(), cell.getRelation()).subscribe(
             props => {
@@ -128,6 +225,9 @@ export class AlignmentValidationComponent {
         )
     }
     
+    /**
+     * Called when user changes the mapping prop of an alignment. Changes the the prop and updates the UI.
+     */
     private changeMappingProperty(cell: AlignmentCell, property: ARTURIResource) {
         //change property only if the user choses a property different from the current.
         if (property.getURI() != cell.getMappingProperty().getURI()) {
@@ -139,11 +239,10 @@ export class AlignmentValidationComponent {
         }
     }
     
+    /**
+     * Opens a modal dialog to edit the settings
+     */
     private openSettings() {
-        this.openSettingsModal().then(() => {}, () => {}); //just catch the returned promises
-    }
-    
-    private openSettingsModal() {
         var modalContent = new ValidationSettingsModalContent();
         let resolvedBindings = Injector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
@@ -152,7 +251,23 @@ export class AlignmentValidationComponent {
                 resolvedBindings,
                 new ModalConfig(null, true, null, "modal-dialog")
         );
-        return dialog.then(resultPromise => resultPromise.result);
+        var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+        dialog.then(
+            resultPromise => resultPromise.result.then(
+                () => {
+                    //update settings
+                    this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
+                    this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
+                    this.confOnMeter = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
+                    this.alignmentPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+                    if (oldAlignPerPage != this.alignmentPerPage) {
+                        this.page = 0;
+                        this.updateAlignmentCells();
+                    }
+                },
+                () => {}
+            )
+        );
     }
     
     private doQuickAction() {
@@ -162,55 +277,105 @@ export class AlignmentValidationComponent {
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     document.getElementById("blockDivFullScreen").style.display = "none";
-                }
+                },
+                () => document.getElementById("blockDivFullScreen").style.display = "none"
             )
         } else if (this.chosenQuickAction == this.qaAcceptAllAbove) {
             this.alignmentService.acceptAllAbove(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     document.getElementById("blockDivFullScreen").style.display = "none";
-                }
+                },
+                () => document.getElementById("blockDivFullScreen").style.display = "none"
             )
         } else if (this.chosenQuickAction == this.qaRejectAll) {
             this.alignmentService.rejectAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     document.getElementById("blockDivFullScreen").style.display = "none";
-                }
+                },
+                () => document.getElementById("blockDivFullScreen").style.display = "none"
             )
         } else if (this.chosenQuickAction == this.qaRejectAllUnder) {
             this.alignmentService.rejectAllUnder(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
                     document.getElementById("blockDivFullScreen").style.display = "none";
-                }
+                },
+                () => document.getElementById("blockDivFullScreen").style.display = "none"
             )
         }
     }
     
+    /**
+     * Called after a quick action. Updates the list of the alignment cell
+     */
     private updateAlignmentListAfterQuickAction(newAlignmentList: Array<AlignmentCell>) {
         for (var i = 0; i < newAlignmentList.length; i++) {
             this.alignmentCellList[this.getIndexOfCell(newAlignmentList[i])] = newAlignmentList[i];
         }
     }
     
+    /**
+     * Listener to "Apply to ontology button"
+     */
     private applyToOnto() {
-        //TODO get deleteReject from user choice
-        var deleteReject: boolean;
+        if (this.rejectedAlignmentAction == "skip") {
+            this.modalService.confirm("Apply validation", "This operation will add to the ontology the triples of the "
+                + "accepted alignments. Are you sure to continue?", "warning").then(
+                confirm => {
+                    this.applyValidation(false);
+                },
+                () => {}
+            );
+        } else if (this.rejectedAlignmentAction == "delete") {
+            this.modalService.confirm("Apply validation", "This operation will add to the ontology the triples of the "
+                + "accepted alignments and delete the triples of the ones rejected. Are you sure to continue?", "warning").then(
+                confirm => {
+                    this.applyValidation(true);
+                },
+                () => {}
+            );
+        } else if (this.rejectedAlignmentAction == "ask") {
+            this.modalService.confirmCheck("Apply valdiation", "This operation will add to the ontology the triples of the "
+                + "accepted alignments. Are you sure to continue?", "Delete triples of rejected alignments", "warning").then(
+                confirm => {
+                    this.applyValidation(confirm);
+                },
+                () => {}
+            );
+        }
+        
+    }
+    
+    /**
+     * calls the service to apply the validation and shows the report dialog.
+     */
+    private applyValidation(deleteReject: boolean) {
+        document.getElementById("blockDivFullScreen").style.display = "block";
         this.alignmentService.applyValidation(deleteReject).subscribe(
             report => {
-                console.log("actions done " + JSON.stringify(report));
+                document.getElementById("blockDivFullScreen").style.display = "none";
+                //open report modal
+                var modalContent = new ValidationReportModalContent(report);
+                let resolvedBindings = Injector.resolve(
+                    [provide(ICustomModal, {useValue: modalContent})]),
+                    dialog = this.modal.open(
+                        <any>ValidationReportModal,
+                        resolvedBindings,
+                        new ModalConfig("lg", true, null, "modal-dialog")
+                );
+                dialog.then(resultPromise => resultPromise.result.then(() => {}, () => {}));
             }
         )
     }
     
     private export() {
-        alert("export alignment");
         this.alignmentService.exportAlignment().subscribe(
             stResp => {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 var exportLink = window.URL.createObjectURL(data);
-                console.log("exportLink " + exportLink);
+                this.modalService.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
             },
             err => { }
         );
