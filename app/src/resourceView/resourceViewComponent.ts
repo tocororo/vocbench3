@@ -1,4 +1,4 @@
-import {Component, Input, Injector, provide} from "angular2/core";
+import {Component, Input, ReflectiveInjector, provide} from "angular2/core";
 import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {RDFTypesEnum} from "../utils/Enums";
@@ -207,7 +207,7 @@ export class ResourceViewComponent {
      */
     private openAlignmentModal() {
         var modalContent = new ResourceAlignmentModalContent(this.resource);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ResourceAlignmentModal,

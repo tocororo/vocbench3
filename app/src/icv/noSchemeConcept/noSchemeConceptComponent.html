@@ -26,7 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#concept of brokenConceptList">
+                    <tr *ngFor="let concept of brokenConceptList">
                         <td>
                             <rdf-resource [resource]="concept"></rdf-resource>
                         </td>

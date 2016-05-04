@@ -7,7 +7,7 @@
     </div>
     <div style="margin-top: 5px;">
         <select class="form-control" style="padding: 5px;" [(ngModel)]="optionSelected" size="5">
-            <option *ngFor="#o of context.options" style="font-size: 13px;" [value]="o">{{o}}</option>
+            <option *ngFor="let o of context.options" style="font-size: 13px;" [value]="o">{{o}}</option>
         </select>
     </div>
 </div>

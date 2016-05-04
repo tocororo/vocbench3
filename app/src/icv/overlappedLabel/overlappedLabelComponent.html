@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#record of brokenRecordList">
+                    <tr *ngFor="let record of brokenRecordList">
                         <td>
                             <rdf-resource [resource]="record.resource"></rdf-resource>
                         </td>

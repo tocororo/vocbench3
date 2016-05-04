@@ -26,7 +26,7 @@
                 <td><label>Property:</label></td>
                 <td>
                     <select class="form-control input-sm" [(ngModel)]="mappingProperty">
-                        <option *ngFor="#p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
+                        <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
                     </select>
                 </td>
                 <td>

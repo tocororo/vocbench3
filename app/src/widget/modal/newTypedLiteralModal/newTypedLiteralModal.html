@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div>
         <select class="form-control input-sm" id="toFocus" [(ngModel)]="datatype">
-            <option *ngFor="#dt of datatypes" [value]="dt" [disabled]="!isDatatypeAllowed(dt)">{{dt}}</option>
+            <option *ngFor="let dt of datatypes" [value]="dt" [disabled]="!isDatatypeAllowed(dt)">{{dt}}</option>
         </select>
         <!--input dedicated to some datatypes-->
         <div *ngIf="isDatatypeBound()" class="panel panel-default" style="margin-top: 6px;">

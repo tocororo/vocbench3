@@ -8,7 +8,7 @@
             title="Specifies what to do with the rejected alignment when applyng the validation to the ontology"></span>
         <label style="white-space: nowrap; margin: 0px 3px;">Rejected alignment action:</label>
         <select class="form-control input-xs" style="display: inline-block" [(ngModel)]="rejectedAlignmentAction">
-            <option *ngFor="#opt of rejectedAlignmentOptions" [value]="opt.value">{{opt.label}}</option>
+            <option *ngFor="let opt of rejectedAlignmentOptions" [value]="opt.value">{{opt.label}}</option>
         </select>
     </div>
     
@@ -21,7 +21,7 @@
                 <div class="panel-body">
                     <div>Show relation as:</div>
                     <div style="margin: 5px 0px 0px 5px">
-                        <div class="radio" *ngFor="#opt of showRelationOptions" style="margin: 0px;">
+                        <div class="radio" *ngFor="let opt of showRelationOptions" style="margin: 0px;">
                             <label>
                                 <input #relRadio type="radio" name="relRadio" [value]="opt.value" (click)="showRelationType=relRadio.value"
                                     [checked]="showRelationType==relRadio.value">{{opt.label}}

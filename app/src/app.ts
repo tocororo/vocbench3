@@ -1,5 +1,7 @@
-import { Component } from "angular2/core";
-import { RouteConfig, ROUTER_DIRECTIVES, Location, Router } from "angular2/router";
+import { Component, ViewContainerRef } from "angular2/core";
+import { RouteConfig, ROUTER_DIRECTIVES, Router } from "angular2/router";
+import { Location } from "angular2/platform/common";
+import { Modal } from 'angular2-modal/angular2-modal';
 import { VocbenchCtx } from "./utils/VocbenchCtx";
 import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
@@ -63,7 +65,14 @@ import { TestComponent } from "./test/testComponent";
 
 export class App {
     
-    constructor(private location:Location, private router: Router, private vbCtx:VocbenchCtx) {}
+    constructor(private location:Location, private router: Router, private vbCtx:VocbenchCtx,
+        private modal: Modal, viewContainer: ViewContainerRef) {
+        /**
+         * A Default view container ref, usually the app root container ref.
+         * Has to be set manually until we can find a way to get it automatically.
+         */
+        modal.defaultViewContainer = viewContainer;    
+    }
     
     /**
      * returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links

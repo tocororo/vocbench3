@@ -2,7 +2,7 @@
     <h3 class="modal-title">Configuration for {{context.configuration.shortName}}</h3>
 </div>
 <div class="modal-body">
-    <div *ngFor="#p of context.configuration.params" class="listItem">
+    <div *ngFor="let p of context.configuration.params" class="listItem">
         <span style="width: 250px;">{{p.name}}:</span>
         <input type="text" class="form-control input-sm" [(ngModel)]="p.value">
         <span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" [title]="p.description"></span>

@@ -1,4 +1,4 @@
-import {Injectable, Injector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ClassListCreatorModal, ClassListCreatorModalContent} from "./classListCreatorModal";
 import {InstanceListCreatorModal, InstanceListCreatorModalContent} from "./instanceListCreatorModal";
@@ -21,7 +21,7 @@ export class ResViewModalServices {
      */
     createClassList(title: string) {
         var modalContent = new ClassListCreatorModalContent(title);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ClassListCreatorModal,
@@ -38,7 +38,7 @@ export class ResViewModalServices {
      */
     createInstanceList(title: string) {
         var modalContent = new InstanceListCreatorModalContent(title);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>InstanceListCreatorModal,
@@ -55,7 +55,7 @@ export class ResViewModalServices {
      */
     enrichProperty(title: string, property: ARTURIResource, ranges: ARTURIResource[]) {
         var modalContent = new EnrichPropertyModalContent(title, property, ranges);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>EnrichPropertyModal,

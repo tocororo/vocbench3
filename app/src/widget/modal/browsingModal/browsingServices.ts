@@ -1,4 +1,4 @@
-import {Injectable, Injector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ClassTreeModal, ClassTreeModalContent} from "../browsingModal/classTreeModal/classTreeModal";
 import {InstanceListModal, InstanceListModalContent} from "../browsingModal/instanceListModal/instanceListModal";
@@ -26,7 +26,7 @@ export class BrowsingServices {
      */
     browseClassTree(title: string) {
         var modalContent = new ClassTreeModalContent(title);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ClassTreeModal,
@@ -44,7 +44,7 @@ export class BrowsingServices {
      */
     browseInstanceList(title: string, cls: ARTURIResource) {
         var modalContent = new InstanceListModalContent(title, cls);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>InstanceListModal,
@@ -63,7 +63,7 @@ export class BrowsingServices {
      */
     browseConceptTree(title: string, scheme?: ARTURIResource, schemeChangeable?: boolean) {
         var modalContent = new ConceptTreeModalContent(title, scheme, schemeChangeable);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ConceptTreeModal,
@@ -80,7 +80,7 @@ export class BrowsingServices {
      */
     browseSchemeList(title: string) {
         var modalContent = new SchemeListModalContent(title);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>SchemeListModal,
@@ -99,7 +99,7 @@ export class BrowsingServices {
      */
     browsePropertyTree(title: string, resource?: ARTURIResource) {
         var modalContent = new PropertyTreeModalContent(title, resource);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>PropertyTreeModal,

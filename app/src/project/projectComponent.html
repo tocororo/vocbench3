@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="#p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
+                <tr *ngFor="let p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
                     <td class="text-center">
                         <input #input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="accessProject(input.value)"
                             [checked]="isWorkingProject(input.value)" [disabled]="!p.isOpen()"/>

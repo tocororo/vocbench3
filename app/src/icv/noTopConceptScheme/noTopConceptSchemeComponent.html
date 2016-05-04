@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#scheme of brokenSchemeList">
+                    <tr *ngFor="let scheme of brokenSchemeList">
                         <td>
                             <rdf-resource [resource]="scheme"></rdf-resource>
                         </td>

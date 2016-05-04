@@ -50,7 +50,7 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        <tr *ngFor="#a of alignmentCellList">
+                        <tr *ngFor="let a of alignmentCellList">
                             <td style="border: 0px 1px 1px solid #ddd">{{a.getEntity1()}}</td>
                             <td>{{a.getEntity2()}}</td>
                             <td style="position: relative"
@@ -66,7 +66,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li *ngFor="#rel of relationSymbols">
+                                        <li *ngFor="let rel of relationSymbols">
                                             <a (click)="changeRelation(a, rel.relation)">
                                                 {{rel.relation}}<span *ngIf="a.getRelation() == rel.relation" class="glyphicon glyphicon-ok pull-right"></span>
                                             </a>
@@ -83,7 +83,7 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li *ngFor="#sp of a.getSuggestedMappingProperties()">
+                                            <li *ngFor="let sp of a.getSuggestedMappingProperties()">
                                                 <a (click)="changeMappingProperty(a, sp)">{{sp.getShow()}} 
                                                     <span *ngIf="sp.getShow() == a.getMappingProperty().getShow()"
                                                         class="glyphicon glyphicon-ok pull-right">
@@ -137,7 +137,7 @@
                 
                 <select class="form-control input-xs" style="width: auto; display: inline-block" [(ngModel)]="chosenQuickAction"
                     [disabled]="alignmentCellList.length == 0">
-                    <option *ngFor="#qa of quickActionList">{{qa}}</option>
+                    <option *ngFor="let qa of quickActionList">{{qa}}</option>
                 </select>
                 <input *ngIf="chosenQuickAction.includes('threshold')"
                     class="form-control input-xs" style="width: auto; display: inline-block"

@@ -12,7 +12,7 @@
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
-	<concept-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"
+	<concept-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"
         (itemSelected)="onNodeSelected($event)">
     </concept-tree-node>
 </div>

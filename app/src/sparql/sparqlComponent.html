@@ -2,7 +2,7 @@
     
     <!--Tabs navigation-->
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-        <li *ngFor="#t of tabs" [ngClass]="{active : t.active}">
+        <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
             <a href (click)="selectTab(t)">
                 Query
                 <span *ngIf=(t.removable) class="glyphicon glyphicon-remove-circle"
@@ -20,7 +20,7 @@
     </ul>
     <!--Tabs content-->
     <div class="tab-content">
-        <div *ngFor="#t of tabs" [ngClass]="{vbox : t.active}">
+        <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <div *ngIf="t.active" class="vbox">
                 <!--Query mode selection-->
                 <div style="margin: 5px 0;">
@@ -53,12 +53,12 @@
                         <table class="table table-striped table-condensed table-hoverable" style="flex: 1">
                             <thead>
                                 <tr>
-                                    <th *ngFor="#h of t.headers">{{h}}</th>
+                                    <th *ngFor="let h of t.headers">{{h}}</th>
                                 </tr>
                             </thead>
                             <tbody style="overflow: auto;">
-                                <tr *ngFor="#bindings of t.queryResult">
-                                    <td *ngFor="#h of t.headers">{{bindings[h].value}}</td>
+                                <tr *ngFor="let bindings of t.queryResult">
+                                    <td *ngFor="let h of t.headers">{{bindings[h].value}}</td>
                                 </tr>
                             </tbody>
                         </table>

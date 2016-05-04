@@ -57,7 +57,7 @@
                             <td><label>Gender:</label></td>
                             <td>
                                 <select [(ngModel)]="gender" class="form-control input-sm">
-                                    <option *ngFor="#g of genders" [value]="g">{{g}}</option>
+                                    <option *ngFor="let g of genders" [value]="g">{{g}}</option>
                                 </select>
                             </td>
                             <td><label>Birthday:</label></td>
@@ -69,7 +69,7 @@
                             <td><label>Country:</label></td>
                             <td>
                                 <select [(ngModel)]="country" class="form-control input-sm">
-                                    <option *ngFor="#c of countries" [value]="c">{{c}}</option>
+                                    <option *ngFor="let c of countries" [value]="c">{{c}}</option>
                                 </select>
                             </td>
                             <td><label>Address:</label></td>

@@ -1,3 +1,3 @@
 <div class="scrollableContainer">
-    <property-tree-node *ngFor="#p of propertyTree" [node]="p" (itemSelected)="onNodeSelected($event)"></property-tree-node>
+    <property-tree-node *ngFor="let p of propertyTree" [node]="p" (itemSelected)="onNodeSelected($event)"></property-tree-node>
 </div>

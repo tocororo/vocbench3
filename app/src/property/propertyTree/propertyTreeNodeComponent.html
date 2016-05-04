@@ -12,6 +12,6 @@
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('children').length > 0 && node.getAdditionalProperty('open')">
-	<property-tree-node *ngFor="#n of node.getAdditionalProperty('children')" [node]="n" (itemSelected)="onNodeSelected($event)">
+	<property-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" (itemSelected)="onNodeSelected($event)">
     </property-tree-node>
 </div>

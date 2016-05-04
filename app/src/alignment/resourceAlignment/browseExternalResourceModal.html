@@ -6,7 +6,7 @@
     <div style="padding: 3px; display: flex; align-items: center">
         <span style="white-space: nowrap; margin: 0px 3px;">Project:</span>
         <select class="form-control input-xs" [(ngModel)]="project" (ngModelChange)="onProjectChange()">
-            <option *ngFor="#p of projectList" [ngValue]="p">{{p.getName()}}</option>
+            <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
         </select>
     </div>
     

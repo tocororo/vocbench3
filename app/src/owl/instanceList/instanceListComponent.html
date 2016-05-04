@@ -1,5 +1,5 @@
 <div class="scrollableContainer">
-    <rdf-resource *ngFor="#i of instanceList" [resource]="i" (click)="selectInstance(i)" 
+    <rdf-resource *ngFor="let i of instanceList" [resource]="i" (click)="selectInstance(i)" 
         [ngClass]="{selectedResource : i.getAdditionalProperty('selected')}"></rdf-resource>
     <div *ngIf="instanceList && instanceList.length==0">
         No instances

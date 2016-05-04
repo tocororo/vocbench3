@@ -1,4 +1,4 @@
-import {Component, Injector, provide} from "angular2/core";
+import {Component, ReflectiveInjector, provide} from "angular2/core";
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {OntoMgrConfigModal, OntoMgrConfigModalContent} from "./ontoMgrConfigModal";
 import {Router} from 'angular2/router';
@@ -212,7 +212,7 @@ export class CreateProjectComponent {
      */
     private openConfigurationModal(configuration: any) {
         var modalContent = new OntoMgrConfigModalContent(configuration);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>OntoMgrConfigModal,

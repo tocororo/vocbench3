@@ -28,7 +28,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#resource of brokenResourceList">
+                    <tr *ngFor="let resource of brokenResourceList">
                         <td>
                             <rdf-resource [resource]="resource"></rdf-resource>
                         </td>

@@ -8,7 +8,7 @@
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmTitle">
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmMessage">
             <select [(ngModel)]="confirmType" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;">
-                <option *ngFor="#t of typeList" [value]="t">{{t}}</option>
+                <option *ngFor="let t of typeList" [value]="t">{{t}}</option>
             </select>
             <br/><button class="btn btn-primary btn-xs" (click)="confirm()">Test</button>
             <span>Last result: <strong>{{confirmResult}}</strong></span>
@@ -32,7 +32,7 @@
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="alertTitle">
             <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="alertMessage">
             <select [(ngModel)]="alertType" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;">
-                <option *ngFor="#t of typeList" [value]="t">{{t}}</option>
+                <option *ngFor="let t of typeList" [value]="t">{{t}}</option>
             </select>
             <br/><button class="btn btn-primary btn-xs" (click)="alert()">Test</button>
         </div>

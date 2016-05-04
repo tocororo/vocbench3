@@ -18,7 +18,7 @@
         </div>
 
         <div class="scrollableContainer" style="border: 1px solid #ddd">
-            <div *ngFor="#c of classList">
+            <div *ngFor="let c of classList">
                 <rdf-resource [resource]="c" class="listItem" (click)="onListElementSelected(c)" 
                     [ngClass]="{selectedResource : isListElementSelected(c)}">
                 </rdf-resource>

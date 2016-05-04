@@ -1,4 +1,4 @@
-import {Component, Injector, provide} from "angular2/core";
+import {Component, ReflectiveInjector, provide} from "angular2/core";
 import {Router} from 'angular2/router';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {MetadataServices} from "../../../services/metadataServices";
@@ -257,7 +257,7 @@ export class MetadataManagementComponent {
      */
     private openMappingModal(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean) {
         var modalContent = new PrefixNamespaceModalContent(title, prefix, namespace, namespaceReadonly);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>PrefixNamespaceModal,
@@ -400,7 +400,7 @@ export class MetadataManagementComponent {
      */
     private openImportModal(title: string, importType: ImportType) {
         var modalContent = new ImportOntologyModalContent(title, importType);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ImportOntologyModal,

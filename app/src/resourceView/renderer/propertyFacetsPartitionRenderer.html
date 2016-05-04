@@ -4,7 +4,7 @@
     </div>
     <div class="subPanel-body">
         <div style="display: flex; padding: 8px;">
-            <span *ngFor="#f of facets" style="flex:1; display: inline-flex; align-items: center;">
+            <span *ngFor="let f of facets" style="flex:1; display: inline-flex; align-items: center;">
                 <input #cb type="checkbox" style="margin: 0px 3px 0px 0px;" value="transitive"
                     [ngModel]="f.value" [disabled]="!f.explicit" (change)="changeFacet(f.name, cb.checked)">{{f.name}}
             </span>
@@ -16,7 +16,7 @@
                 <input type="image" title="Add a inverse property" src="app/assets/images/prop_create.png" (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
             </div>
             <div class="subPanel-body">
-                <div *ngFor="#p of objectList" class="listItem">
+                <div *ngFor="let p of objectList" class="listItem">
                     <rdf-resource [resource]="p" style="flex:1"></rdf-resource>
                     <input type="image" title="Remove inverse property" src="app/assets/images/prop_delete.png" (click)="remove(p)" [disabled]="!p.getAdditionalProperty('explicit')">
                 </div>

@@ -17,7 +17,7 @@
             </button>
             <ul class="dropdown-menu">
                 <!--why template? see https://github.com/angular/angular/issues/4792-->
-                <template ngFor #lp [ngForOf]="lexicalizationProperties">
+                <template ngFor let-lp [ngForOf]="lexicalizationProperties">
                     <li *ngIf="isPropOntoTypeCompliant(lp)">
                         <a (click)="add(lp)">
                             <rdf-resource [resource]="lp"></rdf-resource>
@@ -29,7 +29,7 @@
         
     </div>
     <div class="subPanel-body">
-        <div class="subPanel" *ngFor="#po of predicateObjectList">
+        <div class="subPanel" *ngFor="let po of predicateObjectList">
             <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
@@ -37,7 +37,7 @@
                         (click)="add(po.getPredicate())">
             </div>
             <div class="subPanel-body">
-                <div *ngFor="#obj of po.getObjects()" class="listItem">
+                <div *ngFor="let obj of po.getObjects()" class="listItem">
                     <rdf-resource [resource]="obj" style="flex:1"></rdf-resource>
                     <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
                         (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">

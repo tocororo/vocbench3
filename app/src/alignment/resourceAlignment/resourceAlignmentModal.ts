@@ -1,4 +1,4 @@
-import {Component, Injector, provide} from "angular2/core";
+import {Component, ReflectiveInjector, provide} from "angular2/core";
 import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -104,7 +104,7 @@ export class ResourceAlignmentModal implements ICustomModalComponent {
      */
     private openBrowseExternalResModal(title: string, resRole: RDFResourceRolesEnum) {
         var modalContent = new BrowseExternalResourceModalContent(title, resRole);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>BrowseExternalResourceModal,

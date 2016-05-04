@@ -1,4 +1,4 @@
-import {Component, Injector, provide} from 'angular2/core';
+import {Component, ReflectiveInjector, provide} from 'angular2/core';
 import {Router} from 'angular2/router';
 import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -244,7 +244,7 @@ export class AlignmentValidationComponent {
      */
     private openSettings() {
         var modalContent = new ValidationSettingsModalContent();
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ValidationSettingsModal,
@@ -358,7 +358,7 @@ export class AlignmentValidationComponent {
                 document.getElementById("blockDivFullScreen").style.display = "none";
                 //open report modal
                 var modalContent = new ValidationReportModalContent(report);
-                let resolvedBindings = Injector.resolve(
+                let resolvedBindings = ReflectiveInjector.resolve(
                     [provide(ICustomModal, {useValue: modalContent})]),
                     dialog = this.modal.open(
                         <any>ValidationReportModal,

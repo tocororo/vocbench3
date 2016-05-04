@@ -17,7 +17,7 @@
                     </div>
                     <div class="subPanel-body" *ngIf="structuralIcv.open">
                         <!--why template? see https://github.com/angular/angular/issues/4792-->
-                        <template ngFor #icv [ngForOf]="structuralIcv.list">
+                        <template ngFor let-icv [ngForOf]="structuralIcv.list">
                             <div *ngIf=(isCompatibleWithProject(icv)) class="listItem">
                                 <span style="width: 200px">{{icv.name}}</span>
                                 <span style="flex: 1"><i>{{icv.description}}</i></span>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="subPanel-body" *ngIf="labelIcv.open">
                         <!--why template? see https://github.com/angular/angular/issues/4792-->
-                        <template ngFor #icv [ngForOf]="labelIcv.list">
+                        <template ngFor let-icv [ngForOf]="labelIcv.list">
                             <div *ngIf=(isCompatibleWithProject(icv)) class="listItem">
                                 <span style="width: 200px">{{icv.name}}</span>
                                 <span style="flex: 1"><i>{{icv.description}}</i></span>
@@ -55,7 +55,7 @@
                     </div>
                     <div class="subPanel-body" *ngIf="genericIcv.open">
                         <!--why template? see https://github.com/angular/angular/issues/4792-->
-                        <template ngFor #icv [ngForOf]="genericIcv.list">
+                        <template ngFor let-icv [ngForOf]="genericIcv.list">
                             <div *ngIf=(isCompatibleWithProject(icv)) class="listItem">
                                 <span style="width: 200px">{{icv.name}}</span>
                                 <span style="flex: 1"><i>{{icv.description}}</i></span>

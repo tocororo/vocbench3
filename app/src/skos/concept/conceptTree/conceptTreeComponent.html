@@ -2,12 +2,12 @@
     <span style="white-space: nowrap; margin: 0px 3px;">Concept Scheme:</span>
     <select class="form-control input-xs" [(ngModel)]="selectedSchemeUri" (ngModelChange)="onSchemeChange()">
         <option value="---">no-scheme</option>
-        <option *ngFor="#s of schemeList" [value]="s.getURI()">{{s.getURI()}}</option>
+        <option *ngFor="let s of schemeList" [value]="s.getURI()">{{s.getURI()}}</option>
     </select>
 </div>
 
 <div class="scrollableContainer">
-    <concept-tree-node *ngFor="#r of roots" [node]="r" [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree-node>
+    <concept-tree-node *ngFor="let r of roots" [node]="r" [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree-node>
 </div>
 
 <div #blockDivTree class="blockingDiv" style="display:none">

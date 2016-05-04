@@ -6,7 +6,7 @@
         <!--<button class="btn btn-default btn-xs" [title]="addBtnImgTitle" (click)="add()">Add</button>-->
     </div>
     <div class="subPanel-body">
-        <div *ngFor="#o of objectList" class="listItem">
+        <div *ngFor="let o of objectList" class="listItem">
             <rdf-resource [resource]="o" style="flex:1"></rdf-resource>
             <input type="image" [title]="removeBtnImgTitle" [src]="removeBtnImgSrc" 
                     (click)="remove(o)" [disabled]="!o.getAdditionalProperty('explicit')">

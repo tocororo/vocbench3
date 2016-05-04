@@ -1,5 +1,5 @@
 import { bootstrap } from "angular2/platform/browser";
-import { enableProdMode } from "angular2/core";
+import { enableProdMode, Renderer } from "angular2/core";
 import { ROUTER_PROVIDERS } from "angular2/router";
 import { HTTP_PROVIDERS } from "angular2/http";
 import { Modal } from 'angular2-modal/angular2-modal';
@@ -18,6 +18,6 @@ import {App} from "./src/app";
  * in the bootstrap function so that they can be widely used in the application, without specifying them in providers
  */
 bootstrap(App, [
-    ROUTER_PROVIDERS, HTTP_PROVIDERS,
+    ROUTER_PROVIDERS, HTTP_PROVIDERS, Renderer,
     HttpManager, VocbenchCtx, VBEventHandler, Modal, ModalServices, BrowsingServices
 ]);

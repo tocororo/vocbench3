@@ -18,7 +18,7 @@
         </div>
             
         <div class="scrollableContainer" style="border: 1px solid #ddd">
-            <div *ngFor="#i of instanceList">
+            <div *ngFor="let i of instanceList">
                 <rdf-resource [resource]="i" class="listItem" (click)="onTargetListInstanceSelected(i)" 
                     [ngClass]="{selectedResource : isTargetListInstanceSelected(i)}">
                 </rdf-resource>

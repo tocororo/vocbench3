@@ -72,7 +72,7 @@
                 <td><label>Namespace:</label></td>
                 <td>
                     <select *ngIf="mirrorList" class="form-control input-sm" [(ngModel)]="selectedMirror">
-                        <option *ngFor="#m of mirrorList" [ngValue]="m">{{m.namespace}}</option>
+                        <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.namespace}}</option>
                     </select>
                     <select *ngIf="!mirrorList" class="form-control input-sm" disabled>
                         <option>No ontologies mirrored</option>

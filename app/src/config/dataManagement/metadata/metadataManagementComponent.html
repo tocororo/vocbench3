@@ -80,7 +80,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="#m of nsPrefMappingList" (click)="selectMapping(m)" 
+                                <tr *ngFor="let m of nsPrefMappingList" (click)="selectMapping(m)" 
                                     [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
                                     <td class="text-center">{{m.prefix}}</td>
                                     <td class="text-center">{{m.namespace}}</td>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="subPanel-body vbox">
                     <div class="scrollableContainer">
-                        <div class="listItem" *ngFor="#i of importList">
+                        <div class="listItem" *ngFor="let i of importList">
                             <span class="glyphicon"  style="margin-right: 5px;"
                                 [ngClass]="{'glyphicon-globe': i.status == 'WEB', 'glyphicon-hdd': i.status == 'LOCAL'}"></span>
                             <span style="flex: 1">{{i.uri}}</span>

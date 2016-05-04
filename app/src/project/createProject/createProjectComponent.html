@@ -51,7 +51,7 @@
                         <label>Configuration:</label>
                         <div class="input-group">
                             <select class="form-control input-sm" [(ngModel)]="selectedOntoMgrConfig">
-                                <option *ngFor="#conf of ontoMgrConfigList" [ngValue]="conf">{{conf.shortName}}</option>
+                                <option *ngFor="let conf of ontoMgrConfigList" [ngValue]="conf">{{conf.shortName}}</option>
                             </select>
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-sm" (click)="configureOntoMgr()">Configure</button>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="subPanel-body" *ngIf="extPointPanelOpen">
 
-                    <div *ngFor="#xp of extPointStructList">
+                    <div *ngFor="let xp of extPointStructList">
                         <div class="subPanel">
                             <div class="subPanel-heading" style="background: #f5f5f5">
                                 <label>{{xp.id.substring(xp.id.lastIndexOf('.')+1)}}:</label>
@@ -85,7 +85,7 @@
                                                 see issue https://github.com/angular/angular/issues/4843 -->
                                     <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPluginId" (ngModelChange)="changeExtPointPlugin(xp)">
                                         <option value="---">---</option>
-                                        <option *ngFor="#plugin of xp.plugins" [value]="plugin">{{plugin.substring(plugin.lastIndexOf('.')+1)}}</option>
+                                        <option *ngFor="let plugin of xp.plugins" [value]="plugin">{{plugin.substring(plugin.lastIndexOf('.')+1)}}</option>
                                     </select>
                                 </div>
                                 
@@ -94,7 +94,7 @@
                                     <div class="input-group">
                                         <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPlugin.selectedConfigType" 
                                             [disabled]="!xp.selectedExtPointPlugin.configurations">
-                                            <option *ngFor="#conf of xp.selectedExtPointPlugin.configurations" [value]="conf.type">
+                                            <option *ngFor="let conf of xp.selectedExtPointPlugin.configurations" [value]="conf.type">
                                                 {{conf.shortName}}
                                             </option>
                                         </select>

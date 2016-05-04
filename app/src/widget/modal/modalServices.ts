@@ -1,4 +1,4 @@
-import {Injectable, Injector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
@@ -31,7 +31,7 @@ export class ModalServices {
      */
     prompt(title: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
         var modalContent = new PromptModalContent(title, label, value, false, inputOptional, inputSanitized);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>PromptModal,
@@ -53,7 +53,7 @@ export class ModalServices {
     confirm(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined
         var modalContent = new ConfirmModalContent(title, message, modalType);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ConfirmModal,
@@ -76,7 +76,7 @@ export class ModalServices {
     confirmCheck(title: string, message: string, checkboxLabel: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined
         var modalContent = new ConfirmCheckModalContent(title, message, checkboxLabel, modalType);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ConfirmCheckModal,
@@ -96,7 +96,7 @@ export class ModalServices {
     alert(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "info"; //set default type to info if not defined
         var modalContent = new AlertModalContent(title, message, modalType);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>AlertModal,
@@ -115,7 +115,7 @@ export class ModalServices {
      */
     select(title: string, message: string, options: Array<string>) {
         var modalContent = new SelectionModalContent(title, message, options);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>SelectionModal,
@@ -134,7 +134,7 @@ export class ModalServices {
      */
     downloadLink(title: string, message: string, downloadLink: string, fileName: string) {
         var modalContent = new DownloadModalContent(title, message, downloadLink, fileName);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>DownloadModal,
@@ -153,7 +153,7 @@ export class ModalServices {
      */
     selectResource(title: string, message: string, resourceList: Array<ARTURIResource>) {
         var modalContent = new ResourceSelectionModalContent(title, message, resourceList);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>ResourceSelectionModal,
@@ -170,7 +170,7 @@ export class ModalServices {
      */
     newResource(title: string) {
         var modalContent = new NewResourceModalContent(title);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>NewResourceModal,
@@ -191,7 +191,7 @@ export class ModalServices {
      */
     newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean) {
         var modalContent = new NewPlainLiteralModalContent(title, value, valueReadonly, lang, langReadonly);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>NewPlainLiteralModal,
@@ -209,7 +209,7 @@ export class ModalServices {
      */
     newTypedLiteral(title: string, allowedDatatypes?: string[]) {
         var modalContent = new NewTypedLiteralModalContent(title, allowedDatatypes);
-        let resolvedBindings = Injector.resolve(
+        let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(
                 <any>NewTypedLiteralModal,
