@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "angular2/core";
+import {Component, ViewChild} from "@angular/core";
 import {ModalServices} from "../widget/modal/modalServices";
 import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
 import {VocbenchCtx} from "../utils/VocbenchCtx";

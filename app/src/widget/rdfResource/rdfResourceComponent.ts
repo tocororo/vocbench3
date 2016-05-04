@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from "angular2/core";
+import {Component, Input, OnInit} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {ClassTreeComponent} from "../classTree/classTreeComponent";
 import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../services/searchServices";

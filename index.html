@@ -7,15 +7,12 @@
     <!-- Favicon  -->
 	<link rel="shortcut icon" href="app/assets/images/logos/favicon.ico" />
     
-    <!-- IE required polyfills, in this exact order -->
+    <!-- Polyfill(s) for older browsers -->
     <script src="node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
-    <!-- Angular2 stuff -->
-    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     <!--Further Angular2 modules-->
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
@@ -27,24 +24,10 @@
     
     <link rel="stylesheet" href="app/assets/styles/style.css">
 
-    <!-- 2. Configure SystemJS -->
+    <!-- Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
     <script>
-        System.config({
-            packages: {        
-                app: {
-                    format: 'register',
-                    defaultExtension: 'js'
-                },
-                'angular2-modal': {
-                    defaultExtension: 'js'
-                }
-            },
-            map: {
-                'angular2-modal': 'node_modules/angular2-modal/dist/commonjs'
-            }
-        });
-        System.import('app/main')
-            .then(null, console.error.bind(console));
+        System.import('app/main').catch(function(err){ console.error(err); });
     </script>
 
   </head>

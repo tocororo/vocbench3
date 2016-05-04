@@ -1,6 +1,6 @@
-import { Component, ViewContainerRef } from "angular2/core";
-import { RouteConfig, ROUTER_DIRECTIVES, Router } from "angular2/router";
-import { Location } from "angular2/platform/common";
+import { Component, ViewContainerRef } from "@angular/core";
+import { RouteConfig, ROUTER_DIRECTIVES, Router } from "@angular/router-deprecated";
+import { Location } from "@angular/common";
 import { Modal } from 'angular2-modal/angular2-modal';
 import { VocbenchCtx } from "./utils/VocbenchCtx";
 import { HomeComponent } from "./homeComponent";

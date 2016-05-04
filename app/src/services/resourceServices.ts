@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
 
@@ -13,15 +13,6 @@ export class ResourceServices {
     /**
      * Removes a property-value to a resource
      * (used in ResourceView properties partition instead of Property.removePropValue)
-     * 
-     * @param year
-     * @param month
-     * @param day
-     * @param hour
-     * @param minute
-     * @param second
-     * @param offset
-     * @return formatted dateTime
      */
     removePropertyValue(subject: ARTResource, predicate: ARTURIResource, object: ARTNode) {
         console.log("[ResourceServices] removePropertyValue");

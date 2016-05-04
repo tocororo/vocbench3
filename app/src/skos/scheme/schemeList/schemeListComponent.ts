@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter} from "angular2/core";
+import {Component, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {SkosServices} from "../../../services/skosServices";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";

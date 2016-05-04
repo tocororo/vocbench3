@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";

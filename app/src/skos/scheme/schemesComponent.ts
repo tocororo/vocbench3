@@ -1,5 +1,5 @@
-import {Component} from "angular2/core";
-import {Router} from 'angular2/router';
+import {Component} from "@angular/core";
+import {Router} from '@angular/router-deprecated';
 import {SchemeListPanelComponent} from "./schemeListPanel/schemeListPanelComponent";
 import {ResourceViewComponent} from "../../resourceView/resourceViewComponent";
 import {ARTURIResource} from "../../utils/ARTResources";

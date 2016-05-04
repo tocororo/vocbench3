@@ -1,7 +1,7 @@
-import {Component, ReflectiveInjector, provide} from "angular2/core";
+import {Component, ReflectiveInjector, provide} from "@angular/core";
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {OntoMgrConfigModal, OntoMgrConfigModalContent} from "./ontoMgrConfigModal";
-import {Router} from 'angular2/router';
+import {Router} from '@angular/router-deprecated';
 import {ProjectServices} from "../../services/projectServices";
 import {OntoManagerServices} from "../../services/ontoManagerServices";
 import {PluginsServices} from "../../services/pluginsServices";

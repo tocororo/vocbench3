@@ -1,5 +1,5 @@
-import {Component, ReflectiveInjector, provide} from 'angular2/core';
-import {Router} from 'angular2/router';
+import {Component, ReflectiveInjector, provide} from '@angular/core';
+import {Router} from '@angular/router-deprecated';
 import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";

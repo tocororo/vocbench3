@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
-import {RouterLink} from "angular2/router";
+import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
+import {RouterLink} from "@angular/router-deprecated";
 import {ConceptTreeComponent} from "../conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";

@@ -1,4 +1,4 @@
-import {Component, ReflectiveInjector, provide} from "angular2/core";
+import {Component, ReflectiveInjector, provide} from "@angular/core";
 import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";

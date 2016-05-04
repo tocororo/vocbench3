@@ -1,4 +1,4 @@
-import {Component, Input, ReflectiveInjector, provide} from "angular2/core";
+import {Component, Input, ReflectiveInjector, provide} from "@angular/core";
 import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {RDFTypesEnum} from "../utils/Enums";

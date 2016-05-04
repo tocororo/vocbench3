@@ -1,4 +1,4 @@
-import {Injectable, EventEmitter} from 'angular2/core';
+import {Injectable, EventEmitter} from '@angular/core';
 import {ARTURIResource} from './ARTResources';
 
 /**
@@ -17,7 +17,7 @@ export class VBEventHandler {
     //event should contain an object with "narrower" (the narrower created) and "broader"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted concept
-    public conceptDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    public conceptDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "concept" and "scheme"
     public conceptRemovedFromSchemeEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "concept" and "scheme"
@@ -29,7 +29,7 @@ export class VBEventHandler {
     //event should contain an object with "subClass" (the subClass created) and "superClass"
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted class
-    public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "resource" and "type"
     public typeDeletedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "resource" and "type"
@@ -44,11 +44,11 @@ export class VBEventHandler {
     public instanceDeletedEvent: EventEmitter<any> = new EventEmitter();
     
     //PROPERTY EVENTS
-    public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "subProperty" (the subproperty created) and "superProperty"
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted property
-    public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter();
+    public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "property" and "superProperty"
     public superPropertyRemovedEvent: EventEmitter<any> = new EventEmitter();
     

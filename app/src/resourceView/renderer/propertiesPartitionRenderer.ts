@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
 import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";

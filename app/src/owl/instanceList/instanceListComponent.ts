@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input, Output, EventEmitter} from "angular2/core";
+import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";

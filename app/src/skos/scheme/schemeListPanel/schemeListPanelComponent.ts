@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter} from "angular2/core";
+import {Component, Output, EventEmitter} from "@angular/core";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {ModalServices} from "../../../widget/modal/modalServices";

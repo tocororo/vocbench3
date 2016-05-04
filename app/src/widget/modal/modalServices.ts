@@ -1,4 +1,4 @@
-import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from '@angular/core';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalContent} from "./promptModal/promptModal";

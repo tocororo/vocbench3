@@ -1,4 +1,4 @@
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {ARTURIResource} from "../utils/ARTResources";
 

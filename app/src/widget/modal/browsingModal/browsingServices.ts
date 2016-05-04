@@ -1,4 +1,4 @@
-import {Injectable, ReflectiveInjector, provide} from 'angular2/core';
+import {Injectable, ReflectiveInjector, provide} from '@angular/core';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ClassTreeModal, ClassTreeModalContent} from "../browsingModal/classTreeModal/classTreeModal";
 import {InstanceListModal, InstanceListModalContent} from "../browsingModal/instanceListModal/instanceListModal";

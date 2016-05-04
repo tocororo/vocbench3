@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "angular2/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
 import {SKOS} from '../../utils/Vocabulary';

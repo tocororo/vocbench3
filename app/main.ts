@@ -1,7 +1,7 @@
-import { bootstrap } from "angular2/platform/browser";
-import { enableProdMode, Renderer } from "angular2/core";
-import { ROUTER_PROVIDERS } from "angular2/router";
-import { HTTP_PROVIDERS } from "angular2/http";
+import { bootstrap } from "@angular/platform-browser-dynamic";
+import { enableProdMode, Renderer } from "@angular/core";
+import { ROUTER_PROVIDERS } from "@angular/router-deprecated";
+import { HTTP_PROVIDERS } from "@angular/http";
 import { Modal } from 'angular2-modal/angular2-modal';
 import { ModalServices } from "./src/widget/modal/modalServices";
 import { BrowsingServices } from "./src/widget/modal/browsingModal/browsingServices";

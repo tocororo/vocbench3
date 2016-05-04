@@ -1,5 +1,5 @@
-import {Component} from "angular2/core";
-import {Router} from 'angular2/router';
+import {Component} from "@angular/core";
+import {Router} from '@angular/router-deprecated';
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ModalServices} from "../../../widget/modal/modalServices";

@@ -1,5 +1,5 @@
-import {Component} from "angular2/core";
-import {Router, RouterLink} from 'angular2/router';
+import {Component} from "@angular/core";
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";

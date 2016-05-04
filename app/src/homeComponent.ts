@@ -1,5 +1,5 @@
-import {Component} from "angular2/core";
-import {RouterLink, Router} from "angular2/router";
+import {Component} from "@angular/core";
+import {RouterLink, Router} from "@angular/router-deprecated";
 import {ModalServices} from "./widget/modal/modalServices";
 import {VocbenchCtx} from "./utils/VocbenchCtx";
 

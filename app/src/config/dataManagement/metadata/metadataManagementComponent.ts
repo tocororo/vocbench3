@@ -1,5 +1,5 @@
-import {Component, ReflectiveInjector, provide} from "angular2/core";
-import {Router} from 'angular2/router';
+import {Component, ReflectiveInjector, provide} from "@angular/core";
+import {Router} from '@angular/router-deprecated';
 import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
 import {MetadataServices} from "../../../services/metadataServices";
 import {RefactorServices} from "../../../services/refactorServices";

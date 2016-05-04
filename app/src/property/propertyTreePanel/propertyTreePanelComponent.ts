@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from "angular2/core";
+import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {PropertyTreeComponent} from "../propertyTree/propertyTreeComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
