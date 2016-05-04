@@ -26,7 +26,7 @@ export class ResViewModalServices {
             dialog = this.modal.open(
                 <any>ClassListCreatorModal,
                 resolvedBindings,
-                new ModalConfig('lg', true, null, "modal-dialog")
+                new ModalConfig('lg', true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -43,7 +43,7 @@ export class ResViewModalServices {
             dialog = this.modal.open(
                 <any>InstanceListCreatorModal,
                 resolvedBindings,
-                new ModalConfig('lg', true, null, "modal-dialog")
+                new ModalConfig('lg', true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -60,7 +60,7 @@ export class ResViewModalServices {
             dialog = this.modal.open(
                 <any>EnrichPropertyModal,
                 resolvedBindings,
-                new ModalConfig('lg', true, null, "modal-dialog")
+                new ModalConfig('lg', true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }

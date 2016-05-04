@@ -262,7 +262,7 @@ export class MetadataManagementComponent {
             dialog = this.modal.open(
                 <any>PrefixNamespaceModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -405,7 +405,7 @@ export class MetadataManagementComponent {
             dialog = this.modal.open(
                 <any>ImportOntologyModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }

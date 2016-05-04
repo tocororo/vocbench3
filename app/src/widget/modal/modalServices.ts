@@ -36,7 +36,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>PromptModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -58,7 +58,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>ConfirmModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -81,7 +81,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>ConfirmCheckModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -101,7 +101,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>AlertModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -120,7 +120,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>SelectionModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -139,7 +139,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>DownloadModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -158,7 +158,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>ResourceSelectionModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -175,7 +175,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>NewResourceModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -196,7 +196,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>NewPlainLiteralModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
@@ -214,7 +214,7 @@ export class ModalServices {
             dialog = this.modal.open(
                 <any>NewTypedLiteralModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }

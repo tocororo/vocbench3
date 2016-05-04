@@ -249,7 +249,7 @@ export class AlignmentValidationComponent {
             dialog = this.modal.open(
                 <any>ValidationSettingsModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
         dialog.then(
@@ -363,7 +363,7 @@ export class AlignmentValidationComponent {
                     dialog = this.modal.open(
                         <any>ValidationReportModal,
                         resolvedBindings,
-                        new ModalConfig("lg", true, null, "modal-dialog")
+                        new ModalConfig("lg", true, null)
                 );
                 dialog.then(resultPromise => resultPromise.result.then(() => {}, () => {}));
             }

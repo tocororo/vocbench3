@@ -109,7 +109,7 @@ export class ResourceAlignmentModal implements ICustomModalComponent {
             dialog = this.modal.open(
                 <any>BrowseExternalResourceModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }

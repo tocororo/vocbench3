@@ -217,7 +217,7 @@ export class CreateProjectComponent {
             dialog = this.modal.open(
                 <any>OntoMgrConfigModal,
                 resolvedBindings,
-                new ModalConfig(null, true, null, "modal-dialog")
+                new ModalConfig(null, true, null)
         );
         return dialog.then(resultPromise => resultPromise.result);
     }
