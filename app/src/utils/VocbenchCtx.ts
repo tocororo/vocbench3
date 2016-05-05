@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ARTURIResource} from './ARTResources';
 import {Project} from './Project';
+import {RDFResourceRolesEnum} from "./Enums";
+import {Cookie} from "./Cookie";
 
 @Injectable()
 export class VocbenchCtx {
@@ -8,7 +10,6 @@ export class VocbenchCtx {
     private authToken: string; //if provided it means that the user is authenticated
     private workingProject: Project; //working project
     private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
-    private scheme: ARTURIResource; //working scheme (used only in SKOS(-XL) projects)
     private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
 
     constructor() { }
@@ -49,16 +50,31 @@ export class VocbenchCtx {
         this.ctxProject = undefined;
     }
 
+    /**
+     * Saves the given scheme for the project in use as cookie
+     */
     setScheme(scheme: ARTURIResource) {
-        this.scheme = scheme;
+        Cookie.setCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName(), scheme.getURI(), 365*10);
     }
 
+    /**
+     * Returns the scheme saved for the project in use as cookie.
+     * Note: returns an ARTURIResource with show null
+     */
     getScheme(): ARTURIResource {
-        return this.scheme;
+        var schemeCookie = Cookie.getCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName());
+        if (schemeCookie != null) {
+            return new ARTURIResource(schemeCookie, null, RDFResourceRolesEnum.conceptScheme);
+        } else {
+            return null;
+        }
     }
 
+    /**
+     * Removes the scheme saved for the project in use as cookie
+     */
     removeScheme() {
-        this.scheme = undefined;
+        Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName());
     }
     
     setSessionToken(token: string) {

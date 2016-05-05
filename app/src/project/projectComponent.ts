@@ -16,8 +16,6 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
     
-    private exportLink: string;
-
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
         private modalService: ModalServices) {
         // navigate to Home view if not authenticated
@@ -101,7 +99,8 @@ export class ProjectComponent implements OnInit {
         this.projectService.exportProject(this.selectedProject).subscribe(
             stResp => {
                 var data = new Blob([stResp], {type: "octet/stream"});
-                this.exportLink = window.URL.createObjectURL(data);
+                var exportLink = window.URL.createObjectURL(data);
+                this.modalService.downloadLink("Export project", null, exportLink, "export.zip");
             },
             err => { }
         );
