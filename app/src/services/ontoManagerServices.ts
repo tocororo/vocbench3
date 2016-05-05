@@ -47,5 +47,24 @@ export class OntoManagerServices {
             }
         );
     }
+    
+    /**
+     * Gets the list of ontology manager implementations. Returns a list of class names.
+     */
+    listOntoManager() {
+        console.log("[OntoManagerServices] listOntoManager");
+        var params = {};
+        return this.httpMgr.doGet("systemStart", "listTripleStores", params, this.oldTypeService).map(
+            stResp => {
+                var ontMgrList = [];
+                var repElemColl: Array<Element> = stResp.getElementsByTagName("Repository");
+                for (var i = 0; i < repElemColl.length; i++) {
+                    ontMgrList.push(repElemColl[i].getAttribute("repName"));
+                }
+                return ontMgrList;
+            }
+        );
+    }
+    
 
 }

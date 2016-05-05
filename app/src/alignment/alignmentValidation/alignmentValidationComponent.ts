@@ -366,7 +366,8 @@ export class AlignmentValidationComponent {
                         new ModalConfig("lg", true, null)
                 );
                 dialog.then(resultPromise => resultPromise.result.then(() => {}, () => {}));
-            }
+            },
+            () => { document.getElementById("blockDivFullScreen").style.display = "none"; }
         )
     }
     

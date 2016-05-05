@@ -40,10 +40,10 @@ export class ImportDataComponent {
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.format).subscribe(
                 stResp => {
+                    document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Import data", "Data imported successfully");
                 },
-                err => { },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
             );
         }
     }

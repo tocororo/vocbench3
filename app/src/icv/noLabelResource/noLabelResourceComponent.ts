@@ -56,9 +56,9 @@ export class NoLabelResourceComponent {
                             var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept); 
                             this.brokenResourceList.push(c);
                         }
+                        document.getElementById("blockDivIcv").style.display = "none";
                     },
-                    err => { },
-                    () => document.getElementById("blockDivIcv").style.display = "none"
+                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
                 );
             } else if (this.resourceType == RDFResourceRolesEnum.conceptScheme) {
                 document.getElementById("blockDivIcv").style.display = "block";
@@ -70,9 +70,9 @@ export class NoLabelResourceComponent {
                             var c = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme); 
                             this.brokenResourceList.push(c);
                         }
+                        document.getElementById("blockDivIcv").style.display = "none";
                     },
-                    err => { },
-                    () => document.getElementById("blockDivIcv").style.display = "none"
+                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
                 );
             }
         } else if (this.ontoType == "SKOS-XL") {
@@ -86,9 +86,9 @@ export class NoLabelResourceComponent {
                             var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept); 
                             this.brokenResourceList.push(c);
                         }
+                        document.getElementById("blockDivIcv").style.display = "none";
                     },
-                    err => { },
-                    () => document.getElementById("blockDivIcv").style.display = "none"
+                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
                 );
             } else if (this.resourceType == RDFResourceRolesEnum.conceptScheme) {
                 document.getElementById("blockDivIcv").style.display = "block";
@@ -100,9 +100,9 @@ export class NoLabelResourceComponent {
                             var c = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme); 
                             this.brokenResourceList.push(c);
                         }
+                        document.getElementById("blockDivIcv").style.display = "none";
                     },
-                    err => { },
-                    () => document.getElementById("blockDivIcv").style.display = "none"
+                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
                 );
             }
         } else { //OWL 

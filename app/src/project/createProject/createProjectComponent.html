@@ -20,9 +20,7 @@
                     <div class="form-group">
                         <label>Type:</label>
                         <select class="form-control input-sm" [(ngModel)]="ontoType">
-                            <option value="it.uniroma2.art.owlart.models.OWLModel">OWL</option>
-                            <option value="it.uniroma2.art.owlart.models.SKOSModel">SKOS</option>
-                            <option value="it.uniroma2.art.owlart.models.SKOSXLModel">SKOS-XL</option>
+                            <option *ngFor="let ot of ontoTypeList" [value]="ot.value">{{ot.label}}</option>
                         </select>
                     </div>
                 </form>
@@ -44,7 +42,9 @@
                     
                     <div class="form-group">
                         <label>OntoManager:</label>
-                        <input type="text" class="form-control input-sm" style="cursor: default" [(ngModel)]="ontoMgrId" disabled>
+                        <select class="form-control input-sm" [(ngModel)]="ontoMgrId" (ngModelChange)="onOntMgrChanged()">
+                            <option *ngFor="let om of ontoMgrList" [value]="om">{{om}}</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -62,7 +62,6 @@
             </div>
 
             <!--Extention points configuration-->
-            <!--Unavailable untill issue https://github.com/angular/angular/issues/4843 is not resolved-->
             <div class="subPanel">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Optional settings:</label>
@@ -81,8 +80,6 @@
                                 
                                 <div class="form-group">
                                     <label>Plugin:</label>
-                                        <!-- currently select option is not fully supported with object array. This is a workaroung
-                                                see issue https://github.com/angular/angular/issues/4843 -->
                                     <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPluginId" (ngModelChange)="changeExtPointPlugin(xp)">
                                         <option value="---">---</option>
                                         <option *ngFor="let plugin of xp.plugins" [value]="plugin">{{plugin.substring(plugin.lastIndexOf('.')+1)}}</option>

@@ -45,15 +45,15 @@ export class ConfigBarComponent {
                         //close the project (to avoid exception)
                         this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
                             stResp => {
+                                document.getElementById("blockDivFullScreen").style.display = "none";
                                 this.vbCtx.removeWorkingProject();
                                 //then redirect to home page
                                 this.router.navigate(['Projects']);
                             },
-                            err => { }
+                            err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
                         );
                     },
-                    err => { },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
                 );
             },
             () => {}

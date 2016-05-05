@@ -78,7 +78,8 @@ export class BrowseExternalResourceModal implements ICustomModalComponent {
             stResp => {
                 this.vbCtx.setContextProject(this.project);
                 document.getElementById("blockDivFullScreen").style.display = "none";
-            }
+            },
+            () => document.getElementById("blockDivFullScreen").style.display = "none"
         );
         this.alignedObject = null;
     }

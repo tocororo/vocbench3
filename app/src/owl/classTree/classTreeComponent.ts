@@ -64,9 +64,9 @@ export class ClassTreeComponent {
             this.owlService.getClassesInfoAsRootsForTree(this.rootClasses[i]).subscribe(
                 roots => {
                     this.roots = this.roots.concat(roots);
+                    this.blockDivElement.nativeElement.style.display = "none";
                 },
-                err => { },
-                () => this.blockDivElement.nativeElement.style.display = "none"
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
             );
         }
     }

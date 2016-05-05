@@ -44,9 +44,9 @@ export class NoTopConceptSchemeComponent {
                     var s = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme); 
                     this.brokenSchemeList.push(s);
                 }
+                document.getElementById("blockDivIcv").style.display = "none";
             },
-            err => { },
-            () => document.getElementById("blockDivIcv").style.display = "none"
+            err => { document.getElementById("blockDivIcv").style.display = "none"; }
         );
     }
     

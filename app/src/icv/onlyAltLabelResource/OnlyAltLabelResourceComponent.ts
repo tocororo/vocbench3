@@ -58,18 +58,18 @@ export class OnlyAltLabelResourceComponent {
                 this.icvService.listConceptsWithOnlySKOSAltLabel().subscribe(
                     stResp => {
                         //TODO
+                        document.getElementById("blockDivIcv").style.display = "none";
                     },
-                    err => { },
-                    () => document.getElementById("blockDivIcv").style.display = "none"
+                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
                 );
             } else if (this.resourceType == RDFResourceRolesEnum.conceptScheme) {
                 document.getElementById("blockDivIcv").style.display = "block";
                 this.icvService.listConceptsWithOnlySKOSXLAltLabel().subscribe(
                     stResp => {
                         //TODO
+                        document.getElementById("blockDivIcv").style.display = "none";
                     },
-                    err => { },
-                    () => document.getElementById("blockDivIcv").style.display = "none"
+                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
                 );
             }
         } else if (this.ontoType == "SKOS-XL") {

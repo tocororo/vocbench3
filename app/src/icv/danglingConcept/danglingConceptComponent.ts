@@ -64,9 +64,9 @@ export class DanglingConceptComponent {
                         this.brokenConceptList.push(dc);
                     }
                 }
+                document.getElementById("blockDivIcv").style.display = "none"
             },
-            err => { },
-            () => document.getElementById("blockDivIcv").style.display = "none"
+            err => { document.getElementById("blockDivIcv").style.display = "none"; }
         );
     }
     

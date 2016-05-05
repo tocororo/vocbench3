@@ -306,7 +306,8 @@ nav {
 }
 
 .navbar-default {
-	background: linear-gradient(to right, #1B3671, #7486AB);
+	/*background: linear-gradient(to right, #1B3671, #7486AB);*/
+    background: #1E4387;
 }
 
 .navbar-brand {
@@ -314,7 +315,7 @@ nav {
 }
 
 .navbar-nav>li>a {
-    padding: 14px;
+    /*padding: 14px;*/
     margin: 1px;
 }
 
@@ -403,4 +404,8 @@ If modals  show layout problems try to remove it.*/
   display: inline-block;
   text-align: left;
   vertical-align: middle;
+}
+
+.dropdown-menu .divider {
+    margin: 2px 0px;
 }

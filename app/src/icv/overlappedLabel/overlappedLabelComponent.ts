@@ -51,18 +51,18 @@ export class OverlappedLabelComponent {
             this.icvService.listConceptsWithOverlappedSKOSLabel().subscribe(
                 stResp => {
                     //TODO
+                    document.getElementById("blockDivIcv").style.display = "none";
                 },
-                err => { },
-                () => document.getElementById("blockDivIcv").style.display = "none"
+                err => { document.getElementById("blockDivIcv").style.display = "none"; }
             );
         } else if (this.ontoType == "SKOS-XL") {
             document.getElementById("blockDivIcv").style.display = "block";
             this.icvService.listConceptsWithOverlappedSKOSXLLabel().subscribe(
                 stResp => {
                     //TODO
+                    document.getElementById("blockDivIcv").style.display = "none";
                 },
-                err => { },
-                () => document.getElementById("blockDivIcv").style.display = "none"
+                err => { document.getElementById("blockDivIcv").style.display = "none"; }
             );
         }
     }

@@ -28,12 +28,12 @@ export class ExportDataComponent {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.inOutService.saveRDF(this.format).subscribe(
             stResp => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
                 var data = new Blob([stResp], {type: "octet/stream"});
                 var downloadLink = window.URL.createObjectURL(data);
                 this.modalService.downloadLink("Export data", null, downloadLink, "export.rdf");
             },
-            err => { },
-            () => document.getElementById("blockDivFullScreen").style.display = "none"
+            err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
         );
     }
     

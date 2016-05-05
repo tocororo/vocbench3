@@ -43,9 +43,10 @@ export class NoSchemeConceptComponent {
                     var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept); 
                     this.brokenConceptList.push(c);       
                 }
+                document.getElementById("blockDivIcv").style.display = "none";
             },
-            err => { },
-            () => document.getElementById("blockDivIcv").style.display = "none");
+            err => { document.getElementById("blockDivIcv").style.display = "none"; }
+        );
     }
     
     /**

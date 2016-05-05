@@ -88,5 +88,13 @@ export class VocbenchCtx {
     removeSessionToken() {
         this.sessionToken = undefined;
     }
+    
+    setContentLanguage(langTag: string) {
+        Cookie.setCookie(Cookie.VB_CONTENT_LANG, langTag, 365*10);
+    }
+    
+    getContentLanguage() {
+        return Cookie.getCookie(Cookie.VB_CONTENT_LANG);
+    }
 
 }

@@ -77,9 +77,9 @@ export class InstanceListComponent {
                         }
                     }
                 }
+                this.blockDivElement.nativeElement.style.display = "none";
             },
-            err => { },
-            () => this.blockDivElement.nativeElement.style.display = "none"
+            err => { this.blockDivElement.nativeElement.style.display = "none"; }
         );
     }
     

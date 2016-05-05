@@ -53,20 +53,20 @@ export class NoLangLabelComponent {
             //should be replaced by listResourcesWithNoLanguageSKOSLabel and should look for concept and conceptScheme
             this.icvService.listConceptsWithNoLanguageTagSKOSLabel().subscribe(
                 stResp => {
-                    
+                    //...
+                    document.getElementById("blockDivIcv").style.display = "none";
                 },
-                err => { },
-                () => document.getElementById("blockDivIcv").style.display = "none"
+                err => { document.getElementById("blockDivIcv").style.display = "none"; }
             );
         } else if (this.ontoType == "SKOS-XL") {
             document.getElementById("blockDivIcv").style.display = "block";
             //should be replaced by listResourcesWithNoLanguageSKOSXLLabel and should look for concept and conceptScheme
             this.icvService.listConceptsWithNoLanguageTagSKOSXLLabel().subscribe(
                 stResp => {
-                    
+                    //...
+                    document.getElementById("blockDivIcv").style.display = "none";
                 },
-                err => { },
-                () => document.getElementById("blockDivIcv").style.display = "none"
+                err => { document.getElementById("blockDivIcv").style.display = "none"; }
             );
         } else { //OWL 
             //TODO listResourcesWithNoLanguageRDFSLabel and should look for classes and individuals

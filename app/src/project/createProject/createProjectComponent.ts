@@ -37,9 +37,16 @@ export class CreateProjectComponent {
     
     private projectName: string;
     private baseURI: string;
-    private ontoType: string = "it.uniroma2.art.owlart.models.OWLModel";
     
-    private ontoMgrId = "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl";
+    private ontoTypeList = [
+        {value: "it.uniroma2.art.owlart.models.OWLModel", label: "OWL"},
+        {value: "it.uniroma2.art.owlart.models.SKOSModel", label: "SKOS"},
+        {value: "it.uniroma2.art.owlart.models.SKOSXLModel", label: "SKOSXL"}
+    ];
+    private ontoType: string = this.ontoTypeList[0].value;
+    
+    private ontoMgrList: Array<string>;
+    private ontoMgrId: string;
     private ontoMgrConfigList: Array<any>;
     private selectedOntoMgrConfig: any = {};
     //config represents the configuration of the ontology manager (shortName, type, params, ...)
@@ -65,12 +72,18 @@ export class CreateProjectComponent {
     }
     
     ngOnInit() {
-        this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
-            configList => {
-                this.ontoMgrConfigList = configList;
-                this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
+        this.ontMgrService.listOntoManager().subscribe(
+            ontoMgrs => {
+                this.ontoMgrList = ontoMgrs;
+                this.ontoMgrId = this.ontoMgrList[0];
+                this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
+                    configList => {
+                        this.ontoMgrConfigList = configList;
+                        this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
+                    }
+                );
             }
-        );
+        )
         
         for (var i = 0; i < this.extPointList.length; i++) {
             var extPoint: any = {};
@@ -92,6 +105,18 @@ export class CreateProjectComponent {
                 }
             );
         }
+    }
+    
+    /**
+     * Called when user change the onto manager. Updates the configuration list of the onto manager.
+     */
+    onOntMgrChanged() {
+        this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
+            configList => {
+                this.ontoMgrConfigList = configList;
+                this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
+            }
+        );
     }
     
     /**
@@ -196,12 +221,12 @@ export class CreateProjectComponent {
                 uriGenFactoryID, uriGenConfigurationClass, uriGenConfigurationArray,
                 renderingEngineFactoryID, renderingEngineConfigurationClass, renderingEngineConfigurationArray).subscribe(
                 stResp => {
+                    document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Create project", "Project created successfully").then(
                         () => this.router.navigate(['Projects'])
                     );
                 },
-                err => { },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
             );
             
         }

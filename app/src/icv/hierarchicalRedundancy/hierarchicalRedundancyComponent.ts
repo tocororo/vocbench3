@@ -43,9 +43,9 @@ export class HierarchicalRedundancyComponent {
                     var n = new ARTURIResource(recordColl[i].getAttribute("narrower"), recordColl[i].getAttribute("narrower"), RDFResourceRolesEnum.concept); 
                     this.brokenRecordList.push({broader: b, narrower: n});
                 }
+                document.getElementById("blockDivIcv").style.display = "none";
             },
-            err => { },
-            () => document.getElementById("blockDivIcv").style.display = "none"
+            err => { document.getElementById("blockDivIcv").style.display = "none"; }
         );
     }
     

@@ -36,12 +36,12 @@ export class ImportProjectComponent {
             document.getElementById("blockDivFullScreen").style.display = "block";
             this.projectService.importProject(this.projectName, this.fileToUpload).subscribe(
                 stResp => {
+                    document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Import project", "Project imported successfully").then(
                         confirm => this.router.navigate(["Projects"])
                     );
                 },
-                err => { },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
             );
         }
     }

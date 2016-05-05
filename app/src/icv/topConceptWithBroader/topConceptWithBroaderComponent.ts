@@ -43,9 +43,9 @@ export class TopConceptWithBroaderComponent {
                     var s = new ARTURIResource(recordColl[i].getAttribute("scheme"), recordColl[i].getAttribute("scheme"), RDFResourceRolesEnum.conceptScheme); 
                     this.brokenRecordList.push({concept: c, scheme: s});
                 }
+                document.getElementById("blockDivIcv").style.display = "none";
             },
-            err => { },
-            () => document.getElementById("blockDivIcv").style.display = "none"
+            err => { document.getElementById("blockDivIcv").style.display = "none"; }
         );
     }
     

@@ -113,9 +113,9 @@ export class ResourceViewComponent {
                         this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                     }
                 }
+                document.getElementById("blockDivResView").style.display = "none"
             },
-            err => { },
-            () => document.getElementById("blockDivResView").style.display = "none"
+            err => { document.getElementById("blockDivResView").style.display = "none"; }
         );
     }
     
