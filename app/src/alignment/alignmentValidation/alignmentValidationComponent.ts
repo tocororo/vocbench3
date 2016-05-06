@@ -7,7 +7,7 @@ import {Cookie} from "../../utils/Cookie";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 import {AlignmentCell} from "./AlignmentCell";
-import {ValidationSettingsModal, ValidationSettingsModalContent} from "./validationSettingsModal/validationSettingsModal"
+import {ValidationSettingsModal} from "./validationSettingsModal/validationSettingsModal"
 import {ValidationReportModal, ValidationReportModalContent} from "./validationReportModal/validationReportModal"
 import {AlignmentServices} from "../../services/AlignmentServices";
 
@@ -243,16 +243,8 @@ export class AlignmentValidationComponent {
      * Opens a modal dialog to edit the settings
      */
     private openSettings() {
-        var modalContent = new ValidationSettingsModalContent();
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ValidationSettingsModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
-        );
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-        dialog.then(
+        this.modal.open(<any>ValidationSettingsModal, [], new ModalConfig(null, true, null)).then(
             resultPromise => resultPromise.result.then(
                 () => {
                     //update settings

@@ -1,5 +1,5 @@
 import {Injectable, ReflectiveInjector, provide} from '@angular/core';
-import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
+import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ClassListCreatorModal, ClassListCreatorModalContent} from "./classListCreatorModal";
 import {InstanceListCreatorModal, InstanceListCreatorModalContent} from "./instanceListCreatorModal";
 import {EnrichPropertyModal, EnrichPropertyModalContent} from "./enrichPropertyModal";

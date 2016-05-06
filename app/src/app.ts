@@ -26,6 +26,10 @@ import { ExportDataComponent } from "./config/dataManagement/exportData/exportDa
 import { MetadataManagementComponent } from "./config/dataManagement/metadata/metadataManagementComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
 
+//import to open modal to change content language (Remove if the modal will be launched from another component)
+import { ModalConfig } from 'angular2-modal/angular2-modal';
+import { ContentLangModal } from "./settings/contentLang/contentLangModal";
+
 import { TestComponent } from "./test/testComponent";
 
 @Component({
@@ -115,6 +119,16 @@ export class App {
      */
     private isProjectOWL(): boolean {
         return (this.vbCtx.getWorkingProject().getPrettyPrintOntoType() == "OWL");
+    }
+    
+    private changeContentLang() {
+        this.modal.open(<any>ContentLangModal, [], new ModalConfig(null, true, null)).then(
+            resultPromise => 
+                resultPromise.result.then(
+                    confirmed => {},
+                    canceled => {}
+                )
+            );
     }
     
 }

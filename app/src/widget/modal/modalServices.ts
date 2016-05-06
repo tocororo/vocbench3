@@ -1,5 +1,5 @@
 import {Injectable, ReflectiveInjector, provide} from '@angular/core';
-import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
+import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
@@ -166,10 +166,11 @@ export class ModalServices {
     /**
      * Opens a modal to create a new resource with name, label and language tag
      * @param title the title of the modal dialog
+     * @param lang the language of the new resource
      * @return if the modal closes with ok returns a promise containing an object with name, label and lang
      */
-    newResource(title: string) {
-        var modalContent = new NewResourceModalContent(title);
+    newResource(title: string, lang?: string) {
+        var modalContent = new NewResourceModalContent(title, lang);
         let resolvedBindings = ReflectiveInjector.resolve(
             [provide(ICustomModal, {useValue: modalContent})]),
             dialog = this.modal.open(

@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
+import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 
@@ -27,7 +28,7 @@ export class ConceptTreeNodeComponent {
     
     private eventSubscriptions = [];
     
-	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler) {
+	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             deletedConcept => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
@@ -98,7 +99,7 @@ export class ConceptTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
+        this.skosService.getNarrowerConcepts(this.node, this.scheme, this.vbCtx.getContentLanguage()).subscribe(
             narrower => {
                 this.node.setAdditionalProperty("children", narrower); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty("open", true);

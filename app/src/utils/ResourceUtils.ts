@@ -113,5 +113,9 @@ export class ResourceUtils {
         }
         return imgSrc
     }
+    
+    static getFlagImgSrc(langTag: string): string {
+        return "app/assets/images/flags/flag_" + langTag + ".png";
+    }
 
 }

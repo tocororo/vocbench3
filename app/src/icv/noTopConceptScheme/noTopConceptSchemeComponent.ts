@@ -70,7 +70,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.modalService.newResource("Create top Concept").then(
+        this.modalService.newResource("Create top Concept", this.vbCtx.getContentLanguage()).then(
             data => {
                 this.skosService.createTopConcept(data.name, scheme, data.label, data.lang).subscribe(
                     stResp => {

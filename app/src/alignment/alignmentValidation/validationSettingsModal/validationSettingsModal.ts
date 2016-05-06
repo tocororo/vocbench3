@@ -1,18 +1,6 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {Cookie} from "../../../utils/Cookie";
-
-/**
- * This modal doesn't get any input parameter, anyway provide this class cause I don't know at the moment how to
- * use custom modal without content
- */
-export class ValidationSettingsModalContent {
-    /**
-     * @param
-     */
-    // constructor() {
-    // }
-}
 
 @Component({
     selector: "validation-settings-modal",
@@ -37,13 +25,7 @@ export class ValidationSettingsModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     
-    dialog: ModalDialogInstance;
-    context: ValidationSettingsModalContent;
-    
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <ValidationSettingsModalContent>modelContentData;
-    }
+    constructor(public dialog: ModalDialogInstance) {}
     
     ngOnInit() {
         //here there's no need to check if cookies are != null, because they're initialized in AlignmentValidationComponent

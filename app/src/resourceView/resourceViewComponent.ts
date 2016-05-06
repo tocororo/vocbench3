@@ -8,7 +8,7 @@ import {ModalServices} from "../widget/modal/modalServices";
 import {ResourceViewServices} from "../services/resourceViewServices";
 import {RefactorServices} from "../services/refactorServices";
 import {AlignmentServices} from "../services/alignmentServices";
-import {Modal, ModalConfig, ModalDialogInstance, ICustomModal} from 'angular2-modal/angular2-modal';
+import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
 import {ResourceAlignmentModal, ResourceAlignmentModalContent} from "../alignment/resourceAlignment/resourceAlignmentModal"
 
 import {TypesPartitionRenderer} from "./renderer/typesPartitionRenderer";

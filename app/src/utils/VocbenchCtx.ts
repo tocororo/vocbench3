@@ -89,12 +89,25 @@ export class VocbenchCtx {
         this.sessionToken = undefined;
     }
     
+    /**
+     * Sets the content language for project in use as cookie.
+     */
     setContentLanguage(langTag: string) {
-        Cookie.setCookie(Cookie.VB_CONTENT_LANG, langTag, 365*10);
+        Cookie.setCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName(), langTag, 365*10);
     }
     
+    /**
+     * Returns the content language for project in use set as cookie.
+     * If no language is set, return "en" as default
+     */
     getContentLanguage() {
-        return Cookie.getCookie(Cookie.VB_CONTENT_LANG);
+        // return Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
+        var contLang = Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
+        if (contLang == null) {
+            return "en"; //default lang
+        } else {
+            return contLang;
+        }
     }
 
 }

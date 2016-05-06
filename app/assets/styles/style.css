@@ -100,7 +100,7 @@ config-bar {
 
 .resViewContainer {
     margin-left: 10px;
-    flex: 4;
+    flex: 3;
 }
 
 concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, resource-view {

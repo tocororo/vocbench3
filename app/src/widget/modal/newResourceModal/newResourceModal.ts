@@ -3,10 +3,10 @@ import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 
 export class NewResourceModalContent {
-    public title: string = "Modal title";
-    constructor(title: string) {
-        this.title = title;
-    }
+    constructor(
+        public title: string = "Modal title",
+        public lang: string = "en"
+    ) {}
 }
 
 @Component({
@@ -20,7 +20,7 @@ export class NewResourceModal implements ICustomModalComponent {
     
     private name: string;
     private label: string;
-    private lang: string = "en";
+    private lang: string;
     private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
         "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
     
@@ -33,6 +33,7 @@ export class NewResourceModal implements ICustomModalComponent {
     }
     
     ngOnInit() {
+        this.lang = this.context.lang;
         document.getElementById("toFocus").focus();
     }
 

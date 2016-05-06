@@ -1,5 +1,6 @@
 import {Component, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
+import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 
@@ -15,10 +16,10 @@ export class SchemeListComponent {
     private schemeList: ARTURIResource[];
     private selectedScheme: ARTURIResource;
     
-    constructor(private skosService: SkosServices) {}
+    constructor(private skosService: SkosServices, private vbCtx: VocbenchCtx) {}
     
     ngOnInit() {
-        this.skosService.getAllSchemesList().subscribe(
+        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage()).subscribe(
             schemeList => {
                 this.schemeList = schemeList;
             },

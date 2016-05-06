@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {ResourceUtils} from "../../../utils/ResourceUtils";
 
 export class NewPlainLiteralModalContent {
     /**
@@ -37,11 +38,11 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
         this.dialog = dialog;
         this.context = <NewPlainLiteralModalContent>modelContentData;
-        this.lang = this.context.lang;
-        this.value = this.context.value;
     }
     
     ngOnInit() {
+        this.lang = this.context.lang;
+        this.value = this.context.value;
         document.getElementById("toFocus").focus();
     }
 
@@ -69,7 +70,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     }
     
     private getFlagImgSrc(): string {
-        return "app/assets/images/flags/flag_" + this.lang + ".png";
+        return ResourceUtils.getFlagImgSrc(this.lang);
     }
 
 }

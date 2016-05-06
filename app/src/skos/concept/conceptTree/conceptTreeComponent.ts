@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "@angular/core";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
+import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {RDFResourceRolesEnum} from "../../../utils/Enums";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
@@ -37,7 +38,8 @@ export class ConceptTreeComponent {
 
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler,
+        private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             data => this.onTopConceptCreated(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
@@ -75,7 +77,7 @@ export class ConceptTreeComponent {
     
     private initTree() {
         this.blockDivElement.nativeElement.style.display = "block";
-        this.skosService.getTopConcepts(this.workingScheme).subscribe(
+        this.skosService.getTopConcepts(this.workingScheme, this.vbCtx.getContentLanguage()).subscribe(
             topConcepts => {
                 this.roots = topConcepts;
                 this.blockDivElement.nativeElement.style.display = "none";

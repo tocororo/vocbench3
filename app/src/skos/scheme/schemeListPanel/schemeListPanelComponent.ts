@@ -29,7 +29,7 @@ export class SchemeListPanelComponent {
     }
     
     ngOnInit() {
-        this.skosService.getAllSchemesList().subscribe(
+        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage()).subscribe(
             schemeList => {
                 this.schemeList = schemeList;
             },
@@ -39,7 +39,7 @@ export class SchemeListPanelComponent {
     }
     
     private createScheme() {
-        this.modalService.newResource("Create new skos:ConceptScheme").then(
+        this.modalService.newResource("Create new skos:ConceptScheme", this.vbCtx.getContentLanguage()).then(
             result => {
                 this.skosService.createScheme(result.name, result.label, result.lang).subscribe(
                     newScheme => {
