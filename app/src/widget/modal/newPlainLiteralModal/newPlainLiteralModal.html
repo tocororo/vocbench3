@@ -9,7 +9,7 @@
                 [disabled]="context.valueReadonly">
             <select [(ngModel)]="lang" class="form-control input-sm" style="width: initial; margin-right: 4px;"
                 [disabled]="context.langReadonly">
-                <option *ngFor="let lang of languageList" [value]="lang">{{lang}}</option>
+                <option *ngFor="let lang of languageList" [value]="lang.tag">{{lang.name}} ({{lang.tag}})</option>
             </select>
             <img [src]="getFlagImgSrc()"/>
         </div>

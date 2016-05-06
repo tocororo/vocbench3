@@ -55,6 +55,9 @@ export class VBEventHandler {
     //event should contain an object with "oldResource" and "newResource"
     public resourceRenamedEvent: EventEmitter<any> = new EventEmitter();
     
+    //event contains the new content language
+    public contentLangChangedEvent: EventEmitter<string> = new EventEmitter<string>();
+    
 	constructor() {}
     
     /**

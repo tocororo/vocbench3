@@ -1,7 +1,9 @@
 import {Component} from "@angular/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {VBEventHandler} from "../../utils/VBEventHandler";
 import {ResourceUtils} from "../../utils/ResourceUtils";
+import {Languages} from "../../utils/LanguagesCountries";
 
 @Component({
     selector: "content-lang-modal",
@@ -9,30 +11,11 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 })
 export class ContentLangModal implements ICustomModalComponent {
     
-    private languages = [
-        { name: "Arabic", tag: "ar" },
-        { name: "Czech", tag: "cs" },
-        { name: "German", tag: "de" },
-        { name: "Greek", tag: "el" },
-        { name: "English", tag: "en" },
-        { name: "Spanish", tag: "es" },
-        { name: "French", tag: "fr" },
-        { name: "Hindi", tag: "hi" },
-        { name: "Italian", tag: "it" },
-        { name: "Japanese", tag: "ja" },
-        { name: "Korean", tag: "ko" },
-        { name: "Dutch", tag: "nl" },
-        { name: "Portuguese", tag: "pt" },
-        { name: "Russian", tag: "ru" },
-        { name: "Thai", tag: "th" },
-        { name: "Turkish", tag: "tr" },
-        { name: "Ukrainian", tag: "uk" },
-        { name: "Chinese", tag: "zh" }
-    ];
+    private languages = Languages.languageList;
     
     private contentLang: string;
     
-    constructor(public dialog: ModalDialogInstance, public vbCtx: VocbenchCtx) {}
+    constructor(public dialog: ModalDialogInstance, public vbCtx: VocbenchCtx, public evtHandler: VBEventHandler) {}
     
     private getFlagImgSrc() {
         return ResourceUtils.getFlagImgSrc(this.contentLang);
@@ -44,7 +27,12 @@ export class ContentLangModal implements ICustomModalComponent {
     }
 
     ok(event) {
-        this.vbCtx.setContentLanguage(this.contentLang);
+        var oldLang = this.vbCtx.getContentLanguage();
+        //update content language only if changed and emit event
+        if (oldLang != this.contentLang) {
+            this.vbCtx.setContentLanguage(this.contentLang);
+            this.evtHandler.contentLangChangedEvent.emit(this.contentLang);
+        }
         event.stopPropagation();
         this.dialog.close();
     }

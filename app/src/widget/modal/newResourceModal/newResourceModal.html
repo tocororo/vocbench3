@@ -11,7 +11,7 @@
             <label style="width: 50px;">Label:</label>
             <input type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="label">
             <select [(ngModel)]="lang" class="form-control input-sm" style="width: initial; margin-right: 4px;">
-                <option *ngFor="let lang of languageList" [value]="lang">{{lang}}</option>
+                <option *ngFor="let lang of languageList" [value]="lang.tag">{{lang.name}} ({{lang.tag}})</option>
             </select>
             <img [src]="getFlagImgSrc()"/>
         </div>

@@ -48,6 +48,8 @@ export class ConceptTreeComponent {
             data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
             data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
+        this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
+            newLang => this.onContentLangChanged(newLang)));
     }
     
     ngOnInit() {
@@ -182,6 +184,13 @@ export class ConceptTreeComponent {
                 }
             }
         }
+    }
+    
+    private onContentLangChanged(lang: string) {
+        //reset the selected item
+        this.itemSelected.emit(undefined);
+        //and reinitialize tree
+        this.initTree();
     }
 
 }

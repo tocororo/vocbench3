@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
+import {Languages} from "../../../utils/LanguagesCountries";
 
 export class NewResourceModalContent {
     constructor(
@@ -21,8 +22,7 @@ export class NewResourceModal implements ICustomModalComponent {
     private name: string;
     private label: string;
     private lang: string;
-    private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
-        "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
+    private languageList = Languages.languageList;
     
     dialog: ModalDialogInstance;
     context: NewResourceModalContent;

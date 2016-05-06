@@ -102,12 +102,14 @@ export class VocbenchCtx {
      */
     getContentLanguage() {
         // return Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
-        var contLang = Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
-        if (contLang == null) {
-            return "en"; //default lang
-        } else {
-            return contLang;
+        var contLang: string;
+        if (this.getWorkingProject() != undefined) {
+            var contLang = Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
         }
+        if (contLang == null) {
+            contLang = "en"; //default lang
+        }
+        return contLang;
     }
 
 }

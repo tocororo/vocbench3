@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {ResourceUtils} from "../../../utils/ResourceUtils";
+import {Languages} from "../../../utils/LanguagesCountries";
 
 export class NewPlainLiteralModalContent {
     /**
@@ -29,8 +30,7 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     
     private value: string;
     private lang: string;
-    private languageList = ["ar", "cs", "de", "el", "en", "es", "fr",
-        "hi", "it", "ja", "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
+    private languageList = Languages.languageList;
     
     dialog: ModalDialogInstance;
     context: NewPlainLiteralModalContent;
