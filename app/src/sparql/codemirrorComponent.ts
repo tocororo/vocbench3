@@ -1,6 +1,6 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+///<reference path="../../../typings/main/ambient/codemirror/index.d.ts"/>
 
-declare var CodeMirror: any;
+import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'codemirror',
@@ -15,7 +15,7 @@ export class CodemirrorComponent {
     
     @ViewChild('txtarea') textareaElement;
 
-    cm: any;
+    cm: CodeMirror.EditorFromTextArea;
 
     constructor() { }
 
@@ -24,9 +24,8 @@ export class CodemirrorComponent {
             this.textareaElement.nativeElement,
             { 
                 lineNumbers: true, mode: "application/sparql-query", 
-                matchBrackets: true,
                 indentUnit : 4,
-                tabMode : "indent",
+                indentWithTabs: true,
                 extraKeys: {"Ctrl-Space": this.autoCompleteHandler},
             }
         );
@@ -34,9 +33,6 @@ export class CodemirrorComponent {
         this.cm.on('change', (editor: CodeMirror.Editor) => {
             this.querychange.emit(editor.getDoc().getValue());
         });
-        
-        this.cm.setSize();
-        
     }
     
     autoCompleteHandler() {
