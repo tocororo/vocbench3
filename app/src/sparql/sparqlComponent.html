@@ -31,7 +31,7 @@
                     </select>
                 </div>
                 
-                <textarea [(ngModel)]="t.query" style="resize: vertical; min-height: 150px; width:100%;"></textarea>
+                <codemirror [query]="t.query" (querychange)="t.query=$event"></codemirror>
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">

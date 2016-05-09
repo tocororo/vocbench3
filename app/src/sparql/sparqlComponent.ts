@@ -2,11 +2,13 @@ import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {SparqlServices} from "../services/sparqlServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
+import {CodemirrorComponent} from "./codemirrorComponent";
 
 @Component({
     selector: "sparql-component",
     templateUrl: "app/src/sparql/sparqlComponent.html",
     providers: [SparqlServices],
+    directives: [CodemirrorComponent],
     host: { class: "pageComponent" }
 })
 export class SparqlComponent {

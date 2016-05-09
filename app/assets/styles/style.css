@@ -289,6 +289,8 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
     color: white;
  }
+ 
+ .CodeMirror { height: 30vh !important }
 
 /* BOOTSTRAP OVERRIDE */
 
