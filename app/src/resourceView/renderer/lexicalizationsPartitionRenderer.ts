@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
+import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
 import {RDFTypesEnum} from "../../utils/Enums";
@@ -89,19 +89,19 @@ export class LexicalizationsPartitionRenderer {
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         switch (predicate.getURI()) {
             case SKOSXL.prefLabel.getURI():
-                this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
+                this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
                     stResp => this.update.emit(null),
                     err => { }
                 );
                 break;
             case SKOSXL.altLabel.getURI():
-                this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
+                this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
                     stResp => this.update.emit(null),
                     err => { }
                 );
                 break;
             case SKOSXL.hiddenLabel.getURI():
-                this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty("lang")).subscribe(
+                this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
                     stResp => this.update.emit(null),
                     err => { }
                 );

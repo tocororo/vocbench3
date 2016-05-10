@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTResource, ARTURIResource, ARTNode, ARTBNode} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute} from "../utils/ARTResources";
 
 @Injectable()
 export class OwlServices {
@@ -26,7 +26,7 @@ export class OwlServices {
             stResp => {
                 var roots = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < roots.length; i++) {
-                    roots[i].setAdditionalProperty("children", []);
+                    roots[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return roots;
             }
@@ -51,7 +51,7 @@ export class OwlServices {
             stResp => {
                 var subClasses = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < subClasses.length; i++) {
-                    subClasses[i].setAdditionalProperty("children", []);
+                    subClasses[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return subClasses;
             }
@@ -91,7 +91,7 @@ export class OwlServices {
         return this.httpMgr.doGet(this.serviceName, "createClass", params, this.oldTypeService).map(
             stResp => {
                 var newClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                newClass.setAdditionalProperty("children", []);
+                newClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.subClassCreatedEvent.emit({subClass: newClass, superClass: superClass});
                 return stResp;
             }

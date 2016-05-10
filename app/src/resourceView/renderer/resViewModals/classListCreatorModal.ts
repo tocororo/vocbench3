@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
-import {ARTResource, ARTURIResource, ARTBNode} from '../../../utils/ARTResources';
+import {ARTResource, ARTURIResource, ARTBNode, ResAttribute} from '../../../utils/ARTResources';
 import {RDFResourceRolesEnum} from '../../../utils/Enums';
 import {ClassTreeComponent} from '../../../owl/classTree/classTreeComponent';
 import {ManchesterServices} from "../../../services/manchesterServices";
@@ -53,7 +53,7 @@ export class ClassListCreatorModal implements ICustomModalComponent {
         //push a copy of the selected class in tree to avoid problem with "selected" attribute
         var cls = new ARTURIResource(
             this.selectedTreeClass.getURI(), this.selectedTreeClass.getShow(), this.selectedTreeClass.getRole());
-        cls.setAdditionalProperty("explicit", this.selectedTreeClass.getAdditionalProperty("explicit")); 
+        cls.setAdditionalProperty(ResAttribute.EXPLICIT, this.selectedTreeClass.getAdditionalProperty(ResAttribute.EXPLICIT)); 
         this.classList.push(cls);
         this.duplicateResource = null;
     }
@@ -73,7 +73,7 @@ export class ClassListCreatorModal implements ICustomModalComponent {
                 }
                 //adds the expression as ARTBNode to the list 
                 var exprCls = new ARTBNode(this.manchExpr, this.manchExpr, RDFResourceRolesEnum.cls);
-                exprCls.setAdditionalProperty("explicit", true);
+                exprCls.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                 this.classList.push(exprCls);
                 this.manchExpr = null;
                 this.duplicateResource = null;

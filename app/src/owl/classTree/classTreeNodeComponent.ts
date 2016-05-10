@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OWL} from "../../utils/Vocabulary";
 import {OwlServices} from "../../services/owlServices";
@@ -76,11 +76,11 @@ export class ClassTreeNodeComponent {
         if (path.length == 0) { //this is the last node of the path (so, the searched node). Focus it in the tree
             this.treeNodeElement.nativeElement.scrollIntoView();
             //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
-            if (!this.node.getAdditionalProperty("selected")) { //select the searched node only if is not yet selected
+            if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
                 this.selectNode();    
             }
         } else {
-            if (!this.node.getAdditionalProperty("open")) { //if node is close, expand itself
+            if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
                 this.expandNode();
             }
             var nodeChildren = this.viewChildrenNode.toArray();
@@ -112,8 +112,8 @@ export class ClassTreeNodeComponent {
     public expandNode() {
         this.owlService.getSubClasses(this.node, true, true).subscribe(
             subClasses => {
-                this.node.setAdditionalProperty("children", subClasses); //append the retrieved node as child of the expanded node
-                this.node.setAdditionalProperty("open", true);
+                this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
+                this.node.setAdditionalProperty(ResAttribute.OPEN, true);
             },
             err => { }
         );
@@ -124,8 +124,8 @@ export class ClassTreeNodeComponent {
    	 * Collapse the subtree div.
    	 */
     private collapseNode() {
-        this.node.setAdditionalProperty("open", false);
-        this.node.setAdditionalProperty("children", []);
+        this.node.setAdditionalProperty(ResAttribute.OPEN, false);
+        this.node.setAdditionalProperty(ResAttribute.CHILDREN, []);
     }
     
     /**
@@ -142,14 +142,14 @@ export class ClassTreeNodeComponent {
     }
     
     private onClassDeleted(cls: ARTURIResource) {
-        var children = this.node.getAdditionalProperty("children");
+        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
         for (var i=0; i<children.length; i++) {
             if (children[i].getURI() == cls.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
-   					this.node.setAdditionalProperty("more", 0);
-   					this.node.setAdditionalProperty("open", false);
+   					this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+   					this.node.setAdditionalProperty(ResAttribute.OPEN, false);
    				}
                 break;
             }
@@ -159,8 +159,8 @@ export class ClassTreeNodeComponent {
     private onSubClassCreated(subClass: ARTURIResource, superClass: ARTURIResource) {
         //add the new class as children only if the parent is the current class
         if (this.node.getURI() == superClass.getURI()) {
-            this.node.getAdditionalProperty("children").push(subClass);
-            this.node.setAdditionalProperty("more", 1);
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subClass);
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
         }
     }
     
@@ -172,7 +172,7 @@ export class ClassTreeNodeComponent {
     
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (oldResource.getURI() == this.node.getURI()) {
-            this.node['show'] = newResource.getShow();
+            this.node[ResAttribute.SHOW] = newResource.getShow();
             this.node['uri'] = newResource.getURI();
         }
     }
@@ -180,16 +180,16 @@ export class ClassTreeNodeComponent {
     //decrease numInst property when an instance of the current class is deleted
     onInstanceDeleted(cls: ARTURIResource) {
         if (this.node.getURI() == cls.getURI()) {
-            var numInst = this.node.getAdditionalProperty("numInst");
-            this.node.setAdditionalProperty("numInst", numInst-1);
+            var numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
+            this.node.setAdditionalProperty(ResAttribute.NUM_INST, numInst-1);
         }
     }
     
     //increase numInst property when an instance of the current class is created
     onInstanceCreated(cls: ARTURIResource) {
         if (this.node.getURI() == cls.getURI()) {
-            var numInst = this.node.getAdditionalProperty("numInst");
-            this.node.setAdditionalProperty("numInst", numInst+1);
+            var numInst = this.node.getAdditionalProperty(ResAttribute.NUM_INST);
+            this.node.setAdditionalProperty(ResAttribute.NUM_INST, numInst+1);
         }
     }
 }

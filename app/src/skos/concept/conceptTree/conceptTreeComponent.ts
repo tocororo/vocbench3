@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "@angular/core";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {RDFResourceRolesEnum} from "../../../utils/Enums";
@@ -138,11 +138,11 @@ export class ConceptTreeComponent {
     private onNodeSelected(node: ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty("selected", true);
+            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         } else {
-            this.selectedNode.deleteAdditionalProperty("selected");
+            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty("selected", true);
+            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.itemSelected.emit(node);
     }

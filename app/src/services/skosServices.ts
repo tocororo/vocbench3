@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTURIResource} from "../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../utils/ARTResources";
 
 @Injectable()
 export class SkosServices {
@@ -33,7 +33,7 @@ export class SkosServices {
             stResp => {
                 var topConcepts = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topConcepts.length; i++) {
-                    topConcepts[i].setAdditionalProperty("children", []);
+                    topConcepts[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return topConcepts;
             }
@@ -63,7 +63,7 @@ export class SkosServices {
             stResp => {
                 var narrower = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < narrower.length; i++) {
-                    narrower[i].setAdditionalProperty("children", []);
+                    narrower[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return narrower;
             }
@@ -91,7 +91,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
-                newConc.setAdditionalProperty("children", []);
+                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: scheme});
                 return {concept: newConc, scheme: scheme};
             });
@@ -172,7 +172,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
-                newConc.setAdditionalProperty("children", []);
+                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broader});
                 return newConc;
             });

@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
@@ -59,11 +59,11 @@ export class PropertyTreeNodeComponent {
         if (path.length == 0) { //this is the last node of the path. Focus it in the tree
             this.treeNodeElement.nativeElement.scrollIntoView();
             //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
-            if (!this.node.getAdditionalProperty("selected")) { //select the searched node only if is not yet selected
+            if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
                 this.selectNode();    
             }
         } else {
-            if (!this.node.getAdditionalProperty("open")) { //if node is close, expand itself
+            if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
                 this.expandNode();
             }
             var nodeChildren = this.viewChildrenNode.toArray();
@@ -94,7 +94,7 @@ export class PropertyTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        this.node.setAdditionalProperty("open", true);
+        this.node.setAdditionalProperty(ResAttribute.OPEN, true);
     }
     
     /**
@@ -102,7 +102,7 @@ export class PropertyTreeNodeComponent {
    	 * Collapse the subtree div.
    	 */
     private collapseNode() {
-		this.node.setAdditionalProperty("open", false);
+		this.node.setAdditionalProperty(ResAttribute.OPEN, false);
     }
     
     /**
@@ -119,14 +119,14 @@ export class PropertyTreeNodeComponent {
     }
     
     private onPropertyDeleted(property: ARTURIResource) {
-        var children = this.node.getAdditionalProperty("children");
+        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
         for (var i=0; i<children.length; i++) {
             if (children[i].getURI() == property.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {
-   					this.node.setAdditionalProperty("more", 0);
-   					this.node.setAdditionalProperty("open", false);
+   					this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+   					this.node.setAdditionalProperty(ResAttribute.OPEN, false);
    				}
                 break;
             }
@@ -136,8 +136,8 @@ export class PropertyTreeNodeComponent {
     private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {
         //add the new property as children only if the parent is the current property
         if (this.node.getURI() == superProperty.getURI()) {
-            this.node.getAdditionalProperty("children").push(subProperty);
-            this.node.setAdditionalProperty("more", 1);
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
         }
     }
     
@@ -149,7 +149,7 @@ export class PropertyTreeNodeComponent {
 	
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (oldResource.getURI() == this.node.getURI()) {
-            this.node['show'] = newResource.getShow();
+            this.node[ResAttribute.SHOW] = newResource.getShow();
             this.node['uri'] = newResource.getURI();
         }
     }

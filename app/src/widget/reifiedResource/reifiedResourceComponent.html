@@ -1,0 +1,22 @@
+<div class="hbox">
+    <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" style="flex:1"></rdf-resource>
+    <button *ngIf="predicateObjectList" class="close" style="padding-right: 5px;" (click)="toggle()">
+        <span *ngIf="open">-</span>
+        <span *ngIf="!open">+</span>
+    </button>
+</div>
+
+<div *ngIf="open" class="panel panel-default" style="margin: 0px 3px 3px;">
+    <div class="panel-body" style="padding: 2px;">
+        <table class="table table-condensed table-borderless table-hoverable">
+            <tbody>
+                <tr *ngFor="let predObj of predicateObjectList">
+                    <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
+                    <td>
+                        <input type="text" class="form-control input-xs" [ngModel]="predObj.getObjects()[0].getNominalValue()" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

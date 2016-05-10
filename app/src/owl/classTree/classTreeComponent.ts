@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {OWL} from "../../utils/Vocabulary";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
@@ -98,11 +98,11 @@ export class ClassTreeComponent {
     private onNodeSelected(node:ARTURIResource) {
         if (this.selectedNode == undefined) {
             this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty("selected", true);    
+            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);    
         } else {
-            this.selectedNode.deleteAdditionalProperty("selected");
+            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty("selected", true);
+            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.itemSelected.emit(node);
     }

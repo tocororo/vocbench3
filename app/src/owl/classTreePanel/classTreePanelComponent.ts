@@ -4,7 +4,7 @@ import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../services/searchServices";
 import {OwlServices} from "../../services/owlServices";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
 
@@ -60,7 +60,7 @@ export class ClassTreePanelComponent {
     }
     
     private deleteClass() {
-        if (this.selectedClass.getAdditionalProperty("numInst") != 0) {
+        if (this.selectedClass.getAdditionalProperty(ResAttribute.NUM_INST) != 0) {
             this.modalService.alert("Operation denied", "Cannot delete " + this.selectedClass.getURI() + 
                 " since it has instance(s). Please delete the instance(s) and retry.", "warning");
             return;
@@ -159,7 +159,7 @@ export class ClassTreePanelComponent {
     private onClassSelected(cls:ARTURIResource) {
         this.selectedClass = cls;
         if (this.selectedInstance != null) {
-            this.selectedInstance.setAdditionalProperty("selected", false);
+            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, false);
             this.selectedInstance = null;    
         }
         this.classSelected.emit(cls);

@@ -1,5 +1,5 @@
 import {Component, Input, ReflectiveInjector, provide} from "@angular/core";
-import {ARTNode, ARTURIResource, ARTPredicateObjects} from "../utils/ARTResources";
+import {ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {RDFTypesEnum} from "../utils/Enums";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
@@ -122,10 +122,10 @@ export class ResourceViewComponent {
     private parseFacetsPartition(facetsElement) {
         //init default facets
         this.propertyFacets = [
-            {name: "symmetric", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
-            {name: "functional", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
-            {name: "inverseFunctional", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
-            {name: "transitive", explicit: this.resource.getAdditionalProperty("explicit"), value: false},
+            {name: "symmetric", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
+            {name: "functional", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
+            {name: "inverseFunctional", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
+            {name: "transitive", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
         ];
         var facetsChildren = facetsElement.children;
         for (var i = 0; i < facetsChildren.length; i++) {
@@ -133,7 +133,7 @@ export class ResourceViewComponent {
             if (facetName == "symmetric" || facetName == "functional" || facetName == "inverseFunctional" || facetName == "transitive") {
                 var facet = {
                     name: facetName,
-                    explicit: (facetsChildren[i].getAttribute("explicit") == "true"),
+                    explicit: (facetsChildren[i].getAttribute(ResAttribute.EXPLICIT) == "true"),
                     value: (facetsChildren[i].getAttribute("value") == "true")
                 };
                 //replace the default facets

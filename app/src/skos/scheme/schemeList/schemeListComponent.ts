@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
@@ -30,11 +30,11 @@ export class SchemeListComponent {
     private selectScheme(scheme: ARTURIResource) {
         if (this.selectedScheme == undefined) {
             this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty("selected", true);    
+            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);    
         } else if (this.selectedScheme.getURI() != scheme.getURI()) {
-            this.selectedScheme.deleteAdditionalProperty("selected");
+            this.selectedScheme.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty("selected", true);
+            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.selectedScheme = scheme;
         this.itemSelected.emit(scheme);

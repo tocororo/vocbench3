@@ -1,4 +1,4 @@
-import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects} from "./ARTResources";
+import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "./ARTResources";
 import {RDFResourceRolesEnum} from "./Enums";
 
 export class ResourceUtils {
@@ -12,7 +12,7 @@ export class ResourceUtils {
         //enum roles instead of "owl:ObjectProperty", "owl:DatatypeProperty", ...
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
-            var explicit = rdfResource.getAdditionalProperty("explicit");
+            var explicit = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT);
             if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
                 if (explicit) {
                     imgSrc = "app/assets/images/class.png";
@@ -64,7 +64,7 @@ export class ResourceUtils {
                     imgSrc = "app/assets/images/prop_imported.png";
                 }
             } else if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
-                var lang = rdfResource.getAdditionalProperty("lang");
+                var lang = rdfResource.getAdditionalProperty(ResAttribute.LANG);
                 if (lang != undefined && lang != null) {
                     if (this.availableFlagLang.indexOf(lang) != -1) {
                         imgSrc = "app/assets/images/flags/flag_" + lang + ".png";    

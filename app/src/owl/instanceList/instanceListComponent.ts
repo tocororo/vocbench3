@@ -1,5 +1,5 @@
 import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
@@ -90,11 +90,11 @@ export class InstanceListComponent {
     private selectInstance(instance: ARTURIResource) {
         if (this.selectedInstance == undefined) {
             this.selectedInstance = instance;
-            this.selectedInstance.setAdditionalProperty("selected", true);    
+            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);    
         } else if (this.selectedInstance.getURI() != instance.getURI()) {
-            this.selectedInstance.deleteAdditionalProperty("selected");
+            this.selectedInstance.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.selectedInstance = instance;
-            this.selectedInstance.setAdditionalProperty("selected", true);
+            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.selectedInstance = instance;
         this.itemSelected.emit(instance);

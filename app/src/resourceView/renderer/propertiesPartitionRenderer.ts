@@ -1,9 +1,10 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects} from "../../utils/ARTResources";
+import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "../../utils/ARTResources";
 import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {ReifiedResourceComponent} from "../../widget/reifiedResource/reifiedResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ResViewModalServices} from "./resViewModals/resViewModalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -14,7 +15,7 @@ import {ResourceServices} from "../../services/resourceServices";
 @Component({
     selector: "properties-renderer",
     templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
-    directives: [RdfResourceComponent],
+    directives: [RdfResourceComponent, ReifiedResourceComponent],
     providers: [PropertyServices, SkosxlServices, ResourceServices, ResViewModalServices],
 })
 export class PropertiesPartitionRenderer {
@@ -173,6 +174,16 @@ export class PropertiesPartitionRenderer {
         );
     }
     
+    /**
+     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
+     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
+     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
+     * or the predicate has no custom range, the object should be rendered as simple rdfResource
+     * @param object object of the predicate object list to render in view.
+     */
+    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
+        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
+    }
     
     private getAddPropImgTitle(predicate: ARTURIResource) {
         return "Add a " + predicate.getShow();

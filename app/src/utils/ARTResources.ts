@@ -235,7 +235,7 @@ export class ARTLiteral implements ARTNode {
 export class ARTPredicateObjects {
 
     private predicate: ARTURIResource;
-    private objects;
+    private objects: ARTNode[];
 
     constructor(predicate: ARTURIResource, objects) {
         this.predicate = predicate;
@@ -246,8 +246,27 @@ export class ARTPredicateObjects {
         return this.predicate;
     };
 
-    getObjects() {
+    getObjects(): ARTNode[] {
         return this.objects;
     };
 
+}
+
+export class ResAttribute {
+    
+    public static SHOW = "show";
+    public static ROLE = "role";
+    public static TYPE = "type";
+    public static EXPLICIT = "explicit";
+    public static MORE = "more";
+    public static NUM_INST = "numInst";
+    public static HAS_CUSTOM_RANGE = "hasCustomRange";
+    public static RESOURCE_POSITION = "resourcePosition";
+    public static LANG = "lang";
+    
+    //never in st responses, added because are util for tree
+    public static OPEN = "open";
+    public static CHILDREN = "children";
+    public static SELECTED = "selected";
+    
 }

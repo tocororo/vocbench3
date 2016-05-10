@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
-import {ARTURIResource} from '../../../utils/ARTResources';
+import {ARTURIResource, ResAttribute} from '../../../utils/ARTResources';
 import {ClassTreeComponent} from '../../../owl/classTree/classTreeComponent';
 import {InstanceListComponent} from '../../../owl/instanceList/instanceListComponent';
 
@@ -50,7 +50,7 @@ export class InstanceListCreatorModal implements ICustomModalComponent {
         //push a copy of the selected instance to avoid problem with "selected" attribute
         var inst = new ARTURIResource(
             this.selectedSourceInstance.getURI(), this.selectedSourceInstance.getShow(), this.selectedSourceInstance.getRole());
-        inst.setAdditionalProperty("explicit", this.selectedSourceInstance.getAdditionalProperty("explicit")); 
+        inst.setAdditionalProperty(ResAttribute.EXPLICIT, this.selectedSourceInstance.getAdditionalProperty(ResAttribute.EXPLICIT)); 
         this.instanceList.push(inst);
         this.duplicateInstance = null;
     }

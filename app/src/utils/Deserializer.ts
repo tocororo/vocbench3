@@ -1,4 +1,4 @@
-import {ARTNode, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects} from "./ARTResources";
+import {ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "./ARTResources";
 
 export class Deserializer {
     
@@ -64,34 +64,34 @@ export class Deserializer {
 		}
 		
 		var uri = uriElement.textContent;
-		var show = uriElement.getAttribute('show');
-        var role = uriElement.getAttribute('role');
+		var show = uriElement.getAttribute(ResAttribute.SHOW);
+        var role = uriElement.getAttribute(ResAttribute.ROLE);
         var artURIRes = new ARTURIResource(uri, show, role);
         
         //optional properties
-		var explicit = uriElement.getAttribute('explicit');
+		var explicit = uriElement.getAttribute(ResAttribute.EXPLICIT);
         if (explicit != undefined) {
-             artURIRes.setAdditionalProperty("explicit", (explicit == "true"));
+             artURIRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
         }
-		var more = uriElement.getAttribute('more');
+		var more = uriElement.getAttribute(ResAttribute.MORE);
         if (more != undefined) {
-            artURIRes.setAdditionalProperty("more", more); 
+            artURIRes.setAdditionalProperty(ResAttribute.MORE, more); 
         }
-		var numInst = uriElement.getAttribute("numInst");
+		var numInst = uriElement.getAttribute(ResAttribute.NUM_INST);
         if (numInst != undefined) {
-            artURIRes.setAdditionalProperty("numInst", parseInt(numInst));
+            artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, parseInt(numInst));
         }
-		var hasCustomRange = uriElement.getAttribute("hasCustomRange");//indicates if a property has a CustomRange
+		var hasCustomRange = uriElement.getAttribute(ResAttribute.HAS_CUSTOM_RANGE);//indicates if a property has a CustomRange
         if (hasCustomRange != undefined) {
-            artURIRes.setAdditionalProperty("hasCustomRange", (hasCustomRange == "true"));
+            artURIRes.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, (hasCustomRange == "true"));
         }
-		var resourcePosition = uriElement.getAttribute("resourcePosition");//indicates the position of the resource
+		var resourcePosition = uriElement.getAttribute(ResAttribute.RESOURCE_POSITION);//indicates the position of the resource
         if (resourcePosition != undefined) {
-            artURIRes.setAdditionalProperty("resourcePosition", resourcePosition);
+            artURIRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
-		var lang = uriElement.getAttribute("lang");//indicates the language of an xLabel
+		var lang = uriElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
         if (lang != undefined) {
-            artURIRes.setAdditionalProperty("lang", lang);
+            artURIRes.setAdditionalProperty(ResAttribute.LANG, lang);
         }
 		
 		return artURIRes;
@@ -106,22 +106,22 @@ export class Deserializer {
 		}
 		
 		var id = bnodeElement.textContent;
-		var show = bnodeElement.getAttribute("show");
-		var role = bnodeElement.getAttribute('role');
+		var show = bnodeElement.getAttribute(ResAttribute.SHOW);
+		var role = bnodeElement.getAttribute(ResAttribute.ROLE);
         var bNodeRes = new ARTBNode(id, show, role);
         
         //optional properties
-		var explicit = bnodeElement.getAttribute('explicit');
+		var explicit = bnodeElement.getAttribute(ResAttribute.EXPLICIT);
         if (explicit != undefined) {
-             bNodeRes.setAdditionalProperty("explicit", (explicit == "true"));
+             bNodeRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
         }
-        var resourcePosition = bnodeElement.getAttribute("resourcePosition");//indicates the position of the resource
+        var resourcePosition = bnodeElement.getAttribute(ResAttribute.RESOURCE_POSITION);//indicates the position of the resource
         if (resourcePosition != undefined) {
-            bNodeRes.setAdditionalProperty("resourcePosition", resourcePosition);
+            bNodeRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
-		var lang = bnodeElement.getAttribute("lang");//indicates the language of an xLabel
+		var lang = bnodeElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
         if (lang != undefined) {
-            bNodeRes.setAdditionalProperty("lang", lang);
+            bNodeRes.setAdditionalProperty(ResAttribute.LANG, lang);
         }
 
 		return bNodeRes;
@@ -149,7 +149,7 @@ export class Deserializer {
         var label = literalElement.textContent;
         var datatype;
         if (isTypedLiteral) {
-            datatype = literalElement.getAttribute("type");
+            datatype = literalElement.getAttribute(ResAttribute.TYPE);
         } else {
             datatype = "";
         }
@@ -157,17 +157,17 @@ export class Deserializer {
         if (isTypedLiteral) {
             lang = "";
         } else {
-            lang = literalElement.getAttribute("lang");
+            lang = literalElement.getAttribute(ResAttribute.LANG);
         }
         var artLiteralRes = new ARTLiteral(label, datatype, lang, isTypedLiteral);
         //optional properties
-        var show = literalElement.getAttribute("show");
+        var show = literalElement.getAttribute(ResAttribute.SHOW);
         if (show != undefined) {
-            artLiteralRes.setAdditionalProperty("show", show);
+            artLiteralRes.setAdditionalProperty(ResAttribute.SHOW, show);
         }
-        var explicit = literalElement.getAttribute('explicit');
+        var explicit = literalElement.getAttribute(ResAttribute.EXPLICIT);
         if (explicit != undefined) {
-            artLiteralRes.setAdditionalProperty("explicit", (explicit == "true"));
+            artLiteralRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
         }
 
         return artLiteralRes;
@@ -186,10 +186,10 @@ export class Deserializer {
         }
     }
 	
-	static createRDFResource(element): ARTNode {
+	static createRDFResource(element): ARTResource {
 		var tagName = element.tagName;
 		if(tagName == 'uri' || tagName == 'bnode'){
-			return this.createRDFNode(element);
+			return <ARTResource>this.createRDFNode(element);
 		} else {
 			throw new Error("Not a RDFResource");
 		}

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTURIResource} from "../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../utils/ARTResources";
 import {RDFTypesEnum} from "../utils/Enums";
 
 @Injectable()
@@ -46,7 +46,7 @@ export class PropertyServices {
         //properties use deleteForbidden instead of explicit, use explicit in order to standardize the attributes
         var explicit = propXml.getAttribute("deleteForbidden") != "true";
         var p = new ARTURIResource(uri, show, role);
-        p.setAdditionalProperty("explicit", explicit);
+        p.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
         //recursively parse children
         var subProperties: ARTURIResource[] = [];
         var subPropsXml = propXml.querySelectorAll(":scope > SubProperties > Property");
@@ -54,9 +54,9 @@ export class PropertyServices {
             var subP = this.parseProperty(subPropsXml[i]);
             subProperties.push(subP);
         }
-        p.setAdditionalProperty("children", subProperties);
+        p.setAdditionalProperty(ResAttribute.CHILDREN, subProperties);
         if (subProperties.length > 0) {
-            p.setAdditionalProperty("open", true); //to initialize tree all expanded
+            p.setAdditionalProperty(ResAttribute.OPEN, true); //to initialize tree all expanded
         }
         return p;
     }
@@ -96,7 +96,7 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
             stResp => {
                 var newProp = Deserializer.createURI(stResp);
-                newProp.setAdditionalProperty("children", []);
+                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.topPropertyCreatedEvent.emit(newProp);
                 return newProp;
             }
@@ -119,7 +119,7 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
             stResp => {
                 var newProp = Deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
-                newProp.setAdditionalProperty("children", []);
+                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.subPropertyCreatedEvent.emit({subProperty: newProp, superProperty: superProperty});
                 return newProp;
             }
