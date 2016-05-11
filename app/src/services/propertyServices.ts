@@ -3,6 +3,7 @@ import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTURIResource, ResAttribute} from "../utils/ARTResources";
+import {CustomRange, CustomRangeEntry, CustomRangeType} from "../utils/CustomRanges";
 import {RDFTypesEnum} from "../utils/Enums";
 
 @Injectable()
@@ -260,13 +261,13 @@ export class PropertyServices {
     }
     
     /**
-     * Returns the range of a property (two element: ranges and customRanges)
+     * Returns the range of a property
      * @param property
-     * @return an object with rngType (available values: 
-     * resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent)
-     * and ranges, an array of ARTURIResource
-     * (available only if rngType is resource, then represent the admitted range classes,
-     * or typedLiteral, then represent the admitted datatypes)
+     * @return an object with:
+     * rngType (available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent);
+     * ranges, an array of ARTURIResource (available only if rngType is resource, then represent the admitted range classes,
+     * or typedLiteral, then represent the admitted datatypes);
+     * customRanges, an optional CustomRange object only if the property has custom ranges
      */
     getRange(property: ARTURIResource) {
         console.log("[PropertyServices] getRange");
@@ -280,11 +281,22 @@ export class PropertyServices {
                 if (rngType != "undetermined") {
                     var rangesUriColl = Deserializer.createURIArrayGivenList(rangesElem.childNodes);
                 }
-                //TODO handle custom ranges
-                // if (stResp.getElementsByTagName("customRanges") != undefined) {
-                //     var rangesElem: Element = stResp.getElementsByTagName("customRanges")[0];
-                // }
-                return {rngType: rngType, ranges: rangesUriColl};
+                if (stResp.getElementsByTagName("customRanges").length != 0) {
+                    var cRangesElem: Element = stResp.getElementsByTagName("customRanges")[0];
+                    var crId = cRangesElem.getAttribute("id");
+                    var crProp = cRangesElem.getAttribute("property");
+                    var crEntries: CustomRangeEntry[] = [];
+                    var creElemColl = cRangesElem.getElementsByTagName("crEntry");
+                    for (var i = 0; i < creElemColl.length; i++) {
+                        var creId = creElemColl[i].getAttribute("id");
+                        var name = creElemColl[i].getAttribute("name");
+                        var type: CustomRangeType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
+                        var description = creElemColl[i].getElementsByTagName("description")[0].textContent;
+                        crEntries.push(new CustomRangeEntry(creId, name, type, description));
+                    }
+                    var cr = new CustomRange(crId, crProp, crEntries)
+                }
+                return {rngType: rngType, ranges: rangesUriColl, customRanges: cr};
             }
         );
     }

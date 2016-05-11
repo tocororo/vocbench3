@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
+import {FormEntry, CustomRangeType} from "../utils/CustomRanges";
 
 @Injectable()
 export class CustomRangeServices {
@@ -40,5 +41,33 @@ export class CustomRangeServices {
             resource: resource.getNominalValue()
         };
         return this.httpMgr.doGet(this.serviceName, "removeReifiedResource", params, this.oldTypeService);
+    }
+    
+    /**
+     * Returns the form for the given CustomRangeEntry
+     * @param creId id of a CustomRangeEntry
+     * @return an array of FormEntry
+     */
+    getCustomRangeEntryForm(creId: string) {
+        console.log("[CustomRangeServices] getCustomRangeEntryForm");
+        var params: any = {
+            id: creId
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntryForm", params, this.oldTypeService).map(
+            stResp => {
+                var form: Array<FormEntry> = [];
+                var formEntryElemColl: Array<Element> = stResp.getElementsByTagName("formEntry");
+                for (var i = 0; i < formEntryElemColl.length; i++) {
+                    var placeholderId = formEntryElemColl[i].getAttribute("placeholderId");
+                    var type: CustomRangeType = formEntryElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
+                    var mandatory = formEntryElemColl[i].getAttribute("mandatory") == "true";
+                    var userPrompt = formEntryElemColl[i].getAttribute("userPrompt");
+                    var converter = formEntryElemColl[i].getElementsByTagName("converter")[0].getAttribute("uri");
+                    var entry = new FormEntry(placeholderId, type, mandatory, userPrompt, converter);
+                    form.push(entry);
+                }
+                return form;
+            }
+        );
     }
 }

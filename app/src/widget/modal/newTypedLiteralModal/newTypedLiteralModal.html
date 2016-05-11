@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
     <div>
-        <select class="form-control input-sm" id="toFocus" [(ngModel)]="datatype">
+        <select class="form-control input-sm" id="toFocus" [(ngModel)]="datatype" (ngModelChange)="value=null">
             <option *ngFor="let dt of datatypes" [value]="dt" [disabled]="!isDatatypeAllowed(dt)">{{dt}}</option>
         </select>
         <!--input dedicated to some datatypes-->

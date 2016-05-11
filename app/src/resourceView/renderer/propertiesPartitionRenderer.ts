@@ -3,6 +3,7 @@ import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute} 
 import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFTypesEnum} from "../../utils/Enums";
+import {CustomRange, CustomRangeEntry} from "../../utils/CustomRanges";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ReifiedResourceComponent} from "../../widget/reifiedResource/reifiedResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -11,12 +12,13 @@ import {BrowsingServices} from "../../widget/modal/browsingModal/browsingService
 import {PropertyServices} from "../../services/propertyServices";
 import {SkosxlServices} from "../../services/skosxlServices";
 import {ResourceServices} from "../../services/resourceServices";
+import {CustomRangeServices} from "../../services/customRangeServices";
 
 @Component({
     selector: "properties-renderer",
     templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
     directives: [RdfResourceComponent, ReifiedResourceComponent],
-    providers: [PropertyServices, SkosxlServices, ResourceServices, ResViewModalServices],
+    providers: [PropertyServices, SkosxlServices, ResourceServices, ResViewModalServices, CustomRangeServices],
 })
 export class PropertiesPartitionRenderer {
     
@@ -31,7 +33,8 @@ export class PropertiesPartitionRenderer {
     private removeBtnImgTitle = "Remove property value";
     
     constructor(private propertyService:PropertyServices, private skosxlService: SkosxlServices, private resourceService: ResourceServices,
-        private browsingService: BrowsingServices, private modalService: ModalServices, private resViewModalService: ResViewModalServices) {}
+        private browsingService: BrowsingServices, private modalService: ModalServices, private resViewModalService: ResViewModalServices,
+        private customRangeService: CustomRangeServices) {}
         
     private add() {
         this.browsingService.browsePropertyTree("Select a property", this.resource).then(
@@ -77,33 +80,76 @@ export class PropertiesPartitionRenderer {
                 range => {
                     var rngType = range.rngType;
                     var ranges = range.ranges;
-                    //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
-                    if (rngType == RDFTypesEnum.resource) {
-                        this.enrichWithResource(predicate, ranges);
-                    } else if (rngType == RDFTypesEnum.plainLiteral) {
-                        this.enrichWithPlainLiteral(predicate);
-                    } else if (rngType == RDFTypesEnum.typedLiteral) {
-                        var datatypes = [];
-                        for (var i = 0; i < ranges.length; i++) {
-                            datatypes.push(ranges[i].getNominalValue());
+                    var customRanges: CustomRange = range.customRanges;
+                    if (customRanges == undefined) { //just "classic" range
+                        //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
+                        if (rngType == RDFTypesEnum.resource) {
+                            this.enrichWithResource(predicate, ranges);
+                        } else if (rngType == RDFTypesEnum.plainLiteral) {
+                            this.enrichWithPlainLiteral(predicate);
+                        } else if (rngType == RDFTypesEnum.typedLiteral) {
+                            var datatypes = [];
+                            for (var i = 0; i < ranges.length; i++) {
+                                datatypes.push(ranges[i].getNominalValue());
+                            }
+                            this.enrichWithTypedLiteral(predicate, datatypes);  
+                        } else if (rngType == RDFTypesEnum.literal) {
+                            var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
+                            this.modalService.select("Select range type", null, options).then(
+                                selectedRange => {
+                                    if (selectedRange == RDFTypesEnum.typedLiteral) {
+                                        this.enrichWithTypedLiteral(predicate);
+                                    } else if (selectedRange == RDFTypesEnum.plainLiteral) {
+                                        this.enrichWithPlainLiteral(predicate);
+                                    }
+                                },
+                                () => {}
+                            )
+                        } else if (rngType == RDFTypesEnum.undetermined) {
+                            var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
+                            this.modalService.select("Select range type", null, options).then(
+                                selectedRange => {
+                                    if (selectedRange == RDFTypesEnum.resource) {
+                                        this.enrichWithResource(predicate);
+                                    } else if (selectedRange == RDFTypesEnum.typedLiteral) {
+                                        this.enrichWithTypedLiteral(predicate);
+                                    } else if (selectedRange == RDFTypesEnum.plainLiteral) {
+                                        this.enrichWithPlainLiteral(predicate);
+                                    }
+                                },
+                                () => {}
+                            )
+                        } else if (rngType == "inconsistent") {
+                            this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
-                        this.enrichWithTypedLiteral(predicate, datatypes);  
-                    } else if (rngType == RDFTypesEnum.literal) {
-                        var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
-                        this.modalService.select("Select range type", null, options).then(
+                    } else { //both "classic" and custom range
+                        var rangeOptions = [];//prepare the range options...
+                        var crEntries = customRanges.getEntries();
+                        //...with the custom range entries
+                        for (var i = 0; i < crEntries.length; i++) {
+                            rangeOptions.push(crEntries[i].getName());
+                        }
+                        //...and the classic ranges
+                        if (rngType == RDFTypesEnum.resource || rngType == RDFTypesEnum.plainLiteral || rngType == RDFTypesEnum.typedLiteral) {
+                            rangeOptions.push(rngType);
+                        } else if (rngType == RDFTypesEnum.literal) {
+                            rangeOptions.push(RDFTypesEnum.plainLiteral);
+                            rangeOptions.push(RDFTypesEnum.typedLiteral);
+                        } else if (rngType == RDFTypesEnum.undetermined) {
+                            rangeOptions.push(RDFTypesEnum.resource);
+                            rangeOptions.push(RDFTypesEnum.plainLiteral);
+                            rangeOptions.push(RDFTypesEnum.typedLiteral);
+                        }
+                        //ask the user to choose
+                        this.modalService.select("Select range type", null, rangeOptions).then(
                             selectedRange => {
-                                if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                    this.enrichWithTypedLiteral(predicate);
-                                } else if (selectedRange == RDFTypesEnum.plainLiteral) {
-                                    this.enrichWithPlainLiteral(predicate);
+                                //check if selected range is one of the customs
+                                for (var i = 0; i < crEntries.length; i++) {
+                                    if (selectedRange == crEntries[i].getName()) {
+                                        this.enrichWithCustomRange(crEntries[i]);
+                                        return;
+                                    }
                                 }
-                            },
-                            () => {}
-                        )
-                    } else if (rngType == RDFTypesEnum.undetermined) {
-                        var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
-                        this.modalService.select("Select range type", null, options).then(
-                            selectedRange => {
                                 if (selectedRange == RDFTypesEnum.resource) {
                                     this.enrichWithResource(predicate);
                                 } else if (selectedRange == RDFTypesEnum.typedLiteral) {
@@ -112,15 +158,20 @@ export class PropertiesPartitionRenderer {
                                     this.enrichWithPlainLiteral(predicate);
                                 }
                             },
-                            () => {}
+                            () => { }
                         )
-                    } else if (rngType == "inconsistent") {
-                        this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                     }
                 }
             );
         }
-        // this.update.emit(null);
+    }
+    
+    private enrichWithCustomRange(crEntry: CustomRangeEntry) {
+        this.customRangeService.getCustomRangeEntryForm(crEntry.getId()).subscribe(
+            form => {
+                alert("opening custom form for entry: " + JSON.stringify(form));
+            }
+        )
     }
     
     /**
@@ -169,9 +220,15 @@ export class PropertiesPartitionRenderer {
     }
     
     private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
-            stResp => this.update.emit(null)
-        );
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            this.customRangeService.removeReifiedResource(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            )
+        } else {
+            this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        }
     }
     
     /**
