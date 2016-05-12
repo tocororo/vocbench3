@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {RouterLink} from "@angular/router-deprecated";
 import {ConceptTreeComponent} from "../conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
+import {SkosxlServices} from "../../../services/skosxlServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
 import {ARTURIResource} from "../../../utils/ARTResources";
@@ -12,7 +13,7 @@ import {RDFResourceRolesEnum} from "../../../utils/Enums";
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
 	directives: [ConceptTreeComponent, RouterLink],
-    providers: [SkosServices, SearchServices],
+    providers: [SkosServices, SkosxlServices, SearchServices],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
@@ -23,20 +24,26 @@ export class ConceptTreePanelComponent {
     private selectedConcept:ARTURIResource;
     private searchInputPlaceholder: string;
     
-	constructor(private skosService:SkosServices, private searchService: SearchServices, 
+    private ONTO_TYPE: string;
+    
+	constructor(private skosService:SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices, 
         private modalService: ModalServices, private vbCtx:VocbenchCtx) {}
     
     ngOnInit() {
-        this.searchInputPlaceholder = this.scheme ? "Search..." : "Search not available in no-scheme mode"; 
+        this.searchInputPlaceholder = this.scheme ? "Search..." : "Search not available in no-scheme mode";
+        this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
     }
     
     private createConcept() {
         this.modalService.newResource("Create new skos:Concept", this.vbCtx.getContentLanguage()).then(
             result => {
-                this.skosService.createTopConcept(result.name, this.vbCtx.getScheme(), result.label, result.lang).subscribe(
-                    data => { },
-                    err => { }
-                );
+                if (this.ONTO_TYPE == "SKOS") {
+                    this.skosService.createTopConcept(result.name, this.vbCtx.getScheme(),
+                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                } else { //SKOSXL
+                    this.skosxlService.createTopConcept(result.name, this.vbCtx.getScheme(),
+                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                }
             },
             () => {}
         );
@@ -45,23 +52,34 @@ export class ConceptTreePanelComponent {
     private createNarrower() {
         this.modalService.newResource("Create a skos:narrower", this.vbCtx.getContentLanguage()).then(
             result => {
-                this.skosService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(), result.label, result.lang).subscribe(
-                    data => { },
-                    err => { }
-                );
+                if (this.ONTO_TYPE == "SKOS") {
+                    this.skosService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(),
+                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                } else { //SKOSXL
+                    this.skosxlService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(),
+                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                }
             },
             () => {}
         );
     }
     
     private deleteConcept() {
-        this.skosService.deleteConcept(this.selectedConcept).subscribe(
-            stResp => {
-                this.selectedConcept = null;
-                this.itemSelected.emit(undefined);
-            },
-            err => { }
-        );
+        if (this.ONTO_TYPE == "SKOS") {
+            this.skosService.deleteConcept(this.selectedConcept).subscribe(
+                stResp => {
+                    this.selectedConcept = null;
+                    this.itemSelected.emit(undefined);
+                }
+            );
+        } else { //SKOSXL
+            this.skosxlService.deleteConcept(this.selectedConcept).subscribe(
+                stResp => {
+                    this.selectedConcept = null;
+                    this.itemSelected.emit(undefined);
+                }
+            );
+        }
     }
     
     private doSearch(searchedText: string) {
@@ -84,8 +102,7 @@ export class ConceptTreePanelComponent {
                             );
                         }
                     }
-                },
-                err => { }
+                }
             );
         }
     }

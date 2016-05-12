@@ -75,8 +75,7 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
                 this.classList.push(exprCls);
                 this.manchExpr = null;
                 this.duplicateResource = null;
-            },
-            error => {}
+            }
         )
     }
     

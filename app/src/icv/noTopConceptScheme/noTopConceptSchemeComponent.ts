@@ -92,8 +92,7 @@ export class NoTopConceptSchemeComponent {
                 this.skosService.deleteScheme(scheme).subscribe(
                     stResp => {
                         this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
-                    },
-                    err => { }
+                    }
                 );
             },
             () => {}

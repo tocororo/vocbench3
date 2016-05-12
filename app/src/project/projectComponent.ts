@@ -28,8 +28,7 @@ export class ProjectComponent implements OnInit {
         this.projectService.listProjects().subscribe(
             projectList => {
                 this.projectList = projectList;
-            },
-            err => { }
+            }
         );
     }
 
@@ -71,9 +70,9 @@ export class ProjectComponent implements OnInit {
                                     this.projectList.splice(i, 1);
                                 }
                             }
+                            this.vbCtx.removeScheme(this.selectedProject);
                             this.selectedProject = null;
-                        },
-                        err => { }
+                        }
                     );
                 },
                 () => {}
@@ -101,8 +100,7 @@ export class ProjectComponent implements OnInit {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 var exportLink = window.URL.createObjectURL(data);
                 this.modalService.downloadLink("Export project", null, exportLink, "export.zip");
-            },
-            err => { }
+            }
         );
     }
     
@@ -114,9 +112,6 @@ export class ProjectComponent implements OnInit {
         }
     }
     
-    /**
-     * Called when double clicking on the "closed folder" icon
-     */
     private openProject(project: Project) {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.accessProject(project).subscribe(
@@ -129,9 +124,6 @@ export class ProjectComponent implements OnInit {
         );
     }
     
-    /**
-     * Called when double clicking on "open folder" icon
-     */
     private closeProject(project: Project) {
         if (project.getType() == "saveToStore") {
             //if closing project is non-persistent ask to save
@@ -154,7 +146,6 @@ export class ProjectComponent implements OnInit {
         //if the closed project is the working, remove it from context
         if (this.vbCtx.getWorkingProject() != undefined && this.vbCtx.getWorkingProject().getName() == project.getName()) {
             this.vbCtx.removeWorkingProject();
-            this.vbCtx.removeScheme();
         }
     }
     

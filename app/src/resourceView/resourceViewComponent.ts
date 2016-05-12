@@ -183,8 +183,7 @@ export class ResourceViewComponent {
                     //here pass newResource instead of this.resource since this.resource is not still
                     //updated/injected from the NodeComponent that catch the rename event 
                     this.buildResourceView(newResource);
-                },
-                err => { }
+                }
             );    
         }
     }

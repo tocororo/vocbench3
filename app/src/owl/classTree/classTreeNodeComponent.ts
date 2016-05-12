@@ -114,8 +114,7 @@ export class ClassTreeNodeComponent {
             subClasses => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
-            },
-            err => { }
+            }
         );
     }
     

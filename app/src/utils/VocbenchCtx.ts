@@ -71,10 +71,10 @@ export class VocbenchCtx {
     }
 
     /**
-     * Removes the scheme saved for the project in use as cookie
+     * Removes the scheme saved for the given project
      */
-    removeScheme() {
-        Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName());
+    removeScheme(project: Project) {
+        Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
     }
     
     setSessionToken(token: string) {

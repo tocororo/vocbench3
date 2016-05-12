@@ -38,46 +38,39 @@ export class LexicalizationsPartitionRenderer {
             literal => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
-                        this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                        this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                            stResp => this.update.emit(null)
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
-                        this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                        this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                            stResp => this.update.emit(null)
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
-                        this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                        this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                            stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.prefLabel.getURI():
                         this.skosService.setPrefLabel(this.resource, literal.value, literal.lang).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                            stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.altLabel.getURI():
                         this.skosService.addAltLabel(this.resource, literal.value, literal.lang).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                            stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.hiddenLabel.getURI():
                         this.skosService.addHiddenLabel(this.resource, literal.value, literal.lang).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                            stResp => this.update.emit(null)
                         );
                         break;
                     case RDFS.label.getURI():
                         this.propertyService.createAndAddPropValue(
                             this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
-                            stResp => this.update.emit(null),
-                            err => { }
+                            stResp => this.update.emit(null)
                         );
                         break;
                 }
@@ -90,45 +83,38 @@ export class LexicalizationsPartitionRenderer {
         switch (predicate.getURI()) {
             case SKOSXL.prefLabel.getURI():
                 this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
                 break;
             case SKOSXL.altLabel.getURI():
                 this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
                 break;
             case SKOSXL.hiddenLabel.getURI():
                 this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.prefLabel.getURI():
                 this.skosService.removePrefLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.altLabel.getURI():
                 this.skosService.removeAltLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.hiddenLabel.getURI():
                 this.skosService.removeHiddenLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
                 break;
             case RDFS.label.getURI():
                 this.propertyService.removePropValue(this.resource, predicate, (<ARTLiteral>object).getLabel(),
                     null, RDFTypesEnum.plainLiteral, (<ARTLiteral>object).getLang()).subscribe(
-                        stResp => this.update.emit(null),
-                        err => { }
+                        stResp => this.update.emit(null)
                     );
                 break;
             }

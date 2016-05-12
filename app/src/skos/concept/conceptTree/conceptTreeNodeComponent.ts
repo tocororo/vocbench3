@@ -103,8 +103,7 @@ export class ConceptTreeNodeComponent {
             narrower => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
-            },
-            err => { }
+            }
         );
     }
     

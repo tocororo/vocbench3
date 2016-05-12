@@ -37,8 +37,7 @@ export class PropertyFacetsPartitionRenderer {
         this.propService.removePropValue(this.resource, OWL.inverseOf, property.getURI(), null, RDFTypesEnum.uri).subscribe(
             stResp => {
                 this.update.emit(null);
-            },
-            err => { }
+            }
         );
     }
     
@@ -57,13 +56,11 @@ export class PropertyFacetsPartitionRenderer {
     private setPropertyFacet(propertyClass: ARTURIResource, value: boolean) {
         if (value) {
             this.propService.addExistingPropValue(this.resource, RDF.type, propertyClass.getURI(), RDFTypesEnum.uri).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             );
         } else {
             this.propService.removePropValue(this.resource, RDF.type, propertyClass.getURI(), null, RDFTypesEnum.uri).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             );
         }
     }

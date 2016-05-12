@@ -41,8 +41,7 @@ export class DomainsPartitionRenderer {
                         this.manchService.createRestriction(this.resource, RDFS.domain, manchExpr).subscribe(
                             stResp => this.update.emit(null)
                         );
-                    },
-                    err => {}
+                    }
                 )
             },
             () => {}
@@ -52,15 +51,13 @@ export class DomainsPartitionRenderer {
     private remove(domain: ARTNode) {
         if (domain.isBNode()) {
             this.manchService.removeExpression(this.resource, RDFS.domain, domain).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             )
         } else {
             this.propService.removePropertyDomain(this.resource, <ARTURIResource>domain).subscribe(
                 stResp => {
                     this.update.emit(null);
-                },
-                err => { }
+                }
             );
         }
     }

@@ -121,7 +121,7 @@ export class NoLangLabelComponent {
                     if (record.labelProp == SKOSXL.prefLabel) {
                         this.skosxlService.removePrefLabel(record.resource, record.label.getLabel(), null).subscribe(
                             stResp => {
-                                this.skosxlService.setPrefLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.bnode).subscribe(
+                                this.skosxlService.setPrefLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.uri).subscribe(
                                     stResp => {
                                         this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
                                     }
@@ -131,7 +131,7 @@ export class NoLangLabelComponent {
                     } else if (record.labelProp == SKOSXL.altLabel) {
                         this.skosxlService.removeAltLabel(record.resource, record.label.getLabel(), null).subscribe(
                             stResp => {
-                                this.skosxlService.addAltLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.bnode).subscribe(
+                                this.skosxlService.addAltLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.uri).subscribe(
                                     stResp => {
                                         this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
                                     }
@@ -141,7 +141,7 @@ export class NoLangLabelComponent {
                     } else if (record.labelProp == SKOSXL.hiddenLabel) {
                         this.skosxlService.removeHiddenLabel(record.resource, record.label.getLabel(), null).subscribe(
                             stResp => {
-                                this.skosxlService.addHiddenLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.bnode).subscribe(
+                                this.skosxlService.addHiddenLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.uri).subscribe(
                                     stResp => {
                                         this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
                                     }

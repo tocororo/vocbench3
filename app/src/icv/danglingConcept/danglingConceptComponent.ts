@@ -43,8 +43,7 @@ export class DanglingConceptComponent {
                         break;
                     }
                 }
-            },
-            err => { }
+            }
         );
     }
     
@@ -78,8 +77,7 @@ export class DanglingConceptComponent {
             data => {
                 //remove the concept from the danglingConceptList
                 this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
-            },
-            err => { }
+            }
         );
     }
     
@@ -133,8 +131,7 @@ export class DanglingConceptComponent {
                     data => {
                         //remove the concept from the danglingConceptList
                         this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
-                    },
-                    err => { }
+                    }
                 );
             },
             () => {}

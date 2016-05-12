@@ -40,8 +40,7 @@ export class SchemesPartitionRenderer {
         this.skosService.removeConceptFromScheme(this.resource, scheme).subscribe(
             data => {
                 this.update.emit(null);
-            },
-            err => { }
+            }
         );
     }
     

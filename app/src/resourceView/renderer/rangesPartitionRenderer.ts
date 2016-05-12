@@ -51,8 +51,7 @@ export class RangesPartitionRenderer {
                         this.manchService.createRestriction(this.resource, RDFS.range, manchExpr).subscribe(
                             stResp => this.update.emit(null)
                         );
-                    },
-                    err => {}
+                    }
                 )
             },
             () => {}
@@ -79,15 +78,13 @@ export class RangesPartitionRenderer {
     private remove(range: ARTNode) {
         if (range.isBNode()) {
             this.manchService.removeExpression(this.resource, RDFS.range, range).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             )
         } else {
             this.propService.removePropertyRange(this.resource, <ARTURIResource>range).subscribe(
                 stResp => {
                     this.update.emit(null);
-                },
-                err => { }
+                }
             );
         }
     }

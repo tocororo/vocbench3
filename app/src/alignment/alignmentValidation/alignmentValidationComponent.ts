@@ -352,7 +352,6 @@ export class AlignmentValidationComponent {
                 var modalData = new ValidationReportModalData(report);
                 return this.modal.open(ValidationReportModal, modalData).then(
                     dialog => dialog.result
-                    //.then(() => {}, () => {}));
                 );
             },
             () => { document.getElementById("blockDivFullScreen").style.display = "none"; }
@@ -365,8 +364,7 @@ export class AlignmentValidationComponent {
                 var data = new Blob([stResp], {type: "octet/stream"});
                 var exportLink = window.URL.createObjectURL(data);
                 this.modalService.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
-            },
-            err => { }
+            }
         );
     }
     

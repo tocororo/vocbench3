@@ -43,8 +43,10 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
+     * @param skipErrorAlert if true, in case of error it shows an alert. If false is useful to handle the error from
+     * the component that invokes the service. 
      */
-    doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean) {
+    doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
@@ -85,7 +87,9 @@ export class HttpManager {
             .catch(error => {
                 console.log("Error during get " + url); //TODO remove (temp to debug createProject error)
                 console.error(error);
-                this.modalService.alert("Error", error, "error");
+                if (!skipErrorAlert) {
+                    this.modalService.alert("Error", error, "error");
+                }
                 return Observable.throw(error);
             });
     }

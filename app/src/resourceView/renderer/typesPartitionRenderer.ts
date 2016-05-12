@@ -40,8 +40,7 @@ export class TypesPartitionRenderer {
         this.owlService.removeType(this.resource, type).subscribe(
             stResp => {
                 this.update.emit(null);
-            },
-            err => { }
+            }
         );
     }
     

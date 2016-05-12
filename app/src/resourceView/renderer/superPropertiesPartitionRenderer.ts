@@ -39,8 +39,7 @@ export class SuperPropertiesPartitionRenderer {
         this.propService.removeSuperProperty(this.resource, superProp).subscribe(
             stResp => {
                 this.update.emit(null);
-            },
-            err => { }
+            }
         );
     }
     

@@ -46,8 +46,7 @@ export class SparqlComponent {
                 //process result
                 tab.headers = data.sparql.head.vars;
                 tab.queryResult = data.sparql.results.bindings;
-            },
-            err => { }
+            }
         );
     }
     

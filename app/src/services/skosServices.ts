@@ -76,9 +76,11 @@ export class SkosServices {
      * @param scheme scheme where new concept should belong
      * @param prefLabel preferred label of the concept
      * @param prefLabelLang language of the preferred label
+     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
+     * in the response)
      * @return an object containing concept and scheme
      */
-    createTopConcept(concept: string, scheme: ARTURIResource, prefLabel: string, prefLabelLang: string) {
+    createTopConcept(concept: string, scheme: ARTURIResource, prefLabel?: string, prefLabelLang?: string, lang?: string) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             concept: concept,
@@ -87,6 +89,9 @@ export class SkosServices {
         if (prefLabel != undefined && prefLabelLang != undefined) {
             params.prefLabel = prefLabel;
             params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
             stResp => {
@@ -156,9 +161,14 @@ export class SkosServices {
     /**
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
      * @param concept local name of the narrower
+     * @param scheme scheme where new concept should belong
+     * @param prefLabel preferred label of the concept
+     * @param prefLabelLang language of the preferred label
+     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
+     * in the response)
      * @return the new concept
      */
-    createNarrower(concept: string, broader: ARTURIResource, scheme: ARTURIResource, prefLabel: string, prefLabelLang: string) {
+    createNarrower(concept: string, broader: ARTURIResource, scheme: ARTURIResource, prefLabel?: string, prefLabelLang?: string, lang?: string) {
         console.log("[SkosServices] createNarrower");
         var params: any = {
             concept: concept,
@@ -168,6 +178,9 @@ export class SkosServices {
         if (prefLabel != undefined && prefLabelLang != undefined) {
             params.prefLabel = prefLabel;
             params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
             stResp => {
@@ -278,9 +291,11 @@ export class SkosServices {
      * @param local name of the scheme
      * @param prefLabel
      * @param prefLabelLang
+     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
+     * in the response)
      * @return the new scheme
      */
-    createScheme(scheme: string, prefLabel?: string, prefLabelLang?: string) {
+    createScheme(scheme: string, prefLabel?: string, prefLabelLang?: string, lang?: string) {
         console.log("[SkosServices] createScheme");
         var params: any = {
             scheme: scheme,
@@ -288,6 +303,9 @@ export class SkosServices {
         if (prefLabel != undefined && prefLabelLang != undefined) {
             params.prefLabel = prefLabel;
             params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService).map(
             stResp => {
@@ -297,7 +315,7 @@ export class SkosServices {
     }
 
     /**
-     * Deletes a scheme
+     * Deletes a scheme. Throws an Error if forceDeleteDanglingConcepts is not passed and the scheme is not empty
      * @param scheme the scheme to delete
      * @param forceDeleteDanglingConcepts tells whether the dangling concept should be deleted
      */
@@ -310,7 +328,8 @@ export class SkosServices {
         if (forceDeleteDanglingConcepts != undefined) {
             params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
         }
-        return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService);
+        //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component 
+        return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
     }
     
     //Label services

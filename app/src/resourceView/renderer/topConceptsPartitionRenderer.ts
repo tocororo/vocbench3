@@ -40,8 +40,7 @@ export class TopConceptsPartitionRenderer {
         this.skosService.removeTopConcept(this.resource, scheme).subscribe(
             stResp => {
                 this.update.emit(null);
-            },
-            err => { }
+            }
         );
     }
     

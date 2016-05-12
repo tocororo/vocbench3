@@ -36,10 +36,7 @@ export class ClassTreePanelComponent {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", null, false, true).then(
             result => {
-                this.owlService.createClass(OWL.thing, result).subscribe(
-                    stResp => { },
-                    err => { }
-                )
+                this.owlService.createClass(OWL.thing, result).subscribe()
             },
             () => {}
         );
@@ -50,10 +47,7 @@ export class ClassTreePanelComponent {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", null, false, true).then(
             result => {
-                this.owlService.createClass(this.selectedClass, result).subscribe(
-                    stResp => { },
-                    err => { }
-                );
+                this.owlService.createClass(this.selectedClass, result).subscribe();
             },
             () => {}
         );
@@ -69,8 +63,7 @@ export class ClassTreePanelComponent {
             stResp => {
                 this.selectedClass = null;
                 this.classSelected.emit(undefined);
-            },
-            err => { }
+            }
         );
     }
     
@@ -78,10 +71,7 @@ export class ClassTreePanelComponent {
         //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
         this.modalService.prompt("Create new instance", "Name", null, false, true).then(
             result => {
-                this.owlService.createInstance(this.selectedClass, result).subscribe(
-                    stResp => { },
-                    err => { }
-                );
+                this.owlService.createInstance(this.selectedClass, result).subscribe();
             },
             () => {}
         );
@@ -120,8 +110,7 @@ export class ClassTreePanelComponent {
                             );
                         }
                     }
-                },
-                err => { }
+                }
             );
         }
     }

@@ -58,8 +58,7 @@ export class HierarchicalRedundancyComponent {
         this.skosService.removeBroaderConcept(narrower, broader).subscribe(
             stResp => {
                 this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
-            },
-            err => { }
+            }
         );
     }
     

@@ -22,8 +22,7 @@ export class SchemeListComponent {
         this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage()).subscribe(
             schemeList => {
                 this.schemeList = schemeList;
-            },
-            err => { }
+            }
         );
     }
     

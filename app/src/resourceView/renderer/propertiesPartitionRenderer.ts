@@ -55,21 +55,18 @@ export class PropertiesPartitionRenderer {
                 literal => {
                     switch (predicate.getURI()) {
                         case SKOSXL.prefLabel.getURI():
-                            this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
-                                stResp => this.update.emit(null),
-                                err => { }
+                            this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                                stResp => this.update.emit(null)
                             );
                             break;
                         case SKOSXL.altLabel.getURI():
-                            this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
-                                stResp => this.update.emit(null),
-                                err => { }
+                            this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                                stResp => this.update.emit(null)
                             );
                             break;
                         case SKOSXL.hiddenLabel.getURI():
-                            this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.bnode).subscribe(
-                                stResp => this.update.emit(null),
-                                err => { }
+                            this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                                stResp => this.update.emit(null)
                             );
                             break;
                     }

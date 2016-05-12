@@ -128,7 +128,7 @@ export class NoLabelResourceComponent {
         } else if (this.ontoType == "SKOS-XL") {
             this.modalService.newPlainLiteral("Add skosxl:prefLabel").then(
                 data => {
-                    this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.bnode).subscribe(
+                    this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.brokenResourceList.splice(this.brokenResourceList.indexOf(resource), 1);
                         }

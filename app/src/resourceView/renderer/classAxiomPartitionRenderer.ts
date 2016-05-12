@@ -71,13 +71,11 @@ export class ClassAxiomPartitionPartitionRenderer {
             selectedClass => {
                 if (property.getURI() == RDFS.subClassOf.getURI()) {
                     this.owlService.addSuperCls(this.resource, selectedClass).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
+                        stResp => this.update.emit(null)
                     );
                 } else {
                     this.propertyService.addExistingPropValue(this.resource, property, selectedClass.getURI(), RDFTypesEnum.uri).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
+                        stResp => this.update.emit(null)
                     );
                 }
             },
@@ -96,11 +94,9 @@ export class ClassAxiomPartitionPartitionRenderer {
                 this.manchService.checkExpression(manchExpr).subscribe(
                     stResp => {
                         this.manchService.createRestriction(this.resource, property, manchExpr).subscribe(
-                            stResp => this.update.emit(null),
-                            err => {}    
+                            stResp => this.update.emit(null)
                         );
-                    },
-                    err => {}
+                    }
                 )
             },
             () => {}
@@ -116,13 +112,11 @@ export class ClassAxiomPartitionPartitionRenderer {
             classes => {
                 if (property.getURI() == OWL.intersectionOf.getURI()) {
                     this.owlService.addIntersectionOf(this.resource, classes).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
+                        stResp => this.update.emit(null)
                     );    
                 } else if (property.getURI() == OWL.unionOf.getURI()) {
                     this.owlService.addUnionOf(this.resource, classes).subscribe(
-                        stResp => this.update.emit(null),
-                        err => {}
+                        stResp => this.update.emit(null)
                     );
                 }
             },
@@ -138,8 +132,7 @@ export class ClassAxiomPartitionPartitionRenderer {
         this.resViewModalService.createInstanceList("Add " + property.getShow()).then(
             instances => {
                 this.owlService.addOneOf(this.resource, instances).subscribe(
-                    stResp => this.update.emit(null),
-                    err => {}
+                    stResp => this.update.emit(null)
                 );
             }
         );
@@ -153,42 +146,35 @@ export class ClassAxiomPartitionPartitionRenderer {
         if (predicate.getURI() == RDFS.subClassOf.getURI()) {
             if (object.isBNode()) {
                 this.manchService.removeExpression(this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 )
             } else {
                 this.owlService.removeSuperCls(this.resource, <ARTURIResource>object).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
             }
         } else if (predicate.getURI() == OWL.equivalentClass.getURI() || predicate.getURI() == OWL.disjointWith.getURI() ||
                 predicate.getURI() == OWL.complementOf.getURI()) {
             if (object.isBNode()) {
                 this.manchService.removeExpression(this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 )
             } else {
                 this.propertyService.removePropValue(this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
-                    stResp => this.update.emit(null),
-                    err => { }
+                    stResp => this.update.emit(null)
                 );
             }
         } else if (predicate.getURI() == OWL.intersectionOf.getURI()) {
             this.owlService.removeIntersectionOf(this.resource, object).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             );
         } else if (predicate.getURI() == OWL.unionOf.getURI()) {
             this.owlService.removeUnionOf(this.resource, object).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             );
         } else if (predicate.getURI() == OWL.oneOf.getURI()) {
             this.owlService.removeOneOf(this.resource, object).subscribe(
-                stResp => this.update.emit(null),
-                err => { }
+                stResp => this.update.emit(null)
             );
         }
     }

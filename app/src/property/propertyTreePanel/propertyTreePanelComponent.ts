@@ -45,10 +45,7 @@ export class PropertyTreePanelComponent {
         //currently uses prompt instead of newResource since addProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a new " + type, "Name", null, false, true).then(
             result => {
-                this.propService.addProperty(result, type).subscribe(
-                    stResp => { },
-                    err => { }
-                );
+                this.propService.addProperty(result, type).subscribe();
             },
             () => {}
         );
@@ -58,10 +55,7 @@ export class PropertyTreePanelComponent {
         //currently uses prompt instead of newResource since addSubProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a subProperty", "Name", null, false, true).then(
             result => {
-                this.propService.addSubProperty(result, this.selectedProperty).subscribe(
-                    stResp => { },
-                    err => { }
-                );
+                this.propService.addSubProperty(result, this.selectedProperty).subscribe();
             },
             () => {}
         );
@@ -72,8 +66,7 @@ export class PropertyTreePanelComponent {
             stResp => {
                 this.selectedProperty = null;
                 this.itemSelected.emit(undefined);
-            },
-            err => { }
+            }
         );
     }
     
@@ -97,8 +90,7 @@ export class PropertyTreePanelComponent {
                             );
                         }
                     }
-                },
-                err => { }
+                }
             );
         }
     }

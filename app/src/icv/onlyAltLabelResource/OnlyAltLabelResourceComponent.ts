@@ -143,7 +143,7 @@ export class OnlyAltLabelResourceComponent {
             } else if (this.ontoType == "SKOS-XL") {
                 this.skosxlService.removeAltLabel(resource, label.getLabel(), label.getLang()).subscribe(
                     stResp => {
-                        this.skosxlService.setPrefLabel(resource, label.getLabel(), label.getLang(), RDFTypesEnum.bnode).subscribe(
+                        this.skosxlService.setPrefLabel(resource, label.getLabel(), label.getLang(), RDFTypesEnum.uri).subscribe(
                             stResp => {
                                 observer.next();
                                 observer.complete();
@@ -172,7 +172,7 @@ export class OnlyAltLabelResourceComponent {
         } else if (this.ontoType == "SKOS-XL") {
             this.modalService.newPlainLiteral("Add skosxl:prefLabel").then(
                 data => {
-                    this.skosxlService.setPrefLabel(record.resource, data.value, data.lang, RDFTypesEnum.bnode).subscribe(
+                    this.skosxlService.setPrefLabel(record.resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
                         }
