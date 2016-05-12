@@ -1,16 +1,19 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {AdministrationServices} from '../../../services/administrationServices';
 import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
-export class ImportOntologyModalContent {
+export class ImportOntologyModalData extends BSModalContext {
     /**
      * @param title modal title
      */
     constructor(
         public title: string = "Modal Title",
         public importType: ImportType
-    ) {}
+    ) {
+        super();
+    }
 }
 
 @Component({
@@ -19,7 +22,8 @@ export class ImportOntologyModalContent {
     providers: [AdministrationServices],
     directives: [FilePickerComponent]
 })
-export class ImportOntologyModal implements ICustomModalComponent {
+export class ImportOntologyModal implements ModalComponent<ImportOntologyModalData> {
+    context: ImportOntologyModalData;
     
     private baseURI: string; //used for type "fromWeb", "fromWebToMirror", "fromLocalFile"
     private localFile: File; //used for type "fromLocalFile"
@@ -31,14 +35,8 @@ export class ImportOntologyModal implements ICustomModalComponent {
     private mirrorList: Array<any>; //used for type "fromOntologyMirror"
     private selectedMirror; //used for type "fromOntologyMirror"
     
-    dialog: ModalDialogInstance;
-    context: ImportOntologyModalContent;
-    adminService: AdministrationServices;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal, adminService: AdministrationServices) {
-        this.dialog = dialog;
-        this.context = <ImportOntologyModalContent>modelContentData;
-        this.adminService = adminService;
+    constructor(public dialog: DialogRef<ImportOntologyModalData>, public adminService: AdministrationServices) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

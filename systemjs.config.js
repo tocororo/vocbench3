@@ -1,19 +1,3 @@
-// System.config({
-//             packages: {        
-//                 app: {
-//                     format: 'register',
-//                     defaultExtension: 'js'
-//                 },
-//                 'angular2-modal': {
-//                     defaultExtension: 'js'
-//                 }
-//             },
-//             map: {
-//                 'angular2-modal': 'node_modules/angular2-modal/dist/commonjs'
-//             }
-//         });
-        
-        
 (function(global) {
 
   // map tells the System loader where to look for things
@@ -22,7 +6,7 @@
     'rxjs':                       'node_modules/rxjs',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
     '@angular':                   'node_modules/@angular',
-    'angular2-modal':             'node_modules/angular2-modal/dist/commonjs'
+    'angular2-modal':             'node_modules/angular2-modal'
   };
 
   // packages tells the System loader how to load when no filename and/or no extension
@@ -43,6 +27,10 @@
     '@angular/router-deprecated',
     '@angular/testing',
     '@angular/upgrade',
+    
+    'angular2-modal',
+    'angular2-modal/platform-browser',
+    'angular2-modal/plugins/bootstrap',
   ];
 
   // add package entries for angular packages in the form '@angular/common': { main: 'index.js', defaultExtension: 'js' }

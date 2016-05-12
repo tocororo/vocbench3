@@ -1,9 +1,10 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
 import {ConceptTreeComponent} from '../../../../skos/concept/conceptTree/conceptTreeComponent';
 
-export class ConceptTreeModalContent {
+export class ConceptTreeModalData extends BSModalContext {
     /**
      * @param title the title of the modal
      * @param scheme the scheme of the concept tree. If not provided the modal contains a tree in no-scheme mode
@@ -12,7 +13,10 @@ export class ConceptTreeModalContent {
     constructor(
         public title: string = 'Modal Title',
         public scheme: ARTURIResource,
-        public schemeChangeable: boolean = false) {}
+        public schemeChangeable: boolean = false
+    ) {
+        super();
+    }
 }
 
 @Component({
@@ -20,16 +24,13 @@ export class ConceptTreeModalContent {
     templateUrl: "app/src/widget/modal/browsingModal/conceptTreeModal/conceptTreeModal.html",
     directives: [ConceptTreeComponent]
 })
-export class ConceptTreeModal implements ICustomModalComponent {
+export class ConceptTreeModal implements ModalComponent<ConceptTreeModalData> {
+    context: ConceptTreeModalData;
     
     private selectedConcept;
     
-    dialog: ModalDialogInstance;
-    context: ConceptTreeModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <ConceptTreeModalContent>modelContentData;
+    constructor(public dialog: DialogRef<ConceptTreeModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

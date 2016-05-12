@@ -1,8 +1,9 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 
-export class PromptModalContent {
+export class PromptModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param label label of the input field
@@ -18,7 +19,9 @@ export class PromptModalContent {
         public hideNo: boolean = false,
         public inputOptional: boolean = false,
         public inputSanitized: boolean = false
-    ) {}
+    ) {
+        super();
+    }
 }
 
 @Component({
@@ -26,18 +29,15 @@ export class PromptModalContent {
     templateUrl: "app/src/widget/modal/promptModal/promptModal.html",
     directives: [SanitizerDirective]
 })
-export class PromptModal implements ICustomModalComponent {
+export class PromptModal implements ModalComponent<PromptModalData> {
+    context: PromptModalData;
     
     private inputTxt: string;
     
     private submitted: boolean = false;
     
-    dialog: ModalDialogInstance;
-    context: PromptModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <PromptModalContent>modelContentData;
+    constructor(public dialog: DialogRef<PromptModalData>) {
+        this.context = dialog.context;
         this.inputTxt = this.context.value;
     }
     

@@ -1,14 +1,14 @@
-import {Component, ReflectiveInjector, provide} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router-deprecated';
-import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
+import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Cookie} from "../../utils/Cookie";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 import {AlignmentCell} from "./AlignmentCell";
-import {ValidationSettingsModal} from "./validationSettingsModal/validationSettingsModal"
-import {ValidationReportModal, ValidationReportModalContent} from "./validationReportModal/validationReportModal"
+import {ValidationSettingsModal, ValidationSettingsModalData} from "./validationSettingsModal/validationSettingsModal"
+import {ValidationReportModal, ValidationReportModalData} from "./validationReportModal/validationReportModal"
 import {AlignmentServices} from "../../services/AlignmentServices";
 
 @Component({
@@ -244,8 +244,8 @@ export class AlignmentValidationComponent {
      */
     private openSettings() {
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-        this.modal.open(<any>ValidationSettingsModal, [], new ModalConfig(null, true, null)).then(
-            resultPromise => resultPromise.result.then(
+        this.modal.open(ValidationSettingsModal, new ValidationSettingsModalData()).then(
+            dialog => dialog.result.then(
                 () => {
                     //update settings
                     this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
@@ -349,15 +349,11 @@ export class AlignmentValidationComponent {
             report => {
                 document.getElementById("blockDivFullScreen").style.display = "none";
                 //open report modal
-                var modalContent = new ValidationReportModalContent(report);
-                let resolvedBindings = ReflectiveInjector.resolve(
-                    [provide(ICustomModal, {useValue: modalContent})]),
-                    dialog = this.modal.open(
-                        <any>ValidationReportModal,
-                        resolvedBindings,
-                        new ModalConfig("lg", true, null)
+                var modalData = new ValidationReportModalData(report);
+                return this.modal.open(ValidationReportModal, modalData).then(
+                    dialog => dialog.result
+                    //.then(() => {}, () => {}));
                 );
-                dialog.then(resultPromise => resultPromise.result.then(() => {}, () => {}));
             },
             () => { document.getElementById("blockDivFullScreen").style.display = "none"; }
         )

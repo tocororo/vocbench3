@@ -1,5 +1,5 @@
 import {Component, ViewChild} from "@angular/core";
-import {ModalServices} from "../widget/modal/modalServices";
+import {ModalServices, ModalType} from "../widget/modal/modalServices";
 import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
@@ -7,7 +7,7 @@ import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 @Component({
     selector: "test-component",
     templateUrl: "app/src/test/testComponent.html",
-    providers: [],
+    providers: [BrowsingServices],
     directives: [SanitizerDirective],
     host: { class : "pageComponent" }
 })
@@ -20,7 +20,7 @@ export class TestComponent {
     private confirmResult;
     private confirmTitle = "Confirm title";
     private confirmMessage = "Confirm message";
-    private confirmType = "info";
+    private confirmType: ModalType = "info";
     confirm() {
         this.modalService.confirm(this.confirmTitle, this.confirmMessage, this.confirmType).then(
             result => {
@@ -45,7 +45,7 @@ export class TestComponent {
     
     private alertTitle = "Alert title";
     private alertMessage = "Alert message";
-    private alertType = "info";
+    private alertType: ModalType = "info";
     alert() {
         this.modalService.alert(this.alertTitle, this.alertMessage, this.alertType);
     }

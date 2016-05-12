@@ -1,10 +1,13 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
 import {SchemeListComponent} from '../../../../skos/scheme/schemeList/schemeListComponent';
 
-export class SchemeListModalContent {
-    constructor(public title: string = 'Modal Title') {}
+export class SchemeListModalData extends BSModalContext {
+    constructor(public title: string = 'Modal Title') {
+        super();
+    }
 }
 
 @Component({
@@ -12,16 +15,13 @@ export class SchemeListModalContent {
     templateUrl: "app/src/widget/modal/browsingModal/schemeListModal/schemeListModal.html",
     directives: [SchemeListComponent]
 })
-export class SchemeListModal implements ICustomModalComponent {
+export class SchemeListModal implements ModalComponent<SchemeListModalData> {
+    context: SchemeListModalData;
     
     private selectedScheme;
     
-    dialog: ModalDialogInstance;
-    context: SchemeListModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <SchemeListModalContent>modelContentData;
+    constructor(public dialog: DialogRef<SchemeListModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

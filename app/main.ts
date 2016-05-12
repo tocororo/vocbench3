@@ -2,12 +2,14 @@ import { bootstrap } from "@angular/platform-browser-dynamic";
 import { enableProdMode, Renderer } from "@angular/core";
 import { ROUTER_PROVIDERS } from "@angular/router-deprecated";
 import { HTTP_PROVIDERS } from "@angular/http";
-import { Modal } from 'angular2-modal/angular2-modal';
-import { ModalServices } from "./src/widget/modal/modalServices";
-import { BrowsingServices } from "./src/widget/modal/browsingModal/browsingServices";
+
+import { MODAL_BROWSER_PROVIDERS } from 'angular2-modal/platform-browser';
+import { BS_MODAL_PROVIDERS } from 'angular2-modal/plugins/bootstrap';
+
 import { HttpManager } from "./src/utils/HttpManager";
 import { VocbenchCtx } from "./src/utils/VocbenchCtx";
 import { VBEventHandler } from "./src/utils/VBEventHandler";
+import { ModalServices } from "./src/widget/modal/modalServices";
 
 import {App} from "./src/app";
 
@@ -18,6 +20,8 @@ import {App} from "./src/app";
  * in the bootstrap function so that they can be widely used in the application, without specifying them in providers
  */
 bootstrap(App, [
-    ROUTER_PROVIDERS, HTTP_PROVIDERS, Renderer,
-    HttpManager, VocbenchCtx, VBEventHandler, Modal, ModalServices, BrowsingServices
+    ROUTER_PROVIDERS, HTTP_PROVIDERS,
+    HttpManager, VocbenchCtx, VBEventHandler,
+    BS_MODAL_PROVIDERS, Renderer, MODAL_BROWSER_PROVIDERS, //required in order to add ModalServices as provider
+    ModalServices
 ]);

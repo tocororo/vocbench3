@@ -1,18 +1,19 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
 import {PropertyTreeComponent} from '../../../../property/propertyTree/propertyTreeComponent';
 
-export class PropertyTreeModalContent {
-    public title: string = 'Modal Title';
-    public resource: ARTURIResource;
+export class PropertyTreeModalData extends BSModalContext {
     /**
      * @param resource optional, if provided the returned propertyTree contains 
      * just the properties that have as domain the type of the resource 
      */
-    constructor(title: string, resource?: ARTURIResource) {
-        this.title = title;
-        this.resource = resource;
+    constructor(
+        public title: string = 'Modal Title',
+        public resource: ARTURIResource
+    ) {
+        super()
     }
 }
 
@@ -21,17 +22,14 @@ export class PropertyTreeModalContent {
     templateUrl: "app/src/widget/modal/browsingModal/propertyTreeModal/propertyTreeModal.html",
     directives: [PropertyTreeComponent]
 })
-export class PropertyTreeModal implements ICustomModalComponent {
+export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> {
+    context: PropertyTreeModalData;
     
     private selectedProperty;
     private domainRes: ARTURIResource;
     
-    dialog: ModalDialogInstance;
-    context: PropertyTreeModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <PropertyTreeModalContent>modelContentData;
+    constructor(public dialog: DialogRef<PropertyTreeModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

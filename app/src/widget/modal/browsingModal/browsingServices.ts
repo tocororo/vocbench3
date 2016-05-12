@@ -1,10 +1,10 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
-import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
-import {ClassTreeModal, ClassTreeModalContent} from "../browsingModal/classTreeModal/classTreeModal";
-import {InstanceListModal, InstanceListModalContent} from "../browsingModal/instanceListModal/instanceListModal";
-import {ConceptTreeModal, ConceptTreeModalContent} from "../browsingModal/conceptTreeModal/conceptTreeModal";
-import {SchemeListModal, SchemeListModalContent} from "../browsingModal/schemeListModal/schemeListModal";
-import {PropertyTreeModal, PropertyTreeModalContent} from "../browsingModal/propertyTreeModal/propertyTreeModal";
+import {Injectable} from '@angular/core';
+import {Modal} from 'angular2-modal/angular2-modal';
+import {ClassTreeModal, ClassTreeModalData} from "../browsingModal/classTreeModal/classTreeModal";
+import {InstanceListModal, InstanceListModalData} from "../browsingModal/instanceListModal/instanceListModal";
+import {ConceptTreeModal, ConceptTreeModalData} from "../browsingModal/conceptTreeModal/conceptTreeModal";
+import {SchemeListModal, SchemeListModalData} from "../browsingModal/schemeListModal/schemeListModal";
+import {PropertyTreeModal, PropertyTreeModalData} from "../browsingModal/propertyTreeModal/propertyTreeModal";
 import {ARTURIResource} from "../../../utils/ARTResources";
 
 /**
@@ -25,15 +25,10 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected class
      */
     browseClassTree(title: string) {
-        var modalContent = new ClassTreeModalContent(title);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ClassTreeModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ClassTreeModalData(title);
+        return this.modal.open(ClassTreeModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -43,15 +38,10 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected instance
      */
     browseInstanceList(title: string, cls: ARTURIResource) {
-        var modalContent = new InstanceListModalContent(title, cls);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>InstanceListModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new InstanceListModalData(title, cls);
+        return this.modal.open(InstanceListModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -62,15 +52,10 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected concept
      */
     browseConceptTree(title: string, scheme?: ARTURIResource, schemeChangeable?: boolean) {
-        var modalContent = new ConceptTreeModalContent(title, scheme, schemeChangeable);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ConceptTreeModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ConceptTreeModalData(title, scheme, schemeChangeable);
+        return this.modal.open(ConceptTreeModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -79,15 +64,10 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected scheme
      */
     browseSchemeList(title: string) {
-        var modalContent = new SchemeListModalContent(title);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>SchemeListModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new SchemeListModalData(title);
+        return this.modal.open(SchemeListModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -98,15 +78,10 @@ export class BrowsingServices {
      * @return if the modal closes with ok returns a promise containing the selected property
      */
     browsePropertyTree(title: string, resource?: ARTURIResource) {
-        var modalContent = new PropertyTreeModalContent(title, resource);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>PropertyTreeModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new PropertyTreeModalData(title, resource);
+        return this.modal.open(PropertyTreeModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

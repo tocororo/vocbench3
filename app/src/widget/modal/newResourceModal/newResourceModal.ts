@@ -1,13 +1,16 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 import {Languages} from "../../../utils/LanguagesCountries";
 
-export class NewResourceModalContent {
+export class NewResourceModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
         public lang: string = "en"
-    ) {}
+    ) {
+        super();
+    }
 }
 
 @Component({
@@ -15,7 +18,8 @@ export class NewResourceModalContent {
     templateUrl: "app/src/widget/modal/newResourceModal/newResourceModal.html",
     directives: [SanitizerDirective]
 })
-export class NewResourceModal implements ICustomModalComponent {
+export class NewResourceModal implements ModalComponent<NewResourceModalData> {
+    context: NewResourceModalData;
     
     private submitted: boolean = false;
     
@@ -24,12 +28,8 @@ export class NewResourceModal implements ICustomModalComponent {
     private lang: string;
     private languageList = Languages.languageList;
     
-    dialog: ModalDialogInstance;
-    context: NewResourceModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <NewResourceModalContent>modelContentData;
+    constructor(public dialog: DialogRef<NewResourceModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

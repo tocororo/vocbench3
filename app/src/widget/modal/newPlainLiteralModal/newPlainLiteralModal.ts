@@ -1,9 +1,10 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ResourceUtils} from "../../../utils/ResourceUtils";
 import {Languages} from "../../../utils/LanguagesCountries";
 
-export class NewPlainLiteralModalContent {
+export class NewPlainLiteralModalData extends BSModalContext {
     /**
      * @param title the title of the modal dialog
      * @param value the value inserted by default
@@ -17,14 +18,17 @@ export class NewPlainLiteralModalContent {
         public valueReadonly: boolean = false,
         public lang: string = 'en',
         public langReadonly: boolean = false
-    ) {}
+    ) {
+        super();
+    }
 }
 
 @Component({
     selector: "new-plain-literal-modal",
     templateUrl: "app/src/widget/modal/newPlainLiteralModal/newPlainLiteralModal.html",
 })
-export class NewPlainLiteralModal implements ICustomModalComponent {
+export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModalData> {
+    context: NewPlainLiteralModalData;
     
     private submitted: boolean = false;
     
@@ -32,12 +36,8 @@ export class NewPlainLiteralModal implements ICustomModalComponent {
     private lang: string;
     private languageList = Languages.languageList;
     
-    dialog: ModalDialogInstance;
-    context: NewPlainLiteralModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <NewPlainLiteralModalContent>modelContentData;
+    constructor(public dialog: DialogRef<NewPlainLiteralModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

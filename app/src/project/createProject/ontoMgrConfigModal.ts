@@ -1,24 +1,25 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 
-export class OntoMgrConfigModalContent {
+export class OntoMgrConfigModalData extends BSModalContext {
     /**
      * @param configuration 
      */
-    constructor(public configuration: any = {}) {}
+    constructor(public configuration: any = {}) {
+        super();
+    }
 }
 
 @Component({
     selector: "onto-mgr-config-modal",
     templateUrl: "app/src/project/createProject/ontoMgrConfigModal.html",
 })
-export class OntoMgrConfigModal implements ICustomModalComponent {
-    dialog: ModalDialogInstance;
-    context: OntoMgrConfigModalContent;
+export class OntoMgrConfigModal implements ModalComponent<OntoMgrConfigModalData> {
+    context: OntoMgrConfigModalData;
     
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <OntoMgrConfigModalContent>modelContentData;
+    constructor(public dialog: DialogRef<OntoMgrConfigModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

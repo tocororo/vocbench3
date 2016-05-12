@@ -1,12 +1,15 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {ARTURIResource, ResAttribute} from '../../../utils/ARTResources';
 import {ClassTreeComponent} from '../../../owl/classTree/classTreeComponent';
 import {InstanceListComponent} from '../../../owl/instanceList/instanceListComponent';
 
-export class InstanceListCreatorModalContent {
-    constructor(public title: string = 'Modal Title') {}
+export class InstanceListCreatorModalData extends BSModalContext {
+    constructor(public title: string = 'Modal Title') {
+        super();
+    }
 }
 
 @Component({
@@ -14,7 +17,8 @@ export class InstanceListCreatorModalContent {
     templateUrl: "app/src/resourceView/renderer/resViewModals/instanceListCreatorModal.html",
     directives: [ClassTreeComponent, InstanceListComponent, RdfResourceComponent],
 })
-export class InstanceListCreatorModal implements ICustomModalComponent {
+export class InstanceListCreatorModal implements ModalComponent<InstanceListCreatorModalData> {
+    context: InstanceListCreatorModalData;
     
     private selectedClass: ARTURIResource; //class selected in the class tree
     private selectedSourceInstance: ARTURIResource; //instance selected in the source instance list
@@ -24,12 +28,8 @@ export class InstanceListCreatorModal implements ICustomModalComponent {
     
     private duplicateInstance: ARTURIResource; //instance tried to add to the instanceList but already there 
     
-    dialog: ModalDialogInstance;
-    context: InstanceListCreatorModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <InstanceListCreatorModalContent>modelContentData;
+    constructor(public dialog: DialogRef<InstanceListCreatorModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

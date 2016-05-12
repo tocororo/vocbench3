@@ -1,7 +1,8 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 
-export class DownloadModalContent {
+export class DownloadModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param message modal message
@@ -12,20 +13,21 @@ export class DownloadModalContent {
         public title: string = 'Modal Title',
         public message: string,
         public downloadLink: string,
-        public fileName: string) {}
+        public fileName: string
+    ) {
+        super();
+    }
 }
 
 @Component({
     selector: "download-modal",
     templateUrl: "app/src/widget/modal/downloadModal/downloadModal.html",
 })
-export class DownloadModal implements ICustomModalComponent {
-    dialog: ModalDialogInstance;
-    context: DownloadModalContent;
+export class DownloadModal implements ModalComponent<DownloadModalData> {
+    context: DownloadModalData;
     
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <DownloadModalContent>modelContentData;
+    constructor(public dialog: DialogRef<DownloadModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

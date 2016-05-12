@@ -1,18 +1,20 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from "../../../utils/ARTResources";
 import {XmlSchema, SKOS} from "../../../utils/Vocabulary";
 
-export class NewTypedLiteralModalContent {
-    public title: string = 'Create new label';
-    public allowedDatatypes: Array<string>;
+export class NewTypedLiteralModalData extends BSModalContext {
+    
     /**
      * @param allowedDatatypes array of datatype URIs of the allowed datatypes in the typed literal creation.
      * If null all the datatypes are allowed
      */
-    constructor(title: string, allowedDatatypes?: Array<string>) {
-        this.title = title;
-        this.allowedDatatypes = allowedDatatypes;
+    constructor(
+        public title: string = 'Create new label',
+        public allowedDatatypes: Array<string>
+    ) {
+        super();
     }
 }
 
@@ -20,22 +22,20 @@ export class NewTypedLiteralModalContent {
     selector: "new-typed-lang-modal",
     templateUrl: "app/src/widget/modal/newTypedLiteralModal/newTypedLiteralModal.html",
 })
-export class NewTypedLiteralModal implements ICustomModalComponent {
+export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModalData> {
+    context: NewTypedLiteralModalData;
     
     private datatypes: Array<string> = [
         XmlSchema.boolean.getURI(), XmlSchema.date.getURI(), XmlSchema.dateTime.getURI(), XmlSchema.float.getURI(),
-        XmlSchema.integer.getURI(), XmlSchema.string.getURI(), XmlSchema.time.getURI()];
+        XmlSchema.integer.getURI(), XmlSchema.string.getURI(), XmlSchema.time.getURI()
+    ];
     
     private submitted: boolean = false;
     private value: any;
     private datatype: string;
     
-    dialog: ModalDialogInstance;
-    context: NewTypedLiteralModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <NewTypedLiteralModalContent>modelContentData;
+    constructor(public dialog: DialogRef<NewTypedLiteralModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

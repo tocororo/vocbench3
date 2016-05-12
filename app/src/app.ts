@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef } from "@angular/core";
 import { RouteConfig, ROUTER_DIRECTIVES, Router } from "@angular/router-deprecated";
 import { Location } from "@angular/common";
-import { Modal } from 'angular2-modal/angular2-modal';
+
 import { VocbenchCtx } from "./utils/VocbenchCtx";
 import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
@@ -27,8 +27,8 @@ import { MetadataManagementComponent } from "./config/dataManagement/metadata/me
 import { RegistrationComponent } from "./user/registrationComponent";
 
 //import to open modal to change content language (Remove if the modal will be launched from another component)
-import { ModalConfig } from 'angular2-modal/angular2-modal';
-import { ContentLangModal } from "./settings/contentLang/contentLangModal";
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { ContentLangModal, ContentLangModalData } from "./settings/contentLang/contentLangModal";
 
 import { TestComponent } from "./test/testComponent";
 
@@ -122,9 +122,9 @@ export class App {
     }
     
     private changeContentLang() {
-        this.modal.open(<any>ContentLangModal, [], new ModalConfig(null, true, null)).then(
-            resultPromise => 
-                resultPromise.result.then(
+        this.modal.open(ContentLangModal, new ContentLangModalData()).then(
+            dialog => 
+                dialog.result.then(
                     confirmed => {},
                     canceled => {}
                 )

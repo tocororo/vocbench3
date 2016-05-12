@@ -1,12 +1,24 @@
 import {Component} from "@angular/core";
-import {ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {Cookie} from "../../../utils/Cookie";
+
+/**
+ * Useless class with empty data
+ * (I need this cause currently I don't know how to create a Custom Modal without context data)
+ */
+export class ValidationSettingsModalData extends BSModalContext {
+    constructor() {
+        super();
+    }
+}
 
 @Component({
     selector: "validation-settings-modal",
     templateUrl: "app/src/alignment/alignmentValidation/validationSettingsModal/validationSettingsModal.html",
 })
-export class ValidationSettingsModal implements ICustomModalComponent {
+export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
+    context: ValidationSettingsModalData;
     
     private rejectedAlignmentAction: string;
     private rejectedOptAsk = {value: "ask", label: "Always ask (Always ask for the action to perform)"};
@@ -25,7 +37,9 @@ export class ValidationSettingsModal implements ICustomModalComponent {
     
     private submitted: boolean = false;
     
-    constructor(public dialog: ModalDialogInstance) {}
+    constructor(public dialog: DialogRef<ValidationSettingsModalData>) {
+        this.context = dialog.context;
+    }
     
     ngOnInit() {
         //here there's no need to check if cookies are != null, because they're initialized in AlignmentValidationComponent

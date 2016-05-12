@@ -1,8 +1,8 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
-import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
-import {ClassListCreatorModal, ClassListCreatorModalContent} from "./classListCreatorModal";
-import {InstanceListCreatorModal, InstanceListCreatorModalContent} from "./instanceListCreatorModal";
-import {EnrichPropertyModal, EnrichPropertyModalContent} from "./enrichPropertyModal";
+import {Injectable} from '@angular/core';
+import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreatorModal";
+import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
+import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
 import {ARTURIResource} from '../../../utils/ARTResources';
 
 /**
@@ -20,15 +20,10 @@ export class ResViewModalServices {
      * classes (ARTURIResource) and expressions (ARTBNode)
      */
     createClassList(title: string) {
-        var modalContent = new ClassListCreatorModalContent(title);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ClassListCreatorModal,
-                resolvedBindings,
-                new ModalConfig('lg', true, null)
+        var modalData = new ClassListCreatorModalData(title);
+        return this.modal.open(ClassListCreatorModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -37,15 +32,10 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing an array of instances
      */
     createInstanceList(title: string) {
-        var modalContent = new InstanceListCreatorModalContent(title);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>InstanceListCreatorModal,
-                resolvedBindings,
-                new ModalConfig('lg', true, null)
+        var modalData = new InstanceListCreatorModalData(title);
+        return this.modal.open(InstanceListCreatorModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -54,15 +44,10 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
     enrichProperty(title: string, property: ARTURIResource, ranges: ARTURIResource[]) {
-        var modalContent = new EnrichPropertyModalContent(title, property, ranges);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>EnrichPropertyModal,
-                resolvedBindings,
-                new ModalConfig('lg', true, null)
+        var modalData = new EnrichPropertyModalData(title, property, ranges);
+        return this.modal.open(EnrichPropertyModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

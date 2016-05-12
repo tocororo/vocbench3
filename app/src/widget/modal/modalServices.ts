@@ -1,18 +1,18 @@
-import {Injectable, ReflectiveInjector, provide} from '@angular/core';
-import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
+import {Injectable} from '@angular/core';
+import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTURIResource} from "../../utils/ARTResources";
-import {PromptModal, PromptModalContent} from "./promptModal/promptModal";
-import {ConfirmModal, ConfirmModalContent} from "./confirmModal/confirmModal";
-import {ConfirmCheckModal, ConfirmCheckModalContent} from "./confirmModal/confirmCheckModal";
-import {AlertModal, AlertModalContent} from "./alertModal/alertModal";
-import {DownloadModal, DownloadModalContent} from "./downloadModal/downloadModal";
-import {NewResourceModal, NewResourceModalContent} from "./newResourceModal/newResourceModal";
-import {NewPlainLiteralModal, NewPlainLiteralModalContent} from "./newPlainLiteralModal/newPlainLiteralModal";
-import {NewTypedLiteralModal, NewTypedLiteralModalContent} from "./newTypedLiteralModal/newTypedLiteralModal";
-import {SelectionModal, SelectionModalContent} from "./selectionModal/selectionModal";
-import {ResourceSelectionModal, ResourceSelectionModalContent} from "./selectionModal/resourceSelectionModal";
+import {PromptModal, PromptModalData} from "./promptModal/promptModal";
+import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
+import {ConfirmCheckModal, ConfirmCheckModalData} from "./confirmModal/confirmCheckModal";
+import {AlertModal, AlertModalData} from "./alertModal/alertModal";
+import {DownloadModal, DownloadModalData} from "./downloadModal/downloadModal";
+import {NewResourceModal, NewResourceModalData} from "./newResourceModal/newResourceModal";
+import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralModal/newPlainLiteralModal";
+import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
+import {SelectionModal, SelectionModalData} from "./selectionModal/selectionModal";
+import {ResourceSelectionModal, ResourceSelectionModalData} from "./selectionModal/resourceSelectionModal";
 
-type ModalType = "info" | "error" | "warning";
+export type ModalType = "info" | "error" | "warning";
 
 @Injectable()
 export class ModalServices {
@@ -30,15 +30,10 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing the input text
      */
     prompt(title: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
-        var modalContent = new PromptModalContent(title, label, value, false, inputOptional, inputSanitized);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>PromptModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new PromptModalData(title, label, value, false, inputOptional, inputSanitized);
+        return this.modal.open(PromptModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -52,15 +47,10 @@ export class ModalServices {
      */
     confirm(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined
-        var modalContent = new ConfirmModalContent(title, message, modalType);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ConfirmModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ConfirmModalData(title, message, modalType);
+        return this.modal.open(ConfirmModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -75,15 +65,10 @@ export class ModalServices {
      */
     confirmCheck(title: string, message: string, checkboxLabel: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined
-        var modalContent = new ConfirmCheckModalContent(title, message, checkboxLabel, modalType);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ConfirmCheckModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ConfirmCheckModalData(title, message, checkboxLabel, modalType);
+        return this.modal.open(ConfirmCheckModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -95,15 +80,10 @@ export class ModalServices {
      */
     alert(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "info"; //set default type to info if not defined
-        var modalContent = new AlertModalContent(title, message, modalType);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>AlertModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new AlertModalData(title, message, modalType);
+        return this.modal.open(AlertModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -114,15 +94,10 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing the selected option
      */
     select(title: string, message: string, options: Array<string>) {
-        var modalContent = new SelectionModalContent(title, message, options);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>SelectionModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new SelectionModalData(title, message, options);
+        return this.modal.open(SelectionModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -133,15 +108,10 @@ export class ModalServices {
      * @param fileName name of the file to download
      */
     downloadLink(title: string, message: string, downloadLink: string, fileName: string) {
-        var modalContent = new DownloadModalContent(title, message, downloadLink, fileName);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>DownloadModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new DownloadModalData(title, message, downloadLink, fileName);
+        return this.modal.open(DownloadModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -152,15 +122,10 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
     selectResource(title: string, message: string, resourceList: Array<ARTURIResource>) {
-        var modalContent = new ResourceSelectionModalContent(title, message, resourceList);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ResourceSelectionModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ResourceSelectionModalData(title, message, resourceList);
+        return this.modal.open(ResourceSelectionModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -170,15 +135,10 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing an object with name, label and lang
      */
     newResource(title: string, lang?: string) {
-        var modalContent = new NewResourceModalContent(title, lang);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>NewResourceModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new NewResourceModalData(title, lang);
+        return this.modal.open(NewResourceModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -191,15 +151,10 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing an object with value and lang
      */
     newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean) {
-        var modalContent = new NewPlainLiteralModalContent(title, value, valueReadonly, lang, langReadonly);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>NewPlainLiteralModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new NewPlainLiteralModalData(title, value, valueReadonly, lang, langReadonly);
+        return this.modal.open(NewPlainLiteralModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     /**
@@ -209,15 +164,10 @@ export class ModalServices {
      * @return if the modal closes with ok returns a promise containing an object with value and datatype
      */
     newTypedLiteral(title: string, allowedDatatypes?: string[]) {
-        var modalContent = new NewTypedLiteralModalContent(title, allowedDatatypes);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>NewTypedLiteralModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new NewTypedLiteralModalData(title, allowedDatatypes);
+        return this.modal.open(NewTypedLiteralModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

@@ -1,7 +1,8 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 
-export class PrefixNamespaceModalContent {
+export class PrefixNamespaceModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param prefix the prefix to change. Optional, to provide only to change a mapping.
@@ -13,24 +14,23 @@ export class PrefixNamespaceModalContent {
         public prefix: string,
         public namespace: string,
         public namespaceReadonly: boolean = false
-    ) {}
+    ) {
+        super();
+    }
 }
 
 @Component({
     selector: "mapping-modal",
     templateUrl: "app/src/config/dataManagement/metadata/prefixNamespaceModal.html",
 })
-export class PrefixNamespaceModal implements ICustomModalComponent {
+export class PrefixNamespaceModal implements ModalComponent<PrefixNamespaceModalData> {
+    context: PrefixNamespaceModalData;
     
     private prefix: string;
     private namespace: string;
-    
-    dialog: ModalDialogInstance;
-    context: PrefixNamespaceModalContent;
 
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <PrefixNamespaceModalContent>modelContentData;
+    constructor(public dialog: DialogRef<PrefixNamespaceModalData>) {
+        this.context = dialog.context;
         this.prefix = this.context.prefix;
         this.namespace = this.context.namespace;
     }

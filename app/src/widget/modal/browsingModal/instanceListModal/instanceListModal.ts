@@ -1,10 +1,13 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
 import {InstanceListComponent} from '../../../../owl/instanceList/instanceListComponent';
 
-export class InstanceListModalContent {
-    constructor(public title: string = 'Modal Title', public cls: ARTURIResource) {}
+export class InstanceListModalData extends BSModalContext {
+    constructor(public title: string = 'Modal Title', public cls: ARTURIResource) {
+        super();
+    }
 }
 
 @Component({
@@ -12,16 +15,13 @@ export class InstanceListModalContent {
     templateUrl: "app/src/widget/modal/browsingModal/instanceListModal/instanceListModal.html",
     directives: [InstanceListComponent]
 })
-export class InstanceListModal implements ICustomModalComponent {
+export class InstanceListModal implements ModalComponent<InstanceListModalData> {
+    context: InstanceListModalData;
     
     private selectedInstance;
     
-    dialog: ModalDialogInstance;
-    context: InstanceListModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <InstanceListModalContent>modelContentData;
+    constructor(public dialog: DialogRef<InstanceListModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

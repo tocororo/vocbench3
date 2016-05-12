@@ -1,10 +1,13 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
 import {ClassTreeComponent} from '../../../../owl/classTree/classTreeComponent';
 
-export class ClassTreeModalContent {
-    constructor(public title: string = 'Modal Title') {}
+export class ClassTreeModalData extends BSModalContext {
+    constructor(public title: string = 'Modal Title') {
+        super();
+    }
 }
 
 @Component({
@@ -12,16 +15,13 @@ export class ClassTreeModalContent {
     templateUrl: "app/src/widget/modal/browsingModal/classTreeModal/classTreeModal.html",
     directives: [ClassTreeComponent]
 })
-export class ClassTreeModal implements ICustomModalComponent {
+export class ClassTreeModal implements ModalComponent<ClassTreeModalData> {
+    context: ClassTreeModalData;
     
     private selectedClass;
     
-    dialog: ModalDialogInstance;
-    context: ClassTreeModalContent;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <ClassTreeModalContent>modelContentData;
+    constructor(public dialog: DialogRef<ClassTreeModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

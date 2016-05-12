@@ -1,6 +1,6 @@
-import {Component, ReflectiveInjector, provide} from "@angular/core";
-import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
-import {OntoMgrConfigModal, OntoMgrConfigModalContent} from "./ontoMgrConfigModal";
+import {Component} from "@angular/core";
+import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {OntoMgrConfigModal, OntoMgrConfigModalData} from "./ontoMgrConfigModal";
 import {Router} from '@angular/router-deprecated';
 import {ProjectServices} from "../../services/projectServices";
 import {OntoManagerServices} from "../../services/ontoManagerServices";
@@ -236,15 +236,10 @@ export class CreateProjectComponent {
      * Opens a modal to change configurations
      */
     private openConfigurationModal(configuration: any) {
-        var modalContent = new OntoMgrConfigModalContent(configuration);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>OntoMgrConfigModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new OntoMgrConfigModalData(configuration);
+        return this.modal.open(OntoMgrConfigModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

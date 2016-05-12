@@ -1,4 +1,5 @@
-import {Component, Input, ReflectiveInjector, provide} from "@angular/core";
+import {Component, Input} from "@angular/core";
+import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {RDFTypesEnum} from "../utils/Enums";
@@ -8,8 +9,7 @@ import {ModalServices} from "../widget/modal/modalServices";
 import {ResourceViewServices} from "../services/resourceViewServices";
 import {RefactorServices} from "../services/refactorServices";
 import {AlignmentServices} from "../services/alignmentServices";
-import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
-import {ResourceAlignmentModal, ResourceAlignmentModalContent} from "../alignment/resourceAlignment/resourceAlignmentModal"
+import {ResourceAlignmentModal, ResourceAlignmentModalData} from "../alignment/resourceAlignment/resourceAlignmentModal"
 
 import {TypesPartitionRenderer} from "./renderer/typesPartitionRenderer";
 import {TopConceptsPartitionRenderer} from "./renderer/topConceptsPartitionRenderer";
@@ -206,15 +206,10 @@ export class ResourceViewComponent {
      * aligned object
      */
     private openAlignmentModal() {
-        var modalContent = new ResourceAlignmentModalContent(this.resource);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ResourceAlignmentModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ResourceAlignmentModalData(this.resource);
+        return this.modal.open(ResourceAlignmentModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
 }

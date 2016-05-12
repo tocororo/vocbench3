@@ -1,13 +1,16 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {ARTResource, ARTURIResource, ARTBNode, ResAttribute} from '../../../utils/ARTResources';
 import {RDFResourceRolesEnum} from '../../../utils/Enums';
 import {ClassTreeComponent} from '../../../owl/classTree/classTreeComponent';
 import {ManchesterServices} from "../../../services/manchesterServices";
 
-export class ClassListCreatorModalContent {
-    constructor(public title: string = 'Modal Title') {}
+export class ClassListCreatorModalData extends BSModalContext {
+    constructor(public title: string = 'Modal Title') {
+        super();
+    }
 }
 
 @Component({
@@ -16,7 +19,8 @@ export class ClassListCreatorModalContent {
     directives: [ClassTreeComponent, RdfResourceComponent],
     providers: [ManchesterServices]
 })
-export class ClassListCreatorModal implements ICustomModalComponent {
+export class ClassListCreatorModal implements ModalComponent<ClassListCreatorModalData> {
+    context: ClassListCreatorModalData;
     
     private selectedTreeClass: ARTURIResource; //class selected in the class tree
     private selectedListElement: ARTResource; //class or expression selected in the class list
@@ -25,14 +29,8 @@ export class ClassListCreatorModal implements ICustomModalComponent {
     
     private duplicateResource: ARTResource; //resource tried to add to the classList but already there 
     
-    dialog: ModalDialogInstance;
-    context: ClassListCreatorModalContent;
-    manchService: ManchesterServices;
-
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal, manchService: ManchesterServices) {
-        this.dialog = dialog;
-        this.context = <ClassListCreatorModalContent>modelContentData;
-        this.manchService = manchService;
+    constructor(public dialog: DialogRef<ClassListCreatorModalData>, public manchService: ManchesterServices) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

@@ -1,7 +1,8 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 
-export class ConfirmCheckModalContent {
+export class ConfirmCheckModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param message modal message
@@ -18,25 +19,25 @@ export class ConfirmCheckModalContent {
         public type: string = 'info',
         public yesText: string = 'Yes',
         public noText: string = 'No'
-    ) {}
+    ) {
+        super();
+    }
 }
 
 @Component({
     selector: "confirm-modal",
     templateUrl: "app/src/widget/modal/confirmModal/confirmCheckModal.html",
 })
-export class ConfirmCheckModal implements ICustomModalComponent {
-    dialog: ModalDialogInstance;
-    context: ConfirmCheckModalContent;
+export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> {
+	context: ConfirmCheckModalData;
     
     private check: boolean = false;
     
     private headerStyle;
     private msgStyle;
 
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <ConfirmCheckModalContent>modelContentData;
+    constructor(public dialog: DialogRef<ConfirmCheckModalData>) {
+        this.context = dialog.context;
         
         //based on the modal type set the css style of the message alert
         switch (this.context.type) {

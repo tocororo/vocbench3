@@ -1,18 +1,22 @@
-import {Component, ReflectiveInjector, provide} from "@angular/core";
-import {Modal, ICustomModal, ICustomModalComponent, ModalDialogInstance, ModalConfig} from 'angular2-modal/angular2-modal';
+import {Component} from "@angular/core";
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
-import {BrowseExternalResourceModal, BrowseExternalResourceModalContent} from "./browseExternalResourceModal"
+import {BrowseExternalResourceModal, BrowseExternalResourceModalData} from "./browseExternalResourceModal"
 
-export class ResourceAlignmentModalContent {
+export class ResourceAlignmentModalData extends BSModalContext {
     /**
      * @param resource the resource to align
      */
-    constructor(public resource: ARTURIResource) {}
+    constructor(public resource: ARTURIResource) {
+        super();
+    }
 }
 
 @Component({
@@ -21,28 +25,17 @@ export class ResourceAlignmentModalContent {
     providers: [AlignmentServices],
     directives: [RdfResourceComponent]
 })
-export class ResourceAlignmentModal implements ICustomModalComponent {
+export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentModalData> {
+    context: ResourceAlignmentModalData;
     
     private mappingPropList: Array<ARTURIResource>;
     private mappingProperty: ARTURIResource;
     private allPropCheck: boolean = false;
     private alignedObject: ARTURIResource;
     
-    dialog: ModalDialogInstance;
-    context: ResourceAlignmentModalContent;
-    alignService: AlignmentServices;
-    vbCtx: VocbenchCtx;
-    modal: Modal;
-    modalService: ModalServices;
-    
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal, modal: Modal,
-        alignService: AlignmentServices, vbCtx: VocbenchCtx, modalService: ModalServices) {
-        this.dialog = dialog;
-        this.context = <ResourceAlignmentModalContent>modelContentData;
-        this.modal = modal;
-        this.alignService = alignService;
-        this.vbCtx = vbCtx;
-        this.modalService = modalService;
+    constructor(public dialog: DialogRef<ResourceAlignmentModalData>, public modal: Modal,
+        public alignService: AlignmentServices, public vbCtx: VocbenchCtx, public modalService: ModalServices) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {
@@ -103,15 +96,10 @@ export class ResourceAlignmentModal implements ICustomModalComponent {
      * @param resRole role of the resource to explore.
      */
     private openBrowseExternalResModal(title: string, resRole: RDFResourceRolesEnum) {
-        var modalContent = new BrowseExternalResourceModalContent(title, resRole);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>BrowseExternalResourceModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new BrowseExternalResourceModalData(title, resRole);
+        return this.modal.open(BrowseExternalResourceModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     private isOkClickable(): boolean {

@@ -1,21 +1,21 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {ARTURIResource} from "../../../utils/ARTResources";
 
-export class ResourceSelectionModalContent {
-    public title: string = 'Modal Title';
-    public message: string;
-    public resourceList: Array<ARTURIResource>;
+export class ResourceSelectionModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param message modal message, if null no the message is shwown the modal
      * @param resourceList resources available for the choise
      */
-    constructor(title: string,  message: string, resourceList: Array<ARTURIResource>) {
-        this.title = title;
-        this.message = message;
-        this.resourceList = resourceList;
+    constructor(
+        public title: string = 'Modal Title',
+        public message: string,
+        public resourceList: Array<ARTURIResource>
+    ) {
+        super();
     }
 }
 
@@ -27,16 +27,13 @@ export class ResourceSelectionModalContent {
     templateUrl: "app/src/widget/modal/selectionModal/resourceSelectionModal.html",
     directives: [RdfResourceComponent]
 })
-export class ResourceSelectionModal implements ICustomModalComponent {
+export class ResourceSelectionModal implements ModalComponent<ResourceSelectionModalData> {
+    context: ResourceSelectionModalData;
     
     private resourceSelected;
     
-    dialog: ModalDialogInstance;
-    context: ResourceSelectionModalContent;
-    
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <ResourceSelectionModalContent>modelContentData;
+    constructor(public dialog: DialogRef<ResourceSelectionModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {

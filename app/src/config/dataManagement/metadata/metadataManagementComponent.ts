@@ -1,12 +1,12 @@
-import {Component, ReflectiveInjector, provide} from "@angular/core";
+import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
-import {Modal, ModalConfig, ICustomModal} from 'angular2-modal/angular2-modal';
+import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {MetadataServices} from "../../../services/metadataServices";
 import {RefactorServices} from "../../../services/refactorServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {PrefixNamespaceModal, PrefixNamespaceModalContent} from "./prefixNamespaceModal";
-import {ImportOntologyModal, ImportOntologyModalContent, ImportType} from "./importOntologyModal";
+import {PrefixNamespaceModal, PrefixNamespaceModalData} from "./prefixNamespaceModal";
+import {ImportOntologyModal, ImportOntologyModalData, ImportType} from "./importOntologyModal";
 
 @Component({
 	selector: "metadata-management-component",
@@ -256,15 +256,10 @@ export class MetadataManagementComponent {
      * @return returns a mapping object containing "prefix" and "namespace"
      */
     private openMappingModal(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean) {
-        var modalContent = new PrefixNamespaceModalContent(title, prefix, namespace, namespaceReadonly);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>PrefixNamespaceModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new PrefixNamespaceModalData(title, prefix, namespace, namespaceReadonly);
+        return this.modal.open(PrefixNamespaceModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
     //======= IMPORTS MANAGEMENT =======
@@ -399,15 +394,10 @@ export class MetadataManagementComponent {
      * fromOntologyMirror) mirror object contains "namespace" and "file".
      */
     private openImportModal(title: string, importType: ImportType) {
-        var modalContent = new ImportOntologyModalContent(title, importType);
-        let resolvedBindings = ReflectiveInjector.resolve(
-            [provide(ICustomModal, {useValue: modalContent})]),
-            dialog = this.modal.open(
-                <any>ImportOntologyModal,
-                resolvedBindings,
-                new ModalConfig(null, true, null)
+        var modalData = new ImportOntologyModalData(title, importType);
+        return this.modal.open(ImportOntologyModal, modalData).then(
+            dialog => dialog.result
         );
-        return dialog.then(resultPromise => resultPromise.result);
     }
     
 

@@ -1,20 +1,20 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 
-export class AlertModalContent {
-    public title: string = 'Modal Title';
-    public message: string = 'Modal Body!';
-    public type: string = 'info';
+export class AlertModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param message modal message
      * @param type type of the modal. Determines the style of the message alert.
      *      Available values: "info", "warning", "error"
      */
-    constructor(title: string, message: string, type: string) {
-        this.title = title;
-        this.message = message;
-        this.type = type;
+    constructor(
+        public title: string = 'Modal Title',
+        public message: string = 'Modal Body!',
+        public type: string = 'info'
+    ) {
+       super(); 
     }
 }
 
@@ -22,16 +22,14 @@ export class AlertModalContent {
     selector: "alert-modal",
     templateUrl: "app/src/widget/modal/alertModal/alertModal.html",
 })
-export class AlertModal implements ICustomModalComponent {
-    dialog: ModalDialogInstance;
-    context: AlertModalContent;
+export class AlertModal implements ModalComponent<AlertModalData> {
+    context: AlertModalData;
     
     private headerStyle;
     private msgStyle;
     
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <AlertModalContent>modelContentData;
+    constructor(public dialog: DialogRef<AlertModalData>) {
+        this.context = dialog.context;
         
         //based on the modal type set the css style of the message alert
         switch (this.context.type) {

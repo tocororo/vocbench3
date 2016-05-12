@@ -5,7 +5,7 @@
     <div style="display: flex; align-items: center; margin-bottom: 5px;">
         Show all classes
         <input type="checkbox" style="margin-left: 3px;" [checked]="allClasses" 
-            (change)="onCheckboxChange($event.target.checked)" [disabled]="!context.rangeClasses">
+            (change)="onCheckboxChange($event.target.checked)" [disabled]="!context.rangeClasses || context.rangeClasses.length == 0">
     </div>
     <class-individual-tree [roots]="treeRoots" (itemSelected)="onInstanceSelected($event)">
     </class-individual-tree>

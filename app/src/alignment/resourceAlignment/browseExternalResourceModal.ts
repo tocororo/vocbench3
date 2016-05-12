@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {RDFResourceRolesEnum} from "../../utils/Enums";
@@ -11,12 +12,14 @@ import {ConceptTreeComponent} from "../../skos/concept/conceptTree/conceptTreeCo
 import {SchemeListComponent} from "../../skos/scheme/schemeList/schemeListComponent";
 import {PropertyTreeComponent} from "../../property/propertyTree/propertyTreeComponent";
 
-export class BrowseExternalResourceModalContent {
+export class BrowseExternalResourceModalData extends BSModalContext {
     /**
      * @param title title of the modal
      * @param resRole role of the resource to explore.
      */
-    constructor(public title: string, public resRole: RDFResourceRolesEnum) {}
+    constructor(public title: string, public resRole: RDFResourceRolesEnum) {
+        super();
+    }
 }
 
 @Component({
@@ -26,22 +29,18 @@ export class BrowseExternalResourceModalContent {
     directives: [ClassTreeComponent, ClassIndividualTreeComponent, ConceptTreeComponent,
         PropertyTreeComponent, SchemeListComponent]
 })
-export class BrowseExternalResourceModal implements ICustomModalComponent {
+export class BrowseExternalResourceModal implements ModalComponent<BrowseExternalResourceModalData> {
+    context: BrowseExternalResourceModalData;
     
     private projectList: Array<Project> = [];
     private project: Project;
     private alignedObject: ARTURIResource;
     
-    dialog: ModalDialogInstance;
-    context: BrowseExternalResourceModalContent;
-    vbCtx: VocbenchCtx;
-    projService: ProjectServices;
     
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal, vbCtx: VocbenchCtx, projService: ProjectServices) {
-        this.dialog = dialog;
-        this.context = <BrowseExternalResourceModalContent>modelContentData;
-        this.vbCtx = vbCtx;
-        this.projService = projService;
+    constructor(public dialog: DialogRef<BrowseExternalResourceModalData>, 
+        public vbCtx: VocbenchCtx, public projService: ProjectServices) {
+            
+        this.context = dialog.context;
     }
     
     ngOnInit() {

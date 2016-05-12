@@ -1,25 +1,25 @@
 import {Component} from "@angular/core";
-import {ICustomModal, ICustomModalComponent, ModalDialogInstance} from 'angular2-modal/angular2-modal';
+import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "angular2-modal";
 
-export class ValidationReportModalContent {
+export class ValidationReportModalData extends BSModalContext {
     /**
      * @param report collection of object with entity1, entity2, property and action
      */
-    constructor(public report) {}
+    constructor(public report: Array<any>) {
+        super();
+    }
 }
 
 @Component({
     selector: "validation-report-modal",
     templateUrl: "app/src/alignment/alignmentValidation/validationReportModal/validationReportModal.html",
 })
-export class ValidationReportModal implements ICustomModalComponent {
+export class ValidationReportModal implements ModalComponent<ValidationReportModalData> {
+    context: ValidationReportModalData;
     
-    dialog: ModalDialogInstance;
-    context: ValidationReportModalContent;
-    
-    constructor(dialog: ModalDialogInstance, modelContentData: ICustomModal) {
-        this.dialog = dialog;
-        this.context = <ValidationReportModalContent>modelContentData;
+    constructor(public dialog: DialogRef<ValidationReportModalData>) {
+        this.context = dialog.context;
     }
     
     ngOnInit() {
