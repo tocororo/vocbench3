@@ -1,4 +1,5 @@
 import {Component} from "@angular/core";
+import {DomSanitizationService} from "@angular/platform-browser"
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 
@@ -26,11 +27,14 @@ export class DownloadModalData extends BSModalContext {
 export class DownloadModal implements ModalComponent<DownloadModalData> {
     context: DownloadModalData;
     
-    constructor(public dialog: DialogRef<DownloadModalData>) {
+    private safeDownloadLink;
+    
+    constructor(public dialog: DialogRef<DownloadModalData>, public sanitizer: DomSanitizationService) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
+        this.safeDownloadLink = this.sanitizer.bypassSecurityTrustUrl(this.context.downloadLink);
         document.getElementById("toFocus").focus();
     }
 

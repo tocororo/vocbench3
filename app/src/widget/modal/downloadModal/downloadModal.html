@@ -5,7 +5,7 @@
     <div class="alert alert-info" *ngIf="context.message">
         {{context.message}}
     </div>
-    <a [href]="context.downloadLink" [download]="context.fileName">Download</a>
+    <a [href]="safeDownloadLink" [download]="context.fileName">Download</a>
 </div>
 <div class="modal-footer">
     <button id="toFocus" class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>

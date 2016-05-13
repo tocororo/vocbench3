@@ -85,7 +85,6 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                console.log("Error during get " + url); //TODO remove (temp to debug createProject error)
                 console.error(error);
                 if (!skipErrorAlert) {
                     this.modalService.alert("Error", error, "error");
