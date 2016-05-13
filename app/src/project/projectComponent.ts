@@ -164,6 +164,14 @@ export class ProjectComponent implements OnInit {
         );
     }
     
+    private saveProject(project: Project) {
+        this.projectService.saveProject(project).subscribe(
+            stResp => {
+                this.modalService.alert("Save project", "Project " + project.getName() + " saved successfully");
+            }
+        );
+    }
+    
     /**
      * Useful to set as selected the radio button of the working project
      */

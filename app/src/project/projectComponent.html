@@ -3,8 +3,10 @@
     <div>
         <div class="btn-group btn-group-sm" style="margin-bottom: 10px;" role="group">
             <button type="button" class="btn btn-default" (click)="createProject()">Create</button>
-            <button type="button" class="btn btn-default" (click)="deleteProject()" [disabled]="!selectedProject">Delete</button>
             <button type="button" class="btn btn-default" (click)="importProject()">Import</button>
+        </div>
+        <div class="btn-group btn-group-sm" style="margin-bottom: 10px;" role="group">
+            <button type="button" class="btn btn-default" (click)="deleteProject()" [disabled]="!selectedProject">Delete</button>
             <button type="button" class="btn btn-default" (click)="exportProject()" [disabled]="!selectedProject">Export</button>
         </div>
     </div>
@@ -36,7 +38,13 @@
                     </td>
                     <td class="text-center">{{p.getName()}}</td>
                     <td class="text-center">{{p.getPrettyPrintOntoMgr()}}</td>
-                    <td class="text-center">{{p.getType()}}</td>
+                    <td class="text-center">
+                        {{p.getType()}}
+                        <button *ngIf="p.getType() == 'saveToStore'" class="btn btn-default btn-xs" (click)="saveProject(p)"
+                            title="Save project" [disabled]="!p.isOpen()">
+                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                        </button>
+                    </td>
                     <td class="text-center">{{p.getPrettyPrintOntoType()}}</td>
                     <td class="text-center">
                         <span [class]="p.getStatus().class" [title]="p.getStatus().message"></span>
