@@ -148,31 +148,72 @@ export class MetadataManagementComponent {
     private applyNamespaceBaseURI() {
         this.nsBaseURISubmitted = true;
         if (this.isBaseURIValid() && this.isNamespaceValid()) {
-            this.modalService.confirm("Refactor", 
-                "Attention, this refactoring operation could be a long process. Are you sure to proceed?", "warning").then(
-                confirm => {
-                    document.getElementById("blockDivFullScreen").style.display = "block";
-                        this.refactorService.replaceBaseURI(this.baseURI).subscribe(
+            var message = "Save change of ";
+            if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
+                message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
+                this.modalService.confirm("Refactor", message, "warning").then(
+                    confirm => {
+                        document.getElementById("blockDivFullScreen").style.display = "block";
+                        this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
-                                this.metadataService.setDefaultNamespace(this.namespace).subscribe(
+                                this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                                     stResp => {
                                         document.getElementById("blockDivFullScreen").style.display = "none";
                                         this.modalService.alert("Refactor", "BaseURI and namespace have been updated successfully");
-                                        //refreshes baseURI and namespace
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
-                                    },
-                                    () => document.getElementById("blockDivFullScreen").style.display = "none"
-                                );
+                                        this.nsBaseURISubmitted = true;
+                                    }
+                                )
                             }
                         )
-                },
-                () => {
-                    //restore baseURI and namespace
-                    this.baseURI = this.pristineBaseURI;
-                    this.namespace = this.pristineNamespace;
-                }
-            );
+                    },
+                    rejected => {
+                        //restore both
+                        this.namespace = this.pristineNamespace;
+                        this.baseURI = this.pristineBaseURI;
+                        this.nsBaseURISubmitted = true;
+                    }
+                );
+            } else if (this.baseURI != this.pristineBaseURI) { //changed only baseURI
+                message += "baseURI? (Attention, baseURI refactoring could be a long process)";
+                this.modalService.confirm("Refactor", message, "warning").then(
+                    confirm => {
+                        document.getElementById("blockDivFullScreen").style.display = "block";
+                        this.refactorService.replaceBaseURI(this.baseURI).subscribe(
+                            stResp => {
+                                document.getElementById("blockDivFullScreen").style.display = "none";
+                                this.modalService.alert("Refactor", "BaseURI has been updated successfully and refactor complete.");
+                                this.refreshBaseURI();
+                                this.nsBaseURISubmitted = true;
+                            }
+                        )
+                    },
+                    rejected => {
+                        //restore baseURI
+                        this.baseURI = this.pristineBaseURI;
+                        this.nsBaseURISubmitted = true;
+                    }
+                )
+            } else if (this.namespace != this.pristineNamespace) {//changed only namespace
+                message += "namespace?";
+                this.modalService.confirm("Save changes", message, "warning").then(
+                    confirm => {
+                        this.metadataService.setDefaultNamespace(this.namespace).subscribe(
+                            stResp => {
+                                this.modalService.alert("Refactor", "Mamespace has been updated successfully");
+                                this.refreshDefaultNamespace();
+                                this.nsBaseURISubmitted = true;
+                            }
+                        );
+                    },
+                    rejected => {
+                        //restore namespace
+                        this.namespace = this.pristineNamespace;
+                        this.nsBaseURISubmitted = true;
+                    }
+                )
+            }
         } else {
             this.modalService.alert("Error", "Please insert valid namespace and baseURI", "error");
         }
