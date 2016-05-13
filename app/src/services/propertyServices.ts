@@ -2,9 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTURIResource, ResAttribute} from "../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {CustomRange, CustomRangeEntry, CustomRangeType} from "../utils/CustomRanges";
-import {RDFTypesEnum} from "../utils/Enums";
 
 @Injectable()
 export class PropertyServices {

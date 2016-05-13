@@ -1,8 +1,7 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "../../utils/ARTResources";
+import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";
-import {RDFTypesEnum} from "../../utils/Enums";
 import {CustomRange, CustomRangeEntry} from "../../utils/CustomRanges";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ReifiedResourceComponent} from "../../widget/reifiedResource/reifiedResourceComponent";

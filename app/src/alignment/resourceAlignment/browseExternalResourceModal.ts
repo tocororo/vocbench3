@@ -1,9 +1,8 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {Project} from "../../utils/Project";
 import {ProjectServices} from "../../services/projectServices";
 import {ClassTreeComponent} from "../../owl/classTree/classTreeComponent";

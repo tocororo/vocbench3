@@ -4,9 +4,8 @@ import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../services/searchServices";
 import {OwlServices} from "../../services/owlServices";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
-import {RDFResourceRolesEnum} from "../../utils/Enums";
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot

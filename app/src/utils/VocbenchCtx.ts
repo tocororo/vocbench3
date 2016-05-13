@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import {ARTURIResource} from './ARTResources';
+import {ARTURIResource, RDFResourceRolesEnum} from './ARTResources';
 import {Project} from './Project';
-import {RDFResourceRolesEnum} from "./Enums";
 import {Cookie} from "./Cookie";
 
 @Injectable()

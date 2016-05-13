@@ -1,8 +1,7 @@
 import {Component, Input} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
-import {ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute} from "../utils/ARTResources";
+import {ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
-import {RDFTypesEnum} from "../utils/Enums";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../widget/modal/modalServices";

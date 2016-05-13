@@ -1,12 +1,11 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects, RDFTypesEnum} from "../../utils/ARTResources";
 import {RDFS, OWL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ResViewModalServices} from "./resViewModals/resViewModalServices";
 import {ResourceUtils} from "../../utils/ResourceUtils";
-import {RDFTypesEnum} from "../../utils/Enums";
 import {PropertyServices} from "../../services/propertyServices";
 import {OwlServices} from "../../services/owlServices";
 import {ManchesterServices} from "../../services/manchesterServices";

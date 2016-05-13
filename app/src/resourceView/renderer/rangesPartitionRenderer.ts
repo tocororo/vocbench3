@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
-import {RDFResourceRolesEnum} from "../../utils/Enums";
+import {ARTNode, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {RDFS, XmlSchema} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";

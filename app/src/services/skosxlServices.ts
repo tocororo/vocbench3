@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTURIResource, ResAttribute} from "../utils/ARTResources";
-import {RDFResourceRolesEnum} from "../utils/Enums";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../utils/ARTResources";
 
 @Injectable()
 export class SkosxlServices {

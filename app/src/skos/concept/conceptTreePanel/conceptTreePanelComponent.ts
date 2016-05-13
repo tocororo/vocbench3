@@ -5,9 +5,8 @@ import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTURIResource, RDFResourceRolesEnum} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {RDFResourceRolesEnum} from "../../../utils/Enums";
 
 @Component({
 	selector: "concept-tree-panel",

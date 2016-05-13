@@ -2,8 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
-import {ARTResource, ARTURIResource, ARTBNode, ResAttribute} from '../../../utils/ARTResources';
-import {RDFResourceRolesEnum} from '../../../utils/Enums';
+import {ARTResource, ARTURIResource, ARTBNode, ResAttribute, RDFResourceRolesEnum} from '../../../utils/ARTResources';
 import {ClassTreeComponent} from '../../../owl/classTree/classTreeComponent';
 import {ManchesterServices} from "../../../services/manchesterServices";
 

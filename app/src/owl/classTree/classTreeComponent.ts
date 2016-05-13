@@ -1,8 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
-import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {OWL} from "../../utils/Vocabulary";
 import {VBEventHandler} from "../../utils/VBEventHandler";
-import {RDFResourceRolesEnum} from "../../utils/Enums";
 import {OwlServices} from "../../services/owlServices";
 import {SearchServices} from "../../services/searchServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";

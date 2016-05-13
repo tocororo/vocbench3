@@ -17,7 +17,8 @@ export class Project {
     };
     
     private static knownOntoMgrInterfaces = {
-        "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl" : "Sesame2"
+        "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl" : "Sesame2",
+        "it.uniroma2.art.semanticturkey.ontology.sesame4.OntologyManagerFactorySesame4Impl" : "Sesame4"
     }
     
     // constructor() {}

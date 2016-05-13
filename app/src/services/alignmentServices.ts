@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource} from "../utils/ARTResources";
+import {ARTURIResource, RDFResourceRolesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
-import {RDFResourceRolesEnum} from "../utils/Enums";
 import {AlignmentCell} from "../alignment/alignmentValidation/AlignmentCell";
 
 @Injectable()

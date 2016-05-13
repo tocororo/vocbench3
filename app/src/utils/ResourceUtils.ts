@@ -1,5 +1,5 @@
-import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "./ARTResources";
-import {RDFResourceRolesEnum} from "./Enums";
+import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
+    ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum} from "./ARTResources";
 
 export class ResourceUtils {
     

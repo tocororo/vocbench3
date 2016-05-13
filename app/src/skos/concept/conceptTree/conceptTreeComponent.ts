@@ -1,8 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "@angular/core";
-import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {RDFResourceRolesEnum} from "../../../utils/Enums";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";

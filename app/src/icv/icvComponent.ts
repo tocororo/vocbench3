@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {VocbenchCtx} from "../utils/VocbenchCtx";
-import {RDFResourceRolesEnum} from "../utils/Enums";
+import {RDFResourceRolesEnum} from "../utils/ARTResources";
 
 @Component({
     selector: "icv-component",
