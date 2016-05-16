@@ -6,8 +6,13 @@
         {{context.message}}
     </div>
     <div style="margin-top: 5px;">
-        <select class="form-control" style="padding: 5px;" [(ngModel)]="optionSelected" size="5">
+        <select *ngIf="!context.optionsWithDescription" class="form-control" style="padding: 5px;" [(ngModel)]="optionSelected" size="5">
             <option *ngFor="let o of context.options" style="font-size: 13px;" [value]="o">{{o}}</option>
+        </select>
+        
+        <select *ngIf="context.optionsWithDescription" class="form-control" style="padding: 5px;" [(ngModel)]="optionSelected" size="5">
+            <option *ngFor="let o of context.options" style="font-size: 13px;" [value]="o.value"
+                [title]="o.description">{{o.value}}</option>
         </select>
     </div>
 </div>

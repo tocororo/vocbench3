@@ -90,11 +90,14 @@ export class ModalServices {
      * Opens a modal with an message and a list of selectable options.
      * @param title the title of the modal dialog
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
-     * @param options array of options
+     * @param options array of options. This can be an array of string or an array of objects 
+     * {value: string, description: string}, where the description is shown on mouseover of the option value
+     * @param optionsWithDescription if true the options array is treated as an array of objects,
+     * otherwise it is a simple string array 
      * @return if the modal closes with ok returns a promise containing the selected option
      */
-    select(title: string, message: string, options: Array<string>) {
-        var modalData = new SelectionModalData(title, message, options);
+    select(title: string, message: string, options: Array<any>, optionsWithDescription?: boolean) {
+        var modalData = new SelectionModalData(title, message, options, optionsWithDescription);
         return this.modal.open(SelectionModal, modalData).then(
             dialog => dialog.result
         );

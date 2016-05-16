@@ -124,21 +124,21 @@ export class PropertiesPartitionRenderer {
                         var crEntries = customRanges.getEntries();
                         //...with the custom range entries
                         for (var i = 0; i < crEntries.length; i++) {
-                            rangeOptions.push(crEntries[i].getName());
+                            rangeOptions.push({value: crEntries[i].getName(), description: crEntries[i].getDescription()});
                         }
                         //...and the classic ranges
                         if (rngType == RDFTypesEnum.resource || rngType == RDFTypesEnum.plainLiteral || rngType == RDFTypesEnum.typedLiteral) {
-                            rangeOptions.push(rngType);
+                            rangeOptions.push({value: rngType, description: rngType});
                         } else if (rngType == RDFTypesEnum.literal) {
-                            rangeOptions.push(RDFTypesEnum.plainLiteral);
-                            rangeOptions.push(RDFTypesEnum.typedLiteral);
+                            rangeOptions.push({value: RDFTypesEnum.plainLiteral, description: RDFTypesEnum.plainLiteral});
+                            rangeOptions.push({value: RDFTypesEnum.typedLiteral, description: RDFTypesEnum.typedLiteral});
                         } else if (rngType == RDFTypesEnum.undetermined) {
-                            rangeOptions.push(RDFTypesEnum.resource);
-                            rangeOptions.push(RDFTypesEnum.plainLiteral);
-                            rangeOptions.push(RDFTypesEnum.typedLiteral);
+                            rangeOptions.push({value: RDFTypesEnum.resource, description: RDFTypesEnum.resource});
+                            rangeOptions.push({value: RDFTypesEnum.plainLiteral, description: RDFTypesEnum.plainLiteral});
+                            rangeOptions.push({value: RDFTypesEnum.typedLiteral, description: RDFTypesEnum.typedLiteral});
                         }
                         //ask the user to choose
-                        this.modalService.select("Select range type", null, rangeOptions).then(
+                        this.modalService.select("Select range type", null, rangeOptions, true).then(
                             selectedRange => {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < crEntries.length; i++) {
