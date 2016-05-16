@@ -72,6 +72,11 @@ export class HttpManager {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
                     var stResp = parser.parseFromString(res.text(), "application/xml");
+                    //TODO remove this part when bug of cuncurrent requests is fixed
+                    if (stResp.getElementsByTagName("stresponse")[0] == undefined) {
+                        console.error("GET " + url + "\nRes.text() " + res.text());
+                        console.error("parsed " + stResp.documentElement.innerHTML);
+                    }
                     return stResp;
                 } else if (this.isResponseJson(res)) {
                     return res.json();

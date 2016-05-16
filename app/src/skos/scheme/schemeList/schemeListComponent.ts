@@ -19,7 +19,7 @@ export class SchemeListComponent {
     constructor(private skosService: SkosServices, private vbCtx: VocbenchCtx) {}
     
     ngOnInit() {
-        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage()).subscribe(
+        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage(true)).subscribe(
             schemeList => {
                 this.schemeList = schemeList;
             }

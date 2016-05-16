@@ -3,6 +3,7 @@ export class Cookie {
 	
 	public static VB_ACTIVE_SKOS_SCHEME = "active_skos_scheme";
 	public static VB_CONTENT_LANG = "content_language";
+	public static VB_HUMAN_READABLE = "human_readable";
 
 	public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_per_page";
 	public static ALIGNMENT_VALIDATION_RELATION_SHOW = "relation_show";

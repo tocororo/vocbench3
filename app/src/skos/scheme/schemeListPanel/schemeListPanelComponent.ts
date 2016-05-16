@@ -33,7 +33,7 @@ export class SchemeListPanelComponent {
     
     ngOnInit() {
         this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
-        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage()).subscribe(
+        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage(true)).subscribe(
             schemeList => {
                 this.schemeList = schemeList;
             }

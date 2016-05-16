@@ -3,6 +3,7 @@ import { RouteConfig, ROUTER_DIRECTIVES, Router } from "@angular/router-deprecat
 import { Location } from "@angular/common";
 
 import { VocbenchCtx } from "./utils/VocbenchCtx";
+import { VBEventHandler } from "./utils/VBEventHandler";
 import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
 import { ConceptsComponent } from "./skos/concept/conceptsComponent";
@@ -69,7 +70,7 @@ import { TestComponent } from "./test/testComponent";
 
 export class App {
     
-    constructor(private location:Location, private router: Router, private vbCtx:VocbenchCtx,
+    constructor(private location:Location, private router: Router, private vbCtx:VocbenchCtx, private evtHandler: VBEventHandler,
         private modal: Modal, viewContainer: ViewContainerRef) {
         /**
          * A Default view container ref, usually the app root container ref.
@@ -121,6 +122,12 @@ export class App {
         return (this.vbCtx.getWorkingProject().getPrettyPrintOntoType() == "OWL");
     }
     
+    
+    //---- User drobdown menu ----
+     
+    /**
+     * When user selects "content language" menu item. Opens the modal to change the content language.
+     */
     private changeContentLang() {
         this.modal.open(ContentLangModal, new ContentLangModalData()).then(
             dialog => 
@@ -129,6 +136,29 @@ export class App {
                     canceled => {}
                 )
             );
+    }
+    
+    /**
+     * Determines the status of the checkbox in the "content language" menu item.
+     */
+    private isHumanReadable(): boolean {
+        return this.vbCtx.getHumanReadable();
+    }
+    
+    /**
+     * Listener to click event of the human readable checkbox in the "content language" menu item.
+     * Updates the humanReadable setting and emits a contentLangChangedEvent.
+     * N.B. this method listens the click event, and NOT the change, because it needs to intercept the click on the menu item 
+     * and stop the propagation to prevent to open ContentLangModal  
+     */
+    private switchHumanReadable(humanReadable: boolean, event: Event) {
+        event.stopPropagation();
+        this.vbCtx.setHumanReadable(humanReadable);
+        if (humanReadable) {
+            this.evtHandler.contentLangChangedEvent.emit(this.vbCtx.getContentLanguage());
+        } else {
+            this.evtHandler.contentLangChangedEvent.emit(null);
+        }
     }
     
 }

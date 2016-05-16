@@ -78,7 +78,7 @@ export class ConceptTreeComponent {
     
     private initTree() {
         this.blockDivElement.nativeElement.style.display = "block";
-        this.skosService.getTopConcepts(this.workingScheme, this.vbCtx.getContentLanguage()).subscribe(
+        this.skosService.getTopConcepts(this.workingScheme, this.vbCtx.getContentLanguage(true)).subscribe(
             topConcepts => {
                 this.roots = topConcepts;
                 this.blockDivElement.nativeElement.style.display = "none";

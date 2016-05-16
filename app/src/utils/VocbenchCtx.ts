@@ -97,18 +97,45 @@ export class VocbenchCtx {
     
     /**
      * Returns the content language for project in use set as cookie.
-     * If no language is set, return "en" as default
+     * If no language is set, return "en" as default.
+     * @param checkHumanReadable if true, returns the content language only if the humanReadable option is set to true
      */
-    getContentLanguage() {
-        // return Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
+    getContentLanguage(checkHumanReadable?: boolean): string {
         var contLang: string;
-        if (this.getWorkingProject() != undefined) {
-            var contLang = Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
-        }
-        if (contLang == null) {
-            contLang = "en"; //default lang
+        if (checkHumanReadable) { //human readable required: return content language only if humanReadable is true
+            var humanReadable: boolean = this.getHumanReadable();
+            if (humanReadable) {
+                if (this.getWorkingProject() != undefined) {
+                    var contLang = Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
+                }
+                if (contLang == null) {
+                    contLang = "en"; //default lang
+                }
+            }
+        } else { //no humanReadable required, return the content language
+            if (this.getWorkingProject() != undefined) {
+                var contLang = Cookie.getCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName());
+            }
+            if (contLang == null) {
+                contLang = "en"; //default lang
+            }
         }
         return contLang;
+    }
+    
+    /**
+     * Sets the human_readable cookie in order to enable/disable the human readable label.
+     * The language of the labels is then determined by the content language.
+     */
+    setHumanReadable(humanReadable: boolean) {
+        Cookie.setCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName(), humanReadable + "", 365*10);
+    }
+    
+    /**
+     * Returns the human_readable cookie that tells if the resources in trees should be rendered with human readable labels.
+     */
+    getHumanReadable(): boolean {
+        return Cookie.getCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName()) == "true";
     }
 
 }

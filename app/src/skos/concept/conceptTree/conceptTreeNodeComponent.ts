@@ -99,7 +99,7 @@ export class ConceptTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        this.skosService.getNarrowerConcepts(this.node, this.scheme, this.vbCtx.getContentLanguage()).subscribe(
+        this.skosService.getNarrowerConcepts(this.node, this.scheme, this.vbCtx.getContentLanguage(true)).subscribe(
             narrower => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
