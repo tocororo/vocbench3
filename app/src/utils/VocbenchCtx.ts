@@ -137,5 +137,19 @@ export class VocbenchCtx {
     getHumanReadable(): boolean {
         return Cookie.getCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName()) == "true";
     }
+    
+    /**
+     * Sets the preference to show or hide the inferred information in resource view
+     */
+    setInferenceInResourceView(showInferred: boolean) {
+        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365*10);
+    }
+    
+    /**
+     * Gets the preference to show or hide the inferred information in resource view
+     */
+    getInferenceInResourceView() {
+        return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
+    }
 
 }

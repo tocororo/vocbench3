@@ -124,6 +124,9 @@ export class App {
     
     
     //---- User drobdown menu ----
+    /*this logic cannot be moved in a dedicated (user menu) component since the component,
+      would add an element (likely <user-menu>) between the <ul class="nav navbar-nav navbar-right"> and
+      <li class="dropdown"> elements */ 
      
     /**
      * When user selects "content language" menu item. Opens the modal to change the content language.

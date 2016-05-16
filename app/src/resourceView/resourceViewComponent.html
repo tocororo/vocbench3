@@ -22,7 +22,12 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="alignResource()">Align</button> 
+            <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="alignResource()">Align</button>
+            <button class="btn btn-default btn-xs" style="margin-left: 10px;" [ngClass]="{active: showInferred}"
+                title="Show/hide inferred information" (click)="showHideInferred()">
+                <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
+                <span *ngIf="!showInferred" class="glyphicon glyphicon-eye-close"></span>
+            </button>
         </div>
     </div>
     <div class="panel-body scrollableContainer blockingDivHost">

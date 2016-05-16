@@ -2,6 +2,7 @@ import {Component, Input} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
+import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../widget/modal/modalServices";
@@ -36,6 +37,7 @@ export class ResourceViewComponent {
     @Input() resource:ARTURIResource;
     
     private renameLocked = true;
+    private showInferred = false;
     
     //partitions
     private typesColl: ARTURIResource[];
@@ -51,11 +53,12 @@ export class ResourceViewComponent {
     private propertyFacets: any[];
     private inverseofColl: ARTURIResource[];
     
-	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices,
-        private alignServices: AlignmentServices, private modalService: ModalServices, private modal: Modal) {
+	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices, private alignServices: AlignmentServices,
+        private vbCtx: VocbenchCtx, private modalService: ModalServices, private modal: Modal) {
     }
     
     ngOnChanges(changes) {
+        this.showInferred = this.vbCtx.getInferenceInResourceView();
         if (changes.resource.currentValue) {
             this.buildResourceView(this.resource);//refresh resource view when Input resource changes       
         }
@@ -90,32 +93,74 @@ export class ResourceViewComponent {
                         this.resource = Deserializer.createURI(partition.children[0]);
                     } else if (partitionName == "types") {
                         this.typesColl = Deserializer.createURIArray(partition);
+                        this.typesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.typesColl);
                     } else if (partitionName == "classaxioms") {
                         this.classAxiomColl = Deserializer.createPredicateObjectsList(partition.children[0]);
+                        this.classAxiomColl = this.filterInferredFromPredObjList(this.classAxiomColl);
                     } else if (partitionName == "topconceptof") {
                         this.topconceptofColl = Deserializer.createURIArray(partition);
+                        this.topconceptofColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.topconceptofColl);
                     } else if (partitionName == "schemes") {
                         this.schemesColl = Deserializer.createURIArray(partition);
+                        this.schemesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.schemesColl);
                     } else if (partitionName == "broaders") {
                         this.broadersColl = Deserializer.createURIArray(partition);
+                        this.broadersColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.broadersColl);
                     } else if (partitionName == "superproperties") {
                         this.superpropertiesColl = Deserializer.createURIArray(partition);
+                        this.superpropertiesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.superpropertiesColl);
                     } else if (partitionName == "facets") {
                         this.parseFacetsPartition(partition);
                     } else if (partitionName == "domains") {
                         this.domainsColl = Deserializer.createRDFArray(partition);
+                        this.domainsColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.domainsColl);
                     } else if (partitionName == "ranges") {
                         this.rangesColl = Deserializer.createRDFArray(partition);
+                        this.rangesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.rangesColl);
                     } else if (partitionName == "lexicalizations") {
                         this.lexicalizationsColl = Deserializer.createPredicateObjectsList(partition.children[0]);
+                        this.lexicalizationsColl = this.filterInferredFromPredObjList(this.lexicalizationsColl);
                     } else if (partitionName == "properties") {
                         this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
+                        this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);
                     }
                 }
                 document.getElementById("blockDivResView").style.display = "none"
             },
             err => { document.getElementById("blockDivResView").style.display = "none"; }
         );
+    }
+    
+    private filterInferredFromResourceList(resourceArray: ARTNode[]): ARTNode[] {
+        if (!this.showInferred) {
+            for (var i = 0; i < resourceArray.length; i++) {
+                if (!resourceArray[i].getAdditionalProperty(ResAttribute.EXPLICIT)) {
+                    resourceArray.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        return resourceArray;
+    }
+    
+    private filterInferredFromPredObjList(predObjList: ARTPredicateObjects[]): ARTPredicateObjects[] {
+        if (!this.showInferred) {
+            for (var i = 0; i < predObjList.length; i++) {
+                var objList: ARTNode[] = predObjList[i].getObjects();
+                for (var j = 0; j < objList.length; j++) {
+                    if (!objList[j].getAdditionalProperty(ResAttribute.EXPLICIT)) {
+                        objList.splice(j, 1);
+                        j--;
+                    }
+                }
+                //after filtering the objects list, if the predicate has no more objects, remove it from predObjList
+                if (objList.length == 0) {
+                    predObjList.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        return predObjList;
     }
     
     private parseFacetsPartition(facetsElement) {
@@ -208,6 +253,12 @@ export class ResourceViewComponent {
         return this.modal.open(ResourceAlignmentModal, modalData).then(
             dialog => dialog.result
         );
+    }
+    
+    private showHideInferred() {
+        this.showInferred = !this.showInferred;
+        this.vbCtx.setInferenceInResourceView(this.showInferred);
+        this.buildResourceView(this.resource);
     }
     
 }
