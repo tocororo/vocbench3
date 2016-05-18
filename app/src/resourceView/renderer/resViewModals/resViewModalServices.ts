@@ -3,6 +3,7 @@ import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreatorModal";
 import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
 import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
+import {CustomFormModal, CustomFormModalData} from "../../../customRanges/customForm/customFormModal";
 import {ARTURIResource} from '../../../utils/ARTResources';
 
 /**
@@ -46,6 +47,18 @@ export class ResViewModalServices {
     enrichProperty(title: string, property: ARTURIResource, ranges: ARTURIResource[]) {
         var modalData = new EnrichPropertyModalData(title, property, ranges);
         return this.modal.open(EnrichPropertyModal, modalData).then(
+            dialog => dialog.result
+        );
+    }
+    
+    /**
+     * Opens a modal with a custom form to enrich a property with a custom range.
+     * @param title title of the dialog
+     * @param creId custom range entry ID
+     */
+    enrichCustomForm(title: string, creId: string) {
+        var modalData = new CustomFormModalData(title, creId);
+        return this.modal.open(CustomFormModal, modalData).then(
             dialog => dialog.result
         );
     }

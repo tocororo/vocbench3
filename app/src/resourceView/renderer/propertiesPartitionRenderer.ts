@@ -143,7 +143,7 @@ export class PropertiesPartitionRenderer {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < crEntries.length; i++) {
                                     if (selectedRange == crEntries[i].getName()) {
-                                        this.enrichWithCustomRange(crEntries[i]);
+                                        this.enrichWithCustomRange(predicate, crEntries[i]);
                                         return;
                                     }
                                 }
@@ -163,11 +163,16 @@ export class PropertiesPartitionRenderer {
         }
     }
     
-    private enrichWithCustomRange(crEntry: CustomRangeEntry) {
-        this.customRangeService.getCustomRangeEntryForm(crEntry.getId()).subscribe(
-            form => {
-                alert("opening custom form for entry: " + JSON.stringify(form));
-            }
+    private enrichWithCustomRange(predicate: ARTURIResource, crEntry: CustomRangeEntry) {
+        this.resViewModalService.enrichCustomForm("Add " + predicate.getShow(), crEntry.getId()).then(
+            entryMap => {
+                this.customRangeService.runCoda(this.resource, predicate, crEntry.getId(), entryMap).subscribe(
+                    stResp => {
+                        this.update.emit(null);
+                    }
+                );
+            },
+            () => { }
         )
     }
     

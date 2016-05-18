@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
-import {FormEntry, CustomRangeType} from "../utils/CustomRanges";
+import {FormEntry, CustomRangeType, FormEntryType} from "../utils/CustomRanges";
 
 @Injectable()
 export class CustomRangeServices {
@@ -55,19 +55,58 @@ export class CustomRangeServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntryForm", params, this.oldTypeService).map(
             stResp => {
+                /* this service could throw an error if Pearl is invalid
+                (in this case the server throws a PRParserException and it is handled in HttpManager),
+                or if the form doesn't contain any formEntry (in this case <form> element doesn't contain
+                <formEntry> elements but has an "exception" attribute) */
+                //TODO: handle dependencies between form entries
                 var form: Array<FormEntry> = [];
                 var formEntryElemColl: Array<Element> = stResp.getElementsByTagName("formEntry");
+                
+                if (formEntryElemColl.length == 0) {
+                    var exception = stResp.getElementsByTagName("form")[0].getAttribute("exception");
+                    throw new Error("Error in pearl code of the Custom Range Entry with id '" + creId + "': " + exception);
+                }
                 for (var i = 0; i < formEntryElemColl.length; i++) {
                     var placeholderId = formEntryElemColl[i].getAttribute("placeholderId");
-                    var type: CustomRangeType = formEntryElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
+                    var type: FormEntryType = formEntryElemColl[i].getAttribute("type") == "literal" ? "literal" : "uri";
                     var mandatory = formEntryElemColl[i].getAttribute("mandatory") == "true";
                     var userPrompt = formEntryElemColl[i].getAttribute("userPrompt");
                     var converter = formEntryElemColl[i].getElementsByTagName("converter")[0].getAttribute("uri");
                     var entry = new FormEntry(placeholderId, type, mandatory, userPrompt, converter);
+                    if (type == "literal") {
+                        var datatype = formEntryElemColl[i].getAttribute("datatype");
+                        entry.setDatatype(datatype);
+                        var lang = formEntryElemColl[i].getAttribute("lang");
+                        entry.setLang(lang);
+                    }
                     form.push(entry);
                 }
                 return form;
             }
         );
     }
+    
+    /**
+     * Makes Coda execute the pearl rule in the given CustomRangeEntry and with the value specified in the entryMap.
+     * Then "append" the generated triples (representing a reified object) to the subject-predicate pair. 
+     * @param subject
+     * @param predicate
+     * @param crEntryId
+     * @param entryMap array of object {userPrompt: string, value: string} where "userPrompt" is the feature
+     * name in the pearl rule which its "value" is provided by means a custom form
+     */
+    runCoda(subject: ARTURIResource, predicate: ARTURIResource, crEntryId: string, entryMap: Array<any>) {
+        console.log("[CustomRangeServices] runCoda");
+        var params: any = {
+            subject: subject.getURI(),
+            predicate: predicate.getURI(),
+            crEntryId: crEntryId,
+        };
+        for (var i = 0; i < entryMap.length; i++) {
+            params[entryMap[i].userPrompt] = entryMap[i].value;
+        }
+        return this.httpMgr.doGet(this.serviceName, "runCoda", params, this.oldTypeService);
+    }
+    
 }

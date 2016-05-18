@@ -1,6 +1,6 @@
 <div class="hbox">
     <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" style="flex:1"></rdf-resource>
-    <button *ngIf="predicateObjectList" class="close" style="padding-right: 5px;" (click)="toggle()">
+    <button *ngIf="predicateObjectList" class="close" style="margin-right: 10px;" (click)="toggle()">
         <span *ngIf="open">-</span>
         <span *ngIf="!open">+</span>
     </button>

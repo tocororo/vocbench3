@@ -243,14 +243,14 @@ input.invalid {
     background: #ffaaaa;
 }
 
-/*Removes spinner from input type number*/
-input[type=number]::-webkit-inner-spin-button, 
+/*Removes spinner from input type number (I'm not sure if show or not the spinner, keep it commented for now)*/
+/*input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
     margin: 0; 
-}
+}*/
 
 /* apply bootstrap style to input of type "file" */
 .btn-file {

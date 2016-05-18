@@ -6,7 +6,7 @@
         {{context.message}}
     </div>
         
-    <div class="scrollableContainer" style="border: 1px solid #ddd; margin-top: 5px; max-height: 60%;">
+    <div class="scrollableContainer" style="border: 1px solid #ddd; margin-top: 5px; max-height: 60vh;">
         <div *ngFor="let r of context.resourceList">
             <rdf-resource [resource]="r" class="listItem" (click)="onResourceSelected(r)" 
                 [ngClass]="{selectedResource : isResourceSelected(r)}">

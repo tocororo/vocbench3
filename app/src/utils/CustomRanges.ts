@@ -57,11 +57,13 @@ export class CustomRangeEntry {
 export class FormEntry {
     private mandatory: boolean;
     private placeholderId: string;
-    private type: CustomRangeType;
+    private type: FormEntryType;
     private userPrompt: string;
     private converter: string;
+    private datatype: string; //provided optionally only if type is literal
+    private lang: string; //provided optionally only if type is literal and datatype is null or xsd:string
     
-    constructor(placeholderId: string, type: CustomRangeType, mandatory: boolean, userPrompt: string, converter: string) {
+    constructor(placeholderId: string, type: FormEntryType, mandatory: boolean, userPrompt: string, converter: string) {
         this.placeholderId = placeholderId;
         this.type = type;
         this.mandatory = mandatory;
@@ -77,7 +79,7 @@ export class FormEntry {
         return this.placeholderId;
     }
     
-    public getType(): CustomRangeType {
+    public getType(): FormEntryType {
         return this.type;
     }
     
@@ -89,6 +91,23 @@ export class FormEntry {
         return this.converter;
     }
     
+    public setDatatype(datatype: string) {
+        this.datatype = datatype;
+    }
+    
+    public getDatatype(): string {
+        return this.datatype;
+    }
+    
+    public setLang(lang: string) {
+        this.lang = lang;
+    }
+    
+    public getLang(): string {
+        return this.lang;
+    }
+    
 }
 
 export type CustomRangeType = "node" | "graph";
+export type FormEntryType = "literal" | "uri";
