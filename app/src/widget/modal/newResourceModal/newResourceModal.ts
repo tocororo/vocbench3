@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
-import {Languages} from "../../../utils/LanguagesCountries";
+import {LangPickerComponent} from "../../langPicker/langPickerComponent";
 
 export class NewResourceModalData extends BSModalContext {
     constructor(
@@ -16,7 +16,7 @@ export class NewResourceModalData extends BSModalContext {
 @Component({
     selector: "new-resource-modal",
     templateUrl: "app/src/widget/modal/newResourceModal/newResourceModal.html",
-    directives: [SanitizerDirective]
+    directives: [SanitizerDirective, LangPickerComponent]
 })
 export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     context: NewResourceModalData;
@@ -26,7 +26,6 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     private name: string;
     private label: string;
     private lang: string;
-    private languageList = Languages.languageList;
     
     constructor(public dialog: DialogRef<NewResourceModalData>) {
         this.context = dialog.context;
@@ -35,6 +34,23 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     ngOnInit() {
         this.lang = this.context.lang;
         document.getElementById("toFocus").focus();
+    }
+    
+    private onKeydown(event) {
+        if (event.which == "13") {
+            this.submitted = true;
+            if (this.isInputValid()) {
+                this.ok(event);
+            }
+        }
+    }
+    
+    private onLangChange(newLang: string) {
+        this.lang = newLang;
+    }
+    
+    private isInputValid(): boolean {
+        return (this.name != undefined && this.name.trim() != "");
     }
 
     ok(event) {
@@ -52,21 +68,4 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
         this.dialog.dismiss();
     }
     
-    private onKeydown(event) {
-        if (event.which == "13") {
-            this.submitted = true;
-            if (this.isInputValid()) {
-                this.ok(event);
-            }
-        }
-    }
-    
-    private isInputValid(): boolean {
-        return (this.name != undefined && this.name.trim() != "");
-    }
-    
-    private getFlagImgSrc(): string {
-        return "app/assets/images/flags/flag_" + this.lang + ".png";
-    }
-
 }

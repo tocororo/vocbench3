@@ -42,7 +42,8 @@ export class SkosxlServices {
                 //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
                 //parse return and insert in the event just the new concept
                 var newConc: ARTURIResource;
-                var parsedUriColl = Deserializer.createURIArray(stResp);
+                var uriColl: Array<Element> = stResp.getElementsByTagName("uri");
+                var parsedUriColl = Deserializer.createURIArrayGivenList(uriColl);
                 for (var i = 0; i < parsedUriColl.length; i++) {
                     if (parsedUriColl[i].getRole() == RDFResourceRolesEnum.concept) {
                         newConc = parsedUriColl[i];
@@ -84,7 +85,8 @@ export class SkosxlServices {
                 //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
                 //parse return and insert in the event just the new concept
                 var newConc: ARTURIResource;
-                var parsedUriColl = Deserializer.createURIArray(stResp);
+                var uriColl: Array<Element> = stResp.getElementsByTagName("uri");
+                var parsedUriColl = Deserializer.createURIArrayGivenList(uriColl);
                 for (var i = 0; i < parsedUriColl.length; i++) {
                     if (parsedUriColl[i].getRole() == RDFResourceRolesEnum.concept) {
                         newConc = parsedUriColl[i];
@@ -92,7 +94,7 @@ export class SkosxlServices {
                     }
                 }
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({narrower: newConc, broader: broader});
+                this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broader});
                 return newConc;
             });
     }

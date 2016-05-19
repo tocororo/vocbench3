@@ -286,6 +286,10 @@ input[type=number]::-webkit-outer-spin-button {
     color: white;
  }
  
+ lang-picker {
+     display: flex; align-items: center;
+ }
+ 
  .CodeMirror { height: 30vh !important }
 
 /* BOOTSTRAP OVERRIDE */

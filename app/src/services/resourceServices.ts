@@ -16,7 +16,6 @@ export class ResourceServices {
      */
     removePropertyValue(subject: ARTResource, predicate: ARTURIResource, object: ARTNode) {
         console.log("[ResourceServices] removePropertyValue");
-        console.log("object " + JSON.stringify(object));
         var params: any = {
             subject : subject.toNT(),
             predicate : predicate.toNT(),

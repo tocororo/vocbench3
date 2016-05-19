@@ -7,11 +7,7 @@
             <label style="width: 50px;">Value:</label>
             <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="value"
                 [disabled]="context.valueReadonly">
-            <select [(ngModel)]="lang" class="form-control input-sm" style="width: initial; margin-right: 4px;"
-                [disabled]="context.langReadonly">
-                <option *ngFor="let lang of languageList" [value]="lang.tag">{{lang.name}} ({{lang.tag}})</option>
-            </select>
-            <img [src]="getFlagImgSrc()"/>
+            <lang-picker [lang]="lang" (langChange)="onLangChange($event)" [disabled]="context.langReadonly"></lang-picker>
         </div>
     </div>
     <div *ngIf="!isInputValid() && submitted" class="alert alert-danger">

@@ -10,70 +10,79 @@
             <col style="width: 1%;">
         </colgroup>
         <tbody>
-            <tr *ngFor="let cre of formEntries">
-                <!--Form entry label-->
-                <td><label>{{cre.getUserPrompt()}}:</label></td>
-                <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
-                <td>
-                    <div *ngIf="cre.getType() == 'literal'">
-                        <div [ngSwitch]="cre.getDatatype()">
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#string'">
-                                <input class="form-control input-xs" [(ngModel)]="cre.value" [disabled]="!cre.checked">
-                            </div>
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#integer'">
-                                <input class="form-control input-xs" [(ngModel)]="cre.value" type="number" step="1"
-                                    [disabled]="!cre.checked">
-                            </div>
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#float'">
-                                <input class="form-control input-xs" [(ngModel)]="cre.value" type="number" step="any"
-                                    [disabled]="!cre.checked">
-                            </div>
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#boolean'" class="hbox">
-                                <input class="form-control input-xs" [ngModel]="cre.value" style="flex: 1" disabled>
-                                <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
-                                    <label class="radio-inline">
-                                        <input type="radio" (click)="cre.value='true'" [checked]="cre.value=='true'"
-                                        [disabled]="!cre.checked">true
-                                    </label>
-                                    <label class="radio-inline" style="margin-left: 15px;">
-                                        <input type="radio" (click)="cre.value='false'" [checked]="cre.value=='false'"
-                                        [disabled]="!cre.checked">false
-                                    </label>
-                                </span>
-                            </div>
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">
-                                <input class="form-control input-xs" [ngModel]="cre.value" disabled>
-                                <input class="form-control input-xs" style="margin-left: 10px;" type="date"
-                                    [(ngModel)]="cre.value" [disabled]="!cre.checked"> 
-                            </div>
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
-                                <input class="form-control input-xs" [ngModel]="cre.value" disabled>
-                                <input class="form-control input-xs" style="margin-left: 10px;" type="time"
-                                    [(ngModel)]="cre.value" [disabled]="!cre.checked">
-                            </div>
-                            <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
-                                <input class="form-control input-xs" [ngModel]="cre.value" disabled>
-                                <input class="form-control input-xs" style="margin-left: 10px;" type="datetime-local"
-                                    [(ngModel)]="cre.value" [disabled]="!cre.checked">
-                            </div>
-                            <div *ngSwitchDefault class="hbox" style="align-items: center;">
-                                <input class="form-control input-xs" [(ngModel)]="cre.value" [disabled]="!cre.checked">
-                                <span *ngIf="cre.getLang()" style="margin-left: 4px;">@{{cre.getLang()}}</span>
+            <template ngFor let-fe [ngForOf]="formEntries">
+                <tr *ngIf="!fe.isDependency()">
+                    <!--Form entry label-->
+                    <td><label>{{fe.getUserPrompt()}}:</label></td>
+                    <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
+                    <td>
+                        <div *ngIf="fe.getType() == 'literal'">
+                            <div [ngSwitch]="fe.getDatatype()">
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#string'">
+                                    <input class="form-control input-xs" [(ngModel)]="fe.value" [disabled]="!fe.checked">
+                                </div>
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#integer'">
+                                    <input class="form-control input-xs" [(ngModel)]="fe.value" type="number" step="1"
+                                        [disabled]="!fe.checked">
+                                </div>
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#float'">
+                                    <input class="form-control input-xs" [(ngModel)]="fe.value" type="number" step="any"
+                                        [disabled]="!fe.checked">
+                                </div>
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#boolean'" class="hbox">
+                                    <input class="form-control input-xs" [ngModel]="fe.value" style="flex: 1" disabled>
+                                    <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
+                                        <label class="radio-inline">
+                                            <input type="radio" (click)="fe.value='true'" [checked]="fe.value=='true'"
+                                            [disabled]="!fe.checked">true
+                                        </label>
+                                        <label class="radio-inline" style="margin-left: 15px;">
+                                            <input type="radio" (click)="fe.value='false'" [checked]="fe.value=='false'"
+                                            [disabled]="!fe.checked">false
+                                        </label>
+                                    </span>
+                                </div>
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">
+                                    <input class="form-control input-xs" [ngModel]="fe.value" disabled>
+                                    <input class="form-control input-xs" style="margin-left: 10px;" type="date"
+                                        [(ngModel)]="fe.value" [disabled]="!fe.checked"> 
+                                </div>
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
+                                    <input class="form-control input-xs" [ngModel]="fe.value" disabled>
+                                    <input class="form-control input-xs" style="margin-left: 10px;" type="time"
+                                        [(ngModel)]="fe.value" [disabled]="!fe.checked">
+                                </div>
+                                <div *ngSwitchWhen="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
+                                    <input class="form-control input-xs" [ngModel]="fe.value" disabled>
+                                    <input class="form-control input-xs" style="margin-left: 10px;" type="datetime-local"
+                                        [(ngModel)]="fe.value" [disabled]="!fe.checked">
+                                </div>
+                                <div *ngSwitchDefault class="hbox" style="align-items: center;">
+                                    <input class="form-control input-xs" style="flex:1" [(ngModel)]="fe.value"
+                                        (input)="onEntryValueChange($event.target.value, fe)" [disabled]="!fe.checked">
+                                    <span *ngIf="fe.getLang()" style="margin-left: 4px;">@{{fe.getLang()}}</span>
+                                    <span *ngIf="fe.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' 
+                                            && fe.getConverterArg()" style="margin-left: 4px;">
+                                        <lang-picker size="xs" [lang]="fe.getConverterArg().value"
+                                            (langChange)="onConverterLangChange($event, fe.getConverterArg())">
+                                        </lang-picker>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div *ngIf="cre.getType() == 'uri'">
-                        <input class="form-control input-xs" [(ngModel)]="cre.value" [disabled]="!cre.checked">
-                    </div>
-                </td>
-                <!--Mandatory/Optional-->
-                <td>
-                    <span *ngIf="cre.isMandatory()">*</span>
-                    <span *ngIf="!cre.isMandatory()">
-                        <input type="checkbox" [(ngModel)]="cre.checked" title="Optional field, check to insert">
-                    </span>
-                </td>
-            </tr>
+                        <div *ngIf="fe.getType() == 'uri'">
+                            <input class="form-control input-xs" [(ngModel)]="fe.value" [disabled]="!fe.checked">
+                        </div>
+                    </td>
+                    <!--Mandatory/Optional-->
+                    <td>
+                        <span *ngIf="fe.isMandatory()">*</span>
+                        <span *ngIf="!fe.isMandatory()">
+                            <input type="checkbox" [(ngModel)]="fe.checked" title="Optional field, check to insert">
+                        </span>
+                    </td>
+                </tr>
+            </template>
         </tbody>
     </table>
     

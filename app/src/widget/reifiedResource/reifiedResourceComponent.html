@@ -1,6 +1,6 @@
 <div class="hbox">
     <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" style="flex:1"></rdf-resource>
-    <button *ngIf="predicateObjectList" class="close" style="margin-right: 10px;" (click)="toggle()">
+    <button *ngIf="predicateObjectList" class="close" style="margin-right: 10px; width: 20px;" (click)="toggle()">
         <span *ngIf="open">-</span>
         <span *ngIf="!open">+</span>
     </button>
@@ -10,12 +10,18 @@
     <div class="panel-body" style="padding: 2px;">
         <table class="table table-condensed table-borderless table-hoverable">
             <tbody>
-                <tr *ngFor="let predObj of predicateObjectList">
-                    <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
-                    <td>
-                        <input type="text" class="form-control input-xs" [ngModel]="predObj.getObjects()[0].getNominalValue()" readonly>
-                    </td>
-                </tr>
+                
+                <template ngFor let-predObj [ngForOf]="predicateObjectList">
+                    <tr *ngFor="let obj of predObj.getObjects()">
+                        <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
+                        <td>
+                            <input type="text" class="form-control input-xs" [ngModel]="obj.getNominalValue()" readonly>
+                            <!--Restore when getReifiedResourceDescription will contain roles of objects in <predicateObjects>-->
+                            <!--<rdf-resource [resource]="obj"></rdf-resource>-->
+                        </td>
+                    </tr>
+                </template>
+                
             </tbody>
         </table>
     </div>

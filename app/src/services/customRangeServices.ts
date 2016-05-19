@@ -59,7 +59,6 @@ export class CustomRangeServices {
                 (in this case the server throws a PRParserException and it is handled in HttpManager),
                 or if the form doesn't contain any formEntry (in this case <form> element doesn't contain
                 <formEntry> elements but has an "exception" attribute) */
-                //TODO: handle dependencies between form entries
                 var form: Array<FormEntry> = [];
                 var formEntryElemColl: Array<Element> = stResp.getElementsByTagName("formEntry");
                 
@@ -67,21 +66,56 @@ export class CustomRangeServices {
                     var exception = stResp.getElementsByTagName("form")[0].getAttribute("exception");
                     throw new Error("Error in pearl code of the Custom Range Entry with id '" + creId + "': " + exception);
                 }
+                
+                var pendingEntryDependencies = <any>[];
+                //an array of objects {phIdEntry: string, userPromptArg: string} that collects the userPrompt
+                //of the formEntries that are used just as argument/dependency of another formEntry and later
+                //will be set as arguments to other formEntries
+                
                 for (var i = 0; i < formEntryElemColl.length; i++) {
                     var placeholderId = formEntryElemColl[i].getAttribute("placeholderId");
                     var type: FormEntryType = formEntryElemColl[i].getAttribute("type") == "literal" ? "literal" : "uri";
                     var mandatory = formEntryElemColl[i].getAttribute("mandatory") == "true";
                     var userPrompt = formEntryElemColl[i].getAttribute("userPrompt");
                     var converter = formEntryElemColl[i].getElementsByTagName("converter")[0].getAttribute("uri");
+                    //coda:langString could have an argument to specify the language through another entry 
+                    if (converter == "http://art.uniroma2.it/coda/contracts/langString") {
+                        var argUserPrompt = formEntryElemColl[i].getElementsByTagName("converter")[0]
+                                .getElementsByTagName("arg")[0].getAttribute("userPrompt");
+                        pendingEntryDependencies.push({phIdEntry: placeholderId, userPromptArg: argUserPrompt});
+                    }
                     var entry = new FormEntry(placeholderId, type, mandatory, userPrompt, converter);
                     if (type == "literal") {
                         var datatype = formEntryElemColl[i].getAttribute("datatype");
-                        entry.setDatatype(datatype);
+                        if (datatype != undefined) {
+                            entry.setDatatype(datatype);
+                        }
                         var lang = formEntryElemColl[i].getAttribute("lang");
-                        entry.setLang(lang);
+                        if (lang != undefined) {
+                            entry.setLang(lang);
+                        }
                     }
                     form.push(entry);
                 }
+                
+                //iterate over pendingEntryDependencies and set them as argument of other formEntries
+                for (var i = 0; i < pendingEntryDependencies.length; i++) {
+                    var argEntry: FormEntry; //entry that is used as argument of another
+                    //get the FormEntry to set as argument
+                    for (var j = 0; j < form.length; j++) {
+                        if (form[j].getUserPrompt() == pendingEntryDependencies[i].userPromptArg) {
+                            argEntry = form[j];
+                            argEntry.setDependency(true); //mark the entry as a dependency
+                        }
+                    }
+                    //look for the entry to which inject the argEntry as argument
+                    for (var j = 0; j < form.length; j++) {
+                        if (pendingEntryDependencies[i].phIdEntry == form[j].getPlaceholderId()) {
+                            form[j].setConverterArg(argEntry);
+                        }
+                    }
+                }
+               
                 return form;
             }
         );

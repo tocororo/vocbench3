@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ResourceUtils} from "../../../utils/ResourceUtils";
-import {Languages} from "../../../utils/LanguagesCountries";
+import {LangPickerComponent} from "../../langPicker/langPickerComponent";
+
 
 export class NewPlainLiteralModalData extends BSModalContext {
     /**
@@ -26,6 +26,7 @@ export class NewPlainLiteralModalData extends BSModalContext {
 @Component({
     selector: "new-plain-literal-modal",
     templateUrl: "app/src/widget/modal/newPlainLiteralModal/newPlainLiteralModal.html",
+    directives: [LangPickerComponent]
 })
 export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModalData> {
     context: NewPlainLiteralModalData;
@@ -34,7 +35,6 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
     
     private value: string;
     private lang: string;
-    private languageList = Languages.languageList;
     
     constructor(public dialog: DialogRef<NewPlainLiteralModalData>) {
         this.context = dialog.context;
@@ -44,6 +44,23 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
         this.lang = this.context.lang;
         this.value = this.context.value;
         document.getElementById("toFocus").focus();
+    }
+    
+    private onKeydown(event) {
+        if (event.which == "13") {
+            this.submitted = true;
+            if (this.isInputValid()) {
+                this.ok(event);
+            }
+        }
+    }
+    
+    private onLangChange(newLang: string) {
+        this.lang = newLang;
+    }
+    
+    private isInputValid(): boolean {
+        return (this.value != undefined && this.value.trim() != "");
     }
 
     ok(event) {
@@ -56,21 +73,4 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
         this.dialog.dismiss();
     }
     
-    private onKeydown(event) {
-        if (event.which == "13") {
-            this.submitted = true;
-            if (this.isInputValid()) {
-                this.ok(event);
-            }
-        }
-    }
-    
-    private isInputValid(): boolean {
-        return (this.value != undefined && this.value.trim() != "");
-    }
-    
-    private getFlagImgSrc(): string {
-        return ResourceUtils.getFlagImgSrc(this.lang);
-    }
-
 }

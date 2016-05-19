@@ -3,8 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {VBEventHandler} from "../../utils/VBEventHandler";
-import {ResourceUtils} from "../../utils/ResourceUtils";
-import {Languages} from "../../utils/LanguagesCountries";
+import {LangPickerComponent} from "../../widget/langPicker/langPickerComponent";
 
 /**
  * Useless class with empty data
@@ -19,11 +18,10 @@ export class ContentLangModalData extends BSModalContext {
 @Component({
     selector: "content-lang-modal",
     templateUrl: "app/src/settings/contentLang/contentLangModal.html",
+    directives: [LangPickerComponent]
 })
 export class ContentLangModal implements ModalComponent<ContentLangModalData> {
     context: ContentLangModalData;
-    
-    private languages = Languages.languageList;
     
     private contentLang: string;
     
@@ -31,13 +29,13 @@ export class ContentLangModal implements ModalComponent<ContentLangModalData> {
         this.context = dialog.context;
     }
     
-    private getFlagImgSrc() {
-        return ResourceUtils.getFlagImgSrc(this.contentLang);
-    }
-    
     ngOnInit() {
         document.getElementById("toFocus").focus();
         this.contentLang = this.vbCtx.getContentLanguage();
+    }
+    
+    private onLangChange(newLang) {
+        this.contentLang = newLang;
     }
 
     ok(event) {

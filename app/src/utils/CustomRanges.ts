@@ -62,6 +62,11 @@ export class FormEntry {
     private converter: string;
     private datatype: string; //provided optionally only if type is literal
     private lang: string; //provided optionally only if type is literal and datatype is null or xsd:string
+    private dependency: boolean = false; //tells if the FormEntry is a dependency of another FormEntry 
+        //(it determines also if the FormEntry should be shown in the form) 
+    private converterArg: FormEntry; //provided optionally only if the entry has coda:langString converter that requires a language
+        //as argument that is in turn provided by means a userPrompt
+    
     
     constructor(placeholderId: string, type: FormEntryType, mandatory: boolean, userPrompt: string, converter: string) {
         this.placeholderId = placeholderId;
@@ -105,6 +110,22 @@ export class FormEntry {
     
     public getLang(): string {
         return this.lang;
+    }
+    
+    public setDependency(dependency: boolean) {
+        this.dependency = dependency;
+    }
+    
+    public isDependency(): boolean {
+        return this.dependency;
+    }
+    
+    public setConverterArg(arg: FormEntry) {
+        this.converterArg = arg;
+    }
+    
+    public getConverterArg(): FormEntry {
+        return this.converterArg;
     }
     
 }

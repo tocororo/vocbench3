@@ -8,12 +8,7 @@
         The selected language determines also which language is set as default when creating a new resource.
     </div>
     
-    <div class="hbox" style="margin-top: 5px; align-items: center;">
-        <select class="form-control input-sm" [(ngModel)]="contentLang">
-            <option *ngFor="let l of languages" [value]="l.tag">{{l.name}} ({{l.tag}})</option>
-        </select>
-        <img [src]="getFlagImgSrc()" style="margin-left: 4px;"/>
-    </div>
+    <lang-picker style="margin-top: 5px;" [lang]="contentLang" (langChange)="onLangChange($event)"></lang-picker>
     
 </div>
 <div class="modal-footer">

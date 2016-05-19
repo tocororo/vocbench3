@@ -1,0 +1,5 @@
+<select [ngModel]="language" (ngModelChange)="onLangChange($event)" [class]="selectClass" style="margin-right: 4px;" 
+    [disabled]="disabled">
+    <option *ngFor="let l of languageList" [value]="l.tag">{{l.name}} ({{l.tag}})</option>
+</select>
+<img [src]="getFlagImgSrc()" />

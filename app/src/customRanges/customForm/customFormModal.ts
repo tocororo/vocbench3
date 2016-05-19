@@ -2,6 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
+import {LangPickerComponent} from "../../widget/langPicker/langPickerComponent";
 import {FormEntry} from "../../utils/CustomRanges";
 import {CustomRangeServices} from "../../services/customRangeServices";
 
@@ -24,15 +25,14 @@ export class CustomFormModalData extends BSModalContext {
 @Component({
     selector: "custom-form-modal",
     templateUrl: "app/src/customRanges/customForm/customFormModal.html",
-    providers: [CustomRangeServices]
+    providers: [CustomRangeServices],
+    directives: [LangPickerComponent]
 })
 export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     context: CustomFormModalData;
     
     private formEntries: FormEntry[];
     private submittedWithError: boolean = false;
-    
-    //TODO: handle CRE with type node
     
     constructor(public dialog: DialogRef<CustomFormModalData>, public crService: CustomRangeServices) {
         this.context = dialog.context;
@@ -42,9 +42,8 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
         this.crService.getCustomRangeEntryForm(this.context.creId).subscribe(
             form => {
                 this.formEntries = form
-                /*initialize formEntries in order to adapt it to the view
-                set checked at true to all formEntries. This is not necessary for all the entries
-                but just for those optional*/
+                /*initialize formEntries in order to adapt it to the view set checked at true to
+                all formEntries. (It wouldn't be necessary for all the entries but just for those optional*/
                 for (var i = 0; i < this.formEntries.length; i++) {
                     this.formEntries[i]['checked'] = true;
                 }
@@ -53,7 +52,28 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
         document.getElementById("toFocus").focus();
     }
     
+    /**
+     * Listener to change of lang-picker used to set the language argument of a FormEntry that
+     * has coda:langString as converter
+     */
+    private onConverterLangChange(newLang: string, formEntryConvArgument: FormEntry) {
+        formEntryConvArgument['value'] = newLang;
+    }
+    
+    /**
+     * Listener on change of a formEntry input field. Checks if there are some other
+     * formEntries with the same userPrompt and eventually updates their value
+     */
+    private onEntryValueChange(value: string, formEntry: FormEntry) {
+        for (var i = 0; i < this.formEntries.length; i++) {
+            if (this.formEntries[i] != formEntry && this.formEntries[i].getUserPrompt() == formEntry.getUserPrompt()) {
+                this.formEntries[i]['value'] = value;
+            }
+        }
+    }
+    
     ok(event) {
+        
         //check if all required field are filled
         for (var i = 0; i < this.formEntries.length; i++) {
             var entry = this.formEntries[i];
@@ -63,11 +83,21 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
             }
         }
         
-        var entryMap: Array<any> = [];
+        var entryMap: Array<any> = []; //{userPrompt: string, value: string}
         for (var i = 0; i < this.formEntries.length; i++) {
             var entry = this.formEntries[i];
             if (entry['checked']) {
-                entryMap.push({userPrompt: entry.getUserPrompt(), value: entry['value']});
+                //add the entry only if not already in
+                var alreadyIn: boolean = false;
+                for (var j = 0; j < entryMap.length; j++) {
+                    if (entryMap[j].userPrompt == entry.getUserPrompt()) {
+                        alreadyIn = true;
+                        break;
+                    }
+                }
+                if (!alreadyIn) {
+                    entryMap.push({userPrompt: entry.getUserPrompt(), value: entry['value']});
+                }
             }
         }
         
