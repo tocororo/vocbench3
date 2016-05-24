@@ -9,6 +9,7 @@ import {InstanceListComponent} from '../../../owl/instanceList/instanceListCompo
 export class InstanceListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
         super();
+        this.size = "lg";
     }
 }
 

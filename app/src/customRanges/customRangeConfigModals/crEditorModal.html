@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h3 class="modal-title">Custom Range Editor</h3>
+</div>
+<div class="modal-body vbox" style="height: 50vh;">
+    
+    <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
+        <label style="white-space: nowrap; margin: 0px 3px;">Custom Range ID:</label>
+        <div class="hbox">
+        <div class="input-group input-group-xs">
+            <span class="input-group-addon" style="padding-right: 2px">{{crPrefix}}</span>
+            <input type="text" class="form-control" [(ngModel)]="crShortId" [disabled]="crId">
+        </div>
+        </div>
+    </div>
+    
+    <div class="hbox">
+        <div class="subPanel vbox">
+            <div class="subPanel-heading">
+                <label style="flex: 1">Custom Range Entries:</label>
+            </div>
+            <div class="subPanel-body vbox">
+                <div class="scrollableContainer">
+                    <table class="table table-condensed table-borderless table-hoverable">
+                        <tbody>
+                            <tr *ngFor="let cre of crEntries" (click)="selectCRE(cre)" [ngClass]="{active: cre == selectedCRE}">
+                                <td>{{cre}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
+            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addEntry()" [disabled]="!selectedCREAll">
+                <span class="glyphicon glyphicon-chevron-left"></span>Add
+            </button>
+            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeEntry()" [disabled]="!selectedCRE">
+                Remove<span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+        
+        <div class="subPanel vbox">
+            <div class="subPanel-heading">
+                <label style="flex: 1">Available Entries:</label>
+            </div>
+            <div class="subPanel-body vbox">
+                <div class="scrollableContainer">
+                    <table class="table table-condensed table-borderless table-hoverable">
+                        <tbody>
+                            <tr *ngFor="let cre of crEntriesAll" (click)="selectCREAll(cre)"
+                                [ngClass]="{active: cre == selectedCREAll, greyText: isCREAlreadyInCR(cre)}">
+                                <td>{{cre}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="submitted && !isDataValid()" class="alert alert-danger" style="margin-top: 6px;">
+        {{errorMsg}}
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button id="toFocus" class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="submitted && !isDataValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
-import {FormEntry, CustomRangeType, FormEntryType} from "../utils/CustomRanges";
+import {CustomRange, CustomRangeEntry, FormEntry, CustomRangeType, FormEntryType} from "../utils/CustomRanges";
 
 @Injectable()
 export class CustomRangeServices {
@@ -141,6 +141,252 @@ export class CustomRangeServices {
             params[entryMap[i].userPrompt] = entryMap[i].value;
         }
         return this.httpMgr.doGet(this.serviceName, "runCoda", params, this.oldTypeService);
+    }
+    
+    /**
+     * Returns the mapping between CustomRange and properties. The returned array contains object
+     * with {idCustomRange: string, property: string}.
+     * At the moment replaceRanges is ignored 
+     */
+    getCustomRangeConfigMap() {
+        console.log("[CustomRangeServices] getCustomRangeConfigMap");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getCustomRangeConfigMap", params, this.oldTypeService).map(
+            stResp => {
+                var confEntries: Array<any> = [];
+                var confEntryElemColl: Array<Element> = stResp.getElementsByTagName("configEntry");
+                for (var i = 0; i < confEntryElemColl.length; i++) {
+                    var idCustomRange = confEntryElemColl[i].getAttribute("idCustomRange")
+                    var property = confEntryElemColl[i].getAttribute("property")
+                    var replaceRanges = confEntryElemColl[i].getAttribute("replaceRanges");//at the moment don't use this
+                    confEntries.push({idCustomRange: idCustomRange, property: property});
+                }
+                return confEntries;
+            }
+        );
+    }
+    
+    /**
+     * Adds a new CustomRange - property mapping
+     * @param customRangeId
+     * @param property
+     * @param replaceRanges tells if the CustomRange will replace the "classic" ranges in the response of getRange service.
+     * Currently if it's true it could cause error since the getRange response handler expects <ranges> element.
+     */
+    addCustomRangeToProperty(customRangeId: string, property: ARTURIResource, replaceRanges?: boolean) {
+        console.log("[CustomRangeServices] addCustomRangeToProperty");
+        var params: any = {
+            customRangeId: customRangeId,
+            property: property.getURI()
+        };
+        if (replaceRanges != undefined) {
+            params.replaceRanges = replaceRanges;
+        }
+        return this.httpMgr.doGet(this.serviceName, "addCustomRangeToProperty", params, this.oldTypeService);
+    }
+    
+    /**
+     * Removes the CustomRange from the given property
+     * @param property
+     */
+    removeCustomRangeFromProperty(property: string) {
+        console.log("[CustomRangeServices] removeCustomRangeFromProperty");
+        var params: any = {
+            property: property
+        };
+	    return this.httpMgr.doGet(this.serviceName, "removeCustomRangeFromProperty", params, this.oldTypeService);
+    }
+    
+    /**
+     * Returns the list of CustomRange available
+     */
+    getAllCustomRanges() {
+        console.log("[CustomRangeServices] getAllCustomRanges");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getAllCustomRanges", params, this.oldTypeService).map(
+            stResp => {
+                var customRanges: Array<string> = [];
+                var customRangeElemColl: Array<Element> = stResp.getElementsByTagName("customRange");
+                for (var i = 0; i < customRangeElemColl.length; i++) {
+                    customRanges.push(customRangeElemColl[i].textContent);
+                }
+                return customRanges;
+            }
+        );
+    }
+    
+    /**
+     * Returns the CustomRange with the given id.
+     * @param id
+     */
+    getCustomRange(id: string) {
+	    console.log("[CustomRangeServices] getCustomRange");
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomRange", params, this.oldTypeService).map(
+            stResp => {
+                var customRange: CustomRange;
+                var crElem: Element = stResp.getElementsByTagName("customRange")[0];
+                var crId = crElem.getAttribute("id");
+                var entries = [];
+                var entryElemColl = crElem.getElementsByTagName("entry");
+                for (var i = 0; i < entryElemColl.length; i++) {
+                    entries.push(entryElemColl[i].getAttribute("id"));
+                }
+                customRange = new CustomRange(crId, entries);
+                return customRange;
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param
+     */
+    createCustomRange(id: string) {
+        console.log("[CustomRangeServices] createCustomRange");
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doGet(this.serviceName, "createCustomRange", params, this.oldTypeService);
+    }
+
+    /**
+     * Deletes the CustomRange with the given ID and consequentially the CR-prop mapping with the same CR
+     * @param id the ID of the CustomRange to delete
+     */
+    deleteCustomRange(id: string) {
+        console.log("[CustomRangeServices] deleteCustomRange");
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doGet(this.serviceName, "deleteCustomRange", params, this.oldTypeService);
+    }
+    
+    /**
+     * Returns the list of all the CustomRangeEntry available
+     */
+    getAllCustomRangeEntries() {
+        console.log("[CustomRangeServices] getAllCustomRangeEntries");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getAllCustomRangeEntries", params, this.oldTypeService).map(
+            stResp => {
+                var customRangeEntries: Array<string> = [];
+                var customRangeEntryElemColl: Array<Element> = stResp.getElementsByTagName("customRangeEntry");
+                for (var i = 0; i < customRangeEntryElemColl.length; i++) {
+                    customRangeEntries.push(customRangeEntryElemColl[i].textContent);
+                }
+                return customRangeEntries;
+            }
+        );
+    }
+    
+    /**
+     * 
+     * @param
+     */
+    getCustomRangeEntry(id: string) {
+        console.log("[CustomRangeServices] getCustomRangeEntry");
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntry", params, this.oldTypeService).map(
+            stResp => {
+                
+            }
+        );
+    }
+
+    /**
+     * Returns the list of CustomRangeEntry for the given property
+     * @param property
+     */
+    getCustomRangeEntries(property: string) {
+        console.log("[CustomRangeServices] getCustomRangeEntries");
+        var params: any = {
+            property: property
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntries", params, this.oldTypeService).map(
+            stResp => {
+                
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param
+     */
+    createCustomRangeEntry(type: CustomRangeType, id: string, name: string, description: string, ref: string, showProp?: string) {
+        console.log("[CustomRangeServices] createCustomRangeEntry");
+        var params: any = {
+            type: type,
+            id: id,
+            name: name,
+            description: description,
+            ref: ref,
+        };
+        if (showProp != undefined) {
+            params.showProp = showProp;
+        }
+        return this.httpMgr.doPost(this.serviceName, "createCustomRangeEntry", params, this.oldTypeService);
+    }
+
+    /**
+     * Deletes the CustomRangeEntry with the given ID.
+     * @param id the ID of the CustomRangeEntry to delete
+     */
+    deleteCustomRangeEntry(id: string) {
+        console.log("[CustomRangeServices] deleteCustomRangeEntry");
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doGet(this.serviceName, "deleteCustomRangeEntry", params, this.oldTypeService);
+    }
+
+    /**
+     * 
+     * @param
+     */
+    updateCustomRangeEntry(id: string, name: string, description: string, ref: string, showProp: string) {
+        console.log("[CustomRangeServices] updateCustomRangeEntry");
+        var params: any = {
+            id: id,
+            name: name,
+            description: description,
+            ref: ref,
+        };
+        if (showProp != undefined) {
+            params.showProp = showProp;
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateCustomRangeEntry", params, this.oldTypeService);
+    }
+
+    /**
+     * 
+     * @param
+     */
+    addEntryToCustomRange(customRangeId: string, customRangeEntryId: string) {
+        console.log("[CustomRangeServices] addEntryToCustomRange");
+        var params: any = {
+            customRangeId: customRangeId,
+            customRangeEntryId: customRangeEntryId
+        };
+        return this.httpMgr.doGet(this.serviceName, "addEntryToCustomRange", params, this.oldTypeService);
+    }
+
+    /**
+     * 
+     * @param
+     */
+    removeEntryFromCustomRange(customRangeId: string, customRangeEntryId: string) {
+        console.log("[CustomRangeServices] removeEntryFromCustomRange");
+        var params: any = {
+            customRangeId: customRangeId,
+            customRangeEntryId: customRangeEntryId
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeEntryFromCustomRange", params, this.oldTypeService);
     }
     
 }

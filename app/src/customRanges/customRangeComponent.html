@@ -1,0 +1,114 @@
+<div class="vbox">
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Custom Range configurator:</label>
+        </div>
+
+        <div class="panel-body vbox">
+            
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Property - Custom Range mapping:</label>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button class="btn btn-default" title="Create Property - Custom Range mapping" (click)="createPropCRMapping()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" title="Remove Property - Custom Range mapping" (click)="removePropCRMapping()"
+                            [disabled]="!selectedCRPropMapping">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox">
+                    
+                    <div class="scrollableContainer">
+                        <table class="table table-condensed table-borderless table-hoverable">
+                            <thead>
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Custom Range</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let crProp of crConfigurationMap" (click)="selectCRPropMap(crProp)"
+                                    [ngClass]="{active: crProp == selectedCRPropMapping}">
+                                    <td>{{crProp.property}}</td>
+                                    <td>{{crProp.idCustomRange}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="hbox">
+                
+                <div class="subPanel vbox">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">Custom Range:</label>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <button class="btn btn-default" title="Create Custom Range" (click)="createCR()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Delete Custom Range" (click)="deleteCR()"
+                                [disabled]="!selectedCR">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Change Custom Range" (click)="editCR()"
+                                [disabled]="!selectedCR">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="subPanel-body vbox">
+                        <div class="scrollableContainer">
+                            <table class="table table-condensed table-borderless table-hoverable">
+                                <tbody>
+                                    <tr *ngFor="let cr of customRangeList" (click)="selectCR(cr)"
+                                        [ngClass]="{active: cr == selectedCR}">
+                                        <td>{{cr}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subPanel vbox" style="margin-left: 4px;">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">Custom Range Entry:</label>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <button class="btn btn-default" title="Create Custom Range Entry" (click)="createCRE()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Delete Custom Range Entry" (click)="deleteCRE()"
+                                [disabled]="!selectedCRE">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Change Custom Range Entry" (click)="editCRE()"
+                                [disabled]="!selectedCRE">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="subPanel-body vbox">
+                        <div class="scrollableContainer">
+                            <table class="table table-condensed table-borderless table-hoverable">
+                                <tbody>
+                                    <tr *ngFor="let cre of customRangeEntryList" (click)="selectCRE(cre)"
+                                        [ngClass]="{active: cre == selectedCRE}">
+                                        <td>{{cre}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>

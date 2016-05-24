@@ -1,11 +1,12 @@
 export class CustomRange {
-    private id: string;
-    private property: string;
-    private entries: CustomRangeEntry[];
     
-    constructor(id: string, property: string, entries: CustomRangeEntry[]) {
+    public static PREFIX = "it.uniroma2.art.semanticturkey.customrange.";
+    
+    private id: string;
+    private entries: string[]; //id of the entries
+    
+    constructor(id: string, entries: string[]) {
         this.id = id;
-        this.property = property;
         this.entries = entries;
     }
     
@@ -13,17 +14,20 @@ export class CustomRange {
         return this.id;
     }
     
-    public getProperty(): string {
-        return this.property;
+    public getEntries(): string[] {
+        return this.entries;
     }
     
-    public getEntries(): CustomRangeEntry[] {
-        return this.entries;
+    public setEntries(entries: string[]) {
+        this.entries = entries;
     }
     
 }
 
 export class CustomRangeEntry {
+    
+    public static PREFIX = "it.uniroma2.art.semanticturkey.entry.";
+    
     private id: string;
     private name: string;
     private type: CustomRangeType;

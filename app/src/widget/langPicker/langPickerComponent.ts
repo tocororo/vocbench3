@@ -28,7 +28,7 @@ export class LangPickerComponent implements OnInit {
         }
         if (this.lang == undefined) {
             this.language = this.vbCtx.getContentLanguage();//if lang is not provided set the content language
-            this.langChange.emit(this.language);
+            this.langChange.emit(this.language);//and emit langChange event
         } else {
             this.language = this.lang;
         }

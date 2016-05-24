@@ -26,7 +26,7 @@
                 Remember me
                 <input type="checkbox" style="margin-left: 3px;" [checked]="rememberMe" (change)="rememberMe=$event.target.checked">
             </div>
-            <a href="#">Forgot password?</a>
+            <a (click)="forgotPassword()" style="cursor: pointer" >Forgot password?</a>
             <a [routerLink]="['Registration']">Sign up</a>
         </div>
         

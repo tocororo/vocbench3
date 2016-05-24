@@ -24,4 +24,9 @@ export class HomeComponent {
         this.router.navigate(['Projects']);
     }
     
+    private forgotPassword() {
+        //TODO
+        alert("Not yet available");
+    }
+    
 }
