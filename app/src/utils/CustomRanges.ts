@@ -3,22 +3,21 @@ export class CustomRange {
     public static PREFIX = "it.uniroma2.art.semanticturkey.customrange.";
     
     private id: string;
-    private entries: string[]; //id of the entries
+    private entries: CustomRangeEntry[];
     
-    constructor(id: string, entries: string[]) {
+    constructor(id: string) {
         this.id = id;
-        this.entries = entries;
     }
     
     public getId(): string {
         return this.id;
     }
     
-    public getEntries(): string[] {
+    public getEntries(): CustomRangeEntry[] {
         return this.entries;
     }
     
-    public setEntries(entries: string[]) {
+    public setEntries(entries: CustomRangeEntry[]) {
         this.entries = entries;
     }
     
@@ -30,15 +29,14 @@ export class CustomRangeEntry {
     
     private id: string;
     private name: string;
-    private type: CustomRangeType;
+    private type: CustomRangeEntryType;
     private description: string;
+    private ref: string;
+    private showProperty: string;
     // private form: FormEntry[];
     
-    constructor(id: string, name: string, type: CustomRangeType, description: string) {
+    constructor(id: string) {
         this.id = id;
-        this.name = name;
-        this.type = type;
-        this.description = description;
     }
     
     public getId(): string {
@@ -49,13 +47,42 @@ export class CustomRangeEntry {
         return this.name;
     }
     
-    public getType(): CustomRangeType {
+    public setName(name: string) {
+        this.name = name;
+    }
+    
+    public getType(): CustomRangeEntryType {
         return this.type;
+    }
+    
+    public setType(type: CustomRangeEntryType) {
+        this.type = type;
     }
     
     public getDescription(): string {
         return this.description;
     }
+    
+    public setDescription(description: string) {
+        this.description = description;
+    }
+    
+    public getRef(): string {
+        return this.ref;
+    }
+    
+    public setRef(ref: string) {
+        this.ref = ref;
+    }
+    
+    public getShowProperty(): string {
+        return this.showProperty;
+    }
+    
+    public setShowProperty(showProperty: string) {
+        this.showProperty = showProperty;
+    }
+    
 }
 
 export class FormEntry {
@@ -134,5 +161,5 @@ export class FormEntry {
     
 }
 
-export type CustomRangeType = "node" | "graph";
+export type CustomRangeEntryType = "node" | "graph";
 export type FormEntryType = "literal" | "uri";

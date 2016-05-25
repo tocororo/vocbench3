@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
-import {CustomRange, CustomRangeEntry, FormEntry, CustomRangeType, FormEntryType} from "../utils/CustomRanges";
+import {CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../utils/CustomRanges";
 
 @Injectable()
 export class CustomRangeServices {
@@ -198,7 +198,7 @@ export class CustomRangeServices {
     }
     
     /**
-     * Returns the list of CustomRange available
+     * Returns the IDs of CustomRange available
      */
     getAllCustomRanges() {
         console.log("[CustomRangeServices] getAllCustomRanges");
@@ -229,12 +229,13 @@ export class CustomRangeServices {
                 var customRange: CustomRange;
                 var crElem: Element = stResp.getElementsByTagName("customRange")[0];
                 var crId = crElem.getAttribute("id");
-                var entries = [];
+                var entries: CustomRangeEntry[] = [];
                 var entryElemColl = crElem.getElementsByTagName("entry");
                 for (var i = 0; i < entryElemColl.length; i++) {
-                    entries.push(entryElemColl[i].getAttribute("id"));
+                    entries.push(new CustomRangeEntry(entryElemColl[i].getAttribute("id")));
                 }
-                customRange = new CustomRange(crId, entries);
+                customRange = new CustomRange(crId);
+                customRange.setEntries(entries);
                 return customRange;
             }
         );
@@ -265,7 +266,7 @@ export class CustomRangeServices {
     }
     
     /**
-     * Returns the list of all the CustomRangeEntry available
+     * Returns the IDs of all the CustomRangeEntry available
      */
     getAllCustomRangeEntries() {
         console.log("[CustomRangeServices] getAllCustomRangeEntries");
@@ -293,7 +294,23 @@ export class CustomRangeServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntry", params, this.oldTypeService).map(
             stResp => {
-                
+                var creElem: Element = stResp.getElementsByTagName("customRangeEntry")[0];
+                var id: string = creElem.getAttribute("id");
+                var name: string = creElem.getAttribute("name");
+                var type: CustomRangeEntryType = creElem.getAttribute("type") == "graph" ? "graph" : "node";
+                var description: string = creElem.getElementsByTagName("description")[0].textContent;
+                var refElem: Element = creElem.getElementsByTagName("ref")[0];
+                var ref: string = refElem.textContent;
+                var showProp: string = refElem.getAttribute("showProperty");
+                var cre: CustomRangeEntry = new CustomRangeEntry(id);
+                cre.setName(name);
+                cre.setType(type);
+                cre.setDescription(description);
+                cre.setRef(ref);
+                if (type == "graph") {
+                    cre.setShowProperty(showProp);
+                }
+                return cre;
             }
         );
     }
@@ -318,7 +335,7 @@ export class CustomRangeServices {
      * 
      * @param
      */
-    createCustomRangeEntry(type: CustomRangeType, id: string, name: string, description: string, ref: string, showProp?: string) {
+    createCustomRangeEntry(type: CustomRangeEntryType, id: string, name: string, description: string, ref: string, showProp?: string) {
         console.log("[CustomRangeServices] createCustomRangeEntry");
         var params: any = {
             type: type,

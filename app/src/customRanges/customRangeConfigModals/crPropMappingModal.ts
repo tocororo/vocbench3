@@ -22,7 +22,7 @@ export class CustomRangePropMappingModalData extends BSModalContext {
     providers: [CustomRangeServices, BrowsingServices],
     directives: [RdfResourceComponent]
 })
-export class CustomRangePropMappingModal implements ModalComponent<BSModalContext> {
+export class CustomRangePropMappingModal implements ModalComponent<CustomRangePropMappingModalData> {
     context: CustomRangePropMappingModalData;
     
     private customRangeList: Array<string>;

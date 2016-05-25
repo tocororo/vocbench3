@@ -17,7 +17,7 @@ export class ValidationSettingsModalData extends BSModalContext {
     selector: "validation-settings-modal",
     templateUrl: "app/src/alignment/alignmentValidation/validationSettingsModal/validationSettingsModal.html",
 })
-export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
+export class ValidationSettingsModal implements ModalComponent<ValidationSettingsModalData> {
     context: ValidationSettingsModalData;
     
     private rejectedAlignmentAction: string;

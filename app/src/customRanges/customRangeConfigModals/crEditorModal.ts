@@ -23,10 +23,9 @@ export class CustomRangeEditorModalData extends BSModalContext {
     providers: [CustomRangeServices],
     styles: [ ".greyText { color: #999 }" ] //to grey the CRE already-in the entries of the current CR
 })
-export class CustomRangeEditorModal implements ModalComponent<BSModalContext> {
+export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorModalData> {
     context: CustomRangeEditorModalData;
     
-    private customRange: CustomRange;
     private crPrefix: string = CustomRange.PREFIX;
     private crId: string;
     private crShortId: string; //ID of the CR without the prefix
@@ -51,11 +50,14 @@ export class CustomRangeEditorModal implements ModalComponent<BSModalContext> {
         if (this.context.id != undefined) { //CR id provided, so the modal works in edit mode
             this.crService.getCustomRange(this.context.id).subscribe(
                 cr => {
-                    this.customRange = cr;
-                    this.crId = this.customRange.getId();
+                    this.crId = cr.getId();
                     this.crShortId = this.crId.replace(this.crPrefix, "");
-                    this.crEntries = this.customRange.getEntries();
-                    this.crEntriesPristine.push(...this.customRange.getEntries());
+                    var crEntriesObj: CustomRangeEntry[] = cr.getEntries();
+                    //for semplicity, keep just the IDs of the CRE of the given CR
+                    crEntriesObj.forEach(cre => {
+                        this.crEntries.push(cre.getId());
+                    });
+                    this.crEntriesPristine.push(...this.crEntries);
                 }
             )
         }
@@ -112,8 +114,8 @@ export class CustomRangeEditorModal implements ModalComponent<BSModalContext> {
             this.errorMsg = "The Custom Range Entry list is empty. Please add at least one Entry."
         }
         if (this.crId == null) { //check only in create mode
-            if (!this.crShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
-                this.errorMsg = "The Custom Range ID contains invalid character(s). Please fix it."
+            if (this.crShortId == null && !this.crShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
+                this.errorMsg = "The Custom Range ID is invalid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }
             if (this.context.existingCr.indexOf(this.crPrefix + this.crShortId) != -1) { //CR with the same id already exists
@@ -146,8 +148,8 @@ export class CustomRangeEditorModal implements ModalComponent<BSModalContext> {
             }
             //collect the removeEntryFromCustomRange and addEntryToCustomRange functions 
             var changesFnArray = [];
-            changesFnArray = creToRemove.map((cr) => this.crService.removeEntryFromCustomRange(this.crId, cr));
-            changesFnArray = creToAdd.map((cr) => this.crService.addEntryToCustomRange(this.crId, cr));
+            creToRemove.forEach(cre => {changesFnArray.push(this.crService.removeEntryFromCustomRange(this.crId, cre))});
+            creToAdd.forEach(cre => {changesFnArray.push(this.crService.addEntryToCustomRange(this.crId, cre))});
             //call the collected functions and subscribe when all are completed
             Observable.forkJoin(changesFnArray).subscribe(
                 res => {

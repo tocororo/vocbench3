@@ -130,7 +130,7 @@ export class CustomRangeComponent {
     }
     
     private createCRE() {
-        var modalData = new CustomRangeEntryEditorModalData()
+        var modalData = new CustomRangeEntryEditorModalData(null, this.customRangeEntryList);
         return this.modal.open(CustomRangeEntryEditorModal, modalData).then(
             dialog => dialog.result.then(
                 res => this.initCREList(),
@@ -140,7 +140,7 @@ export class CustomRangeComponent {
     }
     
     private editCRE() {
-        var modalData = new CustomRangeEntryEditorModalData()
+        var modalData = new CustomRangeEntryEditorModalData(this.selectedCRE);
         return this.modal.open(CustomRangeEntryEditorModal, modalData).then(
             dialog => dialog.result.then(
                 res => {},

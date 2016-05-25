@@ -3,7 +3,7 @@ import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTURIResource, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
-import {CustomRange, CustomRangeEntry, CustomRangeType} from "../utils/CustomRanges";
+import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../utils/CustomRanges";
 
 @Injectable()
 export class PropertyServices {
@@ -289,11 +289,16 @@ export class PropertyServices {
                     for (var i = 0; i < creElemColl.length; i++) {
                         var creId = creElemColl[i].getAttribute("id");
                         var name = creElemColl[i].getAttribute("name");
-                        var type: CustomRangeType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
+                        var type: CustomRangeEntryType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
                         var description = creElemColl[i].getElementsByTagName("description")[0].textContent;
-                        crEntries.push(new CustomRangeEntry(creId, name, type, description));
+                        var cre: CustomRangeEntry = new CustomRangeEntry(creId);
+                        cre.setName(name);
+                        cre.setType(type);
+                        cre.setDescription(description);
+                        crEntries.push(cre);
                     }
-                    var cr = new CustomRange(crId, crProp, crEntries)
+                    var cr = new CustomRange(crId);
+                    cr.setEntries(crEntries);
                 }
                 return {rngType: rngType, ranges: rangesUriColl, customRanges: cr};
             }
