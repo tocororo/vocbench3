@@ -3,11 +3,10 @@ import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
-import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
+import {VBEventHandler} from "../utils/VBEventHandler";
 import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
-import {ModalServices} from "../widget/modal/modalServices";
+import {ResourceRenameComponent} from "./resourceRenameComponent";
 import {ResourceViewServices} from "../services/resourceViewServices";
-import {RefactorServices} from "../services/refactorServices";
 import {AlignmentServices} from "../services/alignmentServices";
 import {ResourceAlignmentModal, ResourceAlignmentModalData} from "../alignment/resourceAlignment/resourceAlignmentModal"
 
@@ -26,18 +25,17 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
 @Component({
     selector: "resource-view",
     templateUrl: "app/src/resourceView/resourceViewComponent.html",
-    directives: [RdfResourceComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, SchemesPartitionRenderer,
-        BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
+    directives: [RdfResourceComponent, ResourceRenameComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, 
+        SchemesPartitionRenderer, BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
         SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-        RangesPartitionRenderer, PropertyFacetsPartitionRenderer, SanitizerDirective],
-    providers: [ResourceViewServices, RefactorServices, AlignmentServices],
+        RangesPartitionRenderer, PropertyFacetsPartitionRenderer],
+    providers: [ResourceViewServices, AlignmentServices],
 })
 export class ResourceViewComponent {
     
-    @Input() resource:ARTResource;
+    @Input() resource: ARTResource;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
-    private renameLocked = true;
     private showInferred = false;
     
     //partitions
@@ -54,8 +52,13 @@ export class ResourceViewComponent {
     private propertyFacets: any[];
     private inverseofColl: ARTURIResource[];
     
-	constructor(private resViewService:ResourceViewServices, private refactorService: RefactorServices, private alignServices: AlignmentServices,
-        private vbCtx: VocbenchCtx, private modalService: ModalServices, private modal: Modal) {
+    private eventSubscriptions = [];
+    
+	constructor(private resViewService:ResourceViewServices, private alignServices: AlignmentServices, private vbCtx: VocbenchCtx, 
+        private eventHandler: VBEventHandler, private modal: Modal) {
+            
+        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+            data => this.buildResourceView(data.newResource)));
     }
     
     ngOnChanges(changes) {
@@ -63,6 +66,10 @@ export class ResourceViewComponent {
         if (changes.resource.currentValue) {
             this.buildResourceView(this.resource);//refresh resource view when Input resource changes       
         }
+    }
+    
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
     private buildResourceView(res: ARTResource) {
@@ -91,7 +98,7 @@ export class ResourceViewComponent {
                     var partition = respPartitions[i];
                     var partitionName = partition.tagName;
                     if (partitionName == "resource") {
-                        this.resource = Deserializer.createURI(partition.children[0]);
+                        this.resource = Deserializer.createRDFResource(partition.children[0]);
                     } else if (partitionName == "types") {
                         this.typesColl = Deserializer.createURIArray(partition);
                         this.typesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.typesColl);
@@ -191,47 +198,6 @@ export class ResourceViewComponent {
             } else if (facetName == "inverseof") {
                 this.inverseofColl = Deserializer.createURIArray(facetsChildren[i]);
             }
-        }
-    }
-    
-    /** 
-     * Enable and focus the input text to rename the resource 
-     */  
-    private startRename(inputEl: HTMLElement) {
-        inputEl.focus();
-        this.renameLocked = false;
-    }
-    
-    /**
-     * Cancel the renaming of the resource and restore the original UI
-     */
-    private cancelRename(inputEl: HTMLInputElement) {
-        //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
-        inputEl.value = (<ARTURIResource>this.resource).getLocalName();
-        this.renameLocked = true;
-    }
-    
-    /**
-     * Apply the renaming of the resource and restore the original UI
-     */
-    private renameResource(inputEl: HTMLInputElement) {
-        //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
-        this.renameLocked = true;
-        var newLocalName = inputEl.value;
-        if (newLocalName.trim() == "") {
-            this.modalService.alert("Rename", "You have to write a valid local name", "error");
-            inputEl.value = (<ARTURIResource>this.resource).getLocalName();
-            return;
-        }
-        var newUri = (<ARTURIResource>this.resource).getBaseURI() + newLocalName;
-        if ((<ARTURIResource>this.resource).getURI() != newUri) { //if the uri has changed 
-            this.refactorService.changeResourceURI(<ARTURIResource>this.resource, newUri).subscribe(
-                newResource => {
-                    //here pass newResource instead of this.resource since this.resource is not still
-                    //updated/injected from the NodeComponent that catch the rename event 
-                    this.buildResourceView(newResource);
-                }
-            );    
         }
     }
     

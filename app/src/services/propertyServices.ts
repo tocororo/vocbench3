@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTURIResource, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../utils/CustomRanges";
 
 @Injectable()
@@ -198,10 +198,10 @@ export class PropertyServices {
      * @param type
      * @param lang
      */
-    createAndAddPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, rangeQName: string, type: RDFTypesEnum, lang?: string) {
+    createAndAddPropValue(subject: ARTResource, property: ARTURIResource, value: string, rangeQName: string, type: RDFTypesEnum, lang?: string) {
         console.log("[PropertyServices] createAndAddPropValue");
         var params: any = {
-            instanceQName: subject.getURI(),
+            instanceQName: subject.getNominalValue(),
             propertyQName: property.getURI(),
             value: value,
             rangeQName: rangeQName,
@@ -220,10 +220,10 @@ export class PropertyServices {
      * @param value value to add
      * @param type 
      */
-    addExistingPropValue(subject: ARTURIResource, property: ARTURIResource, value: string, type: RDFTypesEnum) {
+    addExistingPropValue(subject: ARTResource, property: ARTURIResource, value: string, type: RDFTypesEnum) {
         console.log("[PropertyServices] addExistingPropValue");
         var params: any = {
-            instanceQName: subject.getURI(),
+            instanceQName: subject.getNominalValue(),
             propertyQName: property.getURI(),
             value: value,
             type: type,

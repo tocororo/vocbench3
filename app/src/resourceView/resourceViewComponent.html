@@ -4,25 +4,10 @@
             <label style="margin-right: 8px;">Resource:</label>
             <rdf-resource [resource]="resource"></rdf-resource>
             <div style="margin-left: 10px; flex: 1; min-width: 300px;">
-                <div class="input-group input-group-xs">
-                    <span class="input-group-addon" style="padding-right: 2px;">{{resource.getBaseURI()}}</span>
-                    <input #renameinput type="text" class="form-control" style="padding-left: 2px;" 
-                        [value]="resource.getLocalName()" [readonly]="renameLocked" sanitized>
-                    <div class="input-group-btn">
-                        <button *ngIf="renameLocked" class="btn btn-default" style="width:60px" type="button" 
-                            (click)="startRename(renameinput)" [disabled]="!resource.getAdditionalProperty('explicit')">Rename</button>
-                        <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" 
-                            (click)="renameResource(renameinput)">
-                            <span class="glyphicon glyphicon-ok" style="color: green"></span>
-                        </button>
-                        <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" 
-                            (click)="cancelRename(renameinput)">
-                            <span class="glyphicon glyphicon-remove" style="color: red"></span>
-                        </button>
-                    </div>
-                </div>
+                <resource-rename [resource]="resource"></resource-rename>
             </div>
-            <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="alignResource()">Align</button>
+            <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="alignResource()" 
+                [disabled]="!resource.getAdditionalProperty('explicit')">Align</button>
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: showInferred}"
                 title="Show/hide inferred information" (click)="showHideInferred()">
                 <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
@@ -33,7 +18,8 @@
     <div class="panel-body scrollableContainer blockingDivHost">
         <types-renderer [object-list]="typesColl" [resource]="resource" (update)="buildResourceView(resource)"
             (dblclickObj)="objectDblClick($event)"></types-renderer>
-        <class-axiom-renderer [pred-obj-list]="classAxiomColl" [resource]="resource" (update)="buildResourceView(resource)"></class-axiom-renderer>
+        <class-axiom-renderer [pred-obj-list]="classAxiomColl" [resource]="resource" (update)="buildResourceView(resource)"
+            (dblclickObj)="objectDblClick($event)"></class-axiom-renderer>
         <top-concepts-renderer [object-list]="topconceptofColl" [resource]="resource" (update)="buildResourceView(resource)"
             (dblclickObj)="objectDblClick($event)"></top-concepts-renderer>
         <schemes-renderer [object-list]="schemesColl" [resource]="resource" (update)="buildResourceView(resource)"

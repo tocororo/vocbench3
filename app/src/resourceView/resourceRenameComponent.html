@@ -1,0 +1,25 @@
+<div *ngIf="resource.isURIResource()" style="position: relative">
+    <div *ngIf="!copyEnabled" class="input-group input-group-xs">
+        <span class="input-group-addon" style="padding-right: 2px;">{{resource.getBaseURI()}}</span>
+        <input #renameinput type="text" class="form-control" style="padding-left: 2px;" [value]="resource.getLocalName()"
+            [readonly]="renameLocked" sanitized>
+        <div class="input-group-btn">
+            <button *ngIf="renameLocked" class="btn btn-default" style="width:60px" type="button" (click)="startRename(renameinput)"
+                [disabled]="!resource.getAdditionalProperty('explicit')">Rename</button>
+            <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" (click)="renameResource(renameinput)">
+                <span class="glyphicon glyphicon-ok" style="color: green"></span>
+            </button>
+            <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" (click)="cancelRename(renameinput)">
+                <span class="glyphicon glyphicon-remove" style="color: red"></span>
+            </button>
+        </div>
+    </div>
+    <div style="position: absolute; top: 0px; right: 63px; z-index: 3;">
+        <button type="button" class="close" (click)="copyToClipboard()" title="Copy URI to clipboard">
+            <span class="glyphicon glyphicon-copy" style="font-size: 12px"></span>
+        </button>
+    </div>
+</div>
+<div *ngIf="resource.isBNode()">
+    <input type="text" class="form-control input-xs" [value]="resource.getNominalValue()" readonly>
+</div>

@@ -1,9 +1,8 @@
 <div class="rdfResourceIcon"><img *ngIf="getImgSrc()" [src]="getImgSrc()"></div>
-<span [title]="resource.getNominalValue()" style="flex: 1">
+<span [title]="resource.getNominalValue()" style="flex: 1" style="margin-right: 6px;">
     {{resource.isResource() ? resource.getShow() : resource.getNominalValue()}}
     <!-- # of instances (shown only if numInst is specified and is not 0) -->
-    <span *ngIf="resource.isResource() && resource.getAdditionalProperty('numInst') && resource.getAdditionalProperty('numInst') != 0"
-        style="margin-right: 4px;">
+    <span *ngIf="resource.isResource() && resource.getAdditionalProperty('numInst') && resource.getAdditionalProperty('numInst') != 0">
         ({{resource.getAdditionalProperty('numInst')}})
     </span>
 </span>
