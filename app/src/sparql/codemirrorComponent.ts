@@ -1,11 +1,11 @@
 ///<reference path="../../../typings/browser.d.ts"/>
 
-import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'codemirror',
     template: `
-        <textarea #txtarea style="resize: vertical; min-height: 150px; width:100%;">{{query}}</textarea>
+        <textarea #txtarea style="">{{query}}</textarea>
     `,
     host: { style: "border: 1px solid #ddd;"}
 })
@@ -15,12 +15,12 @@ export class CodemirrorComponent {
     
     @ViewChild('txtarea') textareaElement;
 
-    cm: CodeMirror.EditorFromTextArea;
+    private cmEditor: CodeMirror.EditorFromTextArea;
 
     constructor() { }
 
     ngAfterViewInit() {
-        this.cm = CodeMirror.fromTextArea(
+        this.cmEditor = CodeMirror.fromTextArea(
             this.textareaElement.nativeElement,
             { 
                 lineNumbers: true, mode: "application/sparql-query", 
@@ -29,8 +29,8 @@ export class CodemirrorComponent {
                 extraKeys: {"Ctrl-Space": this.autoCompleteHandler},
             }
         );
-
-        this.cm.on('change', (editor: CodeMirror.Editor) => {
+        
+        this.cmEditor.on('change', (editor: CodeMirror.Editor) => {
             this.querychange.emit(editor.getDoc().getValue());
         });
     }

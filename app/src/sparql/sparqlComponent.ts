@@ -1,38 +1,58 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {SparqlServices} from "../services/sparqlServices";
+import {MetadataServices} from "../services/metadataServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {CodemirrorComponent} from "./codemirrorComponent";
 
 @Component({
     selector: "sparql-component",
     templateUrl: "app/src/sparql/sparqlComponent.html",
-    providers: [SparqlServices],
+    providers: [SparqlServices, MetadataServices],
     directives: [CodemirrorComponent],
     host: { class: "pageComponent" }
 })
 export class SparqlComponent {
     
-    private tabs: Array<any> = [{
-        query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
-        queryMode: "query",
-        headers: null,
-        queryResult: null,
-        queryInProgress: false,
-        queryTime: null,
-        inferred: false,
-        removable: false,
-        active: true
-    }];
-    private activeTab = this.tabs[0];
+    private sampleQuery: string = "SELECT * WHERE { ?s ?p ?o } LIMIT 10";
+    private tabs: Array<any> = [];
+    private activeTab;
     
-    constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices) {
+    constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices,
+        private metadataService: MetadataServices) {
         // navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
         } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
             router.navigate(['Projects']);
         }
+    }
+    
+    ngOnInit() {
+        this.metadataService.getNSPrefixMappings().subscribe(
+            mappings => {
+                //collect the prefix namespace mappings
+                var prefixImports: string = "";
+                for (var i = 0; i < mappings.length; i++) {
+                    prefixImports += "PREFIX " + mappings[i].prefix + ": <" + mappings[i].namespace + ">\n";
+                }
+                //set them as suffix of sampleQuery
+                this.sampleQuery = prefixImports + "\n" + this.sampleQuery;
+                //initialize the first tab
+                this.tabs.push({
+                    query: this.sampleQuery,
+                    queryMode: "query",
+                    headers: null,
+                    queryResult: null,
+                    queryInProgress: false,
+                    queryTime: null,
+                    inferred: false,
+                    removable: false,
+                    active: true
+                });
+                this.activeTab = this.tabs[0];
+            }
+        )
     }
     
     private doQuery(tab) {
@@ -76,7 +96,8 @@ export class SparqlComponent {
     addTab() {
         this.activeTab.active = false;
         this.tabs.push({
-            query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
+            // query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
+            query: this.sampleQuery,
             queryMode: "query",
             headers: null,
             queryResult: null,
