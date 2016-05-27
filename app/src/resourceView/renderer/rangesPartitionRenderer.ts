@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTNode, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTNode, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {RDFS, XmlSchema} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -18,6 +18,7 @@ export class RangesPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     constructor(private propService:PropertyServices, private manchService: ManchesterServices,
         private browsingService: BrowsingServices, private modalService: ModalServices) {}
@@ -86,6 +87,11 @@ export class RangesPartitionRenderer {
                 }
             );
         }
+    }
+    
+    private objectDblClick(obj: ARTResource) {
+        //clicked object (range class) can be a URIResource or BNode
+        this.dblclickObj.emit(obj);
     }
     
 }

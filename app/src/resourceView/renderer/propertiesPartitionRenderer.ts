@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {CustomRange, CustomRangeEntry} from "../../utils/CustomRanges";
@@ -25,6 +25,7 @@ export class PropertiesPartitionRenderer {
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     private label = "Properties";
     private addBtnImgSrc = "app/assets/images/prop_create.png";
@@ -230,6 +231,13 @@ export class PropertiesPartitionRenderer {
             this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
+        }
+    }
+    
+    private objectDblClick(obj: ARTNode) {
+        //clicked objects could be BNode URIResource or literal 
+        if (obj.isResource()) {//Emit event to open a 2nd res view only for resources
+            this.dblclickObj.emit(<ARTResource>obj);
         }
     }
     

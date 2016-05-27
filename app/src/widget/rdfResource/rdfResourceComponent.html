@@ -2,7 +2,8 @@
 <span [title]="resource.getNominalValue()" style="flex: 1">
     {{resource.isResource() ? resource.getShow() : resource.getNominalValue()}}
     <!-- # of instances (shown only if numInst is specified and is not 0) -->
-    <span *ngIf="resource.isResource() && resource.getAdditionalProperty('numInst') && resource.getAdditionalProperty('numInst') != 0">
+    <span *ngIf="resource.isResource() && resource.getAdditionalProperty('numInst') && resource.getAdditionalProperty('numInst') != 0"
+        style="margin-right: 4px;">
         ({{resource.getAdditionalProperty('numInst')}})
     </span>
 </span>

@@ -15,6 +15,7 @@ export class SchemesPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Schemes";
     private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
@@ -42,6 +43,10 @@ export class SchemesPartitionRenderer {
                 this.update.emit(null);
             }
         );
+    }
+    
+    private objectDblClick(obj: ARTURIResource) {
+        this.dblclickObj.emit(obj);//clicked object (scheme) can only be a URIResource
     }
     
 }

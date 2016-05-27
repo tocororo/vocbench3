@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, RDFResourceRolesEnum} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {AlignmentCell} from "../alignment/alignmentValidation/AlignmentCell";
 
@@ -22,10 +22,10 @@ export class AlignmentServices {
 	 * model type; if true returns all the mapping properties independently from the model type
 	 * @return a collection of properties
      */
-    getMappingRelations(resource: ARTURIResource, allMappingProps: boolean) {
+    getMappingRelations(resource: ARTResource, allMappingProps: boolean) {
         console.log("[AlignmentServices] getMappingRelations");
         var params: any = {
-            resource: resource.getURI(),
+            resource: resource.getNominalValue(),
             allMappingProps: allMappingProps
         };
         return this.httpMgr.doGet(this.serviceName, "getMappingRelations", params, this.oldTypeService).map(
@@ -42,12 +42,12 @@ export class AlignmentServices {
      * @param predicate the mapping predicate
      * @param targetResource the resource (of an external project) to align
      */
-    addAlignment(sourceResource: ARTURIResource, predicate: ARTURIResource, targetResource: ARTURIResource) {
+    addAlignment(sourceResource: ARTResource, predicate: ARTURIResource, targetResource: ARTResource) {
         console.log("[AlignmentServices] addAlignment");
         var params: any = {
-            sourceResource: sourceResource.getURI(),
+            sourceResource: sourceResource.getNominalValue(),
             predicate: predicate.getURI(),
-            targetResource: targetResource.getURI()
+            targetResource: targetResource.getNominalValue()
         };
         return this.httpMgr.doGet(this.serviceName, "addAlignment", params, this.oldTypeService);
     }

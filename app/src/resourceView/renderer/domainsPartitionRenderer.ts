@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
+import {ARTResource, ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {RDFS} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -18,6 +18,7 @@ export class DomainsPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     constructor(private propService:PropertyServices, private manchService: ManchesterServices,
         private browsingService: BrowsingServices, private modalService: ModalServices) {}
@@ -60,6 +61,11 @@ export class DomainsPartitionRenderer {
                 }
             );
         }
+    }
+    
+    private objectDblClick(obj: ARTResource) {
+        //clicked object (domain class) can only be a URIResource or BNode
+        this.dblclickObj.emit(<ARTResource>obj);
     }
     
 }

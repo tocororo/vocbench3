@@ -18,6 +18,7 @@ export class PropertyFacetsPartitionRenderer {
             name of the facet (symmetric/functional/inverseFunctional), if the info is explicit, the value (true/false) */
     @Input() resource: ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     constructor(private propService:PropertyServices, private browsingService: BrowsingServices) {}
     
@@ -62,6 +63,10 @@ export class PropertyFacetsPartitionRenderer {
                 stResp => this.update.emit(null)
             );
         }
+    }
+    
+    private objectDblClick(obj: ARTURIResource) {
+        this.dblclickObj.emit(obj);//clicked object (property) can only be a URIResource
     }
     
 }

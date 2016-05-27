@@ -21,6 +21,7 @@ export class ClassAxiomPartitionPartitionRenderer {
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     private clsAxiomProperties = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
@@ -176,6 +177,10 @@ export class ClassAxiomPartitionPartitionRenderer {
                 stResp => this.update.emit(null)
             );
         }
+    }
+    
+    private objectDblClick(obj: ARTResource) {
+        this.dblclickObj.emit(obj);//clicked object (class) can be a URIResource or BNode (collection of classes)
     }
     
     private getAddPropImgTitle(predicate: ARTURIResource) {

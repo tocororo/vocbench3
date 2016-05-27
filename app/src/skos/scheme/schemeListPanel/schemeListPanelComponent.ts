@@ -1,16 +1,15 @@
 import {Component, Output, EventEmitter} from "@angular/core";
-import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {ARTURIResource} from "../../../utils/ARTResources";
-import {VBEventHandler} from "../../../utils/VBEventHandler";
+import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
+import {SchemeListNodeComponent} from '../schemeList/schemeListNodeComponent';
 
 @Component({
 	selector: "scheme-list-panel",
 	templateUrl: "app/src/skos/scheme/schemeListPanel/schemeListPanelComponent.html",
-	directives: [RdfResourceComponent],
+    directives: [SchemeListNodeComponent],
     providers: [SkosServices, SkosxlServices],
 })
 export class SchemeListPanelComponent {
@@ -26,9 +25,7 @@ export class SchemeListPanelComponent {
     private eventSubscriptions = [];
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private vbCtx: VocbenchCtx, 
-            private eventHandler: VBEventHandler, private modalService: ModalServices) {
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+            private modalService: ModalServices) {
     }
     
     ngOnInit() {
@@ -135,30 +132,15 @@ export class SchemeListPanelComponent {
      * Called when a scheme is clicked. Set the clicked scheme as selected. Useful to select a scheme to delete
      */
     private selectScheme(scheme: ARTURIResource) {
-        this.selectedScheme = scheme;
-        this.itemSelected.emit(scheme);
-    }
-    
-    /**
-     * Check if a scheme is selected. Useful to apply style (show the scheme item as higlighted)
-     */
-    private isSelected(scheme:ARTURIResource) {
-        if (this.selectedScheme != undefined && scheme != undefined) {
-            return this.selectedScheme.getURI() == scheme.getURI();    
+        if (this.selectedScheme == undefined) {
+            this.selectedScheme = scheme;
+            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         } else {
-            return false;
+            this.selectedScheme.deleteAdditionalProperty(ResAttribute.SELECTED);
+            this.selectedScheme = scheme;
+            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
-    }
-    
-    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        for (var i=0; i<this.schemeList.length; i++) {//look for the renamed scheme
-            var scheme = this.schemeList[i]; 
-            if (scheme.getURI() == oldResource.getURI()) {
-                scheme['show'] = newResource.getShow();
-                scheme['uri'] = newResource.getURI();
-                break;
-            }
-        }
+        this.itemSelected.emit(scheme);
     }
     
 }

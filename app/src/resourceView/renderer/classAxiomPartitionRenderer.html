@@ -28,7 +28,7 @@
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let obj of po.getObjects()" class="listItem">
-                    <rdf-resource [resource]="obj" style="flex:1"></rdf-resource>
+                    <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
                     <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
                         (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
                 </div>

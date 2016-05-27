@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
@@ -15,6 +15,7 @@ export class SuperPropertiesPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Superproperties";
     private addBtnImgSrc = "app/assets/images/prop_create.png";
@@ -41,6 +42,10 @@ export class SuperPropertiesPartitionRenderer {
                 this.update.emit(null);
             }
         );
+    }
+    
+    private objectDblClick(obj: ARTURIResource) {
+        this.dblclickObj.emit(obj);//clicked object (superProp) can only be a URIResource
     }
     
 }

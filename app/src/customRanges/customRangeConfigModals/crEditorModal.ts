@@ -150,13 +150,18 @@ export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorM
             var changesFnArray = [];
             creToRemove.forEach(cre => {changesFnArray.push(this.crService.removeEntryFromCustomRange(this.crId, cre))});
             creToAdd.forEach(cre => {changesFnArray.push(this.crService.addEntryToCustomRange(this.crId, cre))});
-            //call the collected functions and subscribe when all are completed
-            Observable.forkJoin(changesFnArray).subscribe(
-                res => {
-                    event.stopPropagation();
-                    this.dialog.close();
-                }
-            );
+            if (changesFnArray.length == 0) { //no changes
+                event.stopPropagation();
+                this.dialog.close();
+            } else { //changes to do...apply then close
+                //call the collected functions and subscribe when all are completed
+                Observable.forkJoin(changesFnArray).subscribe(
+                    res => {
+                        event.stopPropagation();
+                        this.dialog.close();
+                    }
+                );
+            }
         } else { //create mode
             this.crService.createCustomRange(this.crPrefix + this.crShortId).subscribe(
                 stResp => {

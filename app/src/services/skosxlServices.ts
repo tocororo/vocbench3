@@ -108,11 +108,7 @@ export class SkosxlServices {
         var params: any = {
             concept: concept.getURI(),
         };
-        /* TODO due to a lack of ST, at the moment call the SKOS.deleteConcept service 
-          which however doesn't delete the skosxl:Label of the concept.
-          Change it as soon as the service will be implemented. */  
-        // return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService).map(
-        return this.httpMgr.doGet("skos", "deleteConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
@@ -165,19 +161,15 @@ export class SkosxlServices {
         if (forceDeleteDanglingConcepts != undefined) {
             params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
         }
-        /* TODO due to a lack of ST, at the moment call the SKOS.deleteScheme service 
-          which however doesn't delete the skosxl:Label of the concept.
-          Change it as soon as the service will be implemented. */  
-        
         //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component
-        // return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
-        return this.httpMgr.doGet("skos", "deleteScheme", params, this.oldTypeService, false, true);
+        return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
     }
     
     //Label services
     
     /**
-     * Sets a preferred label to the given concept
+     * Sets a preferred label to the given concept (or scheme). Emits a skosxlPrefLabelSetEvent with
+     * resource, label and lang)
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -191,11 +183,17 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.skosxlPrefLabelSetEvent.emit({resource: concept, label: label, lang: lang});
+                return stResp;
+            }
+        );
     }
     
     /**
-     * Removes a preferred label from the given concept
+     * Removes a preferred label from the given concept (or scheme). Emits a skosxlPrefLabelRemovedEvent with
+     * resource, label and lang)
      * @param concept 
      * @param label label to remove
      * @param lang
@@ -209,11 +207,16 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.skosxlPrefLabelRemovedEvent.emit({resource: concept, label: label, lang: lang});
+                return stResp;
+            }
+        );
 	}
     
     /**
-     * Adds an alternative label to the given concept
+     * Adds an alternative label to the given concept (or scheme)
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -231,7 +234,7 @@ export class SkosxlServices {
     }
     
     /**
-     * Removes an alternative label from the given concept
+     * Removes an alternative label from the given concept (or scheme)
      * @param concept 
      * @param label label to remove
      * @param lang
@@ -249,7 +252,7 @@ export class SkosxlServices {
 	}
     
     /**
-     * Adds an hidden label to the given concept
+     * Adds an hidden label to the given concept (or scheme)
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -267,7 +270,7 @@ export class SkosxlServices {
     }
     
     /**
-     * Removes an hidden label from the given concept
+     * Removes an hidden label from the given concept (or scheme)
      * @param concept 
      * @param label label to remove
      * @param lang

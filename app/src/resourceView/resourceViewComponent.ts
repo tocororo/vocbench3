@@ -1,6 +1,6 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
-import {ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
+import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
@@ -34,7 +34,8 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
 })
 export class ResourceViewComponent {
     
-    @Input() resource:ARTURIResource;
+    @Input() resource:ARTResource;
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     private renameLocked = true;
     private showInferred = false;
@@ -64,7 +65,7 @@ export class ResourceViewComponent {
         }
     }
     
-    private buildResourceView(res: ARTURIResource) {
+    private buildResourceView(res: ARTResource) {
         document.getElementById("blockDivResView").style.display = "block";
         
         //reset all partitions
@@ -205,7 +206,8 @@ export class ResourceViewComponent {
      * Cancel the renaming of the resource and restore the original UI
      */
     private cancelRename(inputEl: HTMLInputElement) {
-        inputEl.value = this.resource.getLocalName();
+        //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
+        inputEl.value = (<ARTURIResource>this.resource).getLocalName();
         this.renameLocked = true;
     }
     
@@ -213,16 +215,17 @@ export class ResourceViewComponent {
      * Apply the renaming of the resource and restore the original UI
      */
     private renameResource(inputEl: HTMLInputElement) {
+        //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         this.renameLocked = true;
         var newLocalName = inputEl.value;
         if (newLocalName.trim() == "") {
             this.modalService.alert("Rename", "You have to write a valid local name", "error");
-            inputEl.value = this.resource.getLocalName();
+            inputEl.value = (<ARTURIResource>this.resource).getLocalName();
             return;
         }
-        var newUri = this.resource.getBaseURI() + newLocalName;
-        if (this.resource.getURI() != newUri) { //if the uri has changed 
-            this.refactorService.changeResourceURI(this.resource, newUri).subscribe(
+        var newUri = (<ARTURIResource>this.resource).getBaseURI() + newLocalName;
+        if ((<ARTURIResource>this.resource).getURI() != newUri) { //if the uri has changed 
+            this.refactorService.changeResourceURI(<ARTURIResource>this.resource, newUri).subscribe(
                 newResource => {
                     //here pass newResource instead of this.resource since this.resource is not still
                     //updated/injected from the NodeComponent that catch the rename event 
@@ -259,6 +262,10 @@ export class ResourceViewComponent {
         this.showInferred = !this.showInferred;
         this.vbCtx.setInferenceInResourceView(this.showInferred);
         this.buildResourceView(this.resource);
+    }
+    
+    private objectDblClick(object: ARTResource) {
+        this.dblclickObj.emit(object);
     }
     
 }

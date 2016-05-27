@@ -411,3 +411,7 @@ If modals  show layout problems try to remove it.*/
 .dropdown-menu .divider {
     margin: 2px 0px;
 }
+
+.nav-tabs>li>a {
+    padding: 4px 8px;
+}

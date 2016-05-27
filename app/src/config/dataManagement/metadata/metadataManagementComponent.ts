@@ -139,7 +139,7 @@ export class MetadataManagementComponent {
      * Tells if namespace is valid. Namespace is valid if starts with http:// and ends with #
      */
     private isNamespaceValid() {
-        return (this.namespace && this.namespace.startsWith("http://") && this.namespace.endsWith("#"));
+        return (this.namespace && this.namespace.startsWith("http://") && (this.namespace.endsWith("#") || this.namespace.endsWith("/")));
     }
     
     /**

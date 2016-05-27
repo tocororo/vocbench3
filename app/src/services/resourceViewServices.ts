@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource} from "../utils/ARTResources";
+import {ARTResource} from "../utils/ARTResources";
 
 
 @Injectable()
@@ -15,10 +15,10 @@ export class ResourceViewServices {
      * Returns the resource view of the given resource
      * @param resource
      */
-    getResourceView(resource: ARTURIResource) {
+    getResourceView(resource: ARTResource) {
         console.log("[resourceViewServices] getResourceView");
         var params: any = {
-            resource: resource.getURI(),
+            resource: resource.getNominalValue(),
         };
         return this.httpMgr.doGet(this.serviceName, "getResourceView", params, this.oldTypeService);
     }

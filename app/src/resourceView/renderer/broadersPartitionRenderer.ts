@@ -16,6 +16,7 @@ export class BroadersPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Broaders";
     private addBtnImgSrc = "app/assets/images/concept_create.png";
@@ -43,6 +44,10 @@ export class BroadersPartitionRenderer {
                 this.update.emit(null);
             }
         );
+    }
+    
+    private objectDblClick(obj: ARTURIResource) {
+        this.dblclickObj.emit(obj);//clicked object (broader) can only be a URIResource
     }
     
 }

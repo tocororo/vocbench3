@@ -1,0 +1,4 @@
+<div class="treeNode">
+	<rdf-resource [resource]="node" (click)="selectNode()" 
+        [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+</div>

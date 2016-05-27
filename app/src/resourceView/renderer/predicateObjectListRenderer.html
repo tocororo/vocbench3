@@ -10,14 +10,14 @@
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
                 <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
-                        (click)="enrichProperty(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
+                    (click)="enrichProperty(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let obj of po.getObjects()" class="listItem">
                     <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)"
                         [resource]="obj" [predicate]="po.getPredicate()" style="flex:1"></reified-resource>
-                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)"
-                        [resource]="obj" style="flex:1"></rdf-resource>
+                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
                     <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
                         (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
                 </div>

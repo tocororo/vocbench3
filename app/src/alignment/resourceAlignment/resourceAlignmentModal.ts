@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -13,7 +13,7 @@ export class ResourceAlignmentModalData extends BSModalContext {
     /**
      * @param resource the resource to align
      */
-    constructor(public resource: ARTURIResource) {
+    constructor(public resource: ARTResource) {
         super();
     }
 }

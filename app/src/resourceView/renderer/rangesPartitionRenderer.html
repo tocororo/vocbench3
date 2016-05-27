@@ -19,10 +19,10 @@
             
     </div>
     <div class="subPanel-body">
-        <div *ngFor="let o of objectList" class="listItem">
-            <rdf-resource [resource]="o" style="flex:1"></rdf-resource>
+        <div *ngFor="let obj of objectList" class="listItem">
+            <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
             <input type="image" title="Remove range" src="app/assets/images/class_delete.png" 
-                    (click)="remove(o)" [disabled]="!o.getAdditionalProperty('explicit')">
+                    (click)="remove(obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
         </div>
     </div>
 </div>

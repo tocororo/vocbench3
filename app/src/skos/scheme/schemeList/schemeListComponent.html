@@ -1,6 +1,5 @@
 <div class="scrollableContainer">
-    <rdf-resource *ngFor="let s of schemeList" [resource]="s" (click)="selectScheme(s)" 
-        [ngClass]="{selectedResource : s.getAdditionalProperty('selected')}"></rdf-resource>
+    <scheme-list-node *ngFor="let s of schemeList" [node]="s" (itemSelected)="selectScheme(s)"></scheme-list-node>
     <div *ngIf="schemeList && schemeList.length==0">
         No skos:ConceptScheme(s)
     </div>

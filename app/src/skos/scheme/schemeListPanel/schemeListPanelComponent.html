@@ -15,7 +15,7 @@
             <div *ngFor="let s of schemeList" class="schemeItem">
                 <input style="margin-right: 5px" type="radio" name="scheme" [value]="s" 
                     (click)="activateScheme(s)" [checked]="isActive(s)"/>    
-                <rdf-resource [resource]="s" (click)="selectScheme(s)" [ngClass]="{selectedResource : isSelected(s)}"></rdf-resource>
+                <scheme-list-node [node]="s" (itemSelected)="selectScheme(s)" style="flex:1"></scheme-list-node>
             </div>
         </div>
     </div>

@@ -15,6 +15,7 @@ export class TopConceptsPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Top Concepts";
     private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
@@ -42,6 +43,10 @@ export class TopConceptsPartitionRenderer {
                 this.update.emit(null);
             }
         );
+    }
+    
+    private objectDblClick(obj: ARTNode) {
+        this.dblclickObj.emit(<ARTURIResource>obj);//clicked object (scheme) can only be a URIResource
     }
     
 }

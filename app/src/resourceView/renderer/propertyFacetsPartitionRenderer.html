@@ -17,7 +17,7 @@
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let p of objectList" class="listItem">
-                    <rdf-resource [resource]="p" style="flex:1"></rdf-resource>
+                    <rdf-resource [resource]="p" (dblclick)="objectDblClick(p)" style="flex:1"></rdf-resource>
                     <input type="image" title="Remove inverse property" src="app/assets/images/prop_delete.png" (click)="remove(p)" [disabled]="!p.getAdditionalProperty('explicit')">
                 </div>
             </div>

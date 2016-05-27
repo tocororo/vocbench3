@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode} from "../../utils/ARTResources";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {OwlServices} from "../../services/owlServices";
@@ -15,6 +15,7 @@ export class TypesPartitionRenderer {
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     private label = "Types";
     private addBtnImgSrc = "app/assets/images/class_create.png";
@@ -42,6 +43,10 @@ export class TypesPartitionRenderer {
                 this.update.emit(null);
             }
         );
+    }
+    
+    private objectDblClick(obj: ARTResource) {
+        this.dblclickObj.emit(obj);//clicked object (type) can be a URIResource or BNode
     }
     
     

@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
@@ -21,6 +21,7 @@ export class LexicalizationsPartitionRenderer {
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     private showAllLexicalProp = false;
     
@@ -135,6 +136,13 @@ export class LexicalizationsPartitionRenderer {
                 property.getShow().startsWith("skosxl:") && ontoType == "SKOS-XL"
             )
         );
+    }
+    
+    private objectDblClick(obj: ARTNode) {
+        //clicked object (label) can be a Resource (xlabel bnode or uri) or literal (plain label)
+        if (obj.isResource()) {//emit double click for open a new res view only for resources
+            this.dblclickObj.emit(<ARTResource>obj);
+        }
     }
     
     private getAddPropImgTitle(predicate: ARTURIResource) {

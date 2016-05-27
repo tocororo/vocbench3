@@ -52,6 +52,16 @@ export class VBEventHandler {
     //event should contain an object with "property" and "superProperty"
     public superPropertyRemovedEvent: EventEmitter<any> = new EventEmitter();
     
+    //LABEL EVENTS
+    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
+    public skosPrefLabelSetEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
+    public skosPrefLabelRemovedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
+    public skosxlPrefLabelSetEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
+    public skosxlPrefLabelRemovedEvent: EventEmitter<any> = new EventEmitter();
+    
     //event should contain an object with "oldResource" and "newResource"
     public resourceRenamedEvent: EventEmitter<any> = new EventEmitter();
     

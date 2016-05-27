@@ -38,7 +38,15 @@ export class ConceptTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
             data => this.onBroaderRemoved(data.concept, data.broader)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource))); 
+            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+        this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
+            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+        this.eventSubscriptions.push(eventHandler.skosxlPrefLabelSetEvent.subscribe(
+            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+        this.eventSubscriptions.push(eventHandler.skosPrefLabelRemovedEvent.subscribe(
+            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+        this.eventSubscriptions.push(eventHandler.skosxlPrefLabelRemovedEvent.subscribe(
+            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
     
     ngAfterViewInit() {
@@ -131,7 +139,7 @@ export class ConceptTreeNodeComponent {
     
     private onConceptDeleted(deletedConcept: ARTURIResource) {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-        for (var i=0; i<children.length; i++) {
+        for (var i = 0; i < children.length; i++) {
             if (children[i].getURI() == deletedConcept.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
@@ -166,8 +174,33 @@ export class ConceptTreeNodeComponent {
     
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (oldResource.getURI() == this.node.getURI()) {
-            this.node['show'] = newResource.getShow();
-            this.node['uri'] = newResource.getURI();
+            if (this.vbCtx.getHumanReadable()) {
+                this.skosService.getShow(newResource, this.vbCtx.getContentLanguage()).subscribe(
+                    show => {
+                        this.node['show'] = show;
+                        this.node['uri'] = newResource.getURI();
+                    }
+                )
+            } else {//human readable disabled, just replace the show (localName)
+                this.node['show'] = newResource.getShow();
+                this.node['uri'] = newResource.getURI();
+            }
+        }
+    }
+    
+    private onPrefLabelSet(resource: ARTURIResource, label: string, lang: string) {
+        if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
+            this.node['show'] = label;
+        }
+    }
+    
+    private onPrefLabelRemoved(resource: ARTURIResource, label: string, lang: string) {
+        if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
+            this.skosService.getShow(resource, this.vbCtx.getContentLanguage()).subscribe(
+                show => {
+                    this.node['show'] = show;
+                }
+            )
         }
     }
     

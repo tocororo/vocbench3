@@ -335,7 +335,8 @@ export class SkosServices {
     //Label services
     
     /**
-     * Sets a preferred label to the given concept
+     * Sets a preferred label to the given concept (or scheme). Emits a skosPrefLabelSetEvent with
+     * resource, label and lang
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -347,11 +348,17 @@ export class SkosServices {
             label: label,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.skosPrefLabelSetEvent.emit({resource: concept, label: label, lang: lang});
+                return stResp;
+            }
+        );
     }
 
     /**
-     * Removes a preferred label from the given concept
+     * Removes a preferred label from the given concept (or scheme). Emits a skosPrefLabelRemovedEvent with
+     * resource, label and lang
      * @param concept 
      * @param label label to remove
      * @param lang
@@ -365,11 +372,16 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.skosPrefLabelRemovedEvent.emit({resource: concept, label: label, lang: lang});
+                return stResp;
+            }
+        );
 	}
 
     /**
-     * Adds an alternative label to the given concept
+     * Adds an alternative label to the given concept (or scheme)
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -385,7 +397,7 @@ export class SkosServices {
     }
 
     /**
-     * Removes an alternative label from the given concept
+     * Removes an alternative label from the given concept (or scheme)
      * @param concept 
      * @param label label to remove
      * @param lang
@@ -403,7 +415,7 @@ export class SkosServices {
 	}
 
     /**
-     * Adds an hidden label to the given concept
+     * Adds an hidden label to the given concept (or scheme)
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -419,7 +431,7 @@ export class SkosServices {
     }
 
     /**
-     * Removes an hidden label from the given concept
+     * Removes an hidden label from the given concept (or scheme)
      * @param concept 
      * @param label label to remove
      * @param lang
@@ -435,5 +447,25 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "removeHiddenLabel", params, this.oldTypeService);
 	}
+    
+    /**
+     * Returns the show of a resource (concept or scheme) according to the given language (if provide)
+     * @param resource concept or conceptScheme
+     * @param lang if provided returns the show for that language, otherwise returns the localName of the resource 
+     */
+    getShow(resource: ARTURIResource, lang?: string) {
+        console.log("[SkosServices] getShow");
+        var params: any = {
+            resourceName: resource.getURI()
+        };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getShow", params, this.oldTypeService).map(
+            stResp => {
+                return stResp.getElementsByTagName("show")[0].getAttribute("value");
+            }
+        );
+    }
 
 }

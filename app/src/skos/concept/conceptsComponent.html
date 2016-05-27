@@ -3,6 +3,17 @@
         <concept-tree-panel [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree-panel>
     </div>
     <div class="resViewContainer vbox" *ngIf="resource">
-        <resource-view [resource]="resource"></resource-view>
+        <resource-view [resource]="resource" (dblclickObj)="objectDblClick($event)"></resource-view>
+    </div>
+    <div class="resViewContainer vbox" style="position: relative" *ngIf="object">
+        <resource-view [resource]="object" (dblclickObj)="objectDblClick($event)"></resource-view>
+        <div style="position: absolute; left: 2px; top: 0px;">
+            <button type="button" class="close" (click)="closeSecondaryResView()" title="Close this resource view">
+                <span class="glyphicon glyphicon-remove" style="font-size: 10px"></span>
+            </button>
+            <button type="button" class="close" (click)="closeSecondaryResView()" title="Previous resource">
+                <span class="glyphicon glyphicon-chevron-left" style="font-size: 10px"></span>
+            </button>
+        </div>
     </div>
 </div>
