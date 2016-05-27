@@ -60,7 +60,10 @@
                                 <div *ngSwitchDefault class="hbox" style="align-items: center;">
                                     <input class="form-control input-xs" style="flex:1" [(ngModel)]="fe.value"
                                         (input)="onEntryValueChange($event.target.value, fe)" [disabled]="!fe.checked">
-                                    <span *ngIf="fe.getLang()" style="margin-left: 4px;">@{{fe.getLang()}}</span>
+                                    <span *ngIf="fe.getLang()" style="margin-left: 4px;">
+                                        <lang-picker size="xs" [lang]="fe.getLang()" disabled="true">
+                                        </lang-picker>
+                                    </span>
                                     <span *ngIf="fe.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' 
                                             && fe.getConverterArg()" style="margin-left: 4px;">
                                         <lang-picker size="xs" [lang]="fe.getConverterArg().value"
