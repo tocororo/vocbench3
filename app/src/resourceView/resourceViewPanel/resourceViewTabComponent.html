@@ -1,0 +1,24 @@
+<div class="vbox">
+    
+    <!--Tabs navigation-->
+    <ul class="nav nav-tabs" (click)="$event.preventDefault()">
+        <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
+            <a href (click)="selectTab(t)">
+                {{t.resource.getShow()}}
+                <span *ngIf=(t.removable) class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
+                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                    onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
+                </span>
+            </a>
+        </li>
+    </ul>
+    <!--Tabs content-->
+    <div class="tab-content">
+        <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
+            <div *ngIf="t.active" class="vbox">
+                <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)"></resource-view>
+            </div>
+        </div>
+    </div>
+    
+</div>

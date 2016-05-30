@@ -1,14 +1,14 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {PropertyTreePanelComponent} from "./propertyTreePanel/propertyTreePanelComponent";
-import {ResourceViewPanelComponent} from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
+import {ResourceViewTabComponent} from "../resourceView/resourceViewPanel/resourceViewTabComponent";
 import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({
     selector: "property-component",
     templateUrl: "app/src/property/propertyComponent.html",
-    directives: [PropertyTreePanelComponent, ResourceViewPanelComponent],
+    directives: [PropertyTreePanelComponent, ResourceViewTabComponent],
     host: { class: "pageComponent" }
 })
 export class PropertyComponent {

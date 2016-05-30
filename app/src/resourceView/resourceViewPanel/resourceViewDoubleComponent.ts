@@ -3,12 +3,12 @@ import {ARTResource} from "../../utils/ARTResources";
 import {ResourceViewComponent} from "../ResourceViewComponent";
 
 @Component({
-    selector: "resource-view-panel",
-    templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewPanelComponent.html",
+    selector: "resource-view-double",
+    templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewDoubleComponent.html",
     directives: [ResourceViewComponent],
     host: { class: "resViewContainer" }
 })
-export class ResourceViewPanelComponent {
+export class ResourceViewDoubleComponent {
     
     @Input() resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
     

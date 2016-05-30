@@ -1,14 +1,14 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {ClassTreePanelComponent} from "./classTreePanel/classTreePanelComponent";
-import {ResourceViewPanelComponent} from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
+import {ResourceViewTabComponent} from "../resourceView/resourceViewPanel/resourceViewTabComponent";
 import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Component({
     selector: "class-component",
     templateUrl: "app/src/owl/classComponent.html",
-    directives: [ClassTreePanelComponent, ResourceViewPanelComponent],
+    directives: [ClassTreePanelComponent, ResourceViewTabComponent],
     host: { class: "pageComponent" }
 })
 export class ClassComponent {

@@ -415,6 +415,9 @@ If modals  show layout problems try to remove it.*/
 
 .nav-tabs>li>a {
     padding: 4px 8px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    cursor: default;
 }
 .nav-tabs>li>a>.glyphicon {/*To avoid to stretch the tab when there is a glyphicon in the link*/
     line-height: 1.0;

@@ -177,7 +177,6 @@ export class SparqlComponent {
     addTab() {
         this.activeTab.active = false;
         this.tabs.push({
-            // query: "SELECT * WHERE { ?s ?p ?o } LIMIT 10",
             query: this.sampleQuery,
             queryMode: "query",
             headers: null,

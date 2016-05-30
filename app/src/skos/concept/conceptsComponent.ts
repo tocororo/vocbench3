@@ -1,14 +1,14 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {ConceptTreePanelComponent} from "./conceptTreePanel/conceptTreePanelComponent";
-import {ResourceViewPanelComponent} from "../../resourceView/resourceViewPanel/resourceViewPanelComponent";
+import {ResourceViewTabComponent} from "../../resourceView/resourceViewPanel/resourceViewTabComponent";
 import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 
 @Component({
     selector: "concept-component",
     templateUrl: "app/src/skos/concept/conceptsComponent.html",
-    directives: [ConceptTreePanelComponent, ResourceViewPanelComponent],
+    directives: [ConceptTreePanelComponent, ResourceViewTabComponent],
     host: { class : "pageComponent" }
 })
 export class ConceptsComponent implements OnInit {

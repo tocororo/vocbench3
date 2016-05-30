@@ -13,8 +13,9 @@
             </a>
         </li>
         <li [ngClass]="{disabled : tabs.length==10}">
-            <a href (click)="addTab()" onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
-                <i class="glyphicon glyphicon-plus"></i>
+            <a href (click)="addTab()" style="font-weight: bold" 
+                onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
+                +
             </a>
         </li>
     </ul>

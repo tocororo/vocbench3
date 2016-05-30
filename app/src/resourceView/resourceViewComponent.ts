@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
@@ -36,21 +36,24 @@ export class ResourceViewComponent {
     @Input() resource: ARTResource;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
+    @ViewChild('blockDiv') blockingDivElement;
+    private viewInitialized: boolean = false;
+    
     private showInferred = false;
     
     //partitions
-    private typesColl: ARTURIResource[];
-    private classAxiomColl: ARTPredicateObjects[];
-    private topconceptofColl: ARTURIResource[];
-    private schemesColl: ARTURIResource[];
-    private broadersColl: ARTURIResource[];
-    private superpropertiesColl: ARTURIResource[];
-    private domainsColl: ARTNode[];
-    private rangesColl: ARTNode[];
-    private lexicalizationsColl: ARTPredicateObjects[];
-    private propertiesColl: ARTPredicateObjects[];
-    private propertyFacets: any[];
-    private inverseofColl: ARTURIResource[];
+    private typesColl: ARTURIResource[] = null;
+    private classAxiomColl: ARTPredicateObjects[] = null;
+    private topconceptofColl: ARTURIResource[] = null;
+    private schemesColl: ARTURIResource[] = null;
+    private broadersColl: ARTURIResource[] = null;
+    private superpropertiesColl: ARTURIResource[] = null;
+    private domainsColl: ARTNode[] = null;
+    private rangesColl: ARTNode[] = null;
+    private lexicalizationsColl: ARTPredicateObjects[] = null;
+    private propertiesColl: ARTPredicateObjects[] = null;
+    private propertyFacets: any[] = null;
+    private inverseofColl: ARTURIResource[] = null;
     
     private eventSubscriptions = [];
     
@@ -64,8 +67,15 @@ export class ResourceViewComponent {
     ngOnChanges(changes) {
         this.showInferred = this.vbCtx.getInferenceInResourceView();
         if (changes.resource.currentValue) {
-            this.buildResourceView(this.resource);//refresh resource view when Input resource changes       
+            if (this.viewInitialized) {
+                this.buildResourceView(this.resource);//refresh resource view when Input resource changes
+            }
         }
+    }
+    
+    ngAfterViewInit() {
+        this.viewInitialized = true;
+        this.buildResourceView(this.resource);
     }
     
     ngOnDestroy() {
@@ -73,7 +83,7 @@ export class ResourceViewComponent {
     }
     
     private buildResourceView(res: ARTResource) {
-        document.getElementById("blockDivResView").style.display = "block";
+        this.blockingDivElement.nativeElement.style.display = "block";
         
         //reset all partitions
         this.typesColl = null;
@@ -133,9 +143,11 @@ export class ResourceViewComponent {
                         this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);
                     }
                 }
-                document.getElementById("blockDivResView").style.display = "none"
+                this.blockingDivElement.nativeElement.style.display = "none";
             },
-            err => { document.getElementById("blockDivResView").style.display = "none"; }
+            err => {
+                this.blockingDivElement.nativeElement.style.display = "none";
+            }
         );
     }
     
