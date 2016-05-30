@@ -23,7 +23,7 @@
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <div *ngIf="t.active" class="vbox">
                 <!--Query mode selection-->
-                <div style="margin: 5px 0;">
+                <div style="margin-bottom: 5px;">
                     <label>Query mode:</label>
                     <select name="queryModeSelect" [(ngModel)]="t.queryMode">
                         <option value="query">SPARQL 1.1 Query</option>
@@ -35,21 +35,29 @@
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">
-                    <button class="btn btn-sm btn-primary" type="button" (click)="doQuery(t)" [disabled]="t.queryInProgress">Submit query</button>
-                    <button class="btn btn-sm btn-info" type="button" (click)="clear(t)">Clear</button>
-                    <label style="margin-left: 5px;">
-                        Include inferred statement:
+                    <button class="btn btn-xs btn-primary" type="button" (click)="doQuery(t)" [disabled]="t.queryInProgress">Submit query</button>
+                    <button class="btn btn-xs btn-info" type="button" (click)="clear(t)" [disabled]="!t.queryResult">Clear</button>
+                    <div class="hbox" style="align-items: center; display: inline-flex;">
+                        <label style="margin-right: 5px;">Include inferred statement:</label>
                         <input #inferredcb type="checkbox" (change)="t.inferred=inferredcb.checked">
-                    </label>
+                    </div>
+                    <div *ngIf="t.queryResult" class="hbox pull-right" style="align-items: center">
+                        <span style="display: inline; margin-left: 5px;">(Done in {{t.queryTime}})</span>
+                        <div class="dropdown pull-right" style="margin-left: 5px;">
+                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                Save results as... <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a (click)="saveResultAsJSON(t)">Json</a></li>
+                                <li><a (click)="saveResultAsText(t)">Plain text</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 
                 <!--Query result-->
                 <div *ngIf="t.queryResult" class="vbox">
-                    <div>
-                        <label>Result of the query </label>
-                        <p *ngIf="t.queryTime != null" style="display: inline; margin-left: 5px;">(Done in {{t.queryTime}})</p>
-                    </div>
-                    <div class="scrollableContainer">
+                    <div class="scrollableContainer" style="border: 1px solid #ddd">
                         <table class="table table-striped table-condensed table-hoverable" style="flex: 1">
                             <thead>
                                 <tr>
@@ -58,7 +66,12 @@
                             </thead>
                             <tbody style="overflow: auto;">
                                 <tr *ngFor="let bindings of t.queryResult">
-                                    <td *ngFor="let h of t.headers">{{bindings[h].value}}</td>
+                                    <template [ngIf]="t.resultType == 'graph'">
+                                        <td *ngFor="let h of t.headers">{{bindings[h]}}</td>
+                                    </template>
+                                    <template [ngIf]="t.resultType == 'tuple'">
+                                        <td *ngFor="let h of t.headers">{{bindings[h].value}}</td>
+                                    </template>
                                 </tr>
                             </tbody>
                         </table>

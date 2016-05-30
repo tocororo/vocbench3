@@ -3,6 +3,7 @@ import {Router} from '@angular/router-deprecated';
 import {SparqlServices} from "../services/sparqlServices";
 import {MetadataServices} from "../services/metadataServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
+import {ModalServices} from '../widget/modal/modalServices';
 import {CodemirrorComponent} from "./codemirrorComponent";
 
 @Component({
@@ -19,7 +20,7 @@ export class SparqlComponent {
     private activeTab;
     
     constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices,
-        private metadataService: MetadataServices) {
+        private metadataService: MetadataServices, private modalService: ModalServices) {
         // navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
@@ -42,6 +43,7 @@ export class SparqlComponent {
                 this.tabs.push({
                     query: this.sampleQuery,
                     queryMode: "query",
+                    resultType: null, //graph or tuple
                     headers: null,
                     queryResult: null,
                     queryInProgress: false,
@@ -64,8 +66,14 @@ export class SparqlComponent {
                 var diffTime = finishTime - initTime;
                 tab.queryTime = this.getPrettyPrintTime(diffTime);
                 //process result
-                tab.headers = data.sparql.head.vars;
-                tab.queryResult = data.sparql.results.bindings;
+                tab.resultType = data.resulttype;
+                if (data.resulttype == "tuple") {
+                    tab.headers = data.sparql.head.vars;
+                    tab.queryResult = data.sparql.results.bindings;
+                } else if (data.resulttype == "graph") {
+                    tab.headers = ["subj", "pred", "obj"];
+                    tab.queryResult = data.stm;
+                }
             }
         );
     }
@@ -74,6 +82,79 @@ export class SparqlComponent {
         tab.headers = null;
         tab.queryResult = null;
         tab.queryTime = null;
+    }
+    
+    private saveResultAsJSON(tab) {
+        var fileContent: string;
+        if (tab.resultType == "tuple") {
+            fileContent = JSON.stringify(tab.queryResult);
+        } else if (tab.resultType == "graph") {
+            fileContent = JSON.stringify(tab.queryResult);
+        }
+        this.downloadSavedResult(fileContent, "json");
+    }
+    
+    private saveResultAsText(tab) {
+        var fileContent: string = "";
+        var separator = "; ";
+        if (tab.resultType == "tuple") {
+            var cols = tab.headers;
+            for (var i = 0; i < cols.length; i++) {
+                var variable_name = cols[i];
+                fileContent += variable_name + separator;
+            }
+            fileContent += "\n\n";
+            var bindings = tab.queryResult;
+            for (var bind in bindings) {
+                for (var i = 0; i < cols.length; i++) {
+                    var variable_name = cols[i];
+                    var element = (bindings[bind])[variable_name];
+                    if (typeof element != "undefined") {
+                        var lblValue = "";
+                        var type = "";
+                        if (element.type == "uri") {
+                            lblValue = element.value;
+                        } else if (element.type == "literal") {
+                            lblValue = element.value;
+                            if (element["xml:lang"] != null) {
+                                lblValue = lblValue + " (" + element["xml:lang"] + ")";
+                            }
+                        } else if (element.type == "typed-literal") {
+                            lblValue = element.value;
+                        } else if (element.type == "bnode") {
+                            lblValue = element.value;
+                        }
+                        fileContent += lblValue + separator;
+                    } else {
+                        fileContent += separator;
+                    }
+                }
+                fileContent += "\n";
+            }
+        } else if (tab.resultType == "graph") {
+            var stms = tab.queryResult;
+            for (var stm in stms) {
+                var sbjName = JSON.stringify(stms[stm].subj).replace(/\"/g, "");
+                var preName = JSON.stringify(stms[stm].pred).replace(/\"/g, "");
+                var objName = JSON.stringify(stms[stm].obj).replace(/\"/g, "");
+                fileContent += sbjName + separator + preName + separator + objName + separator + "\n";
+            }
+        }
+        this.downloadSavedResult(fileContent, "text");
+    }
+    
+    /**
+     * Prepares a json or text file containing the given content and shows a modal to download it.
+     */
+    private downloadSavedResult(fileContent: string, type: "text" | "json") {
+        var data = new Blob([fileContent], {type: 'text/plain'});
+        var textFile = window.URL.createObjectURL(data);
+        var fileName: string;
+        type == "text" ? fileName = "results.txt" : fileName = "results.json"
+        this.modalService.downloadLink("Save SPARQL results", null, textFile, fileName).then(
+            done => { window.URL.revokeObjectURL(textFile); },
+            () => {}
+        );
     }
     
     private getPrettyPrintTime(time) {
