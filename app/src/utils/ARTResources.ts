@@ -261,6 +261,7 @@ export class ResAttribute {
     public static HAS_CUSTOM_RANGE = "hasCustomRange";
     public static RESOURCE_POSITION = "resourcePosition";
     public static LANG = "lang";
+    public static GRAPHS = "graphs"; //used in getResourceView response
     
     //never in st responses, added because are util for tree
     public static OPEN = "open";

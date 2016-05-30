@@ -142,7 +142,7 @@ export class ResourceViewComponent {
     private filterInferredFromResourceList(resourceArray: ARTNode[]): ARTNode[] {
         if (!this.showInferred) {
             for (var i = 0; i < resourceArray.length; i++) {
-                if (!resourceArray[i].getAdditionalProperty(ResAttribute.EXPLICIT)) {
+                if (resourceArray[i].getAdditionalProperty(ResAttribute.GRAPHS).includes("http://semanticturkey/inference-graph")) {
                     resourceArray.splice(i, 1);
                     i--;
                 }
@@ -156,7 +156,7 @@ export class ResourceViewComponent {
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
-                    if (!objList[j].getAdditionalProperty(ResAttribute.EXPLICIT)) {
+                    if (objList[j].getAdditionalProperty(ResAttribute.GRAPHS).includes("http://semanticturkey/inference-graph")) {
                         objList.splice(j, 1);
                         j--;
                     }

@@ -99,8 +99,9 @@ config-bar {
 }
 
 .resViewContainer {
-    margin-left: 10px;
-    flex: 3;
+    margin-left: 8px;
+    display: flex;
+    flex: 4;
 }
 
 concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, resource-view {

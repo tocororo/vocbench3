@@ -6,7 +6,7 @@
             title="Show all the properties, including those not compliant with the current project type">
             <span>Show All</span>
             <input type="checkbox" style="margin: 0 3px;" [checked]="showAllLexicalProp" 
-                (change)="showAllLexicalProp=$event.target.checked">
+                [disabled]="!resource.getAdditionalProperty('explicit')" (change)="showAllLexicalProp=$event.target.checked">
         </div>
         
         <div class="dropdown pull-right">

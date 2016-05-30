@@ -1,14 +1,14 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {ClassTreePanelComponent} from "./classTreePanel/classTreePanelComponent";
-import {ResourceViewComponent} from "../resourceView/resourceViewComponent";
+import {ResourceViewPanelComponent} from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import {ARTURIResource} from "../utils/ARTResources";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Component({
     selector: "class-component",
     templateUrl: "app/src/owl/classComponent.html",
-    directives: [ClassTreePanelComponent, ResourceViewComponent],
+    directives: [ClassTreePanelComponent, ResourceViewPanelComponent],
     host: { class: "pageComponent" }
 })
 export class ClassComponent {
@@ -23,8 +23,6 @@ export class ClassComponent {
             router.navigate(['Projects']);
         }
     }
-    
-    
     
     //EVENT LISTENERS 
     private onClassSelected(cls) {

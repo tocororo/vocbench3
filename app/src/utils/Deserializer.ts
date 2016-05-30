@@ -93,6 +93,10 @@ export class Deserializer {
         if (lang != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.LANG, lang);
         }
+        var graphs = uriElement.getAttribute(ResAttribute.GRAPHS);//contains comma separated graphs
+        if (graphs != undefined) {
+            artURIRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
+        }
 		
 		return artURIRes;
 	}
@@ -122,6 +126,10 @@ export class Deserializer {
 		var lang = bnodeElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
         if (lang != undefined) {
             bNodeRes.setAdditionalProperty(ResAttribute.LANG, lang);
+        }
+        var graphs = bnodeElement.getAttribute(ResAttribute.GRAPHS);//contains comma separated graphs
+        if (graphs != undefined) {
+            bNodeRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
 
 		return bNodeRes;
@@ -168,6 +176,10 @@ export class Deserializer {
         var explicit = literalElement.getAttribute(ResAttribute.EXPLICIT);
         if (explicit != undefined) {
             artLiteralRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
+        }
+        var graphs = literalElement.getAttribute(ResAttribute.GRAPHS);//contains comma separated graphs
+        if (graphs != undefined) {
+            artLiteralRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
 
         return artLiteralRes;
