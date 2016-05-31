@@ -26,6 +26,7 @@ import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
 import { MetadataManagementComponent } from "./config/dataManagement/metadata/metadataManagementComponent";
+import { VocbenchSettingsComponent } from "./settings/vocbenchSettingsComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
 
 //import to open modal to change content language (Remove if the modal will be launched from another component)
@@ -54,6 +55,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/CustomRange", name: "CustomRange", component: CustomRangeComponent},
     {path: "/Test", name: "Test", component: TestComponent},
     {path: "/Registration", name: "Registration", component: RegistrationComponent},
+    {path: "/Settings", name: "Settings", component: VocbenchSettingsComponent},
     // route config of config bar
     {path: "/Config/ImportData", name: "ImportData", component: ImportDataComponent},
     {path: "/Config/ExportData", name: "ExportData", component: ExportDataComponent},

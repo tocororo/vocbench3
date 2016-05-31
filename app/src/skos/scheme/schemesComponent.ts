@@ -1,14 +1,14 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
 import {SchemeListPanelComponent} from "./schemeListPanel/schemeListPanelComponent";
-import {ResourceViewTabComponent} from "../../resourceView/resourceViewPanel/resourceViewTabComponent";
+import {ResourceViewPanelComponent} from "../../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
 
 @Component({
     selector: "scheme-component",
     templateUrl: "app/src/skos/scheme/schemesComponent.html",
-    directives: [SchemeListPanelComponent, ResourceViewTabComponent],
+    directives: [SchemeListPanelComponent, ResourceViewPanelComponent],
     host: { class: "pageComponent" }
 })
 export class SchemesComponent {

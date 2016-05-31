@@ -3,7 +3,8 @@ import {Router} from '@angular/router-deprecated';
 import {Observable} from 'rxjs/Observable';
 import {ProjectServices} from "../services/projectServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {Project} from '../utils/Project';
+import {VBEventHandler} from '../utils/VBEventHandler';
+import {Project, ProjectTypesEnum} from '../utils/Project';
 import {ModalServices} from "../widget/modal/modalServices";
 
 @Component({
@@ -16,12 +17,16 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
     
+    private eventSubscriptions = [];
+    
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
-        private modalService: ModalServices) {
+        private eventHandler: VBEventHandler, private modalService: ModalServices) {
         // navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);
-        }        
+        }
+        
+        this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(project => this.onProjectClosed(project)));
     }
 
     ngOnInit() {
@@ -30,6 +35,10 @@ export class ProjectComponent implements OnInit {
                 this.projectList = projectList;
             }
         );
+    }
+    
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
     private selectProject(project: Project) {
@@ -125,7 +134,7 @@ export class ProjectComponent implements OnInit {
     }
     
     private closeProject(project: Project) {
-        if (project.getType() == "saveToStore") {
+        if (project.getType() == ProjectTypesEnum.saveToStore) {
             //if closing project is non-persistent ask to save
             this.modalService.confirm("Save project", "You're closing a non-persistent project " + project.getName()
                 + ". Do you want to save changes?", "warning").then(
@@ -196,6 +205,21 @@ export class ProjectComponent implements OnInit {
     
     private getProjectObjectFromName(projectName: string): Project {
         return this.projectList.find(proj => proj.getName() == projectName);
+    }
+    
+    
+    //EVENT HANDLER
+    
+    /**
+     * This event handler is useful when project data is cleared from the current page,
+     * then there is need to update the UI
+     */
+    private onProjectClosed(project: Project) {
+        for (var i = 0; i < this.projectList.length; i++) {
+            if (this.projectList[i].getName() == project.getName()) {
+                this.projectList[i].setOpen(false);
+            }
+        }
     }
     
 }

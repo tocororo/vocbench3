@@ -1,14 +1,13 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
 import {ResourceViewComponent} from "../ResourceViewComponent";
 
 @Component({
-    selector: "resource-view-double",
-    templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewDoubleComponent.html",
-    directives: [ResourceViewComponent],
-    host: { class: "resViewContainer" }
+    selector: "resource-view-splitted",
+    templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewSplittedComponent.html",
+    directives: [ResourceViewComponent]
 })
-export class ResourceViewDoubleComponent {
+export class ResourceViewSplittedComponent {
     
     @Input() resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
     

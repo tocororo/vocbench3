@@ -1,5 +1,6 @@
 import {Injectable, EventEmitter} from '@angular/core';
 import {ARTURIResource} from './ARTResources';
+import {Project} from './Project';
 
 /**
  * This class need to be injected in constructor of every Component that throws or subscribes to an event.
@@ -62,11 +63,17 @@ export class VBEventHandler {
     //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
     public skosxlPrefLabelRemovedEvent: EventEmitter<any> = new EventEmitter();
     
+    
+    //MISC EVENTS 
+    
     //event should contain an object with "oldResource" and "newResource"
     public resourceRenamedEvent: EventEmitter<any> = new EventEmitter();
     
     //event contains the new content language
     public contentLangChangedEvent: EventEmitter<string> = new EventEmitter<string>();
+    
+    //event contains the project closed
+    public projectClosedEvent: EventEmitter<Project> = new EventEmitter<Project>(); 
     
 	constructor() {}
     

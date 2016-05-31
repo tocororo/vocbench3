@@ -1,22 +1,20 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
-import {ModalServices} from "../../widget/modal/modalServices";
 import {ResourceViewComponent} from "../ResourceViewComponent";
 
 @Component({
-    selector: "resource-view-tab",
-    templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewTabComponent.html",
-    directives: [ResourceViewComponent],
-    host: { class: "resViewContainer" }
+    selector: "resource-view-tabbed",
+    templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewTabbedComponent.html",
+    directives: [ResourceViewComponent]
 })
-export class ResourceViewTabComponent {
+export class ResourceViewTabbedComponent {
     
     @Input() resource: ARTResource;
     
     private tabs: Array<any> = [];
     private activeTab;
     
-    constructor(private modalService: ModalServices) {}
+    constructor() {}
     
     ngOnChanges(changes) {
         if (changes.resource) {

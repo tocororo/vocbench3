@@ -112,3 +112,10 @@ export class Project {
         return this.type;
     }
 }
+
+export type ProjectTypesEnum = "saveToStore" | "continuosEditing";
+    
+export const ProjectTypesEnum = {
+    saveToStore: "saveToStore" as ProjectTypesEnum,
+    continuosEditing: "continuosEditing" as ProjectTypesEnum
+}

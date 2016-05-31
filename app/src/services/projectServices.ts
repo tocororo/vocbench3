@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Project} from '../utils/Project';
+import {VBEventHandler} from '../utils/VBEventHandler';
 
 @Injectable()
 export class ProjectServices {
@@ -8,7 +9,7 @@ export class ProjectServices {
     private serviceName = "Projects";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * Gets the current available projects in ST
@@ -50,7 +51,7 @@ export class ProjectServices {
     }
 
     /**
-     * Disconnects from the given project
+     * Disconnects from the given project. Emits a projectClosedEvent
      * @param project the project to disconnect
      */
     disconnectFromProject(project: Project) {
@@ -59,7 +60,12 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.projectClosedEvent.emit(project);
+                return stResp;
+            }
+        );
     }
     
     /**

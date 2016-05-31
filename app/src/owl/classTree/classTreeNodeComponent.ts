@@ -47,7 +47,7 @@ export class ClassTreeNodeComponent {
     }
     
     ngOnInit() {
-        if (this.node.getURI() == OWL.thing.getURI()) {
+        if (this.node.getURI() == OWL.thing.getURI() && this.node.getAdditionalProperty(ResAttribute.MORE) == "1") {
             this.expandNode();
         }
     }

@@ -104,6 +104,10 @@ config-bar {
     flex: 4;
 }
 
+resource-view-splitted, resource-view-tabbed {
+    display: flex;
+}
+
 concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, resource-view {
     display: flex;
     flex-flow: column;

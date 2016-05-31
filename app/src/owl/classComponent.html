@@ -2,5 +2,5 @@
     <div class="sidebar vbox">
         <class-tree-panel (classSelected)="onClassSelected($event)" (instanceSelected)="onInstanceSelected($event)"></class-tree-panel>
     </div>
-    <resource-view-tab *ngIf="resource" [resource]="resource"></resource-view-tab>
+    <resource-view-panel *ngIf="resource" [resource]="resource"></resource-view-panel>
 </div>

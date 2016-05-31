@@ -2,5 +2,5 @@
     <div class="sidebar vbox">
         <scheme-list-panel (itemSelected)="onSchemeSelected($event)"></scheme-list-panel>
     </div>
-    <resource-view-tab *ngIf="resource" [resource]="resource"></resource-view-tab>
+    <resource-view-panel *ngIf="resource" [resource]="resource"></resource-view-panel>
 </div>
