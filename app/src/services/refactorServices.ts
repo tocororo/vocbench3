@@ -48,7 +48,16 @@ export class RefactorServices {
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = sourceBaseURI;
         }
-        return this.httpMgr.doGet(this.serviceName, "replaceBaseURI", params, this.oldTypeService)
+        return this.httpMgr.doGet(this.serviceName, "replaceBaseURI", params, this.oldTypeService);
+    }
+    
+    migrateDefaultGraphToBaseURIGraph(clearDestinationGraph?: boolean) {
+        console.log("[RefactorServices] migrateDefaultGraphToBaseURIGraph");
+        var params: any = {}
+        if (clearDestinationGraph != undefined) {
+            params.clearDestinationGraph = clearDestinationGraph;
+        }
+        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService);
     }
 
 }

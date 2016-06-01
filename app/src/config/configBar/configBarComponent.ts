@@ -4,20 +4,22 @@ import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {Project, ProjectTypesEnum} from "../../utils/Project";
 import {InputOutputServices} from "../../services/inputOutputServices";
 import {ProjectServices} from "../../services/projectServices";
+import {RefactorServices} from "../../services/refactorServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "config-bar",
 	templateUrl: "app/src/config/configBar/configBarComponent.html",
     directives: [RouterLink],
-    providers: [InputOutputServices, ProjectServices]
+    providers: [InputOutputServices, ProjectServices, RefactorServices]
 })
 export class ConfigBarComponent {
     
     private currentProject: Project;
     
-    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, 
-        private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {}
+    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices,
+        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
+        private router: Router) {}
     
     /**
      * returns true if a project is open. Useful to enable/disable navbar links
@@ -78,6 +80,27 @@ export class ConfigBarComponent {
             },
             () => {}
         );
+    }
+    
+    private migrateData() {
+        this.modalService.confirm("Migrate data", "This operation will move the content of the default " 
+                + "graph to a graph named after the base URI of the current project. It also will clear "
+                + "the default graph and preserve the information already contained in the "
+                + "destination graph. Once the operation is done, you will be redirect to the project page. "
+                + "Are you sure to continue?", "warning").then(
+            confirm => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+                this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
+                    stResp => {
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        //then redirect to home page
+                        this.router.navigate(['Projects']);
+                    },
+                    err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
+                );
+            },
+            () => {}
+        )
     }
     
 }

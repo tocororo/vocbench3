@@ -163,6 +163,7 @@ export class MetadataManagementComponent {
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
+                                        this.vbCtx.removeScheme(this.vbCtx.getWorkingProject());
                                     }
                                 )
                             }
