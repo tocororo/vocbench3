@@ -71,6 +71,12 @@ export class ResourceUtils {
                     } else {
                         imgSrc = "app/assets/images/flags/flag_unknown.png";    
                     }
+                } else {
+                    if (explicit) {
+                        imgSrc = "app/assets/images/xLabel.png";
+                    } else {
+                        imgSrc = "app/assets/images/xLabel_imported.png";
+                    }
                 }
             }
         } else if (rdfResource.isLiteral()) {
