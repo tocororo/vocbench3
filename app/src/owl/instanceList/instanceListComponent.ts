@@ -36,8 +36,8 @@ export class InstanceListComponent {
             data => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             data => this.onInstanceCreated(data.instance, data.cls)));
-        this.eventSubscriptions.push(eventHandler.typeDeletedEvent.subscribe(
-            data => this.onTypeDeleted(data.resource, data.type)));
+        this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
+            data => this.onTypeRemoved(data.resource, data.type)));
     }
     
     ngOnChanges(changes) {
@@ -138,7 +138,7 @@ export class InstanceListComponent {
         }
     }
     
-    private onTypeDeleted(instance: ARTURIResource, cls: ARTURIResource) {
+    private onTypeRemoved(instance: ARTURIResource, cls: ARTURIResource) {
         if (this.cls.getURI() == cls.getURI()) {
             for (var i=0; i < this.instanceList.length; i++) {
                 if (this.instanceList[i].getURI() == instance.getURI()) {

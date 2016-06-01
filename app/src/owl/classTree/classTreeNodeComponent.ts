@@ -40,7 +40,7 @@ export class ClassTreeNodeComponent {
             data => this.onInstanceDeleted(data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
             data => this.onInstanceCreated(data.cls)));
-        this.eventSubscriptions.push(eventHandler.typeDeletedEvent.subscribe(
+        this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
             data => this.onInstanceDeleted(data.type)));
         this.eventSubscriptions.push(eventHandler.typeAddedEvent.subscribe(
             data => this.onInstanceCreated(data.type)));

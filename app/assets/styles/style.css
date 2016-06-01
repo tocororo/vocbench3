@@ -137,7 +137,7 @@ concept-tree, class-tree, property-tree, instance-list, scheme-list {
 }
 
 rdf-resource {
-	min-height: 24px;
+    min-height: 16px;
     display: inline-flex;
     align-items: center;
     border-radius: 2px;
@@ -146,6 +146,10 @@ rdf-resource {
 rdf-resource > .rdfResourceIcon {
     min-width: 16px;
     margin-right: 5px;
+}
+
+.treeNode > rdf-resource {
+    min-height: 24px;
 }
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,

@@ -248,7 +248,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet("individual", "removeType", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.typeDeletedEvent.emit({resource: resource, type: type});
+                this.eventHandler.typeRemovedEvent.emit({resource: resource, type: type});
                 return stResp;      
             }
         );

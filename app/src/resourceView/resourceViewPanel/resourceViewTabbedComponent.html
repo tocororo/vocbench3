@@ -4,7 +4,7 @@
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
             <a href (click)="selectTab(t)">
-                {{t.resource.getShow()}}
+                <rdf-resource [resource]="t.resource"></rdf-resource>
                 <span *ngIf=(t.removable) class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
                     onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
@@ -14,11 +14,22 @@
     </ul>
     <!--Tabs content-->
     <div class="tab-content">
-        <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
+        <!-- This solution destroy a resource when its tab is no more active, and re-init when the tab is selected -->
+        <!--<div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <div *ngIf="t.active" class="vbox">
                 <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)"></resource-view>
             </div>
+        </div>-->
+        
+        <!-- This solution simply hides a resource view its tab is no more active, the shows it when tab is selected.
+            This is preferred because has better performance, restore the previous if problems come out caused by
+            refresh after the resource changes -->
+        <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}" [hidden]="!t.active">
+            <div class="vbox">
+                <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)"></resource-view>
+            </div>
         </div>
+        
     </div>
     
 </div>

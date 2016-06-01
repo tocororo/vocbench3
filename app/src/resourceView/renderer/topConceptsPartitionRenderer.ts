@@ -17,7 +17,7 @@ export class TopConceptsPartitionRenderer {
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
-    private label = "Top Concepts";
+    private label = "Top Concept of";
     private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
     private addBtnImgTitle = "Add to a ConceptScheme as topConcept";
     private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
