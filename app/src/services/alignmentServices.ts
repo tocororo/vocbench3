@@ -318,15 +318,7 @@ export class AlignmentServices {
         };
         return this.httpMgr.doGet(this.serviceName, "listSuggestedProperties", params, this.oldTypeService).map(
             stResp => {
-                var props: Array<ARTURIResource> = [];
-                var mapPropElemColl: Array<Element> = stResp.getElementsByTagName("mappingProperty");
-                for (var i = 0; i < mapPropElemColl.length; i++) {
-                    var uri = mapPropElemColl[i].textContent;
-                    var show = mapPropElemColl[i].getAttribute("show");
-                    var p = new ARTURIResource(uri, show, RDFResourceRolesEnum.property);
-                    props.push(p);
-                }
-                return props;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
