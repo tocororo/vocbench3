@@ -5,6 +5,7 @@ import {MetadataServices} from "../../../services/metadataServices";
 import {RefactorServices} from "../../../services/refactorServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ModalServices} from "../../../widget/modal/modalServices";
+import {ReplaceBaseURIModal, ReplaceBaseURIModalData} from "./replaceBaseURIModal";
 import {PrefixNamespaceModal, PrefixNamespaceModalData} from "./prefixNamespaceModal";
 import {ImportOntologyModal, ImportOntologyModalData, ImportType} from "./importOntologyModal";
 
@@ -13,7 +14,7 @@ import {ImportOntologyModal, ImportOntologyModalData, ImportType} from "./import
 	templateUrl: "app/src/config/dataManagement/metadata/metadataManagementComponent.html",
     providers: [MetadataServices, RefactorServices],
     host: { class : "pageComponent" },
-    styles: [ ".greyText { color: #999 } .greenText { color: green }" ] //to grey the non-explicit mappings
+    styles: [ ".greyText { color: #999 }" ] //to grey the non-explicit mappings
 })
 export class MetadataManagementComponent {
     
@@ -218,6 +219,14 @@ export class MetadataManagementComponent {
         } else {
             this.modalService.alert("Error", "Please insert valid namespace and baseURI", "error");
         }
+    }
+    
+    replaceBaseURI() {
+        //open a modal to manage the baseURI replacement
+        var modalData = new ReplaceBaseURIModalData(this.pristineBaseURI);
+        return this.modal.open(ReplaceBaseURIModal, modalData).then(
+            dialog => dialog.result.then(() => {}, () => {})
+        );
     }
     
     //======= PREFIX NAMESPACE MAPPINGS MANAGEMENT =======

@@ -46,7 +46,7 @@ export class CreateProjectComponent {
     private ontoType: string = this.ontoTypeList[0].value;
     
     private ontoMgrList: Array<string>;
-    private ontoMgrId: string = "it.uniroma2.art.semanticturkey.ontology.sesame4.OntologyManagerFactorySesame4Impl";
+    private ontoMgrId: string = "it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl";
     private ontoMgrConfigList: Array<any>;
     private selectedOntoMgrConfig: any = {};
     //config represents the configuration of the ontology manager (shortName, type, params, ...)

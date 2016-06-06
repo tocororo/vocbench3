@@ -10,6 +10,9 @@
             <div class="subPanel">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Refactor:</label>
+                    <button class="btn btn-xs btn-default" title="Replace a baseURI" (click)="replaceBaseURI()">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
                 </div>
                 <div class="subPanel-body">
                     <table class="table table-condensed table-borderless">
@@ -27,10 +30,17 @@
                                         [ngModel]="baseURI" (ngModelChange)="onBaseURIChanged($event)">
                                 </td>
                                 <td rowspan="2">
-                                    <button class="btn btn-default" [ngClass]="{active: bind}" title="Bind/unbind namespace and baseURI"
-                                        (click)="bindNamespaceBaseURI()">
-                                        <span class="glyphicon glyphicon-link"></span>
-                                    </button>
+                                    <div class="btn-group-sm btn-group-vertical">
+                                        <button class="btn btn-default" [ngClass]="{active: bind}" title="Bind/unbind namespace and baseURI"
+                                            (click)="bindNamespaceBaseURI()">
+                                            <span class="glyphicon glyphicon-link"></span>
+                                        </button>
+                                        <button class="btn btn-default" title="Apply namespace baseURI changes"
+                                            [ngClass]="{'btn-primary' : areNamespaceBaseURIChanged()}" 
+                                            (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged()">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -43,13 +53,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="subPanel-footer">
-                    <button class="btn btn-default btn-sm pull-right" title="Apply namespace baseURI changes" 
-                        (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged()">
-                        <span class="glyphicon glyphicon-ok" [ngClass]="{greenText : areNamespaceBaseURIChanged()}"></span>
-                    </button>
-                    <span class="clearfix"></span>
                 </div>
             </div>
 

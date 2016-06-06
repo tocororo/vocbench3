@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3 class="modal-title">Replace baseURI</h3>
+</div>
+<div class="modal-body" id="toFocus">
+    
+    <div style="margin-bottom: 6px">
+        <label>Old baseURI:</label>
+        <div style="display: inline-flex; align-items: center; float: right;">
+            <span style="margin-right: 3px;">Use default baseURI</span>
+            <input type="checkbox" [(ngModel)]="useDefaultBaseURI" (ngModelChange)="onCheckChange()">
+        </div>
+        <input type="text" class="form-control input-sm" style="margin-top: 2px;"
+            [(ngModel)]="oldBaseURI" [readonly]="useDefaultBaseURI">
+    </div>
+    
+    <div>
+        <label>New baseURI:</label>
+        <input type="text" class="form-control input-sm" style="margin-top: 2px;" [(ngModel)]="newBaseURI">
+    </div>
+    
+    <div *ngIf="submittedWithError" class="alert alert-danger" style="margin-top: 6px;">
+        {{errorMsg}}
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" 
+        [disabled]="!newBaseURI || !oldBaseURI || newBaseURI == oldBaseURI">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>
