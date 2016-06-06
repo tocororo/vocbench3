@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, ViewChild} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTResource, ARTURIResource} from "../utils/ARTResources";
 import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
@@ -15,42 +15,77 @@ export class ResourceRenameComponent {
     
     @Input() resource: ARTResource;
     
+    @ViewChild('localrenameinput') localRenameInput;
+    @ViewChild('totalrenameinput') totalRenameInput;
+    
+    private localName: string;
+    private pristineNamespace: string;
+    private pristineLocalName: string;
+    
     private renameLocked = true;
+    private namespaceLocked = true;
     
     constructor(private refactorService: RefactorServices, private modalService: ModalServices) {}
+    
+    ngOnInit() {
+        if (this.resource.isURIResource()) {
+            this.localName = (<ARTURIResource>this.resource).getLocalName();
+        }
+    }
     
     /** 
      * Enable and focus the input text to rename the resource 
      */  
-    private startRename(inputEl: HTMLElement) {
-        inputEl.focus();
+    private startRename() {
+        this.localRenameInput.nativeElement.focus();
         this.renameLocked = false;
     }
     
     /**
      * Cancel the renaming of the resource and restore the original UI
      */
-    private cancelRename(inputEl: HTMLInputElement) {
+    private cancelRename() {
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
-        inputEl.value = (<ARTURIResource>this.resource).getLocalName();
+        this.localName = (<ARTURIResource>this.resource).getLocalName(); //restore the local name
         this.renameLocked = true;
+        this.namespaceLocked = true;
+    }
+    
+    private blockNamespace() {
+        this.namespaceLocked = !this.namespaceLocked;
     }
     
     /**
      * Apply the renaming of the resource and restore the original UI
      */
-    private renameResource(inputEl: HTMLInputElement) {
+    private renameResource() {
+        var newUri: string;
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
-        this.renameLocked = true;
-        var newLocalName = inputEl.value;
-        if (newLocalName.trim() == "") {
-            this.modalService.alert("Rename", "You have to write a valid local name", "error");
-            inputEl.value = (<ARTURIResource>this.resource).getLocalName();
-            return;
+        if (this.namespaceLocked) { //just the namespace has changed
+            if (this.localName.trim() == "") {
+                this.modalService.alert("Rename", "You have to write a valid local name", "error");
+                this.cancelRename()
+                return;
+            }
+            newUri = (<ARTURIResource>this.resource).getBaseURI() + this.localName;
+        } else { //complete renaming (ns + localName)
+            newUri = this.totalRenameInput.nativeElement.value;
+            if (newUri.trim() == "") {
+                this.modalService.alert("Rename", "You have to write a valid URI", "error");
+                this.cancelRename()
+                return;
+            }
         }
-        var newUri = (<ARTURIResource>this.resource).getBaseURI() + newLocalName;
         if ((<ARTURIResource>this.resource).getURI() != newUri) { //if the uri has changed
-            this.refactorService.changeResourceURI(<ARTURIResource>this.resource, newUri).subscribe();    
+            this.refactorService.changeResourceURI(<ARTURIResource>this.resource, newUri).subscribe(
+                stResp => {
+                    this.renameLocked = true;
+                    this.namespaceLocked = true;
+                },
+                err => {
+                    this.cancelRename();
+                }
+            );
         }
     }
     

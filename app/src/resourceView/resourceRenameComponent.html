@@ -1,20 +1,32 @@
 <div *ngIf="resource.isURIResource()" style="position: relative">
     <div *ngIf="!copyEnabled" class="input-group input-group-xs">
-        <span class="input-group-addon" style="padding-right: 2px;">{{resource.getBaseURI()}}</span>
-        <input #renameinput type="text" class="form-control" style="padding-left: 2px;" [value]="resource.getLocalName()"
-            [readonly]="renameLocked" sanitized>
+        <span *ngIf="namespaceLocked" class="input-group-addon" style="padding-right: 2px;">
+            {{resource.getBaseURI()}}
+        </span>
+        <input #localrenameinput *ngIf="namespaceLocked" type="text" class="form-control" style="padding-left: 2px;"
+            [(ngModel)]="localName" [readonly]="renameLocked" sanitized>
+            
+        <input #totalrenameinput *ngIf="!namespaceLocked" type="text" class="form-control" [value]="resource.getURI()" sanitized>
+        
         <div class="input-group-btn">
-            <button *ngIf="renameLocked" class="btn btn-default" style="width:60px" type="button" (click)="startRename(renameinput)"
+            <button *ngIf="renameLocked" class="btn btn-default" style="width:72px" (click)="startRename()"
                 [disabled]="!resource.getAdditionalProperty('explicit')">Rename</button>
-            <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" (click)="renameResource(renameinput)">
+                
+            <button *ngIf="!renameLocked" class="btn btn-default" style="width:24px; padding: 1px 3px;"
+                (click)="renameResource()">
                 <span class="glyphicon glyphicon-ok" style="color: green"></span>
             </button>
-            <button *ngIf="!renameLocked" class="btn btn-default" style="width:30px" type="button" (click)="cancelRename(renameinput)">
+            <button *ngIf="!renameLocked" class="btn btn-default" style="width:24px; padding: 1px 3px;"
+                (click)="cancelRename()">
                 <span class="glyphicon glyphicon-remove" style="color: red"></span>
+            </button>
+            <button *ngIf="!renameLocked" class="btn btn-default" [ngClass]="{active: namespaceLocked}"
+                style="width:24px; padding: 1px 3px;" (click)="blockNamespace()" title="Block namespace">
+                <span class="glyphicon glyphicon-lock"></span>
             </button>
         </div>
     </div>
-    <div style="position: absolute; top: 0px; right: 63px; z-index: 3;">
+    <div style="position: absolute; top: 0px; right: 75px; z-index: 3;">
         <button type="button" class="close" (click)="copyToClipboard()" title="Copy URI to clipboard">
             <span class="glyphicon glyphicon-copy" style="font-size: 12px"></span>
         </button>
