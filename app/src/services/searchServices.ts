@@ -21,9 +21,8 @@ export class SearchServices {
      * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      * @return an array of resources
      */
-    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string, lang?: string
-        // , scheme?: ARTURIResource
-        ) {
+    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string,
+        lang?: string, scheme?: ARTURIResource) {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -34,9 +33,9 @@ export class SearchServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        // if (scheme != undefined) {
-        //     params.scheme = scheme.getURI();
-        // }
+        if (scheme != undefined) {
+            params.scheme = scheme.getURI();
+        }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);

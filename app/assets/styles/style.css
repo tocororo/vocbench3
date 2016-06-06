@@ -106,6 +106,7 @@ config-bar {
 
 resource-view-splitted, resource-view-tabbed {
     display: flex;
+    flex: 1;
 }
 
 concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, resource-view {
