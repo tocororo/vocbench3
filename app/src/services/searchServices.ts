@@ -17,10 +17,13 @@ export class SearchServices {
      * @param rolesArray available roles: "concept", "cls", "property", "individual"
      * @param useLocalName tells if the searched string should be searched in the local name (as well as in labels)
      * @param searchMode available searchMode values: "contain", "start", "end", "exact"
+     * @param lang if provided tells in which language render the show of the results (only for concepts and schemes)
      * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      * @return an array of resources
      */
-    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string, scheme?: string) {
+    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string, lang?: string
+        // , scheme?: ARTURIResource
+        ) {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -28,9 +31,12 @@ export class SearchServices {
             useLocalName: useLocalName,
             searchMode: searchMode,
         };
-        if (scheme != undefined) {
-            params.scheme = scheme;
+        if (lang != undefined) {
+            params.lang = lang;
         }
+        // if (scheme != undefined) {
+        //     params.scheme = scheme.getURI();
+        // }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);

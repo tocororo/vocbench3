@@ -59,6 +59,7 @@ export class SparqlComponent {
     
     private doQuery(tab) {
         var initTime = new Date().getTime();
+        document.getElementById("blockDivFullScreen").style.display = "block";
         this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
             data => {
                 //calculates the time spent in query
@@ -74,6 +75,10 @@ export class SparqlComponent {
                     tab.headers = ["subj", "pred", "obj"];
                     tab.queryResult = data.stm;
                 }
+                document.getElementById("blockDivFullScreen").style.display = "none";
+            },
+            err => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
             }
         );
     }
