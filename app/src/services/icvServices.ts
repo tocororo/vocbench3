@@ -12,14 +12,16 @@ export class IcvServices {
     constructor(private httpMgr: HttpManager) {}
 
     /**
-     * TODO: when refactored, this method should get also the scheme as parameter
-     * Returns a list of records <concept-scheme>, where concept is a dangling skos:Concept, and scheme is the
-	 * skos:ConceptScheme where concept is dangling 
+     * Returns a list of records <concept>, where concept is a dangling skos:Concept in the given
+     * skos:ConceptScheme 
+     * @param scheme scheme where to get the dangling concept
      * @param limit max number of results to return
      */
-    listDanglingConcepts(limit?: number) {
+    listDanglingConcepts(scheme: ARTURIResource, limit?: number) {
         console.log("[IcvServices] listDanglingConcepts");
-        var params: any = {};
+        var params: any = {
+            scheme: scheme.getURI()
+        };
         if (limit != undefined) {
             params.limit = limit;
         }
@@ -240,6 +242,67 @@ export class IcvServices {
             params.limit = limit;
         }
         return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params, this.oldTypeService);
+    }
+    
+    //=============================
+    //======== QUICK FIXES ========
+    //=============================
+    
+    /**
+     * Quick fix for dangling concepts. Set all dangling concepts as topConceptOf the given scheme
+	 * @param concepts array of dangling concepts
+	 * @param scheme
+     */
+    setAllDanglingAsTopConcept(concepts: ARTURIResource[], scheme: ARTURIResource) {
+        console.log("[IcvServices] setAllDanglingAsTopConcept");
+        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
+        var conceptsUri: string[] = []
+        for (var i = 0; i < concepts.length; i++) {
+            conceptsUri.push(concepts[i].getURI());
+        }
+        var params: any = {
+            conceptsUri: conceptsUri,
+            scheme: scheme.getURI()
+        };
+        return this.httpMgr.doPost(this.serviceName, "setAllDanglingAsTopConcept", params, this.oldTypeService);
+    }
+    
+    /**
+     * Quick fix for dangling concepts. Set a concept of broader for all dangling concepts
+	 * @param concepts array of dangling concepts
+	 * @param scheme
+     */
+    setBroaderForAllDangling(concepts: ARTURIResource[], broader: ARTURIResource) {
+        console.log("[IcvServices] setBroaderForAllDangling");
+        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
+        var conceptsUri: string[] = []
+        for (var i = 0; i < concepts.length; i++) {
+            conceptsUri.push(concepts[i].getURI());
+        }
+        var params: any = {
+            conceptsUri: conceptsUri,
+            broader: broader.getURI()
+        };
+        return this.httpMgr.doPost(this.serviceName, "setBroaderForAllDangling", params, this.oldTypeService);
+    }
+    
+    /**
+     * Quick fix for dangling concepts. Removes all dangling concepts from their scheme
+	 * @param concepts
+	 * @param scheme
+     */
+    removeAllFromScheme(concepts: ARTURIResource[], scheme: ARTURIResource) {
+        console.log("[IcvServices] removeAllFromScheme");
+        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
+        var conceptsUri: string[] = []
+        for (var i = 0; i < concepts.length; i++) {
+            conceptsUri.push(concepts[i].getURI());
+        }
+        var params: any = {
+            conceptsUri: conceptsUri,
+            scheme: scheme.getURI()
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeAllFromScheme", params, this.oldTypeService);
     }
     
 }

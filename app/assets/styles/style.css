@@ -300,7 +300,7 @@ input[type=number]::-webkit-outer-spin-button {
      display: flex; align-items: center;
  }
  
- .CodeMirror { height: 30vh !important }
+ .CodeMirror { height: 40vh !important }
 
 /* BOOTSTRAP OVERRIDE */
 

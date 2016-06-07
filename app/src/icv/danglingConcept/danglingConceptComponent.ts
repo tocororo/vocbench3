@@ -36,10 +36,12 @@ export class DanglingConceptComponent {
             schemeList => {
                 this.schemeList = schemeList;
                 var currentScheme = this.vbCtx.getScheme();
-                for (var i = 0; i < this.schemeList.length; i++) {
-                    if (this.schemeList[i].getURI() == currentScheme.getURI()) {
-                        this.selectedScheme = this.schemeList[i];
-                        break;
+                if (currentScheme != null) {
+                    for (var i = 0; i < this.schemeList.length; i++) {
+                        if (this.schemeList[i].getURI() == currentScheme.getURI()) {
+                            this.selectedScheme = this.schemeList[i];
+                            break;
+                        }
                     }
                 }
             }
@@ -50,17 +52,14 @@ export class DanglingConceptComponent {
      * Run the check
      */
     private runIcv() {
-        //TODO check when service will be refactored
         document.getElementById("blockDivIcv").style.display = "block";
-        this.icvService.listDanglingConcepts().subscribe(
+        this.icvService.listDanglingConcepts(this.selectedScheme).subscribe(
             stResp => {
                 this.brokenConceptList = new Array();
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
-                    if (recordColl[i].getAttribute("scheme") == this.selectedScheme.getURI()) {
-                        var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), RDFResourceRolesEnum.concept);
-                        this.brokenConceptList.push(dc);
-                    }
+                    var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), RDFResourceRolesEnum.concept);
+                    this.brokenConceptList.push(dc);
                 }
                 document.getElementById("blockDivIcv").style.display = "none"
             },
@@ -84,8 +83,11 @@ export class DanglingConceptComponent {
      * Fixes all concepts by setting them all as topConceptOf the current scheme
      */
     private setAllTopConcept() {
-        //TODO this fix requires a new service server side that takes a list of concept and sets them as topConcept of a scheme
-        alert("Fix not yet available. Adding all concept as topConceptOf current scheme");
+        this.icvService.setAllDanglingAsTopConcept(this.brokenConceptList, this.selectedScheme).subscribe(
+            stResp => {
+                this.brokenConceptList = [];//reset the dangling concept list
+            }
+        )
     }
     
     /**
@@ -109,11 +111,13 @@ export class DanglingConceptComponent {
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, true).then(
+        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, false).then(
             broader => {
-                //TODO this fix requires a new service server side that takes a list of concept and sets for them a broader concept
-                alert("Fix not yet available, added " + broader.getShow() + " as broader for all dangling concept");
-                //then this.brokenConceptList = [];
+                this.icvService.setBroaderForAllDangling(this.brokenConceptList, broader).subscribe(
+                    stResp => {
+                        this.brokenConceptList = [];
+                    }
+                )
             },
             () => {}
         );
@@ -141,8 +145,17 @@ export class DanglingConceptComponent {
      * Fixes concepts by removing them all from the current scheme 
      */
     private removeAllFromScheme() {
-        //TODO this fix requires a new service server side that takes a list of concept removes them from a scheme
-        alert("Fix not yet available");
+        this.modalService.confirm("Remove from scheme", "Warning, if the concepts have narrowers, removing them " +
+                "may generate other dangling concepts. Are you sure to proceed?").then(
+            result => {
+                this.icvService.removeAllFromScheme(this.brokenConceptList, this.selectedScheme).subscribe(
+                    stResp => {
+                        this.brokenConceptList = [];
+                    }
+                );
+            },
+            () => {}
+        );
     }
     
 }
