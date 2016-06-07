@@ -291,8 +291,8 @@ export class IcvServices {
 	 * @param concepts
 	 * @param scheme
      */
-    removeAllFromScheme(concepts: ARTURIResource[], scheme: ARTURIResource) {
-        console.log("[IcvServices] removeAllFromScheme");
+    removeAllConceptsFromScheme(concepts: ARTURIResource[], scheme: ARTURIResource) {
+        console.log("[IcvServices] removeAllConceptsFromScheme");
         //convert array of ARTURIResource to array of string, in order to be compliant with Post params
         var conceptsUri: string[] = []
         for (var i = 0; i < concepts.length; i++) {
@@ -302,7 +302,66 @@ export class IcvServices {
             conceptsUri: conceptsUri,
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doPost(this.serviceName, "removeAllFromScheme", params, this.oldTypeService);
+        return this.httpMgr.doPost(this.serviceName, "removeAllConceptsFromScheme", params, this.oldTypeService);
+    }
+    
+    /**
+     * Quick fix for concepts in no scheme. Add all concepts to a scheme
+	 * @param concepts
+	 * @param scheme
+     */
+    addAllConceptsToScheme(concepts: ARTURIResource[], scheme: ARTURIResource) {
+        console.log("[IcvServices] addAllConceptsToScheme");
+        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
+        var conceptsUri: string[] = []
+        for (var i = 0; i < concepts.length; i++) {
+            conceptsUri.push(concepts[i].getURI());
+        }
+        var params: any = {
+            conceptsUri: conceptsUri,
+            scheme: scheme.getURI()
+        };
+        return this.httpMgr.doPost(this.serviceName, "addAllConceptsToScheme", params, this.oldTypeService);
+    }
+    
+    /**
+	 * Fix for topConcept with broader. Remove all the broader relation in the given scheme of the given concept.
+	 * @param concept
+	 * @param scheme
+	 */
+	removeBroadersToConcept(concept: ARTURIResource, scheme: ARTURIResource) {
+        console.log("[IcvServices] removeBroadersToConcept");
+        var params: any = {
+            concept: concept.getURI(),
+            scheme: scheme.getURI()
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeBroadersToConcept", params, this.oldTypeService);
+    }
+    
+    /**
+	 * Quick fix for topConcept with broader. Remove all the broader relation in the given scheme of the given concepts.
+	 * @param conceptsUri
+	 */
+	removeBroadersToAllConcepts(concepts: ARTURIResource[]) {
+        console.log("[IcvServices] removeBroadersToAllConcepts");
+        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
+        var conceptsUri: string[] = []
+        for (var i = 0; i < concepts.length; i++) {
+            conceptsUri.push(concepts[i].getURI());
+        }
+        var params: any = {
+            conceptsUri: conceptsUri,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeBroadersToAllConcepts", params, this.oldTypeService);
+    } 
+
+    /**
+     * Quick fix for topConcept with broader. Remove as topConceptOf all the topConcept with broader.
+     */
+    removeAllAsTopConceptsWithBroader() {
+        console.log("[IcvServices] removeAllAsTopConceptsWithBroader");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "removeAllAsTopConceptsWithBroader", params, this.oldTypeService);
     }
     
 }

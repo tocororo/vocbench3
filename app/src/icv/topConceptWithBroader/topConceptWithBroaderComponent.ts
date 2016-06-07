@@ -31,7 +31,6 @@ export class TopConceptWithBroaderComponent {
      * Run the check
      */
     runIcv() {
-        //TODO check when service will be refactored
         document.getElementById("blockDivIcv").style.display = "block";
         this.icvService.listTopConceptsWithBroader().subscribe(
             stResp => {
@@ -45,6 +44,46 @@ export class TopConceptWithBroaderComponent {
                 document.getElementById("blockDivIcv").style.display = "none";
             },
             err => { document.getElementById("blockDivIcv").style.display = "none"; }
+        );
+    }
+    
+    removeBroaders(record) {
+        var concept = record.concept;
+        var scheme = record.scheme;
+        this.icvService.removeBroadersToConcept(concept, scheme).subscribe(
+            stResp => {
+                this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+            }
+        );
+    }
+    
+    removeAsTopConceptOf(record) {
+        var concept = record.concept;
+        var scheme = record.scheme;
+        this.skosService.removeTopConcept(concept, scheme).subscribe(
+            stResp => {
+                this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+            }
+        );
+    }
+    
+    removeBroadersToAll() {
+        var topConcWithBroader: ARTURIResource[] = [];
+        for (var i = 0; i < this.brokenRecordList.length; i++) {
+            topConcWithBroader.push(this.brokenRecordList[i].concept);
+        }
+        this.icvService.removeBroadersToAllConcepts(topConcWithBroader).subscribe(
+            stResp => {
+                this.brokenRecordList = [];
+            }
+        );
+    }
+    
+    removeAllAsTopConceptOf() {
+        this.icvService.removeAllAsTopConceptsWithBroader().subscribe(
+            stResp => {
+                this.brokenRecordList = [];
+            }
         );
     }
     

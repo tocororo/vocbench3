@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
+import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -102,8 +103,21 @@ export class NoTopConceptSchemeComponent {
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        alert("Fix not yet available");
-        //TODO inform the user with a warning like in deleteScheme
+        alert("quick fix not yet available");
+        
+        //TODO this fix causes CuncurrentModificationException. Disabled untill it is fixed server side.
+        // this.modalService.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
+        //         "will generate concepts in no scheme. Are you sure to proceed?").then(
+        //     confirm => {
+        //         var deleteSchemeFnArray = [];
+        //         deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteScheme(sc));
+        //         //call the collected functions and subscribe when all are completed
+        //         Observable.forkJoin(deleteSchemeFnArray).subscribe(
+        //             res => this.brokenSchemeList = []
+        //         );
+        //     },
+        //     () => {}
+        // );
     }
     
 }

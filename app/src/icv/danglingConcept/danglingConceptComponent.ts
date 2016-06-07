@@ -148,7 +148,7 @@ export class DanglingConceptComponent {
         this.modalService.confirm("Remove from scheme", "Warning, if the concepts have narrowers, removing them " +
                 "may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
-                this.icvService.removeAllFromScheme(this.brokenConceptList, this.selectedScheme).subscribe(
+                this.icvService.removeAllConceptsFromScheme(this.brokenConceptList, this.selectedScheme).subscribe(
                     stResp => {
                         this.brokenConceptList = [];
                     }

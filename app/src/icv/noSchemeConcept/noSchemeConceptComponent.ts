@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
 import {Router} from '@angular/router-deprecated';
+import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
@@ -32,7 +33,6 @@ export class NoSchemeConceptComponent {
      * Run the check
      */
     runIcv() {
-        //TODO check when service will be refactored
         document.getElementById("blockDivIcv").style.display = "block";
         this.icvService.listConceptsWithNoScheme().subscribe(
             stResp => {
@@ -71,8 +71,9 @@ export class NoSchemeConceptComponent {
     addAllToScheme() {
         this.browsingService.browseSchemeList("Select a scheme").then(
             scheme => {
-                //TODO this fix requires a new service server side that takes a list of concept and adds them to a scheme
-                alert("Fix not yet available. Add all concepts to " + scheme.getShow());
+                this.icvService.addAllConceptsToScheme(this.brokenConceptList, scheme).subscribe(
+                    stResp => this.brokenConceptList = []
+                )
             },
             () => {}
         )
@@ -95,7 +96,14 @@ export class NoSchemeConceptComponent {
      */
     deleteAllConcept() {
         alert("Fix not yet available");
-        //TODO this fix requires a new service server side that takes a list of concept and delete them all
+       
+        //TODO this fix causes CuncurrentModificationException. Disabled untill it is fixed server side.
+        // var deleteConcFnArray = [];
+        // deleteConcFnArray = this.brokenConceptList.map((conc) => this.skosService.deleteConcept(conc));
+        // //call the collected functions and subscribe when all are completed
+        // Observable.forkJoin(deleteConcFnArray).subscribe(
+        //     res => this.brokenConceptList = []
+        // );
     }
     
 }
