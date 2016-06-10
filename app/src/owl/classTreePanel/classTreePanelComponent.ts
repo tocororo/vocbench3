@@ -3,6 +3,7 @@ import {ClassTreeComponent} from "../classTree/classTreeComponent";
 import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../services/searchServices";
 import {OwlServices} from "../../services/owlServices";
+import {DeleteServices} from "../../services/deleteServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
@@ -17,7 +18,7 @@ import {RDF, OWL} from "../../utils/Vocabulary";
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
 	directives: [ClassTreeComponent, InstanceListComponent],
-    providers: [OwlServices, SearchServices],
+    providers: [OwlServices, SearchServices, DeleteServices],
 })
 export class ClassTreePanelComponent {
     @Output() classSelected = new EventEmitter<ARTURIResource>();
@@ -29,7 +30,8 @@ export class ClassTreePanelComponent {
     private selectedClass:ARTURIResource;
     private selectedInstance:ARTURIResource;
     
-	constructor(private owlService:OwlServices, private searchService: SearchServices, private modalService: ModalServices) {}
+	constructor(private owlService:OwlServices, private searchService: SearchServices, private deleteService: DeleteServices, 
+        private modalService: ModalServices) {}
     
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
@@ -58,7 +60,7 @@ export class ClassTreePanelComponent {
                 " since it has instance(s). Please delete the instance(s) and retry.", "warning");
             return;
         }
-        this.owlService.removeClass(this.selectedClass).subscribe(
+        this.deleteService.removeClass(this.selectedClass).subscribe(
             stResp => {
                 this.selectedClass = null;
                 this.classSelected.emit(undefined);
@@ -77,7 +79,7 @@ export class ClassTreePanelComponent {
     }
     
     private deleteInstance() {
-        this.owlService.removeInstance(this.selectedInstance, this.selectedClass).subscribe(
+        this.deleteService.removeInstance(this.selectedInstance, this.selectedClass).subscribe(
             stResp => {
                 this.selectedInstance = null;
                 this.instanceSelected.emit(undefined);

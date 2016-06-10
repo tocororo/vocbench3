@@ -13,8 +13,6 @@
             <i>
                 skos:Concept(s) that are not reachable in a concept tree because they have no broader
                 concept and are not top concept of its scheme.
-                (memo: change service so that it returns just the dangling concepts of the scheme in use.
-                In this way, the quick fixes "set all as topConcept" and "select a broader for all" can be applied)
             </i>
         </div>
 
@@ -44,6 +42,7 @@
                                 <button class="btn btn-xs btn-default" (click)="selectBroader(concept)">Select skos:broader</button>
                                 <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept)">Set as skos:topConceptOf</button>
                                 <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept)">Remove from scheme</button>
+                                <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
                             </td>
                         </tr>
                     </tbody>
@@ -61,6 +60,7 @@
                 <li><a (click)="setAllTopConcept()" style="cursor: pointer;">Set all as skos:topConceptOf</a></li>
                 <li><a (click)="selectBroaderForAll()" style="cursor: pointer;">Select a skos:broader for all</a></li>
                 <li><a (click)="removeAllFromScheme()" style="cursor: pointer;">Remove all from scheme</a></li>
+                <li><a (click)="deleteAll()" style="cursor: pointer;">Delete all</a></li>
             </ul>
         </div>
     </div>

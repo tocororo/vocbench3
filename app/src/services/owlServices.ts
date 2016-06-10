@@ -99,24 +99,6 @@ export class OwlServices {
     }
 
     /**
-     * Removes a class. Emits a classDeletedEvent with the removed class
-     * @param cls class to remove
-     */
-    removeClass(cls: ARTURIResource) {
-        console.log("[owlServices] deleteClass");
-        var params: any = {
-            name: cls.getURI(),
-            type: "Class",
-        };
-        return this.httpMgr.doGet("delete", "removeClass", params, this.oldTypeService).map(
-            stResp => {
-                this.eventHandler.classDeletedEvent.emit(cls);
-                return stResp;
-            }
-        );
-    }
-    
-    /**
      * Adds a superClass to a class
      * Emits subClassCreatedEvent containing the subClass and the superClass
      * @param cls the class to which add the superClass
@@ -173,26 +155,6 @@ export class OwlServices {
             stResp => {
                 var instance = Deserializer.createURI(stResp.getElementsByTagName("Instance")[0]);
                 this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
-                return stResp;
-            }
-        );
-    }
-    
-    /**
-     * Removes an instance. Emits an instanceDeletedEvent with instance (the removed instance) and
-     * cls (the type of the instance)
-     * @param instance the instance to remove
-     * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
-     */
-    removeInstance(instance: ARTURIResource, cls: ARTURIResource) {
-        console.log("[owlServices] removeInstance");
-        var params: any = {
-            name: instance.getURI(),
-            type: "Instance",
-        };
-        return this.httpMgr.doGet("delete", "removeInstance", params, this.oldTypeService).map(
-            stResp => {
-                this.eventHandler.instanceDeletedEvent.emit({instance: instance, cls: cls});
                 return stResp;
             }
         );

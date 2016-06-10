@@ -65,10 +65,11 @@ export class HierarchicalRedundancyComponent {
      * Fixes all record by removing redundant relations (server side with just one request)
      */
     quickFix() {
-        //TODO needs a service that retrieve againg every redundant relations and remove them
-        //(c3 broader c2, c2 broader c1, c3 broader c1, x3 broader x2, x2 broader x1, x3 broader x1,
-        //removes c3 broader c1 and x3 broader x1)
-        alert("Quick fix not yet available");
+        this.icvService.removeAllHierarchicalRedundancy().subscribe(
+            stResp => {
+                this.brokenRecordList = [];
+            }
+        )
     }
     
 }

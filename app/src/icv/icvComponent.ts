@@ -24,7 +24,7 @@ export class IcvComponent {
             { name: "Hierarchical redundancy", ontoType: ["SKOS", "SKOS-XL"], routeName: "HierarchicalRedundancy",
             description: "skos:Concept(s) that have redundant hierarchical relations"},
             { name: "Cyclic hierarchical concepts", ontoType: ["SKOS", "SKOS-XL"],
-            description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"}
+            description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"},
         ]
     };
     
@@ -72,7 +72,9 @@ export class IcvComponent {
             { name: "Multiple skosxl:prefLabel concepts", ontoType: ["SKOS-XL"],
             description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"},
             { name: "skosxl:Label without skos:literalForm", ontoType: ["SKOS-XL"],
-            description: "skosxl:Label(s) that don't specify a literal form"}
+            description: "skosxl:Label(s) that don't specify a literal form"},
+            { name: "Dangling skosxl:Label(s)", ontoType: ["SKOS-XL"], routeName: "DanglingXLabel",
+            description: "skosxl:Label(s) that are not linked with any skos:Concept"}
         ]
     };
     

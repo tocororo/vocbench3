@@ -68,11 +68,7 @@ export class TopConceptWithBroaderComponent {
     }
     
     removeBroadersToAll() {
-        var topConcWithBroader: ARTURIResource[] = [];
-        for (var i = 0; i < this.brokenRecordList.length; i++) {
-            topConcWithBroader.push(this.brokenRecordList[i].concept);
-        }
-        this.icvService.removeBroadersToAllConcepts(topConcWithBroader).subscribe(
+        this.icvService.removeBroadersToAllConcepts().subscribe(
             stResp => {
                 this.brokenRecordList = [];
             }
@@ -86,38 +82,5 @@ export class TopConceptWithBroaderComponent {
             }
         );
     }
-    
-    /**
-     * Fixes concept by ...
-     * How to fix a topConcept with broader(s)?
-     * Currently in ST the "fix" button just open the resource view to let the user fix the problem. I don't like it.
-     * The idea is to remove the skos:broader relations with concept in the same skos:ConceptScheme,
-     * namely remove triples like
-     * topConcept - skos:broader - broader
-     * To fix the problem, the client send to server the concept-scheme pair and 
-     * the server perform a query to fetch all the broaders of concept in scheme
-     * and then remove the skos:broader relations
-     */
-    fix(record) {
-        alert("Fix not yet available");
-        var concept = record.concept;
-        var scheme = record.scheme;
-        //TODO fix to be determined
-    }
-    
-    /**
-     * Fixes all concept by ... 
-     * The idea is to do something like fix() but instead of sending the desired concept-scheme pair
-     * (with the concept to fix), the server do a new query to get all the topConcept with broader and remove
-     * the skos:broader relations
-     */
-    quickFix() {
-        alert("Quick fix not yet available");
-        for (var i = 0; i < this.brokenRecordList.length; i++) {
-            var concept = this.brokenRecordList[i].concept;
-            var scheme = this.brokenRecordList[i].scheme;
-            //TODO fix to be determined
-        }
-    }
-    
+
 }

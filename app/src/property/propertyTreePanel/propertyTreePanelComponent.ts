@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {PropertyTreeComponent} from "../propertyTree/propertyTreeComponent";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {PropertyServices} from "../../services/propertyServices";
+import {DeleteServices} from "../../services/deleteServices";
 import {SearchServices} from "../../services/searchServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 
@@ -9,7 +10,7 @@ import {ModalServices} from "../../widget/modal/modalServices";
 	selector: "property-tree-panel",
 	templateUrl: "app/src/property/propertyTreePanel/propertyTreePanelComponent.html",
 	directives: [PropertyTreeComponent],
-    providers: [PropertyServices, SearchServices],
+    providers: [PropertyServices, SearchServices, DeleteServices],
 })
 export class PropertyTreePanelComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
@@ -18,7 +19,8 @@ export class PropertyTreePanelComponent {
     
     private selectedProperty:ARTURIResource;
     
-	constructor(private propService:PropertyServices, private searchService: SearchServices, private modalService: ModalServices) {}
+	constructor(private propService:PropertyServices, private searchService: SearchServices, private deleteService: DeleteServices, 
+        private modalService: ModalServices) {}
     
     private createProperty() {
         this.createPropertyForType("rdf:Property");
@@ -61,7 +63,7 @@ export class PropertyTreePanelComponent {
     }
     
     private deleteProperty() {
-        this.propService.removeProperty(this.selectedProperty).subscribe(
+        this.deleteService.removeProperty(this.selectedProperty).subscribe(
             stResp => {
                 this.selectedProperty = null;
                 this.itemSelected.emit(undefined);

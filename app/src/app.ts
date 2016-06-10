@@ -22,6 +22,7 @@ import { NoTopConceptSchemeComponent } from "./icv/noTopConceptScheme/noTopConce
 import { TopConceptWithBroaderComponent } from "./icv/topConceptWithBroader/topConceptWithBroaderComponent";
 import { HierarchicalRedundancyComponent } from "./icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
 import { NoLabelResourceComponent } from "./icv/noLabelResource/noLabelResourceComponent";
+import { DanglingXLabelComponent } from "./icv/danglingXLabel/danglingXLabelComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -70,6 +71,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Icv/TopConceptWithBroader", name: "TopConceptWithBroader", component: TopConceptWithBroaderComponent},
     {path: "/Icv/HierarchicalRedundancy", name: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent},
     {path: "/Icv/NoLabelResource/:type", name: "NoLabelResource", component: NoLabelResourceComponent},
+    {path: "/Icv/DanglingXLabel", name: "DanglingXLabel", component: DanglingXLabelComponent},
 ])
 
 export class App {

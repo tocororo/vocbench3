@@ -71,7 +71,7 @@ export class NoSchemeConceptComponent {
     addAllToScheme() {
         this.browsingService.browseSchemeList("Select a scheme").then(
             scheme => {
-                this.icvService.addAllConceptsToScheme(this.brokenConceptList, scheme).subscribe(
+                this.icvService.addAllConceptsToScheme(scheme).subscribe(
                     stResp => this.brokenConceptList = []
                 )
             },

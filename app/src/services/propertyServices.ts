@@ -62,25 +62,6 @@ export class PropertyServices {
     }
 
     /**
-     * Removes the given property. Emits a propertyDeletedEvent with property (the deleted property)
-     * @param property the property to remove
-     * @return the deleted property
-     */
-    removeProperty(property: ARTURIResource) {
-        console.log("[PropertyServices] removeProperty");
-        var params: any = {
-            name: property.getURI(),
-            type: "Property",
-        };
-        return this.httpMgr.doGet("delete", "removeProperty", params, this.oldTypeService).map(
-            stResp => {
-                this.eventHandler.propertyDeletedEvent.emit(property);
-                return property;
-            }
-        );
-    }
-
-    /**
      * Creates a property with the given name of the given type.
      * Emits a topPropertyCreatedEvent with the new property
      * @param propertyName local name of the property

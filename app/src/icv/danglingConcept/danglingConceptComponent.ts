@@ -83,7 +83,7 @@ export class DanglingConceptComponent {
      * Fixes all concepts by setting them all as topConceptOf the current scheme
      */
     private setAllTopConcept() {
-        this.icvService.setAllDanglingAsTopConcept(this.brokenConceptList, this.selectedScheme).subscribe(
+        this.icvService.setAllDanglingAsTopConcept(this.selectedScheme).subscribe(
             stResp => {
                 this.brokenConceptList = [];//reset the dangling concept list
             }
@@ -113,7 +113,7 @@ export class DanglingConceptComponent {
     private selectBroaderForAll() {
         this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, false).then(
             broader => {
-                this.icvService.setBroaderForAllDangling(this.brokenConceptList, broader).subscribe(
+                this.icvService.setBroaderForAllDangling(this.selectedScheme, broader).subscribe(
                     stResp => {
                         this.brokenConceptList = [];
                     }
@@ -148,7 +148,7 @@ export class DanglingConceptComponent {
         this.modalService.confirm("Remove from scheme", "Warning, if the concepts have narrowers, removing them " +
                 "may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
-                this.icvService.removeAllConceptsFromScheme(this.brokenConceptList, this.selectedScheme).subscribe(
+                this.icvService.removeAllDanglingFromScheme(this.selectedScheme).subscribe(
                     stResp => {
                         this.brokenConceptList = [];
                     }
@@ -157,5 +157,28 @@ export class DanglingConceptComponent {
             () => {}
         );
     }
+
+    /**
+     * Fixes concept by deleting it 
+     */
+    private deleteConcept(concept: ARTURIResource) {
+        this.skosService.deleteConcept(concept).subscribe(
+            stResp => {
+                //remove the concept from the danglingConceptList
+                this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+            }
+        )
+    }
     
+    /**
+     * Fixes dangling simply by deleting them all
+     */
+    private deleteAll(concept: ARTURIResource) {
+        this.icvService.deleteAllDanglingConcepts(this.selectedScheme).subscribe(
+            stResp => {
+                this.brokenConceptList = [];
+            }
+        )
+    }
+
 }

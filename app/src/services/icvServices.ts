@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource} from "../utils/ARTResources";
-
+import {ARTURIResource, ARTResource} from "../utils/ARTResources";
+import {Deserializer} from "../utils/Deserializer";
 
 @Injectable()
 export class IcvServices {
@@ -221,6 +221,19 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSXLLabel", params, this.oldTypeService);
     }
+
+    /**
+     * Returns a list of dangling skosxl:Label, namely the skosxl:Label not linked with any concept
+     */
+    listDanglingXLabels() {
+        console.log("[IcvServices] listDanglingXLabels");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params, this.oldTypeService).map(
+            stResp => {
+                return <ARTResource[]>Deserializer.createRDFArray(stResp);
+            }
+        );
+    }
     
     /**
      * Returns a list of skos:Concept that have redundant hierarchical relations
@@ -250,78 +263,65 @@ export class IcvServices {
     
     /**
      * Quick fix for dangling concepts. Set all dangling concepts as topConceptOf the given scheme
-	 * @param concepts array of dangling concepts
 	 * @param scheme
      */
-    setAllDanglingAsTopConcept(concepts: ARTURIResource[], scheme: ARTURIResource) {
+    setAllDanglingAsTopConcept(scheme: ARTURIResource) {
         console.log("[IcvServices] setAllDanglingAsTopConcept");
-        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
-        var conceptsUri: string[] = []
-        for (var i = 0; i < concepts.length; i++) {
-            conceptsUri.push(concepts[i].getURI());
-        }
         var params: any = {
-            conceptsUri: conceptsUri,
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doPost(this.serviceName, "setAllDanglingAsTopConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setAllDanglingAsTopConcept", params, this.oldTypeService);
     }
     
     /**
-     * Quick fix for dangling concepts. Set a concept of broader for all dangling concepts
-	 * @param concepts array of dangling concepts
+     * Quick fix for dangling concepts. Set the given broader for all dangling concepts in the given scheme 
 	 * @param scheme
+	 * @param broader
      */
-    setBroaderForAllDangling(concepts: ARTURIResource[], broader: ARTURIResource) {
+    setBroaderForAllDangling(scheme: ARTURIResource, broader: ARTURIResource) {
         console.log("[IcvServices] setBroaderForAllDangling");
-        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
         var conceptsUri: string[] = []
-        for (var i = 0; i < concepts.length; i++) {
-            conceptsUri.push(concepts[i].getURI());
-        }
         var params: any = {
-            conceptsUri: conceptsUri,
+            scheme: scheme.getURI(),
             broader: broader.getURI()
         };
-        return this.httpMgr.doPost(this.serviceName, "setBroaderForAllDangling", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setBroaderForAllDangling", params, this.oldTypeService);
     }
     
     /**
-     * Quick fix for dangling concepts. Removes all dangling concepts from their scheme
-	 * @param concepts
+     * Quick fix for dangling concepts. Removes all dangling concepts from the given scheme
 	 * @param scheme
      */
-    removeAllConceptsFromScheme(concepts: ARTURIResource[], scheme: ARTURIResource) {
-        console.log("[IcvServices] removeAllConceptsFromScheme");
-        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
-        var conceptsUri: string[] = []
-        for (var i = 0; i < concepts.length; i++) {
-            conceptsUri.push(concepts[i].getURI());
-        }
+    removeAllDanglingFromScheme(scheme: ARTURIResource) {
+        console.log("[IcvServices] removeAllDanglingFromScheme");
         var params: any = {
-            conceptsUri: conceptsUri,
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doPost(this.serviceName, "removeAllConceptsFromScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeAllDanglingFromScheme", params, this.oldTypeService);
+    }
+
+    /**
+     * Quick fix for dangling concepts. Deletes all dangling concepts of the given scheme
+	 * @param scheme
+     */
+    deleteAllDanglingConcepts(scheme: ARTURIResource) {
+        console.log("[IcvServices] deleteAllDanglingConcepts");
+        var params: any = {
+            scheme: scheme.getURI()
+        };
+        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingConcepts", params, this.oldTypeService);
     }
     
     /**
-     * Quick fix for concepts in no scheme. Add all concepts to a scheme
-	 * @param concepts
+     * Quick fix for concepts in no scheme. Add all concepts without scheme to the given scheme
 	 * @param scheme
      */
-    addAllConceptsToScheme(concepts: ARTURIResource[], scheme: ARTURIResource) {
+    addAllConceptsToScheme(scheme: ARTURIResource) {
         console.log("[IcvServices] addAllConceptsToScheme");
-        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
-        var conceptsUri: string[] = []
-        for (var i = 0; i < concepts.length; i++) {
-            conceptsUri.push(concepts[i].getURI());
-        }
         var params: any = {
-            conceptsUri: conceptsUri,
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doPost(this.serviceName, "addAllConceptsToScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addAllConceptsToScheme", params, this.oldTypeService);
     }
     
     /**
@@ -339,20 +339,13 @@ export class IcvServices {
     }
     
     /**
-	 * Quick fix for topConcept with broader. Remove all the broader relation in the given scheme of the given concepts.
-	 * @param conceptsUri
+	 * Quick fix for topConcept with broader. Remove all the broader (or narrower) relation in the 
+	 * of top concepts with broader (in the same scheme).
 	 */
-	removeBroadersToAllConcepts(concepts: ARTURIResource[]) {
+	removeBroadersToAllConcepts() {
         console.log("[IcvServices] removeBroadersToAllConcepts");
-        //convert array of ARTURIResource to array of string, in order to be compliant with Post params
-        var conceptsUri: string[] = []
-        for (var i = 0; i < concepts.length; i++) {
-            conceptsUri.push(concepts[i].getURI());
-        }
-        var params: any = {
-            conceptsUri: conceptsUri,
-        };
-        return this.httpMgr.doPost(this.serviceName, "removeBroadersToAllConcepts", params, this.oldTypeService);
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "removeBroadersToAllConcepts", params, this.oldTypeService);
     } 
 
     /**
@@ -363,5 +356,39 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "removeAllAsTopConceptsWithBroader", params, this.oldTypeService);
     }
+
+    /**
+	 * Quick fix for hierarchical redundancy. Remove narrower/broader redundant relations.
+	 */
+	removeAllHierarchicalRedundancy() {
+        console.log("[IcvServices] removeAllHierarchicalRedundancy");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "removeAllHierarchicalRedundancy", params, this.oldTypeService);
+    }
     
+    /**
+     * Quick fix for dangling xLabel. Deletes all the dangling labels.
+     */
+    deleteAllDanglingXLabel() {
+        console.log("[IcvServices] deleteAllDanglingXLabel");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingXLabel", params, this.oldTypeService);
+    }
+
+    /**
+     * Fix for dangling xLabel. Links the dangling xLabel to the given concept through the given predicate 
+	 * @param concept
+	 * @param xlabelPred
+	 * @param xlabel
+     */
+    setDanglingXLabel(concept: ARTURIResource, xlabelPred: ARTURIResource, xlabel: ARTResource) {
+        console.log("[IcvServices] setDanglingXLabel");
+        var params: any = {
+            concept: concept.getURI(),
+            xlabelPred: xlabelPred.getURI(),
+            xlabel: xlabel.getNominalValue()
+        };
+        return this.httpMgr.doGet(this.serviceName, "setDanglingXLabel", params, this.oldTypeService);
+    }
+
 }

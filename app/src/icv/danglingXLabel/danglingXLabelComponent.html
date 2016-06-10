@@ -1,35 +1,37 @@
 <div class="panel panel-default vbox" style="position: relative">
     <div class="panel-heading">
-        <label style="flex: 1;">ConceptScheme without topConcept</label>
+        <label style="flex: 1;">Dangling xLabels</label>
         <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
     </div>
     <div class="panel-body vbox">
         
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>skos:ConceptScheme(s) that don't have a topConcept or simply empty.</i>
+            <i>
+                skosxl:Label(s) that are not linked with any skos:Concept.
+            </i>
         </div>
 
-        <div *ngIf="!brokenSchemeList" style="padding: 4px;">
+        <div *ngIf="!brokenLabelList" style="padding: 4px;">
             Press <strong>Run</strong> button to run the check.
         </div>
-        <div *ngIf="brokenSchemeList" class="scrollableContainer">
+        
+        <div *ngIf="brokenLabelList" class="scrollableContainer">
             <table class="table table-condensed table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
-                        <th class="text-center">ConceptScheme</th>
+                        <th class="text-center">XLabel</th>
                         <th class="text-center" style="width: 1%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let scheme of brokenSchemeList">
+                    <tr *ngFor="let label of brokenLabelList">
                         <td>
-                            <rdf-resource [resource]="scheme"></rdf-resource>
+                            <rdf-resource [resource]="label"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="selectTopConcept(scheme)">Select top concept</button>
-                            <button class="btn btn-xs btn-default" (click)="createTopConcept(scheme)">Create top concept</button>
-                            <button class="btn btn-xs btn-default" (click)="deleteScheme(scheme)">Delete scheme</button>
+                            <button class="btn btn-xs btn-default" (click)="deleteLabel(label)">Delete label</button>
+                            <button class="btn btn-xs btn-default" (click)="assignLabel(label)">Add to a concept</button>
                         </td>
                     </tr>
                 </tbody>
@@ -38,9 +40,9 @@
     </div>
     <div class="panel-footer">
         <div  class="dropup pull-right">
-            <button *ngIf="brokenSchemeList && !brokenSchemeList.length == 0" class="btn btn-default btn-xs" type="button"
-                (click)="deleteAllScheme()">
-                Delete all scheme
+            <button *ngIf="brokenLabelList && !brokenLabelList.length == 0" class="btn btn-default btn-xs" type="button"
+                (click)="deleteAllLabel()">
+                Delete all
             </button>
         </div>
     </div>
