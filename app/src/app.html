@@ -25,6 +25,9 @@
 				<li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Schemes']">Schemes</a>
                 </li>
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Collections'), disabled: !isProjectOpen()}">
+                    <a [routerLink]="['Collections']">Collections</a>
+                </li>
 				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
                     <a [routerLink]="['Sparql']">SPARQL</a>
                 </li>

@@ -109,21 +109,21 @@ resource-view-splitted, resource-view-tabbed {
     flex: 1;
 }
 
-concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, resource-view {
+concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, collection-tree-panel, resource-view {
     display: flex;
     flex-flow: column;
     flex: 1;
     min-height: 0;
 }
 
-concept-tree, class-tree, property-tree, resource-view, instance-list, scheme-list, class-individual-tree {
+concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, class-individual-tree, resource-view {
     display: flex;
     flex: 1;
     min-height: 0;
     flex-flow: column;
 }
 
-concept-tree, class-tree, property-tree, instance-list, scheme-list {
+concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list {
     border: 1px solid #ddd;
 }
 
@@ -154,7 +154,8 @@ rdf-resource > .rdfResourceIcon {
 }
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
-scheme-list rdf-resource:hover, property-tree rdf-resource:hover, scheme-list-panel rdf-resource:hover {
+collection-tree rdf-resource:hover, scheme-list rdf-resource:hover, property-tree rdf-resource:hover,
+scheme-list-panel rdf-resource:hover {
     background-color: #e5f3ff;
 }
 

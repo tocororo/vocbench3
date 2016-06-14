@@ -25,6 +25,15 @@ export class VBEventHandler {
     public conceptRemovedAsTopConceptEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "concept" and "broader"
     public broaderRemovedEvent: EventEmitter<any> = new EventEmitter();
+
+    //COLLECTION EVENTS
+    //event should contain the created collection
+    public rootCollectionCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
+    //event should contain an object with "nested" (the narrower created) and "container"
+    public nestedCollectionCreatedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain the deleted collection
+    public collectionDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
+    
     
     //CLASS EVENTS
     //event should contain an object with "subClass" (the subClass created) and "superClass"

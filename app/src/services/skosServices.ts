@@ -12,7 +12,7 @@ export class SkosServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
     
-    //Concept services 
+    //====== Concept services ====== 
     
     /**
      * Returns the topConcepts of the given scheme
@@ -266,7 +266,7 @@ export class SkosServices {
         );
     }
     
-    //Scheme services
+    //====== Scheme services ======
     
     /**
      * Returns the list of available skos:ConceptScheme
@@ -332,7 +332,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
     }
     
-    //Label services
+    //====== Label services ======
     
     /**
      * Sets a preferred label to the given concept (or scheme). Emits a skosPrefLabelSetEvent with
@@ -464,6 +464,120 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "getShow", params, this.oldTypeService).map(
             stResp => {
                 return stResp.getElementsByTagName("show")[0].getAttribute("value");
+            }
+        );
+    }
+
+    //====== Collection services ======
+
+    /**
+     * Gets the root collections
+     * @param lang language in which the show attribute should be rendered
+     */
+    getRootCollections(lang?: string) {
+        console.log("[SkosServices] getRootCollections");
+        var params: any = {};
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, this.oldTypeService).map(
+            stResp => {
+                var rootColl = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < rootColl.length; i++) {
+                    rootColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return rootColl;
+            }
+        );
+    }
+
+    /**
+     * Get the nested collections of a container collection
+     * @param container the URI of the container collection
+     * @param lang language in which the show attribute should be rendered
+     */
+    getNestedCollections(container: ARTURIResource, lang?: string) {
+        console.log("[SkosServices] getNestedCollections");
+        var params: any = {
+            container: container.getURI()
+        };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, this.oldTypeService).map(
+            stResp => {
+                var nestedColl = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < nestedColl.length; i++) {
+                    nestedColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return nestedColl;
+            }
+        );
+    }
+
+    /**
+     * Creates a root collection
+     * @param collection the name of the collection. If not provided its URI is generated randomically
+     * @param prefLabel the preferred label of the collection
+     * @param prefLabelLang the language of the preferred label
+     * @param lang language in which the show attribute should be rendered
+     */
+    createRootCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string) {
+        console.log("[SkosServices] createCollection");
+        var params: any = {};
+        if (collection != undefined) {
+            params.collection = collection;
+        }
+        if (prefLabel != undefined) {
+            params.prefLabel = prefLabel;
+        }
+        if (prefLabelLang != undefined) {
+            params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+            stResp => {
+                var newColl = Deserializer.createURI(stResp);
+                this.eventHandler.rootCollectionCreatedEvent.emit(newColl);
+                return newColl;
+            }
+        );
+    }
+
+    /**
+     * Creates a nested collection for the given container
+     * @param collection the name of the collection. If not provided its URI is generated randomically
+     * @param container the container collection
+     * @param prefLabel the preferred label of the collection
+     * @param prefLabelLang the language of the preferred label
+     * @param lang language in which the show attribute should be rendered
+     */
+    createNestedCollection(container: ARTURIResource, collection?: string,
+        prefLabel?: string, prefLabelLang?: string, lang?: string) {
+
+        console.log("[SkosServices] createCollection");
+        var params: any = {
+            container: container.getURI()
+        };
+        if (collection != undefined) {
+            params.collection = collection;
+        }
+        if (prefLabel != undefined) {
+            params.prefLabel = prefLabel;
+        }
+        if (prefLabelLang != undefined) {
+            params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+            stResp => {
+                var newColl = Deserializer.createURI(stResp);
+                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
+                return newColl;
             }
         );
     }

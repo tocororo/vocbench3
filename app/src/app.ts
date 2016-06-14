@@ -10,6 +10,7 @@ import { ConceptsComponent } from "./skos/concept/conceptsComponent";
 import { ClassComponent } from "./owl/classComponent";
 import { PropertyComponent } from "./property/propertyComponent";
 import { SchemesComponent } from "./skos/scheme/schemesComponent";
+import { CollectionsComponent } from "./skos/collection/collectionsComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { IcvComponent } from "./icv/icvComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
@@ -50,6 +51,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Property", name: "Property", component: PropertyComponent},
     {path: "/Concepts", name: "Concepts", component: ConceptsComponent},
     {path: "/Schemes", name: "Schemes", component: SchemesComponent},
+    {path: "/Collections", name: "Collections", component: CollectionsComponent},
     {path: "/Sparql", name: "Sparql", component: SparqlComponent},
     {path: "/Icv", name: "Icv", component: IcvComponent},
     {path: "/AlignmentValidation", name: "AlignmentValidation", component: AlignmentValidationComponent},

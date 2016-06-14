@@ -25,7 +25,6 @@ export class ResourceViewPanelComponent {
         } else {
             this.resViewMode = "tabbed"; //default
         }
-        console.log("resViewMode " + this.resViewMode)
     }
     
 }

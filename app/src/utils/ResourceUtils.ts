@@ -39,6 +39,12 @@ export class ResourceUtils {
                 } else {
                     imgSrc = "app/assets/images/propObject_imported.png";       
                 }
+            } else if (role.indexOf(RDFResourceRolesEnum.skosCollection.toLowerCase()) != -1) {
+                if (explicit) {
+                    imgSrc = "app/assets/images/concept.png"; //TODO change
+                } else {
+                    imgSrc = "app/assets/images/concept_imported.png"; //TODO change
+                }
             } else if (role.indexOf(RDFResourceRolesEnum.datatypeProperty.toLowerCase()) != -1) {
                 if (explicit) {
                     imgSrc = "app/assets/images/propDatatype.png";
