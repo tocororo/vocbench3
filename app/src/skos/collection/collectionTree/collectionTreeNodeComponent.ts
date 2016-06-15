@@ -155,6 +155,7 @@ export class CollectionTreeNodeComponent {
         if (this.node.getURI() == container.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
         }
     }
     

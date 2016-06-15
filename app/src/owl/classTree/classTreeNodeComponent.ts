@@ -160,6 +160,7 @@ export class ClassTreeNodeComponent {
         if (this.node.getURI() == superClass.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subClass);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
         }
     }
     

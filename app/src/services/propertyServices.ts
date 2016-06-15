@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../utils/ARTResources";
+import {RDF, OWL} from "../utils/Vocabulary";
 import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../utils/CustomRanges";
 
 @Injectable()
@@ -65,7 +66,7 @@ export class PropertyServices {
      * Creates a property with the given name of the given type.
      * Emits a topPropertyCreatedEvent with the new property
      * @param propertyName local name of the property
-     * @param propertyType type of the property (property, objectProperty, datatypeProperty, ...) 
+     * @param propertyType type of the property (rdf:Property, owl:ObjectProperty, owl:DatatypeProperty, ...) 
      * @return the created property
      */
     addProperty(propertyName: string, propertyType: string) {
@@ -92,9 +93,23 @@ export class PropertyServices {
      */
     addSubProperty(propertyQName: string, superProperty: ARTURIResource) {
         console.log("[PropertyServices] addSubProperty");
+        var propType: string; //need to convert from role to type (service requires type, but returns role)
+        if (superProperty.getRole().toLowerCase().indexOf(RDFResourceRolesEnum.property.toLowerCase())) {
+            propType = RDF.property.getShow();
+        } else if (superProperty.getRole().toLowerCase().indexOf(RDFResourceRolesEnum.objectProperty.toLowerCase())) {
+            propType = OWL.objectProperty.getShow();
+        } else if (superProperty.getRole().toLowerCase().indexOf(RDFResourceRolesEnum.datatypeProperty.toLowerCase())) {
+            propType = OWL.datatypeProperty.getShow();
+        } else if (superProperty.getRole().toLowerCase().indexOf(RDFResourceRolesEnum.annotationProperty.toLowerCase())) {
+            propType = OWL.annotationProperty.getShow();
+        } else if (superProperty.getRole().toLowerCase().indexOf(RDFResourceRolesEnum.ontologyProperty.toLowerCase())) {
+            propType = OWL.ontologyProperty.getShow();
+        } else {
+            propType = superProperty.getRole();
+        } 
         var params: any = {
             propertyQName: propertyQName,
-            propertyType: superProperty.getRole(),
+            propertyType: propType,
             superPropertyQName: superProperty.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(

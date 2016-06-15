@@ -17,7 +17,8 @@ export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
     @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
-    @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();
+    @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
+            //only when the scheme is the one used in the current concept tree
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
     
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)

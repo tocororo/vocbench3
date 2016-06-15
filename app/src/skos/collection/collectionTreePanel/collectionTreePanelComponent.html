@@ -3,16 +3,13 @@
     <div class="panel-heading">  
         <div class="btn-group btn-group-xs" role="group" style="flex: 1;">
             <button class="btn btn-default" title="Create Collection" (click)="createCollection()">
-                <!--<img src="app/assets/images/collection_create.png" />-->
-                <img src="app/assets/images/concept_create.png" />
+                <img src="app/assets/images/collection_create.png" />
             </button>
             <button class="btn btn-default" title="Create a nested Collection" (click)="createNestedCollection()" [disabled]="!selectedCollection">
-                <!--<img src="app/assets/images/collection_addNested.png" />-->
-                <img src="app/assets/images/concept_addNarrower.png" />
+                <img src="app/assets/images/collection_addNested.png" />
             </button>
             <button class="btn btn-default" title="Delete Collection" (click)="deleteCollection()" [disabled]="!selectedCollection">
-                <!--<img src="app/assets/images/collection_delete.png" />-->
-                <img src="app/assets/images/concept_delete.png" />
+                <img src="app/assets/images/collection_delete.png" />
             </button>
         </div>
     </div>

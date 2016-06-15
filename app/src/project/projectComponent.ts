@@ -79,7 +79,7 @@ export class ProjectComponent implements OnInit {
                                     this.projectList.splice(i, 1);
                                 }
                             }
-                            this.vbCtx.removeScheme(this.selectedProject);
+                            this.vbCtx.removeProjectSetting(this.selectedProject);
                             this.selectedProject = null;
                         }
                     );

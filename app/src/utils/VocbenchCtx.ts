@@ -122,7 +122,7 @@ export class VocbenchCtx {
         }
         return contLang;
     }
-    
+
     /**
      * Sets the human_readable cookie in order to enable/disable the human readable label.
      * The language of the labels is then determined by the content language.
@@ -150,6 +150,15 @@ export class VocbenchCtx {
      */
     getInferenceInResourceView() {
         return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
+    }
+
+    /**
+     * Removes the settings saved as cookie for the given project
+     */
+    removeProjectSetting(project: Project) {
+        Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
+        Cookie.deleteCookie(Cookie.VB_CONTENT_LANG + "_" + project.getName());
+        Cookie.deleteCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName());
     }
 
 }

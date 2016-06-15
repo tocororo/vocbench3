@@ -540,6 +540,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
+                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.rootCollectionCreatedEvent.emit(newColl);
                 return newColl;
             }
@@ -576,6 +577,7 @@ export class SkosServices {
         return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
+                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
                 return newColl;
             }

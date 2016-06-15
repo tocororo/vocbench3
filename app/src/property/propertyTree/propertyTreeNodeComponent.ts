@@ -138,6 +138,7 @@ export class PropertyTreeNodeComponent {
         if (this.node.getURI() == superProperty.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
         }
     }
     

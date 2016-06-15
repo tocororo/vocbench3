@@ -157,6 +157,7 @@ export class ConceptTreeNodeComponent {
         if (this.node.getURI() == broader.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(narrower);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
         }
     }
     
