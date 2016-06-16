@@ -29,19 +29,27 @@
     'upgrade',
   ];
 
-  //add to packages array the angular2 packages
-  function packIndex(pkgName) {
+  /**
+   * The following commented block causes error with angular2-modal when closing modals.
+   * In order to make angular2-modal work, treat the npPackages as the third parties.
+   */
+  // //add to packages array the angular2 packages
+  // function packIndex(pkgName) {
+  //   packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
+  // }
+  // function packUmd(pkgName) {
+  //   packages['@angular/'+pkgName] = { main: '/bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
+  // }
+
+  // // Most environments should use UMD; some (Karma) need the individual index files
+  // var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+
+  // // Add package entries for angular packages
+  // ngPackageNames.forEach(setPackageConfig);
+
+  ngPackageNames.forEach(function(pkgName) {
     packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
-  }
-  function packUmd(pkgName) {
-    packages['@angular/'+pkgName] = { main: '/bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
-  }
-
-  // Most environments should use UMD; some (Karma) need the individual index files
-  var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
-
-  // Add package entries for angular packages
-  ngPackageNames.forEach(setPackageConfig);
+  });
 
   //====== 3rd party packages ======
   var thirdPartPackageNames = [

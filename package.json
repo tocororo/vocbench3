@@ -29,7 +29,7 @@
     "bootstrap": "^3.3.6",
     "jquery": "2.2.3",
     
-    "angular2-modal": "1.0.0",
+    "angular2-modal": "1.0.4",
     "codemirror": "5.14.2"
   },
   "devDependencies": {

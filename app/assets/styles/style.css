@@ -295,13 +295,18 @@ input[type=number]::-webkit-outer-spin-button {
     display: block;
     width: 100%;
     color: white;
- }
+}
  
- lang-picker {
+lang-picker {
      display: flex; align-items: center;
- }
+}
  
- .CodeMirror { height: 40vh !important }
+.CodeMirror { height: 40vh !important }
+
+/* Btn groups in panel heading (usually button for tree/list managment) */
+.panel-heading .btn-group-xs>.btn {
+    padding: 1px 3px;
+}
 
 /* BOOTSTRAP OVERRIDE */
 
