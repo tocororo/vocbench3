@@ -1,4 +1,4 @@
-///<reference path="../../../typings/browser.d.ts"/>
+///<reference path="../../../typings/index.d.ts"/>
 
 import { Component, ViewChild, Input, Output, EventEmitter} from '@angular/core';
 
