@@ -104,7 +104,7 @@ export class OnlyAltLabelResourceComponent {
             newPrefLabel = record.altLabels[0];
             this.changeAltToPref(record.resource, newPrefLabel).subscribe(
                 () => {
-                    this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                    this.runIcv();
                 }
             );
         } else {//multiple alt label -> ask the user which one to set as prefLabel
@@ -113,7 +113,7 @@ export class OnlyAltLabelResourceComponent {
                     newPrefLabel = selected;
                     this.changeAltToPref(record.resource, newPrefLabel).subscribe(
                         () => {
-                            this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                            this.runIcv();
                         }
                     );
                 },
@@ -163,7 +163,7 @@ export class OnlyAltLabelResourceComponent {
                 data => {
                     this.skosService.setPrefLabel(record.resource, data.value, data.lang).subscribe(
                         stResp => {
-                            this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                            this.runIcv();
                         }
                     )
                 }
@@ -173,7 +173,7 @@ export class OnlyAltLabelResourceComponent {
                 data => {
                     this.skosxlService.setPrefLabel(record.resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
-                            this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                            this.runIcv();
                         }
                     )
                 }

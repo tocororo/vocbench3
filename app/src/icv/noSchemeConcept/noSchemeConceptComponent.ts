@@ -56,8 +56,7 @@ export class NoSchemeConceptComponent {
             scheme => {
                 this.skosService.addConceptToScheme(concept, scheme).subscribe(
                     stResp => {
-                        //remove the concept from the list
-                        this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                        this.runIcv();
                     }
                 )
             },
@@ -72,7 +71,9 @@ export class NoSchemeConceptComponent {
         this.browsingService.browseSchemeList("Select a scheme").then(
             scheme => {
                 this.icvService.addAllConceptsToScheme(scheme).subscribe(
-                    stResp => this.brokenConceptList = []
+                    stResp => {
+                        this.runIcv();
+                    }
                 )
             },
             () => {}
@@ -85,8 +86,7 @@ export class NoSchemeConceptComponent {
     deleteConcept(concept: ARTURIResource) {
         this.skosService.deleteConcept(concept).subscribe(
             stResp => {
-                //remove the concept from the list
-                this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                this.runIcv();
             }
         );
     }

@@ -52,7 +52,7 @@ export class DanglingXLabelComponent {
     deleteLabel(xlabel: ARTResource) {
         this.deleteService.removeInstance(xlabel, SKOSXL.label).subscribe(
             stResp => {
-                this.brokenLabelList.splice(this.brokenLabelList.indexOf(xlabel), 1);
+                this.runIcv();
             }
         )
     }
@@ -71,7 +71,7 @@ export class DanglingXLabelComponent {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(
                             stResp => {
-                                this.brokenLabelList.splice(this.brokenLabelList.indexOf(xlabel), 1);
+                                this.runIcv();
                             }
                         )
                     },
@@ -88,7 +88,7 @@ export class DanglingXLabelComponent {
     deleteAllLabel() {
         this.icvService.deleteAllDanglingXLabel().subscribe(
             stResp => {
-                this.brokenLabelList = [];
+                this.runIcv();
             }
         )
     }

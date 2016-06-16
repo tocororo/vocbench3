@@ -85,7 +85,7 @@ export class NoLangLabelComponent {
                             stResp => {
                                 this.skosService.setPrefLabel(record.resource, record.label.getLabel(), data.lang).subscribe(
                                     stResp => {
-                                        this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                        this.runIcv();
                                     }
                                 )
                             }
@@ -95,7 +95,7 @@ export class NoLangLabelComponent {
                             stResp => {
                                 this.skosService.addAltLabel(record.resource, record.label.getLabel(), data.lang).subscribe(
                                     stResp => {
-                                        this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                        this.runIcv();
                                     }
                                 )
                             }
@@ -105,7 +105,7 @@ export class NoLangLabelComponent {
                             stResp => {
                                 this.skosService.addHiddenLabel(record.resource, record.label.getLabel(), data.lang).subscribe(
                                     stResp => {
-                                        this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                        this.runIcv();
                                     }
                                 )
                             }
@@ -122,7 +122,7 @@ export class NoLangLabelComponent {
                             stResp => {
                                 this.skosxlService.setPrefLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.uri).subscribe(
                                     stResp => {
-                                        this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                        this.runIcv();
                                     }
                                 )
                             }
@@ -132,7 +132,7 @@ export class NoLangLabelComponent {
                             stResp => {
                                 this.skosxlService.addAltLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.uri).subscribe(
                                     stResp => {
-                                        this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                        this.runIcv();
                                     }
                                 )
                             }
@@ -142,7 +142,7 @@ export class NoLangLabelComponent {
                             stResp => {
                                 this.skosxlService.addHiddenLabel(record.resource, record.label.getLabel(), data.lang, RDFTypesEnum.uri).subscribe(
                                     stResp => {
-                                        this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                        this.runIcv();
                                     }
                                 )
                             }
@@ -158,7 +158,7 @@ export class NoLangLabelComponent {
                         stResp => {
                             this.propService.createAndAddPropValue(record.resource, RDFS.label, record.label.getLabel(), null, RDFTypesEnum.plainLiteral, data.lang).subscribe(
                                 stResp => {
-                                    this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                                    this.runIcv();
                                 }
                             )
                         }

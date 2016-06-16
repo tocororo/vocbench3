@@ -118,7 +118,7 @@ export class NoLabelResourceComponent {
                 data => {
                     this.skosService.setPrefLabel(resource, data.value, data.lang).subscribe(
                         stResp => {
-                            this.brokenResourceList.splice(this.brokenResourceList.indexOf(resource), 1);
+                            this.runIcv();
                         }
                     )
                 },
@@ -129,7 +129,7 @@ export class NoLabelResourceComponent {
                 data => {
                     this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
-                            this.brokenResourceList.splice(this.brokenResourceList.indexOf(resource), 1);
+                            this.runIcv();
                         }
                     )
                 },
@@ -140,7 +140,7 @@ export class NoLabelResourceComponent {
                 data => {
                     this.propService.createAndAddPropValue(resource, RDFS.label, data.value, null, RDFTypesEnum.plainLiteral, data.lang).subscribe(
                         stResp => {
-                            this.brokenResourceList.splice(this.brokenResourceList.indexOf(resource), 1);
+                            this.runIcv();
                         }
                     )
                 },

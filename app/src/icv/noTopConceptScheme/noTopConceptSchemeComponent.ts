@@ -58,7 +58,7 @@ export class NoTopConceptSchemeComponent {
             concept => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
                     stResp => {
-                        this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                        this.runIcv();
                     }
                 );
             },
@@ -74,7 +74,7 @@ export class NoTopConceptSchemeComponent {
             data => {
                 this.skosService.createTopConcept(data.name, scheme, data.label, data.lang).subscribe(
                     stResp => {
-                        this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                        this.runIcv();
                     }
                 )
             },
@@ -91,7 +91,7 @@ export class NoTopConceptSchemeComponent {
             result => {
                 this.skosService.deleteScheme(scheme).subscribe(
                     stResp => {
-                        this.brokenSchemeList.splice(this.brokenSchemeList.indexOf(scheme), 1);
+                        this.runIcv();
                     }
                 );
             },

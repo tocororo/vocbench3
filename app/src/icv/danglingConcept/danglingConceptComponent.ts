@@ -73,8 +73,7 @@ export class DanglingConceptComponent {
     private setAsTopConcept(concept: ARTURIResource) {
         this.skosService.addTopConcept(concept, this.selectedScheme).subscribe(
             data => {
-                //remove the concept from the danglingConceptList
-                this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                this.runIcv();
             }
         );
     }
@@ -85,7 +84,7 @@ export class DanglingConceptComponent {
     private setAllTopConcept() {
         this.icvService.setAllDanglingAsTopConcept(this.selectedScheme).subscribe(
             stResp => {
-                this.brokenConceptList = [];//reset the dangling concept list
+                this.runIcv();
             }
         )
     }
@@ -98,8 +97,7 @@ export class DanglingConceptComponent {
             broader => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
-                        //remove the concept from the danglingConceptList
-                        this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                        this.runIcv();
                     }
                 )
             },
@@ -115,7 +113,7 @@ export class DanglingConceptComponent {
             broader => {
                 this.icvService.setBroaderForAllDangling(this.selectedScheme, broader).subscribe(
                     stResp => {
-                        this.brokenConceptList = [];
+                        this.runIcv();
                     }
                 )
             },
@@ -132,8 +130,7 @@ export class DanglingConceptComponent {
             result => {
                 this.skosService.removeConceptFromScheme(concept, this.selectedScheme).subscribe(
                     data => {
-                        //remove the concept from the danglingConceptList
-                        this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                        this.runIcv();
                     }
                 );
             },
@@ -150,7 +147,7 @@ export class DanglingConceptComponent {
             result => {
                 this.icvService.removeAllDanglingFromScheme(this.selectedScheme).subscribe(
                     stResp => {
-                        this.brokenConceptList = [];
+                        this.runIcv();
                     }
                 );
             },
@@ -164,8 +161,7 @@ export class DanglingConceptComponent {
     private deleteConcept(concept: ARTURIResource) {
         this.skosService.deleteConcept(concept).subscribe(
             stResp => {
-                //remove the concept from the danglingConceptList
-                this.brokenConceptList.splice(this.brokenConceptList.indexOf(concept), 1);
+                this.runIcv();
             }
         )
     }
@@ -176,7 +172,7 @@ export class DanglingConceptComponent {
     private deleteAll(concept: ARTURIResource) {
         this.icvService.deleteAllDanglingConcepts(this.selectedScheme).subscribe(
             stResp => {
-                this.brokenConceptList = [];
+                this.runIcv();
             }
         )
     }

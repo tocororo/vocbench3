@@ -56,7 +56,7 @@ export class HierarchicalRedundancyComponent {
         var narrower = record.narrower;
         this.skosService.removeBroaderConcept(narrower, broader).subscribe(
             stResp => {
-                this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                this.runIcv();
             }
         );
     }
@@ -67,7 +67,7 @@ export class HierarchicalRedundancyComponent {
     quickFix() {
         this.icvService.removeAllHierarchicalRedundancy().subscribe(
             stResp => {
-                this.brokenRecordList = [];
+                this.runIcv();
             }
         )
     }

@@ -52,7 +52,7 @@ export class TopConceptWithBroaderComponent {
         var scheme = record.scheme;
         this.icvService.removeBroadersToConcept(concept, scheme).subscribe(
             stResp => {
-                this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                this.runIcv();
             }
         );
     }
@@ -62,7 +62,7 @@ export class TopConceptWithBroaderComponent {
         var scheme = record.scheme;
         this.skosService.removeTopConcept(concept, scheme).subscribe(
             stResp => {
-                this.brokenRecordList.splice(this.brokenRecordList.indexOf(record), 1);
+                this.runIcv();
             }
         );
     }
@@ -70,7 +70,7 @@ export class TopConceptWithBroaderComponent {
     removeBroadersToAll() {
         this.icvService.removeBroadersToAllConcepts().subscribe(
             stResp => {
-                this.brokenRecordList = [];
+                this.runIcv();
             }
         );
     }
@@ -78,7 +78,7 @@ export class TopConceptWithBroaderComponent {
     removeAllAsTopConceptOf() {
         this.icvService.removeAllAsTopConceptsWithBroader().subscribe(
             stResp => {
-                this.brokenRecordList = [];
+                this.runIcv();
             }
         );
     }
