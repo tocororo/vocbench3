@@ -9,18 +9,25 @@ import {RDFResourceRolesEnum} from "../utils/ARTResources";
     host: { class: "pageComponent" }
 })
 export class IcvComponent {
+
+    private ontotype: string;
     
     private structuralIcv = {
         open: true,
         list: [
+            //OK
             { name: "Dangling concepts", ontoType: ["SKOS", "SKOS-XL"], routeName: "DanglingConcept",
             description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong"},
+            //OK
             { name: "Omitted topConcept", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoTopConceptScheme",
             description: "skos:ConceptScheme(s) that have no top concept"},
+            //OK
             { name: "Concepts in no scheme", ontoType: ["SKOS", "SKOS-XL"], routeName: "NoSchemeConcept",
             description: "skos:Concept(s) that doesn't belong to any scheme"},
+            //OK
             { name: "TopConcept with broader", ontoType: ["SKOS", "SKOS-XL"], routeName: "TopConceptWithBroader",
             description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept"},
+            //OK
             { name: "Hierarchical redundancy", ontoType: ["SKOS", "SKOS-XL"], routeName: "HierarchicalRedundancy",
             description: "skos:Concept(s) that have redundant hierarchical relations"},
             { name: "Cyclic hierarchical concepts", ontoType: ["SKOS", "SKOS-XL"],
@@ -31,25 +38,20 @@ export class IcvComponent {
     private labelIcv = {
         open: true,
         list: [
-            { name: "No skos:prefLabel concept", ontoType: ["SKOS"], routeName: "NoLabelResource", 
-            param: {type: RDFResourceRolesEnum.concept}, description: "skos:Concept(s) that have no skos:prefLabel"},
-            { name: "No skosxl:prefLabel concept", ontoType: ["SKOS-XL"], routeName: "NoLabelResource",
-            param: {type: RDFResourceRolesEnum.concept}, description: "skos:Concept(s) that have no skosxl:prefLabel"},
-            { name: "No rdfs:label resource", ontoType: ["OWL"], routeName: "NoLabelResource",
-            param: {type: RDFResourceRolesEnum.cls}, description: "Classes or instances that have no rdfs:label"},
-            //TODO make a unique ICV for both scheme and concept, so param can be removed and I can base the check on the ontoType
-            { name: "No skos:prefLabel scheme", ontoType: ["SKOS"], routeName: "NoLabelResource",
-            param: {type: RDFResourceRolesEnum.conceptScheme}, description: "skos:ConceptScheme(s) that have no skos:prefLabel"},
-            { name: "No skosxl:prefLabel scheme", ontoType: ["SKOS-XL"], routeName: "NoLabelResource",
-            param: {type: RDFResourceRolesEnum.conceptScheme}, description: "skos:ConceptScheme(s) that have no skosxl:prefLabel"},
-            { name: "Only skos:altLabel concept", ontoType: ["SKOS"], param: {type: RDFResourceRolesEnum.concept},
-            description: "skos:Concept(s) that have a skos:altLabel but not a skos:prefLabel in the same language"},
-            { name: "Only skosxl:altLabel concept", ontoType: ["SKOS-XL"], param: {type: RDFResourceRolesEnum.concept},
-            description: "skos:Concept(s) that have a skosxl:prefLabel but not a skosxl:prefLabel in the same language"},
-            { name: "Only skos:altLabel scheme", ontoType: ["SKOS"], param: {type: RDFResourceRolesEnum.conceptScheme},
-            description: "skos:ConceptScheme(s) that have a skos:prefLabel but not a skos:prefLabel in the same language"},
-            { name: "Only skosxl:altLabel scheme", ontoType: ["SKOS-XL"], param: {type: RDFResourceRolesEnum.conceptScheme},
-            description: "skos:ConceptScheme(s) that have a skosxl:prefLabel but not a skosxl:prefLabel in the same language"},
+            //OK
+            { name: "No skos:prefLabel resource", ontoType: ["SKOS"], routeName: "NoLabelResource", 
+            description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel"},
+            //OK
+            { name: "No skosxl:prefLabel resource", ontoType: ["SKOS-XL"], routeName: "NoLabelResource", 
+            description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel"},
+            { name: "No rdfs:label resource", ontoType: ["OWL"], // routeName: "NoLabelResource", 
+            description: "Classes or instances that have no rdfs:label"},
+            //OK
+            { name: "Only skos:altLabel resources", ontoType: ["SKOS"], routeName: "OnlyAltLabelResource",
+            description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language"},
+            //OK
+            { name: "Only skosxl:altLabel resources", ontoType: ["SKOS-XL"], routeName: "OnlyAltLabelResource",
+            description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language"},
             { name: "No language tag skos label", ontoType: ["SKOS"],
             description: "skos:Concept(s) that have a SKOS label without language tag"},
             { name: "No language tag skosxl label", ontoType: ["SKOS-XL"],
@@ -58,11 +60,12 @@ export class IcvComponent {
             description: "skos:Concept(s) that have the same skos:prefLabel in the same language"},
             { name: "Same skosxl:prefLabel concepts", ontoType: ["SKOS-XL"],
             description: "skos:Concept(s) that have the same skosxl:prefLabel in the same language"},
-            //TODO refactor service to check for conceptScheme too
-            { name: "Overlapped skos label concepts", ontoType: ["SKOS"],
-            description: "skos:Concept(s) that have the same value as skos:prefLabel and skos:altLabel in the same language"},
-            { name: "Overlapped skosxl label concepts", ontoType: ["SKOS-XL"],
-            description: "skos:Concept(s) that have the same value as skosxl:prefLabel and skosxl:altLabel in the same language"},
+            //OK
+            { name: "Overlapped skos label resources", ontoType: ["SKOS"], routeName: "OverlappedLabelResource",
+            description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skos:prefLabel and skos:altLabel in the same language"},
+            //OK
+            { name: "Overlapped skosxl label resources", ontoType: ["SKOS-XL"], routeName: "OverlappedLabelResource",
+            description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skosxl:prefLabel and skosxl:altLabel in the same language"},
             { name: "Extra whitespace skos label concepts", ontoType: ["SKOS"],
             description: "skos:Concept(s) that have some extra whitespace in a SKOS label"},
             { name: "Extra whitespace skosxl label concepts", ontoType: ["SKOS-XL"],
@@ -73,6 +76,7 @@ export class IcvComponent {
             description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"},
             { name: "skosxl:Label without skos:literalForm", ontoType: ["SKOS-XL"],
             description: "skosxl:Label(s) that don't specify a literal form"},
+            //OK
             { name: "Dangling skosxl:Label(s)", ontoType: ["SKOS-XL"], routeName: "DanglingXLabel",
             description: "skosxl:Label(s) that are not linked with any skos:Concept"}
         ]
@@ -93,6 +97,10 @@ export class IcvComponent {
         } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
             router.navigate(['Projects']);
         }
+    }
+
+    ngOnInit() {
+        this.ontotype = this.vbCtx.getWorkingProject().getPrettyPrintOntoType()
     }
     
     /**
@@ -122,7 +130,7 @@ export class IcvComponent {
      * Useful to show/hide the icv.
      */
     private isCompatibleWithProject(icvStruct): boolean {
-        return icvStruct.ontoType.indexOf(this.vbCtx.getWorkingProject().getPrettyPrintOntoType()) != -1;
+        return icvStruct.ontoType.indexOf(this.ontotype) != -1;
     }
-    
+
 }

@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {ARTResource} from "../../utils/ARTResources";
+import {ARTNode} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 
 @Component({
@@ -7,7 +7,7 @@ import {ResourceUtils} from "../../utils/ResourceUtils";
 	templateUrl: "app/src/widget/rdfResource/rdfResourceComponent.html",
 })
 export class RdfResourceComponent {
-	@Input() resource:ARTResource;
+	@Input() resource: ARTNode;
 	
 	constructor() {}
     

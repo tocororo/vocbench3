@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../utils/ARTResources";
 
 @Injectable()
 export class SkosxlServices {
@@ -166,6 +166,24 @@ export class SkosxlServices {
     }
     
     //====== Label services ======
+
+    /**
+     * Returns the preferred skosxl label for the given concept in the given language
+     * @param concept
+     * @param lang
+     */
+    getPrefLabel(concept: ARTURIResource, lang: string) {
+        console.log("[SkosxlServices] getPrefLabel");
+        var params: any = {
+            concept: concept.getURI(),
+            lang: lang
+        };
+        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                return Deserializer.createRDFResource(stResp.children[0]);
+            }
+        );
+    }
     
     /**
      * Sets a preferred label to the given concept (or scheme). Emits a skosxlPrefLabelSetEvent with
@@ -214,6 +232,24 @@ export class SkosxlServices {
             }
         );
 	}
+
+    /**
+     * Returns the alternative skosxl labels for the given concept in the given language
+     * @param concept
+     * @param lang
+     */
+    getAltLabels(concept: ARTURIResource, lang: string) {
+        console.log("[SkosxlServices] getAltLabels");
+        var params: any = {
+            concept: concept.getURI(),
+            lang: lang,
+        };
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService).map(
+            stResp => {
+                return Deserializer.createRDFArray(stResp);
+            }
+        );
+    }
     
     /**
      * Adds an alternative label to the given concept (or scheme)
@@ -286,6 +322,55 @@ export class SkosxlServices {
         }
         return this.httpMgr.doGet(this.serviceName, "removeHiddenLabel", params, this.oldTypeService);
 	}
+
+    /**
+     * Updates the info (literal form or language) about an xLabel
+     * N.B. This service works only with XLabel URIResource, not with BNode
+     * @param xLabel
+     * @param label
+     * @param lang
+     */
+    changeLabelInfo(xLabel: ARTResource, label: string, lang?: string) {
+        console.log("[SkosxlServices] changeLabelInfo");
+        var params: any = {
+            xlabelURI: xLabel.getNominalValue(),
+            label: label,
+        };
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "changeLabelInfo", params, this.oldTypeService);
+    }
+
+    /**
+     * Set a preferred label as alternative.
+     * N.B. This service works only with XLabel URIResource, not with BNode
+     * @param concept
+     * @param xLabel
+     */
+    prefToAtlLabel(concept: ARTURIResource, xLabel: ARTURIResource) {
+        console.log("[SkosxlServices] prefToAtlLabel");
+        var params: any = {
+            concept: concept.getURI(),
+            xLabelURI: xLabel.getURI()
+        };
+        return this.httpMgr.doGet(this.serviceName, "prefToAtlLabel", params, this.oldTypeService);
+    }
+
+    /**
+     * Set an alternative label as preferred.
+     * N.B. This service works only with XLabel URIResource, not with BNode
+     * @param concept
+     * @param xLabel
+     */
+    altToPrefLabel(concept: ARTURIResource, xLabel: ARTURIResource) {
+        console.log("[SkosxlServices] altToPrefLabel");
+        var params: any = {
+            concept: concept.getURI(),
+            xLabelURI: xLabel.getURI()
+        };
+        return this.httpMgr.doGet(this.serviceName, "altToPrefLabel", params, this.oldTypeService);
+    }
 
     //====== Collection services ======
     

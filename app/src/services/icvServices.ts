@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, ARTResource} from "../utils/ARTResources";
+import {ARTURIResource, ARTResource, ARTLiteral} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 
 @Injectable()
@@ -68,6 +68,10 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params, this.oldTypeService);
     }
+
+    //=============================
+    //======== LABEL CHECKS ========
+    //=============================
     
     /**
      * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skos:prefLabel
@@ -88,59 +92,75 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSXLPrefLabel", params, this.oldTypeService);
     }
-    
+
     /**
-     * Returns a list of records resource-lang, of concept that have a skos:altLabel for a lang but not a skos:prefLabel
+     * Returns a list of records resource-lang, of concept or conceptScheme that have a skos:altLabel for a lang
+     * but not a skos:prefLabel
      */
-    listConceptsWithOnlySKOSAltLabel() {
-        console.log("[IcvServices] listConceptsWithOnlySKOSAltLabel");
+    listResourcesWithOnlySKOSAltLabel() {
+        console.log("[IcvServices] listResourcesWithOnlySKOSAltLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithOnlySKOSAltLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSAltLabel", params, this.oldTypeService).map(
+            stResp => {
+                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
+                var records = [];
+                for (var i = 0; i < recordElemColl.length; i++) {
+                    var resource = Deserializer.createURI(recordElemColl[i]);
+                    var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
+                    var langRes = new ARTLiteral(lang, null, lang, false);
+                    records.push({resource: resource, lang: langRes});
+                }
+                return records;
+            }
+        );
     }
     
     /**
-     * Returns a list of records concept-lang, of concept that have a skosxl:altLabel for a lang but not a skosxl:prefLabel
+     * Returns a list of records resource-lang, of concept or conceptScheme that have a skosxl:altLabel for a lang
+     * but not a skosxl:prefLabel
      */
-    listConceptsWithOnlySKOSXLAltLabel() {
-        console.log("[IcvServices] listConceptsWithOnlySKOSXLAltLabel");
+    listResourcesWithOnlySKOSXLAltLabel() {
+        console.log("[IcvServices] listResourcesWithOnlySKOSXLAltLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithOnlySKOSXLAltLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSXLAltLabel", params, this.oldTypeService).map(
+            stResp => {
+                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
+                var records = [];
+                for (var i = 0; i < recordElemColl.length; i++) {
+                    var resource = Deserializer.createURI(recordElemColl[i]);
+                    var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
+                    var langRes = new ARTLiteral(lang, null, lang, false);
+                    records.push({resource: resource, lang: langRes});
+                }
+                return records;
+            }
+        );
     }
     
     /**
-     * Returns a list of concepts that have no skos:prefLabel
+     * Returns a list of concepts or scheme that have no skos:prefLabel
      */
-    listConceptsWithNoSKOSPrefLabel() {
-        console.log("[IcvServices] listConceptsWithNoSKOSPrefLabel");
+    listResourcesWithNoSKOSPrefLabel() {
+        console.log("[IcvServices] listResourcesWithNoSKOSPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoSKOSPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
     
     /**
-     * Returns a list of concepts that have no skosxl:prefLabel
+     * Returns a list of concepts or scheme that have no skosxl:prefLabel
      */
-    listConceptsWithNoSKOSXLPrefLabel() {
-        console.log("[IcvServices] listConceptsWithNoSKOSXLPrefLabel");
+    listResourcesWithNoSKOSXLPrefLabel() {
+        console.log("[IcvServices] listResourcesWithNoSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoSKOSXLPrefLabel", params, this.oldTypeService);
-    }
-    
-    /**
-     * Returns a list of conceptScheme that have no skos:prefLabel
-     */
-    listConceptSchemesWithNoSKOSPrefLabel() {
-        console.log("[IcvServices] listConceptSchemesWithNoSKOSPrefLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoSKOSPrefLabel", params, this.oldTypeService);
-    }
-    
-    /**
-     * Returns a list of conceptScheme that have no skosxl:prefLabel
-     */
-    listConceptSchemesWithNoSKOSXLPrefLabel() {
-        console.log("[IcvServices] listConceptSchemesWithNoSKOSXLPrefLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoSKOSXLPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params, this.oldTypeService).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
     
     /**
@@ -181,23 +201,45 @@ export class IcvServices {
     }
     
     /**
-     * Returns a list of records concept-label-lang. A record like that means that the concept ?concept has 
-	 * the same skos:prefLabel and skos:altLabel ?label in language ?lang
+     * Returns a list of records {resource: ARTURIResource, label: ARTLiteral}. A record like that means that the resource has 
+	 * the same skos:prefLabel and skos:altLabel in the same language
      */
-    listConceptsWithOverlappedSKOSLabel() {
-        console.log("[IcvServices] listConceptsWithOverlappedSKOSLabel");
+    listResourcesWithOverlappedSKOSLabel() {
+        console.log("[IcvServices] listResourcesWithOverlappedSKOSLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithOverlappedSKOSLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSLabel", params, this.oldTypeService).map(
+            stResp => {
+                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
+                var records = [];
+                for (var i = 0; i < recordElemColl.length; i++) {
+                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
+                    var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
+                    records.push({resource: resource, label: label});
+                    console.log(JSON.stringify(records));
+                }
+                return records;
+            }
+        );
     }
     
     /**
-     * Returns a list of records concept-label-lang. A record like that means that the concept ?concept has 
-	 * the same skosxl:prefLabel and skosxl:altLabel ?label in language ?lang
+     * Returns a list of records {resource: ARTURIResource, label: ARTLiteral}. A record like that means that the resource has 
+	 * the same skosxl:prefLabel and skosxl:altLabel in the same language
      */
-    listConceptsWithOverlappedSKOSXLLabel() {
-        console.log("[IcvServices] listConceptsWithOverlappedSKOSXLLabel");
+    listResourcesWithOverlappedSKOSXLLabel() {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithOverlappedSKOSXLLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params, this.oldTypeService).map(
+            stResp => {
+                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
+                var records = [];
+                for (var i = 0; i < recordElemColl.length; i++) {
+                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
+                    var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
+                    records.push({resource: resource, label: label});
+                }
+                return records;
+            }
+        );
     }
     
     /**

@@ -23,6 +23,8 @@ import { NoTopConceptSchemeComponent } from "./icv/noTopConceptScheme/noTopConce
 import { TopConceptWithBroaderComponent } from "./icv/topConceptWithBroader/topConceptWithBroaderComponent";
 import { HierarchicalRedundancyComponent } from "./icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
 import { NoLabelResourceComponent } from "./icv/noLabelResource/noLabelResourceComponent";
+import { OnlyAltLabelResourceComponent } from "./icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
+import { OverlappedLabelComponent } from "./icv/overlappedLabel/overlappedLabelComponent";
 import { DanglingXLabelComponent } from "./icv/danglingXLabel/danglingXLabelComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
@@ -72,7 +74,9 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Icv/NoTopConceptScheme", name: "NoTopConceptScheme", component: NoTopConceptSchemeComponent},
     {path: "/Icv/TopConceptWithBroader", name: "TopConceptWithBroader", component: TopConceptWithBroaderComponent},
     {path: "/Icv/HierarchicalRedundancy", name: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent},
-    {path: "/Icv/NoLabelResource/:type", name: "NoLabelResource", component: NoLabelResourceComponent},
+    {path: "/Icv/NoLabelResource", name: "NoLabelResource", component: NoLabelResourceComponent},//type refers to the label type (SKOS, SKOS-XL, RDFS)
+    {path: "/Icv/OnlyAltLabelResource", name: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent},
+    {path: "/Icv/OverlappedLabelResource", name: "OverlappedLabelResource", component: OverlappedLabelComponent},
     {path: "/Icv/DanglingXLabel", name: "DanglingXLabel", component: DanglingXLabelComponent},
 ])
 

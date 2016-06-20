@@ -21,7 +21,6 @@ export class NoLabelResourceComponent {
     
     private brokenResourceList: Array<ARTURIResource>;
     private ontoType: string;
-    private resourceType: string; //resource without label (concept, cls, conceptScheme)
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
@@ -32,7 +31,6 @@ export class NoLabelResourceComponent {
         } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
             router.navigate(['Projects']);
         }
-        this.resourceType = this.routeParams.get("type");
     }
     
     ngOnInit() {
@@ -43,68 +41,19 @@ export class NoLabelResourceComponent {
      * Run the check
      */
     runIcv() {
-        //TODO check when service will be refactored
         if (this.ontoType == "SKOS") {
-            if (this.resourceType == RDFResourceRolesEnum.concept) {
-                document.getElementById("blockDivIcv").style.display = "block";
-                this.icvService.listConceptsWithNoSKOSPrefLabel().subscribe(
-                    stResp => {
-                        this.brokenResourceList = new Array();
-                        var conceptColl = stResp.getElementsByTagName("concept");
-                        for (var i = 0; i < conceptColl.length; i++) {
-                            var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept); 
-                            this.brokenResourceList.push(c);
-                        }
-                        document.getElementById("blockDivIcv").style.display = "none";
-                    },
-                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
-                );
-            } else if (this.resourceType == RDFResourceRolesEnum.conceptScheme) {
-                document.getElementById("blockDivIcv").style.display = "block";
-                this.icvService.listConceptSchemesWithNoSKOSPrefLabel().subscribe(
-                    stResp => {
-                        this.brokenResourceList = new Array();
-                        var schemeColl = stResp.getElementsByTagName("scheme");
-                        for (var i = 0; i < schemeColl.length; i++) {
-                            var c = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme); 
-                            this.brokenResourceList.push(c);
-                        }
-                        document.getElementById("blockDivIcv").style.display = "none";
-                    },
-                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
-                );
-            }
+            this.icvService.listResourcesWithNoSKOSPrefLabel().subscribe(
+                brokenRes => {
+                    this.brokenResourceList = brokenRes;
+                }
+            );
         } else if (this.ontoType == "SKOS-XL") {
-            if (this.resourceType == RDFResourceRolesEnum.concept) {
-                document.getElementById("blockDivIcv").style.display = "block";
-                this.icvService.listConceptsWithNoSKOSXLPrefLabel().subscribe(
-                    stResp => {
-                        this.brokenResourceList = new Array();
-                        var conceptColl = stResp.getElementsByTagName("concept");
-                        for (var i = 0; i < conceptColl.length; i++) {
-                            var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept); 
-                            this.brokenResourceList.push(c);
-                        }
-                        document.getElementById("blockDivIcv").style.display = "none";
-                    },
-                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
-                );
-            } else if (this.resourceType == RDFResourceRolesEnum.conceptScheme) {
-                document.getElementById("blockDivIcv").style.display = "block";
-                this.icvService.listConceptSchemesWithNoSKOSXLPrefLabel().subscribe(
-                    stResp => {
-                        this.brokenResourceList = new Array();
-                        var schemeColl = stResp.getElementsByTagName("scheme");
-                        for (var i = 0; i < schemeColl.length; i++) {
-                            var c = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme); 
-                            this.brokenResourceList.push(c);
-                        }
-                        document.getElementById("blockDivIcv").style.display = "none";
-                    },
-                    err => { document.getElementById("blockDivIcv").style.display = "none"; }
-                );
-            }
-        } else { //OWL 
+            this.icvService.listResourcesWithNoSKOSXLPrefLabel().subscribe(
+                brokenRes => {
+                    this.brokenResourceList = brokenRes;
+                }
+            );
+        } else { //OWL
             //TODO
         }
     }

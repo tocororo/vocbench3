@@ -1,31 +1,25 @@
 <div class="panel panel-default vbox" style="position: relative">
     <div class="panel-heading">
-        <label *ngIf="resourceType == 'concept'" style="flex: 1;">Concepts with only alternative label</label>
-        <label *ngIf="resourceType == 'conceptScheme'" style="flex: 1;">Concept schemes with only alternative label</label>
+        <label *ngIf="ontoType == 'SKOS'" style="flex: 1;">Only skos:altLabel resources</label>
+        <label *ngIf="ontoType == 'SKOS-XL'" style="flex: 1;">Only skosxl:altLabel resources</label>
         <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
     </div>
     <div class="panel-body vbox">
         
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i *ngIf="resourceType == 'concept' && ontoType == 'SKOS'">
-                skos:Concept(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language.
+            <i *ngIf="ontoType == 'SKOS'">
+                skos:Concept(s) or skos:ConceptScheme(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language.
             </i>
-            <i *ngIf="resourceType == 'concept' && ontoType == 'SKOS-XL'">
-                skos:Concept(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language.
-            </i>
-            <i *ngIf="resourceType == 'conceptScheme' && ontoType == 'SKOS'">
-                skos:ConceptScheme(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language.
-            </i>
-            <i *ngIf="resourceType == 'conceptScheme' && ontoType == 'SKOS-XL'">
-                skos:ConceptScheme(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language.
+            <i *ngIf="ontoType == 'SKOS-XL'">
+                skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language.
             </i>
         </div>
 
-        <div *ngIf="!brokenResourceList" style="padding: 4px;">
+        <div *ngIf="!brokenRecordList" style="padding: 4px;">
             Press <strong>Run</strong> button to run the check.
         </div>
-        <div *ngIf="brokenResourceList" class="scrollableContainer">
+        <div *ngIf="brokenRecordList" class="scrollableContainer">
             <table class="table table-condensed table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
@@ -39,7 +33,7 @@
                         <td>
                             <rdf-resource [resource]="record.resource"></rdf-resource>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <rdf-resource [resource]="record.lang"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">

@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTNode} from "../../../utils/ARTResources";
 
 export class ResourceSelectionModalData extends BSModalContext {
     /**
@@ -13,7 +13,7 @@ export class ResourceSelectionModalData extends BSModalContext {
     constructor(
         public title: string = 'Modal Title',
         public message: string,
-        public resourceList: Array<ARTURIResource>
+        public resourceList: Array<ARTNode>
     ) {
         super();
     }
@@ -40,11 +40,11 @@ export class ResourceSelectionModal implements ModalComponent<ResourceSelectionM
         document.getElementById("toFocus").focus();
     }
     
-    private isResourceSelected(resource: ARTURIResource) {
+    private isResourceSelected(resource: ARTNode) {
         return this.resourceSelected == resource;
     }
     
-    private onResourceSelected(resource: ARTURIResource) {
+    private onResourceSelected(resource: ARTNode) {
         this.resourceSelected = resource;
     }
 

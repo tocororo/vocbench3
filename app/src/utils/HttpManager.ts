@@ -55,10 +55,10 @@ export class HttpManager {
         }
         
         //add parameters
-        url += this.getContextParametersForUrl();
         for (var paramName in params) {
             url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
         }
+        url += this.getContextParametersForUrl();
 
         console.log("[GET]: " + url);
         
@@ -243,10 +243,10 @@ export class HttpManager {
         }
         
         //add parameters
-        url += this.getContextParametersForUrl();
         for (var paramName in params) {
             url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
         }
+        url += this.getContextParametersForUrl();
 
         console.log("[GET]: " + url);
         

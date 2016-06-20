@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Modal} from 'angular2-modal/plugins/bootstrap';
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalData} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
 import {ConfirmCheckModal, ConfirmCheckModalData} from "./confirmModal/confirmCheckModal";
@@ -124,7 +124,7 @@ export class ModalServices {
      * @param resourceList array of available resources
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
-    selectResource(title: string, message: string, resourceList: Array<ARTURIResource>) {
+    selectResource(title: string, message: string, resourceList: Array<ARTNode>) {
         var modalData = new ResourceSelectionModalData(title, message, resourceList);
         return this.modal.open(ResourceSelectionModal, modalData).then(
             dialog => dialog.result

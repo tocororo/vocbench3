@@ -142,7 +142,7 @@ export class Deserializer {
             literalElement = response;
         } else {
             literalElement = response.getElementsByTagName('typedLiteral');
-            if (literalElement.lenght != 0) {
+            if (literalElement.length != 0) {
                 literalElement = response.getElementsByTagName('typedLiteral')[0];
             } else {
                 literalElement = response.getElementsByTagName('plainLiteral')[0];

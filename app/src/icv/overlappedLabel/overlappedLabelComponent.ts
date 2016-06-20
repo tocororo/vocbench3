@@ -3,7 +3,7 @@ import {Router, RouteParams} from '@angular/router-deprecated';
 import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum} from "../../utils/ARTResources";
+import {ARTURIResource, ARTResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -18,7 +18,7 @@ import {SkosxlServices} from "../../services/skosxlServices";
 })
 export class OverlappedLabelComponent {
     
-    private brokenRecordList: Array<any>; //TODO should be {concept: ARTURIResource, prefLabel: ARTLiteral, altLabel: ARTLiteral}
+    private brokenRecordList: Array<any>; //{resource: ARTURIResource, label: ARTLiteral}
     private ontoType: string;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
@@ -38,27 +38,22 @@ export class OverlappedLabelComponent {
     
     /**
      * Run the check
-     * TODO the service should be refactore so that it will return both concept and scheme with overlapped labels
-     * Each <record> element with
-     * - <uri> the resource with overlapped labels (the role determines if the resource is concept or conceptScheme)
-     * and the two <plainLiteral> representing the labels
      */
     runIcv() {
-        //TODO check when service will be refactored
         if (this.ontoType == "SKOS") {
             document.getElementById("blockDivIcv").style.display = "block";
-            this.icvService.listConceptsWithOverlappedSKOSLabel().subscribe(
-                stResp => {
-                    //TODO
+            this.icvService.listResourcesWithOverlappedSKOSLabel().subscribe(
+                brokenRecords => {
+                    this.brokenRecordList = brokenRecords;
                     document.getElementById("blockDivIcv").style.display = "none";
                 },
                 err => { document.getElementById("blockDivIcv").style.display = "none"; }
             );
         } else if (this.ontoType == "SKOS-XL") {
             document.getElementById("blockDivIcv").style.display = "block";
-            this.icvService.listConceptsWithOverlappedSKOSXLLabel().subscribe(
-                stResp => {
-                    //TODO
+            this.icvService.listResourcesWithOverlappedSKOSXLLabel().subscribe(
+                brokenRecords => {
+                    this.brokenRecordList = brokenRecords;
                     document.getElementById("blockDivIcv").style.display = "none";
                 },
                 err => { document.getElementById("blockDivIcv").style.display = "none"; }
@@ -70,28 +65,117 @@ export class OverlappedLabelComponent {
      * Fixes by changing prefLabel
      */
     changePrefLabel(record) {
-        //TODO
+        this.modalService.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getLabel(), false,
+            (<ARTLiteral>record.label).getLang(), true).then(
+            data => {
+                var label = data.value;
+                var lang = data.lang;
+                if (this.ontoType == "SKOS") {
+                    this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getLabel(), lang).subscribe(
+                        stResp => {
+                            this.skosService.setPrefLabel(record.resource, label, lang).subscribe(
+                                stResp => {
+                                    this.runIcv();
+                                }
+                            )
+                        }
+                    )
+                } else { //SKOS-XL
+                    //first get the xlabel to change
+                    this.skosxlService.getPrefLabel(record.resource, lang).subscribe(
+                        xlabel => {
+                            //then update info
+                            this.skosxlService.changeLabelInfo(xlabel, label, lang).subscribe(
+                                stResp => {
+                                    this.runIcv();
+                                }
+                            )
+                        }
+                    );
+                }
+            },
+            () => {}
+        )
     }
     
     /**
      * Fixes by removing prefLabel
      */
     removePrefLabel(record) {
-        //TODO
+        if (this.ontoType == "SKOS") {
+            this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
+                stReso => {
+                    this.runIcv();
+                }
+            );
+        } else { //SKOS-XL
+            this.skosxlService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
+                stReso => {
+                    this.runIcv();
+                }
+            );
+        }
     }
     
     /**
      * Fixes by changing altLabel
      */
     changeAltLabel(record) {
-        //TODO
+        this.modalService.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getLabel(), false,
+            (<ARTLiteral>record.label).getLang(), true).then(
+            data => {
+                var label = data.value;
+                var lang = data.lang;
+                if (this.ontoType == "SKOS") {
+                    this.skosService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
+                        stReso => {
+                            this.skosService.addAltLabel(record.resource, label, lang).subscribe(
+                                stResp => {
+                                    this.runIcv();
+                                }
+                            );
+                        }
+                    );
+                } else { //SKOS-XL
+                    //first get the xlabel to change
+                    this.skosxlService.getAltLabels(record.resource, lang).subscribe(
+                        altLabels => {
+                            //look for the alt label URI
+                            for (var i = 0; i < altLabels.length; i++) {
+                                if (altLabels[i].getShow() == (<ARTLiteral>record.label).getLabel()) {
+                                    //then update info
+                                    this.skosxlService.changeLabelInfo(<ARTResource>altLabels[i], label, lang).subscribe(
+                                        stResp => {
+                                            this.runIcv();
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    );
+                }
+            },
+            () => {}
+        );
     }
     
     /**
      * Fixes by removing altLabel
      */
     removeAltLabel(record) {
-        //TODO
+        if (this.ontoType == "SKOS") {
+            this.skosService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
+                stReso => {
+                    this.runIcv();
+                }
+            );
+        } else { //SKOS-XL
+            this.skosxlService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
+                stReso => {
+                    this.runIcv();
+                }
+            );
+        }
     }
     
 }

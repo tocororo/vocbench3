@@ -103,21 +103,20 @@ export class NoTopConceptSchemeComponent {
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        alert("quick fix not yet available");
-        
-        //TODO this fix causes CuncurrentModificationException. Disabled untill it is fixed server side.
-        // this.modalService.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
-        //         "will generate concepts in no scheme. Are you sure to proceed?").then(
-        //     confirm => {
-        //         var deleteSchemeFnArray = [];
-        //         deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteScheme(sc));
-        //         //call the collected functions and subscribe when all are completed
-        //         Observable.forkJoin(deleteSchemeFnArray).subscribe(
-        //             res => this.brokenSchemeList = []
-        //         );
-        //     },
-        //     () => {}
-        // );
+        this.modalService.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
+                "will generate concepts in no scheme. Are you sure to proceed?").then(
+            confirm => {
+                var deleteSchemeFnArray = [];
+                deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteScheme(sc));
+                //call the collected functions and subscribe when all are completed
+                Observable.forkJoin(deleteSchemeFnArray).subscribe(
+                    res => {
+                        this.runIcv();
+                    }
+                );
+            },
+            () => {}
+        );
     }
     
 }

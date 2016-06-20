@@ -95,15 +95,14 @@ export class NoSchemeConceptComponent {
      * Fixes concepts by deleting them all 
      */
     deleteAllConcept() {
-        alert("Fix not yet available");
-       
-        //TODO this fix causes CuncurrentModificationException. Disabled untill it is fixed server side.
-        // var deleteConcFnArray = [];
-        // deleteConcFnArray = this.brokenConceptList.map((conc) => this.skosService.deleteConcept(conc));
-        // //call the collected functions and subscribe when all are completed
-        // Observable.forkJoin(deleteConcFnArray).subscribe(
-        //     res => this.brokenConceptList = []
-        // );
+        var deleteConcFnArray = [];
+        deleteConcFnArray = this.brokenConceptList.map((conc) => this.skosService.deleteConcept(conc));
+        //call the collected functions and subscribe when all are completed
+        Observable.forkJoin(deleteConcFnArray).subscribe(
+            res => {
+                this.runIcv();
+            }
+        );
     }
     
 }

@@ -381,6 +381,24 @@ export class SkosServices {
 	}
 
     /**
+     * Returns the alternative skos labels for the given concept in the given language
+     * @param concept
+     * @param lang
+     */
+    getAltLabels(concept: ARTURIResource, lang: string) {
+        console.log("[SkosServices] getAltLabels");
+        var params: any = {
+            concept: concept.getURI(),
+            lang: lang,
+        };
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService).map(
+            stResp => {
+                return Deserializer.createRDFArray(stResp);
+            }
+        );
+    }
+
+    /**
      * Adds an alternative label to the given concept (or scheme)
      * @param concept
      * @param label lexical value of the label
