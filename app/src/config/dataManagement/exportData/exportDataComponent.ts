@@ -24,6 +24,11 @@ export class ExportDataComponent {
         }
     }
     
+    /*
+     * Currently the export function allows only to export in the available formats. It doesn't provide the same
+     * capabilities of the export in VB2.x.x (export only a scheme, a subtree of a concept, ...) 
+     * since VB3 uses the export service of SemanticTurkey. 
+     */
     private export() {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.inOutService.saveRDF(this.format).subscribe(

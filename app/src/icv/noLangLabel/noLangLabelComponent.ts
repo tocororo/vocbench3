@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
-import {Router, RouteParams} from '@angular/router-deprecated';
+import {Router} from '@angular/router-deprecated';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum} from "../../utils/ARTResources";
-import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
+import {ARTResource, ARTURIResource, ARTLiteral} from "../../utils/ARTResources";
+import {SKOS, SKOSXL} from "../../utils/Vocabulary";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {PropertyServices} from "../../services/propertyServices";
@@ -23,8 +23,7 @@ export class NoLangLabelComponent {
     private ontoType: string;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
-        private router: Router, private routeParams: RouteParams) {
+        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);

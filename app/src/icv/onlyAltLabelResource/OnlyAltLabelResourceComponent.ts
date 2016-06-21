@@ -1,10 +1,9 @@
 import {Component} from "@angular/core";
-import {Router, RouteParams} from '@angular/router-deprecated';
+import {Router} from '@angular/router-deprecated';
 import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, ARTResource, ARTLiteral, ARTNode, ResAttribute, RDFResourceRolesEnum, RDFTypesEnum} from "../../utils/ARTResources";
-import {RDFS} from "../../utils/Vocabulary";
+import {ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -24,8 +23,7 @@ export class OnlyAltLabelResourceComponent {
     private ontoType: string;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private vbCtx: VocbenchCtx, private modalService: ModalServices,
-        private router: Router, private routeParams: RouteParams) {
+        private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
         //navigate to Home view if not authenticated
         if (vbCtx.getAuthenticationToken() == undefined) {
             router.navigate(['Home']);

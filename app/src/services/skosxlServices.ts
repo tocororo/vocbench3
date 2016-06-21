@@ -325,7 +325,6 @@ export class SkosxlServices {
 
     /**
      * Updates the info (literal form or language) about an xLabel
-     * N.B. This service works only with XLabel URIResource, not with BNode
      * @param xLabel
      * @param label
      * @param lang

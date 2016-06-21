@@ -81,30 +81,31 @@ export class CollectionTreePanelComponent {
     }
     
     private doSearch(searchedText: string) {
-        alert("Search not yet available for Collection");
-        // if (searchedText.trim() == "") {
-        //     this.modalService.alert("Search", "Please enter a valid string to search", "error");
-        // } else {
-        //     this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, "contain",
-        //         this.vbCtx.getContentLanguage(true), this.vbCtx.getScheme()).subscribe(
-        //         searchResult => {
-        //             if (searchResult.length == 0) {
-        //                 this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
-        //             } else { //1 or more results
-        //                 if (searchResult.length == 1) {
-        //                     this.viewChildTree.openTreeAt(searchResult[0]);
-        //                 } else { //multiple results, ask the user which one select
-        //                     this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-        //                         selectedResource => {
-        //                             this.viewChildTree.openTreeAt(selectedResource);
-        //                         },
-        //                         () => {}
-        //                     );
-        //                 }
-        //             }
-        //         }
-        //     );
-        // }
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, "contain",
+                this.vbCtx.getContentLanguage(true)).subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            alert("Feature not yet availabel. Opening tree at " + JSON.stringify(searchResult[0]));
+                            // this.viewChildTree.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    alert("Feature not yet availabel. Opening tree at " + JSON.stringify(selectedResource));
+                                    // this.viewChildTree.openTreeAt(selectedResource);
+                                },
+                                () => {}
+                            );
+                        }
+                    }
+                }
+            );
+        }
     }
     
     /**

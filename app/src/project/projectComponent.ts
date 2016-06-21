@@ -33,6 +33,19 @@ export class ProjectComponent implements OnInit {
         this.projectService.listProjects().subscribe(
             projectList => {
                 this.projectList = projectList;
+            },
+            err => {
+                //if the server is not reachable, the err is an object like the following
+                //{"_body":{"isTrusted":true},"status":200,"ok":true,"statusText":"Ok","headers":{...},"type":3,"url":null}
+                //I don't know how else to recognize if this scenario happens
+                if (err.status == 200 && err.type == 3 && err.url == null) {
+                    this.modalService.alert(
+                        "Error", 
+                        "Server not found. Please be sure that the SemanticTurkey server is running and is listening on the correct port",
+                        "error");
+                } else {
+                    this.modalService.alert("Error", err, "error");
+                }
             }
         );
     }

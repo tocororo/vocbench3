@@ -3,7 +3,7 @@ import {Router} from '@angular/router-deprecated';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {SKOSXL} from "../../utils/Vocabulary";
 import {IcvServices} from "../../services/icvServices";

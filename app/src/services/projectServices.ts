@@ -20,10 +20,10 @@ export class ProjectServices {
         var params = {
             consumer: "SYSTEM"
         };
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService, false, true).map(
             stResp => {
                 var projColl = stResp.getElementsByTagName("project");
-                var projectList = [];
+                var projectList: Project[] = [];
                 for (var i = 0; i < projColl.length; i++) {
                     var proj = new Project();
                     proj.setAccessible(projColl[i].getAttribute("accessible") == "true");
