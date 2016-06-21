@@ -118,28 +118,12 @@ export class OnlyAltLabelResourceComponent {
                     }
                 );
             } else if (this.ontoType == "SKOS-XL") {
-                //in this case label is an ARTNode representing a skosxl:Label
-                if (label.isURIResource()) {
-                    this.skosxlService.altToPrefLabel(resource, <ARTURIResource>label).subscribe(
-                        stResp => {
-                            observer.next();
-                            observer.complete();
-                        }
-                    )
-                } else { //if is bnode, delete the old altLabel and set as prefLabel
-                    var literalForm = label.getShow();
-                    var lang = label.getAdditionalProperty(ResAttribute.LANG);
-                    this.skosxlService.removeAltLabel(resource, literalForm, lang).subscribe(
-                        stResp => {
-                            this.skosxlService.setPrefLabel(resource, literalForm, lang, RDFTypesEnum.uri).subscribe(
-                                stResp => {
-                                    observer.next();
-                                    observer.complete();
-                                }
-                            );
-                        }
-                    );
-                }
+                this.skosxlService.altToPrefLabel(resource, <ARTResource>label).subscribe(
+                    stResp => {
+                        observer.next();
+                        observer.complete();
+                    }
+                )
             }
         });
     }

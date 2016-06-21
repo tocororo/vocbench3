@@ -344,30 +344,28 @@ export class SkosxlServices {
 
     /**
      * Set a preferred label as alternative.
-     * N.B. This service works only with XLabel URIResource, not with BNode
      * @param concept
      * @param xLabel
      */
-    prefToAtlLabel(concept: ARTURIResource, xLabel: ARTURIResource) {
+    prefToAtlLabel(concept: ARTURIResource, xLabel: ARTResource) {
         console.log("[SkosxlServices] prefToAtlLabel");
         var params: any = {
             concept: concept.getURI(),
-            xLabelURI: xLabel.getURI()
+            xlabelURI: xLabel.getNominalValue()
         };
         return this.httpMgr.doGet(this.serviceName, "prefToAtlLabel", params, this.oldTypeService);
     }
 
     /**
      * Set an alternative label as preferred.
-     * N.B. This service works only with XLabel URIResource, not with BNode
      * @param concept
      * @param xLabel
      */
-    altToPrefLabel(concept: ARTURIResource, xLabel: ARTURIResource) {
+    altToPrefLabel(concept: ARTURIResource, xLabel: ARTResource) {
         console.log("[SkosxlServices] altToPrefLabel");
         var params: any = {
             concept: concept.getURI(),
-            xLabelURI: xLabel.getURI()
+            xlabelURI: xLabel.getNominalValue()
         };
         return this.httpMgr.doGet(this.serviceName, "altToPrefLabel", params, this.oldTypeService);
     }
