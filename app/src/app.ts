@@ -25,6 +25,7 @@ import { HierarchicalRedundancyComponent } from "./icv/hierarchicalRedundancy/hi
 import { NoLabelResourceComponent } from "./icv/noLabelResource/noLabelResourceComponent";
 import { OnlyAltLabelResourceComponent } from "./icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
 import { OverlappedLabelComponent } from "./icv/overlappedLabel/overlappedLabelComponent";
+import { NoLangLabelComponent } from "./icv/noLangLabel/noLangLabelComponent";
 import { DanglingXLabelComponent } from "./icv/danglingXLabel/danglingXLabelComponent";
 import { ConfigBarComponent } from "./config/configBar/configBarComponent";
 import { ImportDataComponent } from "./config/dataManagement/importData/importDataComponent";
@@ -77,6 +78,7 @@ import { TestComponent } from "./test/testComponent";
     {path: "/Icv/NoLabelResource", name: "NoLabelResource", component: NoLabelResourceComponent},//type refers to the label type (SKOS, SKOS-XL, RDFS)
     {path: "/Icv/OnlyAltLabelResource", name: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent},
     {path: "/Icv/OverlappedLabelResource", name: "OverlappedLabelResource", component: OverlappedLabelComponent},
+    {path: "/Icv/NoLangLabelResource", name: "NoLangLabelResource", component: NoLangLabelComponent},
     {path: "/Icv/DanglingXLabel", name: "DanglingXLabel", component: DanglingXLabelComponent},
 ])
 

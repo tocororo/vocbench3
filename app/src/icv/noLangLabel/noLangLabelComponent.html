@@ -9,20 +9,20 @@
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
             <i *ngIf="ontoType == 'SKOS'">
-                skos:Concept(s) that have a skos:prefLabel or skos:altLabel or skos:hiddenLabel without language
+                skos:Concept(s) or skos:ConceptScheme(s) that have a skos:prefLabel or skos:altLabel or skos:hiddenLabel without language
             </i>
             <i *ngIf="ontoType == 'SKOS-XL'">
-                skos:Concept(s) that have a skosxl:prefLabel or skosxl:altLabel or skosxl:hiddenLabel without language
+                skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:prefLabel or skosxl:altLabel or skosxl:hiddenLabel without language
             </i>
             <i *ngIf="ontoType == 'OWL'">
                 Classes or instances that have a rdfs:label without language
             </i>
         </div>
 
-        <div *ngIf="!brokenResourceList" style="padding: 4px;">
+        <div *ngIf="!brokenRecordList" style="padding: 4px;">
             Press <strong>Run</strong> button to run the check.
         </div>
-        <div *ngIf="brokenResourceList" class="scrollableContainer">
+        <div *ngIf="brokenRecordList" class="scrollableContainer">
             <table class="table table-condensed table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
@@ -38,13 +38,14 @@
                             <rdf-resource [resource]="record.resource"></rdf-resource>
                         </td>
                         <td>
-                            <rdf-resource [resource]="record.labelProp"></rdf-resource>
+                            <rdf-resource [resource]="record.predicate"></rdf-resource>
                         </td>
                         <td>
                             <rdf-resource [resource]="record.label"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-default" (click)="setLanguage(record)">Set language</button>
+                            <button class="btn btn-xs btn-default" (click)="removeLabel(record)">Remove label</button>
                         </td>
                     </tr>
                 </tbody>

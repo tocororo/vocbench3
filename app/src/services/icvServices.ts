@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, ARTResource, ARTLiteral} from "../utils/ARTResources";
+import {ARTURIResource, ARTResource, ARTNode, ARTLiteral} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 
 @Injectable()
@@ -182,22 +182,47 @@ export class IcvServices {
     }
     
     /**
-     * Returns a list of records concept-labelPred-label of that concept that have a skos label without languageTag
+     * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
+     * skos label without languageTag
      */
-    listConceptsWithNoLanguageTagSKOSLabel() {
-        console.log("[IcvServices] listConceptsWithNoLanguageTagSKOSLabel");
+    listResourcesWithNoLanguageTagSKOSLabel() {
+        console.log("[IcvServices] listResourcesWithNoLanguageTagSKOSLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoLanguageTagSKOSLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSLabel", params, this.oldTypeService).map(
+            stResp => {
+                var records = [];
+                var recordElemColl = stResp.getElementsByTagName("record");
+                for (var i = 0; i < recordElemColl.length; i++) {
+                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
+                    var predicate: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("predicate")[0].children[0]);
+                    var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i].getElementsByTagName("object")[0].children[0]);
+                    records.push({resource: resource, predicate: predicate, label: label});
+                }
+                return records;
+            }
+        );
     }
     
     /**
-     * Returns a list of records concept-labelPred-xlabel-literal of that concept that have a skosxl:Label 
-	 * without languageTag
+     * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
+     * skosxl label without languageTag
      */
-    listConceptsWithNoLanguageTagSKOSXLLabel() {
-        console.log("[IcvServices] listConceptsWithNoLanguageTagSKOSXLLabel");
+    listResourcesWithNoLanguageTagSKOSXLLabel() {
+        console.log("[IcvServices] listResourcesWithNoLanguageTagSKOSXLLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoLanguageTagSKOSXLLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSXLLabel", params, this.oldTypeService).map(
+            stResp => {
+                var records = [];
+                var recordElemColl = stResp.getElementsByTagName("record");
+                for (var i = 0; i < recordElemColl.length; i++) {
+                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
+                    var predicate: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("predicate")[0].children[0]);
+                    var label: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("object")[0].children[0]);
+                    records.push({resource: resource, predicate: predicate, label: label});
+                }
+                return records;
+            }
+        );
     }
     
     /**
@@ -215,7 +240,6 @@ export class IcvServices {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
                     var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
                     records.push({resource: resource, label: label});
-                    console.log(JSON.stringify(records));
                 }
                 return records;
             }
@@ -227,6 +251,7 @@ export class IcvServices {
 	 * the same skosxl:prefLabel and skosxl:altLabel in the same language
      */
     listResourcesWithOverlappedSKOSXLLabel() {
+        console.log("[IcvServices] listResourcesWithOverlappedSKOSXLLabel");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params, this.oldTypeService).map(
             stResp => {
