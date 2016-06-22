@@ -17,7 +17,7 @@ export class CollectionTreeComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
-    // @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
+    @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
     
     //get the element in the view referenced with #blockDivTree
     @ViewChild('blockDivTree') blockDivElement;
@@ -60,22 +60,22 @@ export class CollectionTreeComponent {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
-    // public openTreeAt(node: ARTURIResource) {
-    //     this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.workingScheme).subscribe(
-    //         path => {
-    //             var childrenNodeComponent = this.viewChildrenNode.toArray();
-    //             //open tree from root to node
-    //             for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-    //                 if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
-    //                     //let the found node expand itself and the remaining path
-    //                     path.splice(0, 1);
-    //                     childrenNodeComponent[i].expandPath(path);
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     );
-    // }
+    public openTreeAt(node: ARTURIResource) {
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
+            path => {
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                //open tree from root to node
+                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                        //let the found node expand itself and the remaining path
+                        path.splice(0, 1);
+                        childrenNodeComponent[i].expandPath(path);
+                        break;
+                    }
+                }
+            }
+        );
+    }
     
     //EVENT LISTENERS
     

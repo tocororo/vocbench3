@@ -16,16 +16,16 @@ export class CollectionTreeNodeComponent {
     @Output() itemSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
-    // @ViewChild('treeNodeElement') treeNodeElement;
+    @ViewChild('treeNodeElement') treeNodeElement;
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
     
     //structure to support the tree opening
-    // private pendingSearch = {
-    //     pending: false, //tells if there is a pending search waiting that children view are initialized 
-    //     path: [], //remaining path of the tree to open
-    // }
+    private pendingSearch = {
+        pending: false, //tells if there is a pending search waiting that children view are initialized 
+        path: [], //remaining path of the tree to open
+    }
     
     private eventSubscriptions = [];
     
@@ -49,13 +49,17 @@ export class CollectionTreeNodeComponent {
     }
     
     ngAfterViewInit() {
-        //when ConceptTreeNodeComponent children are added, looks for a pending search to resume
-        // this.viewChildrenNode.changes.subscribe(
-        //     c => {
-        //         if (this.pendingSearch.pending) {//there is a pending search
-        //             this.expandPath(this.pendingSearch.path);
-        //         }
-        //     });
+        //when CollectionTreeNodeComponent children are added, looks for a pending search to resume
+        this.viewChildrenNode.changes.subscribe(
+            c => {
+                if (this.pendingSearch.pending) {//there is a pending search
+                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
+                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
+                    window.setTimeout(() =>
+                        this.expandPath(this.pendingSearch.path)
+                    );
+                }
+            });
     }
     
     ngOnDestroy() {
@@ -68,37 +72,37 @@ export class CollectionTreeNodeComponent {
      * the current node expands itself (if is closed), looks among its children for the following node of the path,
      * then call recursively expandPath() for the child node.
      */
-    // public expandPath(path: ARTURIResource[]) {
-    //     if (path.length == 0) { //this is the last node of the path. Focus it in the tree
-    //         this.treeNodeElement.nativeElement.scrollIntoView();
-    //         //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
-    //         if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
-    //             this.selectNode();    
-    //         }
-    //     } else {
-    //         if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
-    //             this.expandNode();
-    //         }
-    //         var nodeChildren = this.viewChildrenNode.toArray();
-    //         if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
-    //             //save pending search so it can resume when the children are initialized
-    //             this.pendingSearch.pending = true;
-    //             this.pendingSearch.path = path;
-    //         } else if (this.pendingSearch.pending) {
-    //             //the tree expansion is resumed, reset the pending search
-    //             this.pendingSearch.pending = false;
-    //             this.pendingSearch.path = [];
-    //         }
-    //         for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
-    //             if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
-    //                 //let the child node expand the remaining path
-    //                 path.splice(0, 1);
-    //                 nodeChildren[i].expandPath(path);
-    //                 break;
-    //             }
-    //         }
-    //     }
-    // }
+    public expandPath(path: ARTURIResource[]) {
+        if (path.length == 0) { //this is the last node of the path. Focus it in the tree
+            this.treeNodeElement.nativeElement.scrollIntoView();
+            //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
+            if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
+                this.selectNode();    
+            }
+        } else {
+            if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
+                this.expandNode();
+            }
+            var nodeChildren = this.viewChildrenNode.toArray();
+            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
+                //save pending search so it can resume when the children are initialized
+                this.pendingSearch.pending = true;
+                this.pendingSearch.path = path;
+            } else if (this.pendingSearch.pending) {
+                //the tree expansion is resumed, reset the pending search
+                this.pendingSearch.pending = false;
+                this.pendingSearch.path = [];
+            }
+            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+                if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
+                    //let the child node expand the remaining path
+                    path.splice(0, 1);
+                    nodeChildren[i].expandPath(path);
+                    break;
+                }
+            }
+        }
+    }
     
     /**
  	 * Function called when "+" button is clicked.
@@ -182,14 +186,12 @@ export class CollectionTreeNodeComponent {
     }
     
     private onPrefLabelSet(resource: ARTURIResource, label: string, lang: string) {
-        console.log("onPrefLabelSet " + resource.getURI() + "label " + label + " lang " + lang);
         if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
             this.node['show'] = label;
         }
     }
     
     private onPrefLabelRemoved(resource: ARTURIResource, label: string, lang: string) {
-        console.log("onPrefLabelRemoved " + resource.getURI() + "label " + label + " lang " + lang);
         if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
             this.skosService.getShow(resource, this.vbCtx.getContentLanguage()).subscribe(
                 show => {

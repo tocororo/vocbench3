@@ -30,7 +30,7 @@ export class ConceptsComponent implements OnInit {
     }
     
     //EVENT LISTENERS 
-    private onNodeSelected(node) {
+    private onNodeSelected(node: ARTURIResource) {
         this.resource = node;
     }
     

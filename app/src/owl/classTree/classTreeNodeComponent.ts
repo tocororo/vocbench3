@@ -57,7 +57,11 @@ export class ClassTreeNodeComponent {
         this.viewChildrenNode.changes.subscribe(
             c => {
                 if (this.pendingSearch.pending) {//there is a pending search
-                    this.expandPath(this.pendingSearch.path);
+                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
+                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
+                    window.setTimeout(() =>
+                        this.expandPath(this.pendingSearch.path)
+                    );
                 }
             });
     }

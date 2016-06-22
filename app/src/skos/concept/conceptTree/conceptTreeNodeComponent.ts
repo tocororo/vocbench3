@@ -54,7 +54,11 @@ export class ConceptTreeNodeComponent {
         this.viewChildrenNode.changes.subscribe(
             c => {
                 if (this.pendingSearch.pending) {//there is a pending search
-                    this.expandPath(this.pendingSearch.path);
+                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
+                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
+                    window.setTimeout(() =>
+                        this.expandPath(this.pendingSearch.path)
+                    );
                 }
             });
     }
@@ -74,7 +78,7 @@ export class ConceptTreeNodeComponent {
             this.treeNodeElement.nativeElement.scrollIntoView();
             //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
             if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
-                this.selectNode();    
+                this.selectNode()
             }
         } else {
             if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself

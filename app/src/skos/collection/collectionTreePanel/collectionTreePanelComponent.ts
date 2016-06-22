@@ -91,13 +91,11 @@ export class CollectionTreePanelComponent {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            alert("Feature not yet availabel. Opening tree at " + JSON.stringify(searchResult[0]));
-                            // this.viewChildTree.openTreeAt(searchResult[0]);
+                            this.viewChildTree.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 selectedResource => {
-                                    alert("Feature not yet availabel. Opening tree at " + JSON.stringify(selectedResource));
-                                    // this.viewChildTree.openTreeAt(selectedResource);
+                                    this.viewChildTree.openTreeAt(selectedResource);
                                 },
                                 () => {}
                             );

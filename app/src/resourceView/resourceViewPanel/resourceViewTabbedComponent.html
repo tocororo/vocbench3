@@ -21,7 +21,7 @@
             </div>
         </div>-->
         
-        <!-- This solution simply hides a resource view its tab is no more active, the shows it when tab is selected.
+        <!-- This solution simply hides a resource view its tab is no more active, then shows it when tab is selected.
             This is preferred because has better performance, restore the previous if problems come out caused by
             refresh after the resource changes -->
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}" [hidden]="!t.active">

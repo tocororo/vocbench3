@@ -48,7 +48,6 @@ export class Cookie {
 			cookieStr += 'domain=' + domain + ';';
 		}
 
-		// console.log(cookieStr);
 		document.cookie = cookieStr;
 	}
 
