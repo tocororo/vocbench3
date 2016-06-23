@@ -38,6 +38,8 @@ export class InstanceListComponent {
             data => this.onInstanceCreated(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
             data => this.onTypeRemoved(data.resource, data.type)));
+        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+            data => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
     
     ngOnChanges(changes) {
@@ -145,6 +147,15 @@ export class InstanceListComponent {
                     this.instanceList.splice(i, 1);
                     break;       
                 }
+            }
+        }
+    }
+
+    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
+        for (var i = 0; i < this.instanceList.length; i++) {
+            if (oldResource.getURI() == this.instanceList[i].getURI()) {
+                this.instanceList[i][ResAttribute.SHOW] = newResource.getShow();
+                this.instanceList[i]['uri'] = newResource.getURI();
             }
         }
     }

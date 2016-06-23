@@ -20,7 +20,7 @@ export class ProjectServices {
         var params = {
             consumer: "SYSTEM"
         };
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService, false, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService).map(
             stResp => {
                 var projColl = stResp.getElementsByTagName("project");
                 var projectList: Project[] = [];

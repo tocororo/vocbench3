@@ -89,7 +89,7 @@ export class ConfigBarComponent {
                 + "destination graph. Once the operation is done, you will be redirect to the project page. "
                 + "Are you sure to continue?", "warning").then(
             confirm => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                document.getElementById("blockDivFullScreen").style.display = "block";
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";

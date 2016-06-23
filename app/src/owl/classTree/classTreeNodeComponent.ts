@@ -146,7 +146,7 @@ export class ClassTreeNodeComponent {
     
     private onClassDeleted(cls: ARTURIResource) {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-        for (var i=0; i<children.length; i++) {
+        for (var i = 0; i < children.length; i++) {
             if (children[i].getURI() == cls.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
