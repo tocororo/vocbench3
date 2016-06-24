@@ -10,35 +10,35 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li *ngIf="isUserLogged()" [ngClass]="{active: isActive('/Projects')}">
-                    <a [routerLink]="['Projects']">Projects</a>
+                    <a [routerLink]="['/Projects']">Projects</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">
                 <!--<li *ngIf="isProjectOpen() && isProjectOWL()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">-->
-                    <a [routerLink]="['Class']">Class</a>
+                    <a [routerLink]="['/Class']">Class</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Concepts'), disabled: !isProjectOpen()}">
-                    <a [routerLink]="['Concepts']">Concepts</a>
+                    <a [routerLink]="['/Concepts']">Concepts</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Property'), disabled: !isProjectOpen()}">
-                    <a [routerLink]="['Property']">Property</a>
+                    <a [routerLink]="['/Property']">Property</a>
                 </li>
 				<li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
-                    <a [routerLink]="['Schemes']">Schemes</a>
+                    <a [routerLink]="['/Schemes']">Schemes</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Collections'), disabled: !isProjectOpen()}">
-                    <a [routerLink]="['Collections']">Collections</a>
+                    <a [routerLink]="['/Collections']">Collections</a>
                 </li>
 				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
-                    <a [routerLink]="['Sparql']">SPARQL</a>
+                    <a [routerLink]="['/Sparql']">SPARQL</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                         Tools <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
-                        <li><a [routerLink]="['Icv']">Integrity Constraint Validator (ICV)</a></li>
-                        <li><a [routerLink]="['AlignmentValidation']">Alignment Validation</a></li>
-                        <li><a [routerLink]="['CustomRange']">Custom Range configuration</a></li>
+                        <li><a [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a></li>
+                        <li><a [routerLink]="['/AlignmentValidation']">Alignment Validation</a></li>
+                        <li><a [routerLink]="['/CustomRange']">Custom Range configuration</a></li>
                     </ul>
                 </li>
                 
@@ -62,7 +62,7 @@
                         </li>
                         <li role="separator" class="divider"></li>
                         <li><a><span class="glyphicon glyphicon-user"></span> View profile</a></li>
-                        <li><a [routerLink]="['Settings']"><span class="glyphicon glyphicon-cog"></span> Vocbench settings</a></li>
+                        <li><a [routerLink]="['/Settings']"><span class="glyphicon glyphicon-cog"></span> Vocbench settings</a></li>
                         <li *ngIf="isProjectOpen()">
                             <a (click)="changeContentLang()">
                                 <span class="glyphicon glyphicon-flag"></span> Content language

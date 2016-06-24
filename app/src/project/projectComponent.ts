@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
 import {ProjectServices} from "../services/projectServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
@@ -21,11 +21,6 @@ export class ProjectComponent implements OnInit {
     
     constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
         private eventHandler: VBEventHandler, private modalService: ModalServices) {
-        // navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        }
-        
         this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(project => this.onProjectClosed(project)));
     }
 
@@ -60,7 +55,7 @@ export class ProjectComponent implements OnInit {
      * Redirects to the import project page
      */
     private createProject() {
-        this.router.navigate(["CreateProject"]);
+        this.router.navigate(["/CreateProject"]);
     }
 
     private deleteProject() {
@@ -93,7 +88,7 @@ export class ProjectComponent implements OnInit {
      * Redirects to the import project page
      */
     private importProject() {
-        this.router.navigate(["ImportProject"]);
+        this.router.navigate(["/ImportProject"]);
     }
     
     /**

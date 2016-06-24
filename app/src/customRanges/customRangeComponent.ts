@@ -1,8 +1,7 @@
 import {Component} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {CustomRangeServices} from "../services/customRangeServices";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {ModalServices} from "../widget/modal/modalServices";
 import {CustomRangePropMappingModal, CustomRangePropMappingModalData} from "./customRangeConfigModals/crPropMappingModal"
 import {CustomRangeEditorModal, CustomRangeEditorModalData} from "./customRangeConfigModals/crEditorModal"
@@ -24,12 +23,8 @@ export class CustomRangeComponent {
     private selectedCR: string;
     private selectedCRE: string;
     
-    constructor(private customRangeService: CustomRangeServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
+    constructor(private customRangeService: CustomRangeServices, private modalService: ModalServices,
         private router: Router, private modal: Modal) {
-        //navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        }
     }
     
     ngOnInit() {

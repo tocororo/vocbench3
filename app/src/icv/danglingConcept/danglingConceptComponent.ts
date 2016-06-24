@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -12,7 +12,7 @@ import {SkosServices} from "../../services/skosServices";
     selector: "dangling-concept-component",
     templateUrl: "app/src/icv/danglingConcept/danglingConceptComponent.html",
     providers: [IcvServices, SkosServices, BrowsingServices],
-    directives: [RdfResourceComponent, RouterLink],
+    directives: [RdfResourceComponent, ROUTER_DIRECTIVES],
     host: { class : "pageComponent" }
 })
 export class DanglingConceptComponent {
@@ -23,11 +23,8 @@ export class DanglingConceptComponent {
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private vbCtx: VocbenchCtx, 
         private modalService: ModalServices, private browsingService: BrowsingServices, private router: Router) {
-        //navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['Projects']);
+        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
+            router.navigate(['/Projects']);
         }
     }
     

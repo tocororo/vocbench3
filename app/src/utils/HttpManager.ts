@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, Response, Headers, HTTP_PROVIDERS} from '@angular/http';
+import {Http, Response, Headers, RequestOptions, HTTP_PROVIDERS} from '@angular/http';
 import 'rxjs/Rx'; //for map function
 import {Observable} from 'rxjs/Observable';
 import {STResponseUtils} from "../utils/STResponseUtils";
@@ -65,9 +65,10 @@ export class HttpManager {
         var headers = new Headers();
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
+        var options = new RequestOptions({ headers: headers });
         
         //execute request
-        return this.http.get(url, { headers: headers })
+        return this.http.get(url, options)
             .map(res => {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
@@ -129,6 +130,8 @@ export class HttpManager {
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
+        var options = new RequestOptions({ headers: headers });
+
         var postData;
         var strBuilder = [];
         for (var paramName in params) {
@@ -137,7 +140,7 @@ export class HttpManager {
         postData = strBuilder.join("&"); 
         
         //execute request
-        return this.http.post(url, postData, { headers: headers })
+        return this.http.post(url, postData, options)
             .map(res => {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
@@ -198,7 +201,7 @@ export class HttpManager {
         httpReq.open("POST", url, true);
         //headers
         httpReq.setRequestHeader("Accept", "application/xml");
-        
+
         return new Observable(o => {
             //handle the request completed
             httpReq.onreadystatechange = function(event) {

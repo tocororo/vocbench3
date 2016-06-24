@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
-import {Router, RouterLink} from "@angular/router-deprecated";
+import {ROUTER_DIRECTIVES, Router} from "@angular/router";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {AuthServices} from "../../auth/authServices";
 import {Project, ProjectTypesEnum} from "../../utils/Project";
 import {InputOutputServices} from "../../services/inputOutputServices";
 import {ProjectServices} from "../../services/projectServices";
@@ -10,7 +11,7 @@ import {ModalServices} from "../../widget/modal/modalServices";
 @Component({
 	selector: "config-bar",
 	templateUrl: "app/src/config/configBar/configBarComponent.html",
-    directives: [RouterLink],
+    directives: [ROUTER_DIRECTIVES],
     providers: [InputOutputServices, ProjectServices, RefactorServices]
 })
 export class ConfigBarComponent {
@@ -18,8 +19,8 @@ export class ConfigBarComponent {
     private currentProject: Project;
     
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices,
-        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
-        private router: Router) {}
+        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private authService: AuthServices, 
+        private modalService: ModalServices, private router: Router) {}
     
     /**
      * returns true if a project is open. Useful to enable/disable navbar links
@@ -33,7 +34,7 @@ export class ConfigBarComponent {
      * Returns true if the user is logged (an authentication token is stored).
      */
     private isUserLogged(): boolean {
-        return this.vbCtx.getAuthenticationToken() != undefined;
+        return this.authService.isLoggedIn();
     }
     
     private clearData() {
@@ -55,7 +56,7 @@ export class ConfigBarComponent {
                                             document.getElementById("blockDivFullScreen").style.display = "none";
                                             this.vbCtx.removeWorkingProject();
                                             //then redirect to home page
-                                            this.router.navigate(['Projects']);
+                                            this.router.navigate(['/Projects']);
                                         },
                                         err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
                                     );
@@ -69,7 +70,7 @@ export class ConfigBarComponent {
                                     document.getElementById("blockDivFullScreen").style.display = "none";
                                     this.vbCtx.removeWorkingProject();
                                     //then redirect to home page
-                                    this.router.navigate(['Projects']);
+                                    this.router.navigate(['/Projects']);
                                 },
                                 err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
                             );
@@ -94,7 +95,7 @@ export class ConfigBarComponent {
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         //then redirect to home page
-                        this.router.navigate(['Projects']);
+                        this.router.navigate(['/Projects']);
                     },
                     err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
                 );

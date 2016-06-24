@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Cookie} from "../utils/Cookie";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({
     selector: "vb-settings-component",
@@ -12,12 +11,7 @@ export class VocbenchSettingsComponent {
     
     private resViewMode: string;
     
-    constructor(private vbCtx: VocbenchCtx, private router: Router) {
-        // navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        }        
-    }
+    constructor(private router: Router) {}
     
     ngOnInit() {
         var rvModeCookie = Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);

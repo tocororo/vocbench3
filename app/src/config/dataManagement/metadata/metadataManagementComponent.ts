@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {MetadataServices} from "../../../services/metadataServices";
 import {RefactorServices} from "../../../services/refactorServices";
@@ -35,11 +35,8 @@ export class MetadataManagementComponent {
     
     constructor(private metadataService: MetadataServices, private refactorService: RefactorServices,
         private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router, private modal: Modal) {
-        //navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['Projects']);
+        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
+            router.navigate(['/Projects']);
         }
     }
     

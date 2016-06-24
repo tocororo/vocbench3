@@ -1,11 +1,10 @@
 import {Component} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {OntoMgrConfigModal, OntoMgrConfigModalData} from "./ontoMgrConfigModal";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {ProjectServices} from "../../services/projectServices";
 import {OntoManagerServices} from "../../services/ontoManagerServices";
 import {PluginsServices} from "../../services/pluginsServices";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ModalServices} from "../../widget/modal/modalServices";
 
 /**
@@ -62,13 +61,8 @@ export class CreateProjectComponent {
     private submitted: boolean = false;
     
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, 
-        private pluginService: PluginsServices, private vbCtx: VocbenchCtx, private router: Router, 
-        private modalService: ModalServices, private modal: Modal) {
-            
-        // navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        }
+        private pluginService: PluginsServices, private router: Router, private modalService: ModalServices,
+        private modal: Modal) {
     }
     
     ngOnInit() {
@@ -223,7 +217,7 @@ export class CreateProjectComponent {
                 stResp => {
                     document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Create project", "Project created successfully").then(
-                        () => this.router.navigate(['Projects'])
+                        () => this.router.navigate(['/Projects'])
                     );
                 },
                 err => { document.getElementById("blockDivFullScreen").style.display = "none"; }

@@ -1,17 +1,20 @@
-import { bootstrap } from "@angular/platform-browser-dynamic";
-import { enableProdMode, Renderer } from "@angular/core";
-import { ROUTER_PROVIDERS } from "@angular/router-deprecated";
-import { HTTP_PROVIDERS } from "@angular/http";
+import {bootstrap} from "@angular/platform-browser-dynamic";
+import {enableProdMode, Renderer} from "@angular/core";
+import {Router} from "@angular/router";
+import {HTTP_PROVIDERS} from "@angular/http";
 
-import { MODAL_BROWSER_PROVIDERS } from 'angular2-modal/platform-browser';
-import { BS_MODAL_PROVIDERS } from 'angular2-modal/plugins/bootstrap';
+import {MODAL_BROWSER_PROVIDERS} from 'angular2-modal/platform-browser';
+import {BS_MODAL_PROVIDERS} from 'angular2-modal/plugins/bootstrap';
 
-import { HttpManager } from "./src/utils/HttpManager";
-import { VocbenchCtx } from "./src/utils/VocbenchCtx";
-import { VBEventHandler } from "./src/utils/VBEventHandler";
-import { ModalServices } from "./src/widget/modal/modalServices";
+import {HttpManager} from "./src/utils/HttpManager";
+import {VocbenchCtx} from "./src/utils/VocbenchCtx";
+import {VBEventHandler} from "./src/utils/VBEventHandler";
+import {ModalServices} from "./src/widget/modal/modalServices";
+import {AuthGuard} from "./src/auth/authGuard";
+import {AuthServices} from "./src/auth/authServices";
 
 import {App} from "./src/app";
+import {APP_ROUTER_PROVIDERS} from './src/appRoutes';
 
 // enableProdMode();
 /**
@@ -20,8 +23,10 @@ import {App} from "./src/app";
  * in the bootstrap function so that they can be widely used in the application, without specifying them in providers
  */
 bootstrap(App, [
-    ROUTER_PROVIDERS, HTTP_PROVIDERS,
+    APP_ROUTER_PROVIDERS,
+    HTTP_PROVIDERS,
     HttpManager, VocbenchCtx, VBEventHandler,
+    AuthGuard, AuthServices,
     BS_MODAL_PROVIDERS, Renderer, MODAL_BROWSER_PROVIDERS, //required in order to add ModalServices as provider
     ModalServices
 ]);

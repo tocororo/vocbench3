@@ -6,25 +6,12 @@ import {Cookie} from "./Cookie";
 @Injectable()
 export class VocbenchCtx {
 
-    private authToken: string; //if provided it means that the user is authenticated
     private workingProject: Project; //working project
     private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
     private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
 
     constructor() { }
     
-    setAuthenticationToken(token: string) {
-        this.authToken = token
-    }
-    
-    getAuthenticationToken(): string {
-        return this.authToken;
-    }
-    
-    removeAutheticationToken() {
-        this.authToken = undefined;
-    }
-
     setWorkingProject(project: Project) {
         this.workingProject = project;
     }

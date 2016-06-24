@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -24,11 +24,8 @@ export class OnlyAltLabelResourceComponent {
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
-        //navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['Projects']);
+        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
+            router.navigate(['/Projects']);
         }
     }
     

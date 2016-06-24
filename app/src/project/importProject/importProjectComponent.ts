@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {ProjectServices} from "../../services/projectServices";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 
@@ -18,12 +17,8 @@ export class ImportProjectComponent {
     private fileToUpload: File;
     private submitted: boolean = false;
     
-    constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
+    constructor(private projectService: ProjectServices, private router: Router,
             private modalService: ModalServices) {
-        // navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        }
     }
     
     private fileChangeEvent(file: File) {
@@ -38,7 +33,7 @@ export class ImportProjectComponent {
                 stResp => {
                     document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Import project", "Project imported successfully").then(
-                        confirm => this.router.navigate(["Projects"])
+                        confirm => this.router.navigate(["/Projects"])
                     );
                 },
                 err => { document.getElementById("blockDivFullScreen").style.display = "none"; }

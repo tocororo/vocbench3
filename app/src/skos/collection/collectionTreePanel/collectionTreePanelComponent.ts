@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
-import {RouterLink} from "@angular/router-deprecated";
+import {ROUTER_DIRECTIVES} from "@angular/router";
 import {CollectionTreeComponent} from "../collectionTree/collectionTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
@@ -11,7 +11,7 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 @Component({
 	selector: "collection-tree-panel",
 	templateUrl: "app/src/skos/collection/collectionTreePanel/collectionTreePanelComponent.html",
-	directives: [CollectionTreeComponent, RouterLink],
+	directives: [CollectionTreeComponent, ROUTER_DIRECTIVES],
     providers: [SkosServices, SkosxlServices, SearchServices],
 })
 export class CollectionTreePanelComponent {

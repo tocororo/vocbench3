@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -21,11 +21,8 @@ export class NoSchemeConceptComponent {
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingService: BrowsingServices,
             private vbCtx: VocbenchCtx, private router: Router) {
-        //navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['Projects']);
+        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
+            router.navigate(['/Projects']);
         }
     }
     

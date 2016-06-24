@@ -1,6 +1,6 @@
 ///<reference path="../../../typings/index.d.ts"/>
 
-import { Component, ViewChild, Input, Output, EventEmitter} from '@angular/core';
+import {Component, ViewChild, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'codemirror',

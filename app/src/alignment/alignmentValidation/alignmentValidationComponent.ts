@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from '@angular/router-deprecated';
+import {Router} from "@angular/router";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";
@@ -56,11 +56,8 @@ export class AlignmentValidationComponent {
     
     constructor(private vbCtx: VocbenchCtx, private router: Router, private alignmentService: AlignmentServices,
         private modalService: ModalServices, private modal: Modal) {
-        //navigate to Home view if not authenticated
-        if (vbCtx.getAuthenticationToken() == undefined) {
-            router.navigate(['Home']);
-        } else if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['Projects']);
+        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
+            router.navigate(['/Projects']);
         }
     }
     
