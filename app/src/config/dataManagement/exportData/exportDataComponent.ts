@@ -1,7 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {InputOutputServices} from "../../../services/inputOutputServices";
-import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ModalServices} from "../../../widget/modal/modalServices";
 
 @Component({
@@ -14,12 +12,7 @@ export class ExportDataComponent {
     
     private format: string = "RDF/XML";
     
-    constructor(private inOutService: InputOutputServices, private vbCtx: VocbenchCtx, private router: Router,
-        private modalService: ModalServices) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+    constructor(private inOutService: InputOutputServices, private modalService: ModalServices) {}
     
     /*
      * Currently the export function allows only to export in the available formats. It doesn't provide the same

@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {Cookie} from "../utils/Cookie";
 
 @Component({
@@ -10,8 +9,6 @@ import {Cookie} from "../utils/Cookie";
 export class VocbenchSettingsComponent {
     
     private resViewMode: string;
-    
-    constructor(private router: Router) {}
     
     ngOnInit() {
         var rvModeCookie = Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);

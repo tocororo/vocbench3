@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -21,11 +20,7 @@ export class NoTopConceptSchemeComponent {
     private brokenSchemeList: Array<ARTURIResource>;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private vbCtx: VocbenchCtx,
-        private modalService: ModalServices, private browsingService: BrowsingServices, private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+        private modalService: ModalServices, private browsingService: BrowsingServices) {}
     
     /**
      * Run the check

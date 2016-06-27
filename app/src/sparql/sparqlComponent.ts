@@ -1,8 +1,6 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {SparqlServices} from "../services/sparqlServices";
 import {MetadataServices} from "../services/metadataServices";
-import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {ModalServices} from '../widget/modal/modalServices';
 import {CodemirrorComponent} from "./codemirrorComponent";
 
@@ -19,12 +17,7 @@ export class SparqlComponent {
     private tabs: Array<any> = [];
     private activeTab;
     
-    constructor(private vbCtx: VocbenchCtx, private router: Router, private sparqlService:SparqlServices,
-        private metadataService: MetadataServices, private modalService: ModalServices) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+    constructor(private sparqlService:SparqlServices, private metadataService: MetadataServices, private modalService: ModalServices) {}
     
     ngOnInit() {
         this.metadataService.getNSPrefixMappings().subscribe(

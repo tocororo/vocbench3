@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {ROUTER_DIRECTIVES} from "@angular/router";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -22,11 +22,7 @@ export class DanglingConceptComponent {
     private brokenConceptList: Array<ARTURIResource>;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private vbCtx: VocbenchCtx, 
-        private modalService: ModalServices, private browsingService: BrowsingServices, private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+        private modalService: ModalServices, private browsingService: BrowsingServices) {}
     
     ngOnInit() {
         this.skosService.getAllSchemesList().subscribe(

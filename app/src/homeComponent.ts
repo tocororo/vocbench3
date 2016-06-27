@@ -27,10 +27,17 @@ export class HomeComponent {
             }
         );
     }
+
+    private logout() {
+        this.authService.logout().subscribe();
+    }
     
     private forgotPassword() {
-        //TODO
-        alert("Not yet available");
+        alert("Not yet available"); //TODO
+    }
+
+    private isUserLogged(): boolean {
+        return this.authService.isLoggedIn();
     }
     
 }

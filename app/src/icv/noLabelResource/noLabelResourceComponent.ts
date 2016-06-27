@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource, RDFTypesEnum} from "../../utils/ARTResources";
@@ -23,11 +22,7 @@ export class NoLabelResourceComponent {
     private ontoType: string;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices, private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
     
     ngOnInit() {
         this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();

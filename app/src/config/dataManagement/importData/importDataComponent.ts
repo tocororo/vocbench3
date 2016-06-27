@@ -1,7 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {InputOutputServices} from "../../../services/inputOutputServices";
-import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {ModalServices} from "../../../widget/modal/modalServices";
 import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
@@ -20,12 +18,7 @@ export class ImportDataComponent {
     
     private submitted: boolean = false;
     
-    constructor(private inOutService: InputOutputServices, private vbCtx: VocbenchCtx,
-            private modalService: ModalServices, private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+    constructor(private inOutService: InputOutputServices, private modalService: ModalServices) { }
     
     private fileChangeEvent(file: File) {
         this.fileToUpload = file;

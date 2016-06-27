@@ -1,10 +1,8 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
 
@@ -19,12 +17,7 @@ export class NoSchemeConceptComponent {
     
     private brokenConceptList: Array<ARTURIResource>;
     
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingService: BrowsingServices,
-            private vbCtx: VocbenchCtx, private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingService: BrowsingServices) {}
     
     /**
      * Run the check

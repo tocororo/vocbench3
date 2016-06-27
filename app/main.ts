@@ -10,7 +10,7 @@ import {HttpManager} from "./src/utils/HttpManager";
 import {VocbenchCtx} from "./src/utils/VocbenchCtx";
 import {VBEventHandler} from "./src/utils/VBEventHandler";
 import {ModalServices} from "./src/widget/modal/modalServices";
-import {AuthGuard} from "./src/auth/authGuard";
+import {GUARD_PROVIDERS} from "./src/utils/CanActivateGuards";
 import {AuthServices} from "./src/auth/authServices";
 
 import {App} from "./src/app";
@@ -26,7 +26,7 @@ bootstrap(App, [
     APP_ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
     HttpManager, VocbenchCtx, VBEventHandler,
-    AuthGuard, AuthServices,
+    AuthServices, GUARD_PROVIDERS,
     BS_MODAL_PROVIDERS, Renderer, MODAL_BROWSER_PROVIDERS, //required in order to add ModalServices as provider
     ModalServices
 ]);

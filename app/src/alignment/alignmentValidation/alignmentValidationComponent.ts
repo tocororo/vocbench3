@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {Router} from "@angular/router";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";
@@ -54,11 +53,8 @@ export class AlignmentValidationComponent {
         {relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of"}
     ];
     
-    constructor(private vbCtx: VocbenchCtx, private router: Router, private alignmentService: AlignmentServices,
+    constructor(private vbCtx: VocbenchCtx, private alignmentService: AlignmentServices,
         private modalService: ModalServices, private modal: Modal) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
     }
     
     ngOnInit() {

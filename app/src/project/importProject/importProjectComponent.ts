@@ -17,9 +17,7 @@ export class ImportProjectComponent {
     private fileToUpload: File;
     private submitted: boolean = false;
     
-    constructor(private projectService: ProjectServices, private router: Router,
-            private modalService: ModalServices) {
-    }
+    constructor(private projectService: ProjectServices, private router: Router, private modalService: ModalServices) {}
     
     private fileChangeEvent(file: File) {
         this.fileToUpload = file;

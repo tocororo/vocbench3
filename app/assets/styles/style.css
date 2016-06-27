@@ -324,7 +324,6 @@ nav {
 }
 
 .navbar-default {
-	/*background: linear-gradient(to right, #1B3671, #7486AB);*/
     background: #1E4387;
 }
 
@@ -333,8 +332,7 @@ nav {
 }
 
 .navbar-nav>li>a {
-    /*padding: 14px;*/
-    margin: 1px;
+    margin: 0px 1px;
 }
 
 .table {

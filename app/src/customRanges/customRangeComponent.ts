@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {CustomRangeServices} from "../services/customRangeServices";
 import {ModalServices} from "../widget/modal/modalServices";
@@ -23,9 +22,7 @@ export class CustomRangeComponent {
     private selectedCR: string;
     private selectedCRE: string;
     
-    constructor(private customRangeService: CustomRangeServices, private modalService: ModalServices,
-        private router: Router, private modal: Modal) {
-    }
+    constructor(private customRangeService: CustomRangeServices, private modalService: ModalServices, private modal: Modal) {}
     
     ngOnInit() {
         this.initCRConfMap();

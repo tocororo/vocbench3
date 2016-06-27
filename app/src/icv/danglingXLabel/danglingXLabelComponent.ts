@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -22,12 +21,7 @@ export class DanglingXLabelComponent {
     private brokenLabelList: Array<ARTResource>;
     
     constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private deleteService: DeleteServices,
-        private browsingService: BrowsingServices, private modalService: ModalServices, private vbCtx: VocbenchCtx,
-        private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+        private browsingService: BrowsingServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
     
     /**
      * Run the check

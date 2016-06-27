@@ -1,8 +1,6 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
 
@@ -17,12 +15,7 @@ export class HierarchicalRedundancyComponent {
     
     private brokenRecordList: Array<any>;
     
-    constructor(private icvService: IcvServices, private skosService: SkosServices, 
-            private vbCtx: VocbenchCtx, private router: Router) {
-        if (vbCtx.getWorkingProject() == undefined) {//navigate to Projects view if a project is not selected
-            router.navigate(['/Projects']);
-        }
-    }
+    constructor(private icvService: IcvServices, private skosService: SkosServices) {}
     
     /**
      * Run the check
