@@ -15,9 +15,7 @@ import {CustomRangeComponent} from "./customRanges/customRangeComponent";
 import {ImportProjectComponent} from "./project/importProject/importProjectComponent";
 import {CreateProjectComponent} from "./project/createProject/createProjectComponent";
 
-import {IcvRoutes} from "./icv/icvRoutes";
 import {IcvComponent} from "./icv/icvComponent";
-import {IcvListComponent} from "./icv/icvListComponent";
 import {DanglingConceptComponent} from "./icv/danglingConcept/danglingConceptComponent";
 import {NoSchemeConceptComponent} from "./icv/noSchemeConcept/noSchemeConceptComponent";
 import {NoTopConceptSchemeComponent} from "./icv/noTopConceptScheme/noTopConceptSchemeComponent";
@@ -48,6 +46,7 @@ export const routes: RouterConfig = [
     {path: "Schemes", component: SchemesComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Collections", component: CollectionsComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard]},
     {path: "Test", component: TestComponent, canActivate: [AuthGuard]},
@@ -58,33 +57,21 @@ export const routes: RouterConfig = [
     {path: "Config/ExportData", component: ExportDataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Config/Metadata", component: MetadataManagementComponent, canActivate: [AuthGuard, ProjectGuard]},
     // route config for project management
+    {path: "Projects", component: ProjectComponent, canActivate: [AuthGuard]},
     {path: "Projects/ImportProject", component: ImportProjectComponent, canActivate: [AuthGuard]},
     {path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AuthGuard]},
     // route config of ICV
-    ...IcvRoutes
-    
-    // {path: "Icv", component: IcvComponent, canActivate: [AuthGuard], children: [
-    //   {path: "", component: IcvListComponent, canActivate: [AuthGuard]},
-    //   {path: "NoSchemeConcept", component: NoSchemeConceptComponent},
-    //   {path: "NoTopConceptScheme", component: NoTopConceptSchemeComponent},
-    //   {path: "TopConceptWithBroader", component: TopConceptWithBroaderComponent},
-    //   {path: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent},
-    //   {path: "NoLabelResource", component: NoLabelResourceComponent},
-    //   {path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent},
-    //   {path: "OverlappedLabelResource", component: OverlappedLabelComponent},
-    //   {path: "NoLangLabelResource", component: NoLangLabelComponent},
-    //   {path: "DanglingXLabel", component: DanglingXLabelComponent},
-    // ]},
-
-    // {path: "Icv/NoSchemeConcept", component: NoSchemeConceptComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/NoTopConceptScheme", component: NoTopConceptSchemeComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/TopConceptWithBroader", component: TopConceptWithBroaderComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/HierarchicalRedundancy", component: HierarchicalRedundancyComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard]},
-    // {path: "Icv/DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard]},
+    {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/DanglingConcept", component: DanglingConceptComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/NoSchemeConcept", component: NoSchemeConceptComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/NoTopConceptScheme", component: NoTopConceptSchemeComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/TopConceptWithBroader", component: TopConceptWithBroaderComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/HierarchicalRedundancy", component: HierarchicalRedundancyComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Icv/DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard]},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

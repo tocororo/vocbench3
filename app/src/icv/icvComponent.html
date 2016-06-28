@@ -1,5 +1,71 @@
 <div class="vbox">
     
-    <router-outlet></router-outlet>
+    <div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label>Integrity Constraint Validator:</label>
+    </div>
+
+    <div class="panel-body vbox">
+        <div class="scrollableContainer">
+
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Structural checks</label>
+                    <button type="button" class="close" (click)="togglePanel(structuralIcv)">
+                            <span>{{structuralIcv.open ? '-' : '+' }}</span>
+                        </button>
+                </div>
+                <div class="subPanel-body" *ngIf="structuralIcv.open">
+                    <!--why template? see https://github.com/angular/angular/issues/4792-->
+                    <template ngFor let-icv [ngForOf]="structuralIcv.list">
+                        <div *ngIf="isCompatibleWithProject(icv)" class="listItem">
+                            <span style="width: 200px">{{icv.name}}</span>
+                            <span style="flex: 1"><i>{{icv.description}}</i></span>
+                            <button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Label checks</label>
+                    <button type="button" class="close" (click)="togglePanel(labelIcv)">
+                            <span>{{labelIcv.open ? '-' : '+' }}</span>
+                        </button>
+                </div>
+                <div class="subPanel-body" *ngIf="labelIcv.open">
+                    <!--why template? see https://github.com/angular/angular/issues/4792-->
+                    <template ngFor let-icv [ngForOf]="labelIcv.list">
+                        <div *ngIf="isCompatibleWithProject(icv)" class="listItem">
+                            <span style="width: 200px">{{icv.name}}</span>
+                            <span style="flex: 1"><i>{{icv.description}} {{ontotype}}</i></span>
+                            <button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Generic checks</label>
+                    <button type="button" class="close" (click)="togglePanel(genericIcv)">
+                            <span>{{genericIcv.open ? '-' : '+' }}</span>
+                        </button>
+                </div>
+                <div class="subPanel-body" *ngIf="genericIcv.open">
+                    <!--why template? see https://github.com/angular/angular/issues/4792-->
+                    <template ngFor let-icv [ngForOf]="genericIcv.list">
+                        <div *ngIf="isCompatibleWithProject(icv)" class="listItem">
+                            <span style="width: 200px">{{icv.name}}</span>
+                            <span style="flex: 1"><i>{{icv.description}}</i></span>
+                            <button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 </div>

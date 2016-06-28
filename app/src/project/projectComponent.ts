@@ -55,7 +55,7 @@ export class ProjectComponent implements OnInit {
      * Redirects to the import project page
      */
     private createProject() {
-        this.router.navigate(["/CreateProject"]);
+        this.router.navigate(["/Projects/CreateProject"]);
     }
 
     private deleteProject() {
@@ -88,7 +88,7 @@ export class ProjectComponent implements OnInit {
      * Redirects to the import project page
      */
     private importProject() {
-        this.router.navigate(["/ImportProject"]);
+        this.router.navigate(["/Projects/ImportProject"]);
     }
     
     /**
