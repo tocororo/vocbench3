@@ -75,8 +75,11 @@ export class App {
      * Removes the authentication token and redirect to home page
      */
     private logout() {
-        this.authService.logout();
-        this.router.navigate(["/Home"]);
+        this.authService.logout().subscribe(
+            res => {
+                this.router.navigate(["/Home"]);
+            }
+        );
     }
      
     /**

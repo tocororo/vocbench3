@@ -28,10 +28,6 @@ export class HomeComponent {
         );
     }
 
-    private logout() {
-        this.authService.logout().subscribe();
-    }
-    
     private forgotPassword() {
         alert("Not yet available"); //TODO
     }
