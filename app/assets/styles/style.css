@@ -226,25 +226,48 @@ input[type="image"]:disabled  {
 	border-radius: 4px;
 	margin-bottom: 5px;
 }
-
 .subPanel-heading {
     display: flex;
     align-items: center;
-	background: linear-gradient(#fff, #ddd);
-	padding: 4px 8px;
-	border-bottom: 1px solid #ccc;
+    background: linear-gradient(#fff, #eee);
+    padding: 4px 8px;
+    border-bottom: 1px solid #ccc;
 }
-
 .subPanel-body {
 	padding: 4px;
 }
-
 .subPanel-footer {
     padding: 4px;
     background-color: #f5f5f5;
     border-top: 1px solid #ddd;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
+}
+
+.groupPanel {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 7px 0 5px;
+}
+.groupPanel-heading {
+    margin-bottom: 6px;
+    position: relative;
+}
+.groupPanel-heading > div {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: -11px;
+    left: 4px;
+    right: 8px;
+}
+.groupPanel-heading .groupPanel-heading-content {
+    /* labels, buttons, or other elements that should be placed on the heading*/
+    padding: 0px 4px;
+    background: white;
+}
+.groupPanel-body {
+    padding: 4px;
 }
 
 input.ng-invalid.submitted {

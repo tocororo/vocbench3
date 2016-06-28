@@ -1,10 +1,14 @@
-<div class="subPanel" *ngIf="predicateObjectList">
-    <div class="subPanel-heading">
-        <label style="flex: 1">{{label}}:</label>
-        <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()"
-            [disabled]="!resource.getAdditionalProperty('explicit')">
+<div class="groupPanel" *ngIf="predicateObjectList">
+    <div class="groupPanel-heading">
+        <div>
+            <span style="flex: 1">
+                <label class="groupPanel-heading-content">{{label}}:</label>
+            </span>
+            <input type="image" class="groupPanel-heading-content" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+        </div>
     </div>
-    <div class="subPanel-body">
+    <div class="groupPanel-body">
         <div class="subPanel" *ngFor="let po of predicateObjectList">
             <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
