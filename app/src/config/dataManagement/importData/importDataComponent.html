@@ -7,6 +7,15 @@
        
         <div class="panel-body">
             <form role="form">
+
+                <div class="form-group">
+                    <label>RDF file:</label>
+                    <file-picker (fileChanged)="fileChangeEvent($event)"
+                        [accept]="'.rdf, .rdfs, .xml, .owl, .nt, .n3, .ttl, .trig, .trix, .trix-ext, .nq'"></file-picker>    
+                    <div *ngIf="!fileToUpload && submitted" class="alert alert-danger" style="margin-top: 2px">
+                        A <strong>file</strong> is required
+                    </div>
+                </div>
                 
                 <div class="form-group">
                     <label>Base URI:</label>
@@ -19,6 +28,7 @@
                 <div class="form-group">
                     <label>Format:</label>
                     <select class="form-control input-sm" [(ngModel)]="format">
+                        <option value="inferFromFile">Infer from file extension</option>
                         <option value="N3">N3</option>
                         <option value="NQUADS">NQUADS</option>
                         <option value="N-TRIPLES">N-TRIPLES</option>
@@ -29,14 +39,6 @@
                         <option value="TRIX-EXT">TRIX-EXT</option>
                         <option value="TURTLE">TURTLE</option>
                     </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>RDF file:</label>
-                    <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'application/rdf+xml'"></file-picker>    
-                    <div *ngIf="!fileToUpload && submitted" class="alert alert-danger" style="margin-top: 2px">
-                        A <strong>file</strong> is required
-                    </div>
                 </div>
                 
             </form>

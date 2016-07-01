@@ -13,7 +13,7 @@ import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponen
 export class ImportDataComponent {
     
     private baseURI: string;
-    private format: string = "RDF/XML";
+    private format: string = "inferFromFile";
     private fileToUpload: File;
     
     private submitted: boolean = false;
@@ -23,12 +23,16 @@ export class ImportDataComponent {
     private fileChangeEvent(file: File) {
         this.fileToUpload = file;
     }
-    
+
     private import() {
         this.submitted = true;
         if (this.baseURI && this.baseURI.trim() != "" && this.fileToUpload) {
             document.getElementById("blockDivFullScreen").style.display = "block";
-            this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.format).subscribe(
+            var rdfFormat: string;
+            if (this.format != "inferFromFile") {
+                rdfFormat = this.format;
+            } //if format != inferFromFile => rdfFormat in null, so the loadRDF service will infer the format
+            this.inOutService.loadRDF(this.fileToUpload, this.baseURI, rdfFormat).subscribe(
                 stResp => {
                     document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Import data", "Data imported successfully");

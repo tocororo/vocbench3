@@ -49,9 +49,9 @@ export const routes: RouterConfig = [
     {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard]},
-    {path: "Test", component: TestComponent, canActivate: [AuthGuard]},
-    {path: "Registration", component: RegistrationComponent, canActivate: [AuthGuard]},
+    {path: "Registration", component: RegistrationComponent},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},
+    {path: "Test", component: TestComponent, canActivate: [AuthGuard]},
     // route config of config bar
     {path: "Config/ImportData", component: ImportDataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Config/ExportData", component: ExportDataComponent, canActivate: [AuthGuard, ProjectGuard]},

@@ -27,12 +27,14 @@ export class InputOutputServices {
      * @param baseURI the baseURI of the imported data
      * @param format the serialization format of the file
      */
-    loadRDF(file: File, baseURI: string, format: string) {
+    loadRDF(file: File, baseURI: string, format?: string) {
         console.log("[InputOutputServices] loadRDF");
-        var data = {
+        var data: any = {
             inputFile: file,
-            baseUri: baseURI,
-            formatName: format
+            baseUri: baseURI
+        }
+        if (format != undefined) {
+            data.formatName = format;
         }
         return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, this.oldTypeService);
     }
