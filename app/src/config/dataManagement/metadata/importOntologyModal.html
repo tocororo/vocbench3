@@ -27,7 +27,7 @@
             <tr *ngIf="context.importType == 'fromLocalFile'">
                 <td><label>Local file:</label></td>
                 <td>
-                    <file-picker (change)="fileChangeEvent($event)"></file-picker>
+                    <file-picker (fileChanged)="fileChangeEvent($event)"></file-picker>
                 </td>
             </tr>
             <tr *ngIf="context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">

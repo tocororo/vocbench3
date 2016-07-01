@@ -33,7 +33,7 @@
                 
                 <div class="form-group">
                     <label>RDF file:</label>
-                    <file-picker (change)="fileChangeEvent($event)" [accept]="'application/rdf+xml'"></file-picker>    
+                    <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'application/rdf+xml'"></file-picker>    
                     <div *ngIf="!fileToUpload && submitted" class="alert alert-danger" style="margin-top: 2px">
                         A <strong>file</strong> is required
                     </div>

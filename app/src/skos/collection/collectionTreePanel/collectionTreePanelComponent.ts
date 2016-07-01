@@ -5,7 +5,7 @@ import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
 import {SearchServices} from "../../../services/searchServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {ARTURIResource, RDFResourceRolesEnum} from "../../../utils/ARTResources";
+import {ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 
 @Component({
@@ -36,10 +36,10 @@ export class CollectionTreePanelComponent {
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createRootCollection(result.name, result.label, result.lang,
-                        this.vbCtx.getContentLanguage(true)).subscribe();
+                        this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
                     this.skosxlService.createRootCollection(result.name, result.label, result.lang,
-                        this.vbCtx.getContentLanguage(true)).subscribe();
+                        this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 }
             },
             () => {}
@@ -51,10 +51,10 @@ export class CollectionTreePanelComponent {
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createNestedCollection(this.selectedCollection, result.name,
-                        result.label, result.lang, this.vbCtx.getContentLanguage(true)).subscribe();
+                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
                     this.skosxlService.createNestedCollection(this.selectedCollection, result.name,
-                        result.label, result.lang, this.vbCtx.getContentLanguage(true)).subscribe();
+                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 }
             },
             () => {}

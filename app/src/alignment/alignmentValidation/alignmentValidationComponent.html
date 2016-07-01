@@ -15,7 +15,7 @@
             
             <div class="hbox" style="flex: initial; align-items: center;">
                 <label style="white-space: nowrap; margin-right: 4px;">Alignment file:</label>
-                <file-picker (change)="fileChangeEvent($event)" [size]="'xs'" [accept]="'application/rdf+xml'"></file-picker>
+                <file-picker (fileChanged)="fileChangeEvent($event)" [size]="'xs'" [accept]="'application/rdf+xml'"></file-picker>
                 <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="loadAlignment()"
                     [disabled]="!alignmentFile">Load</button>
             </div>

@@ -290,7 +290,8 @@ export type RDFResourceRolesEnum =
     "property" |
     "undetermined" |
     "xLabel"|
-    "skosCollection";
+    "skosCollection" |
+    "skosOrderedCollection";
     
 export const RDFResourceRolesEnum = {
     annotationProperty: "annotationProperty" as RDFResourceRolesEnum,
@@ -307,6 +308,7 @@ export const RDFResourceRolesEnum = {
     undetermined: "undetermined" as RDFResourceRolesEnum,
     xLabel: "xLabel" as RDFResourceRolesEnum,
     skosCollection: "skosCollection" as RDFResourceRolesEnum,
+    skosOrderedCollection: "skosOrderedCollection" as RDFResourceRolesEnum
 };
 
 export type RDFTypesEnum =

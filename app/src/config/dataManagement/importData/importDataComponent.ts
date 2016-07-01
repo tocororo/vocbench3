@@ -4,8 +4,8 @@ import {ModalServices} from "../../../widget/modal/modalServices";
 import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
 @Component({
-	selector: "import-data-component",
-	templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
+    selector: "import-data-component",
+    templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
     providers: [InputOutputServices],
     directives: [FilePickerComponent],
     host: { class : "pageComponent" }

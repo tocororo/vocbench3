@@ -539,8 +539,9 @@ export class SkosServices {
      * @param prefLabel the preferred label of the collection
      * @param prefLabelLang the language of the preferred label
      * @param lang language in which the show attribute should be rendered
+     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createRootCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string) {
+    createRootCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
         console.log("[SkosServices] createCollection");
         var params: any = {};
         if (collection != undefined) {
@@ -554,6 +555,9 @@ export class SkosServices {
         }
         if (lang != undefined) {
             params.lang = lang;
+        }
+        if (mode != undefined) {
+            params.mode = mode;
         }
         return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
             stResp => {
@@ -572,9 +576,10 @@ export class SkosServices {
      * @param prefLabel the preferred label of the collection
      * @param prefLabelLang the language of the preferred label
      * @param lang language in which the show attribute should be rendered
+     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
     createNestedCollection(container: ARTURIResource, collection?: string,
-        prefLabel?: string, prefLabelLang?: string, lang?: string) {
+        prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
 
         console.log("[SkosServices] createCollection");
         var params: any = {
@@ -591,6 +596,9 @@ export class SkosServices {
         }
         if (lang != undefined) {
             params.lang = lang;
+        }
+        if (mode != undefined) {
+            params.mode = mode;
         }
         return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
             stResp => {

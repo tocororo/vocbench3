@@ -22,6 +22,7 @@ export class EnrichPropertyModalData extends BSModalContext {
         public rangeClasses?: ARTURIResource[]
     ) {
         super();
+        this.size = "lg";
         if (rangeClasses != undefined && rangeClasses.length > 0) {
             this.rangeClasses = rangeClasses;
         }

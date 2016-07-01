@@ -11,7 +11,7 @@ export class FilePickerComponent implements OnInit {
     @Input() accept: string;
     @Input() placeholder: string = "Select a file...";
     
-    @Output() change = new EventEmitter<File>();
+    @Output() fileChanged = new EventEmitter<File>();
     
     private file: File;
     private fileName: string;
@@ -34,7 +34,7 @@ export class FilePickerComponent implements OnInit {
     private fileChangeEvent(file: File) {
         this.file = file;
         this.fileName = file.name;
-        this.change.emit(file);
+        this.fileChanged.emit(file);
     }
 
 }
