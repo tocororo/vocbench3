@@ -1,29 +1,34 @@
 <div class="groupPanel" *ngIf="predicateObjectList">
     <div class="groupPanel-heading">
-        <div>
-            <span style="flex: 1">
-                <label class="groupPanel-heading-content">{{label}}:</label>
-            </span>
-            <input type="image" class="groupPanel-heading-content" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <span class="groupPanel-heading-content">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
                 (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
-        </div>
+        </span>
     </div>
+
     <div class="groupPanel-body">
         <div class="subPanel" *ngFor="let po of predicateObjectList">
             <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
-                <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
-                    (click)="enrichProperty(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
+                    [disabled]="!resource.getAdditionalProperty('explicit')">
+                    <span>+</span>
+                </button>
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let obj of po.getObjects()" class="listItem">
-                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)"
-                        [resource]="obj" [predicate]="po.getPredicate()" style="flex:1"></reified-resource>
+                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
                     <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
                         (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-                    <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
-                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())" (click)="removePredicateObject(po.getPredicate(), obj)"  
+                        [disabled]="!obj.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
                 </div>
             </div>
         </div>

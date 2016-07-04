@@ -143,7 +143,6 @@ rdf-resource {
     align-items: center;
     border-radius: 2px;
 }
-
 rdf-resource > .rdfResourceIcon {
     min-width: 16px;
     margin-right: 5px;
@@ -157,6 +156,12 @@ class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rd
 collection-tree rdf-resource:hover, scheme-list rdf-resource:hover, property-tree rdf-resource:hover,
 scheme-list-panel rdf-resource:hover {
     background-color: #e5f3ff;
+}
+
+reified-resource {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    background-color: #eee;
 }
 
 .selectedResource {
@@ -245,18 +250,16 @@ input[type="image"]:disabled  {
 }
 
 .groupPanel {
-    border: 1px solid #ddd;
+    border: 1px solid #aaa;
     border-radius: 4px;
-    margin: 7px 0 5px;
-}
-.groupPanel-heading {
-    margin-bottom: 6px;
+    margin: 8px 0 5px;
     position: relative;
 }
-.groupPanel-heading > div {
+.groupPanel-heading {
     display: flex;
     align-items: center;
     position: absolute;
+    height: 20px;
     top: -11px;
     left: 4px;
     right: 8px;
@@ -267,7 +270,7 @@ input[type="image"]:disabled  {
     background: white;
 }
 .groupPanel-body {
-    padding: 4px;
+    padding: 12px 4px 4px;
 }
 
 input.ng-invalid.submitted {
@@ -329,6 +332,38 @@ lang-picker {
 /* Btn groups in panel heading (usually button for tree/list managment) */
 .panel-heading .btn-group-xs>.btn {
     padding: 1px 3px;
+}
+
+/* Button to add/remove elements in ResourceView partitions */
+.resViewPartitionBtn:hover, .resViewPartitionBtn:focus {
+	color: #000000;
+	text-decoration: none;
+	cursor: pointer;
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+}
+button.resViewPartitionBtn {
+    width: 16px;
+    height: 16px;
+    float: right;
+    font-size: 16.5px;
+	font-weight: bold;
+	line-height: 1;
+	color: #000000;
+	text-shadow: 0 1px 0 #ffffff;
+	opacity: 0.4;
+	filter: alpha(opacity=40);
+	padding: 0;
+	cursor: pointer;
+	background: transparent;
+	border: 0;
+	-webkit-appearance: none;
+}
+button.resViewPartitionBtn:disabled  {
+	opacity: 0.2;
+    filter: alpha(opacity=20);
+    cursor: default;
+    /*cursor: not-allowed;*/
 }
 
 /* BOOTSTRAP OVERRIDE */

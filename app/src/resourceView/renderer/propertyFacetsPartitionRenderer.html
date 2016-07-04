@@ -1,24 +1,30 @@
-<div class="subPanel" *ngIf="objectList">
-    <div class="subPanel-heading">
-        <label style="flex: 1">Property facets:</label>
+<div class="groupPanel" *ngIf="objectList">
+    <div class="groupPanel-heading">
+        <span>
+            <label class="groupPanel-heading-content">Property facets:</label>
+        </span>
     </div>
-    <div class="subPanel-body">
+    <div class="groupPanel-body">
         <div style="display: flex; padding: 8px;">
             <span *ngFor="let f of facets" style="flex:1; display: inline-flex; align-items: center;">
                 <input #cb type="checkbox" style="margin: 0px 3px 0px 0px;" value="transitive"
                     [ngModel]="f.value" [disabled]="!f.explicit" (change)="changeFacet(f.name, cb.checked)">{{f.name}}
             </span>
         </div>
-        
         <div class="subPanel" *ngIf="objectList">
             <div class="subPanel-heading">
                 <label style="flex: 1">Inverse of:</label>
-                <input type="image" title="Add a inverse property" src="app/assets/images/prop_create.png" (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <button class="resViewPartitionBtn" title="Add a inverse property" (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+                    <span>+</span>
+                </button>
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let p of objectList" class="listItem">
                     <rdf-resource [resource]="p" (dblclick)="objectDblClick(p)" style="flex:1"></rdf-resource>
-                    <input type="image" title="Remove inverse property" src="app/assets/images/prop_delete.png" (click)="remove(p)" [disabled]="!p.getAdditionalProperty('explicit')">
+                    <button class="resViewPartitionBtn" title="Remove inverse property" (click)="remove(p)"  
+                        [disabled]="!p.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
                 </div>
             </div>
         </div>

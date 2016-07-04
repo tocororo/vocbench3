@@ -145,7 +145,7 @@ export class VocbenchCtx {
     removeProjectSetting(project: Project) {
         Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
         Cookie.deleteCookie(Cookie.VB_CONTENT_LANG + "_" + project.getName());
-        Cookie.deleteCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName());
+        Cookie.deleteCookie(Cookie.VB_HUMAN_READABLE + "_" + project.getName());
     }
 
 }

@@ -41,5 +41,8 @@ export class ReifiedResourceComponent {
         this.open = !this.open;
     }
     
+    private resDblClicked() {
+        console.log("double clicked");
+    }
 
 }
