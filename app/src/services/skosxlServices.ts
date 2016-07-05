@@ -416,12 +416,12 @@ export class SkosxlServices {
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createNestedCollection(container: ARTURIResource, collection?: string,
+    createNestedCollection(container: ARTResource, collection?: string,
         prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
 
         console.log("[SkosServices] createCollection");
         var params: any = {
-            container: container.getURI()
+            container: container.getNominalValue()
         };
         if (collection != undefined) {
             params.collection = collection;
@@ -439,6 +439,83 @@ export class SkosxlServices {
             params.mode = mode;
         }
         return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+            stResp => {
+                var newColl = Deserializer.createURI(stResp);
+                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
+                return newColl;
+            }
+        );
+    }
+
+    /**
+     * Creates a root ordered collection
+     * @param collection the name of the collection. If not provided its URI is generated randomically
+     * @param prefLabel the preferred label of the collection
+     * @param prefLabelLang the language of the preferred label
+     * @param lang language in which the show attribute should be rendered
+     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
+     */
+    createRootOrderedCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+        console.log("[SkosServices] createRootOrderedCollection");
+        var params: any = {};
+        if (collection != undefined) {
+            params.collection = collection;
+        }
+        if (prefLabel != undefined) {
+            params.prefLabel = prefLabel;
+        }
+        if (prefLabelLang != undefined) {
+            params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        if (mode != undefined) {
+            params.mode = mode;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                var newColl = Deserializer.createURI(stResp);
+                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.rootCollectionCreatedEvent.emit(newColl);
+                return newColl;
+            }
+        );
+    }
+
+    /**
+     * Creates a nested ordered collection for the given container
+     * @param collection the name of the collection. If not provided its URI is generated randomically
+     * @param container the container collection
+     * @param prefLabel the preferred label of the collection
+     * @param prefLabelLang the language of the preferred label
+     * @param lang language in which the show attribute should be rendered
+     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
+     */
+    createNestedOrderedCollection(container: ARTResource, collection?: string,
+        prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+
+        console.log("[SkosServices] createNestedOrderedCollection");
+        var params: any = {
+            container: container.getNominalValue()
+        };
+        if (collection != undefined) {
+            params.collection = collection;
+        }
+        if (prefLabel != undefined) {
+            params.prefLabel = prefLabel;
+        }
+        if (prefLabelLang != undefined) {
+            params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        if (mode != undefined) {
+            params.mode = mode;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);

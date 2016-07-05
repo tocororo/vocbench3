@@ -45,6 +45,21 @@ export class CollectionTreePanelComponent {
             () => {}
         );
     }
+
+    private createOrderedCollection() {
+        this.modalService.newResource("Create new skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
+            result => {
+                if (this.ONTO_TYPE == "SKOS") {
+                    this.skosService.createRootOrderedCollection(result.name, result.label, result.lang,
+                        this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                } else { //SKOSXL
+                    this.skosxlService.createRootOrderedCollection(result.name, result.label, result.lang,
+                        this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                }
+            },
+            () => {}
+        );
+    }
     
     private createNestedCollection() {
         this.modalService.newResource("Create a nested skos:Collection", this.vbCtx.getContentLanguage()).then(
@@ -60,24 +75,38 @@ export class CollectionTreePanelComponent {
             () => {}
         );
     }
+
+    private createNestedOrderedCollection() {
+        this.modalService.newResource("Create a nested skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
+            result => {
+                if (this.ONTO_TYPE == "SKOS") {
+                    this.skosService.createNestedOrderedCollection(this.selectedCollection, result.name,
+                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                } else { //SKOSXL
+                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, result.name,
+                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                }
+            },
+            () => {}
+        );
+    }
     
     private deleteCollection() {
-        alert("Delete collection still not available")
-        // if (this.ONTO_TYPE == "SKOS") {
-        //     this.skosService.deleteConcept(this.selectedCollection).subscribe(
-        //         stResp => {
-        //             this.selectedCollection = null;
-        //             this.itemSelected.emit(undefined);
-        //         }
-        //     );
-        // } else { //SKOSXL
-        //     this.skosxlService.deleteConcept(this.selectedCollection).subscribe(
-        //         stResp => {
-        //             this.selectedCollection = null;
-        //             this.itemSelected.emit(undefined);
-        //         }
-        //     );
-        // }
+        if (this.selectedCollection.getRole() == RDFResourceRolesEnum.skosCollection) {
+            this.skosService.deleteCollection(this.selectedCollection).subscribe(
+                stResp => {
+                    this.selectedCollection = null;
+                    this.itemSelected.emit(undefined);
+                }
+            );
+        } else { //skosOrderedCollection
+            this.skosService.deleteOrderedCollection(this.selectedCollection).subscribe(
+                stResp => {
+                    this.selectedCollection = null;
+                    this.itemSelected.emit(undefined);
+                }
+            );
+        }
     }
     
     private doSearch(searchedText: string) {

@@ -2,12 +2,25 @@
     <!-- Commands -->
     <div class="panel-heading">  
         <div class="btn-group btn-group-xs" role="group" style="flex: 1;">
-            <button class="btn btn-default" title="Create Collection" (click)="createCollection()">
-                <img src="app/assets/images/collection_create.png" />
-            </button>
-            <button class="btn btn-default" title="Create a nested Collection" (click)="createNestedCollection()" [disabled]="!selectedCollection">
-                <img src="app/assets/images/collection_addNested.png" />
-            </button>
+            <div class="btn-group btn-group-xs" role="group" title="Create Collection">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <img src="app/assets/images/collection_create.png" />
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a (click)="createCollection()">Collection</a></li>
+                    <li><a (click)="createOrderedCollection()">OrderedCollection</a></li>
+                </ul>
+            </div>
+            <div class="btn-group btn-group-xs" role="group" >
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Create a nested Collection" 
+                    [disabled]="!selectedCollection">
+                    <img src="app/assets/images/collection_addNested.png" />
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a (click)="createNestedCollection()">Collection</a></li>
+                    <li><a (click)="createNestedOrderedCollection()">OrderedCollection</a></li>
+                </ul>
+            </div>
             <button class="btn btn-default" title="Delete Collection" (click)="deleteCollection()" [disabled]="!selectedCollection">
                 <img src="app/assets/images/collection_delete.png" />
             </button>

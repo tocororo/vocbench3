@@ -42,9 +42,11 @@ export class ResViewModalServices {
     /**
      * Opens a modal to select a resource to set as value of a property with range "resource"
      * @param title the title of the modal
+     * @param property property to enrich with a resource
+     * @param ranges admitted range classes of the property
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
-    enrichProperty(title: string, property: ARTURIResource, ranges: ARTURIResource[]) {
+    enrichProperty(title: string, property: ARTURIResource, ranges?: ARTURIResource[]) {
         var modalData = new EnrichPropertyModalData(title, property, ranges);
         return this.modal.open(EnrichPropertyModal, modalData).then(
             dialog => dialog.result

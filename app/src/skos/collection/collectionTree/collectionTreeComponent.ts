@@ -31,8 +31,10 @@ export class CollectionTreeComponent {
         private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
             newColl => this.onRootCollectionCreated(newColl)));
-        // this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-        //     deletedConcept => this.onConceptDeleted(deletedConcept)));
+        this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
+            deletedCollection => this.onCollectionDeleted(deletedCollection)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
+            data => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             newLang => this.onContentLangChanged(newLang)));
     }
@@ -95,17 +97,27 @@ export class CollectionTreeComponent {
         this.roots.push(collection);       
     }
 
-    // private onConceptDeleted(deletedConcept: ARTURIResource) {
-    //     //check if the concept to delete is a root
-    //     for (var i = 0; i < this.roots.length; i++) {
-    //         if (this.roots[i].getURI() == deletedConcept.getURI()) {
-    //             this.roots.splice(i, 1);
-    //             break;
-    //         }
-    //     }
-    //     //reset the selected item
-    //     this.itemSelected.emit(undefined);
-    // }
+    private onNestedCollectionAdded(nested: ARTURIResource, container: ARTURIResource) {
+        //if the nested was a root collection, then remove it from root (since it is no more a root by definition)
+        for (var i = 0; i < this.roots.length; i++) {
+            if (this.roots[i].getURI() == nested.getURI()) {
+                this.roots.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    private onCollectionDeleted(deletedCollection: ARTURIResource) {
+        //check if the collection to delete is a root
+        for (var i = 0; i < this.roots.length; i++) {
+            if (this.roots[i].getURI() == deletedCollection.getURI()) {
+                this.roots.splice(i, 1);
+                break;
+            }
+        }
+        //reset the selected item
+        this.itemSelected.emit(undefined);
+    }
     
     private onContentLangChanged(lang: string) {
         //reset the selected item

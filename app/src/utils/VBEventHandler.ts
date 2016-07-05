@@ -1,5 +1,5 @@
 import {Injectable, EventEmitter} from '@angular/core';
-import {ARTURIResource} from './ARTResources';
+import {ARTURIResource, ARTResource} from './ARTResources';
 import {Project} from './Project';
 
 /**
@@ -28,12 +28,15 @@ export class VBEventHandler {
 
     //COLLECTION EVENTS
     //event should contain the created collection
-    public rootCollectionCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-    //event should contain an object with "nested" (the narrower created) and "container"
+    public rootCollectionCreatedEvent: EventEmitter<ARTResource> = new EventEmitter<ARTURIResource>();
+    //event should contain an object with "nested" (the nested coll created) and "container"
     public nestedCollectionCreatedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "nested" (the nested coll added) and "container"
+    public nestedCollectionAddedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "nested" (the nested coll removed) and "container"
+    public nestedCollectionRemovedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted collection
-    public collectionDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-    
+    public collectionDeletedEvent: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     //CLASS EVENTS
     //event should contain an object with "subClass" (the subClass created) and "superClass"

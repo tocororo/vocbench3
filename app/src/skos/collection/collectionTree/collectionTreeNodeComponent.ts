@@ -30,12 +30,14 @@ export class CollectionTreeNodeComponent {
     private eventSubscriptions = [];
     
 	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private vbCtx: VocbenchCtx) {
-        // this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-        //     deletedConcept => this.onConceptDeleted(deletedConcept)));
+        this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
+            deletedCollection => this.onCollectionDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionCreatedEvent.subscribe(
             data => this.onNestedCollectionCreated(data.nested, data.container)));
-        // this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
-        //     data => this.onBroaderRemoved(data.concept, data.broader)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
+            data => this.onNestedCollectionCreated(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionRemovedEvent.subscribe(
+            data => this.onNestedCollectionRemoved(data.nested, data.container)));    
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             data => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
@@ -139,20 +141,20 @@ export class CollectionTreeNodeComponent {
         this.itemSelected.emit(node);
     }
     
-    // private onConceptDeleted(deletedConcept: ARTURIResource) {
-    //     var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-    //     for (var i = 0; i < children.length; i++) {
-    //         if (children[i].getURI() == deletedConcept.getURI()) {
-    //             children.splice(i, 1);
-    //             //if node has no more children change info of node so the UI will update
-   	// 			if (children.length == 0) {
-   	// 				this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-   	// 				this.node.setAdditionalProperty(ResAttribute.OPEN, false);
-   	// 			}
-    //             break;
-    //         }
-    //     }
-    // }
+    private onCollectionDeleted(deletedCollection: ARTURIResource) {
+        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].getURI() == deletedCollection.getURI()) {
+                children.splice(i, 1);
+                //if node has no more children change info of node so the UI will update
+   				if (children.length == 0) {
+   					this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+   					this.node.setAdditionalProperty(ResAttribute.OPEN, false);
+   				}
+                break;
+            }
+        }
+    }
     
     private onNestedCollectionCreated(nested: ARTURIResource, container: ARTURIResource) {
         //add the new collection as children only if the container is the current collection
@@ -162,7 +164,14 @@ export class CollectionTreeNodeComponent {
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
         }
     }
-    
+
+    private onNestedCollectionRemoved(nested: ARTURIResource, container: ARTURIResource) {
+        //remove the nested collection from children only if the container is the current collection
+        if (this.node.getURI() == container.getURI()) {
+            this.onCollectionDeleted(nested);
+        }
+    }
+
     // private onBroaderRemoved(concept: ARTURIResource, broader: ARTURIResource) {
     //     if (broader.getURI() == this.node.getURI()) {
     //         this.onConceptDeleted(concept);

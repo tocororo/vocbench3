@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTURIResource, ResAttribute} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../utils/ARTResources";
+import {SKOS} from "../utils/Vocabulary";
 
 @Injectable()
 export class SkosServices {
@@ -514,10 +515,10 @@ export class SkosServices {
      * @param container the URI of the container collection
      * @param lang language in which the show attribute should be rendered
      */
-    getNestedCollections(container: ARTURIResource, lang?: string) {
+    getNestedCollections(container: ARTResource, lang?: string) {
         console.log("[SkosServices] getNestedCollections");
         var params: any = {
-            container: container.getURI()
+            container: container.getNominalValue()
         };
         if (lang != undefined) {
             params.lang = lang;
@@ -578,12 +579,12 @@ export class SkosServices {
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createNestedCollection(container: ARTURIResource, collection?: string,
+    createNestedCollection(container: ARTResource, collection?: string,
         prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
 
         console.log("[SkosServices] createCollection");
         var params: any = {
-            container: container.getURI()
+            container: container.getNominalValue()
         };
         if (collection != undefined) {
             params.collection = collection;
@@ -606,6 +607,246 @@ export class SkosServices {
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
                 return newColl;
+            }
+        );
+    }
+
+    /**
+     * Adds an element to a collection. If the element is a collection, emits a nestedCollectionAddedEvent
+     * @param collection Collection to which add the element
+     * @param element Collection or Concept to add
+     */
+    addToCollection(collection: ARTResource, element: ARTResource) {
+        console.log("[SkosServices] addToCollection");
+        var params: any = {
+            instanceQName: collection.getNominalValue(),
+            propertyQName: SKOS.member.getURI(),
+            value: element.getNominalValue(),
+            type: element.isBNode() ? RDFTypesEnum.bnode : RDFTypesEnum.uri,
+        };
+        return this.httpMgr.doGet("property", "addExistingPropValue", params, true).map(
+            stResp => {
+                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                    element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.eventHandler.nestedCollectionAddedEvent.emit({nested: element, container: collection});
+                } 
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Removes an element from a collection. If the element is a collection, emits a nestedCollectionRemovedEvent
+     * @param collection Collection to which remove the element
+     * @param element Collection or Concept to remove
+     */
+    removeFromCollection(collection: ARTResource, element: ARTResource) {
+        console.log("[SkosServices] removeFromCollection");
+        var params: any = {
+            instanceQName: collection.getNominalValue(),
+            propertyQName: SKOS.member.getURI(),
+            value: element.getNominalValue(),
+            type: element.isBNode() ? RDFTypesEnum.bnode : RDFTypesEnum.uri,
+        };
+        return this.httpMgr.doGet("property", "removePropValue", params, this.oldTypeService).map(
+            stResp => {
+                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                    element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.eventHandler.nestedCollectionRemovedEvent.emit({nested: element, container: collection});
+                } 
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Deletes a collection. Emits a collectionDeletedEvent
+     * @param collection Collection to delete
+     */
+    deleteCollection(collection: ARTURIResource) {
+        console.log("[SkosServices] deleteCollection");
+        var params: any = {
+            collection: collection.getNominalValue(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "deleteCollection", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.collectionDeletedEvent.emit(collection);
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Creates a root ordered collection
+     * @param collection the name of the collection. If not provided its URI is generated randomically
+     * @param prefLabel the preferred label of the collection
+     * @param prefLabelLang the language of the preferred label
+     * @param lang language in which the show attribute should be rendered
+     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
+     */
+    createRootOrderedCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+        console.log("[SkosServices] createRootOrderedCollection");
+        var params: any = {};
+        if (collection != undefined) {
+            params.collection = collection;
+        }
+        if (prefLabel != undefined) {
+            params.prefLabel = prefLabel;
+        }
+        if (prefLabelLang != undefined) {
+            params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        if (mode != undefined) {
+            params.mode = mode;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                var newColl = Deserializer.createURI(stResp);
+                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.rootCollectionCreatedEvent.emit(newColl);
+                return newColl;
+            }
+        );
+    }
+
+    /**
+     * Creates a nested ordered collection for the given container
+     * @param collection the name of the collection. If not provided its URI is generated randomically
+     * @param container the container collection
+     * @param prefLabel the preferred label of the collection
+     * @param prefLabelLang the language of the preferred label
+     * @param lang language in which the show attribute should be rendered
+     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
+     */
+    createNestedOrderedCollection(container: ARTResource, collection?: string,
+        prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+
+        console.log("[SkosServices] createNestedOrderedCollection");
+        var params: any = {
+            container: container.getNominalValue()
+        };
+        if (collection != undefined) {
+            params.collection = collection;
+        }
+        if (prefLabel != undefined) {
+            params.prefLabel = prefLabel;
+        }
+        if (prefLabelLang != undefined) {
+            params.prefLabelLang = prefLabelLang;
+        }
+        if (lang != undefined) {
+            params.lang = lang;
+        }
+        if (mode != undefined) {
+            params.mode = mode;
+        }
+        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                var newColl = Deserializer.createURI(stResp);
+                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
+                return newColl;
+            }
+        );
+    }
+
+    /**
+     * Adds an element to an ordered collection at its beginning.
+     * @param collection Collection to which add the element
+     * @param element Collection or Concept to add
+     */
+    addFirstToOrderedCollection(collection: ARTResource, element: ARTResource) {
+        console.log("[SkosServices] addFirstToOrderedCollection");
+        var params: any = {
+            collection: collection.getNominalValue(),
+            element: element.getNominalValue()
+        };
+        return this.httpMgr.doGet(this.serviceName, "addFirstToOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                //TODO
+                return stResp;
+            }
+        );
+    }
+    
+    /**
+     * Adds an element to an ordered collection at its end.
+     * @param collection Collection to which add the element
+     * @param element Collection or Concept to add
+     */
+    addLastToOrderedCollection(collection: ARTResource, element: ARTResource) {
+        console.log("[SkosServices] addLastToOrderedCollection");
+        var params: any = {
+            collection: collection.getNominalValue(),
+            element: element.getNominalValue()
+        };
+        return this.httpMgr.doGet(this.serviceName, "addLastToOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                //TODO
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Adds an element to an ordered collection at a given position.
+     * @param collection Collection to which add the element
+     * @param element Collection or Concept to add
+     * @param index position where to add the element
+     */
+    addInPositionToOrderedCollection(collection: ARTResource, element: ARTResource, index: number) {
+        console.log("[SkosServices] addInPositionToOrderedCollection");
+        var params: any = {
+            collection: collection.getNominalValue(),
+            element: element.getNominalValue(),
+            index: index
+        };
+        return this.httpMgr.doGet(this.serviceName, "addInPositionToOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                //TODO
+                return stResp;
+            }
+        );
+    }
+    
+    /**
+     * Removes an element from an ordered collection. If the element is a collection, emits a nestedCollectionRemovedEvent
+     * @param collection Collection to which remove the element
+     * @param element Collection or Concept to remove
+     */
+    removeFromOrderedCollection(collection: ARTResource, element: ARTResource) {
+        console.log("[SkosServices] removeFromOrderedCollection");
+        var params: any = {
+            collection: collection.getNominalValue(),
+            element: element.getNominalValue()
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeFromOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                    element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.eventHandler.nestedCollectionRemovedEvent.emit({nested: element, container: collection});
+                } 
+                return stResp;
+            }
+        );
+    }
+    
+    /**
+     * Deletes an ordered collection. Emits a collectionDeletedEvent
+     * @param collection Collection to delete
+     */
+    deleteOrderedCollection(collection: ARTURIResource) {
+        console.log("[SkosServices] deleteOrderedCollection");
+        var params: any = {
+            collection: collection.getNominalValue(),
+        };
+        return this.httpMgr.doGet(this.serviceName, "deleteOrderedCollection", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.collectionDeletedEvent.emit(collection);
+                return stResp;
             }
         );
     }

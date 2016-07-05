@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource} from '../../../utils/ARTResources';
+import {ARTURIResource, ResAttribute} from '../../../utils/ARTResources';
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 import {SKOS} from '../../../utils/Vocabulary';
 import {ClassTreeComponent} from '../../../owl/classTree/classTreeComponent';
@@ -80,6 +80,8 @@ export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalDa
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
+        //to avoid that the returned resource has the "selected" attribute set to true
+        this.selectedInstance.deleteAdditionalProperty(ResAttribute.SELECTED);
         this.dialog.close(this.selectedInstance);
     }
 
