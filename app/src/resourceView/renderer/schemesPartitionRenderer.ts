@@ -18,9 +18,7 @@ export class SchemesPartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Schemes";
-    private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
     private addBtnImgTitle = "Add to a ConceptScheme";
-    private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
     private removeBtnImgTitle = "Remove from ConceptScheme";
     
     constructor(private skosService:SkosServices, private browsingService: BrowsingServices) {}

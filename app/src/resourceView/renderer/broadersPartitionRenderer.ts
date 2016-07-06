@@ -19,9 +19,7 @@ export class BroadersPartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Broaders";
-    private addBtnImgSrc = "app/assets/images/concept_create.png";
     private addBtnImgTitle = "Add broader";
-    private removeBtnImgSrc = "app/assets/images/concept_delete.png";
     private removeBtnImgTitle = "Remove broader";
     
     constructor(private skosService:SkosServices, private vbCtx: VocbenchCtx, private browsingService: BrowsingServices) {}

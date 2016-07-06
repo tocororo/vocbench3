@@ -4,7 +4,7 @@ import {RDFS, OWL} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ResViewModalServices} from "./resViewModals/resViewModalServices";
+import {ResViewModalServices} from "../resViewModals/resViewModalServices";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {PropertyServices} from "../../services/propertyServices";
 import {OwlServices} from "../../services/owlServices";
@@ -189,14 +189,6 @@ export class ClassAxiomPartitionPartitionRenderer {
     
     private getRemovePropImgTitle(predicate: ARTURIResource) {
         return "Remove " + predicate.getShow();
-    }
-    
-    private getAddPropImgSrc(predicate: ARTURIResource) {
-        return ResourceUtils.getActionPropImageSrc(predicate, "create");
-    }
-    
-    private getRemovePropImgSrc(predicate: ARTURIResource) {
-        return ResourceUtils.getActionPropImageSrc(predicate, "delete");
     }
     
 }

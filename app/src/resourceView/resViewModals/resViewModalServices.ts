@@ -3,8 +3,8 @@ import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreatorModal";
 import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
 import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
-import {CustomFormModal, CustomFormModalData} from "../../../customRanges/customForm/customFormModal";
-import {ARTURIResource} from '../../../utils/ARTResources';
+import {CustomFormModal, CustomFormModalData} from "../../customRanges/customForm/customFormModal";
+import {ARTURIResource} from '../../utils/ARTResources';
 
 /**
  * Service to open modals that allow to create a classes list or instances list

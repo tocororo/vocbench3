@@ -18,9 +18,7 @@ export class TopConceptsPartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Top Concept of";
-    private addBtnImgSrc = "app/assets/images/conceptScheme_create.png";
     private addBtnImgTitle = "Add to a ConceptScheme as topConcept";
-    private removeBtnImgSrc = "app/assets/images/conceptScheme_delete.png";
     private removeBtnImgTitle = "Remove as topConcept";
     
     constructor(private skosService:SkosServices, private browsingService: BrowsingServices) {}

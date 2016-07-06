@@ -1,36 +1,40 @@
-<div class="subPanel" *ngIf="predicateObjectList">
-    <div class="subPanel-heading">
-        <label style="flex: 1">Class Axioms:</label>
-    
-        <div class="dropdown pull-right">
+<div class="groupPanel" *ngIf="predicateObjectList">
+    <div class="groupPanel-heading">
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">Class Axioms:</label>
+        </span>
+        <div class="groupPanel-heading-content dropdown pull-right">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
                     title="Add a class axiom" [disabled]="!resource.getAdditionalProperty('explicit')">
                 <img src="app/assets/images/prop_create.png" style="height: 16px"/>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                    <li *ngFor="let cap of clsAxiomProperties">
-                        <a (click)="add(cap)">
-                            <rdf-resource [resource]="cap"></rdf-resource>
-                        </a>
-                    </li>
+                <li *ngFor="let cap of clsAxiomProperties">
+                    <a (click)="add(cap)">
+                        <rdf-resource [resource]="cap"></rdf-resource>
+                    </a>
+                </li>
             </ul>
         </div>    
-            
     </div>
-    <div class="subPanel-body">
+    <div class="groupPanel-body">
         <div class="subPanel" *ngFor="let po of predicateObjectList">
             <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
-                <input type="image" [title]="getAddPropImgTitle(po.getPredicate())" [src]="getAddPropImgSrc(po.getPredicate())"
-                        (click)="add(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" 
+                    (click)="add(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
+                    <span>+</span>
+                </button>
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let obj of po.getObjects()" class="listItem">
                     <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-                    <input type="image" [title]="getRemovePropImgTitle(po.getPredicate())" [src]="getRemovePropImgSrc(po.getPredicate())"
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())" 
                         (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
                 </div>
             </div>
         </div>

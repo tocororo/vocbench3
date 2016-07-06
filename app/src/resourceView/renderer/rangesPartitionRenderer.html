@@ -1,12 +1,10 @@
 <div class="subPanel" *ngIf="objectList">
     <div class="subPanel-heading">
         <label style="flex: 1">Ranges:</label>
-        
         <div *ngIf="!isDatatypeProperty()" class="dropdown pull-right">
-            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
-                    title="Add a range" [disabled]="!resource.getAdditionalProperty('explicit')">
-                <img src="app/assets/images/class_create.png" style="height: 16px"/>
-                <span class="caret"></span>
+            <button class="resViewPartitionBtn dropdown-toggle" data-toggle="dropdown"
+                title="Add a range" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <span>+</span>
             </button>
             <ul class="dropdown-menu">
                 <li><a (click)="addExistingClass()">Add existing class</a></li>
@@ -14,15 +12,19 @@
             </ul>
         </div>
         
-        <input *ngIf="isDatatypeProperty()" type="image" title="Add a range" src="app/assets/images/class_create.png"
-            (click)="addRangeDatatype()" [disabled]="!resource.getAdditionalProperty('explicit')">
+        <button *ngIf="isDatatypeProperty()" class="resViewPartitionBtn" title="Add a range"
+             (click)="addRangeDatatype()" [disabled]="!resource.getAdditionalProperty('explicit')">
+            <span>+</span>
+        </button>
             
     </div>
     <div class="subPanel-body">
         <div *ngFor="let obj of objectList" class="listItem">
             <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-            <input type="image" title="Remove range" src="app/assets/images/class_delete.png" 
-                    (click)="remove(obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+            <button class="resViewPartitionBtn" title="Remove range" (click)="remove(obj)"  
+                [disabled]="!obj.getAdditionalProperty('explicit')">
+                <span>-</span>
+            </button>
         </div>
     </div>
 </div>

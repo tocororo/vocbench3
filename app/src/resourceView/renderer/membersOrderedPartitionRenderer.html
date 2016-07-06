@@ -1,21 +1,22 @@
 <div class="subPanel" *ngIf="objectList">
     <div class="subPanel-heading">
-        <label style="flex: 1">Domains:</label>
+        <label style="flex: 1">Members:</label>
         <div class="dropdown pull-right">
             <button class="resViewPartitionBtn dropdown-toggle" data-toggle="dropdown"
-                title="Add a domain" [disabled]="!resource.getAdditionalProperty('explicit')">
+                title="Add member" [disabled]="!resource.getAdditionalProperty('explicit')">
                 <span>+</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a (click)="addExistingClass()">Add existing class</a></li>
-                <li><a (click)="addClassExpression()">Create and add class expression</a></li>
+                <li><a (click)="addFirst()">Add first</a></li>
+                <li><a (click)="addInPosition()">Add in position...</a></li>
+                <li><a (click)="addLast()">Add last</a></li>
             </ul>
         </div>
     </div>
     <div class="subPanel-body">
         <div *ngFor="let obj of objectList" class="listItem">
             <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-            <button class="resViewPartitionBtn" title="Remove domain" (click)="remove(obj)"  
+            <button class="resViewPartitionBtn" title="Remove member" (click)="remove(obj)"  
                 [disabled]="!obj.getAdditionalProperty('explicit')">
                 <span>-</span>
             </button>

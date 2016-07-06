@@ -37,7 +37,9 @@
         <ranges-renderer [object-list]="rangesColl" [resource]="resource" (update)="buildResourceView(resource)"
             (dblclickObj)="objectDblClick($event)"></ranges-renderer>
         <members-renderer [object-list]="membersColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></members-renderer>    
+            (dblclickObj)="objectDblClick($event)"></members-renderer>
+        <members-ordered-renderer [object-list]="membersOrderedColl" [resource]="resource" (update)="buildResourceView(resource)"
+            (dblclickObj)="objectDblClick($event)"></members-ordered-renderer>
         <properties-renderer [pred-obj-list]="propertiesColl" [resource]="resource" (update)="buildResourceView(resource)"
             (dblclickObj)="objectDblClick($event)"></properties-renderer>
         

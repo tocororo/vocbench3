@@ -33,6 +33,12 @@ export class VBEventHandler {
     public nestedCollectionCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "nested" (the nested coll added) and "container"
     public nestedCollectionAddedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "nested" (the nested coll added), "container"
+    public nestedCollectionAddedFirstEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "nested" (the nested coll added), "container"
+    public nestedCollectionAddedLastEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "nested" (the nested coll added), "container" and "position"
+    public nestedCollectionAddedInPositionEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "nested" (the nested coll removed) and "container"
     public nestedCollectionRemovedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted collection

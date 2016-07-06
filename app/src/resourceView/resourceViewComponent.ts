@@ -16,6 +16,7 @@ import {SchemesPartitionRenderer} from "./renderer/schemesPartitionRenderer";
 import {BroadersPartitionRenderer} from "./renderer/broadersPartitionRenderer";
 import {LexicalizationsPartitionRenderer} from "./renderer/lexicalizationsPartitionRenderer";
 import {MembersPartitionRenderer} from "./renderer/membersPartitionRenderer";
+import {MembersOrderedPartitionRenderer} from "./renderer/membersOrderedPartitionRenderer";
 import {PropertiesPartitionRenderer} from "./renderer/propertiesPartitionRenderer";
 import {ClassAxiomPartitionPartitionRenderer} from "./renderer/classAxiomPartitionRenderer";
 import {SuperPropertiesPartitionRenderer} from "./renderer/superPropertiesPartitionRenderer";
@@ -29,7 +30,7 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
     directives: [RdfResourceComponent, ResourceRenameComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, 
         SchemesPartitionRenderer, BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
         SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-        RangesPartitionRenderer, PropertyFacetsPartitionRenderer, MembersPartitionRenderer],
+        RangesPartitionRenderer, PropertyFacetsPartitionRenderer, MembersPartitionRenderer, MembersOrderedPartitionRenderer],
     providers: [ResourceViewServices, AlignmentServices],
 })
 export class ResourceViewComponent {
@@ -52,7 +53,8 @@ export class ResourceViewComponent {
     private domainsColl: ARTNode[] = null;
     private rangesColl: ARTNode[] = null;
     private lexicalizationsColl: ARTPredicateObjects[] = null;
-    private membersColl: ARTResource[] = null;
+    private membersColl: ARTNode[] = null;
+    private membersOrderedColl: ARTNode[] = null;
     private propertiesColl: ARTPredicateObjects[] = null;
     private propertyFacets: any[] = null;
     private inverseofColl: ARTURIResource[] = null;
@@ -144,6 +146,9 @@ export class ResourceViewComponent {
                     } else if (partitionName == "members") {
                         this.membersColl = Deserializer.createRDFArray(partition);
                         this.membersColl = this.filterInferredFromResourceList(this.membersColl);
+                    } else if (partitionName == "membersOrdered") {
+                        this.membersOrderedColl = Deserializer.createRDFArray(partition);
+                        this.membersOrderedColl = this.filterInferredFromResourceList(this.membersOrderedColl);
                     } else if (partitionName == "properties") {
                         this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                         this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);

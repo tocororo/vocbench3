@@ -18,9 +18,7 @@ export class TypesPartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
     private label = "Types";
-    private addBtnImgSrc = "app/assets/images/class_create.png";
     private addBtnImgTitle = "Add a type";
-    private removeBtnImgSrc = "app/assets/images/class_delete.png";
     private removeBtnImgTitle = "Remove type"; 
     
     constructor(private owlService:OwlServices, private browsingService: BrowsingServices) {}

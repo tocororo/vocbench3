@@ -153,11 +153,4 @@ export class LexicalizationsPartitionRenderer {
         return "Remove " + predicate.getShow();
     }
     
-    private getAddPropImgSrc(predicate: ARTURIResource) {
-        return ResourceUtils.getActionPropImageSrc(predicate, "create");
-    }
-    
-    private getRemovePropImgSrc(predicate: ARTURIResource) {
-        return ResourceUtils.getActionPropImageSrc(predicate, "delete");
-    }
 }

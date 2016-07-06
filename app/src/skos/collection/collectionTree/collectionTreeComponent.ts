@@ -35,6 +35,12 @@ export class CollectionTreeComponent {
             deletedCollection => this.onCollectionDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
             data => this.onNestedCollectionAdded(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
+            data => this.onNestedCollectionAdded(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedLastEvent.subscribe(
+            data => this.onNestedCollectionAdded(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
+            data => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             newLang => this.onContentLangChanged(newLang)));
     }

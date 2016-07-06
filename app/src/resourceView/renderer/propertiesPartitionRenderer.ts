@@ -6,7 +6,7 @@ import {CustomRange, CustomRangeEntry} from "../../utils/CustomRanges";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ReifiedResourceComponent} from "../../widget/reifiedResource/reifiedResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ResViewModalServices} from "./resViewModals/resViewModalServices";
+import {ResViewModalServices} from "../resViewModals/resViewModalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SkosxlServices} from "../../services/skosxlServices";
@@ -258,14 +258,6 @@ export class PropertiesPartitionRenderer {
     
     private getRemovePropImgTitle(predicate: ARTURIResource) {
         return "Remove " + predicate.getShow();
-    }
-    
-    private getAddPropImgSrc(predicate: ARTURIResource) {
-        return ResourceUtils.getActionPropImageSrc(predicate, "create");
-    }
-    
-    private getRemovePropImgSrc(predicate: ARTURIResource) {
-        return ResourceUtils.getActionPropImageSrc(predicate, "delete");
     }
     
 }

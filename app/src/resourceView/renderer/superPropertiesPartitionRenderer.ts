@@ -18,9 +18,7 @@ export class SuperPropertiesPartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     
     private label = "Superproperties";
-    private addBtnImgSrc = "app/assets/images/prop_create.png";
     private addBtnImgTitle = "Add a superproperty";
-    private removeBtnImgSrc = "app/assets/images/prop_delete.png";
     private removeBtnImgTitle = "Remove superproperty";
     
     constructor(private propService:PropertyServices, private browsingService: BrowsingServices) {}

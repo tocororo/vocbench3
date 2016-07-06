@@ -6,32 +6,28 @@ import {ResViewModalServices} from "../resViewModals/resViewModalServices";
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
-	selector: "members-renderer",
-	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
+	selector: "members-ordered-renderer",
+	templateUrl: "app/src/resourceView/renderer/membersOrderedPartitionRenderer.html",
 	directives: [RdfResourceComponent],
     providers: [SkosServices, ResViewModalServices],
 })
-export class MembersPartitionRenderer {
+export class MembersOrderedPartitionRenderer {
     
     @Input('object-list') objectList:ARTURIResource[];
     @Input() resource: ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    private label = "Members";
-    private addBtnImgTitle = "Add member";
-    private removeBtnImgTitle = "Remove member";
-    
     constructor(private rvModalService: ResViewModalServices,
         private skosService: SkosServices) {}
     
     /**
-     * Adds a member in a collection (unordered)
+     * Adds a first member to an ordered collection 
      */
-    private add() {
+    private addFirst() {
         this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
             selectedMember => {
-                this.skosService.addToCollection(this.resource, selectedMember).subscribe(
+                this.skosService.addFirstToOrderedCollection(this.resource, selectedMember).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -39,8 +35,29 @@ export class MembersPartitionRenderer {
         );
     }
 
+    /**
+     * Adds a member in a given position to an ordered collection 
+     */
+    private addInPosition() {
+        alert("still not available");
+    }
+
+    /**
+     * Adds a last member to an ordered collection 
+     */
+    private addLast() {
+        this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
+            selectedMember => {
+                this.skosService.addLastToOrderedCollection(this.resource, selectedMember).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            },
+            () => {}
+        );
+    }
+    
     private remove(member: ARTResource) {
-        this.skosService.removeFromCollection(this.resource, member).subscribe(
+        this.skosService.removeFromOrderedCollection(this.resource, member).subscribe(
             stResp => {
                 this.update.emit(null);
             }

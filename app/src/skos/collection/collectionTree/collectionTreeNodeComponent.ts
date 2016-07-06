@@ -36,6 +36,12 @@ export class CollectionTreeNodeComponent {
             data => this.onNestedCollectionCreated(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
             data => this.onNestedCollectionCreated(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
+            data => this.onNestedCollectionAddedFirst(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedLastEvent.subscribe(
+            data => this.onNestedCollectionAddedLast(data.nested, data.container)));
+        this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
+            data => this.onNestedCollectionAddedInPosition(data.nested, data.container, data.position)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionRemovedEvent.subscribe(
             data => this.onNestedCollectionRemoved(data.nested, data.container)));    
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
@@ -160,6 +166,33 @@ export class CollectionTreeNodeComponent {
         //add the new collection as children only if the container is the current collection
         if (this.node.getURI() == container.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(nested);
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+        }
+    }
+
+    private onNestedCollectionAddedFirst(nested: ARTURIResource, container: ARTURIResource) {
+        //add the new collection as children only if the container is the current collection
+        if (this.node.getURI() == container.getURI()) {
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN).unshift(nested);
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+        }
+    }
+
+    private onNestedCollectionAddedLast(nested: ARTURIResource, container: ARTURIResource) {
+        //add the new collection as children only if the container is the current collection
+        if (this.node.getURI() == container.getURI()) {
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(nested);
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+        }
+    }
+
+    private onNestedCollectionAddedInPosition(nested: ARTURIResource, container: ARTURIResource, position: number) {
+        //add the new collection as children only if the container is the current collection
+        if (this.node.getURI() == container.getURI()) {
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN).splice(position, 0, nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
         }

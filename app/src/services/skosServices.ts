@@ -755,6 +755,7 @@ export class SkosServices {
 
     /**
      * Adds an element to an ordered collection at its beginning.
+     * If the element is a collection, emits a nestedCollectionAddedFirstEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
      */
@@ -766,7 +767,10 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addFirstToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
-                //TODO
+                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                    element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.eventHandler.nestedCollectionAddedFirstEvent.emit({nested: element, container: collection});
+                } 
                 return stResp;
             }
         );
@@ -774,6 +778,7 @@ export class SkosServices {
     
     /**
      * Adds an element to an ordered collection at its end.
+     * If the element is a collection, emits a nestedCollectionAddedLastEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
      */
@@ -785,7 +790,10 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addLastToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
-                //TODO
+                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                    element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.eventHandler.nestedCollectionAddedLastEvent.emit({nested: element, container: collection});
+                } 
                 return stResp;
             }
         );
@@ -793,6 +801,7 @@ export class SkosServices {
 
     /**
      * Adds an element to an ordered collection at a given position.
+     * If the element is a collection, emits a nestedCollectionAddedInPositionEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
      * @param index position where to add the element
@@ -806,7 +815,11 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addInPositionToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
-                //TODO
+                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                    element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.eventHandler.nestedCollectionAddedInPositionEvent.emit(
+                        {nested: element, container: collection, position: index});
+                } 
                 return stResp;
             }
         );
