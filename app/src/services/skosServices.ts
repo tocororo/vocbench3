@@ -800,7 +800,7 @@ export class SkosServices {
     }
 
     /**
-     * Adds an element to an ordered collection at a given position.
+     * Adds an element to an ordered collection at a given position (index starting from 1).
      * If the element is a collection, emits a nestedCollectionAddedInPositionEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add

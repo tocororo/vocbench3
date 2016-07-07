@@ -8,13 +8,15 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a (click)="addFirst()">Add first</a></li>
-                <li><a (click)="addInPosition()">Add in position...</a></li>
                 <li><a (click)="addLast()">Add last</a></li>
+                <li [ngClass]="{disabled : !selectedMember}"><a (click)="addBefore()">Add before the selected member</a></li>
+                <li [ngClass]="{disabled : !selectedMember}"><a (click)="addAfter()">Add after the selected member</a></li>
             </ul>
         </div>
     </div>
     <div class="subPanel-body">
-        <div *ngFor="let obj of objectList" class="listItem">
+        <div *ngFor="let obj of objectList" class="listItem" [ngClass]="{active: obj == selectedMember}"
+            (click)="selectMember(obj)">
             <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
             <button class="resViewPartitionBtn" title="Remove member" (click)="remove(obj)"  
                 [disabled]="!obj.getAdditionalProperty('explicit')">
