@@ -13,7 +13,7 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 })
 export class SchemeListNodeComponent {
     @Input() node: ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     private eventSubscriptions = [];
     
@@ -38,7 +38,7 @@ export class SchemeListNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.itemSelected.emit(this.node);
+        this.nodeSelected.emit(this.node);
     }
     
     //EVENT LISTENERS

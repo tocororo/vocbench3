@@ -1,5 +1,5 @@
 <div class="scrollableContainer">
-    <collection-tree-node *ngFor="let r of roots" [node]="r" (itemSelected)="onNodeSelected($event)"></collection-tree-node>
+    <collection-tree-node *ngFor="let r of roots" [node]="r" (nodeSelected)="onNodeSelected($event)"></collection-tree-node>
 </div>
 
 <div #blockDivTree class="blockingDiv" style="display:none">

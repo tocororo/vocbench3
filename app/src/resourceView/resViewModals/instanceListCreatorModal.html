@@ -3,8 +3,8 @@
 </div>
 <div class="modal-body vbox" style="height:70vh;" id="toFocus">
     <div class="hbox">
-        <class-tree (itemSelected)="onTreeClassSelected($event)"></class-tree>
-        <instance-list [cls]="selectedClass" (itemSelected)="onSourceListInstanceSelected($event)" style="margin-left: 4px;"></instance-list>
+        <class-tree (nodeSelected)="onTreeClassSelected($event)"></class-tree>
+        <instance-list [cls]="selectedClass" (nodeSelected)="onSourceListInstanceSelected($event)" style="margin-left: 4px;"></instance-list>
         
         <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
             <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addToList()" [disabled]="!selectedSourceInstance">

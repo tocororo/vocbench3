@@ -7,12 +7,12 @@
             src="app/assets/images/tree_collapse.png"
             (click)="collapseNode()">
 	</div>
-	<rdf-resource [resource]="node" (click)="selectNode()" 
+	<rdf-resource [resource]="node" (click)="onResourceClicked($event)" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
 	<concept-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" [scheme]="scheme"
-        (itemSelected)="onNodeSelected($event)">
+        (nodeClicked)="onNodeClicked($event)" (nodeCtrlClicked)="onNodeCtrlClicked($event)">
     </concept-tree-node>
 </div>

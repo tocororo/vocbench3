@@ -13,7 +13,7 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
 })
 export class PropertyTreeComponent {
     @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource 
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
@@ -83,15 +83,12 @@ export class PropertyTreeComponent {
     //EVENT LISTENERS
     
     private onNodeSelected(node:ARTURIResource) {
-        if (this.selectedNode == undefined) {
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);    
-        } else {
+        if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
-        this.itemSelected.emit(node);
+        this.selectedNode = node;
+        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
+        this.nodeSelected.emit(node);
     }
     
     private onTopPropertyCreated(property:ARTURIResource) {
@@ -106,8 +103,8 @@ export class PropertyTreeComponent {
                 break;
             }
         }
-        //reset the selected item
-        this.itemSelected.emit(undefined);
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
     }
     
 }

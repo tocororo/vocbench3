@@ -135,6 +135,11 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addSuperProperty", params, this.oldTypeService).map(
             stResp => {
+                //this is needed to avoid error when the event is catched. Since the subProperty is added to the 
+                //children of the superProp, and so it is added to a PropertyTreeNodeComponent
+                //children not set causes error when in the view is executed node.children.lenght...
+                //but this solution "hides" the eventual children that subProperty has
+                property.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 this.eventHandler.subPropertyCreatedEvent.emit({subProperty: property, superProperty: superProperty});
                 return stResp;
             }

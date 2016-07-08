@@ -66,7 +66,7 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
     }
     
     /**
-     * Listener to the event itemSelected thrown by the class-tree. Updates the selectedClass
+     * Listener to the event nodeSelected thrown by the class-tree. Updates the selectedClass
      */
     private onTreeClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;

@@ -13,7 +13,7 @@ import {ModalServices} from "../../widget/modal/modalServices";
     providers: [PropertyServices, SearchServices, DeleteServices],
 })
 export class PropertyTreePanelComponent {
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
     
@@ -66,7 +66,7 @@ export class PropertyTreePanelComponent {
         this.deleteService.removeProperty(this.selectedProperty).subscribe(
             stResp => {
                 this.selectedProperty = null;
-                this.itemSelected.emit(undefined);
+                this.nodeSelected.emit(undefined);
             }
         );
     }
@@ -109,7 +109,7 @@ export class PropertyTreePanelComponent {
     
     private onNodeSelected(node:ARTURIResource) {
         this.selectedProperty = node;
-        this.itemSelected.emit(node);
+        this.nodeSelected.emit(node);
     }
     
     

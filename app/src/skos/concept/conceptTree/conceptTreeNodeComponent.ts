@@ -14,7 +14,8 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Input() scheme: ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeClicked = new EventEmitter<ARTURIResource>();
+    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
@@ -78,7 +79,7 @@ export class ConceptTreeNodeComponent {
             this.treeNodeElement.nativeElement.scrollIntoView();
             //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
             if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
-                this.selectNode()
+                this.selectNode();
             }
         } else {
             if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
@@ -129,18 +130,30 @@ export class ConceptTreeNodeComponent {
     }
     
     /**
-     * Called when a node in the tree is clicked. This function emit an event 
+     * Called when a rdf-resource is clicked. 
      */
+    private onResourceClicked(event: MouseEvent) {
+        if (event.ctrlKey) { //ctrl + click
+            this.nodeCtrlClicked.emit(this.node);
+        } else {
+            this.selectNode();
+        }
+    }
+
     private selectNode() {
-        this.itemSelected.emit(this.node);
+        this.nodeClicked.emit(this.node);
     }
     
     //EVENT LISTENERS
     
-    private onNodeSelected(node: ARTURIResource) {
-        this.itemSelected.emit(node);
+    private onNodeClicked(node: ARTURIResource) {
+        this.nodeClicked.emit(node);
     }
-    
+
+    private onNodeCtrlClicked(node: ARTURIResource) {
+        this.nodeCtrlClicked.emit(node);
+    }
+
     private onConceptDeleted(deletedConcept: ARTURIResource) {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
         for (var i = 0; i < children.length; i++) {

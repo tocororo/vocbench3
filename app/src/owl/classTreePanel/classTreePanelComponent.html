@@ -26,8 +26,8 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <class-tree (itemSelected)="onClassSelected($event)" style="flex: 3"></class-tree>
-        <instance-list [cls]="selectedClass" (itemSelected)="onInstanceSelected($event)" style="margin-top: 4px;"></instance-list>
+        <class-tree (nodeSelected)="onClassSelected($event)" style="flex: 3"></class-tree>
+        <instance-list [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" style="margin-top: 4px;"></instance-list>
     </div>
     
     <!-- Search -->

@@ -14,7 +14,7 @@ import {CollectionTreeNodeComponent} from "./collectionTreeNodeComponent";
     host: { class: "blockingDivHost" }
 })
 export class CollectionTreeComponent {
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
@@ -88,15 +88,12 @@ export class CollectionTreeComponent {
     //EVENT LISTENERS
     
     private onNodeSelected(node: ARTURIResource) {
-        if (this.selectedNode == undefined) {
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        } else {
+        if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
-        this.itemSelected.emit(node);
+        this.selectedNode = node;
+        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
+        this.nodeSelected.emit(node);
     }
 
     private onRootCollectionCreated(collection: ARTURIResource) {
@@ -121,13 +118,13 @@ export class CollectionTreeComponent {
                 break;
             }
         }
-        //reset the selected item
-        this.itemSelected.emit(undefined);
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
     }
     
     private onContentLangChanged(lang: string) {
-        //reset the selected item
-        this.itemSelected.emit(undefined);
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
         //and reinitialize tree
         this.initTree();
     }

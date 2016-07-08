@@ -13,7 +13,7 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 })
 export class InstanceListComponent {
     @Input('cls') cls:ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get the element in the view referenced with #blockDivTree
     @ViewChild('blockDivInstanceList') blockDivElement;
@@ -99,7 +99,7 @@ export class InstanceListComponent {
             this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.selectedInstance = instance;
-        this.itemSelected.emit(instance);
+        this.nodeSelected.emit(instance);
     }
     
     public selectSearchedInstance(cls: ARTURIResource, instance: ARTURIResource) {

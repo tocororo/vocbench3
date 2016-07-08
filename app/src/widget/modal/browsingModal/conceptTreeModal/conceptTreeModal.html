@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox" style="height:70vh;" id="toFocus">
     <concept-tree [scheme]="context.scheme" [schemeChangeable]="context.schemeChangeable"
-        (itemSelected)="onConceptSelected($event)">
+        (nodeSelected)="onConceptSelected($event)">
     </concept-tree>
 </div>
 <div class="modal-footer">

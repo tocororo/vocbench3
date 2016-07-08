@@ -25,5 +25,5 @@ export class ConceptsComponent implements OnInit {
     private onNodeSelected(node: ARTURIResource) {
         this.resource = node;
     }
-    
+
 }

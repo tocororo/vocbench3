@@ -1,5 +1,5 @@
 <div class="scrollableContainer">
-    <scheme-list-node *ngFor="let s of schemeList" [node]="s" (itemSelected)="selectScheme(s)"></scheme-list-node>
+    <scheme-list-node *ngFor="let s of schemeList" [node]="s" (nodeSelected)="selectScheme(s)"></scheme-list-node>
     <div *ngIf="schemeList && schemeList.length==0">
         No skos:ConceptScheme(s)
     </div>

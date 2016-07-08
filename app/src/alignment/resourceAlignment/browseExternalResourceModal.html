@@ -12,20 +12,20 @@
     
     <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
      or individuals, and they are rendered based on the resource role -->
-    <class-tree *ngIf="showClassTree()" (itemSelected)="onResourceSelected($event)">
+    <class-tree *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)">
     </class-tree>
             
-    <concept-tree *ngIf="showConceptTree()" (itemSelected)="onResourceSelected($event)" 
+    <concept-tree *ngIf="showConceptTree()" (nodeSelected)="onResourceSelected($event)" 
         [schemeChangeable]="true" [scheme]="currentScheme" (schemeChanged)="onSchemeChanged()">
     </concept-tree>
             
-    <property-tree *ngIf="showPropertyTree()" (itemSelected)="onResourceSelected($event)">
+    <property-tree *ngIf="showPropertyTree()" (nodeSelected)="onResourceSelected($event)">
     </property-tree>
         
-    <scheme-list *ngIf="showSchemeList()" (itemSelected)="onResourceSelected($event)">
+    <scheme-list *ngIf="showSchemeList()" (nodeSelected)="onResourceSelected($event)">
     </scheme-list>
     
-    <class-individual-tree *ngIf="showClassIndividualTree()" (itemSelected)="onResourceSelected($event)">
+    <class-individual-tree *ngIf="showClassIndividualTree()" (nodeSelected)="onResourceSelected($event)">
     </class-individual-tree>
     
 </div>

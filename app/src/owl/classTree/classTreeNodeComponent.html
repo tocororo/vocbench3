@@ -12,6 +12,6 @@
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
-	<class-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" (itemSelected)="onNodeSelected($event)">
+	<class-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" (nodeSelected)="onNodeSelected($event)">
     </class-tree-node>
 </div>

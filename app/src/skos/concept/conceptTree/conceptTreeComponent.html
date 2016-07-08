@@ -7,7 +7,9 @@
 </div>
 
 <div class="scrollableContainer">
-    <concept-tree-node *ngFor="let r of roots" [node]="r" [scheme]="scheme" (itemSelected)="onNodeSelected($event)"></concept-tree-node>
+    <concept-tree-node *ngFor="let r of roots" [node]="r" [scheme]="scheme" 
+        (nodeClicked)="onNodeClicked($event)" (nodeCtrlClicked)="onNodeCtrlClicked($event)">
+    </concept-tree-node>
 </div>
 
 <div #blockDivTree class="blockingDiv" style="display:none">

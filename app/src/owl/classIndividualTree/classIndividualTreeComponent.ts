@@ -14,9 +14,9 @@ import {ConceptTreeComponent} from '../../skos/concept/conceptTree/conceptTreeCo
 export class ClassIndividualTreeComponent {
     
     @Input() roots: ARTURIResource[];//roots of the class three
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();//when an instance or a concept is selected
-    /*in the future I might need an Output for selected class. In case, change itemSelected in instanceSelected and
-    create classSelected Output. (Memo: itemSelected is to maintain the same Output of the other tree components)*/
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();//when an instance or a concept is selected
+    /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
+    create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/
     
     private selectedClass: ARTURIResource; //the class selected from class tree
     private currentScheme: ARTURIResource;//the scheme selecte in the concept tree (only if selected class is skos:Concept)
@@ -36,12 +36,12 @@ export class ClassIndividualTreeComponent {
     }
     
     /**
-     * Listener to the event itemSelected thrown by the class-tree. Updates the selectedClass
+     * Listener to the event nodeSelected thrown by the class-tree. Updates the selectedClass
      */
     private onTreeClassSelected(cls: ARTURIResource) {
         if (this.selectedClass == undefined || (this.selectedClass != undefined && this.selectedClass.getURI() != cls.getURI())) {
             this.selectedInstance = null; //reset the instance only if selected class changes
-            this.itemSelected.emit(null);
+            this.nodeSelected.emit(null);
         }
         this.selectedClass = cls;
     }
@@ -51,7 +51,7 @@ export class ClassIndividualTreeComponent {
      */
     private onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
-        this.itemSelected.emit(this.selectedInstance);
+        this.nodeSelected.emit(this.selectedInstance);
     }
     
     /**

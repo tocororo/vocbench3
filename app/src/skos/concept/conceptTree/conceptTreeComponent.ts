@@ -16,7 +16,8 @@ import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
     @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
             //only when the scheme is the one used in the current concept tree
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
@@ -135,16 +136,17 @@ export class ConceptTreeComponent {
     
     //EVENT LISTENERS
     
-    private onNodeSelected(node: ARTURIResource) {
-        if (this.selectedNode == undefined) {
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        } else {
+    private onNodeClicked(node: ARTURIResource) {
+        if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
-        this.itemSelected.emit(node);
+        this.selectedNode = node;
+        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
+        this.nodeSelected.emit(node);
+    }
+
+    private onNodeCtrlClicked(node: ARTURIResource) {
+        this.nodeCtrlClicked.emit(node);
     }
 
     private onTopConceptCreated(concept: ARTURIResource, scheme: ARTURIResource) {
@@ -169,8 +171,8 @@ export class ConceptTreeComponent {
                 break;
             }
         }
-        //reset the selected item
-        this.itemSelected.emit(undefined);
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
     }
     
     //data contains "concept" and "scheme"
@@ -187,8 +189,8 @@ export class ConceptTreeComponent {
     }
     
     private onContentLangChanged(lang: string) {
-        //reset the selected item
-        this.itemSelected.emit(undefined);
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
         //and reinitialize tree
         this.initTree();
     }

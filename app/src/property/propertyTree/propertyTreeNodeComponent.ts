@@ -10,7 +10,7 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 })
 export class PropertyTreeNodeComponent {
     @Input() node: ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
@@ -113,13 +113,13 @@ export class PropertyTreeNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.itemSelected.emit(this.node);
+        this.nodeSelected.emit(this.node);
     }
     
     //EVENT LISTENERS
     
     private onNodeSelected(node: ARTURIResource) {
-        this.itemSelected.emit(node);
+        this.nodeSelected.emit(node);
     }
     
     private onPropertyDeleted(property: ARTURIResource) {
@@ -140,6 +140,10 @@ export class PropertyTreeNodeComponent {
     private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {
         //add the new property as children only if the parent is the current property
         if (this.node.getURI() == superProperty.getURI()) {
+            console.log("onSubPropertyCreated " + this.node.getURI());
+            console.log("children " + JSON.stringify(this.node.getAdditionalProperty(ResAttribute.CHILDREN)));
+            console.log("children " + JSON.stringify(subProperty.getAdditionalProperty(ResAttribute.CHILDREN)));
+            console.log("children " + JSON.stringify(superProperty.getAdditionalProperty(ResAttribute.CHILDREN)));
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);

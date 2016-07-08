@@ -15,7 +15,7 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
     providers: [SkosServices, SkosxlServices, SearchServices],
 })
 export class CollectionTreePanelComponent {
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     @ViewChild(CollectionTreeComponent) viewChildTree: CollectionTreeComponent;
     
@@ -96,14 +96,14 @@ export class CollectionTreePanelComponent {
             this.skosService.deleteCollection(this.selectedCollection).subscribe(
                 stResp => {
                     this.selectedCollection = null;
-                    this.itemSelected.emit(undefined);
+                    this.nodeSelected.emit(undefined);
                 }
             );
         } else { //skosOrderedCollection
             this.skosService.deleteOrderedCollection(this.selectedCollection).subscribe(
                 stResp => {
                     this.selectedCollection = null;
-                    this.itemSelected.emit(undefined);
+                    this.nodeSelected.emit(undefined);
                 }
             );
         }
@@ -147,7 +147,7 @@ export class CollectionTreePanelComponent {
     //EVENT LISTENERS
     private onNodeSelected(node:ARTURIResource) {
         this.selectedCollection = node;
-        this.itemSelected.emit(node);
+        this.nodeSelected.emit(node);
     }
     
 }

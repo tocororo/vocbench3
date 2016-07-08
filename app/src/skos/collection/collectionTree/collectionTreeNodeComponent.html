@@ -13,6 +13,6 @@
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
 	<collection-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n"
-        (itemSelected)="onNodeSelected($event)">
+        (nodeSelected)="onNodeSelected($event)">
     </collection-tree-node>
 </div>

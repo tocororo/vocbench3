@@ -16,7 +16,8 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>(); 
     
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent;
     
@@ -68,14 +69,14 @@ export class ConceptTreePanelComponent {
             this.skosService.deleteConcept(this.selectedConcept).subscribe(
                 stResp => {
                     this.selectedConcept = null;
-                    this.itemSelected.emit(undefined);
+                    this.nodeSelected.emit(undefined);
                 }
             );
         } else { //SKOSXL
             this.skosxlService.deleteConcept(this.selectedConcept).subscribe(
                 stResp => {
                     this.selectedConcept = null;
-                    this.itemSelected.emit(undefined);
+                    this.nodeSelected.emit(undefined);
                 }
             );
         }
@@ -117,9 +118,14 @@ export class ConceptTreePanelComponent {
     }
     
     //EVENT LISTENERS
-    private onNodeSelected(node:ARTURIResource) {
+    private onNodeSelected(node: ARTURIResource) {
         this.selectedConcept = node;
-        this.itemSelected.emit(node);
+        this.nodeSelected.emit(node);
+    }
+
+    private onNodeCtrlClicked(node: ARTURIResource) {
+        console.log("[ConceptTreePanelComponent] node ctrl+clicked " + node.getURI());
+        this.nodeCtrlClicked.emit(node);
     }
     
     //when a concept is removed from a scheme, it should be still visible in res view,

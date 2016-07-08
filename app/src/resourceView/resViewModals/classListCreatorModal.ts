@@ -89,7 +89,7 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
     }
     
     /**
-     * Listener to the event itemSelected thrown by the class-tree. Updates the selectedTreeClass
+     * Listener to the event nodeSelected thrown by the class-tree. Updates the selectedTreeClass
      */
     private onTreeClassSelected(cls: ARTURIResource) {
         this.selectedTreeClass = cls;

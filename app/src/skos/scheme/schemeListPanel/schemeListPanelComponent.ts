@@ -14,7 +14,7 @@ import {SchemeListNodeComponent} from '../schemeList/schemeListNodeComponent';
 })
 export class SchemeListPanelComponent {
     
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     private schemeList:ARTURIResource[];
     private activeScheme:ARTURIResource;
@@ -110,7 +110,7 @@ export class SchemeListPanelComponent {
             this.activeScheme = null;
         }
         this.selectedScheme = null;
-        this.itemSelected.emit(undefined);
+        this.nodeSelected.emit(undefined);
     }
     
     private activateScheme(scheme: ARTURIResource) {
@@ -140,7 +140,7 @@ export class SchemeListPanelComponent {
             this.selectedScheme = scheme;
             this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
-        this.itemSelected.emit(scheme);
+        this.nodeSelected.emit(scheme);
     }
     
 }

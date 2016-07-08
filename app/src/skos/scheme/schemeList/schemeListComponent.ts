@@ -11,7 +11,7 @@ import {SchemeListNodeComponent} from "./schemeListNodeComponent";
 	directives: [SchemeListNodeComponent],
 })
 export class SchemeListComponent {
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     private schemeList: ARTURIResource[];
     private selectedScheme: ARTURIResource;
@@ -36,7 +36,7 @@ export class SchemeListComponent {
             this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.selectedScheme = scheme;
-        this.itemSelected.emit(scheme);
+        this.nodeSelected.emit(scheme);
     }
     
 }

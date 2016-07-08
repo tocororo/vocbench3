@@ -13,7 +13,7 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 })
 export class CollectionTreeNodeComponent {
     @Input() node: ARTURIResource;
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement;
@@ -138,13 +138,13 @@ export class CollectionTreeNodeComponent {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        this.itemSelected.emit(this.node);
+        this.nodeSelected.emit(this.node);
     }
     
     //EVENT LISTENERS
     
     private onNodeSelected(node: ARTURIResource) {
-        this.itemSelected.emit(node);
+        this.nodeSelected.emit(node);
     }
     
     private onCollectionDeleted(deletedCollection: ARTURIResource) {

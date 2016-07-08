@@ -15,7 +15,7 @@ import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
 })
 export class ClassTreeComponent {
     @Input('roots') rootClasses: ARTURIResource[];
-    @Output() itemSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
@@ -95,15 +95,12 @@ export class ClassTreeComponent {
     //EVENT LISTENERS
     
     private onNodeSelected(node:ARTURIResource) {
-        if (this.selectedNode == undefined) {
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);    
-        } else {
+        if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedNode = node;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
-        this.itemSelected.emit(node);
+        this.selectedNode = node;
+        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
+        this.nodeSelected.emit(node);
     }
     
     private onClassDeleted(cls: ARTURIResource) {
@@ -114,8 +111,8 @@ export class ClassTreeComponent {
                 break;
             }
         }
-        //reset the selected item
-        this.itemSelected.emit(undefined);
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
     }
     
 }
