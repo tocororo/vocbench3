@@ -26,6 +26,8 @@ export class PropertyTreeComponent {
 	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
+        this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
+            data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
     }
     
     /**
@@ -105,6 +107,17 @@ export class PropertyTreeComponent {
         }
         //reset the selected node
         this.nodeSelected.emit(undefined);
+    }
+
+    private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {
+        //if the subProperty was a root property, should be removed from the root array (propertyTree)
+        //check if the property to delete is a topProperty
+        for (var i = 0; i < this.propertyTree.length; i++) {
+            if (this.propertyTree[i].getURI() == subProperty.getURI()) {
+                this.propertyTree.splice(i, 1);
+                break;
+            }
+        }
     }
     
 }

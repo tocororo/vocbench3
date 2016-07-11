@@ -140,10 +140,6 @@ export class PropertyTreeNodeComponent {
     private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {
         //add the new property as children only if the parent is the current property
         if (this.node.getURI() == superProperty.getURI()) {
-            console.log("onSubPropertyCreated " + this.node.getURI());
-            console.log("children " + JSON.stringify(this.node.getAdditionalProperty(ResAttribute.CHILDREN)));
-            console.log("children " + JSON.stringify(subProperty.getAdditionalProperty(ResAttribute.CHILDREN)));
-            console.log("children " + JSON.stringify(superProperty.getAdditionalProperty(ResAttribute.CHILDREN)));
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
