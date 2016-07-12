@@ -28,6 +28,8 @@ export class PropertyTreeComponent {
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
+        this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
+            data => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
     }
     
     /**
@@ -115,6 +117,17 @@ export class PropertyTreeComponent {
         for (var i = 0; i < this.propertyTree.length; i++) {
             if (this.propertyTree[i].getURI() == subProperty.getURI()) {
                 this.propertyTree.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    private onSuperPropertyAdded(subProperty: ARTURIResource, superProperty: ARTURIResource) {
+        //if the superProperty is a root property add subProperty to its children
+        for (var i = 0; i < this.propertyTree.length; i++) {
+            if (this.propertyTree[i].getURI() == superProperty.getURI()) {
+                this.propertyTree[i].getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
+                this.propertyTree[i].setAdditionalProperty(ResAttribute.MORE, 1);
                 break;
             }
         }

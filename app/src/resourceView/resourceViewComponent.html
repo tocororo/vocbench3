@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="hbox" style="align-items: center">
             <label style="margin-right: 8px;">Resource:</label>
-            <rdf-resource [resource]="resource"></rdf-resource>
+            <rdf-resource *ngIf="describedResource" [resource]="describedResource"></rdf-resource>
             <div style="margin-left: 10px; flex: 1; min-width: 300px;">
                 <resource-rename [resource]="resource"></resource-rename>
             </div>

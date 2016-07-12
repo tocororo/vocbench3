@@ -6,8 +6,8 @@ import {OwlServices} from "../../services/owlServices";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
-	selector: "class-tree-node",
-	templateUrl: "app/src/owl/classTree/classTreeNodeComponent.html",
+    selector: "class-tree-node",
+    templateUrl: "app/src/owl/classTree/classTreeNodeComponent.html",
     directives: [RdfResourceComponent, ClassTreeNodeComponent],
     providers: [OwlServices],
 })
@@ -30,6 +30,8 @@ export class ClassTreeNodeComponent {
 	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             data => this.onSubClassCreated(data.subClass, data.superClass)));
+        this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(
+            data => this.onSuperClassAdded(data.subClass, data.superClass)));    
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             cls => this.onClassDeleted(cls)));
         this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
@@ -165,6 +167,16 @@ export class ClassTreeNodeComponent {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subClass);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+        }
+    }
+
+    private onSuperClassAdded(subClass: ARTURIResource, superClass: ARTURIResource) {
+        if (this.node.getURI() == superClass.getURI()) {//if the superClass is the current node
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
+            //if it was open add the subClass to the visible children
+            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) { 
+                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subClass); 
+            }
         }
     }
     

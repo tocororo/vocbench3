@@ -17,6 +17,8 @@ export class VBEventHandler {
     public topConceptCreatedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain an object with "narrower" (the narrower created) and "broader"
     public narrowerCreatedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "narrower" and "broader"
+    public broaderAddedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted concept
     public conceptDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "concept" and "scheme"
@@ -47,6 +49,8 @@ export class VBEventHandler {
     //CLASS EVENTS
     //event should contain an object with "subClass" (the subClass created) and "superClass"
     public subClassCreatedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "subClass" and "superClass"
+    public superClassAddedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted class
     public classDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "resource" and "type"
@@ -66,6 +70,8 @@ export class VBEventHandler {
     public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "subProperty" (the subproperty created) and "superProperty"
     public subPropertyCreatedEvent: EventEmitter<any> = new EventEmitter();
+    //event should contain an object with "subProperty" and "superProperty"
+    public superPropertyAddedEvent: EventEmitter<any> = new EventEmitter();
     //event should contain the deleted property
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     //event should contain an object with "property" and "superProperty"

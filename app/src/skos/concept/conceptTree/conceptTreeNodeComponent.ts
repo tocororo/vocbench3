@@ -34,6 +34,8 @@ export class ConceptTreeNodeComponent {
             deletedConcept => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
             data => this.onNarrowerCreated(data.narrower, data.broader)));
+        this.eventSubscriptions.push(eventHandler.broaderAddedEvent.subscribe(
+            data => this.onBroaderAdded(data.narrower, data.broader)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
             data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
@@ -175,6 +177,16 @@ export class ConceptTreeNodeComponent {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(narrower);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+        }
+    }
+
+    private onBroaderAdded(narrower: ARTURIResource, broader: ARTURIResource) {
+        if (this.node.getURI() == broader.getURI()) {//if the broader is the current node
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
+            //if it was open add the narrower to the visible children
+            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) { 
+                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(narrower); 
+            }
         }
     }
     

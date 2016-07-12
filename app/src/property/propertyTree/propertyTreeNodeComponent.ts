@@ -27,6 +27,8 @@ export class PropertyTreeNodeComponent {
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
+        this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
+            data => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
         this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
             data => this.onSuperPropertyRemoved(data.property, data.superProperty)));
@@ -143,6 +145,16 @@ export class PropertyTreeNodeComponent {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+        }
+    }
+
+    private onSuperPropertyAdded(subProperty: ARTURIResource, superProperty: ARTURIResource) {
+        if (this.node.getURI() == superProperty.getURI()) {//if the superProperty is the current node
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
+            //if it was open add the subProperty to the visible children
+            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) { 
+                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty); 
+            }
         }
     }
     

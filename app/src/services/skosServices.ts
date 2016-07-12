@@ -193,7 +193,7 @@ export class SkosServices {
     }
     
     /**
-     * Adds the broader relation between two concepts. Emits a narrowerCreatedEvent with narrower and broader
+     * Adds the broader relation between two concepts. Emits a narrowerAddedEvent with narrower and broader
      * @param concept concept to which add the broader
      * @param broaderConcept the broader concept
      */
@@ -205,7 +205,10 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addBroaderConcept", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.narrowerCreatedEvent.emit({narrower: concept, broader: broaderConcept});
+                var narrower: ARTURIResource = Deserializer.createURI(stResp);
+                narrower.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                narrower.setAdditionalProperty(ResAttribute.MORE, concept.getAdditionalProperty(ResAttribute.MORE));
+                this.eventHandler.broaderAddedEvent.emit({narrower: narrower, broader: broaderConcept});
                 return stResp;
             }
         );

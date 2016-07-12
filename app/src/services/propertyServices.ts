@@ -135,14 +135,13 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addSuperProperty", params, this.oldTypeService).map(
             stResp => {
-                //this is needed to avoid error when the event is catched. Since the subProperty is added to the 
-                //children of the superProp, and so it is added to a PropertyTreeNodeComponent,
-                //children not set causes error when in the view is performed a check on children.lenght...
-                //but this solution "hides" the eventual children that subProperty has
-                //TODO: this could be resolved when the services for propertyTree change to dynamic 
-                //and addSuperProperty return attribute "more" about the subProperty
-                property.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.subPropertyCreatedEvent.emit({subProperty: property, superProperty: superProperty});
+                //waiting that the addSuperProperty is refactored (returning subProperty info in response)
+                //create subProperty by duplicating property param
+                var subProperty = new ARTURIResource(property.getURI(), property.getShow(), property.getRole());
+                subProperty.setAdditionalProperty(ResAttribute.CHILDREN, property.getAdditionalProperty(ResAttribute.CHILDREN));
+                subProperty.setAdditionalProperty(ResAttribute.EXPLICIT, property.getAdditionalProperty(ResAttribute.EXPLICIT));
+                subProperty.setAdditionalProperty(ResAttribute.MORE, property.getAdditionalProperty(ResAttribute.MORE));
+                this.eventHandler.superPropertyAddedEvent.emit({subProperty: subProperty, superProperty: superProperty});
                 return stResp;
             }
         );

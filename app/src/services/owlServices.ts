@@ -105,14 +105,17 @@ export class OwlServices {
      * @param superClass class to add as superClass
      */
     addSuperCls(cls: ARTURIResource, superClass: ARTURIResource) {
-        console.log("[owlServices] deleteClass");
+        console.log("[owlServices] addSuperCls");
         var params: any = {
             clsqname: cls.getURI(),
             superclsqname: superClass.getURI(),
         };
         return this.httpMgr.doGet(this.serviceName, "addSuperCls", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.subClassCreatedEvent.emit({subClass: cls, superClass: superClass});
+                var subClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                subClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                subClass.setAdditionalProperty(ResAttribute.MORE, cls.getAdditionalProperty(ResAttribute.MORE));
+                this.eventHandler.superClassAddedEvent.emit({subClass: subClass, superClass: superClass});
                 return stResp;
             }
         );

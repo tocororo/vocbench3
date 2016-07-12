@@ -193,6 +193,7 @@ reified-resource {
 .schemeItem {
     display: flex;
     align-items: center;
+    min-height: 24px;
 }
 
 .schemeItem rdf-resource {
