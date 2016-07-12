@@ -23,10 +23,17 @@
             <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
-                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" 
-                    (click)="add(po.getPredicate())" [disabled]="!resource.getAdditionalProperty('explicit')">
-                    <span>+</span>
-                </button>
+                <div class="dropdown pull-right">
+                    <button class="resViewPartitionBtn dropdown-toggle" data-toggle="dropdown"
+                        [title]="getAddPropImgTitle(po.getPredicate())"
+                        [disabled]="!resource.getAdditionalProperty('explicit')">
+                        <span>+</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a (click)="addExistingClass(po.getPredicate())">Add existing class</a></li>
+                        <li><a (click)="createClassExpression(po.getPredicate())">Create class expression</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="subPanel-body">
                 <div *ngFor="let obj of po.getObjects()" class="listItem">
