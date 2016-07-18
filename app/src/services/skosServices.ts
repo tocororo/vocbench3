@@ -622,12 +622,10 @@ export class SkosServices {
     addToCollection(collection: ARTResource, element: ARTResource) {
         console.log("[SkosServices] addToCollection");
         var params: any = {
-            instanceQName: collection.getNominalValue(),
-            propertyQName: SKOS.member.getURI(),
-            value: element.getNominalValue(),
-            type: element.isBNode() ? RDFTypesEnum.bnode : RDFTypesEnum.uri,
+            collection: collection.getNominalValue(),
+            element: element.getNominalValue()
         };
-        return this.httpMgr.doGet("property", "addExistingPropValue", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "addToCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
