@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {SKOS} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ResViewModalServices} from "../resViewModals/resViewModalServices";
@@ -20,7 +21,8 @@ export class MembersOrderedPartitionRenderer {
 
     private selectedMember: ARTResource;
 
-    constructor(private rvModalService: ResViewModalServices, private skosService: SkosServices) {}
+    constructor(private rvModalService: ResViewModalServices, private skosService: SkosServices,
+        private vbCtx: VocbenchCtx) {}
 
     selectMember(member: ARTResource) {
         if (this.selectedMember == member) {
@@ -89,7 +91,7 @@ export class MembersOrderedPartitionRenderer {
     }
     
     private remove(member: ARTResource) {
-        this.skosService.removeFromOrderedCollection(this.resource, member).subscribe(
+        this.skosService.removeFromOrderedCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
             stResp => {
                 this.update.emit(null);
             }

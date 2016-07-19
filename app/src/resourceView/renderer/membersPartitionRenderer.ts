@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {SKOS} from "../../utils/Vocabulary";
 import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ResViewModalServices} from "../resViewModals/resViewModalServices";
@@ -22,8 +23,8 @@ export class MembersPartitionRenderer {
     private addBtnImgTitle = "Add member";
     private removeBtnImgTitle = "Remove member";
     
-    constructor(private rvModalService: ResViewModalServices,
-        private skosService: SkosServices) {}
+    constructor(private rvModalService: ResViewModalServices, private skosService: SkosServices,
+        private vbCtx: VocbenchCtx) {}
     
     /**
      * Adds a member in a collection (unordered)
@@ -40,7 +41,7 @@ export class MembersPartitionRenderer {
     }
 
     private remove(member: ARTResource) {
-        this.skosService.removeFromCollection(this.resource, member).subscribe(
+        this.skosService.removeFromCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
             stResp => {
                 this.update.emit(null);
             }

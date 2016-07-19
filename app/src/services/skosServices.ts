@@ -637,23 +637,33 @@ export class SkosServices {
     }
 
     /**
-     * Removes an element from a collection. If the element is a collection, emits a nestedCollectionRemovedEvent
+     * Removes an element from a collection. If the element is a collection, emits a nestedCollectionRemovedEvent.
+     * Moreover if the removed nested collection is no member of another one, it turns into a root, 
+     * so emits also a rootCollectionCreatedEvent.
      * @param collection Collection to which remove the element
      * @param element Collection or Concept to remove
+     * @param lang
      */
-    removeFromCollection(collection: ARTResource, element: ARTResource) {
+    removeFromCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] removeFromCollection");
         var params: any = {
-            instanceQName: collection.getNominalValue(),
-            propertyQName: SKOS.member.getURI(),
-            value: element.getNominalValue(),
-            type: element.isBNode() ? RDFTypesEnum.bnode : RDFTypesEnum.uri,
+            collection: collection.getNominalValue(),
+            element: element.getNominalValue(),
         };
-        return this.httpMgr.doGet("property", "removePropValue", params, this.oldTypeService).map(
+        if (lang != null) {
+            params.lang = lang;
+        }
+        return this.httpMgr.doGet(this.serviceName, "removeFromCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionRemovedEvent.emit({nested: element, container: collection});
+                    //if the removed nested collection turns into a root, emits a rootCollectionCreatedEvent
+                    var addedRootElemColl = stResp.getElementsByTagName("addedRoot");
+                    if (addedRootElemColl.length > 0) {
+                        var newRoot: ARTResource = Deserializer.createRDFResource(addedRootElemColl[0].children[0]);
+                        this.eventHandler.rootCollectionCreatedEvent.emit(newRoot);
+                    }
                 } 
                 return stResp;
             }
@@ -827,21 +837,35 @@ export class SkosServices {
     }
     
     /**
-     * Removes an element from an ordered collection. If the element is a collection, emits a nestedCollectionRemovedEvent
+     * Removes an element from an ordered collection. If the element is a collection, emits a nestedCollectionRemovedEvent.
+     * Moreover if the removed nested collection is no member of another one, it turns into a root, 
+     * so emits also a rootCollectionCreatedEvent.
      * @param collection Collection to which remove the element
      * @param element Collection or Concept to remove
+     * @param lang
      */
-    removeFromOrderedCollection(collection: ARTResource, element: ARTResource) {
+    removeFromOrderedCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] removeFromOrderedCollection");
         var params: any = {
             collection: collection.getNominalValue(),
             element: element.getNominalValue()
         };
+        if (lang != null) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "removeFromOrderedCollection", params, this.oldTypeService).map(
             stResp => {
-                if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
+                //TODO remove true in following check, now it's necessary only because in resourceView, currently, 
+                //collection members have individual as role 
+                if (true || element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionRemovedEvent.emit({nested: element, container: collection});
+                    //if the removed nested collection turns into a root, emits a rootCollectionCreatedEvent
+                    var addedRootElemColl = stResp.getElementsByTagName("addedRoot");
+                    if (addedRootElemColl.length > 0) {
+                        var newRoot: ARTResource = Deserializer.createRDFResource(addedRootElemColl[0].children[0]);
+                        this.eventHandler.rootCollectionCreatedEvent.emit(newRoot);
+                    }
                 } 
                 return stResp;
             }
