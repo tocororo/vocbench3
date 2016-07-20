@@ -38,7 +38,7 @@ export class MembersOrderedPartitionRenderer {
     private addFirst() {
         this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
             selectedMember => {
-                this.skosService.addFirstToOrderedCollection(this.resource, selectedMember).subscribe(
+                this.skosService.addFirstToOrderedCollection(this.resource, selectedMember, this.vbCtx.getContentLanguage(true)).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -52,7 +52,7 @@ export class MembersOrderedPartitionRenderer {
     private addLast() {
         this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
             selectedMember => {
-                this.skosService.addLastToOrderedCollection(this.resource, selectedMember).subscribe(
+                this.skosService.addLastToOrderedCollection(this.resource, selectedMember, this.vbCtx.getContentLanguage(true)).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -67,7 +67,8 @@ export class MembersOrderedPartitionRenderer {
         var position = this.objectList.indexOf(this.selectedMember) + 1; //indexOf is 0-based, position is 1-based
         this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
             selectedMember => {
-                this.skosService.addInPositionToOrderedCollection(this.resource, selectedMember, position).subscribe(
+                this.skosService.addInPositionToOrderedCollection(this.resource, selectedMember, position,
+                    this.vbCtx.getContentLanguage(true)).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -82,7 +83,8 @@ export class MembersOrderedPartitionRenderer {
         var position = this.objectList.indexOf(this.selectedMember) + 2; //indexOf is 0-based, position is 1-based
         this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
             selectedMember => {
-                this.skosService.addInPositionToOrderedCollection(this.resource, selectedMember, position).subscribe(
+                this.skosService.addInPositionToOrderedCollection(this.resource, selectedMember, position,
+                    this.vbCtx.getContentLanguage(true)).subscribe(
                     stResp => this.update.emit(null)
                 );
             },

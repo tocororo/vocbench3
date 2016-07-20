@@ -32,7 +32,7 @@ export class MembersPartitionRenderer {
     private add() {
         this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
             selectedMember => {
-                this.skosService.addToCollection(this.resource, selectedMember).subscribe(
+                this.skosService.addToCollection(this.resource, selectedMember, this.vbCtx.getContentLanguage(true)).subscribe(
                     stResp => this.update.emit(null)
                 );
             },

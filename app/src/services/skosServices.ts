@@ -618,18 +618,24 @@ export class SkosServices {
      * Adds an element to a collection. If the element is a collection, emits a nestedCollectionAddedEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
+     * @param lang language used to render the added element in the response
      */
-    addToCollection(collection: ARTResource, element: ARTResource) {
+    addToCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] addToCollection");
         var params: any = {
             collection: collection.getNominalValue(),
             element: element.getNominalValue()
         };
+        if (lang != null) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "addToCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                    this.eventHandler.nestedCollectionAddedEvent.emit({nested: element, container: collection});
+                    var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
+                    var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
+                    this.eventHandler.nestedCollectionAddedEvent.emit({nested: nested, container: collection});
                 } 
                 return stResp;
             }
@@ -642,7 +648,7 @@ export class SkosServices {
      * so emits also a rootCollectionCreatedEvent.
      * @param collection Collection to which remove the element
      * @param element Collection or Concept to remove
-     * @param lang
+     * @param lang language used to render the removed element in the response
      */
     removeFromCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] removeFromCollection");
@@ -769,18 +775,24 @@ export class SkosServices {
      * If the element is a collection, emits a nestedCollectionAddedFirstEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
+     * @param lang language used to render the added element in the response
      */
-    addFirstToOrderedCollection(collection: ARTResource, element: ARTResource) {
+    addFirstToOrderedCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] addFirstToOrderedCollection");
         var params: any = {
             collection: collection.getNominalValue(),
             element: element.getNominalValue()
         };
+        if (lang != null) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "addFirstToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                    this.eventHandler.nestedCollectionAddedFirstEvent.emit({nested: element, container: collection});
+                    var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
+                    var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
+                    this.eventHandler.nestedCollectionAddedFirstEvent.emit({nested: nested, container: collection});
                 } 
                 return stResp;
             }
@@ -792,18 +804,24 @@ export class SkosServices {
      * If the element is a collection, emits a nestedCollectionAddedLastEvent
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
+     * @param lang language used to render the added element in the response
      */
-    addLastToOrderedCollection(collection: ARTResource, element: ARTResource) {
+    addLastToOrderedCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] addLastToOrderedCollection");
         var params: any = {
             collection: collection.getNominalValue(),
             element: element.getNominalValue()
         };
+        if (lang != null) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "addLastToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                    this.eventHandler.nestedCollectionAddedLastEvent.emit({nested: element, container: collection});
+                    var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
+                    var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
+                    this.eventHandler.nestedCollectionAddedLastEvent.emit({nested: nested, container: collection});
                 } 
                 return stResp;
             }
@@ -816,20 +834,25 @@ export class SkosServices {
      * @param collection Collection to which add the element
      * @param element Collection or Concept to add
      * @param index position where to add the element
+     * @param lang language used to render the added element in the response
      */
-    addInPositionToOrderedCollection(collection: ARTResource, element: ARTResource, index: number) {
+    addInPositionToOrderedCollection(collection: ARTResource, element: ARTResource, index: number, lang?: string) {
         console.log("[SkosServices] addInPositionToOrderedCollection");
         var params: any = {
             collection: collection.getNominalValue(),
             element: element.getNominalValue(),
             index: index
         };
+        if (lang != null) {
+            params.lang = lang;
+        }
         return this.httpMgr.doGet(this.serviceName, "addInPositionToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                    this.eventHandler.nestedCollectionAddedInPositionEvent.emit(
-                        {nested: element, container: collection, position: index});
+                    var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
+                    var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
+                    this.eventHandler.nestedCollectionAddedInPositionEvent.emit({nested: nested, container: collection, position: index});
                 } 
                 return stResp;
             }
@@ -842,7 +865,7 @@ export class SkosServices {
      * so emits also a rootCollectionCreatedEvent.
      * @param collection Collection to which remove the element
      * @param element Collection or Concept to remove
-     * @param lang
+     * @param lang language used to render the removed element in the response
      */
     removeFromOrderedCollection(collection: ARTResource, element: ARTResource, lang?: string) {
         console.log("[SkosServices] removeFromOrderedCollection");
