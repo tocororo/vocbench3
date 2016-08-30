@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Cookie} from "../utils/Cookie";
 
+//maybe, when server side services will be provided, this should be moved under services/ folder
+
 @Injectable()
 export class AuthServices {
 

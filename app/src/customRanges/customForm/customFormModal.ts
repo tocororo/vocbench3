@@ -25,7 +25,6 @@ export class CustomFormModalData extends BSModalContext {
 @Component({
     selector: "custom-form-modal",
     templateUrl: "app/src/customRanges/customForm/customFormModal.html",
-    providers: [CustomRangeServices],
     directives: [LangPickerComponent]
 })
 export class CustomFormModal implements ModalComponent<CustomFormModalData> {

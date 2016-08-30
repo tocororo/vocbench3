@@ -11,7 +11,7 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "no-top-concept-scheme-component",
     templateUrl: "app/src/icv/noTopConceptScheme/noTopConceptSchemeComponent.html",
-    providers: [IcvServices, SkosServices, BrowsingServices],
+    providers: [BrowsingServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

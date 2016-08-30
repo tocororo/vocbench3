@@ -11,7 +11,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "only-alt-label-resource-component",
     templateUrl: "app/src/icv/onlyAltLabelResource/onlyAltLabelResourceComponent.html",
-    providers: [IcvServices, SkosServices, SkosxlServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

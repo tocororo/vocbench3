@@ -31,7 +31,6 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
         SchemesPartitionRenderer, BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
         SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
         RangesPartitionRenderer, PropertyFacetsPartitionRenderer, MembersPartitionRenderer, MembersOrderedPartitionRenderer],
-    providers: [ResourceViewServices, AlignmentServices],
 })
 export class ResourceViewComponent {
     

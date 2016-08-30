@@ -20,7 +20,6 @@ export class CustomRangeEditorModalData extends BSModalContext {
 @Component({
     selector: "cr-editor-modal",
     templateUrl: "app/src/customRanges/customRangeConfigModals/crEditorModal.html",
-    providers: [CustomRangeServices],
     styles: [ ".greyText { color: #999 }" ] //to grey the CRE already-in the entries of the current CR
 })
 export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorModalData> {

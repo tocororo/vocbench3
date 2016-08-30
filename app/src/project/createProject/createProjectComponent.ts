@@ -29,7 +29,6 @@ import {ModalServices} from "../../widget/modal/modalServices";
 @Component({
 	selector: "create-project-component",
 	templateUrl: "app/src/project/createProject/createProjectComponent.html",
-    providers: [ProjectServices, OntoManagerServices, PluginsServices],
     host: { class : "pageComponent" }
 })
 export class CreateProjectComponent {

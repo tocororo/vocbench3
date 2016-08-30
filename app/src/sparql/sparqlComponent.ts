@@ -7,7 +7,6 @@ import {CodemirrorComponent} from "./codemirrorComponent";
 @Component({
     selector: "sparql-component",
     templateUrl: "app/src/sparql/sparqlComponent.html",
-    providers: [SparqlServices, MetadataServices],
     directives: [CodemirrorComponent],
     host: { class: "pageComponent" }
 })

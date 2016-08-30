@@ -8,7 +8,7 @@ import {PropertyServices} from "../../services/propertyServices";
 	selector: "superproperties-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [PropertyServices,BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class SuperPropertiesPartitionRenderer {
     

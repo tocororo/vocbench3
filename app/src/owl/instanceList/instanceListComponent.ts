@@ -7,7 +7,6 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
 @Component({
 	selector: "instance-list",
 	templateUrl: "app/src/owl/instanceList/instanceListComponent.html",
-    providers: [OwlServices],
 	directives: [RdfResourceComponent],
     host: { class: "blockingDivHost" }
 })

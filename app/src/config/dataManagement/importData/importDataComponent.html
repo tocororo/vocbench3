@@ -19,7 +19,7 @@
                 
                 <div class="form-group">
                     <label>Base URI:</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" placeholder="baseURI">
+                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI" placeholder="baseURI">
                     <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
                         <strong>BaseURI</strong> is required
                     </div>
@@ -27,7 +27,7 @@
                 
                 <div class="form-group">
                     <label>Format:</label>
-                    <select class="form-control input-sm" [(ngModel)]="format">
+                    <select class="form-control input-sm" [(ngModel)]="format" name="format">
                         <option value="inferFromFile">Infer from file extension</option>
                         <option value="N3">N3</option>
                         <option value="NQUADS">NQUADS</option>

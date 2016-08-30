@@ -7,7 +7,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "top-concept-with-broader-component",
     templateUrl: "app/src/icv/topConceptWithBroader/topConceptWithBroaderComponent.html",
-    providers: [IcvServices, SkosServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

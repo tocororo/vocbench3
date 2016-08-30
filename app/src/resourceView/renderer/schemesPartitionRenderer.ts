@@ -8,7 +8,7 @@ import {SkosServices} from "../../services/skosServices";
     selector: "schemes-renderer",
     templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
     directives: [RdfResourceComponent],
-    providers: [SkosServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class SchemesPartitionRenderer {
     

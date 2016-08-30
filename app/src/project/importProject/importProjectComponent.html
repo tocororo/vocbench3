@@ -11,7 +11,7 @@
                 
                 <div class="form-group">
                     <label>Project name:</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="projectName" placeholder="Name">
+                    <input type="text" class="form-control input-sm" [(ngModel)]="projectName" name="projectName" placeholder="Name">
                     <div *ngIf="(!projectName || projectName.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
                         A <strong>project name</strong> is required
                     </div>

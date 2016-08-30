@@ -1,11 +1,10 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {AuthServices} from "./auth/authServices";
 
 @Component({
     selector: "home-component",
     templateUrl: "app/src/homeComponent.html",
-    directives: [ROUTER_DIRECTIVES],
     host: { class : "pageComponent" }
 })
 export class HomeComponent {

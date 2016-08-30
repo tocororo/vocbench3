@@ -7,7 +7,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "cyclic-concept-component",
     templateUrl: "app/src/icv/cyclicConcept/cyclicConceptComponent.html",
-    providers: [IcvServices, SkosServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

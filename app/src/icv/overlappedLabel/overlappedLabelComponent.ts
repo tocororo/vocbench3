@@ -10,7 +10,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "overlapped-label-component",
     templateUrl: "app/src/icv/overlappedLabel/overlappedLabelComponent.html",
-    providers: [IcvServices, SkosServices, SkosxlServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

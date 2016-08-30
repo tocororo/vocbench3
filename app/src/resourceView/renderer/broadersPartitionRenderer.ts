@@ -9,7 +9,7 @@ import {SkosServices} from "../../services/skosServices";
 	selector: "broaders-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class BroadersPartitionRenderer {
     

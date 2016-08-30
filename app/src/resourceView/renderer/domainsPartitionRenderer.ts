@@ -11,7 +11,7 @@ import {ManchesterServices} from "../../services/manchesterServices";
 	selector: "domains-renderer",
 	templateUrl: "app/src/resourceView/renderer/domainsPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [PropertyServices, ManchesterServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class DomainsPartitionRenderer {
     

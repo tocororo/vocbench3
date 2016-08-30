@@ -14,7 +14,6 @@ import {PropertyServices} from "../../services/propertyServices";
     selector: "lexicalizations-renderer",
     templateUrl: "app/src/resourceView/renderer/lexicalizationsPartitionRenderer.html",
     directives: [RdfResourceComponent],
-    providers: [SkosServices, SkosxlServices, OwlServices, PropertyServices],
 })
 export class LexicalizationsPartitionRenderer {
     

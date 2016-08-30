@@ -12,7 +12,6 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 	selector: "collection-tree-panel",
 	templateUrl: "app/src/skos/collection/collectionTreePanel/collectionTreePanelComponent.html",
 	directives: [CollectionTreeComponent, ROUTER_DIRECTIVES],
-    providers: [SkosServices, SkosxlServices, SearchServices],
 })
 export class CollectionTreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();

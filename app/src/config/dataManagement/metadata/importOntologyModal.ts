@@ -19,7 +19,6 @@ export class ImportOntologyModalData extends BSModalContext {
 @Component({
     selector: "import-ontology-modal",
     templateUrl: "app/src/config/dataManagement/metadata/importOntologyModal.html",
-    providers: [AdministrationServices],
     directives: [FilePickerComponent]
 })
 export class ImportOntologyModal implements ModalComponent<ImportOntologyModalData> {

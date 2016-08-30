@@ -33,7 +33,6 @@ export class EnrichPropertyModalData extends BSModalContext {
     selector: "enrich-property-modal",
     templateUrl: "app/src/resourceView/resViewModals/enrichPropertyModal.html",
     directives: [ClassTreeComponent, InstanceListComponent, ConceptTreeComponent, ClassIndividualTreeComponent],
-    providers: [PropertyServices]
 })
 export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalData> {
     context: EnrichPropertyModalData;

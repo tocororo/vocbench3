@@ -1,4 +1,4 @@
-import {provideRouter, RouterConfig} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 
 import {AuthGuard, ProjectGuard} from "./utils/CanActivateGuards";
 
@@ -35,7 +35,7 @@ import {RegistrationComponent} from "./user/registrationComponent";
 
 import {TestComponent} from "./test/testComponent";
 
-export const routes: RouterConfig = [
+export const routes: Routes = [
     {path: "", redirectTo: "/Home", terminal: true},
     {path: "Home", component: HomeComponent},
     // route config of navigation bar
@@ -74,6 +74,4 @@ export const routes: RouterConfig = [
     {path: "Icv/DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard]},
 ];
 
-export const APP_ROUTER_PROVIDERS = [
-  provideRouter(routes)
-];
+export const appRouting = RouterModule.forRoot(routes);

@@ -8,7 +8,7 @@ import {SkosServices} from "../../services/skosServices";
 	selector: "top-concepts-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class TopConceptsPartitionRenderer {
     

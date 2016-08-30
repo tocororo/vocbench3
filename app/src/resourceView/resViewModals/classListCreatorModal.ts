@@ -17,7 +17,6 @@ export class ClassListCreatorModalData extends BSModalContext {
     selector: "class-list-creator-modal",
     templateUrl: "app/src/resourceView/resViewModals/classListCreatorModal.html",
     directives: [ClassTreeComponent, RdfResourceComponent],
-    providers: [ManchesterServices]
 })
 export class ClassListCreatorModal implements ModalComponent<ClassListCreatorModalData> {
     context: ClassListCreatorModalData;

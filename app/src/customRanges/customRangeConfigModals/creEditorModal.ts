@@ -19,7 +19,6 @@ export class CustomRangeEntryEditorModalData extends BSModalContext {
 @Component({
     selector: "cre-editor-modal",
     templateUrl: "app/src/customRanges/customRangeConfigModals/creEditorModal.html",
-    providers: [CustomRangeServices]
 })
 export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEntryEditorModalData> {
     context: CustomRangeEntryEditorModalData;

@@ -11,7 +11,7 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "dangling-concept-component",
     templateUrl: "app/src/icv/danglingConcept/danglingConceptComponent.html",
-    providers: [IcvServices, SkosServices, BrowsingServices],
+    providers: [BrowsingServices],
     directives: [RdfResourceComponent, ROUTER_DIRECTIVES],
     host: { class : "pageComponent" }
 })

@@ -9,7 +9,6 @@ import {RefactorServices} from "../services/refactorServices";
     selector: "resource-rename",
     templateUrl: "app/src/resourceView/resourceRenameComponent.html",
     directives: [SanitizerDirective],
-    providers: [RefactorServices],
 })
 export class ResourceRenameComponent {
     

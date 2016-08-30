@@ -10,7 +10,6 @@ import {CollectionTreeNodeComponent} from "./collectionTreeNodeComponent";
     selector: "collection-tree",
     templateUrl: "app/src/skos/collection/collectionTree/collectionTreeComponent.html",
     directives: [CollectionTreeNodeComponent],
-    providers: [SkosServices, SearchServices],
     host: { class: "blockingDivHost" }
 })
 export class CollectionTreeComponent {

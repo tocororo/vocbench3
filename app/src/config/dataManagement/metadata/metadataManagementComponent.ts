@@ -11,7 +11,6 @@ import {ImportOntologyModal, ImportOntologyModalData, ImportType} from "./import
 @Component({
 	selector: "metadata-management-component",
 	templateUrl: "app/src/config/dataManagement/metadata/metadataManagementComponent.html",
-    providers: [MetadataServices, RefactorServices],
     host: { class : "pageComponent" },
     styles: [ ".greyText { color: #999 }" ] //to grey the non-explicit mappings
 })

@@ -7,7 +7,6 @@ import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 @Component({
 	selector: "import-project-component",
 	templateUrl: "app/src/project/importProject/importProjectComponent.html",
-    providers: [ProjectServices],
     directives: [FilePickerComponent],
     host: { class : "pageComponent" }
 })

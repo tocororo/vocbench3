@@ -9,7 +9,6 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 	selector: "concept-tree-node",
 	templateUrl: "app/src/skos/concept/conceptTree/conceptTreeNodeComponent.html",
     directives: [RdfResourceComponent, ConceptTreeNodeComponent],
-    providers: [SkosServices],
 })
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;

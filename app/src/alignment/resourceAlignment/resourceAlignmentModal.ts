@@ -21,7 +21,6 @@ export class ResourceAlignmentModalData extends BSModalContext {
 @Component({
     selector: "align-modal",
     templateUrl: "app/src/alignment/resourceAlignment/resourceAlignmentModal.html",
-    providers: [AlignmentServices],
     directives: [RdfResourceComponent]
 })
 export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentModalData> {

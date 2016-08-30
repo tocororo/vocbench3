@@ -1,6 +1,6 @@
 <div class="hbox">
     <div class="sidebar vbox">
-        <collection-tree-panel [scheme]="scheme" (nodeSelected)="onNodeSelected($event)"></collection-tree-panel>
+        <collection-tree-panel (nodeSelected)="onNodeSelected($event)"></collection-tree-panel>
     </div>
     <resource-view-panel *ngIf="resource" [resource]="resource"></resource-view-panel>
 </div>

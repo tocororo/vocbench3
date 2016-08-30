@@ -9,7 +9,6 @@ import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./cu
 @Component({
 	selector: "custom-range-component",
 	templateUrl: "app/src/customRanges/customRangeComponent.html",
-    providers: [CustomRangeServices],
     host: { class : "pageComponent" }
 })
 export class CustomRangeComponent {

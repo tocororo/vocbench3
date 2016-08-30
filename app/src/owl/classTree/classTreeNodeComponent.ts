@@ -9,7 +9,6 @@ import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponen
     selector: "class-tree-node",
     templateUrl: "app/src/owl/classTree/classTreeNodeComponent.html",
     directives: [RdfResourceComponent, ClassTreeNodeComponent],
-    providers: [OwlServices],
 })
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;

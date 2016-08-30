@@ -6,7 +6,6 @@ import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponen
 @Component({
     selector: "import-data-component",
     templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
-    providers: [InputOutputServices],
     directives: [FilePickerComponent],
     host: { class : "pageComponent" }
 })

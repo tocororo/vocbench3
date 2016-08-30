@@ -10,7 +10,6 @@ import {ModalServices} from "../widget/modal/modalServices";
 @Component({
     selector: "project-component",
     templateUrl: "app/src/project/projectComponent.html",
-    providers: [ProjectServices],
     host: { class : "pageComponent" }
 })
 export class ProjectComponent implements OnInit {

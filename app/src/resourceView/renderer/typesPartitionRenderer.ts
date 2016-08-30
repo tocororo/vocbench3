@@ -8,7 +8,7 @@ import {OwlServices} from "../../services/owlServices";
 	selector: "types-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [OwlServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class TypesPartitionRenderer {
     

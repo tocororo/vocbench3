@@ -11,7 +11,7 @@ import {ManchesterServices} from "../../services/manchesterServices";
 	selector: "ranges-renderer",
 	templateUrl: "app/src/resourceView/renderer/rangesPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [PropertyServices, ManchesterServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class RangesPartitionRenderer {
     

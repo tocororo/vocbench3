@@ -12,7 +12,6 @@ import {ModalServices} from "../../widget/modal/modalServices";
 	selector: "config-bar",
 	templateUrl: "app/src/config/configBar/configBarComponent.html",
     directives: [ROUTER_DIRECTIVES],
-    providers: [InputOutputServices, ProjectServices, RefactorServices]
 })
 export class ConfigBarComponent {
     

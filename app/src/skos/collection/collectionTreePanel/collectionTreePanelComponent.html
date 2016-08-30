@@ -29,7 +29,7 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <collection-tree [scheme]="scheme" (nodeSelected)="onNodeSelected($event)" 
+        <collection-tree (nodeSelected)="onNodeSelected($event)" 
             (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </collection-tree>
     </div>

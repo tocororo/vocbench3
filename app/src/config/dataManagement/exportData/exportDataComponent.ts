@@ -5,7 +5,6 @@ import {ModalServices} from "../../../widget/modal/modalServices";
 @Component({
 	selector: "export-data-component",
 	templateUrl: "app/src/config/dataManagement/exportData/exportDataComponent.html",
-    providers: [InputOutputServices],
     host: { class : "pageComponent" }
 })
 export class ExportDataComponent {

@@ -9,7 +9,7 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "no-scheme-concept-component",
     templateUrl: "app/src/icv/noSchemeConcept/noSchemeConceptComponent.html",
-    providers: [IcvServices, SkosServices, BrowsingServices],
+    providers: [BrowsingServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

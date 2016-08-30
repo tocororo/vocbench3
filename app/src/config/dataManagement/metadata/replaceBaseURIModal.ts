@@ -19,7 +19,6 @@ export class ReplaceBaseURIModalData extends BSModalContext {
 @Component({
     selector: "replace-baseuri-modal",
     templateUrl: "app/src/config/dataManagement/metadata/replaceBaseURIModal.html",
-    providers: [RefactorServices]
 })
 export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalData> {
     context: ReplaceBaseURIModalData;

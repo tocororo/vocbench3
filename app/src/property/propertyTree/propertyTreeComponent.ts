@@ -8,7 +8,6 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
 @Component({
 	selector: "property-tree",
 	templateUrl: "app/src/property/propertyTree/propertyTreeComponent.html",
-    providers: [PropertyServices, SearchServices],
     directives: [PropertyTreeNodeComponent],
 })
 export class PropertyTreeComponent {

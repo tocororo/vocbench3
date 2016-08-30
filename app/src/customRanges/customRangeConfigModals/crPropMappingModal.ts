@@ -19,7 +19,7 @@ export class CustomRangePropMappingModalData extends BSModalContext {
 @Component({
     selector: "cr-prop-mapping-modal",
     templateUrl: "app/src/customRanges/customRangeConfigModals/crPropMappingModal.html",
-    providers: [CustomRangeServices, BrowsingServices],
+    providers: [BrowsingServices],
     directives: [RdfResourceComponent]
 })
 export class CustomRangePropMappingModal implements ModalComponent<CustomRangePropMappingModalData> {

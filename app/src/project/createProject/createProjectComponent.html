@@ -11,22 +11,20 @@
             <form role="form">
                 <div class="form-group">
                     <label>Project name:</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="projectName" placeholder="Name">
+                    <input type="text" class="form-control input-sm" [(ngModel)]="projectName" name="projectName" placeholder="Name">
                     <div *ngIf="(!projectName || projectName.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
                         A <strong>project name</strong> is required
                     </div>
                 </div>
-                <form role="form">
-                    <div class="form-group">
-                        <label>Type:</label>
-                        <select class="form-control input-sm" [(ngModel)]="ontoType">
+                <div class="form-group">
+                    <label>Type:</label>
+                        <select class="form-control input-sm" [(ngModel)]="ontoType" name="ontoType">
                             <option *ngFor="let ot of ontoTypeList" [value]="ot.value">{{ot.label}}</option>
                         </select>
-                    </div>
-                </form>
+                </div>
                 <div class="form-group">
                     <label>URI:</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" placeholder="BaseURI">
+                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI" placeholder="BaseURI">
                     <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
                         A <strong>base URI</strong> is required
                     </div>

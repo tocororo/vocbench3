@@ -12,7 +12,7 @@ import {DeleteServices} from "../../services/deleteServices";
 @Component({
     selector: "dangling-label-component",
     templateUrl: "app/src/icv/danglingXLabel/danglingXLabelComponent.html",
-    providers: [IcvServices, SkosxlServices, DeleteServices, BrowsingServices],
+    providers: [BrowsingServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

@@ -9,7 +9,7 @@ import {PropertyServices} from "../../services/propertyServices";
 	selector: "property-facets-renderer",
 	templateUrl: "app/src/resourceView/renderer/propertyFacetsPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [PropertyServices, BrowsingServices],
+    providers: [BrowsingServices],
 })
 export class PropertyFacetsPartitionRenderer {
     

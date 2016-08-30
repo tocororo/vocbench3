@@ -14,7 +14,7 @@ import {ManchesterServices} from "../../services/manchesterServices";
     selector: "class-axiom-renderer",
     templateUrl: "app/src/resourceView/renderer/classAxiomPartitionRenderer.html",
     directives: [RdfResourceComponent],
-    providers: [OwlServices, PropertyServices, ManchesterServices, ResViewModalServices, BrowsingServices],
+    providers: [ResViewModalServices, BrowsingServices],
 })
 export class ClassAxiomPartitionPartitionRenderer {
     

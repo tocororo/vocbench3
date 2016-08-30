@@ -10,7 +10,6 @@ import {SchemeListNodeComponent} from '../schemeList/schemeListNodeComponent';
 	selector: "scheme-list-panel",
 	templateUrl: "app/src/skos/scheme/schemeListPanel/schemeListPanelComponent.html",
     directives: [SchemeListNodeComponent],
-    providers: [SkosServices, SkosxlServices],
 })
 export class SchemeListPanelComponent {
     

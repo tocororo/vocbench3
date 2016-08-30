@@ -8,7 +8,6 @@ import {RdfResourceComponent} from "../rdfResource/rdfResourceComponent";
 @Component({
 	selector: "reified-resource",
 	templateUrl: "app/src/widget/reifiedResource/reifiedResourceComponent.html",
-    providers: [CustomRangeServices],
     directives: [RdfResourceComponent]
 })
 export class ReifiedResourceComponent {

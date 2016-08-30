@@ -12,7 +12,6 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
 	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES],
-    providers: [SkosServices, SkosxlServices, SearchServices],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;

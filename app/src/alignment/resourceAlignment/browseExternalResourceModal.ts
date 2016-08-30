@@ -24,7 +24,6 @@ export class BrowseExternalResourceModalData extends BSModalContext {
 @Component({
     selector: "browse-external-resource-modal",
     templateUrl: "app/src/alignment/resourceAlignment/browseExternalResourceModal.html",
-    providers: [ProjectServices],
     directives: [ClassTreeComponent, ClassIndividualTreeComponent, ConceptTreeComponent,
         PropertyTreeComponent, SchemeListComponent]
 })

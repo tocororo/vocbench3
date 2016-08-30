@@ -12,7 +12,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "no-label-resource-component",
     templateUrl: "app/src/icv/noLabelResource/noLabelResourceComponent.html",
-    providers: [IcvServices, SkosServices, SkosxlServices, PropertyServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

@@ -9,7 +9,6 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 	selector: "collection-tree-node",
 	templateUrl: "app/src/skos/collection/collectionTree/collectionTreeNodeComponent.html",
     directives: [RdfResourceComponent, CollectionTreeNodeComponent],
-    providers: [SkosServices],
 })
 export class CollectionTreeNodeComponent {
     @Input() node: ARTURIResource;

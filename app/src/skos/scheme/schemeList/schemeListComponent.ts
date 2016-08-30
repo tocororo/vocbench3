@@ -7,7 +7,6 @@ import {SchemeListNodeComponent} from "./schemeListNodeComponent";
 @Component({
 	selector: "scheme-list",
 	templateUrl: "app/src/skos/scheme/schemeList/schemeListComponent.html",
-    providers: [SkosServices],
 	directives: [SchemeListNodeComponent],
 })
 export class SchemeListComponent {

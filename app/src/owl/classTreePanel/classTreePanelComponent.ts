@@ -18,7 +18,6 @@ import {RDF, OWL} from "../../utils/Vocabulary";
 	selector: "class-tree-panel",
 	templateUrl: "app/src/owl/classTreePanel/classTreePanelComponent.html",
 	directives: [ClassTreeComponent, InstanceListComponent],
-    providers: [OwlServices, SearchServices, DeleteServices],
 })
 export class ClassTreePanelComponent {
     @Output() classSelected = new EventEmitter<ARTURIResource>();

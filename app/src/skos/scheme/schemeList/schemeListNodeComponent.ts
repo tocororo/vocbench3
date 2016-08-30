@@ -9,7 +9,6 @@ import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceCompo
 	selector: "scheme-list-node",
 	templateUrl: "app/src/skos/scheme/schemeList/schemeListNodeComponent.html",
     directives: [RdfResourceComponent],
-    providers: [SkosServices],
 })
 export class SchemeListNodeComponent {
     @Input() node: ARTURIResource;

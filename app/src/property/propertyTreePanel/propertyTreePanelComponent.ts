@@ -9,8 +9,7 @@ import {ModalServices} from "../../widget/modal/modalServices";
 @Component({
 	selector: "property-tree-panel",
 	templateUrl: "app/src/property/propertyTreePanel/propertyTreePanelComponent.html",
-	directives: [PropertyTreeComponent],
-    providers: [PropertyServices, SearchServices, DeleteServices],
+	directives: [PropertyTreeComponent]
 })
 export class PropertyTreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();

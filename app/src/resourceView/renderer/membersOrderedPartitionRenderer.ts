@@ -10,7 +10,7 @@ import {SkosServices} from "../../services/skosServices";
 	selector: "members-ordered-renderer",
 	templateUrl: "app/src/resourceView/renderer/membersOrderedPartitionRenderer.html",
 	directives: [RdfResourceComponent],
-    providers: [SkosServices, ResViewModalServices],
+    providers: [ResViewModalServices],
 })
 export class MembersOrderedPartitionRenderer {
     

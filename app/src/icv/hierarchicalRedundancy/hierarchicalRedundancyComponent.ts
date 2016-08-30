@@ -7,7 +7,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "hierarchical-redundancy-component",
     templateUrl: "app/src/icv/hierarchicalRedundancy/hierarchicalRedundancyComponent.html",
-    providers: [IcvServices, SkosServices],
     directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })

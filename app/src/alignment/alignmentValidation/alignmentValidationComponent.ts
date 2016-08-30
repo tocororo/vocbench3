@@ -14,7 +14,6 @@ import {AlignmentServices} from "../../services/AlignmentServices";
     selector: 'alignment-validation-component',
     templateUrl: 'app/src/alignment/alignmentValidation/alignmentValidationComponent.html',
     directives: [FilePickerComponent],
-    providers: [AlignmentServices],
     host: { class: "pageComponent" }
 })
 export class AlignmentValidationComponent {
