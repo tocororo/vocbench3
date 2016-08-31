@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import {Observable} from 'rxjs/Observable';
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
@@ -11,8 +10,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "no-top-concept-scheme-component",
     templateUrl: "app/src/icv/noTopConceptScheme/noTopConceptSchemeComponent.html",
-    providers: [BrowsingServices],
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class NoTopConceptSchemeComponent {

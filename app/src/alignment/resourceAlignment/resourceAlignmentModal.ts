@@ -4,7 +4,6 @@ import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
 import {BrowseExternalResourceModal, BrowseExternalResourceModalData} from "./browseExternalResourceModal"
@@ -21,7 +20,6 @@ export class ResourceAlignmentModalData extends BSModalContext {
 @Component({
     selector: "align-modal",
     templateUrl: "app/src/alignment/resourceAlignment/resourceAlignmentModal.html",
-    directives: [RdfResourceComponent]
 })
 export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentModalData> {
     context: ResourceAlignmentModalData;

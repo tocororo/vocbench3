@@ -1,12 +1,10 @@
 import {Component} from "@angular/core";
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
 @Component({
     selector: "import-data-component",
     templateUrl: "app/src/config/dataManagement/importData/importDataComponent.html",
-    directives: [FilePickerComponent],
     host: { class : "pageComponent" }
 })
 export class ImportDataComponent {

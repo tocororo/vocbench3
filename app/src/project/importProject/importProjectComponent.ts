@@ -2,12 +2,10 @@ import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {ProjectServices} from "../../services/projectServices";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 
 @Component({
 	selector: "import-project-component",
 	templateUrl: "app/src/project/importProject/importProjectComponent.html",
-    directives: [FilePickerComponent],
     host: { class : "pageComponent" }
 })
 export class ImportProjectComponent {

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig, DialogRef} from 'angular2-modal';
 import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalData} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
@@ -81,11 +82,17 @@ export class ModalServices {
     alert(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "info"; //set default type to info if not defined
         var modalData = new AlertModalData(title, message, modalType);
-        return this.modal.open(AlertModal, modalData).then(
+
+        const builder = new BSModalContextBuilder<AlertModalData>(
+            modalData, undefined, AlertModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+
+        return this.modal.open(AlertModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal with an message and a list of selectable options.
      * @param title the title of the modal dialog

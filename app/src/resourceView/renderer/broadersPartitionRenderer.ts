@@ -1,15 +1,12 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
 	selector: "broaders-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [BrowsingServices],
 })
 export class BroadersPartitionRenderer {
     

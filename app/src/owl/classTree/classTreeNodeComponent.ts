@@ -3,12 +3,11 @@ import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OWL} from "../../utils/Vocabulary";
 import {OwlServices} from "../../services/owlServices";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
     selector: "class-tree-node",
     templateUrl: "app/src/owl/classTree/classTreeNodeComponent.html",
-    directives: [RdfResourceComponent, ClassTreeNodeComponent],
+    directives: [ClassTreeNodeComponent],
 })
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;

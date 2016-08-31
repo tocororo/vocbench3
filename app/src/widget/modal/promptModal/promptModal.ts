@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
 
 export class PromptModalData extends BSModalContext {
     /**
@@ -27,7 +26,6 @@ export class PromptModalData extends BSModalContext {
 @Component({
     selector: "prompt-modal",
     templateUrl: "app/src/widget/modal/promptModal/promptModal.html",
-    directives: [SanitizerDirective]
 })
 export class PromptModal implements ModalComponent<PromptModalData> {
     context: PromptModalData;

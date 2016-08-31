@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {CollectionTreeComponent} from "../collectionTree/collectionTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
@@ -11,7 +10,7 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 @Component({
 	selector: "collection-tree-panel",
 	templateUrl: "app/src/skos/collection/collectionTreePanel/collectionTreePanelComponent.html",
-	directives: [CollectionTreeComponent, ROUTER_DIRECTIVES],
+	directives: [CollectionTreeComponent],
 })
 export class CollectionTreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();

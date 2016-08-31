@@ -3,12 +3,11 @@ import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
-import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
 	selector: "collection-tree-node",
 	templateUrl: "app/src/skos/collection/collectionTree/collectionTreeNodeComponent.html",
-    directives: [RdfResourceComponent, CollectionTreeNodeComponent],
+    directives: [CollectionTreeNodeComponent],
 })
 export class CollectionTreeNodeComponent {
     @Input() node: ARTURIResource;

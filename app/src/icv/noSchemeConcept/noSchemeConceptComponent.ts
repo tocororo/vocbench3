@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import {Observable} from 'rxjs/Observable';
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {IcvServices} from "../../services/icvServices";
@@ -9,8 +8,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "no-scheme-concept-component",
     templateUrl: "app/src/icv/noSchemeConcept/noSchemeConceptComponent.html",
-    providers: [BrowsingServices],
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class NoSchemeConceptComponent {

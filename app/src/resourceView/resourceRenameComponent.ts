@@ -1,14 +1,12 @@
 import {Component, Input, ViewChild} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTResource, ARTURIResource} from "../utils/ARTResources";
-import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 import {ModalServices} from "../widget/modal/modalServices";
 import {RefactorServices} from "../services/refactorServices";
 
 @Component({
     selector: "resource-rename",
     templateUrl: "app/src/resourceView/resourceRenameComponent.html",
-    directives: [SanitizerDirective],
 })
 export class ResourceRenameComponent {
     

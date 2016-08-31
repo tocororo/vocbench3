@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTResource, ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {RDFS} from "../../utils/Vocabulary";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {PropertyServices} from "../../services/propertyServices";
@@ -10,8 +9,6 @@ import {ManchesterServices} from "../../services/manchesterServices";
 @Component({
 	selector: "domains-renderer",
 	templateUrl: "app/src/resourceView/renderer/domainsPartitionRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [BrowsingServices],
 })
 export class DomainsPartitionRenderer {
     

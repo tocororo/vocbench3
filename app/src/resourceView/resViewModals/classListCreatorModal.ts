@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ARTResource, ARTURIResource, ARTBNode, ResAttribute, RDFResourceRolesEnum} from '../../utils/ARTResources';
 import {ClassTreeComponent} from '../../owl/classTree/classTreeComponent';
 import {ManchesterServices} from "../../services/manchesterServices";
@@ -16,7 +15,7 @@ export class ClassListCreatorModalData extends BSModalContext {
 @Component({
     selector: "class-list-creator-modal",
     templateUrl: "app/src/resourceView/resViewModals/classListCreatorModal.html",
-    directives: [ClassTreeComponent, RdfResourceComponent],
+    directives: [ClassTreeComponent],
 })
 export class ClassListCreatorModal implements ModalComponent<ClassListCreatorModalData> {
     context: ClassListCreatorModalData;

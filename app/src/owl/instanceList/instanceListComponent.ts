@@ -2,12 +2,10 @@ import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
 	selector: "instance-list",
 	templateUrl: "app/src/owl/instanceList/instanceListComponent.html",
-	directives: [RdfResourceComponent],
     host: { class: "blockingDivHost" }
 })
 export class InstanceListComponent {

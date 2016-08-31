@@ -1,12 +1,11 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
 import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
 	selector: "property-tree-node",
 	templateUrl: "app/src/property/propertyTree/propertyTreeNodeComponent.html",
-    directives: [RdfResourceComponent, PropertyTreeNodeComponent],
+    directives: [PropertyTreeNodeComponent],
 })
 export class PropertyTreeNodeComponent {
     @Input() node: ARTURIResource;

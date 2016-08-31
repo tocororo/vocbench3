@@ -4,7 +4,6 @@ import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute,
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {RdfResourceComponent} from "../widget/rdfResource/rdfResourceComponent";
 import {ResourceRenameComponent} from "./resourceRenameComponent";
 import {ResourceViewServices} from "../services/resourceViewServices";
 import {AlignmentServices} from "../services/alignmentServices";
@@ -27,7 +26,7 @@ import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitio
 @Component({
     selector: "resource-view",
     templateUrl: "app/src/resourceView/resourceViewComponent.html",
-    directives: [RdfResourceComponent, ResourceRenameComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, 
+    directives: [ResourceRenameComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, 
         SchemesPartitionRenderer, BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
         SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
         RangesPartitionRenderer, PropertyFacetsPartitionRenderer, MembersPartitionRenderer, MembersOrderedPartitionRenderer],

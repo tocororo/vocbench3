@@ -3,7 +3,6 @@ import {ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, R
 import {SKOSXL} from "../../utils/Vocabulary";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {CustomRange, CustomRangeEntry} from "../../utils/CustomRanges";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ReifiedResourceComponent} from "../../widget/reifiedResource/reifiedResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ResViewModalServices} from "../resViewModals/resViewModalServices";
@@ -16,8 +15,8 @@ import {CustomRangeServices} from "../../services/customRangeServices";
 @Component({
     selector: "properties-renderer",
     templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
-    directives: [RdfResourceComponent, ReifiedResourceComponent],
-    providers: [ResViewModalServices, BrowsingServices],
+    directives: [ReifiedResourceComponent],
+    providers: [ResViewModalServices],
 })
 export class PropertiesPartitionRenderer {
     

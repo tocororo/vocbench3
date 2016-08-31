@@ -3,7 +3,6 @@ import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {SkosServices} from "../../services/skosServices";
 import {SkosxlServices} from "../../services/skosxlServices";
@@ -13,7 +12,6 @@ import {PropertyServices} from "../../services/propertyServices";
 @Component({
     selector: "lexicalizations-renderer",
     templateUrl: "app/src/resourceView/renderer/lexicalizationsPartitionRenderer.html",
-    directives: [RdfResourceComponent],
 })
 export class LexicalizationsPartitionRenderer {
     

@@ -3,12 +3,10 @@ import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects} from "../../u
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {Deserializer} from "../../utils/Deserializer";
 import {CustomRangeServices} from "../../services/customRangeServices";
-import {RdfResourceComponent} from "../rdfResource/rdfResourceComponent";
 
 @Component({
 	selector: "reified-resource",
 	templateUrl: "app/src/widget/reifiedResource/reifiedResourceComponent.html",
-    directives: [RdfResourceComponent]
 })
 export class ReifiedResourceComponent {
     

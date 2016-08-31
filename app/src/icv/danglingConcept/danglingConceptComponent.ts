@@ -1,6 +1,4 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES} from "@angular/router";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
@@ -11,8 +9,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "dangling-concept-component",
     templateUrl: "app/src/icv/danglingConcept/danglingConceptComponent.html",
-    providers: [BrowsingServices],
-    directives: [RdfResourceComponent, ROUTER_DIRECTIVES],
     host: { class : "pageComponent" }
 })
 export class DanglingConceptComponent {

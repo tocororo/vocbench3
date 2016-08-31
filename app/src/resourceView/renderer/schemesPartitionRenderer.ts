@@ -1,14 +1,11 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource, ARTNode} from "../../utils/ARTResources";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
     selector: "schemes-renderer",
     templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
-    directives: [RdfResourceComponent],
-    providers: [BrowsingServices],
 })
 export class SchemesPartitionRenderer {
     

@@ -3,7 +3,6 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {VBEventHandler} from "../../utils/VBEventHandler";
-import {LangPickerComponent} from "../../widget/langPicker/langPickerComponent";
 
 /**
  * Useless class with empty data
@@ -18,7 +17,6 @@ export class ContentLangModalData extends BSModalContext {
 @Component({
     selector: "content-lang-modal",
     templateUrl: "app/src/settings/contentLang/contentLangModal.html",
-    directives: [LangPickerComponent]
 })
 export class ContentLangModal implements ModalComponent<ContentLangModalData> {
     context: ContentLangModalData;

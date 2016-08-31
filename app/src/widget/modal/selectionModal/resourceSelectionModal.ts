@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 import {ARTNode} from "../../../utils/ARTResources";
 
 export class ResourceSelectionModalData extends BSModalContext {
@@ -25,7 +24,6 @@ export class ResourceSelectionModalData extends BSModalContext {
 @Component({
     selector: "resource-selection-modal",
     templateUrl: "app/src/widget/modal/selectionModal/resourceSelectionModal.html",
-    directives: [RdfResourceComponent]
 })
 export class ResourceSelectionModal implements ModalComponent<ResourceSelectionModalData> {
     context: ResourceSelectionModalData;

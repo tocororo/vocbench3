@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
@@ -12,8 +11,6 @@ import {DeleteServices} from "../../services/deleteServices";
 @Component({
     selector: "dangling-label-component",
     templateUrl: "app/src/icv/danglingXLabel/danglingXLabelComponent.html",
-    providers: [BrowsingServices],
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class DanglingXLabelComponent {

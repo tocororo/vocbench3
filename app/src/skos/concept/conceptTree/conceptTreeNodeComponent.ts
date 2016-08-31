@@ -3,12 +3,11 @@ import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
-import {RdfResourceComponent} from "../../../widget/rdfResource/rdfResourceComponent";
 
 @Component({
 	selector: "concept-tree-node",
 	templateUrl: "app/src/skos/concept/conceptTree/conceptTreeNodeComponent.html",
-    directives: [RdfResourceComponent, ConceptTreeNodeComponent],
+    directives: [ConceptTreeNodeComponent],
 })
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;

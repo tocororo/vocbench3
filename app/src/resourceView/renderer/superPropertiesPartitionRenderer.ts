@@ -1,14 +1,11 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
 	selector: "superproperties-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [BrowsingServices],
 })
 export class SuperPropertiesPartitionRenderer {
     

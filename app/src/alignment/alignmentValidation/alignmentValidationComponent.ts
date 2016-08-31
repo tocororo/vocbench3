@@ -4,7 +4,6 @@ import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Cookie} from "../../utils/Cookie";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {FilePickerComponent} from "../../widget/filePicker/filePickerComponent";
 import {AlignmentCell} from "./AlignmentCell";
 import {ValidationSettingsModal, ValidationSettingsModalData} from "./validationSettingsModal/validationSettingsModal"
 import {ValidationReportModal, ValidationReportModalData} from "./validationReportModal/validationReportModal"
@@ -13,7 +12,6 @@ import {AlignmentServices} from "../../services/AlignmentServices";
 @Component({
     selector: 'alignment-validation-component',
     templateUrl: 'app/src/alignment/alignmentValidation/alignmentValidationComponent.html',
-    directives: [FilePickerComponent],
     host: { class: "pageComponent" }
 })
 export class AlignmentValidationComponent {

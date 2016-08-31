@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import {Observable} from 'rxjs/Observable';
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -11,7 +10,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "only-alt-label-resource-component",
     templateUrl: "app/src/icv/onlyAltLabelResource/onlyAltLabelResourceComponent.html",
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class OnlyAltLabelResourceComponent {

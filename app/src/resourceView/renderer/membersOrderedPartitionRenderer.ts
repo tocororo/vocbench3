@@ -2,14 +2,12 @@ import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {SKOS} from "../../utils/Vocabulary";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ResViewModalServices} from "../resViewModals/resViewModalServices";
 import {SkosServices} from "../../services/skosServices";
 
 @Component({
 	selector: "members-ordered-renderer",
 	templateUrl: "app/src/resourceView/renderer/membersOrderedPartitionRenderer.html",
-	directives: [RdfResourceComponent],
     providers: [ResViewModalServices],
 })
 export class MembersOrderedPartitionRenderer {

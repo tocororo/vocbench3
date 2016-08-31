@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource, RDFTypesEnum} from "../../utils/ARTResources";
 import {RDFS} from "../../utils/Vocabulary";
@@ -12,7 +11,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "no-label-resource-component",
     templateUrl: "app/src/icv/noLabelResource/noLabelResourceComponent.html",
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class NoLabelResourceComponent {

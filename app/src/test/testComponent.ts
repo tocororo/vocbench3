@@ -2,13 +2,10 @@ import {Component, ViewChild} from "@angular/core";
 import {ModalServices, ModalType} from "../widget/modal/modalServices";
 import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
-import {SanitizerDirective} from "../utils/directives/sanitizerDirective";
 
 @Component({
     selector: "test-component",
     templateUrl: "app/src/test/testComponent.html",
-    providers: [BrowsingServices],
-    directives: [SanitizerDirective],
     host: { class : "pageComponent" }
 })
 export class TestComponent {

@@ -1,6 +1,5 @@
 import {Component, ViewContainerRef} from "@angular/core";
-import {ROUTER_DIRECTIVES, Router} from '@angular/router';
-import {Location} from "@angular/common";
+import {Router} from '@angular/router';
 
 import {VocbenchCtx} from "./utils/VocbenchCtx";
 import {AuthServices} from "./auth/authServices";
@@ -8,6 +7,7 @@ import {VBEventHandler} from "./utils/VBEventHandler";
 import {ConfigBarComponent} from "./config/configBar/configBarComponent";
 
 //import to open modal to change content language (Remove if the modal will be launched from another component)
+import {Overlay} from "angular2-modal"
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ContentLangModal, ContentLangModalData} from "./settings/contentLang/contentLangModal";
 
@@ -16,25 +16,18 @@ import {TestComponent} from "./test/testComponent";
 @Component({
     selector: "app",
     templateUrl: "app/src/app.html",
-    directives: [ROUTER_DIRECTIVES, ConfigBarComponent],
+    directives: [ConfigBarComponent],
 })
 
 export class App {
     
-    constructor(private location: Location, private router: Router, private vbCtx: VocbenchCtx, private evtHandler: VBEventHandler,
-        private authService: AuthServices, private modal: Modal, viewContainer: ViewContainerRef) {
+    constructor(private router: Router, private vbCtx: VocbenchCtx, private evtHandler: VBEventHandler,
+        private authService: AuthServices, private modal: Modal, viewContainer: ViewContainerRef, overlay: Overlay) {
         /* A Default view container ref, usually the app root container ref.
          * Has to be set manually until we can find a way to get it automatically. */
-        modal.defaultViewContainer = viewContainer;
+        overlay.defaultViewContainer = viewContainer;
     }
     
-    /**
-     * returns true if viewLocation is the current view. Useful to apply "active" style to the navbar links
-     */ 
-    private isActive(viewLocation): boolean {
-        return this.location.path() == viewLocation;
-    }
-
     /**
      * Returns true if the user is logged (an authentication token is stored)
      */

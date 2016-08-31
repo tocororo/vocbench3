@@ -9,26 +9,25 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li *ngIf="isUserLogged()" [ngClass]="{active: isActive('/Projects')}">
+                <li *ngIf="isUserLogged()" routerLinkActive="active">
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">
-                <!--<li *ngIf="isProjectOpen() && isProjectOWL()" [ngClass]="{active: isActive('/Class'), disabled: !isProjectOpen()}">-->
+                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Class']">Class</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Concepts'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Concepts']">Concepts</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Property'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Property']">Property</a>
                 </li>
-				<li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Schemes'), disabled: !isProjectOpen()}">
+				<li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Schemes']">Schemes</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" [ngClass]="{active: isActive('/Collections'), disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Collections']">Collections</a>
                 </li>
-				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{active: isActive('/Sparql'), disabled: !isProjectOpen()}">
+				<li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">

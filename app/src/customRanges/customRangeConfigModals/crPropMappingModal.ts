@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {CustomRangeServices} from "../../services/customRangeServices";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource} from "../../utils/ARTResources";
 
@@ -19,8 +18,6 @@ export class CustomRangePropMappingModalData extends BSModalContext {
 @Component({
     selector: "cr-prop-mapping-modal",
     templateUrl: "app/src/customRanges/customRangeConfigModals/crPropMappingModal.html",
-    providers: [BrowsingServices],
-    directives: [RdfResourceComponent]
 })
 export class CustomRangePropMappingModal implements ModalComponent<CustomRangePropMappingModalData> {
     context: CustomRangePropMappingModalData;

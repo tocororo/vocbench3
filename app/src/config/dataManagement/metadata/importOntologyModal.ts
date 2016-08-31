@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {AdministrationServices} from '../../../services/administrationServices';
-import {FilePickerComponent} from "../../../widget/filePicker/filePickerComponent";
 
 export class ImportOntologyModalData extends BSModalContext {
     /**
@@ -19,7 +18,6 @@ export class ImportOntologyModalData extends BSModalContext {
 @Component({
     selector: "import-ontology-modal",
     templateUrl: "app/src/config/dataManagement/metadata/importOntologyModal.html",
-    directives: [FilePickerComponent]
 })
 export class ImportOntologyModal implements ModalComponent<ImportOntologyModalData> {
     context: ImportOntologyModalData;

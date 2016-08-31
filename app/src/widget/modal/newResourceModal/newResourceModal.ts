@@ -1,8 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {SanitizerDirective} from "../../../utils/directives/sanitizerDirective";
-import {LangPickerComponent} from "../../langPicker/langPickerComponent";
 
 export class NewResourceModalData extends BSModalContext {
     constructor(
@@ -16,7 +14,6 @@ export class NewResourceModalData extends BSModalContext {
 @Component({
     selector: "new-resource-modal",
     templateUrl: "app/src/widget/modal/newResourceModal/newResourceModal.html",
-    directives: [SanitizerDirective, LangPickerComponent]
 })
 export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     context: NewResourceModalData;

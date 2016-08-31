@@ -1,11 +1,18 @@
 import {NgModule} from '@angular/core';
 
+import {Renderer} from '@angular/core';
+
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from "@angular/router";
-import {HttpModule} from '@angular/http';
 
-import {Renderer} from "@angular/core";
+import {STServicesModule} from "./src/services/stServicesModule";
+import {ProjectModule} from "./src/project/projectModule";
+import {PropertyModule} from "./src/property/propertyModule";
+
+import {SharedModule} from "./src/widget/sharedModule";
+import {VBModalModule} from "./src/widget/vbModalModule";
+
 
 import {ModalModule} from 'angular2-modal';
 import {BootstrapModalModule} from 'angular2-modal/plugins/bootstrap';
@@ -14,33 +21,13 @@ import {HttpManager} from "./src/utils/HttpManager";
 import {VocbenchCtx} from "./src/utils/VocbenchCtx";
 import {VBEventHandler} from "./src/utils/VBEventHandler";
 import {GUARD_PROVIDERS} from "./src/utils/CanActivateGuards";
+
 import {ModalServices} from "./src/widget/modal/modalServices";
+import {BrowsingServices} from "./src/widget/modal/browsingModal/browsingServices";
 import {AuthServices} from "./src/auth/authServices";
 
 import {App} from "./src/app";
 import {appRouting} from './src/appRoutes';
-
-//ST Services
-import {AdministrationServices} from "./src/services/administrationServices";
-import {AlignmentServices} from "./src/services/alignmentServices";
-import {CustomRangeServices} from "./src/services/customRangeServices";
-import {DeleteServices} from "./src/services/deleteServices";
-import {IcvServices} from "./src/services/icvServices";
-import {InputOutputServices} from "./src/services/inputOutputServices";
-import {ManchesterServices} from "./src/services/manchesterServices";
-import {MetadataServices} from "./src/services/metadataServices";
-import {OntoManagerServices} from "./src/services/ontoManagerServices";
-import {OwlServices} from "./src/services/owlServices";
-import {PluginsServices} from "./src/services/pluginsServices";
-import {ProjectServices} from "./src/services/projectServices";
-import {PropertyServices} from "./src/services/propertyServices";
-import {RefactorServices} from "./src/services/refactorServices";
-import {ResourceServices} from "./src/services/resourceServices";
-import {ResourceViewServices} from "./src/services/resourceViewServices";
-import {SearchServices} from "./src/services/searchServices";
-import {SkosServices} from "./src/services/skosServices";
-import {SkosxlServices} from "./src/services/skosxlServices";
-import {SparqlServices} from "./src/services/sparqlServices";
 
 //Components
 import {HomeComponent} from "./src/homeComponent";
@@ -73,80 +60,60 @@ import {VocbenchSettingsComponent} from "./src/settings/vocbenchSettingsComponen
 import {RegistrationComponent} from "./src/user/registrationComponent";
 import {TestComponent} from "./src/test/testComponent";
 
-//Modal entry
-import {CustomModal} from "./src/widget/modal/custom-modal-sample";
-
-
 @NgModule({
-  imports: [ BrowserModule, FormsModule, HttpModule, RouterModule, 
-        appRouting,
-        ModalModule.forRoot(), BootstrapModalModule
-  ],
-  providers: [
-        HttpManager, VocbenchCtx, VBEventHandler,
-        AuthServices, GUARD_PROVIDERS,
-      //   BS_MODAL_PROVIDERS, Renderer, MODAL_BROWSER_PROVIDERS, //required in order to add ModalServices as provider
-        ModalServices,
+      imports: [
+            BrowserModule, RouterModule, 
+            FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
-        //ST services
-        AdministrationServices,
-        AlignmentServices,
-        CustomRangeServices,
-        DeleteServices,
-        IcvServices,
-        InputOutputServices,
-        ManchesterServices,
-        MetadataServices,
-        OntoManagerServices,
-        OwlServices,
-        PluginsServices,
-        ProjectServices,
-        PropertyServices,
-        RefactorServices,
-        ResourceServices,
-        ResourceViewServices,
-        SearchServices,
-        SkosServices,
-        SkosxlServices,
-        SparqlServices
-  ],
-  declarations: [ App,
-        HomeComponent,
-        ProjectComponent,
-        ConceptsComponent,
-        ClassComponent,
-        PropertyComponent,
-        SchemesComponent,
-        CollectionsComponent,
-        SparqlComponent,
-        AlignmentValidationComponent,
-        CustomRangeComponent,
-        ImportProjectComponent,
-        CreateProjectComponent,
-        IcvComponent,
-        DanglingConceptComponent,
-        NoSchemeConceptComponent,
-        NoTopConceptSchemeComponent,
-        TopConceptWithBroaderComponent,
-        HierarchicalRedundancyComponent,
-        NoLabelResourceComponent,
-        OnlyAltLabelResourceComponent,
-        OverlappedLabelComponent,
-        NoLangLabelComponent,
-        DanglingXLabelComponent,
-        ImportDataComponent,
-        ExportDataComponent,
-        MetadataManagementComponent,
-        VocbenchSettingsComponent,
-        RegistrationComponent,
-        TestComponent //remove???
-  ],
-  bootstrap: [ App ],
+            SharedModule, VBModalModule,
+            STServicesModule,
+            appRouting,
+            ModalModule.forRoot(), BootstrapModalModule //Modules of angular2-modal
+      ],
+      //services with application scope
+      providers: [
+            HttpManager, VocbenchCtx, VBEventHandler,
+            AuthServices, GUARD_PROVIDERS,
+            ModalServices, BrowsingServices,
 
+            Renderer, //needed form modal (maybe can be moved in a VBModalModule or wherever there are modals)
+      ],
+      declarations: [
+            App,
+            
+            HomeComponent,
+            ProjectComponent,
+            ImportProjectComponent,
+            CreateProjectComponent,
+            ConceptsComponent,
+            ClassComponent,
+            PropertyComponent,
+            SchemesComponent,
+            CollectionsComponent,
+            SparqlComponent,
+            AlignmentValidationComponent,
+            CustomRangeComponent,
 
-  // IMPORTANT: 
-  // Since 'AdditionCalculateWindow' is never explicitly used (in a template)
-  // we must tell angular about it.
-  entryComponents: [ CustomModal ]
+            //icv(s) could be moved in a separate module
+            IcvComponent,
+            DanglingConceptComponent,
+            NoSchemeConceptComponent,
+            NoTopConceptSchemeComponent,
+            TopConceptWithBroaderComponent,
+            HierarchicalRedundancyComponent,
+            NoLabelResourceComponent,
+            OnlyAltLabelResourceComponent,
+            OverlappedLabelComponent,
+            NoLangLabelComponent,
+            DanglingXLabelComponent,
+            ImportDataComponent,
+            ExportDataComponent,
+            MetadataManagementComponent,
+            VocbenchSettingsComponent,
+            RegistrationComponent,
+            TestComponent, //remove???
+
+      ],
+      bootstrap: [App],
 })
 export class AppModule { }

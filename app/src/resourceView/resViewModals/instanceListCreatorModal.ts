@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ARTURIResource, ResAttribute} from '../../utils/ARTResources';
 import {ClassTreeComponent} from '../../owl/classTree/classTreeComponent';
 import {InstanceListComponent} from '../../owl/instanceList/instanceListComponent';
@@ -16,7 +15,7 @@ export class InstanceListCreatorModalData extends BSModalContext {
 @Component({
     selector: "instance-list-creator-modal",
     templateUrl: "app/src/resourceView/resViewModals/instanceListCreatorModal.html",
-    directives: [ClassTreeComponent, InstanceListComponent, RdfResourceComponent],
+    directives: [ClassTreeComponent, InstanceListComponent],
 })
 export class InstanceListCreatorModal implements ModalComponent<InstanceListCreatorModalData> {
     context: InstanceListCreatorModalData;

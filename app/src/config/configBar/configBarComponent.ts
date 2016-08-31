@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ROUTER_DIRECTIVES, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {AuthServices} from "../../auth/authServices";
 import {Project, ProjectTypesEnum} from "../../utils/Project";
@@ -11,7 +11,6 @@ import {ModalServices} from "../../widget/modal/modalServices";
 @Component({
 	selector: "config-bar",
 	templateUrl: "app/src/config/configBar/configBarComponent.html",
-    directives: [ROUTER_DIRECTIVES],
 })
 export class ConfigBarComponent {
     

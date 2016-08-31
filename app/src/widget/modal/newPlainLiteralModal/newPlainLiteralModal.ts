@@ -1,8 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {LangPickerComponent} from "../../langPicker/langPickerComponent";
-
 
 export class NewPlainLiteralModalData extends BSModalContext {
     /**
@@ -26,7 +24,6 @@ export class NewPlainLiteralModalData extends BSModalContext {
 @Component({
     selector: "new-plain-literal-modal",
     templateUrl: "app/src/widget/modal/newPlainLiteralModal/newPlainLiteralModal.html",
-    directives: [LangPickerComponent]
 })
 export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModalData> {
     context: NewPlainLiteralModalData;

@@ -1,15 +1,12 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource, RDFTypesEnum} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
 	selector: "property-facets-renderer",
 	templateUrl: "app/src/resourceView/renderer/propertyFacetsPartitionRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [BrowsingServices],
 })
 export class PropertyFacetsPartitionRenderer {
     

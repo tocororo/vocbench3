@@ -1,14 +1,11 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTResource, ARTURIResource, ARTNode} from "../../utils/ARTResources";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {OwlServices} from "../../services/owlServices";
 
 @Component({
 	selector: "types-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
-	directives: [RdfResourceComponent],
-    providers: [BrowsingServices],
 })
 export class TypesPartitionRenderer {
     

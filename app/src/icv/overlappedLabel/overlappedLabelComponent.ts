@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource, ARTResource, ARTLiteral} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -10,7 +9,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "overlapped-label-component",
     templateUrl: "app/src/icv/overlappedLabel/overlappedLabelComponent.html",
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class OverlappedLabelComponent {

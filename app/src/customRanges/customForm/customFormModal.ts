@@ -1,8 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
-import {LangPickerComponent} from "../../widget/langPicker/langPickerComponent";
 import {FormEntry} from "../../utils/CustomRanges";
 import {CustomRangeServices} from "../../services/customRangeServices";
 
@@ -25,7 +23,6 @@ export class CustomFormModalData extends BSModalContext {
 @Component({
     selector: "custom-form-modal",
     templateUrl: "app/src/customRanges/customForm/customFormModal.html",
-    directives: [LangPickerComponent]
 })
 export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     context: CustomFormModalData;

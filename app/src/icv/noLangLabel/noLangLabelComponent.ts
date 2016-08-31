@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTResource, ARTURIResource, ARTLiteral} from "../../utils/ARTResources";
 import {SKOS, SKOSXL} from "../../utils/Vocabulary";
@@ -12,7 +11,6 @@ import {SkosxlServices} from "../../services/skosxlServices";
 @Component({
     selector: "no-lang-label-component",
     templateUrl: "app/src/icv/noLangLabel/noLangLabelComponent.html",
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class NoLangLabelComponent {

@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import {RdfResourceComponent} from "../../widget/rdfResource/rdfResourceComponent";
 import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
@@ -7,7 +6,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
     selector: "hierarchical-redundancy-component",
     templateUrl: "app/src/icv/hierarchicalRedundancy/hierarchicalRedundancyComponent.html",
-    directives: [RdfResourceComponent],
     host: { class : "pageComponent" }
 })
 export class HierarchicalRedundancyComponent {

@@ -1,5 +1,4 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {ConceptTreeComponent} from "../conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
@@ -11,7 +10,7 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 @Component({
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
-	directives: [ConceptTreeComponent, ROUTER_DIRECTIVES],
+	directives: [ConceptTreeComponent],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
