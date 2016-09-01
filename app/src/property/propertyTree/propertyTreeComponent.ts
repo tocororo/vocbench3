@@ -8,7 +8,6 @@ import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
 @Component({
 	selector: "property-tree",
 	templateUrl: "app/src/property/propertyTree/propertyTreeComponent.html",
-    directives: [PropertyTreeNodeComponent],
 })
 export class PropertyTreeComponent {
     @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource 

@@ -6,7 +6,7 @@ import {CustomRangeServices} from "../../services/customRangeServices";
 
 @Component({
 	selector: "reified-resource",
-	templateUrl: "app/src/widget/reifiedResource/reifiedResourceComponent.html",
+	templateUrl: "app/src/resourceView/reifiedResource/reifiedResourceComponent.html",
 })
 export class ReifiedResourceComponent {
     

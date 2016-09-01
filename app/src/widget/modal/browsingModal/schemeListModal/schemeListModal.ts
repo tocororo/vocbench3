@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
-import {SchemeListComponent} from '../../../../skos/scheme/schemeList/schemeListComponent';
 
 export class SchemeListModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
@@ -13,7 +12,6 @@ export class SchemeListModalData extends BSModalContext {
 @Component({
     selector: "scheme-list-modal",
     templateUrl: "app/src/widget/modal/browsingModal/schemeListModal/schemeListModal.html",
-    directives: [SchemeListComponent]
 })
 export class SchemeListModal implements ModalComponent<SchemeListModalData> {
     context: SchemeListModalData;

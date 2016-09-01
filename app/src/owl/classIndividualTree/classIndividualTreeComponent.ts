@@ -2,14 +2,10 @@ import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
 import {SKOS} from '../../utils/Vocabulary';
-import {ClassTreeComponent} from '../../owl/classTree/classTreeComponent';
-import {InstanceListComponent} from '../../owl/instanceList/instanceListComponent';
-import {ConceptTreeComponent} from '../../skos/concept/conceptTree/conceptTreeComponent';
 
 @Component({
     selector: "class-individual-tree",
     templateUrl: "app/src/owl/classIndividualTree/classIndividualTreeComponent.html",
-    directives: [ClassTreeComponent, InstanceListComponent, ConceptTreeComponent],
 })
 export class ClassIndividualTreeComponent {
     

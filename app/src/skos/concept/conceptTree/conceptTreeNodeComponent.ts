@@ -7,7 +7,6 @@ import {SkosServices} from "../../../services/skosServices";
 @Component({
 	selector: "concept-tree-node",
 	templateUrl: "app/src/skos/concept/conceptTree/conceptTreeNodeComponent.html",
-    directives: [ConceptTreeNodeComponent],
 })
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;

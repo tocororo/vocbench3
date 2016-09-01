@@ -4,22 +4,18 @@ import {Router} from '@angular/router';
 import {VocbenchCtx} from "./utils/VocbenchCtx";
 import {AuthServices} from "./auth/authServices";
 import {VBEventHandler} from "./utils/VBEventHandler";
-import {ConfigBarComponent} from "./config/configBar/configBarComponent";
 
 //import to open modal to change content language (Remove if the modal will be launched from another component)
 import {Overlay} from "angular2-modal"
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ContentLangModal, ContentLangModalData} from "./settings/contentLang/contentLangModal";
 
-import {TestComponent} from "./test/testComponent";
-
 @Component({
     selector: "app",
-    templateUrl: "app/src/app.html",
-    directives: [ConfigBarComponent],
+    templateUrl: "app/src/appComponent.html",
 })
 
-export class App {
+export class AppComponent {
     
     constructor(private router: Router, private vbCtx: VocbenchCtx, private evtHandler: VBEventHandler,
         private authService: AuthServices, private modal: Modal, viewContainer: ViewContainerRef, overlay: Overlay) {

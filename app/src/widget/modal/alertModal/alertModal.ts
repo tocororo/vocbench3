@@ -53,9 +53,9 @@ export class AlertModal implements CloseGuard, ModalComponent<AlertModalData> {
         }
     }
     
-    // ngOnInit() {
-    //     document.getElementById("toFocus").focus();
-    // }
+    ngOnInit() {
+        document.getElementById("toFocus").focus();
+    }
 
     beforeDismiss(): boolean {
         return true;
@@ -65,10 +65,6 @@ export class AlertModal implements CloseGuard, ModalComponent<AlertModalData> {
         return false
     }
 
-    // ok(event) {
-    //     event.stopPropagation();
-    //     this.dialog.close(true);
-    // }
     ok() {
         this.dialog.close(true);
     }

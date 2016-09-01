@@ -2,12 +2,10 @@ import {Component, Output, EventEmitter} from "@angular/core";
 import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
-import {SchemeListNodeComponent} from "./schemeListNodeComponent";
 
 @Component({
 	selector: "scheme-list",
 	templateUrl: "app/src/skos/scheme/schemeList/schemeListComponent.html",
-	directives: [SchemeListNodeComponent],
 })
 export class SchemeListComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();

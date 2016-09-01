@@ -1,11 +1,9 @@
 import {Component, Input} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
-import {ResourceViewComponent} from "../ResourceViewComponent";
 
 @Component({
     selector: "resource-view-tabbed",
     templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewTabbedComponent.html",
-    directives: [ResourceViewComponent]
 })
 export class ResourceViewTabbedComponent {
     

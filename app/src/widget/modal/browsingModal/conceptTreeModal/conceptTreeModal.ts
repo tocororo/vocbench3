@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
-import {ConceptTreeComponent} from '../../../../skos/concept/conceptTree/conceptTreeComponent';
 
 export class ConceptTreeModalData extends BSModalContext {
     /**
@@ -22,7 +21,6 @@ export class ConceptTreeModalData extends BSModalContext {
 @Component({
     selector: "concept-tree-modal",
     templateUrl: "app/src/widget/modal/browsingModal/conceptTreeModal/conceptTreeModal.html",
-    directives: [ConceptTreeComponent]
 })
 export class ConceptTreeModal implements ModalComponent<ConceptTreeModalData> {
     context: ConceptTreeModalData;

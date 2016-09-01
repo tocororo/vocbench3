@@ -9,7 +9,6 @@ import {CollectionTreeNodeComponent} from "./collectionTreeNodeComponent";
 @Component({
     selector: "collection-tree",
     templateUrl: "app/src/skos/collection/collectionTree/collectionTreeComponent.html",
-    directives: [CollectionTreeNodeComponent],
     host: { class: "blockingDivHost" }
 })
 export class CollectionTreeComponent {

@@ -1,13 +1,10 @@
 import {Component, Input} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
 import {Cookie} from "../../utils/Cookie";
-import {ResourceViewTabbedComponent} from "./ResourceViewTabbedComponent";
-import {ResourceViewSplittedComponent} from "./ResourceViewSplittedComponent";
 
 @Component({
     selector: "resource-view-panel",
     templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewPanelComponent.html",
-    directives: [ResourceViewTabbedComponent, ResourceViewSplittedComponent],
     host: { class: "resViewContainer" }
 })
 export class ResourceViewPanelComponent {

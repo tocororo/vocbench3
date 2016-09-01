@@ -7,7 +7,6 @@ import {OwlServices} from "../../services/owlServices";
 @Component({
     selector: "class-tree-node",
     templateUrl: "app/src/owl/classTree/classTreeNodeComponent.html",
-    directives: [ClassTreeNodeComponent],
 })
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;
@@ -88,7 +87,7 @@ export class ClassTreeNodeComponent {
                 this.expandNode();
             }
             var nodeChildren = this.viewChildrenNode.toArray();
-            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
+            if (nodeChildren.length == 0) {//Still no children ClassTreeNodeComponent (view not yet initialized)
                 //save pending search so it can resume when the children are initialized
                 this.pendingSearch.pending = true;
                 this.pendingSearch.path = path;
@@ -97,7 +96,7 @@ export class ClassTreeNodeComponent {
                 this.pendingSearch.pending = false;
                 this.pendingSearch.path = [];
             }
-            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+            for (var i = 0; i < nodeChildren.length; i++) {//for every ClassTreeNodeComponent child
                 if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
                     //let the child node expand the remaining path
                     path.splice(0, 1);

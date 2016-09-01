@@ -5,7 +5,6 @@ import {ResourceViewComponent} from "../ResourceViewComponent";
 @Component({
     selector: "resource-view-splitted",
     templateUrl: "app/src/resourceView/resourceViewPanel/resourceViewSplittedComponent.html",
-    directives: [ResourceViewComponent]
 })
 export class ResourceViewSplittedComponent {
     

@@ -9,7 +9,6 @@ import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
 @Component({
     selector: "concept-tree",
     templateUrl: "app/src/skos/concept/conceptTree/conceptTreeComponent.html",
-    directives: [ConceptTreeNodeComponent],
     host: { class: "blockingDivHost" }
 })
 export class ConceptTreeComponent {

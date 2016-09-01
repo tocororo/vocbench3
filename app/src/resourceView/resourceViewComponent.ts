@@ -4,32 +4,13 @@ import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute,
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ResourceRenameComponent} from "./resourceRenameComponent";
 import {ResourceViewServices} from "../services/resourceViewServices";
 import {AlignmentServices} from "../services/alignmentServices";
 import {ResourceAlignmentModal, ResourceAlignmentModalData} from "../alignment/resourceAlignment/resourceAlignmentModal"
 
-import {TypesPartitionRenderer} from "./renderer/typesPartitionRenderer";
-import {TopConceptsPartitionRenderer} from "./renderer/topConceptsPartitionRenderer";
-import {SchemesPartitionRenderer} from "./renderer/schemesPartitionRenderer";
-import {BroadersPartitionRenderer} from "./renderer/broadersPartitionRenderer";
-import {LexicalizationsPartitionRenderer} from "./renderer/lexicalizationsPartitionRenderer";
-import {MembersPartitionRenderer} from "./renderer/membersPartitionRenderer";
-import {MembersOrderedPartitionRenderer} from "./renderer/membersOrderedPartitionRenderer";
-import {PropertiesPartitionRenderer} from "./renderer/propertiesPartitionRenderer";
-import {ClassAxiomPartitionPartitionRenderer} from "./renderer/classAxiomPartitionRenderer";
-import {SuperPropertiesPartitionRenderer} from "./renderer/superPropertiesPartitionRenderer";
-import {DomainsPartitionRenderer} from "./renderer/domainsPartitionRenderer";
-import {RangesPartitionRenderer} from "./renderer/rangesPartitionRenderer";
-import {PropertyFacetsPartitionRenderer} from "./renderer/propertyFacetsPartitionRenderer";
-
 @Component({
     selector: "resource-view",
     templateUrl: "app/src/resourceView/resourceViewComponent.html",
-    directives: [ResourceRenameComponent, TypesPartitionRenderer, TopConceptsPartitionRenderer, 
-        SchemesPartitionRenderer, BroadersPartitionRenderer, LexicalizationsPartitionRenderer, PropertiesPartitionRenderer,
-        SuperPropertiesPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-        RangesPartitionRenderer, PropertyFacetsPartitionRenderer, MembersPartitionRenderer, MembersOrderedPartitionRenderer],
 })
 export class ResourceViewComponent {
     

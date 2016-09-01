@@ -5,11 +5,6 @@ import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {Project} from "../../utils/Project";
 import {ProjectServices} from "../../services/projectServices";
-import {ClassTreeComponent} from "../../owl/classTree/classTreeComponent";
-import {ClassIndividualTreeComponent} from "../../owl/classIndividualTree/classIndividualTreeComponent";
-import {ConceptTreeComponent} from "../../skos/concept/conceptTree/conceptTreeComponent";
-import {SchemeListComponent} from "../../skos/scheme/schemeList/schemeListComponent";
-import {PropertyTreeComponent} from "../../property/propertyTree/propertyTreeComponent";
 
 export class BrowseExternalResourceModalData extends BSModalContext {
     /**
@@ -24,8 +19,6 @@ export class BrowseExternalResourceModalData extends BSModalContext {
 @Component({
     selector: "browse-external-resource-modal",
     templateUrl: "app/src/alignment/resourceAlignment/browseExternalResourceModal.html",
-    directives: [ClassTreeComponent, ClassIndividualTreeComponent, ConceptTreeComponent,
-        PropertyTreeComponent, SchemeListComponent]
 })
 export class BrowseExternalResourceModal implements ModalComponent<BrowseExternalResourceModalData> {
     context: BrowseExternalResourceModalData;

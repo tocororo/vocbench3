@@ -10,7 +10,6 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 @Component({
 	selector: "concept-tree-panel",
 	templateUrl: "app/src/skos/concept/conceptTreePanel/conceptTreePanelComponent.html",
-	directives: [ConceptTreeComponent],
 })
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;

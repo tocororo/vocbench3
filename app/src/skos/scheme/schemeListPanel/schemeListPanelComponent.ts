@@ -4,12 +4,10 @@ import {SkosxlServices} from "../../../services/skosxlServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
 import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
-import {SchemeListNodeComponent} from '../schemeList/schemeListNodeComponent';
 
 @Component({
 	selector: "scheme-list-panel",
 	templateUrl: "app/src/skos/scheme/schemeListPanel/schemeListPanelComponent.html",
-    directives: [SchemeListNodeComponent],
 })
 export class SchemeListPanelComponent {
     

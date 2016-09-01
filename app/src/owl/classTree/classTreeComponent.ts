@@ -9,7 +9,6 @@ import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
 @Component({
 	selector: "class-tree",
 	templateUrl: "app/src/owl/classTree/classTreeComponent.html",
-    directives: [ClassTreeNodeComponent],
     host: { class: "blockingDivHost" }
 })
 export class ClassTreeComponent {

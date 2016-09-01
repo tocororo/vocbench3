@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../utils/ARTResources';
-import {PropertyTreeComponent} from '../../../../property/propertyTree/propertyTreeComponent';
 
 export class PropertyTreeModalData extends BSModalContext {
     /**
@@ -20,7 +19,6 @@ export class PropertyTreeModalData extends BSModalContext {
 @Component({
     selector: "class-tree-modal",
     templateUrl: "app/src/widget/modal/browsingModal/propertyTreeModal/propertyTreeModal.html",
-    directives: [PropertyTreeComponent]
 })
 export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> {
     context: PropertyTreeModalData;

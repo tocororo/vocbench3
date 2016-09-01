@@ -1,12 +1,9 @@
 import {Component} from "@angular/core";
-import {CollectionTreePanelComponent} from "./collectionTreePanel/collectionTreePanelComponent";
-import {ResourceViewPanelComponent} from "../../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
 
 @Component({
     selector: "collection-component",
     templateUrl: "app/src/skos/collection/collectionsComponent.html",
-    directives: [CollectionTreePanelComponent, ResourceViewPanelComponent],
     host: { class : "pageComponent" }
 })
 export class CollectionsComponent {

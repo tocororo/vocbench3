@@ -4,10 +4,6 @@ import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource, ResAttribute} from '../../utils/ARTResources';
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
 import {SKOS} from '../../utils/Vocabulary';
-import {ClassTreeComponent} from '../../owl/classTree/classTreeComponent';
-import {ClassIndividualTreeComponent} from '../../owl/classIndividualTree/classIndividualTreeComponent';
-import {InstanceListComponent} from '../../owl/instanceList/instanceListComponent';
-import {ConceptTreeComponent} from '../../skos/concept/conceptTree/conceptTreeComponent';
 import {PropertyServices} from '../../services/propertyServices';
 
 export class EnrichPropertyModalData extends BSModalContext {
@@ -32,7 +28,6 @@ export class EnrichPropertyModalData extends BSModalContext {
 @Component({
     selector: "enrich-property-modal",
     templateUrl: "app/src/resourceView/resViewModals/enrichPropertyModal.html",
-    directives: [ClassTreeComponent, InstanceListComponent, ConceptTreeComponent, ClassIndividualTreeComponent],
 })
 export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalData> {
     context: EnrichPropertyModalData;

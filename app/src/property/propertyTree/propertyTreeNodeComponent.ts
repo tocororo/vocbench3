@@ -5,7 +5,6 @@ import {VBEventHandler} from "../../utils/VBEventHandler";
 @Component({
 	selector: "property-tree-node",
 	templateUrl: "app/src/property/propertyTree/propertyTreeNodeComponent.html",
-    directives: [PropertyTreeNodeComponent],
 })
 export class PropertyTreeNodeComponent {
     @Input() node: ARTURIResource;
@@ -36,7 +35,7 @@ export class PropertyTreeNodeComponent {
     }
     
     ngAfterViewInit() {
-        //when ClassTreeNodeComponent children are added, looks for a pending search to resume
+        //when PropertyTreeNodeComponent children are added, looks for a pending search to resume
         this.viewChildrenNode.changes.subscribe(
             c => {
                 if (this.pendingSearch.pending) {//there is a pending search
@@ -73,7 +72,7 @@ export class PropertyTreeNodeComponent {
             }
             var nodeChildren = this.viewChildrenNode.toArray();
             
-            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
+            if (nodeChildren.length == 0) {//Still no children PropertyTreeNodeComponent (view not yet initialized)
                 //save pending search so it can resume when the children are initialized
                 this.pendingSearch.pending = true;
                 this.pendingSearch.path = path;
@@ -82,7 +81,7 @@ export class PropertyTreeNodeComponent {
                 this.pendingSearch.pending = false;
                 this.pendingSearch.path = [];
             }
-            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+            for (var i = 0; i < nodeChildren.length; i++) {//for every PropertyTreeNodeComponent child
                 if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
                     //let the child node expand the remaining path
                     path.splice(0, 1);
