@@ -36,7 +36,7 @@ import {RegistrationComponent} from "./user/registrationComponent";
 import {TestComponent} from "./test/testComponent";
 
 export const routes: Routes = [
-    {path: "", redirectTo: "/Home", terminal: true},
+    {path: "", redirectTo: "/Home", pathMatch: "full"},
     {path: "Home", component: HomeComponent},
     // route config of navigation bar
     {path: "Projects", component: ProjectComponent, canActivate: [AuthGuard]},

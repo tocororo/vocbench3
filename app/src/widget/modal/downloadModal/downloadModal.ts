@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {DomSanitizationService} from "@angular/platform-browser"
+import {DomSanitizer} from "@angular/platform-browser"
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 
@@ -29,7 +29,7 @@ export class DownloadModal implements ModalComponent<DownloadModalData> {
     
     private safeDownloadLink;
     
-    constructor(public dialog: DialogRef<DownloadModalData>, public sanitizer: DomSanitizationService) {
+    constructor(public dialog: DialogRef<DownloadModalData>, public sanitizer: DomSanitizer) {
         this.context = dialog.context;
     }
     

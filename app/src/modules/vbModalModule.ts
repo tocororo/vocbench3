@@ -63,7 +63,7 @@ import {OntoMgrConfigModal} from "../project/createProject/ontoMgrConfigModal";
         OntoMgrConfigModal
     ],
     exports: [],
-    providers: [ModalServices, BrowsingServices, Renderer],
+    providers: [ModalServices, BrowsingServices],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
      * (From ngModule FAQ https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-what-not-to-export)
