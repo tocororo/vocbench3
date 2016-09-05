@@ -1,5 +1,7 @@
 import {Component} from "@angular/core";
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
+
 import {MetadataServices} from "../../../services/metadataServices";
 import {RefactorServices} from "../../../services/refactorServices";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
@@ -215,7 +217,11 @@ export class MetadataManagementComponent {
     replaceBaseURI() {
         //open a modal to manage the baseURI replacement
         var modalData = new ReplaceBaseURIModalData(this.pristineBaseURI);
-        return this.modal.open(ReplaceBaseURIModal, modalData).then(
+        const builder = new BSModalContextBuilder<ReplaceBaseURIModalData>(
+            modalData, undefined, ReplaceBaseURIModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ReplaceBaseURIModal, overlayConfig).then(
             dialog => dialog.result.then(() => {}, () => {})
         );
     }
@@ -299,7 +305,11 @@ export class MetadataManagementComponent {
      */
     private openMappingModal(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean) {
         var modalData = new PrefixNamespaceModalData(title, prefix, namespace, namespaceReadonly);
-        return this.modal.open(PrefixNamespaceModal, modalData).then(
+        const builder = new BSModalContextBuilder<PrefixNamespaceModalData>(
+            modalData, undefined, PrefixNamespaceModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(PrefixNamespaceModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -437,7 +447,11 @@ export class MetadataManagementComponent {
      */
     private openImportModal(title: string, importType: ImportType) {
         var modalData = new ImportOntologyModalData(title, importType);
-        return this.modal.open(ImportOntologyModal, modalData).then(
+        const builder = new BSModalContextBuilder<ImportOntologyModalData>(
+            modalData, undefined, ImportOntologyModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ImportOntologyModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

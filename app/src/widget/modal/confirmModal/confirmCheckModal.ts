@@ -65,7 +65,6 @@ export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> 
     }
 
     ok(event) {
-        event.stopPropagation();
         this.dialog.close(this.check);
     }
 

@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
+
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {Cookie} from "../../utils/Cookie";
@@ -7,7 +9,7 @@ import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentCell} from "./AlignmentCell";
 import {ValidationSettingsModal, ValidationSettingsModalData} from "./validationSettingsModal/validationSettingsModal"
 import {ValidationReportModal, ValidationReportModalData} from "./validationReportModal/validationReportModal"
-import {AlignmentServices} from "../../services/AlignmentServices";
+import {AlignmentServices} from "../../services/alignmentServices";
 
 @Component({
     selector: 'alignment-validation-component',
@@ -51,8 +53,7 @@ export class AlignmentValidationComponent {
     ];
     
     constructor(private vbCtx: VocbenchCtx, private alignmentService: AlignmentServices,
-        private modalService: ModalServices, private modal: Modal) {
-    }
+        private modalService: ModalServices, private modal: Modal) {}
     
     ngOnInit() {
         //init settings (where not provided, set a default)
@@ -78,7 +79,7 @@ export class AlignmentValidationComponent {
         //close session only if token is defined
         //(token is defined only when sessios is initialized once the alignment is loaded)
         if (this.vbCtx.getSessionToken() != undefined) {
-            //close session server side
+            // close session server side
             this.alignmentService.closeSession().subscribe(
                 stResp => {//and remove token client side
                     this.vbCtx.removeSessionToken();
@@ -234,7 +235,13 @@ export class AlignmentValidationComponent {
      */
     private openSettings() {
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-        this.modal.open(ValidationSettingsModal, new ValidationSettingsModalData()).then(
+
+        const builder = new BSModalContextBuilder<ValidationSettingsModalData>(
+            new ValidationSettingsModalData(), undefined, ValidationSettingsModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+
+        this.modal.open(ValidationSettingsModal, overlayConfig).then(
             dialog => dialog.result.then(
                 () => {
                     //update settings
@@ -327,7 +334,6 @@ export class AlignmentValidationComponent {
                 () => {}
             );
         }
-        
     }
     
     /**
@@ -340,7 +346,11 @@ export class AlignmentValidationComponent {
                 document.getElementById("blockDivFullScreen").style.display = "none";
                 //open report modal
                 var modalData = new ValidationReportModalData(report);
-                return this.modal.open(ValidationReportModal, modalData).then(
+                const builder = new BSModalContextBuilder<ValidationReportModalData>(
+                    modalData, undefined, ValidationReportModalData
+                );
+                let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+                return this.modal.open(ValidationReportModal, overlayConfig).then(
                     dialog => dialog.result
                 );
             },

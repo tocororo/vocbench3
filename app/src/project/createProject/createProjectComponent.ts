@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
 import {OntoMgrConfigModal, OntoMgrConfigModalData} from "./ontoMgrConfigModal";
 import {Router} from "@angular/router";
 import {ProjectServices} from "../../services/projectServices";
@@ -230,7 +231,11 @@ export class CreateProjectComponent {
      */
     private openConfigurationModal(configuration: any) {
         var modalData = new OntoMgrConfigModalData(configuration);
-        return this.modal.open(OntoMgrConfigModal, modalData).then(
+        const builder = new BSModalContextBuilder<OntoMgrConfigModalData>(
+            modalData, undefined, OntoMgrConfigModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(OntoMgrConfigModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

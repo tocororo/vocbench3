@@ -8,7 +8,6 @@ import {SkosServices} from "../../services/skosServices";
 @Component({
 	selector: "members-renderer",
 	templateUrl: "app/src/resourceView/renderer/objectListRenderer.html",
-    providers: [ResViewModalServices],
 })
 export class MembersPartitionRenderer {
     

@@ -1,5 +1,6 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
@@ -223,7 +224,11 @@ export class ResourceViewComponent {
      */
     private openAlignmentModal() {
         var modalData = new ResourceAlignmentModalData(this.resource);
-        return this.modal.open(ResourceAlignmentModal, modalData).then(
+        const builder = new BSModalContextBuilder<ResourceAlignmentModalData>(
+            modalData, undefined, ResourceAlignmentModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ResourceAlignmentModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

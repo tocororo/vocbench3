@@ -12,7 +12,6 @@ import {ManchesterServices} from "../../services/manchesterServices";
 @Component({
     selector: "class-axiom-renderer",
     templateUrl: "app/src/resourceView/renderer/classAxiomPartitionRenderer.html",
-    providers: [ResViewModalServices],
 })
 export class ClassAxiomPartitionPartitionRenderer {
     
@@ -132,7 +131,8 @@ export class ClassAxiomPartitionPartitionRenderer {
                 this.owlService.addOneOf(this.resource, instances).subscribe(
                     stResp => this.update.emit(null)
                 );
-            }
+            },
+            () => {}
         );
     }
     

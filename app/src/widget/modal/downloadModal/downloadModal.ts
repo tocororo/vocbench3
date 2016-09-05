@@ -39,7 +39,6 @@ export class DownloadModal implements ModalComponent<DownloadModalData> {
     }
 
     ok(event) {
-        event.stopPropagation();
         this.dialog.close(true);
     }
 

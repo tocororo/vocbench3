@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Modal} from 'angular2-modal/angular2-modal';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
 import {ClassTreeModal, ClassTreeModalData} from "../browsingModal/classTreeModal/classTreeModal";
 import {InstanceListModal, InstanceListModalData} from "../browsingModal/instanceListModal/instanceListModal";
 import {ConceptTreeModal, ConceptTreeModalData} from "../browsingModal/conceptTreeModal/conceptTreeModal";
@@ -26,7 +27,11 @@ export class BrowsingServices {
      */
     browseClassTree(title: string) {
         var modalData = new ClassTreeModalData(title);
-        return this.modal.open(ClassTreeModal, modalData).then(
+        const builder = new BSModalContextBuilder<ClassTreeModalData>(
+            modalData, undefined, ClassTreeModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ClassTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -39,7 +44,11 @@ export class BrowsingServices {
      */
     browseInstanceList(title: string, cls: ARTURIResource) {
         var modalData = new InstanceListModalData(title, cls);
-        return this.modal.open(InstanceListModal, modalData).then(
+        const builder = new BSModalContextBuilder<InstanceListModalData>(
+            modalData, undefined, InstanceListModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(InstanceListModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -53,7 +62,11 @@ export class BrowsingServices {
      */
     browseConceptTree(title: string, scheme?: ARTURIResource, schemeChangeable?: boolean) {
         var modalData = new ConceptTreeModalData(title, scheme, schemeChangeable);
-        return this.modal.open(ConceptTreeModal, modalData).then(
+        const builder = new BSModalContextBuilder<ConceptTreeModalData>(
+            modalData, undefined, ConceptTreeModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ConceptTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -65,7 +78,11 @@ export class BrowsingServices {
      */
     browseSchemeList(title: string) {
         var modalData = new SchemeListModalData(title);
-        return this.modal.open(SchemeListModal, modalData).then(
+        const builder = new BSModalContextBuilder<SchemeListModalData>(
+            modalData, undefined, SchemeListModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(SchemeListModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -79,7 +96,11 @@ export class BrowsingServices {
      */
     browsePropertyTree(title: string, resource?: ARTURIResource) {
         var modalData = new PropertyTreeModalData(title, resource);
-        return this.modal.open(PropertyTreeModal, modalData).then(
+        const builder = new BSModalContextBuilder<PropertyTreeModalData>(
+            modalData, undefined, PropertyTreeModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(PropertyTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

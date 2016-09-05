@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig, DialogRef} from 'angular2-modal';
+import {OverlayConfig} from 'angular2-modal';
 import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalData} from "./promptModal/promptModal";
 import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
@@ -12,6 +12,7 @@ import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralM
 import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
 import {SelectionModal, SelectionModalData} from "./selectionModal/selectionModal";
 import {ResourceSelectionModal, ResourceSelectionModalData} from "./selectionModal/resourceSelectionModal";
+import {ContentLangModal, ContentLangModalData} from "./contentLangModal/contentLangModal";
 
 export type ModalType = "info" | "error" | "warning";
 
@@ -32,7 +33,11 @@ export class ModalServices {
      */
     prompt(title: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
         var modalData = new PromptModalData(title, label, value, false, inputOptional, inputSanitized);
-        return this.modal.open(PromptModal, modalData).then(
+        const builder = new BSModalContextBuilder<PromptModalData>(
+            modalData, undefined, PromptModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(PromptModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -49,7 +54,11 @@ export class ModalServices {
     confirm(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined
         var modalData = new ConfirmModalData(title, message, modalType);
-        return this.modal.open(ConfirmModal, modalData).then(
+        const builder = new BSModalContextBuilder<ConfirmModalData>(
+            modalData, undefined, ConfirmModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ConfirmModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -67,7 +76,11 @@ export class ModalServices {
     confirmCheck(title: string, message: string, checkboxLabel: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined
         var modalData = new ConfirmCheckModalData(title, message, checkboxLabel, modalType);
-        return this.modal.open(ConfirmCheckModal, modalData).then(
+        const builder = new BSModalContextBuilder<ConfirmCheckModalData>(
+            modalData, undefined, ConfirmCheckModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ConfirmCheckModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -82,12 +95,10 @@ export class ModalServices {
     alert(title: string, message: string, type?: ModalType) {
         var modalType = type ? type : "info"; //set default type to info if not defined
         var modalData = new AlertModalData(title, message, modalType);
-
         const builder = new BSModalContextBuilder<AlertModalData>(
             modalData, undefined, AlertModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-
         return this.modal.open(AlertModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -105,7 +116,11 @@ export class ModalServices {
      */
     select(title: string, message: string, options: Array<any>, optionsWithDescription?: boolean) {
         var modalData = new SelectionModalData(title, message, options, optionsWithDescription);
-        return this.modal.open(SelectionModal, modalData).then(
+        const builder = new BSModalContextBuilder<SelectionModalData>(
+            modalData, undefined, SelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(SelectionModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -119,7 +134,11 @@ export class ModalServices {
      */
     downloadLink(title: string, message: string, downloadLink: string, fileName: string) {
         var modalData = new DownloadModalData(title, message, downloadLink, fileName);
-        return this.modal.open(DownloadModal, modalData).then(
+        const builder = new BSModalContextBuilder<DownloadModalData>(
+            modalData, undefined, DownloadModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(DownloadModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -133,7 +152,11 @@ export class ModalServices {
      */
     selectResource(title: string, message: string, resourceList: Array<ARTNode>) {
         var modalData = new ResourceSelectionModalData(title, message, resourceList);
-        return this.modal.open(ResourceSelectionModal, modalData).then(
+        const builder = new BSModalContextBuilder<ResourceSelectionModalData>(
+            modalData, undefined, ResourceSelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ResourceSelectionModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -146,7 +169,11 @@ export class ModalServices {
      */
     newResource(title: string, lang?: string) {
         var modalData = new NewResourceModalData(title, lang);
-        return this.modal.open(NewResourceModal, modalData).then(
+        const builder = new BSModalContextBuilder<NewResourceModalData>(
+            modalData, undefined, NewResourceModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(NewResourceModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -162,7 +189,11 @@ export class ModalServices {
      */
     newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean) {
         var modalData = new NewPlainLiteralModalData(title, value, valueReadonly, lang, langReadonly);
-        return this.modal.open(NewPlainLiteralModal, modalData).then(
+        const builder = new BSModalContextBuilder<NewPlainLiteralModalData>(
+            modalData, undefined, NewPlainLiteralModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(NewPlainLiteralModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -175,7 +206,26 @@ export class ModalServices {
      */
     newTypedLiteral(title: string, allowedDatatypes?: string[]) {
         var modalData = new NewTypedLiteralModalData(title, allowedDatatypes);
-        return this.modal.open(NewTypedLiteralModal, modalData).then(
+        const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
+            modalData, undefined, NewTypedLiteralModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(NewTypedLiteralModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to change the content language.
+     * @return
+     */
+    changeContentLang() {
+        var modalData = new ContentLangModalData();
+        const builder = new BSModalContextBuilder<ContentLangModalData>(
+            modalData, undefined, ContentLangModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ContentLangModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

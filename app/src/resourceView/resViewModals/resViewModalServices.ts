@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
 import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreatorModal";
 import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
 import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
@@ -22,7 +23,11 @@ export class ResViewModalServices {
      */
     createClassList(title: string) {
         var modalData = new ClassListCreatorModalData(title);
-        return this.modal.open(ClassListCreatorModal, modalData).then(
+        const builder = new BSModalContextBuilder<ClassListCreatorModalData>(
+            modalData, undefined, ClassListCreatorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ClassListCreatorModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -34,7 +39,11 @@ export class ResViewModalServices {
      */
     createInstanceList(title: string) {
         var modalData = new InstanceListCreatorModalData(title);
-        return this.modal.open(InstanceListCreatorModal, modalData).then(
+        const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
+            modalData, undefined, InstanceListCreatorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(InstanceListCreatorModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -48,7 +57,11 @@ export class ResViewModalServices {
      */
     enrichProperty(title: string, property: ARTURIResource, ranges?: ARTURIResource[]) {
         var modalData = new EnrichPropertyModalData(title, property, ranges);
-        return this.modal.open(EnrichPropertyModal, modalData).then(
+        const builder = new BSModalContextBuilder<EnrichPropertyModalData>(
+            modalData, undefined, EnrichPropertyModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(EnrichPropertyModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -60,7 +73,11 @@ export class ResViewModalServices {
      */
     enrichCustomForm(title: string, creId: string) {
         var modalData = new CustomFormModalData(title, creId);
-        return this.modal.open(CustomFormModal, modalData).then(
+        const builder = new BSModalContextBuilder<CustomFormModalData>(
+            modalData, undefined, CustomFormModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(CustomFormModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

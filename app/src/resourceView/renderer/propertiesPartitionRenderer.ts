@@ -14,7 +14,6 @@ import {CustomRangeServices} from "../../services/customRangeServices";
 @Component({
     selector: "properties-renderer",
     templateUrl: "app/src/resourceView/renderer/predicateObjectListRenderer.html",
-    providers: [ResViewModalServices],
 })
 export class PropertiesPartitionRenderer {
     

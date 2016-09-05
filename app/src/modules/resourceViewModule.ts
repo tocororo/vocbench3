@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {SharedModule} from './sharedModule';
+import {TreeAndListModule} from "./treeAndListModule";
 
 import {ResourceViewComponent} from '../resourceView/resourceViewComponent';
 import {ResourceRenameComponent} from '../resourceView/resourceRenameComponent';
@@ -25,10 +26,15 @@ import {SuperPropertiesPartitionRenderer} from '../resourceView/renderer/superPr
 import {TopConceptsPartitionRenderer} from '../resourceView/renderer/topConceptsPartitionRenderer';
 import {TypesPartitionRenderer} from '../resourceView/renderer/typesPartitionRenderer';
 
+import {ResViewModalServices} from '../resourceView/resViewModals/resViewModalServices';
+import {ClassListCreatorModal} from '../resourceView/resViewModals/classListCreatorModal';
+import {EnrichPropertyModal} from '../resourceView/resViewModals/enrichPropertyModal';
+import {InstanceListCreatorModal} from '../resourceView/resViewModals/instanceListCreatorModal';
+
 @NgModule({
     imports: [
         CommonModule, FormsModule,
-        SharedModule 
+        SharedModule, TreeAndListModule
     ],
     declarations: [
         ResourceViewComponent, ResourceViewPanelComponent,
@@ -39,10 +45,16 @@ import {TypesPartitionRenderer} from '../resourceView/renderer/typesPartitionRen
         LexicalizationsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,
         PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
-        TypesPartitionRenderer
+        TypesPartitionRenderer,
+        //modals
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal
     ],
     exports: [
         ResourceViewPanelComponent
+    ],
+    providers: [ResViewModalServices],
+    entryComponents: [
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal
     ]
 })
 export class ResourceViewModule { }

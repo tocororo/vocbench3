@@ -26,6 +26,22 @@ export class TestComponent {
             () => this.confirmResult = "No"
         );
     }
+
+    private confirmCheckResult;
+    private confirmCheckChecked;
+    private confirmCheckTitle = "Confirm with Check title";
+    private confirmCheckMessage = "Confirm with check message";
+    private confirmCheckLabel = "Confirm with check label";
+    private confirmCheckType: ModalType = "info";
+    confirmCheck() {
+        this.modalService.confirmCheck(this.confirmCheckTitle, this.confirmCheckMessage, this.confirmCheckLabel, this.confirmType).then(
+            result => {
+                this.confirmCheckResult = "Yes";
+                this.confirmCheckChecked = result;
+            },
+            () => this.confirmCheckResult = "No"
+        );
+    }
     
     private promptResult;
     private promptTitle = "Prompt title";

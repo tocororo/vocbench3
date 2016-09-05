@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent, CloseGuard} from "angular2-modal";
+import {DialogRef, ModalComponent} from "angular2-modal";
 
 export class AlertModalData extends BSModalContext {
     /**
@@ -22,7 +22,7 @@ export class AlertModalData extends BSModalContext {
     selector: "alert-modal",
     templateUrl: "app/src/widget/modal/alertModal/alertModal.html",
 })
-export class AlertModal implements CloseGuard, ModalComponent<AlertModalData> {
+export class AlertModal implements ModalComponent<AlertModalData> {
     context: AlertModalData;
     
     private headerStyle;
@@ -30,7 +30,6 @@ export class AlertModal implements CloseGuard, ModalComponent<AlertModalData> {
     
     constructor(public dialog: DialogRef<AlertModalData>) {
         this.context = dialog.context;
-        dialog.setCloseGuard(this);
         
         //based on the modal type set the css style of the message alert
         switch (this.context.type) {
@@ -55,14 +54,6 @@ export class AlertModal implements CloseGuard, ModalComponent<AlertModalData> {
     
     ngOnInit() {
         document.getElementById("toFocus").focus();
-    }
-
-    beforeDismiss(): boolean {
-        return true;
-    }
-
-    beforeClose(): boolean {
-        return false
     }
 
     ok() {

@@ -61,11 +61,11 @@ export class ConfirmModal implements ModalComponent<ConfirmModalData> {
     }
 
     ok(event) {
-        event.stopPropagation();
         this.dialog.close(true);
     }
 
     cancel() {
         this.dialog.dismiss();
     }
+
 }

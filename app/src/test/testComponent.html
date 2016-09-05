@@ -14,6 +14,21 @@
             <span>Last result: <strong>{{confirmResult}}</strong></span>
         </div>
     </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>Confirm with Check Modal:</label>
+        <div>
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmCheckTitle">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmCheckMessage">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="confirmCheckLabel">
+            <select [(ngModel)]="confirmCheckType" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;">
+                <option *ngFor="let t of typeList" [value]="t">{{t}}</option>
+            </select>
+            <br/><button class="btn btn-primary btn-xs" (click)="confirmCheck()">Test</button>
+            <span>Last result: <strong>{{confirmCheckResult}}</strong></span>
+            <span>Checked: <strong>{{confirmCheckChecked}}</strong></span>
+        </div>
+    </div>
     
     <div style="margin-bottom: 15px;">
         <label>Prompt Modal:</label>

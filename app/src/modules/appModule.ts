@@ -83,6 +83,12 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             SparqlComponent,
             AlignmentValidationComponent,
             CustomRangeComponent,
+            ImportDataComponent,
+            ExportDataComponent,
+            MetadataManagementComponent,
+            VocbenchSettingsComponent,
+            RegistrationComponent,
+            TestComponent, //remove???
 
             ConfigBarComponent,
 
@@ -98,13 +104,6 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             OverlappedLabelComponent,
             NoLangLabelComponent,
             DanglingXLabelComponent,
-            ImportDataComponent,
-            ExportDataComponent,
-            MetadataManagementComponent,
-            VocbenchSettingsComponent,
-            RegistrationComponent,
-            TestComponent, //remove???
-
       ],
       bootstrap: [AppComponent],
 })

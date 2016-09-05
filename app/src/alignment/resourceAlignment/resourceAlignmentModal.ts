@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {Modal} from 'angular2-modal/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -93,7 +94,11 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
      */
     private openBrowseExternalResModal(title: string, resRole: RDFResourceRolesEnum) {
         var modalData = new BrowseExternalResourceModalData(title, resRole);
-        return this.modal.open(BrowseExternalResourceModal, modalData).then(
+        const builder = new BSModalContextBuilder<BrowseExternalResourceModalData>(
+            modalData, undefined, BrowseExternalResourceModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(BrowseExternalResourceModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

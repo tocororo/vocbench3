@@ -61,8 +61,6 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
     }
 
     ok(event) {
-        event.stopPropagation();
-        event.preventDefault();
         this.dialog.close({value: this.value, lang: this.lang});
     }
 

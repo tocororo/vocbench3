@@ -1,14 +1,12 @@
 import {Component, ViewContainerRef} from "@angular/core";
 import {Router} from '@angular/router';
 
-import {VocbenchCtx} from "./utils/VocbenchCtx";
-import {AuthServices} from "./auth/authServices";
-import {VBEventHandler} from "./utils/VBEventHandler";
+import {Overlay} from "angular2-modal";
 
-//import to open modal to change content language (Remove if the modal will be launched from another component)
-import {Overlay} from "angular2-modal"
-import {Modal} from 'angular2-modal/plugins/bootstrap';
-import {ContentLangModal, ContentLangModalData} from "./settings/contentLang/contentLangModal";
+import {VocbenchCtx} from "./utils/VocbenchCtx";
+import {VBEventHandler} from "./utils/VBEventHandler";
+import {AuthServices} from "./auth/authServices";
+import {ModalServices} from "./widget/modal/modalServices";
 
 @Component({
     selector: "app",
@@ -18,7 +16,8 @@ import {ContentLangModal, ContentLangModalData} from "./settings/contentLang/con
 export class AppComponent {
     
     constructor(private router: Router, private vbCtx: VocbenchCtx, private evtHandler: VBEventHandler,
-        private authService: AuthServices, private modal: Modal, viewContainer: ViewContainerRef, overlay: Overlay) {
+        private authService: AuthServices, private modalService: ModalServices,
+        viewContainer: ViewContainerRef, overlay: Overlay) {
         /* A Default view container ref, usually the app root container ref.
          * Has to be set manually until we can find a way to get it automatically. */
         overlay.defaultViewContainer = viewContainer;
@@ -75,11 +74,7 @@ export class AppComponent {
      * When user selects "content language" menu item. Opens the modal to change the content language.
      */
     private changeContentLang() {
-        this.modal.open(ContentLangModal, new ContentLangModalData()).then(
-            dialog => {
-                dialog.result.then( confirmed => {}, canceled => {} );
-            }
-        );
+        this.modalService.changeContentLang().then( confirmed => {}, canceled => {} );
     }
     
     /**
