@@ -2,6 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
+import {Renderer} from '@angular/core';
+
 import {SharedModule} from "./sharedModule";
 import {TreeAndListModule} from "./treeAndListModule";
 
@@ -61,7 +63,7 @@ import {OntoMgrConfigModal} from "../project/createProject/ontoMgrConfigModal";
         OntoMgrConfigModal
     ],
     exports: [],
-    providers: [ModalServices, BrowsingServices],
+    providers: [ModalServices, BrowsingServices, Renderer],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
      * (From ngModule FAQ https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-what-not-to-export)

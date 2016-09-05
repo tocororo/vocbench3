@@ -2,12 +2,10 @@ import {Component} from "@angular/core";
 import {SparqlServices} from "../services/sparqlServices";
 import {MetadataServices} from "../services/metadataServices";
 import {ModalServices} from '../widget/modal/modalServices';
-import {CodemirrorComponent} from "./codemirrorComponent";
 
 @Component({
     selector: "sparql-component",
     templateUrl: "app/src/sparql/sparqlComponent.html",
-    directives: [CodemirrorComponent],
     host: { class: "pageComponent" }
 })
 export class SparqlComponent {

@@ -1,7 +1,5 @@
 import {NgModule} from '@angular/core';
 
-import {Renderer} from '@angular/core';
-
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from "@angular/router";
@@ -65,8 +63,7 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
       ],
       //services with application scope
       providers: [
-            AuthServices,
-            Renderer, //needed form modal (maybe can be moved in a VBModalModule or wherever there are modals)
+            AuthServices
       ],
       declarations: [
             AppComponent,

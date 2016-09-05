@@ -10,17 +10,19 @@ import {GUARD_PROVIDERS} from "../utils/CanActivateGuards";
 import {FilePickerComponent} from '../widget/filePicker/filePickerComponent';
 import {LangPickerComponent} from '../widget/langPicker/langPickerComponent';
 import {RdfResourceComponent} from '../widget/rdfResource/rdfResourceComponent';
-
 import {SanitizerDirective} from "../widget/directives/sanitizerDirective";
+
+import {CodemirrorComponent} from '../sparql/codemirrorComponent';
 
 @NgModule({
     imports: [CommonModule, FormsModule],
-    declarations: [FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective],
+    declarations: [FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective, CodemirrorComponent],
     exports: [
         FilePickerComponent,
         RdfResourceComponent,
         SanitizerDirective, 
-        LangPickerComponent
+        LangPickerComponent,
+        CodemirrorComponent
     ],
     providers: [HttpManager, VocbenchCtx, VBEventHandler, GUARD_PROVIDERS]
 })
