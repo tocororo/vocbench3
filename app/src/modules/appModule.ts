@@ -9,6 +9,7 @@ import {SharedModule} from "./sharedModule";
 import {VBModalModule} from "./vbModalModule";
 import {TreeAndListModule} from "./treeAndListModule";
 import {ResourceViewModule} from "./resourceViewModule";
+import {ICVModule} from "./icvModule";
 
 import {ModalModule} from 'angular2-modal';
 import {BootstrapModalModule} from 'angular2-modal/plugins/bootstrap';
@@ -17,6 +18,11 @@ import {AuthServices} from "../auth/authServices";
 
 import {AppComponent} from "../appComponent";
 import {appRouting} from '../appRoutes';
+
+import {HttpManager} from "../utils/HttpManager";
+import {VocbenchCtx} from "../utils/VocbenchCtx";
+import {VBEventHandler} from "../utils/VBEventHandler";
+import {GUARD_PROVIDERS} from "../utils/CanActivateGuards";
 
 //Components
 import {HomeComponent} from "../homeComponent";
@@ -32,16 +38,6 @@ import {CustomRangeComponent} from "../customRanges/customRangeComponent";
 import {ImportProjectComponent} from "../project/importProject/importProjectComponent";
 import {CreateProjectComponent} from "../project/createProject/createProjectComponent";
 import {IcvComponent} from "../icv/icvComponent";
-import {DanglingConceptComponent} from "../icv/danglingConcept/danglingConceptComponent";
-import {NoSchemeConceptComponent} from "../icv/noSchemeConcept/noSchemeConceptComponent";
-import {NoTopConceptSchemeComponent} from "../icv/noTopConceptScheme/noTopConceptSchemeComponent";
-import {TopConceptWithBroaderComponent} from "../icv/topConceptWithBroader/topConceptWithBroaderComponent";
-import {HierarchicalRedundancyComponent} from "../icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
-import {NoLabelResourceComponent} from "../icv/noLabelResource/noLabelResourceComponent";
-import {OnlyAltLabelResourceComponent} from "../icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
-import {OverlappedLabelComponent} from "../icv/overlappedLabel/overlappedLabelComponent";
-import {NoLangLabelComponent} from "../icv/noLangLabel/noLangLabelComponent";
-import {DanglingXLabelComponent} from "../icv/danglingXLabel/danglingXLabelComponent";
 import {ImportDataComponent} from "../config/dataManagement/importData/importDataComponent";
 import {ExportDataComponent} from "../config/dataManagement/exportData/exportDataComponent";
 import {MetadataManagementComponent} from "../config/dataManagement/metadata/metadataManagementComponent";
@@ -57,13 +53,17 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
+
+            ICVModule,
+
             STServicesModule,
             appRouting,
             ModalModule.forRoot(), BootstrapModalModule //Modules of angular2-modal
       ],
       //services with application scope
       providers: [
-            AuthServices
+            AuthServices, //when authorization web services will be implemented, this provider should be moved in stServicesModule
+            HttpManager, VocbenchCtx, VBEventHandler, GUARD_PROVIDERS
       ],
       declarations: [
             AppComponent,
@@ -78,6 +78,7 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             SchemesComponent,
             CollectionsComponent,
             SparqlComponent,
+            IcvComponent,
             AlignmentValidationComponent,
             CustomRangeComponent,
             ImportDataComponent,
@@ -88,19 +89,6 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             TestComponent, //remove???
 
             ConfigBarComponent,
-
-            //icv(s) could be moved in a separate module
-            IcvComponent,
-            DanglingConceptComponent,
-            NoSchemeConceptComponent,
-            NoTopConceptSchemeComponent,
-            TopConceptWithBroaderComponent,
-            HierarchicalRedundancyComponent,
-            NoLabelResourceComponent,
-            OnlyAltLabelResourceComponent,
-            OverlappedLabelComponent,
-            NoLangLabelComponent,
-            DanglingXLabelComponent,
       ],
       bootstrap: [AppComponent],
 })

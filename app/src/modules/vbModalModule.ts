@@ -2,8 +2,6 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
-import {Renderer} from '@angular/core';
-
 import {SharedModule} from "./sharedModule";
 import {TreeAndListModule} from "./treeAndListModule";
 
