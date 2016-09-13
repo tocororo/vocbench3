@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, Response, Headers, RequestOptions, HTTP_PROVIDERS} from '@angular/http';
+import {Http, Headers, Response, RequestOptions} from '@angular/http';
 import 'rxjs/Rx'; //for map function
 import {Observable} from 'rxjs/Observable';
 import {STResponseUtils} from "../utils/STResponseUtils";
