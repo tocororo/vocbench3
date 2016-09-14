@@ -1,0 +1,53 @@
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label *ngIf="ontoType == 'SKOS'" style="flex: 1;">No skos:prefLabel resource</label>
+        <label *ngIf="ontoType == 'SKOS-XL'" style="flex: 1;">No skosxl:prefLabel resource</label>
+        <label *ngIf="ontoType == 'OWL'" style="flex: 1;">No rdfs:label resource</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+        <div class="alert alert-info" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <i *ngIf="ontoType == 'SKOS'">skos:Concept(s) and skos:ConceptScheme(s) that don't have a skos:prefLabel.</i>
+            <i *ngIf="ontoType == 'SKOS-XL'">skos:Concept(s) and skos:ConceptScheme(s) that don't have a skosxl:prefLabel.</i>
+            <i *ngIf="ontoType == 'OWL'">owl:Class(es) and instances that don't have a rdfs:label.</i>
+        </div>
+
+        <div *ngIf="!brokenResourceList" style="padding: 4px;">
+            Press <strong>Run</strong> button to run the check.
+        </div>
+        <div *ngIf="brokenResourceList" class="scrollableContainer">
+            <table class="table table-condensed table-hoverable" style="flex: 1;">
+                <thead>
+                    <tr>
+                        <th class="text-center">Resource</th>
+                        <th class="text-center" style="width: 1%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let resource of brokenResourceList">
+                        <td>
+                            <rdf-resource [resource]="resource"></rdf-resource>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <button class="btn btn-xs btn-default" (click)="fix(resource)">
+                                <span *ngIf="ontoType == 'SKOS-XL'">Add skosxl:prefLabel</span>
+                                <span *ngIf="ontoType == 'SKOS'">Add skos:prefLabel</span>
+                                <span *ngIf="ontoType == 'OWL'">Add rdfs:label</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>
