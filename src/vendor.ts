@@ -18,6 +18,13 @@ import 'angular2-modal';
 import 'angular2-modal/plugins/bootstrap';
 
 // import 'codemirror/lib/codemirror.js' //this is required in codeMirrorComponent, so it could be ignored in vendor
-import 'codemirror/mode/sparql/sparql.js'
-import 'codemirror/addon/edit/matchbrackets.js'
-import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/sparql/sparql.js';
+import 'codemirror/addon/edit/matchbrackets.js';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/comment/comment.js';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/lib/codemirror.css';
+
+import 'codemirror/mode/javascript/javascript.js';
+import 'codemirror/addon/hint/javascript-hint.js';

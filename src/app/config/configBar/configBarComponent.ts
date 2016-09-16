@@ -52,7 +52,6 @@ export class ConfigBarComponent {
                                     this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
                                         stResp => {
                                             document.getElementById("blockDivFullScreen").style.display = "none";
-                                            this.vbCtx.removeWorkingProject();
                                             //then redirect to home page
                                             this.router.navigate(['/Projects']);
                                         },
@@ -66,7 +65,6 @@ export class ConfigBarComponent {
                             this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
                                 stResp => {
                                     document.getElementById("blockDivFullScreen").style.display = "none";
-                                    this.vbCtx.removeWorkingProject();
                                     //then redirect to home page
                                     this.router.navigate(['/Projects']);
                                 },

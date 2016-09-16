@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Project} from '../utils/Project';
 import {VBEventHandler} from '../utils/VBEventHandler';
+import {VocbenchCtx} from '../utils/VocbenchCtx';
 
 @Injectable()
 export class ProjectServices {
@@ -9,7 +10,7 @@ export class ProjectServices {
     private serviceName = "Projects";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) { }
 
     /**
      * Gets the current available projects in ST
@@ -56,6 +57,14 @@ export class ProjectServices {
      */
     disconnectFromProject(project: Project) {
         console.log("[ProjectServices] disconnectFromProject");
+
+        //if the closing project is the working, remove it from context
+        //this could be a temporary warkaround to avoid the problem described here https://art-uniroma2.atlassian.net/browse/ST-289
+        //but is not a "perfect" solution, since it remove the working project from the ctx before it is effectively closed
+        if (this.vbCtx.getWorkingProject() != undefined && this.vbCtx.getWorkingProject().getName() == project.getName()) {
+            this.vbCtx.removeWorkingProject();
+        }
+
         var params = {
             consumer: "SYSTEM",
             projectName: project.getName()

@@ -25,10 +25,8 @@ export class HttpManager {
         //init serverhost ip (see /config/webpack.prod.js)
         if (process.env.SERVERHOST == undefined) {
             this.serverhost = "127.0.0.1";
-            console.log("serverhost undefined => " + this.serverhost); 
         } else {
             this.serverhost = process.env.SERVERHOST;
-            console.log("serverhost " + this.serverhost);
         }
     }
     
@@ -48,7 +46,6 @@ export class HttpManager {
      * the component that invokes the service. 
      */
     doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
-        console.log("HttpManager doGet serverhost " + this.serverhost);
         var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";

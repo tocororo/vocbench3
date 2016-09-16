@@ -146,10 +146,6 @@ export class ProjectComponent implements OnInit {
         } else {//persistent project => just disconnect
             this.disconnectFromProject(project);
         }
-        //if the closed project is the working, remove it from context
-        if (this.vbCtx.getWorkingProject() != undefined && this.vbCtx.getWorkingProject().getName() == project.getName()) {
-            this.vbCtx.removeWorkingProject();
-        }
     }
     
     /**

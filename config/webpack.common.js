@@ -40,7 +40,7 @@ module.exports = {
             //angular2-template-loader loads angular components' template and styles
             {
                 test: /\.ts$/,
-                loaders: ['ts', 'angular2-template-loader']
+                loaders: ['awesome-typescript-loader', 'angular2-template-loader']
             },
             //.html files
             //html - for component templates
