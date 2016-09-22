@@ -32,7 +32,8 @@
                     </select>
                 </div>
                 
-                <codemirror [query]="t.query" (querychange)="t.query=$event"></codemirror>
+                <!--<codemirror [query]="t.query" (querychange)="t.query=$event"></codemirror>-->
+                <yasgui [query]="t.query" (querychange)="t.query=$event"></yasgui>
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">

@@ -1,4 +1,5 @@
 @import url('./custom_bootstrap/css/bootstrap.min.css');
+@import url('../../app/sparql/flint/sparqlcolors.css');
 
 html, body {
     height: 100%;
@@ -332,8 +333,13 @@ input[type=number]::-webkit-outer-spin-button {
 lang-picker {
      display: flex; align-items: center;
 }
- 
+
+/*Limit height of codemirror to 40% of viewport*/ 
 .CodeMirror { height: 40vh !important }
+/*Reset height to auto when codemirror is fullscreen*/
+.CodeMirror.CodeMirror-fullscreen { height: auto !important }
+/*To put codemirror in fullscreen in front of the menubar (default z-index 7 made the textarea behind the navbar)*/
+.yasqe .CodeMirror-fullscreen { z-index: 999 !important; }
 
 /* Btn groups in panel heading (usually button for tree/list managment) */
 .panel-heading .btn-group-xs>.btn {

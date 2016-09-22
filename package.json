@@ -25,7 +25,8 @@
     "bootstrap": "^3.3.6",
     "jquery": "2.2.3",
     "angular2-modal": "^2.0.0-beta.13",
-    "codemirror": "5.14.2"
+    // "codemirror": "5.14.2",
+    "yasgui-yasqe": "2.11.1"
   },
   "devDependencies": {
     "angular2-template-loader": "^0.4.0",
