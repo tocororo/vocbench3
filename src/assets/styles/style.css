@@ -1,5 +1,4 @@
 @import url('./custom_bootstrap/css/bootstrap.min.css');
-@import url('../../app/sparql/flint/sparqlcolors.css');
 
 html, body {
     height: 100%;

@@ -10,7 +10,7 @@ import {ModalServices} from '../widget/modal/modalServices';
 })
 export class SparqlComponent {
     
-    private sampleQuery: string = "SELECT * WHERE { ?s ?p ?o } LIMIT 10";
+    private sampleQuery: string = "SELECT * WHERE {\n  ?s ?p ?o .\n} LIMIT 10";
     private tabs: Array<any> = [];
     private activeTab;
     
@@ -22,7 +22,10 @@ export class SparqlComponent {
                 //collect the prefix namespace mappings
                 var prefixImports: string = "";
                 for (var i = 0; i < mappings.length; i++) {
-                    prefixImports += "PREFIX " + mappings[i].prefix + ": <" + mappings[i].namespace + ">\n";
+                    //default prefix is base, not "" since it prevents autocompletion of class and properties in yasqe
+                    var pref = (mappings[i].prefix == "") ? "base" : mappings[i].prefix; 
+                    var ns = mappings[i].namespace;
+                    prefixImports += "PREFIX " + pref + ": <" + ns + ">\n";
                 }
                 //set them as suffix of sampleQuery
                 this.sampleQuery = prefixImports + "\n" + this.sampleQuery;

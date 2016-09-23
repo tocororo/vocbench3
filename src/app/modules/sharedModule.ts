@@ -7,18 +7,16 @@ import {LangPickerComponent} from '../widget/langPicker/langPickerComponent';
 import {RdfResourceComponent} from '../widget/rdfResource/rdfResourceComponent';
 import {SanitizerDirective} from "../widget/directives/sanitizerDirective";
 
-import {CodemirrorComponent} from '../sparql/codemirrorComponent';
 import {YasguiComponent} from '../sparql/yasguiComponent';
 
 @NgModule({
     imports: [CommonModule, FormsModule],
-    declarations: [FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective, CodemirrorComponent, YasguiComponent],
+    declarations: [FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective, YasguiComponent],
     exports: [
         FilePickerComponent,
         RdfResourceComponent,
         SanitizerDirective, 
         LangPickerComponent,
-        CodemirrorComponent,
         YasguiComponent
     ],
     providers: []

@@ -23,17 +23,8 @@
     <div class="tab-content">
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <div *ngIf="t.active" class="vbox">
-                <!--Query mode selection-->
-                <div style="margin-bottom: 5px;">
-                    <label>Query mode:</label>
-                    <select name="queryModeSelect" [(ngModel)]="t.queryMode">
-                        <option value="query">SPARQL 1.1 Query</option>
-                        <option value="update">SPARQL 1.1 Update</option>
-                    </select>
-                </div>
                 
-                <!--<codemirror [query]="t.query" (querychange)="t.query=$event"></codemirror>-->
-                <yasgui [query]="t.query" (querychange)="t.query=$event"></yasgui>
+                <yasgui [query]="t.query" (querychange)="t.query=$event" (modechange)="t.querymode=$event"></yasgui>
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">
