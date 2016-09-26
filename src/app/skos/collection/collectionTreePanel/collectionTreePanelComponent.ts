@@ -110,7 +110,7 @@ export class CollectionTreePanelComponent {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, "contain",
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, false, "contain",
                 this.vbCtx.getContentLanguage(true)).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {

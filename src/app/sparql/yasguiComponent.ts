@@ -2,6 +2,7 @@
 
 import {Component, ViewChild, Input, Output, EventEmitter} from '@angular/core';
 import {VocbenchCtx} from '../utils/VocbenchCtx';
+import {ARTURIResource} from '../utils/ARTResources';
 import {MetadataServices} from '../services/metadataServices';
 import {SearchServices} from '../services/searchServices';
 
@@ -41,19 +42,19 @@ export class YasguiComponent {
             }
         );
 
-        // YASQE.registerAutocompleter('customPropertyCompleter',
-        //     (yasqe) => {
-        //         return this.customPropertyCompleter(yasqe, this.searchService);
-        //     }
-        // );
+        YASQE.registerAutocompleter('customPropertyCompleter',
+            (yasqe) => {
+                return this.customPropertyCompleter(yasqe, this.searchService);
+            }
+        );
 
         this.yasqe = YASQE.fromTextArea(
             this.textareaElement.nativeElement,
             {
                 persistent: null, //avoid same query for all the tabs
                 createShareLink: null, //disable share button
-                // autocompleters: ["customPrefixCompleter", "customPropertyCompleter", "classes", "variables"],
-                autocompleters: ["customPrefixCompleter", "properties", "classes", "variables"],
+                autocompleters: ["customPrefixCompleter", "customPropertyCompleter", "classes", "variables"],
+                // autocompleters: ["customPrefixCompleter", "properties", "classes", "variables"],
                 // autocompleters: ["prefixes", "properties", "classes", "variables"],
                 extraKeys: { "Ctrl-7": YASQE.commentLines }
             }
@@ -165,11 +166,17 @@ export class YasguiComponent {
             },
             get: function(token, callback) {
                 //update when searchResource will be changed with useURI parameter
-                searchService.searchResource(token.autocompletionString, ["property"], false, "start").subscribe(
+                searchService.searchResource(token.autocompletionString, ["property"], false, true, "start").subscribe(
                     results => {
-                        callback(["http://www.w3.org/2004/02/skos/core#pippo",
-                            "http://www.w3.org/2004/02/skos/core#pluto",
-                            "http://www.w3.org/2004/02/skos/core#paperino"]);
+                        var resArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            var uri = results[i].getURI()
+                            //results may contains duplicate (properties with multiple roles), so add the uri only if not already in
+                            if (resArray.indexOf(uri) == -1) {
+                                resArray.push(uri);
+                            }
+                        }
+                        callback(resArray);
                     }
                 );
             },

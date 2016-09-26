@@ -83,7 +83,7 @@ export class ConceptTreePanelComponent {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, "contain",
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, false, "contain",
                 this.vbCtx.getContentLanguage(true), this.vbCtx.getScheme()).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {

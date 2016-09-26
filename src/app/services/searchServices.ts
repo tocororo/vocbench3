@@ -16,18 +16,20 @@ export class SearchServices {
      * @param searchString the string to search
      * @param rolesArray available roles: "concept", "cls", "property", "individual"
      * @param useLocalName tells if the searched string should be searched in the local name (as well as in labels)
+     * @param useURI tells if the searched string should be searched in the entire URI (as well as in labels)
      * @param searchMode available searchMode values: "contain", "start", "end", "exact"
      * @param lang if provided tells in which language render the show of the results (only for concepts and schemes)
      * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      * @return an array of resources
      */
-    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: string,
-        lang?: string, scheme?: ARTURIResource) {
+    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, 
+        searchMode: string, lang?: string, scheme?: ARTURIResource) {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
             useLocalName: useLocalName,
+            useURI: useURI,
             searchMode: searchMode,
         };
         if (lang != undefined) {
