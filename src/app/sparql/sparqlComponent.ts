@@ -37,6 +37,7 @@ export class SparqlComponent {
                     headers: null,
                     queryResult: null,
                     queryInProgress: false,
+                    queryValid: true,
                     queryTime: null,
                     inferred: false,
                     removable: false,
@@ -71,6 +72,16 @@ export class SparqlComponent {
                 document.getElementById("blockDivFullScreen").style.display = "none";
             }
         );
+    }
+
+    /**
+     * Listener of event querychange, emitted from YasquiComponent.
+     * Event is an object {query: string, valid: boolean} where query is the code written in the textarea
+     * and valid tells wheter the query is syntactically correct 
+     */
+    private onQueryChange(event) {
+        this.activeTab.query = event.query;
+        this.activeTab.queryValid = event.valid;
     }
     
     private clear(tab) {
@@ -177,6 +188,7 @@ export class SparqlComponent {
             headers: null,
             queryResult: null,
             queryInProgress: false,
+            queryValid: true,
             queryTime: null,
             inferred: false,
             removable: true,
