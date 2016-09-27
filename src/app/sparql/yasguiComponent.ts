@@ -24,41 +24,58 @@ export class YasguiComponent {
     @Input() query: string;
     @Output() querychange = new EventEmitter<Object>(); //emit event containing {query: string, valid: boolean} when it changes
     @Output() modechange = new EventEmitter<string>(); //emit event containing mode (update/query) when it changes
-    
+
     @ViewChild('txtarea') textareaElement;
 
+    private CLASS_COMPLETER_NAME = "customClassCompleter";
+    private PREFIX_COMPLETER_NAME = "customPrefixCompleter";
+    private PROPERTY_COMPLETER_NAME = "customPropertyCompleter";
+
     private fetchFromPrefixCheck: boolean = false;
-    // private fetchFromPrefixCheck: boolean = true;
 
     private yasqe;
 
     constructor(private vbCtx: VocbenchCtx, private metadataService: MetadataServices, private searchService: SearchServices) {}
 
     ngAfterViewInit() {
+        YASQE.defaults.indentUnit = 4;
+        YASQE.defaults.persistent = null; //disable persistency
+        YASQE.defaults.autocompleters = ["variables"];
 
-        YASQE.registerAutocompleter('customPrefixCompleter',
-            (yasqe) => {
-                return this.customPrefixCompleter(yasqe, this.metadataService, this.fetchFromPrefixCheck);
-            }
-        );
-
-        YASQE.registerAutocompleter('customPropertyCompleter',
-            (yasqe) => {
-                return this.customPropertyCompleter(yasqe, this.searchService);
-            }
-        );
+        //register the autocompleters if not yet done (by other instances of YasguiComponent)
+        if (YASQE.defaults.autocompleters.indexOf(this.PREFIX_COMPLETER_NAME) == -1) {
+            YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
+                (yasqe) => {
+                    return this.customPrefixCompleter(yasqe, this.metadataService, this.fetchFromPrefixCheck);
+                }
+            );
+        }
+        if (YASQE.defaults.autocompleters.indexOf(this.PROPERTY_COMPLETER_NAME) == -1) {
+            YASQE.registerAutocompleter(this.PROPERTY_COMPLETER_NAME,
+                (yasqe) => {
+                    return this.customPropertyCompleter(yasqe, this.searchService);
+                }
+            );
+        }
+        if (YASQE.defaults.autocompleters.indexOf(this.CLASS_COMPLETER_NAME) == -1) {
+            YASQE.registerAutocompleter(this.CLASS_COMPLETER_NAME,
+                (yasqe) => {
+                    return this.customClassCompleter(yasqe, this.searchService);
+                }
+            );
+        }
 
         this.yasqe = YASQE.fromTextArea(
             this.textareaElement.nativeElement,
             {
                 persistent: null, //avoid same query for all the tabs
                 createShareLink: null, //disable share button
-                autocompleters: ["customPrefixCompleter", "customPropertyCompleter", "classes", "variables"],
-                // autocompleters: ["customPrefixCompleter", "properties", "classes", "variables"],
+                // autocompleters: ["variables", this.CLASS_COMPLETER_NAME, this.PREFIX_COMPLETER_NAME, this.PROPERTY_COMPLETER_NAME],
                 // autocompleters: ["prefixes", "properties", "classes", "variables"],
                 extraKeys: { "Ctrl-7": YASQE.commentLines }
             }
         );
+        
         //called on changes in yasqe editor
         this.yasqe.on('change', (yasqe) => {
             //update query mode in parent component
@@ -67,13 +84,13 @@ export class YasguiComponent {
             this.querychange.emit({query: yasqe.getValue(), valid: yasqe.queryValid});
             //Check whether typed prefix is declared. If not, automatically add declaration using list from prefix.cc
             //taken from prefixes.js, since I don't use prefixes autocompleter I nees to register this listener
-            YASQE.Autocompleters.prefixes.appendPrefixIfNeeded(yasqe, "customPrefixCompleter");
+            YASQE.Autocompleters.prefixes.appendPrefixIfNeeded(yasqe, this.PREFIX_COMPLETER_NAME);
         });
 
         /*------------------------------------------------------------------------------
         In this way I use the default yasqe prefixes autocompletion:
         - the prefixes are completed fetching them from prefix.cc
-        - the sparql query is initialized with a sample SELECT query and with the 
+        - the sparql query is initialized with a sample SELECT query and with the
           declaration of the  prefixes known in the project (not suggested otherwise by autocompletion)
         - when the user types a prefix not yet imported, it is added to the prefix
           declaration (if it is declarated in prefix.cc as well)
@@ -96,6 +113,10 @@ export class YasguiComponent {
         // });
     }
 
+    /**
+     * Override the default "prefixes" autocompleter. This autocompleter looks for prefixes in the local triple store
+     * and on prefix.cc if the fetchFromPrefixCC parameter is true
+     */
     private customPrefixCompleter(yasqe, metadataService: MetadataServices, fetchFromPrefixCC: boolean) {
         return {
             isValidCompletionPosition: function () {
@@ -107,9 +128,7 @@ export class YasguiComponent {
                         var prefixArray = [];
                         //add the prefixes from the local triplestore
                         for (var i = 0; i < mappings.length; i++) {
-                            var pr = (mappings[i].prefix == "") ? "base" : mappings[i].prefix;
-                            var ns = mappings[i].namespace;
-                            var prNs = pr + ": <" + ns + ">";
+                            var prNs = mappings[i].prefix + ": <" + mappings[i].namespace + ">";
                             prefixArray.push(prNs);
                         }
                         prefixArray.sort();
@@ -122,7 +141,7 @@ export class YasguiComponent {
                                     var completeString = prefix + ": <" + data[prefix] + ">";
                                     prefixArray.push(completeString); // the array we want to store in localstorage
                                 }
-                                
+
                                 callback(prefixArray);
                             });
                             //-------------------------------------------------------
@@ -147,30 +166,35 @@ export class YasguiComponent {
         }
     };
 
+    /**
+     * Listener on change event of checkbox to enable the prefix.cc prefix fetching.
+     */
     private onCheckboxChange(checked) {
         //disable the completer, register it with fetchFromPrefixCC changed, then enable it again
-        this.yasqe.disableCompleter("customPrefixCompleter");
-        YASQE.registerAutocompleter('customPrefixCompleter',
+        this.yasqe.disableCompleter(this.PREFIX_COMPLETER_NAME);
+        YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
             (yasqe) => {
                 return this.customPrefixCompleter(yasqe, this.metadataService, checked);
             }
         );
         // YASQE.defaults.autocompleters = ["customPrefixCompleter", "properties", "classes", "variables"];
-        this.yasqe.enableCompleter("customPrefixCompleter");
+        this.yasqe.enableCompleter(this.PREFIX_COMPLETER_NAME);
     }
 
+    /**
+     * Override the default "properties" autocompleter. This autocompleter looks for properties in the local triple store
+     */
     private customPropertyCompleter(yasqe, searchService: SearchServices) {
         return {
             isValidCompletionPosition: function() {
                 return YASQE.Autocompleters.properties.isValidCompletionPosition(yasqe);
             },
             get: function(token, callback) {
-                //update when searchResource will be changed with useURI parameter
                 searchService.searchResource(token.autocompletionString, ["property"], false, true, "start").subscribe(
                     results => {
                         var resArray = [];
                         for (var i = 0; i < results.length; i++) {
-                            var uri = results[i].getURI()
+                            var uri = results[i].getURI();
                             //results may contains duplicate (properties with multiple roles), so add the uri only if not already in
                             if (resArray.indexOf(uri) == -1) {
                                 resArray.push(uri);
@@ -185,6 +209,42 @@ export class YasguiComponent {
             },
             postProcessToken: function(token, suggestedString) {
                 return YASQE.Autocompleters.properties.postProcessToken(yasqe, token, suggestedString);
+            },
+            async: true,
+            bulk: false,
+            autoShow: false,
+            persistent: null,
+            callbacks: {
+                validPosition: yasqe.autocompleters.notifications.show,
+                invalidPosition: yasqe.autocompleters.notifications.hide,
+            }
+        }
+    }
+
+    /**
+     * Override the default "classes" autocompleter. This autocompleter looks for classes in the local triple store
+     */
+    private customClassCompleter(yasqe, searchService: SearchServices) {
+        return {
+            isValidCompletionPosition: function() {
+                return YASQE.Autocompleters.classes.isValidCompletionPosition(yasqe);
+            },
+            get: function(token, callback) {
+                searchService.searchResource(token.autocompletionString, ["cls"], false, true, "start").subscribe(
+                    results => {
+                        var resArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            resArray.push(results[i].getURI());
+                        }
+                        callback(resArray);
+                    }
+                );
+            },
+            preProcessToken: function(token) {
+                return YASQE.Autocompleters.classes.preProcessToken(yasqe, token)
+            },
+            postProcessToken: function(token, suggestedString) {
+                return YASQE.Autocompleters.classes.postProcessToken(yasqe, token, suggestedString);
             },
             async: true,
             bulk: false,
