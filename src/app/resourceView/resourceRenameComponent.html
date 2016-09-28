@@ -3,7 +3,7 @@
         <span *ngIf="namespaceLocked" class="input-group-addon" style="padding-right: 2px;">
             {{resource.getBaseURI()}}
         </span>
-        <input #localrenameinput *ngIf="namespaceLocked" type="text" class="form-control" style="padding-left: 2px;"
+        <input #localrenameinput *ngIf="namespaceLocked" type="text" class="form-control" style="padding-left: 2px; min-width: 80px;"
             [(ngModel)]="localName" [readonly]="renameLocked" sanitized>
             
         <input #totalrenameinput *ngIf="!namespaceLocked" type="text" class="form-control" [value]="resource.getURI()" sanitized>

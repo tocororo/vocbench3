@@ -26,6 +26,8 @@ export class ResourceViewComponent {
     //partitions
     private describedResource: ARTResource; //resource element in RV has different show respect the one in the tree
         //so this variable is useful keep this.resource separated (and in sync with the tree)
+
+    private resViewXmlResponse = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTURIResource[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
     private topconceptofColl: ARTURIResource[] = null;
@@ -68,9 +70,34 @@ export class ResourceViewComponent {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
     
+    /**
+     * Perform the getResourceView request and build the resource view.
+     * Called when
+     * - a resource is selected for the first time in a tree
+     * - the selected resource changes (not in tab mode where every resource selected opens a new tab,
+     *   but in splitted mode when the RV is the same and simply changes the selected resource tho describe)
+     * - the resource is renamed, so it needs to refresh
+     * - some partition has performed a change and emits an update event (which invokes this method, see template)
+     */
     private buildResourceView(res: ARTResource) {
         this.blockingDivElement.nativeElement.style.display = "block";
-        
+        this.resViewService.getResourceView(res).subscribe(
+            stResp => {
+                this.resViewXmlResponse = stResp;
+                this.fillPartitions();
+                this.blockingDivElement.nativeElement.style.display = "none";
+            },
+            err => {
+                this.blockingDivElement.nativeElement.style.display = "none";
+            }
+        );
+    }
+
+    /**
+     * Fill all the partitions of the RV. This not requires that the RV description is fetched again from server,
+     * in fact if the user switches on/off the inference, there's no need to perform a new request.
+     */
+    private fillPartitions() {
         //reset all partitions
         this.typesColl = null;
         this.classAxiomColl = null;
@@ -86,64 +113,59 @@ export class ResourceViewComponent {
         this.propertyFacets = null;
         this.inverseofColl = null;
         
-        this.resViewService.getResourceView(res).subscribe(
-            stResp => {
-                var respResourceElement = stResp.getElementsByTagName("resource")[0];
-                var respPartitions = stResp.children;
+        var respResourceElement = this.resViewXmlResponse.getElementsByTagName("resource")[0];
+        var respPartitions = this.resViewXmlResponse.children;
 
-                for (var i = 0; i < respPartitions.length; i++) {
-                    var partition = respPartitions[i];
-                    var partitionName = partition.tagName;
-                    if (partitionName == "resource") {
-                        this.describedResource = Deserializer.createRDFResource(partition.children[0]);
-                    } else if (partitionName == "types") {
-                        this.typesColl = Deserializer.createURIArray(partition);
-                        this.typesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.typesColl);
-                    } else if (partitionName == "classaxioms") {
-                        this.classAxiomColl = Deserializer.createPredicateObjectsList(partition.children[0]);
-                        this.classAxiomColl = this.filterInferredFromPredObjList(this.classAxiomColl);
-                    } else if (partitionName == "topconceptof") {
-                        this.topconceptofColl = Deserializer.createURIArray(partition);
-                        this.topconceptofColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.topconceptofColl);
-                    } else if (partitionName == "schemes") {
-                        this.schemesColl = Deserializer.createURIArray(partition);
-                        this.schemesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.schemesColl);
-                    } else if (partitionName == "broaders") {
-                        this.broadersColl = Deserializer.createURIArray(partition);
-                        this.broadersColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.broadersColl);
-                    } else if (partitionName == "superproperties") {
-                        this.superpropertiesColl = Deserializer.createURIArray(partition);
-                        this.superpropertiesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.superpropertiesColl);
-                    } else if (partitionName == "facets") {
-                        this.parseFacetsPartition(partition);
-                    } else if (partitionName == "domains") {
-                        this.domainsColl = Deserializer.createRDFArray(partition);
-                        this.domainsColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.domainsColl);
-                    } else if (partitionName == "ranges") {
-                        this.rangesColl = Deserializer.createRDFArray(partition);
-                        this.rangesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.rangesColl);
-                    } else if (partitionName == "lexicalizations") {
-                        this.lexicalizationsColl = Deserializer.createPredicateObjectsList(partition.children[0]);
-                        this.lexicalizationsColl = this.filterInferredFromPredObjList(this.lexicalizationsColl);
-                    } else if (partitionName == "members") {
-                        this.membersColl = Deserializer.createRDFArray(partition);
-                        this.membersColl = this.filterInferredFromResourceList(this.membersColl);
-                    } else if (partitionName == "membersOrdered") {
-                        this.membersOrderedColl = Deserializer.createRDFArray(partition);
-                        this.membersOrderedColl = this.filterInferredFromResourceList(this.membersOrderedColl);
-                    } else if (partitionName == "properties") {
-                        this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
-                        this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);
-                    }
-                }
-                this.blockingDivElement.nativeElement.style.display = "none";
-            },
-            err => {
-                this.blockingDivElement.nativeElement.style.display = "none";
+        for (var i = 0; i < respPartitions.length; i++) {
+            var partition = respPartitions[i];
+            var partitionName = partition.tagName;
+            if (partitionName == "resource") {
+                this.describedResource = Deserializer.createRDFResource(partition.children[0]);
+            } else if (partitionName == "types") {
+                this.typesColl = Deserializer.createURIArray(partition);
+                this.typesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.typesColl);
+            } else if (partitionName == "classaxioms") {
+                this.classAxiomColl = Deserializer.createPredicateObjectsList(partition.children[0]);
+                this.classAxiomColl = this.filterInferredFromPredObjList(this.classAxiomColl);
+            } else if (partitionName == "topconceptof") {
+                this.topconceptofColl = Deserializer.createURIArray(partition);
+                this.topconceptofColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.topconceptofColl);
+            } else if (partitionName == "schemes") {
+                this.schemesColl = Deserializer.createURIArray(partition);
+                this.schemesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.schemesColl);
+            } else if (partitionName == "broaders") {
+                this.broadersColl = Deserializer.createURIArray(partition);
+                this.broadersColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.broadersColl);
+            } else if (partitionName == "superproperties") {
+                this.superpropertiesColl = Deserializer.createURIArray(partition);
+                this.superpropertiesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.superpropertiesColl);
+            } else if (partitionName == "facets") {
+                this.parseFacetsPartition(partition);
+            } else if (partitionName == "domains") {
+                this.domainsColl = Deserializer.createRDFArray(partition);
+                this.domainsColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.domainsColl);
+            } else if (partitionName == "ranges") {
+                this.rangesColl = Deserializer.createRDFArray(partition);
+                this.rangesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.rangesColl);
+            } else if (partitionName == "lexicalizations") {
+                this.lexicalizationsColl = Deserializer.createPredicateObjectsList(partition.children[0]);
+                this.lexicalizationsColl = this.filterInferredFromPredObjList(this.lexicalizationsColl);
+            } else if (partitionName == "members") {
+                this.membersColl = Deserializer.createRDFArray(partition);
+                this.membersColl = this.filterInferredFromResourceList(this.membersColl);
+            } else if (partitionName == "membersOrdered") {
+                this.membersOrderedColl = Deserializer.createRDFArray(partition);
+                this.membersOrderedColl = this.filterInferredFromResourceList(this.membersOrderedColl);
+            } else if (partitionName == "properties") {
+                this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
+                this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);
             }
-        );
+        }
     }
     
+    /**
+     * Based on the showInferred param, filter out or let pass inferred information in an object list
+     */
     private filterInferredFromResourceList(resourceArray: ARTNode[]): ARTNode[] {
         if (!this.showInferred) {
             for (var i = 0; i < resourceArray.length; i++) {
@@ -156,6 +178,9 @@ export class ResourceViewComponent {
         return resourceArray;
     }
     
+    /**
+     * Based on the showInferred param, filter out or let pass inferred information in a predicate-object list
+     */
     private filterInferredFromPredObjList(predObjList: ARTPredicateObjects[]): ARTPredicateObjects[] {
         if (!this.showInferred) {
             for (var i = 0; i < predObjList.length; i++) {
@@ -176,6 +201,10 @@ export class ResourceViewComponent {
         return predObjList;
     }
     
+    /**
+     * Facets partition has a structure different from the other (object list and predicate-object list),
+     * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)
+     */
     private parseFacetsPartition(facetsElement) {
         //init default facets
         this.propertyFacets = [
@@ -236,7 +265,7 @@ export class ResourceViewComponent {
     private showHideInferred() {
         this.showInferred = !this.showInferred;
         this.vbCtx.setInferenceInResourceView(this.showInferred);
-        this.buildResourceView(this.resource);
+        this.fillPartitions();
     }
     
     private objectDblClick(object: ARTResource) {
