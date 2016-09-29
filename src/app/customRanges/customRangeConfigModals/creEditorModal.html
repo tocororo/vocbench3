@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Create Custom Range - Property mapping</h3>
 </div>
-<div class="modal-body vbox" style="height: 60vh">
+<div class="modal-body vbox" style="max-height: 75vh">
     
     <table class="table table-condensed table-borderless" style="height: 100%">
         <colgroup>
@@ -10,7 +10,7 @@
             <col style="width: 1%;">
         </colgroup>
         <tbody>
-            <tr style="height: 1%">
+            <tr style="height: 1%; white-space: nowrap">
                 <td><label>ID:</label></td>
                 <td>
                     <div class="hbox">
@@ -22,7 +22,7 @@
                 </td>
                 <td>*</td>
             </tr>
-            <tr style="height: 1%">
+            <tr style="height: 1%; white-space: nowrap">
                 <td>
                     <label>Name:</label>
                     <span class="glyphicon glyphicon-info-sign"
@@ -31,7 +31,7 @@
                 <td><input type="text" class="form-control input-xs" [(ngModel)]="name"></td>
                 <td>*</td>
             </tr>
-            <tr style="height: 1%">
+            <tr style="height: 1%; white-space: nowrap">
                 <td>
                     <label>Description:</label>
                     <span class="glyphicon glyphicon-info-sign"
@@ -39,7 +39,7 @@
                 </td>
                 <td><input type="text" class="form-control input-xs" [(ngModel)]="description"></td>
             </tr>
-            <tr style="height: 1%">
+            <tr style="height: 1%; white-space: nowrap">
                 <td>
                     <label>Type:</label>
                     <span class="glyphicon glyphicon-info-sign"
@@ -52,18 +52,20 @@
                     </select>
                 </td>
             </tr>
-            <tr style="height: 100%">
+            <!--<tr style="height: 100%">-->
+            <tr>
                 <td>
                     <label>Ref:</label>
                     <span class="glyphicon glyphicon-info-sign"
                         title="In case of Graph type this should contain a CODA rule otherwise, in case of Node type, this should contain simply a CODA converter"></span>
                 </td>
                 <td>
-                    <textarea #refArea style="resize: none; width: 100%; height: 100%" [(ngModel)]="ref"></textarea>
+                    <!--<textarea #refArea style="resize: none; width: 100%; height: 100%" [(ngModel)]="ref"></textarea>-->
+                    <codemirror [code]="ref" (codechange)="ref=$event"></codemirror>
                 </td>
                 <td>*</td>
             </tr>
-            <tr *ngIf="type=='graph'" style="height: 1%">
+            <tr *ngIf="type=='graph'" style="height: 1%; white-space: nowrap">
                 <td nowrap>
                     <label>Show property:</label>
                     <span class="glyphicon glyphicon-info-sign" 

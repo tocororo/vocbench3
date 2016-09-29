@@ -333,8 +333,18 @@ lang-picker {
      display: flex; align-items: center;
 }
 
+
+codemirror .CodeMirror { 
+    border: 1px solid #ddd; /*Border of textare of CodeMirror (just in codemirror, because in yasqe there is already)*/
+    height: auto !important; 
+}
+codemirror .CodeMirror-scroll {
+    min-height: 100px;
+    max-height: 300px;
+}
+
 /*Limit height of codemirror to 40% of viewport*/ 
-.CodeMirror { height: 40vh !important }
+sparql-component .CodeMirror { height: 35vh !important }
 /*Reset height to auto when codemirror is fullscreen*/
 .CodeMirror.CodeMirror-fullscreen { height: auto !important }
 /*To put codemirror in fullscreen in front of the menubar (default z-index 7 made the textarea behind the navbar)*/

@@ -17,7 +17,7 @@ var $: JQueryStatic = require('jquery');
             <span style="margin-right: 3px;">Fetch prefix from prefix.cc</span>
             <input type="checkbox" (change)="onCheckboxChange($event.target.checked)" [(ngModel)]="fetchFromPrefixCheck">
         </div>
-        <textarea #txtarea style="">{{query}}</textarea>
+        <textarea #txtarea>{{query}}</textarea>
     `,
 })
 export class YasguiComponent {

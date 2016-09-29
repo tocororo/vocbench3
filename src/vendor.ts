@@ -12,10 +12,16 @@ import 'rxjs';
 
 import 'jquery';
 import 'bootstrap/dist/js/bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css'; //overriden by assets/styles/custom_bootstrap/css/bootstrap.min.css
 
 import 'angular2-modal';
 import 'angular2-modal/plugins/bootstrap';
 
 import 'yasgui-yasqe/dist/yasqe.bundled.js';
 import 'yasgui-yasqe/dist/yasqe.min.css';
+
+import 'codemirror/addon/edit/matchbrackets.js';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/comment/comment.js';
+import 'codemirror/lib/codemirror.css';
+//import 'codemirror/lib/codemirror.js'; //already imported in codemirrorComponent
