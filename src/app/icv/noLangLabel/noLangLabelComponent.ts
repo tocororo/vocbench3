@@ -96,7 +96,8 @@ export class NoLangLabelComponent {
                             }
                         );
                     }
-                }
+                },
+                () => {}
             );
         } else if (this.ontoType == "SKOS-XL") {
             let label: ARTResource = <ARTResource>record.label;
@@ -108,7 +109,8 @@ export class NoLangLabelComponent {
                             this.runIcv();
                         }
                     );
-                }
+                },
+                () => {}
             );
         }
     }

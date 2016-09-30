@@ -137,29 +137,29 @@ export class ResourceUtils {
         var imgSrc;
         var role = rdfResource.getRole().toLowerCase();
         if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
-            imgSrc = "assets/images/class_" + action + ".png";    
+            imgSrc = require("../../assets/images/class_" + action + ".png");    
         } else if (role == RDFResourceRolesEnum.concept.toLowerCase()) {
-            imgSrc = "assets/images/concept_" + action + ".png";
+            imgSrc = require("../../assets/images/concept_" + action + ".png");
         } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
-            imgSrc = "assets/images/individual_" + action + ".png";
+            imgSrc = require("../../assets/images/individual_" + action + ".png");
         } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
-            imgSrc = "assets/images/conceptScheme_" + action + ".png";
+            imgSrc = require("../../assets/images/conceptScheme_" + action + ".png");
         } else if (role.indexOf(RDFResourceRolesEnum.objectProperty.toLowerCase()) != -1) {
-            imgSrc = "assets/images/propObject_" + action + ".png";
+            imgSrc = require("../../assets/images/propObject_" + action + ".png");
         } else if (role.indexOf(RDFResourceRolesEnum.datatypeProperty.toLowerCase()) != -1) {
-            imgSrc = "assets/images/propDatatype_" + action + ".png";
+            imgSrc = require("../../assets/images/propDatatype_" + action + ".png");
         } else if (role.indexOf(RDFResourceRolesEnum.annotationProperty.toLowerCase()) != -1) {
-            imgSrc = "assets/images/propAnnotation_" + action + ".png";
+            imgSrc = require("../../assets/images/propAnnotation_" + action + ".png");
         } else if (role.indexOf(RDFResourceRolesEnum.ontologyProperty.toLowerCase()) != -1) {
-            imgSrc = "assets/images/propOntology_" + action + ".png";
+            imgSrc = require("../../assets/images/propOntology_" + action + ".png");
         } else if (role.indexOf(RDFResourceRolesEnum.property.toLowerCase()) != -1) {
-            imgSrc = "assets/images/prop_" + action + ".png";
+            imgSrc = require("../../assets/images/prop_" + action + ".png");
         }
-        return imgSrc
+        return imgSrc;
     }
     
     static getFlagImgSrc(langTag: string): string {
-        return "assets/images/flags/flag_" + langTag + ".png";
+        return require("../../assets/images/flags/flag_" + langTag + ".png");
     }
 
 }
