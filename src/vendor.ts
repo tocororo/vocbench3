@@ -17,7 +17,7 @@ import 'bootstrap/dist/js/bootstrap';
 import 'angular2-modal';
 import 'angular2-modal/plugins/bootstrap';
 
-import 'yasgui-yasqe/dist/yasqe.bundled.js';
+//import 'yasgui-yasqe/dist/yasqe.bundled.js'; //already imported in yasguiComponent
 import 'yasgui-yasqe/dist/yasqe.min.css';
 
 import 'codemirror/addon/edit/matchbrackets.js';

@@ -7,7 +7,7 @@
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "postinstall": "typings install"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@angular/common": "2.0.0",
     "@angular/compiler": "2.0.0",
@@ -20,11 +20,11 @@
 
     "core-js": "^2.4.1",
     "rxjs": "5.0.0-beta.12",
-    "zone.js": "0.6.23",
+    "zone.js": "0.6.25",
 
-    "bootstrap": "^3.3.6",
+    "bootstrap": "3.3.6",
     "jquery": "2.2.3",
-    "angular2-modal": "^2.0.0-beta.13",
+    "angular2-modal": "2.0.0-beta.13",
     "codemirror": "5.14.2",
     "yasgui-yasqe": "2.11.2"
   },
