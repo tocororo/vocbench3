@@ -7,7 +7,9 @@ Verify that you are running at least node __v4.x.x__ and npm __3.x.x__ by runnin
 
 * Download the project
 * From the project folder execute `npm install` to install all the dependencies
-* Execute `npm start` to run the server in **development mode** (it compiles and watches for file changes) and to launch the application in a browser.
+* Execute `npm start` to run the server in **development mode** (it compiles and watches for file changes), then launch the application in a browser at page `localhost:8080` (unless you have changed the port in `package.json` ```"start": "webpack-dev-server --inline --progress --port 8080"```)
+
+
 
 ### Creating a build ###
 Execute `npm run build` to create a `dist` folder, a distribution deployable in an http server (tested with Tomcat 7.0.52 an 8.0.27).
