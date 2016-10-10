@@ -7,7 +7,7 @@ Verify that you are running at least node __v4.x.x__ and npm __3.x.x__ by runnin
 
 * Download the project
 * From the project folder execute `npm install` to install all the dependencies
-* Execute `npm start` to run the server in **development mode** (it compiles and watches for file changes), then launch the application in a browser at page `localhost:8080` (unless you have changed the port in `package.json` ```"start": "webpack-dev-server --inline --progress --port 8080"```)
+* Execute `npm start` to run the webpack lightweight server (it compiles and watches for file changes), then launch the application in a browser at page `localhost:8080` (unless you have changed the port in `package.json` `"start": "webpack-dev-server --inline --progress --port 8080"`)
 
 
 
@@ -20,7 +20,9 @@ output: {
     ...    
 },
 ```
-If *VocBench3* and the *SemanticTurkey* server run on two different hosts, be sure to update the server ip that hosts *SemanticTurkey*, by changing in `config/webpack.prod.js` the following
+
+### Further configuration ###
+If *VocBench3* and the *SemanticTurkey* servers run on two different hosts, be sure to update the server ip that hosts *SemanticTurkey*, by changing in `config/webpack.prod.js` (if you are running VB3 in development mode with `npm start`) or `config/webpack.dev.js` (if you are creating a build with `npm run build`) the following
 ```
 const SERVERHOST = '127.0.0.1';
 ```
