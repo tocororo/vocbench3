@@ -332,7 +332,8 @@ export class SkosServices {
         if (forceDeleteDanglingConcepts != undefined) {
             params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
         }
-        //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component 
+        //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component
+        //(e.g. ask to the user to delete or retain dangling concepts) 
         return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
     }
     

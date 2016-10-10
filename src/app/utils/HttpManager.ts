@@ -41,8 +41,8 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
-     * @param skipErrorAlert if true, in case of error it shows an alert. If false is useful to handle the error from
-     * the component that invokes the service. 
+     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
+     *      Is useful to handle the error from the component that invokes the service.
      */
     doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
@@ -89,11 +89,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                console.error(error);
-                if (!skipErrorAlert) {
-                    this.modalService.alert("Error", error, "error");
-                }
-                return Observable.throw(error);
+                return this.handleError(error, skipErrorAlert);
             });
     }
     
@@ -156,9 +152,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                console.error(error);
-                this.modalService.alert("Error", error, "error");
-                return Observable.throw(error);
+                return this.handleError(error);
             });
     }
     
@@ -225,9 +219,7 @@ export class HttpManager {
             }
         })
         .catch(error => {
-            console.error(error);
-            this.modalService.alert("Error", error, "error");
-            return Observable.throw(error);
+            return this.handleError(error);
         });
         
     }
@@ -271,9 +263,7 @@ export class HttpManager {
             httpReq.send(null);
         })
         .catch(error => {
-            console.error(error);
-            this.modalService.alert("Error", error, "error");
-            return Observable.throw(error);
+            return this.handleError(error);
         });
         
     }
@@ -295,6 +285,42 @@ export class HttpManager {
             params += "ctx_token=" + encodeURIComponent(this.vbCtx.getSessionToken()) + "&";
         }
         return params;
+    }
+
+    /**
+     * Handler for error in requests to ST server. Called in catch clause of get/post requests.
+     * @param error error catched in catch clause
+     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
+     *      Is useful to handle the error from the component that invokes the service. See doGet method.
+     */
+    private handleError(error: any, skipErrorAlert?: boolean) {
+        console.log("ERROR " + JSON.stringify(error, null, 2));
+        console.error(error);
+        if (!skipErrorAlert) {
+            /*
+            In case that ST server is not running, error is an object like the following 
+            {
+                "_body": {
+                    "isTrusted": true
+                },
+                "status": 0,
+                "ok": false,
+                "statusText": "",
+                "headers": {},
+                "type": 3,
+                "url": null 
+            }
+             */
+            if (error.status == 0 && !error.ok && error.statusText == "" && error.type == 3 && error.url == null) {
+                this.modalService.alert("Error",
+                    "No SemanticTurkey server found! Please check that a server is listening on "
+                    + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
+                    + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
+            } else {
+                this.modalService.alert("Error", error, "error");
+            }
+        }
+        return Observable.throw(error);
     }
 
     private isResponseXml(response: Response): boolean {
