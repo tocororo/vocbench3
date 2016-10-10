@@ -29,6 +29,12 @@ export class ResourceRenameComponent {
             this.localName = (<ARTURIResource>this.resource).getLocalName();
         }
     }
+
+    ngOnChanges(changes) {
+        if (changes.resource.currentValue) {
+            this.localName = (<ARTURIResource>this.resource).getLocalName();
+        }
+    }
     
     /** 
      * Enable and focus the input text to rename the resource 
