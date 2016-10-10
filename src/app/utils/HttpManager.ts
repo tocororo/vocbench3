@@ -13,7 +13,6 @@ export class HttpManager {
     private contentTypeJson: string = "application/json";
 
     private serverhost: string;
-    private serverport: string = "1979";
     //new services url parts
     private serverpath: string = "semanticturkey";
     private groupId: string = "it.uniroma2.art.semanticturkey";
@@ -24,7 +23,7 @@ export class HttpManager {
     constructor(private http: Http, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
         //init serverhost ip (see /config/webpack.prod.js)
         if (process.env.SERVERHOST == undefined) {
-            this.serverhost = "127.0.0.1";
+            this.serverhost = "127.0.0.1:1979";
         } else {
             this.serverhost = process.env.SERVERHOST;
         }
@@ -46,7 +45,7 @@ export class HttpManager {
      * the component that invokes the service. 
      */
     doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
-        var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
+        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {
@@ -112,7 +111,7 @@ export class HttpManager {
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      */
     doPost(service: string, request: string, params, oldType: boolean, respJson?: boolean) {
-        var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
+        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {
@@ -180,7 +179,7 @@ export class HttpManager {
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      */
     uploadFile(service: string, request: string, params, oldType: boolean) {
-        var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
+        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {
@@ -237,7 +236,7 @@ export class HttpManager {
      * Executes an XMLHttpRequest GET to get a file
      */
     downloadFile(service: string, request: string, params, oldType: boolean) {
-        var url: string = "http://" + this.serverhost + ":" + this.serverport + "/" + this.serverpath + "/";
+        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {

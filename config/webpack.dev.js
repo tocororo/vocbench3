@@ -6,10 +6,16 @@ by merging into it the peculiarities particular to their target environments.
 Here is the development configuration file, webpack.dev.js
  */
 
+var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
+
+//'dev' run angular2 in dev mode, 'prod' or anything else enables angular2 production mode
+const ENV = process.env.NODE_ENV = process.env.ENV = 'prod';
+//SemanticTurkey Server ip address
+const SERVERHOST = '127.0.0.1:1979'; //localhost and default port of ST
 
 module.exports = webpackMerge(commonConfig, {
   devtool: 'cheap-module-eval-source-map',
@@ -33,7 +39,22 @@ module.exports = webpackMerge(commonConfig, {
   The ExtractTextPlugin extracts them into external .css files that the HtmlWebpackPlugin inscribes as <link> tags into the index.html
    */
   plugins: [
-    new ExtractTextPlugin('[name].css')
+    new ExtractTextPlugin('[name].css'),
+
+    /*
+    Use to define environment variables that we can reference within our application
+    Thanks to this Plugin and the ENV variable defined at top, we can enable Angular 2 production mode
+    in main.ts like this:
+    if (process.env.ENV !== 'dev') {
+      enableProdMode();
+    }
+    */
+    new webpack.DefinePlugin({
+      'process.env': {
+        'ENV': JSON.stringify(ENV),
+        'SERVERHOST': JSON.stringify(SERVERHOST)
+      }
+    })
   ],
 
   /*

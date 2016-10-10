@@ -1,7 +1,6 @@
 {
     "globalDependencies": {
         "core-js": "registry:dt/core-js#0.0.0+20160725163759",
-        "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
         "node": "registry:dt/node#6.0.0+20160909174046",
         "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#5c7d1fcbea9b14df54fc4554d94cb67dfabffd9a",
         "codemirror": "github:DefinitelyTyped/DefinitelyTyped/codemirror/codemirror.d.ts#eef739049cdd4509bb02f6b71e1b7cc7bacd7c2b"
