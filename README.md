@@ -1,7 +1,10 @@
 # README #
 
+### Prerequisites ###
 Required npm that comes with [Node.js](https://nodejs.org/en/).
 Verify that you are running at least node __v4.x.x__ and npm __3.x.x__ by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
+
+Required Semantic Turkey server running.
 
 ### Run the application ###
 
