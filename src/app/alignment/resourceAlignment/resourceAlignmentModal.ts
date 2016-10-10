@@ -36,7 +36,6 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     }
     
     ngOnInit() {
-        document.getElementById("toFocus").focus();
         this.initPropList();
     }
     

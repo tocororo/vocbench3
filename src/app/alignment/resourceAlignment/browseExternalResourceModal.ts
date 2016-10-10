@@ -35,9 +35,6 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
     }
     
     ngOnInit() {
-        //toFocus2 cause this modal is open from another modal that have already an id "toFocus"
-        document.getElementById("toFocus2").focus(); 
-        
         this.projService.listProjects().subscribe(
             projects => {
                 //keep only the projects (different from the current) compliant with the resource role to align

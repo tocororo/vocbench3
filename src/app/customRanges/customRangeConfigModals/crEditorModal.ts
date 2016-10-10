@@ -65,7 +65,6 @@ export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorM
                 this.crEntriesAll = creIds;
             }
         )
-        document.getElementById("toFocus").focus();
     }
     
     private selectCRE(creId: string) {

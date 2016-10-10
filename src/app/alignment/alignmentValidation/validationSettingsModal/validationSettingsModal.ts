@@ -47,8 +47,6 @@ export class ValidationSettingsModal implements ModalComponent<ValidationSetting
         this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
         this.confOnMeterCheck = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
         this.maxAlignment = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-        
-        document.getElementById("toFocus").focus();
     }
     
     ok(event) {

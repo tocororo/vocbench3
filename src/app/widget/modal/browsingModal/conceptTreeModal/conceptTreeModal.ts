@@ -30,10 +30,6 @@ export class ConceptTreeModal implements ModalComponent<ConceptTreeModalData> {
     constructor(public dialog: DialogRef<ConceptTreeModalData>) {
         this.context = dialog.context;
     }
-    
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
 
     ok(event) {
         event.stopPropagation();

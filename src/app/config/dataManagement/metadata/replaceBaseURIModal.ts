@@ -35,10 +35,6 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-    
     private onCheckChange() {
         if (this.useDefaultBaseURI) {
             this.oldBaseURI = this.context.baseURI;

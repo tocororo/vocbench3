@@ -37,8 +37,6 @@ export class CustomRangePropMappingModal implements ModalComponent<CustomRangePr
                 this.customRangeList = crList;
             }
         );
-        
-        document.getElementById("toFocus").focus();
     }
     
     private selectProperty() {

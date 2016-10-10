@@ -34,10 +34,6 @@ export class ResourceSelectionModal implements ModalComponent<ResourceSelectionM
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-    
     private isResourceSelected(resource: ARTNode) {
         return this.resourceSelected == resource;
     }

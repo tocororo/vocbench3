@@ -22,10 +22,6 @@ export class ClassTreeModal implements ModalComponent<ClassTreeModalData> {
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-
     ok(event) {
         event.stopPropagation();
         event.preventDefault();

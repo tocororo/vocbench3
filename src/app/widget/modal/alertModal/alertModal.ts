@@ -52,10 +52,6 @@ export class AlertModal implements ModalComponent<AlertModalData> {
         }
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-
     ok() {
         this.dialog.close(true);
     }

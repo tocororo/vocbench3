@@ -56,10 +56,6 @@ export class ConfirmModal implements ModalComponent<ConfirmModalData> {
         }
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-
     ok(event) {
         this.dialog.close(true);
     }

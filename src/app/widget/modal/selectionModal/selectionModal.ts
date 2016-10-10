@@ -36,10 +36,6 @@ export class SelectionModal implements ModalComponent<SelectionModalData> {
     constructor(public dialog: DialogRef<SelectionModalData>) {
         this.context = dialog.context;
     }
-    
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
 
     ok(event) {
         event.stopPropagation();

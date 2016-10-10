@@ -29,10 +29,6 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-    
     /**
      * Adds an instance taken from source list to the target list of instances to return
      */

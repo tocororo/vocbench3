@@ -35,10 +35,6 @@ export class PrefixNamespaceModal implements ModalComponent<PrefixNamespaceModal
         this.namespace = this.context.namespace;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-    
     /**
      * Useful to enable/disable ok button. Inputs are valid if they are not null and if one of them is changed
      */

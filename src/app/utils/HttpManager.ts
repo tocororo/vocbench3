@@ -294,7 +294,6 @@ export class HttpManager {
      *      Is useful to handle the error from the component that invokes the service. See doGet method.
      */
     private handleError(error: any, skipErrorAlert?: boolean) {
-        console.log("ERROR " + JSON.stringify(error, null, 2));
         console.error(error);
         if (!skipErrorAlert) {
             /*

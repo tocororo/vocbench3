@@ -37,7 +37,6 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     }
     
     ngOnInit() {
-        document.getElementById("toFocus").focus();
         //init mirror list if modal import type is fromOntologyMirror
         if (this.context.importType == ImportType.fromOntologyMirror) {
             this.adminService.getOntologyMirror().subscribe(

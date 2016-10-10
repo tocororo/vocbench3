@@ -230,15 +230,17 @@ export class YasguiComponent {
                 return YASQE.Autocompleters.classes.isValidCompletionPosition(yasqe);
             },
             get: function(token, callback) {
-                searchService.searchResource(token.autocompletionString, ["cls"], false, true, "start").subscribe(
-                    results => {
-                        var resArray = [];
-                        for (var i = 0; i < results.length; i++) {
-                            resArray.push(results[i].getURI());
+                if (token.autocompletionString.trim() != "") {
+                    searchService.searchResource(token.autocompletionString, ["cls"], false, true, "start").subscribe(
+                        results => {
+                            var resArray = [];
+                            for (var i = 0; i < results.length; i++) {
+                                resArray.push(results[i].getURI());
+                            }
+                            callback(resArray);
                         }
-                        callback(resArray);
-                    }
-                );
+                    );
+                }
             },
             preProcessToken: function(token) {
                 return YASQE.Autocompleters.classes.preProcessToken(yasqe, token)

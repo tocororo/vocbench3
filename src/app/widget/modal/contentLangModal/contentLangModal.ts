@@ -28,7 +28,6 @@ export class ContentLangModal implements ModalComponent<ContentLangModalData> {
     }
     
     ngOnInit() {
-        document.getElementById("toFocus").focus();
         this.contentLang = this.vbCtx.getContentLanguage();
     }
     

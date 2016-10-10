@@ -55,7 +55,6 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                 }
             )
         }
-        document.getElementById("toFocus").focus();
     }
     
     private isDataValid() {

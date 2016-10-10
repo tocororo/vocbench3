@@ -31,7 +31,6 @@ export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> 
     }
     
     ngOnInit() {
-        document.getElementById("toFocus").focus();
         this.domainRes = this.context.resource;
     }
     

@@ -35,7 +35,6 @@ export class DownloadModal implements ModalComponent<DownloadModalData> {
     
     ngOnInit() {
         this.safeDownloadLink = this.sanitizer.bypassSecurityTrustUrl(this.context.downloadLink);
-        document.getElementById("toFocus").focus();
     }
 
     ok(event) {

@@ -29,10 +29,6 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-    
     /**
      * Adds a class of the class tree to the list of classes to return
      */

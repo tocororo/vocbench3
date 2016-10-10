@@ -44,7 +44,6 @@ export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalDa
     }
     
     ngOnInit() {
-        document.getElementById("toFocus").focus();
         this.treeRoots = this.context.rangeClasses;
         if (this.context.rangeClasses == undefined || this.context.rangeClasses.length == 0) {
             this.allClasses = true;

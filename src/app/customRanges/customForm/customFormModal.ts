@@ -45,7 +45,6 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
                 }
             }
         )
-        document.getElementById("toFocus").focus();
     }
     
     /**

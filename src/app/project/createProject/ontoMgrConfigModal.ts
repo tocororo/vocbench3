@@ -22,10 +22,6 @@ export class OntoMgrConfigModal implements ModalComponent<OntoMgrConfigModalData
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-
     ok(event) {
         event.stopPropagation();
         event.preventDefault();

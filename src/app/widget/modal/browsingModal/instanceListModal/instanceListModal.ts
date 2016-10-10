@@ -21,10 +21,6 @@ export class InstanceListModal implements ModalComponent<InstanceListModalData> 
     constructor(public dialog: DialogRef<InstanceListModalData>) {
         this.context = dialog.context;
     }
-    
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
 
     ok(event) {
         event.stopPropagation();

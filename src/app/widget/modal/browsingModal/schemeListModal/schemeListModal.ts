@@ -22,10 +22,6 @@ export class SchemeListModal implements ModalComponent<SchemeListModalData> {
         this.context = dialog.context;
     }
     
-    ngOnInit() {
-        document.getElementById("toFocus").focus();
-    }
-
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
