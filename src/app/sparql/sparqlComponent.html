@@ -24,12 +24,12 @@
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <div *ngIf="t.active" class="vbox">
                 
-                <yasgui [query]="t.query" (querychange)="onQueryChange($event)" (modechange)="t.querymode=$event"></yasgui>
+                <yasgui [query]="t.query" (querychange)="onQueryChange($event)"></yasgui>
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">
                     <button class="btn btn-xs btn-primary" type="button" (click)="doQuery(t)" [disabled]="t.queryInProgress || !t.queryValid">
-                        Submit query
+                        Submit
                     </button>
                     <button class="btn btn-xs btn-info" type="button" (click)="clear(t)" [disabled]="!t.queryResult">Clear</button>
                     <div class="hbox" style="align-items: center; display: inline-flex;">

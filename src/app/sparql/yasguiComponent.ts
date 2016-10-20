@@ -22,8 +22,8 @@ var $: JQueryStatic = require('jquery');
 })
 export class YasguiComponent {
     @Input() query: string;
-    @Output() querychange = new EventEmitter<Object>(); //emit event containing {query: string, valid: boolean} when it changes
-    @Output() modechange = new EventEmitter<string>(); //emit event containing mode (update/query) when it changes
+    //emit event containing {query: string, valid: boolean, mode: string} when it changes
+    @Output() querychange = new EventEmitter<Object>();
 
     @ViewChild('txtarea') textareaElement;
 
@@ -78,10 +78,8 @@ export class YasguiComponent {
         
         //called on changes in yasqe editor
         this.yasqe.on('change', (yasqe) => {
-            //update query mode in parent component
-            this.modechange.emit(yasqe.getQueryMode());
             //update query in parent component
-            this.querychange.emit({query: yasqe.getValue(), valid: yasqe.queryValid});
+            this.querychange.emit({query: yasqe.getValue(), valid: yasqe.queryValid, mode: yasqe.getQueryMode()});
             //Check whether typed prefix is declared. If not, automatically add declaration using list from prefix.cc
             //taken from prefixes.js, since I don't use prefixes autocompleter I nees to register this listener
             YASQE.Autocompleters.prefixes.appendPrefixIfNeeded(yasqe, this.PREFIX_COMPLETER_NAME);

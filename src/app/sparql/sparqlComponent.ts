@@ -73,14 +73,17 @@ export class SparqlComponent {
 
     /**
      * Listener of event querychange, emitted from YasquiComponent.
-     * Event is an object {query: string, valid: boolean} where query is the code written in the textarea
-     * and valid tells wheter the query is syntactically correct 
+     * Event is an object {query: string, valid: boolean, mode} where
+     * query is the code written in the textarea
+     * valid tells wheter the query is syntactically correct
+     * mode tells the query mode (query/update) 
      */
     private onQueryChange(event) {
         this.activeTab.query = event.query;
         this.activeTab.queryValid = event.valid;
+        this.activeTab.queryMode = event.mode;
     }
-    
+
     private clear(tab) {
         tab.headers = null;
         tab.queryResult = null;
