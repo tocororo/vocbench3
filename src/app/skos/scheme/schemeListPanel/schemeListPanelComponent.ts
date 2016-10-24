@@ -4,6 +4,7 @@ import {SkosxlServices} from "../../../services/skosxlServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
 import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
+import {VBEventHandler} from "../../../utils/VBEventHandler";
 
 @Component({
 	selector: "scheme-list-panel",
@@ -21,18 +22,25 @@ export class SchemeListPanelComponent {
     
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private vbCtx: VocbenchCtx, 
-            private modalService: ModalServices) {
+    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, 
+        private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
+        
+        this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
+            newLang => this.onContentLangChanged(newLang)));
     }
     
     ngOnInit() {
         this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.activeScheme = this.vbCtx.getScheme();
+        this.initList();
+    }
+
+    private initList() {
         this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage(true)).subscribe(
             schemeList => {
                 this.schemeList = schemeList;
             }
         );
-        this.activeScheme = this.vbCtx.getScheme();
     }
     
     private createScheme() {
@@ -138,6 +146,16 @@ export class SchemeListPanelComponent {
             this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.nodeSelected.emit(scheme);
+    }
+
+    /**
+     * Called when user switches on/off the human readable labels or changes the content language
+     */
+    private onContentLangChanged(lang: string) {
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
+        //and reinitialize tree
+        this.initList();
     }
     
 }
