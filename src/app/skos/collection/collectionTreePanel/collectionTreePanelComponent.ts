@@ -32,7 +32,7 @@ export class CollectionTreePanelComponent {
         this.modalService.newResource("Create new skos:Collection", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createRootCollection(result.name, result.label, result.lang,
+                    this.skosService.createRootCollection(result.label, result.lang, result.name, 
                         this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
                     this.skosxlService.createRootCollection(result.name, result.label, result.lang,
@@ -47,10 +47,10 @@ export class CollectionTreePanelComponent {
         this.modalService.newResource("Create new skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createRootOrderedCollection(result.name, result.label, result.lang,
+                    this.skosService.createRootOrderedCollection(result.label, result.lang, result.name,
                         this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
-                    this.skosxlService.createRootOrderedCollection(result.name, result.label, result.lang,
+                    this.skosxlService.createRootOrderedCollection(result.label, result.lang, result.name,
                         this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 }
             },
@@ -62,11 +62,11 @@ export class CollectionTreePanelComponent {
         this.modalService.newResource("Create a nested skos:Collection", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNestedCollection(this.selectedCollection, result.name,
-                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                    this.skosService.createNestedCollection(this.selectedCollection, result.label, result.lang,
+                        result.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
-                    this.skosxlService.createNestedCollection(this.selectedCollection, result.name,
-                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                    this.skosxlService.createNestedCollection(this.selectedCollection, result.label, result.lang,
+                        result.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 }
             },
             () => {}
@@ -77,11 +77,11 @@ export class CollectionTreePanelComponent {
         this.modalService.newResource("Create a nested skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNestedOrderedCollection(this.selectedCollection, result.name,
-                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                    this.skosService.createNestedOrderedCollection(this.selectedCollection, result.label, result.lang,
+                        result.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
-                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, result.name,
-                        result.label, result.lang, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
+                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, result.label, result.lang, 
+                        result.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 }
             },
             () => {}

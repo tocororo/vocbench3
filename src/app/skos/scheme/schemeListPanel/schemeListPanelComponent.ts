@@ -39,13 +39,13 @@ export class SchemeListPanelComponent {
         this.modalService.newResource("Create new skos:ConceptScheme", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createScheme(result.name, result.label, result.lang).subscribe(
+                    this.skosService.createScheme(result.label, result.lang, result.name).subscribe(
                         newScheme => {
                             this.schemeList.push(newScheme);
                         }
                     );
                 } else {//SKOSXL
-                    this.skosxlService.createScheme(result.name, result.label, result.lang).subscribe(
+                    this.skosxlService.createScheme(result.label, result.lang, result.name).subscribe(
                         newScheme => {
                             this.schemeList.push(newScheme);
                         }

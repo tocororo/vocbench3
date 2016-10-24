@@ -2,20 +2,29 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body">
-    <div (keydown)="onKeydown($event)">
-        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-            <label style="width: 50px;">Name:</label>
-            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="name" sanitized>
+    <form class="form-horizontal" (keydown)="onKeydown($event)">
+        <div class="form-group">
+            <label class="control-label col-sm-1">Label:</label>
+            <div class="col-sm-11">
+                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                    <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                    <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                </div>
+            </div>
         </div>
-        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-            <label style="width: 50px;">Label:</label>
-            <input type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="label">
-            <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+        <div class="form-group">
+            <label class="control-label col-sm-1">URI:</label>
+            <div class="col-sm-11">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon" style="padding-right: 5px;">
+                        {{namespace}}
+                    </span>
+                    <input type="text" class="form-control" name="localName" [(ngModel)]="localName"
+                        placeholder="Leave empty in order to autogenerate a random URI" sanitized>
+                </div>
+            </div>
         </div>
-    </div>
-    <div *ngIf="!isInputValid() && submitted" class="alert alert-danger">
-        <strong>Name</strong> is required
-    </div>
+    </form>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>

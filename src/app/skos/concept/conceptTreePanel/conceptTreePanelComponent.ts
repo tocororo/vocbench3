@@ -35,11 +35,11 @@ export class ConceptTreePanelComponent {
         this.modalService.newResource("Create new skos:Concept", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(result.name, this.vbCtx.getScheme(),
-                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosService.createTopConcept(result.label, result.lang, this.vbCtx.getScheme(),
+                        result.name, this.vbCtx.getContentLanguage()).subscribe();
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept(result.name, this.vbCtx.getScheme(),
-                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosxlService.createTopConcept(result.label, result.lang, this.vbCtx.getScheme(),
+                        result.name, this.vbCtx.getContentLanguage()).subscribe();
                 }
             },
             () => {}
@@ -50,11 +50,11 @@ export class ConceptTreePanelComponent {
         this.modalService.newResource("Create a skos:narrower", this.vbCtx.getContentLanguage()).then(
             result => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(),
-                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosService.createNarrower(result.label, result.lang, this.selectedConcept, this.vbCtx.getScheme(),
+                        result.name, this.vbCtx.getContentLanguage()).subscribe();
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(result.name, this.selectedConcept, this.vbCtx.getScheme(),
-                        result.label, result.lang, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosxlService.createNarrower(result.label, result.lang, this.selectedConcept, this.vbCtx.getScheme(),
+                        result.name, this.vbCtx.getContentLanguage()).subscribe();
                 }
             },
             () => {}

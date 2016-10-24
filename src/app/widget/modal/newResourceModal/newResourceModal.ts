@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
+import {VocbenchCtx} from "../../../utils/VocbenchCtx"
 
 export class NewResourceModalData extends BSModalContext {
     constructor(
@@ -20,17 +21,20 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     
     private submitted: boolean = false;
     
-    private name: string;
     private label: string;
     private lang: string;
-    
-    constructor(public dialog: DialogRef<NewResourceModalData>) {
+    private namespace: string = "";
+    private localName: string;
+
+    constructor(public dialog: DialogRef<NewResourceModalData>, private vbCtx: VocbenchCtx) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
         this.lang = this.context.lang;
         document.getElementById("toFocus").focus();
+
+        this.namespace = this.vbCtx.getDefaultNamespace();
     }
     
     private onKeydown(event) {
@@ -47,18 +51,17 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     }
     
     private isInputValid(): boolean {
-        return (this.name != undefined && this.name.trim() != "");
+        return (this.label != undefined && this.label.trim() != "");
     }
 
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        if (this.label && this.label.trim() == "") {//if label has no content return null label
-            this.dialog.close({name: this.name, label: null, lang: null});    
+        if (this.localName && this.localName.trim() == "") {//if localName has no content return null localName
+            this.dialog.close({name: null, label: this.label, lang: this.lang});    
         } else {
-            this.dialog.close({name: this.name, label: this.label, lang: this.lang});
+            this.dialog.close({name: this.localName, label: this.label, lang: this.lang});
         }
-        
     }
 
     cancel() {

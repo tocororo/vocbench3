@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {ARTURIResource} from "../utils/ARTResources";
 
@@ -212,7 +213,7 @@ export class MetadataServices {
     /**
      * Returns the default namespace of the currently open project
      */
-    getDefaultNamespace() {
+    getDefaultNamespace(): Observable<string> {
         console.log("[MetadataServices] getDefaultNamespace");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params, this.oldTypeService).map(
@@ -237,7 +238,7 @@ export class MetadataServices {
     /**
      * Returns the baseURI of the currently open project
      */
-    getBaseuri() {
+    getBaseuri(): Observable<string> {
         console.log("[MetadataServices] getBaseuri");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getBaseuri", params, this.oldTypeService).map(

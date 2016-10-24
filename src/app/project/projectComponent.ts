@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
 import {ProjectServices} from "../services/projectServices";
+import {MetadataServices} from "../services/metadataServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {VBEventHandler} from '../utils/VBEventHandler';
 import {Project, ProjectTypesEnum} from '../utils/Project';
@@ -18,8 +19,8 @@ export class ProjectComponent implements OnInit {
     
     private eventSubscriptions = [];
     
-    constructor(private projectService: ProjectServices, private vbCtx: VocbenchCtx, private router: Router,
-        private eventHandler: VBEventHandler, private modalService: ModalServices) {
+    constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
+        private vbCtx: VocbenchCtx, private router: Router, private eventHandler: VBEventHandler, private modalService: ModalServices) {
         this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(project => this.onProjectClosed(project)));
     }
 
@@ -122,6 +123,12 @@ export class ProjectComponent implements OnInit {
                 this.vbCtx.setWorkingProject(project);
                 project.setOpen(true);
                 document.getElementById("blockDivFullScreen").style.display = "none";
+                //get default namespace of the project and set it to the vbContext
+                this.metadataService.getDefaultNamespace().subscribe(
+                    ns => {
+                        this.vbCtx.setDefaultNamespace(ns);
+                    }
+                )
             },
             err => document.getElementById("blockDivFullScreen").style.display = "none"
         );

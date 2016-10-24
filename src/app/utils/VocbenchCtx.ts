@@ -7,6 +7,7 @@ import {Cookie} from "./Cookie";
 export class VocbenchCtx {
 
     private workingProject: Project; //working project
+    private defaultNamespace: string; //namespace of the current working project
     private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
     private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
 
@@ -22,6 +23,16 @@ export class VocbenchCtx {
     
     removeWorkingProject() {
         this.workingProject = undefined;
+        this.defaultNamespace = undefined;
+    }
+
+    //there is no removeDefaultNamespace since it is remove with the working project (see removeWorkingProject)
+    setDefaultNamespace(ns: string) {
+        this.defaultNamespace = ns;
+    }
+
+    getDefaultNamespace(): string {
+        return this.defaultNamespace;
     }
     
     setContextProject(project: Project) {

@@ -16,23 +16,23 @@ export class SkosxlServices {
     
     /**
      * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme
-     * @param concept local name of the new top concept
-     * @param scheme scheme where new concept should belong
      * @param prefLabel preferred label of the concept
      * @param prefLabelLang language of the preferred label
+     * @param scheme scheme where new concept should belong
+     * @param concept local name of the new top concept
      * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
      * in the response)
      * @return an object containing concept and scheme
      */
-    createTopConcept(concept: string, scheme: ARTURIResource, prefLabel?: string, prefLabelLang?: string, lang?: string) {
+    createTopConcept(prefLabel: string, prefLabelLang: string, scheme: ARTURIResource, concept?: string, lang?: string) {
         console.log("[SkosxlServices] createConcept");
         var params: any = {
-            concept: concept,
+            prefLabel: prefLabel,
+            prefLabelLang,
             scheme: scheme.getURI(),
         };
-        if (prefLabel != undefined && prefLabelLang != undefined) {
-            params.prefLabel = prefLabel;
-            params.prefLabelLang = prefLabelLang;
+        if (concept != undefined) {
+            params.concept = concept;
         }
         if (lang != undefined) {
             params.lang = lang;
@@ -58,24 +58,25 @@ export class SkosxlServices {
     
     /**
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
-     * @param concept local name of the narrower
-     * @param scheme scheme where new concept should belong
      * @param prefLabel preferred label of the concept
      * @param prefLabelLang language of the preferred label
+     * @param broader concept to which add the narrower
+     * @param scheme scheme where new concept should belong
+     * @param concept local name of the narrower 
      * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
      * in the response)
      * @return the new concept
      */
-    createNarrower(concept: string, broader: ARTURIResource, scheme: ARTURIResource, prefLabel?: string, prefLabelLang?: string, lang?: string) {
+    createNarrower(prefLabel: string, prefLabelLang: string, broader: ARTURIResource, scheme: ARTURIResource, concept?: string, lang?: string) {
         console.log("[SkosxlServices] createNarrower");
         var params: any = {
-            concept: concept,
+            prefLabel: prefLabel,
+            prefLabelLang: prefLabelLang,
             broaderConcept: broader.getURI(),
             scheme: scheme.getURI(),
         };
-        if (prefLabel != undefined && prefLabelLang != undefined) {
-            params.prefLabel = prefLabel;
-            params.prefLabelLang = prefLabelLang;
+        if (concept != undefined) {
+            params.concept = concept;
         }
         if (lang != undefined) {
             params.lang = lang;
@@ -121,25 +122,25 @@ export class SkosxlServices {
     
     /**
      * Creates a new scheme
-     * @param local name of the scheme
      * @param prefLabel
      * @param prefLabelLang
+     * @param local name of the scheme. Optional, if not provided a localName is generated randomically
      * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
      * in the response)
      * @return the new scheme
      */
-    createScheme(scheme: string, prefLabel?: string, prefLabelLang?: string, lang?: string) {
+    createScheme(prefLabel: string, prefLabelLang: string, scheme: string, lang?: string) {
         console.log("[SkosxlServices] createScheme");
         var params: any = {
-            scheme: scheme,
+            prefLabel: prefLabel,
+            prefLabelLang: prefLabelLang
         };
-        if (prefLabel != undefined && prefLabelLang != undefined) {
-            params.prefLabel = prefLabel;
-            params.prefLabelLang = prefLabelLang;
-        }
+        if (scheme != undefined) {
+            params.scheme = scheme;
+        };
         if (lang != undefined) {
             params.lang = lang;
-        }
+        };
         return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService).map(
             stResp => {
                 var newScheme = Deserializer.createURI(stResp);
@@ -373,23 +374,21 @@ export class SkosxlServices {
     
     /**
      * Creates a root collection
-     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param prefLabel the preferred label of the collection
      * @param prefLabelLang the language of the preferred label
+     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createRootCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+    createRootCollection(prefLabel: string, prefLabelLang: string, collection?: string, lang?: string, mode?: string) {
         console.log("[SkosServices] createCollection");
         var params: any = {};
         if (collection != undefined) {
+            prefLabel = prefLabel,
+            prefLabelLang = prefLabelLang
+        }
+        if (collection != undefined) {
             params.collection = collection;
-        }
-        if (prefLabel != undefined) {
-            params.prefLabel = prefLabel;
-        }
-        if (prefLabelLang != undefined) {
-            params.prefLabelLang = prefLabelLang;
         }
         if (lang != undefined) {
             params.lang = lang;
@@ -409,28 +408,24 @@ export class SkosxlServices {
 
     /**
      * Creates a nested collection for the given container
-     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param container the container collection
      * @param prefLabel the preferred label of the collection
      * @param prefLabelLang the language of the preferred label
+     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createNestedCollection(container: ARTResource, collection?: string,
-        prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+    createNestedCollection(container: ARTResource, prefLabel?: string, prefLabelLang?: string, 
+        collection?: string, lang?: string, mode?: string) {
 
         console.log("[SkosServices] createCollection");
         var params: any = {
-            container: container.getNominalValue()
+            container: container.getNominalValue(),
+            prefLabel: prefLabel,
+            prefLabelLang: prefLabelLang
         };
         if (collection != undefined) {
             params.collection = collection;
-        }
-        if (prefLabel != undefined) {
-            params.prefLabel = prefLabel;
-        }
-        if (prefLabelLang != undefined) {
-            params.prefLabelLang = prefLabelLang;
         }
         if (lang != undefined) {
             params.lang = lang;
@@ -450,23 +445,20 @@ export class SkosxlServices {
 
     /**
      * Creates a root ordered collection
-     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param prefLabel the preferred label of the collection
      * @param prefLabelLang the language of the preferred label
+     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createRootOrderedCollection(collection?: string, prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+    createRootOrderedCollection(prefLabel: string, prefLabelLang: string, collection?: string, lang?: string, mode?: string) {
         console.log("[SkosServices] createRootOrderedCollection");
-        var params: any = {};
+        var params: any = {
+            prefLabel: prefLabel,
+            prefLabelLang: prefLabelLang
+        }
         if (collection != undefined) {
             params.collection = collection;
-        }
-        if (prefLabel != undefined) {
-            params.prefLabel = prefLabel;
-        }
-        if (prefLabelLang != undefined) {
-            params.prefLabelLang = prefLabelLang;
         }
         if (lang != undefined) {
             params.lang = lang;
@@ -486,28 +478,24 @@ export class SkosxlServices {
 
     /**
      * Creates a nested ordered collection for the given container
-     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param container the container collection
      * @param prefLabel the preferred label of the collection
      * @param prefLabelLang the language of the preferred label
+     * @param collection the name of the collection. If not provided its URI is generated randomically
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createNestedOrderedCollection(container: ARTResource, collection?: string,
-        prefLabel?: string, prefLabelLang?: string, lang?: string, mode?: string) {
+    createNestedOrderedCollection(container: ARTResource, prefLabel: string, prefLabelLang: string, 
+        collection?: string, lang?: string, mode?: string) {
 
         console.log("[SkosServices] createNestedOrderedCollection");
         var params: any = {
-            container: container.getNominalValue()
+            container: container.getNominalValue(),
+            prefLabel: prefLabel,
+            prefLabelLang: prefLabelLang
         };
         if (collection != undefined) {
             params.collection = collection;
-        }
-        if (prefLabel != undefined) {
-            params.prefLabel = prefLabel;
-        }
-        if (prefLabelLang != undefined) {
-            params.prefLabelLang = prefLabelLang;
         }
         if (lang != undefined) {
             params.lang = lang;
