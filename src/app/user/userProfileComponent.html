@@ -1,0 +1,8 @@
+<div class="vbox">
+    <div><label>User:</label> {{user.getUsername()}}</div>
+    <div><label>Roles:</label> {{user.listRoles() | json}}</div>
+    <div>
+        Following button performs a request to a service for which ROLE_ADMIN is required
+        <button class="btn btn-primary" (click)="testAdmin()">Test required admin</button>
+    </div>
+</div>

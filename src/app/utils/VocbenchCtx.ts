@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {ARTURIResource, RDFResourceRolesEnum} from './ARTResources';
 import {Project} from './Project';
 import {Cookie} from "./Cookie";
+import {User} from './User';
 
 @Injectable()
 export class VocbenchCtx {
@@ -10,6 +11,7 @@ export class VocbenchCtx {
     private defaultNamespace: string; //namespace of the current working project
     private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
     private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
+    private loggedUser: User;
 
     constructor() { }
     
@@ -45,6 +47,18 @@ export class VocbenchCtx {
     
     removeContextProject() {
         this.ctxProject = undefined;
+    }
+
+    setLoggedUser(user: User) {
+        this.loggedUser = user;
+    }
+
+    getLoggedUser(): User {
+        return this.loggedUser;
+    }
+
+    removeLoggedUser() {
+        this.loggedUser = undefined;
     }
 
     /**
@@ -157,6 +171,13 @@ export class VocbenchCtx {
         Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
         Cookie.deleteCookie(Cookie.VB_CONTENT_LANG + "_" + project.getName());
         Cookie.deleteCookie(Cookie.VB_HUMAN_READABLE + "_" + project.getName());
+    }
+
+    /**
+     * Returns true if a user is logged in
+     */
+    isLoggedIn(): boolean {
+        return this.loggedUser != undefined;
     }
 
 }

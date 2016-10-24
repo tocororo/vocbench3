@@ -1,7 +1,6 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {AuthServices} from "../../auth/authServices";
 import {Project, ProjectTypesEnum} from "../../utils/Project";
 import {InputOutputServices} from "../../services/inputOutputServices";
 import {ProjectServices} from "../../services/projectServices";
@@ -17,7 +16,7 @@ export class ConfigBarComponent {
     private currentProject: Project;
     
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices,
-        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private authService: AuthServices, 
+        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, 
         private modalService: ModalServices, private router: Router) {}
     
     /**
@@ -32,7 +31,7 @@ export class ConfigBarComponent {
      * Returns true if the user is logged (an authentication token is stored).
      */
     private isUserLogged(): boolean {
-        return this.authService.isLoggedIn();
+        return this.vbCtx.isLoggedIn();
     }
     
     private clearData() {

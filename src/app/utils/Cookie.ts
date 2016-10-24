@@ -7,8 +7,6 @@ export class Cookie {
 	public static VB_INFERENCE_IN_RES_VIEW = "inference_in_resource_view";
 	public static VB_RESOURCE_VIEW_MODE = "resource_view_mode";
 
-	public static USER_AUTH_TOKEN = "user_authentication_token";
-
 	public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_per_page";
 	public static ALIGNMENT_VALIDATION_RELATION_SHOW = "relation_show";
 	public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "show_confidence";

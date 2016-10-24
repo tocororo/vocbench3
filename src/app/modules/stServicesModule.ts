@@ -4,6 +4,7 @@ import {HttpModule} from '@angular/http';
 
 import {AdministrationServices} from "../services/administrationServices";
 import {AlignmentServices} from "../services/alignmentServices";
+import {AuthServices} from "../services/authServices";
 import {CustomRangeServices} from "../services/customRangeServices";
 import {DeleteServices} from "../services/deleteServices";
 import {IcvServices} from "../services/icvServices";
@@ -22,6 +23,7 @@ import {SearchServices} from "../services/searchServices";
 import {SkosServices} from "../services/skosServices";
 import {SkosxlServices} from "../services/skosxlServices";
 import {SparqlServices} from "../services/sparqlServices";
+import {UserServices} from "../services/userServices";
 
 @NgModule({
     imports: [HttpModule],
@@ -30,6 +32,7 @@ import {SparqlServices} from "../services/sparqlServices";
     providers: [
         AdministrationServices,
         AlignmentServices,
+        AuthServices,
         CustomRangeServices,
         DeleteServices,
         IcvServices,
@@ -47,7 +50,8 @@ import {SparqlServices} from "../services/sparqlServices";
         SearchServices,
         SkosServices,
         SkosxlServices,
-        SparqlServices
+        SparqlServices,
+        UserServices
     ]
 })
 export class STServicesModule {}

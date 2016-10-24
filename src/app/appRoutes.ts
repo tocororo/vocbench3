@@ -20,6 +20,7 @@ import {ImportDataComponent} from "./config/dataManagement/importData/importData
 import {ExportDataComponent} from "./config/dataManagement/exportData/exportDataComponent";
 import {MetadataManagementComponent} from "./config/dataManagement/metadata/metadataManagementComponent";
 import {VocbenchSettingsComponent} from "./settings/vocbenchSettingsComponent";
+import {UserProfileComponent} from "./user/userProfileComponent";
 import {RegistrationComponent} from "./user/registrationComponent";
 
 import {TestComponent} from "./test/testComponent";
@@ -39,6 +40,7 @@ export const routes: Routes = [
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard]},
     {path: "Registration", component: RegistrationComponent},
+    {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},
     {path: "Test", component: TestComponent, canActivate: [AuthGuard]},
     // route config of config bar

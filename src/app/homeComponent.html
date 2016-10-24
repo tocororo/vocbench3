@@ -15,21 +15,7 @@
             </div>
         </div>
         <div *ngIf="!isUserLogged()" class="sidebar" style="padding-left: 10px; margin-bottom: 5px; border-left: 1px solid #ddd">
-            <div class="vbox" style="align-items: center;">
-                <div style="margin-bottom: 5px; font-weight: bold; font-size: 13px;">
-                    <span class="glyphicon glyphicon-log-in"></span>
-                    <span> User login</span>
-                </div>
-                <input type="text" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="email" placeholder="E-mail address">
-                <input type="password" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="password" placeholder="Password">
-                <button class="btn btn-sm btn-primary" style="margin-bottom: 5px;" (click)="login()">Log in</button>
-                <div style="display: flex; align-items: center; margin-bottom: 5px;">
-                    Remember me
-                    <input type="checkbox" style="margin-left: 3px;" [checked]="rememberMe" (change)="rememberMe=$event.target.checked">
-                </div>
-                <a (click)="forgotPassword()" style="cursor: pointer" >Forgot password?</a>
-                <a [routerLink]="['/Registration']">Sign up</a>
-            </div>
+            <login></login>
         </div>
     </div>
     

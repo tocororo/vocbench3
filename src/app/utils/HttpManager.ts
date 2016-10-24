@@ -42,7 +42,8 @@ export class HttpManager {
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
-     *      Is useful to handle the error from the component that invokes the service.
+     *      Is useful to handle the error from the component that invokes the service
+     *      (e.g. see deleteScheme in skos or skosxl services)
      */
     doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
@@ -63,7 +64,7 @@ export class HttpManager {
         var headers = new Headers();
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
-        var options = new RequestOptions({ headers: headers });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
         
         //execute request
         return this.http.get(url, options)
@@ -71,11 +72,6 @@ export class HttpManager {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
                     var stResp = parser.parseFromString(res.text(), "application/xml");
-                    //TODO remove this part when bug of cuncurrent requests is fixed
-                    if (stResp.getElementsByTagName("stresponse")[0] == undefined) {
-                        console.error("GET " + url + "\nRes.text() " + res.text());
-                        console.error("parsed " + stResp.documentElement.innerHTML);
-                    }
                     return stResp;
                 } else if (this.isResponseJson(res)) {
                     return res.json();
@@ -105,8 +101,10 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
+     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
+     *      Is useful to handle the error from the component that invokes the service.
      */
-    doPost(service: string, request: string, params, oldType: boolean, respJson?: boolean) {
+    doPost(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
@@ -124,7 +122,7 @@ export class HttpManager {
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
-        var options = new RequestOptions({ headers: headers });
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
 
         var postData;
         var strBuilder = [];
@@ -152,7 +150,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                return this.handleError(error);
+                return this.handleError(error, skipErrorAlert);
             });
     }
     
@@ -190,6 +188,7 @@ export class HttpManager {
         }
         
         var httpReq = new XMLHttpRequest();
+        httpReq.withCredentials = true;
         httpReq.open("POST", url, true);
         //headers
         httpReq.setRequestHeader("Accept", "application/xml");
@@ -244,6 +243,7 @@ export class HttpManager {
         console.log("[GET]: " + url);
         
         var httpReq = new XMLHttpRequest();
+        httpReq.withCredentials = true;
         httpReq.open("GET", url, true);
         httpReq.responseType = "blob";
         
@@ -293,33 +293,27 @@ export class HttpManager {
      * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
      *      Is useful to handle the error from the component that invokes the service. See doGet method.
      */
-    private handleError(error: any, skipErrorAlert?: boolean) {
-        console.error(error);
-        if (!skipErrorAlert) {
-            /*
-            In case that ST server is not running, error is an object like the following 
-            {
-                "_body": {
-                    "isTrusted": true
-                },
-                "status": 0,
-                "ok": false,
-                "statusText": "",
-                "headers": {},
-                "type": 3,
-                "url": null 
-            }
-             */
-            if (error.status == 0 && !error.ok && error.statusText == "" && error.type == 3 && error.url == null) {
-                this.modalService.alert("Error",
-                    "No SemanticTurkey server found! Please check that a server is listening on "
-                    + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
-                    + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
-            } else {
-                this.modalService.alert("Error", error, "error");
-            }
+    private handleError(err: any, skipErrorAlert?: boolean) {
+        console.error(err);
+        console.log("JSON.stringify(err)" + JSON.stringify(err));
+        /* 
+        Handle errors in case ST server is down. In this case, the response (err) is an object like the following 
+        { "_body": { "isTrusted": true }, "status": 0, "ok": false,
+          "statusText": "", "headers": {}, "type": 3, "url": null }
+        */
+        if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
+            this.modalService.alert("Error",
+                "No SemanticTurkey server found! Please check that a server is listening on "
+                + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
+                + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
+        } else if (err.status == 401) {
+            //handle errors in case user did a not authorized requests.
+            //In this case the response (err) body contains an error message
+            this.modalService.alert("Error", err._body, "error");
+        } else if (!skipErrorAlert) {
+            this.modalService.alert("Error", err, "error");
         }
-        return Observable.throw(error);
+        return Observable.throw(err);
     }
 
     private isResponseXml(response: Response): boolean {

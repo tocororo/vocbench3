@@ -10,11 +10,10 @@ import {VBModalModule} from "./vbModalModule";
 import {TreeAndListModule} from "./treeAndListModule";
 import {ResourceViewModule} from "./resourceViewModule";
 import {ICVModule} from "./icvModule";
+import {UserModule} from "./userModule";
 
 import {ModalModule} from 'angular2-modal';
 import {BootstrapModalModule} from 'angular2-modal/plugins/bootstrap';
-
-import {AuthServices} from "../auth/authServices";
 
 import {AppComponent} from "../appComponent";
 import {appRouting} from '../appRoutes';
@@ -42,9 +41,7 @@ import {ImportDataComponent} from "../config/dataManagement/importData/importDat
 import {ExportDataComponent} from "../config/dataManagement/exportData/exportDataComponent";
 import {MetadataManagementComponent} from "../config/dataManagement/metadata/metadataManagementComponent";
 import {VocbenchSettingsComponent} from "../settings/vocbenchSettingsComponent";
-import {RegistrationComponent} from "../user/registrationComponent";
 import {TestComponent} from "../test/testComponent";
-
 import {ConfigBarComponent} from "../config/configBar/configBarComponent";
 
 @NgModule({
@@ -53,8 +50,7 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
-
-            ICVModule,
+            UserModule, ICVModule,
 
             STServicesModule,
             appRouting,
@@ -62,7 +58,6 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
       ],
       //services with application scope
       providers: [
-            AuthServices, //when authorization web services will be implemented, this provider should be moved in stServicesModule
             HttpManager, VocbenchCtx, VBEventHandler, GUARD_PROVIDERS
       ],
       declarations: [
@@ -85,10 +80,9 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             ExportDataComponent,
             MetadataManagementComponent,
             VocbenchSettingsComponent,
-            RegistrationComponent,
             TestComponent, //remove???
 
-            ConfigBarComponent,
+            ConfigBarComponent
       ],
       bootstrap: [AppComponent],
 })

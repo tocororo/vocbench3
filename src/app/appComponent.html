@@ -46,34 +46,8 @@
                 </li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li *ngIf="isUserLogged()" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="padding: 10px;">
-                        <img src="../assets/images/logos/user.svg" style="background: #95A5BC; border-radius: 4px;"
-                            height="24" width="24">
-                    </a>
-                    <ul class="dropdown-menu" style="font-size: 12px;">
-                        <li>
-                            <div style="padding: 10px;">
-                                <img src="../assets/images/logos/user.svg" style="border-radius: 10px;"
-                                    height="48" width="48">
-                                <span style="font-weight:bold">User name</span>
-                            </div>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li><a><span class="glyphicon glyphicon-user"></span> View profile</a></li>
-                        <li><a [routerLink]="['/Settings']"><span class="glyphicon glyphicon-cog"></span> Vocbench settings</a></li>
-                        <li *ngIf="isProjectOpen()">
-                            <a (click)="changeContentLang()">
-                                <span class="glyphicon glyphicon-flag"></span> Content language
-                                <input type="checkbox" style="vertical-align: middle"
-                                    [checked]="isHumanReadable()" (click)="switchHumanReadable($event.target.checked, $event)" 
-                                    title="Enable/disable human readable label">
-                            </a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li><a (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
-                    </ul>
-                </li>
+                <!-- See userMenuComponent to understand user-menu attribute (to avoid css style breaking) -->
+                <li user-menu *ngIf="isUserLogged()" class="dropdown">
             </ul>
         </div>    
     </div>
@@ -82,6 +56,5 @@
     <router-outlet></router-outlet>
 </div>
 <div class="bottom-bar text-right">
-    © <a href="http://www.fao.org/contact-us/terms/en/">FAO</a>
-    & <a href="http://art.uniroma2.it/">ART Group</a>, 2016
+    © <a href="http://art.uniroma2.it/">ART Group</a>, 2016
 </div>

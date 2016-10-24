@@ -18,77 +18,77 @@
                     <tbody>
                         <!--The class submitted is useful to apply "input.ng-invalid.submitted"" only when form is submitted-->
                         <tr>
-                            <td><label>E-mail:</label><span style="color: red">*</span></td>
-                            <td>
+                            <td nowrap><label>E-mail:</label><span style="color: red">*</span></td>
+                            <td colspan="3">
                                 <input type="email" class="form-control input-sm" [ngClass]="{submitted : submitted}" 
                                     placeholder="e-mail address" [(ngModel)]="email" name="email" required>
                             </td>
-                            <td><label>Username:</label><span style="color: red">*</span></td>
+                            <!--<td nowrap><label>Username:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="text" class="form-control input-sm"  [ngClass]="{submitted : submitted}"
                                     placeholder="username" [(ngModel)]="username" name="username" required>
-                            </td>
+                            </td>-->
                         </tr>
                         <tr>
-                            <td><label>Password:</label><span style="color: red">*</span></td>
+                            <td nowrap><label>Password:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="password" class="form-control input-sm" [ngClass]="{submitted : submitted}"
                                     placeholder="password" [(ngModel)]="password" name="password" required>
                             </td>
-                            <td><label>Confirm password:</label><span style="color: red">*</span></td>
+                            <td nowrap><label>Confirm password:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="password" class="form-control input-sm"  [ngClass]="{submitted : submitted, invalid : !isConfirmPwdOk()}"
                                     placeholder="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" required>
                             </td>
                         </tr>
                         <tr>
-                            <td><label>First name:</label><span style="color: red">*</span></td>
+                            <td nowrap><label>First name:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="text" class="form-control input-sm" [ngClass]="{submitted : submitted}"
                                     placeholder="first name" [(ngModel)]="firstName" name="firstName" required>
                             </td>
-                            <td><label>Last name:</label><span style="color: red">*</span></td>
+                            <td nowrap><label>Last name:</label><span style="color: red">*</span></td>
                             <td>
                                 <input type="text" class="form-control input-sm"  [ngClass]="{submitted : submitted}"
                                     placeholder="last name" [(ngModel)]="lastName" name="lastName" required>
                             </td>
                         </tr>
                         <tr>
-                            <td><label>Gender:</label></td>
+                            <td nowrap><label>Gender:</label></td>
                             <td>
                                 <select [(ngModel)]="gender" name="gender" class="form-control input-sm">
                                     <option *ngFor="let g of genders" [value]="g">{{g}}</option>
                                 </select>
                             </td>
-                            <td><label>Birthday:</label></td>
+                            <td nowrap><label>Birthday:</label></td>
                             <td>
                                 <input type="date" class="form-control input-sm" [(ngModel)]="birthday" name="birthday">
                             </td>
                         </tr>
                         <tr>
-                            <td><label>Country:</label></td>
+                            <td nowrap><label>Country:</label></td>
                             <td>
                                 <select [(ngModel)]="country" name="country" class="form-control input-sm">
                                     <option *ngFor="let c of countries" [value]="c">{{c}}</option>
                                 </select>
                             </td>
-                            <td><label>Address:</label></td>
+                            <td nowrap><label>Address:</label></td>
                             <td>
                                 <input type="text" class="form-control input-sm" [(ngModel)]="address" name="address" placeholder="address">
                             </td>
                         </tr>
                         <tr>
-                            <td><label>Phone:</label></td>
+                            <td nowrap><label>Phone:</label></td>
                             <td>
                                 <input type="text" class="form-control input-sm" [(ngModel)]="phone" name="phone" placeholder="phone number">
                             </td>
-                            <td><label>Url:</label></td>
+                            <td nowrap><label>Url:</label></td>
                             <td>
                                 <input type="text" class="form-control input-sm" [(ngModel)]="url" name="url" placeholder="url">
                             </td>
                         </tr>
                         <tr>
-                            <td><label>Affiliation:</label></td>
+                            <td nowrap><label>Affiliation:</label></td>
                             <td>
                                 <input type="text" class="form-control input-sm" [(ngModel)]="affiliation" name="affiliation" placeholder="affiliation">
                             </td>
