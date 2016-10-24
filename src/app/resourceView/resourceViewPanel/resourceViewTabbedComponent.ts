@@ -102,5 +102,14 @@ export class ResourceViewTabbedComponent {
         }
         this.tabs.splice(tabIdx, 1);
     }
+
+    /**
+     * Close all tabs (except the first in synch with the tree) and update active tab
+     */
+    private closeAllTabs() {
+        this.tabs.splice(1);
+        this.tabs[0].active = true;
+        this.activeTab = this.tabs[0];
+    }
     
 }

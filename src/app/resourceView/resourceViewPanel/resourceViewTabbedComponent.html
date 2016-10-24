@@ -5,10 +5,17 @@
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
             <a href (click)="selectTab(t)">
                 <rdf-resource [resource]="t.resource"></rdf-resource>
-                <span *ngIf=(t.removable) class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
+                <span *ngIf="t.removable" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
                     onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
                 </span>
+            </a>
+        </li>
+        <!-- style top 5px necessary to align the bottom of this tab with the others (since this is smaller) -->
+        <li *ngIf="tabs.length > 1" style="top: 5px;">
+            <a href (click)="closeAllTabs()" style="font-weight: bold; padding: 2px 5px;" title="Close all tabs"
+                onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
+                <span class="glyphicon glyphicon-remove"></span>
             </a>
         </li>
     </ul>
