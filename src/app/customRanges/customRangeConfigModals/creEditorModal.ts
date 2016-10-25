@@ -64,7 +64,7 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
             this.errorMsg = "You need to fill all the mandatory field."
             valid = false;
         }
-        
+
         if (this.creId == null) { //check only in create mode
             if (this.creShortId == null || !this.creShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
                 this.errorMsg = "The Custom Range Entry ID is not valid (it may be empty or contain invalid characters). Please fix it."
@@ -83,28 +83,36 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
         if (!this.isDataValid()) {
             return;
         }
-        
-        var showProp: string;
-        if (this.type == "graph" && this.showProperty != null && this.showProperty.trim() != "") {
-            showProp = this.showProperty;
-        }
-        
-        if (this.creId != null) { //edit mode
-            this.crService.updateCustomRangeEntry(this.creId, this.name, this.description, this.ref, showProp).subscribe(
-                stResp => {
-                    event.stopPropagation();
-                    this.dialog.close();
+
+        //should distinguish between node and graph CRE  
+
+        //update CRE only if ref is valid
+        this.crService.validatePearl(this.ref, this.type).subscribe(
+            valid => {
+
+                var showProp: string;
+                if (this.type == "graph" && this.showProperty != null && this.showProperty.trim() != "") {
+                    showProp = this.showProperty;
                 }
-            );
-        } else { //create mode
-            this.crService.createCustomRangeEntry(
-                this.type, this.crePrefix + this.creShortId, this.name, this.description, this.ref, showProp).subscribe(
-                    stResp => {
-                        event.stopPropagation();
-                        this.dialog.close();
-                    }
-                );
-        }
+                
+                if (this.creId != null) { //edit mode
+                    this.crService.updateCustomRangeEntry(this.creId, this.name, this.description, this.ref, showProp).subscribe(
+                        stResp => {
+                            event.stopPropagation();
+                            this.dialog.close();
+                        }
+                    );
+                } else { //create mode
+                    this.crService.createCustomRangeEntry(
+                        this.type, this.crePrefix + this.creShortId, this.name, this.description, this.ref, showProp).subscribe(
+                            stResp => {
+                                event.stopPropagation();
+                                this.dialog.close();
+                            }
+                        );
+                }
+            }
+        )
     }
 
     cancel() {

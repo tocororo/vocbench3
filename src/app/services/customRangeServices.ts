@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
@@ -404,6 +405,22 @@ export class CustomRangeServices {
             customRangeEntryId: customRangeEntryId
         };
         return this.httpMgr.doGet(this.serviceName, "removeEntryFromCustomRange", params, this.oldTypeService);
+    }
+
+    /**
+     * Validate a pearl rule. If the rule is syntactically correct return a response, otherwise hanlde an exception.
+     * @param pearl rule to be parsed, it should be a whole pearl rule if the CRE is a graph entry
+     * or a converter if the CRE is a node entry
+     * @param creType tells if the CRE is type "node" or "graph".
+     * Determines also the nature of the pearl parameter
+     */
+    validatePearl(pearl: string, creType: CustomRangeEntryType) {
+        console.log("[CustomRangeServices] removeEntryFromCustomRange");
+        var params: any = {
+            pearl: pearl,
+            creType: creType
+        };
+        return this.httpMgr.doPost(this.serviceName, "validatePearl", params, this.oldTypeService);
     }
     
 }

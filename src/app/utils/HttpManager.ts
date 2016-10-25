@@ -295,7 +295,6 @@ export class HttpManager {
      */
     private handleError(err: any, skipErrorAlert?: boolean) {
         console.error(err);
-        console.log("JSON.stringify(err)" + JSON.stringify(err));
         /* 
         Handle errors in case ST server is down. In this case, the response (err) is an object like the following 
         { "_body": { "isTrusted": true }, "status": 0, "ok": false,
