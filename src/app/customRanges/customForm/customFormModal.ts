@@ -52,7 +52,11 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
      * has coda:langString as converter
      */
     private onConverterLangChange(newLang: string, formEntryConvArgument: FormEntry) {
-        formEntryConvArgument['value'] = newLang;
+        /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
+        (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
+        window.setTimeout(() =>
+            formEntryConvArgument['value'] = newLang
+        );
     }
     
     /**
