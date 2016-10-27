@@ -305,10 +305,18 @@ export class HttpManager {
                 "No SemanticTurkey server found! Please check that a server is listening on "
                 + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
                 + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
-        } else if (err.status == 401) {
-            //handle errors in case user did a not authorized requests.
+        } else if (err.status == 401 || err.status == 403) {
+            //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
-            this.modalService.alert("Error", err._body, "error");
+            this.modalService.alert("Error", err._body, "error").then(
+                result => {
+                    //in case user is not logged at all, reload app,
+                    //so it performs a new check on authentication and then redirect to home
+                    if (err.status == 401) {
+                        window.location.reload();
+                    }
+                }
+            );
         } else if (!skipErrorAlert) {
             this.modalService.alert("Error", err, "error");
         }

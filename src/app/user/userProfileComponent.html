@@ -1,5 +1,6 @@
 <div class="vbox">
-    <div><label>User:</label> {{user.getUsername()}}</div>
+    <div><label>Email:</label> {{user.getEmail()}}</div>
+    <div><label>Complete name:</label> {{user.getFirstName()}} {{user.getLastName()}}</div>
     <div><label>Roles:</label> {{user.listRoles() | json}}</div>
     <div>
         Following button performs a request to a service for which ROLE_ADMIN is required

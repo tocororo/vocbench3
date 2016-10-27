@@ -5,8 +5,11 @@
 	<li>
 		<div style="padding: 10px; white-space: nowrap;">
 			<img src="../../assets/images/logos/user.svg" style="border-radius: 10px;" height="48" width="48">
-			<!--<span style="font-weight:bold">User name</span>-->
-			<span style="font-weight: bold; white-space: nowrap;">{{currentUser.getFirstName()}} {{currentUser.getLastName()}}</span>
+			<a [routerLink]="['/Profile']">
+				<span style="font-weight: bold; white-space: nowrap;">
+					{{currentUser.getFirstName()}} {{currentUser.getLastName()}}
+				</span>
+			</a>
 		</div>
 	</li>
 	<li role="separator" class="divider"></li>
