@@ -72,11 +72,10 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     }
     
     ok(event) {
-        
         //check if all required field are filled
         for (var i = 0; i < this.formEntries.length; i++) {
             var entry = this.formEntries[i];
-            if (entry['checked'] && (entry['value'] == undefined || entry['value'].trim() == "")) {
+            if (entry['checked'] && (entry['value'] == undefined || (entry['value'] instanceof String && entry['value'].trim() == ""))) {
                 this.submittedWithError = true;
                 return;
             }

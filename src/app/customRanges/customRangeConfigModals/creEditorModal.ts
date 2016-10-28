@@ -111,7 +111,8 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                             }
                         );
                 }
-            }
+            },
+            err => {}
         )
     }
 
