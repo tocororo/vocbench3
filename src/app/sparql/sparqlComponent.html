@@ -60,14 +60,27 @@
                                 </tr>
                             </thead>
                             <tbody style="overflow: auto;">
-                                <tr *ngFor="let bindings of t.queryResult">
-                                    <template [ngIf]="t.resultType == 'graph'">
+                                <template [ngIf]="t.resultType == 'graph'">
+                                    <tr *ngFor="let bindings of t.queryResult">
                                         <td *ngFor="let h of t.headers">{{bindings[h]}}</td>
-                                    </template>
-                                    <template [ngIf]="t.resultType == 'tuple'">
-                                        <td *ngFor="let h of t.headers">{{bindings[h].value}}</td>
-                                    </template>
-                                </tr>
+                                    </tr>
+                                </template>
+                                <template [ngIf]="t.resultType == 'tuple'">
+                                    <tr *ngFor="let bindings of t.queryResult">
+                                        <td *ngFor="let h of t.headers">
+                                            <template [ngIf]="bindings[h]">
+                                                {{bindings[h].value}}
+                                            </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template [ngIf]="t.resultType == 'boolean'">
+                                    <tr>
+                                        <td>
+                                            {{t.queryResult}}
+                                        </td>
+                                    </tr>
+                                </template>
                             </tbody>
                         </table>
                     </div>

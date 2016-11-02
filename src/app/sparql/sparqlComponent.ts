@@ -30,7 +30,7 @@ export class SparqlComponent {
                 this.tabs.push({
                     query: this.sampleQuery,
                     queryMode: "query",
-                    resultType: null, //graph or tuple
+                    resultType: null, //graph / tuple / boolean
                     headers: null,
                     queryResult: null,
                     queryInProgress: false,
@@ -62,6 +62,9 @@ export class SparqlComponent {
                 } else if (data.resulttype == "graph") {
                     tab.headers = ["subj", "pred", "obj"];
                     tab.queryResult = data.stm;
+                } else if (data.resulttype ==  "boolean") {
+                    tab.headers = ["result"];
+                    tab.queryResult = Boolean(data.result);
                 }
                 document.getElementById("blockDivFullScreen").style.display = "none";
             },
@@ -96,6 +99,15 @@ export class SparqlComponent {
             fileContent = JSON.stringify(tab.queryResult);
         } else if (tab.resultType == "graph") {
             fileContent = JSON.stringify(tab.queryResult);
+        } else if (tab.resultType == "boolean") {
+            //https://www.w3.org/TR/sparql11-results-json/#ask-result-form
+            var jsonExport: any = {
+                head: {
+                    link: []
+                },
+                boolean: tab.queryResult
+            };
+            fileContent = JSON.stringify(jsonExport);
         }
         this.downloadSavedResult(fileContent, "json");
     }
@@ -109,7 +121,8 @@ export class SparqlComponent {
                 var variable_name = cols[i];
                 fileContent += variable_name + separator;
             }
-            fileContent += "\n\n";
+            fileContent = fileContent.slice(0, -1); //remove last separator
+            fileContent += "\n";
             var bindings = tab.queryResult;
             for (var bind in bindings) {
                 for (var i = 0; i < cols.length; i++) {
@@ -145,6 +158,8 @@ export class SparqlComponent {
                 var objName = JSON.stringify(stms[stm].obj).replace(/\"/g, "");
                 fileContent += sbjName + separator + preName + separator + objName + separator + "\n";
             }
+        } else if (tab.resultType == "boolean") {
+            fileContent = tab.queryResult;
         }
         this.downloadSavedResult(fileContent, "text");
     }
