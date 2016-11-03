@@ -21,23 +21,23 @@ export class PropertyTreePanelComponent {
         private modalService: ModalServices) {}
     
     private createProperty() {
-        this.createPropertyForType("rdf:Property");
+        this.createPropertyForType(RDFResourceRolesEnum.property);
     }
     
     private createObjectProperty() {
-        this.createPropertyForType("owl:ObjectProperty");
+        this.createPropertyForType(RDFResourceRolesEnum.objectProperty);
     }
     
     private createDatatypeProperty() {
-        this.createPropertyForType("owl:DatatypeProperty");
+        this.createPropertyForType(RDFResourceRolesEnum.datatypeProperty);
     }
     
     private createAnnotationProperty() {
-        this.createPropertyForType("owl:AnnotationProperty");
+        this.createPropertyForType(RDFResourceRolesEnum.annotationProperty);
     }
     
     private createOntologyProperty() {
-        this.createPropertyForType("owl:OntologyProperty");
+        this.createPropertyForType(RDFResourceRolesEnum.ontologyProperty);
     }
     
     private createPropertyForType(type) {

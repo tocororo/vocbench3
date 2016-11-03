@@ -34,8 +34,6 @@ export class ResourceUtils {
         var propOntologyImportedImgSrc = require("../../assets/images/propOntology_imported.png");
 
         var imgSrc;
-        //for property roles use indexOf untill property service will be refactored and returns
-        //enum roles instead of "owl:ObjectProperty", "owl:DatatypeProperty", ...
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
             var explicit = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT);
@@ -59,43 +57,43 @@ export class ResourceUtils {
                 }
             } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
                 imgSrc = conceptSchemeImgSrc;
-            } else if (role.indexOf(RDFResourceRolesEnum.objectProperty.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.objectProperty.toLowerCase()) {
                 if (explicit) {
                     imgSrc = propObjectImgSrc;
                 } else {
                     imgSrc = propObjectImportedImgSrc;       
                 }
-            } else if (role.indexOf(RDFResourceRolesEnum.skosCollection.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.skosCollection.toLowerCase()) {
                 if (explicit) {
                     imgSrc = collectionImgSrc;
                 } else {
                     imgSrc = collectionImportedImgSrc;
                 }
-            } else if (role.indexOf(RDFResourceRolesEnum.skosOrderedCollection.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.skosOrderedCollection.toLowerCase()) {
                 if (explicit) {
                     imgSrc = collectionImgSrc;
                 } else {
                     imgSrc = collectionImportedImgSrc;
                 }
-            } else if (role.indexOf(RDFResourceRolesEnum.datatypeProperty.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.datatypeProperty.toLowerCase()) {
                 if (explicit) {
                     imgSrc = propDatatypeImgSrc;
                 } else {
                     imgSrc = propDatatypeImportedImgSrc;
                 }
-            } else if (role.indexOf(RDFResourceRolesEnum.annotationProperty.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.annotationProperty.toLowerCase()) {
                 if (explicit) {
                     imgSrc = propAnnotationImgSrc;
                 } else {
                     imgSrc = propAnnotationImportedImgSrc;
                 }
-            } else if (role.indexOf(RDFResourceRolesEnum.ontologyProperty.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.ontologyProperty.toLowerCase()) {
                 if (explicit) {
                     imgSrc = propObjectImgSrc;
                 } else {
                     imgSrc = propObjectImportedImgSrc;
                 }
-            } else if (role.indexOf(RDFResourceRolesEnum.property.toLowerCase()) != -1) {
+            } else if (role == RDFResourceRolesEnum.property.toLowerCase()) {
                 if (explicit) {
                     imgSrc = propImgSrc;
                 } else {
