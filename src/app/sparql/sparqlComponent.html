@@ -43,8 +43,9 @@
                                 Save results as... <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a (click)="saveResultAsJSON(t)">Json</a></li>
-                                <li><a (click)="saveResultAsText(t)">Plain text</a></li>
+                                <li><a (click)="exportAsJSON(t)">Json</a></li>
+                                <li><a (click)="exportAsCSV(t)">CSV</a></li>
+                                <li><a (click)="exportAsTSV(t)">TSV</a></li>
                             </ul>
                         </div>
                     </div>
@@ -60,12 +61,7 @@
                                 </tr>
                             </thead>
                             <tbody style="overflow: auto;">
-                                <template [ngIf]="t.resultType == 'graph'">
-                                    <tr *ngFor="let bindings of t.queryResult">
-                                        <td *ngFor="let h of t.headers">{{bindings[h]}}</td>
-                                    </tr>
-                                </template>
-                                <template [ngIf]="t.resultType == 'tuple'">
+                                <template [ngIf]="t.resultType != 'boolean'">
                                     <tr *ngFor="let bindings of t.queryResult">
                                         <td *ngFor="let h of t.headers">
                                             <template [ngIf]="bindings[h]">

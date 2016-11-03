@@ -30,6 +30,7 @@ export class SparqlComponent {
                 this.tabs.push({
                     query: this.sampleQuery,
                     queryMode: "query",
+                    respSparqlJSON: null, //keep the "sparql" JSON object contained in the response
                     resultType: null, //graph / tuple / boolean
                     headers: null,
                     queryResult: null,
@@ -50,21 +51,19 @@ export class SparqlComponent {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
             data => {
+                tab.respSparqlJSON = data.sparql;
                 //calculates the time spent in query
                 var finishTime = new Date().getTime();
                 var diffTime = finishTime - initTime;
                 tab.queryTime = this.getPrettyPrintTime(diffTime);
                 //process result
                 tab.resultType = data.resulttype;
-                if (data.resulttype == "tuple") {
+                if (data.resulttype == "tuple" || data.resulttype == "graph") {
                     tab.headers = data.sparql.head.vars;
                     tab.queryResult = data.sparql.results.bindings;
-                } else if (data.resulttype == "graph") {
-                    tab.headers = ["subj", "pred", "obj"];
-                    tab.queryResult = data.stm;
                 } else if (data.resulttype ==  "boolean") {
-                    tab.headers = ["result"];
-                    tab.queryResult = Boolean(data.result);
+                    tab.headers = ["boolean"];
+                    tab.queryResult = Boolean(data.sparql.boolean);
                 }
                 document.getElementById("blockDivFullScreen").style.display = "none";
             },
@@ -88,90 +87,141 @@ export class SparqlComponent {
     }
 
     private clear(tab) {
+        tab.respSparqlJSON = null;
         tab.headers = null;
         tab.queryResult = null;
         tab.queryTime = null;
     }
     
-    private saveResultAsJSON(tab) {
-        var fileContent: string;
-        if (tab.resultType == "tuple") {
-            fileContent = JSON.stringify(tab.queryResult);
-        } else if (tab.resultType == "graph") {
-            fileContent = JSON.stringify(tab.queryResult);
-        } else if (tab.resultType == "boolean") {
-            //https://www.w3.org/TR/sparql11-results-json/#ask-result-form
-            var jsonExport: any = {
-                head: {
-                    link: []
-                },
-                boolean: tab.queryResult
-            };
-            fileContent = JSON.stringify(jsonExport);
-        }
-        this.downloadSavedResult(fileContent, "json");
+    private exportAsJSON(tab) {
+        this.downloadSavedResult(JSON.stringify(tab.respSparqlJSON), "json");
     }
-    
-    private saveResultAsText(tab) {
-        var fileContent: string = "";
-        var separator = "; ";
-        if (tab.resultType == "tuple") {
-            var cols = tab.headers;
-            for (var i = 0; i < cols.length; i++) {
-                var variable_name = cols[i];
-                fileContent += variable_name + separator;
+
+    private exportAsCSV(tab) {
+        //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
+        var serialization = "";
+        var separator = ",";
+
+        if (tab.resultType == "tuple" || tab.resultType == "graph") {
+            //headers
+            var headers = tab.headers;
+            for (var i = 0; i < headers.length; i++) {
+                serialization += headers[i] + separator;
             }
-            fileContent = fileContent.slice(0, -1); //remove last separator
-            fileContent += "\n";
-            var bindings = tab.queryResult;
-            for (var bind in bindings) {
-                for (var i = 0; i < cols.length; i++) {
-                    var variable_name = cols[i];
-                    var element = (bindings[bind])[variable_name];
-                    if (typeof element != "undefined") {
-                        var lblValue = "";
-                        var type = "";
-                        if (element.type == "uri") {
-                            lblValue = element.value;
-                        } else if (element.type == "literal") {
-                            lblValue = element.value;
-                            if (element["xml:lang"] != null) {
-                                lblValue = lblValue + " (" + element["xml:lang"] + ")";
-                            }
-                        } else if (element.type == "typed-literal") {
-                            lblValue = element.value;
-                        } else if (element.type == "bnode") {
-                            lblValue = element.value;
-                        }
-                        fileContent += lblValue + separator;
+            serialization = serialization.slice(0, -1); //remove last separator
+            serialization += "\n"; //and add new line
+            //results
+            var res: Array<any> = tab.queryResult;
+            for (var j = 0; j < res.length; j++) {
+                for (var i = 0; i < headers.length; i++) {
+                    if (res[j][headers[i]] != undefined) {
+                        serialization += this.escapeForCSV(res[j][headers[i]]) + separator;
                     } else {
-                        fileContent += separator;
+                        serialization += separator;
                     }
                 }
-                fileContent += "\n";
-            }
-        } else if (tab.resultType == "graph") {
-            var stms = tab.queryResult;
-            for (var stm in stms) {
-                var sbjName = JSON.stringify(stms[stm].subj).replace(/\"/g, "");
-                var preName = JSON.stringify(stms[stm].pred).replace(/\"/g, "");
-                var objName = JSON.stringify(stms[stm].obj).replace(/\"/g, "");
-                fileContent += sbjName + separator + preName + separator + objName + separator + "\n";
+                serialization = serialization.slice(0, -1); //remove last separator
+                serialization += "\n"; //and add new line
             }
         } else if (tab.resultType == "boolean") {
-            fileContent = tab.queryResult;
+            serialization += "result\n" + tab.queryResult;
         }
-        this.downloadSavedResult(fileContent, "text");
+
+        this.downloadSavedResult(serialization, "csv");
+    }
+
+    /**
+     * Field is an object {value, type} like the bindings in the sparql response of tuple query
+     */
+    private escapeForCSV(field: any): string {
+        var value: string = field.value;
+        /* Fields containing any of 
+        " (QUOTATION MARK, code point 34),
+        , (COMMA, code point 44),
+        LF (code point 10) or CR (code point 13)
+        must be quoted using a pair of quotation marks " 
+        Blank nodes use the _:label form from Turtle and SPARQL */
+        if (field.type == "bnode" && !value.startsWith("_:")) {
+            value = "_:" + value;
+        } else if (value.includes(String.fromCodePoint(34)) || value.includes(String.fromCodePoint(44)) ||
+            value.includes(String.fromCodePoint(10)) || value.includes(String.fromCodePoint(13))) {
+            // Within quote strings " is written using a pair of quotation marks "".
+            value = value.replace(/"/g, "\"\"");
+            value = "\"" + value + "\"";
+        }
+        return value;
+    }
+
+    private exportAsTSV(tab) {
+        //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
+        var serialization = "";
+        var separator = "\t";
+
+        if (tab.resultType == "tuple" || tab.resultType == "graph") {
+            //headers
+            //Variables are serialized in SPARQL syntax, using question mark ? character followed by the variable name
+            var headers = tab.headers;
+            for (var i = 0; i < headers.length; i++) {
+                serialization += "?" + headers[i] + separator;
+            }
+            serialization = serialization.slice(0, -1); //remove last separator
+            serialization += "\n"; //and add new line
+            //results
+            var res: Array<any> = tab.queryResult;
+            for (var j = 0; j < res.length; j++) {
+                for (var i = 0; i < headers.length; i++) {
+                    if (res[j][headers[i]] != undefined) {
+                        serialization += this.escapeForTSV(res[j][headers[i]]) + separator;
+                    } else {
+                        serialization += separator;
+                    }
+                }
+                serialization = serialization.slice(0, -1); //remove last separator
+                serialization += "\n"; //and add new line
+            }
+        } else if (tab.resultType == "boolean") {
+            serialization += "?result\n" + tab.queryResult;
+        }
+
+        this.downloadSavedResult(serialization, "tsv");
+    }
+
+    /**
+     * Field is an object {value, type} like the bindings in the sparql response of tuple query
+     * if type is literal, it may contains an attribute "xml:lang" or "datatype"
+     */
+    private escapeForTSV(field: any): string {
+        var value: string = field.value;
+        /* IRIs enclosed in <...>,
+        literals are enclosed with double quotes "..." or single quotes ' ...' with optional @lang or ^^ for datatype.
+        Tab, newline and carriage return characters (codepoints 0x09, 0x0A, 0x0D) are encoded as \t, \n and \r
+        Blank nodes use the _:label form from Turtle and SPARQL */
+        if (field.type == "uri") {
+            value = "<" + value + ">";
+        } else if (field.type == "bnode" && !value.startsWith("_:")) {
+            value = "_:" + value;
+        } else if (field.type == "literal") {
+            value = value.replace(/\t/g, "\\t");
+            value = value.replace(/\n/g, "\\n");
+            value = value.replace(/\r/g, "\\r");
+            value = "\"" + value + "\"";
+            if (field["xml:lang"] != undefined) {
+                value += "@" + field["xml:lang"]; 
+            }
+            if (field["datatype"] != undefined) {
+                value += "^^" + field["^^"];
+            }
+        }
+        return value;
     }
     
     /**
      * Prepares a json or text file containing the given content and shows a modal to download it.
      */
-    private downloadSavedResult(fileContent: string, type: "text" | "json") {
+    private downloadSavedResult(fileContent: string, type: "csv" | "tsv" | "json") {
         var data = new Blob([fileContent], {type: 'text/plain'});
         var textFile = window.URL.createObjectURL(data);
-        var fileName: string;
-        type == "text" ? fileName = "results.txt" : fileName = "results.json"
+        var fileName = "result." + type;
         this.modalService.downloadLink("Save SPARQL results", null, textFile, fileName).then(
             done => { window.URL.revokeObjectURL(textFile); },
             () => {}
