@@ -266,7 +266,7 @@ export class PropertyServices {
                 var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
                 var rngType = rangesElem.getAttribute("rngType");
                 if (rngType != "undetermined") {
-                    var rangesUriColl = Deserializer.createURIArrayGivenList(rangesElem.childNodes);
+                    var rangesUriColl = Deserializer.createURIArrayGivenList(rangesElem.children);
                 }
                 if (stResp.getElementsByTagName("customRanges").length != 0) {
                     var cRangesElem: Element = stResp.getElementsByTagName("customRanges")[0];

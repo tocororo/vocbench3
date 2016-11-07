@@ -42,7 +42,7 @@ export class SkosxlServices {
                 //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
                 //parse return and insert in the event just the new concept
                 var newConc: ARTURIResource;
-                var uriColl: Array<Element> = stResp.getElementsByTagName("uri");
+                var uriColl: HTMLCollection = stResp.getElementsByTagName("uri");
                 var parsedUriColl = Deserializer.createURIArrayGivenList(uriColl);
                 for (var i = 0; i < parsedUriColl.length; i++) {
                     if (parsedUriColl[i].getRole() == RDFResourceRolesEnum.concept) {
@@ -86,7 +86,7 @@ export class SkosxlServices {
                 //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
                 //parse return and insert in the event just the new concept
                 var newConc: ARTURIResource;
-                var uriColl: Array<Element> = stResp.getElementsByTagName("uri");
+                var uriColl: HTMLCollection = stResp.getElementsByTagName("uri");
                 var parsedUriColl = Deserializer.createURIArrayGivenList(uriColl);
                 for (var i = 0; i < parsedUriColl.length; i++) {
                     if (parsedUriColl[i].getRole() == RDFResourceRolesEnum.concept) {

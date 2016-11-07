@@ -1,28 +1,27 @@
-import {ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute} from "./ARTResources";
+import { ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects,
+    ResAttribute, RDFResourceRolesEnum } from "./ARTResources";
 
 export class Deserializer {
-    
+
     /**
      * creates an array of mixed resources (ARTBNode, ARTLiteral, ARTURIResource)
      * from a <collection> element.
      */
-    static createRDFArray(response): ARTNode[] {
-		var collectionElement = response.getElementsByTagName('collection')[0];
-		var childElements = collectionElement.childNodes;
-		return this.createRDFArrayGivenList(childElements);
-	};
-    
+    static createRDFArray(response: Element): ARTNode[] {
+        var collectionElement = response.getElementsByTagName('collection')[0];
+        var childElements = collectionElement.children;
+        return this.createRDFArrayGivenList(childElements);
+    };
+
     /**
      * creates an array of mixed resources (ARTBNode, ARTLiteral, ARTURIResource)
      */
-    static createRDFArrayGivenList(childElements): ARTNode[] {
+    static createRDFArrayGivenList(childElements: HTMLCollection): ARTNode[] {
         var collectionArray: ARTNode[] = new Array();
         if (typeof childElements.length == "undefined")
             return null;
         for (var i = 0; i < childElements.length; i++) {
-            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
-                collectionArray.push(this.createRDFNode(childElements[i]));
-            }
+            collectionArray.push(this.createRDFNode(childElements[i]));
         }
         return collectionArray;
     };
@@ -30,25 +29,23 @@ export class Deserializer {
     /**
      * creates an array of ARTURIResource and ARTResource from a <collection> element.
      */
-    static createResourceArray(response): ARTResource[] {
+    static createResourceArray(response: Element): ARTResource[] {
         var resourceArray: ARTResource[] = new Array();
-        var childElements = response.getElementsByTagName('collection')[0].childNodes;
+        var childElements = response.getElementsByTagName('collection')[0].children;
         for (var i = 0; i < childElements.length; i++) {
-            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
-                if (childElements[i].tagName == "uri") {
-                    resourceArray.push(this.createURI(childElements[i]));
-                } else if (childElements[i].tagName == "bnode") {
-                    resourceArray.push(this.createBlankNode(childElements[i]));
-                }
+            if (childElements[i].tagName == "uri") {
+                resourceArray.push(this.createURI(childElements[i]));
+            } else if (childElements[i].tagName == "bnode") {
+                resourceArray.push(this.createBlankNode(childElements[i]));
             }
         }
         return resourceArray;
     }
-    
+
     /**
      * creates an array of ARTURIResource and ARTResource 
      */
-    static createResourceArrayGivenList(childElements): ARTResource[] {
+    static createResourceArrayGivenList(childElements: HTMLCollection): ARTResource[] {
         var collectionArray: ARTResource[] = new Array();
         if (typeof childElements.length == "undefined")
             return null;
@@ -63,24 +60,24 @@ export class Deserializer {
         }
         return collectionArray;
     };
-    
+
     /**
      * creates an array of only ARTURIResource from a <collection> element.
      */
-    static createURIArray(response): ARTURIResource[] {
+    static createURIArray(response: Element): ARTURIResource[] {
         var uriResourceArray: ARTURIResource[] = new Array();
         var collectionElement = response.getElementsByTagName('collection')[0];
-		var uriElemens = collectionElement.getElementsByTagName('uri');
+        var uriElemens = collectionElement.getElementsByTagName('uri');
         for (var i = 0; i < uriElemens.length; i++) {
             uriResourceArray.push(this.createURI(uriElemens[i]))
         }
         return uriResourceArray;
     }
-    
+
     /**
      * creates an array of ARTURIResource
      */
-    static createURIArrayGivenList(childElements): ARTURIResource[] {
+    static createURIArrayGivenList(childElements: HTMLCollection): ARTURIResource[] {
         var collectionArray: ARTURIResource[] = new Array();
         if (typeof childElements.length == "undefined")
             return null;
@@ -91,42 +88,42 @@ export class Deserializer {
         }
         return collectionArray;
     };
-	
-	static createURI(response): ARTURIResource {
-		var uriElement;
-		if(response.tagName == 'uri') {
-			uriElement = response;
-		} else {
-			uriElement = response.getElementsByTagName('uri')[0];
-		}
-		
-		var uri = uriElement.textContent;
-		var show = uriElement.getAttribute(ResAttribute.SHOW);
+
+    static createURI(response: Element): ARTURIResource {
+        var uriElement;
+        if (response.tagName == 'uri') {
+            uriElement = response;
+        } else {
+            uriElement = response.getElementsByTagName('uri')[0];
+        }
+
+        var uri = uriElement.textContent;
+        var show = uriElement.getAttribute(ResAttribute.SHOW);
         var role = uriElement.getAttribute(ResAttribute.ROLE);
         var artURIRes = new ARTURIResource(uri, show, role);
-        
+
         //optional properties
-		var explicit = uriElement.getAttribute(ResAttribute.EXPLICIT);
+        var explicit = uriElement.getAttribute(ResAttribute.EXPLICIT);
         if (explicit != undefined) {
-             artURIRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
+            artURIRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
         }
-		var more = uriElement.getAttribute(ResAttribute.MORE);
+        var more = uriElement.getAttribute(ResAttribute.MORE);
         if (more != undefined) {
-            artURIRes.setAdditionalProperty(ResAttribute.MORE, more); 
+            artURIRes.setAdditionalProperty(ResAttribute.MORE, more);
         }
-		var numInst = uriElement.getAttribute(ResAttribute.NUM_INST);
+        var numInst = uriElement.getAttribute(ResAttribute.NUM_INST);
         if (numInst != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, parseInt(numInst));
         }
-		var hasCustomRange = uriElement.getAttribute(ResAttribute.HAS_CUSTOM_RANGE);//indicates if a property has a CustomRange
+        var hasCustomRange = uriElement.getAttribute(ResAttribute.HAS_CUSTOM_RANGE);//indicates if a property has a CustomRange
         if (hasCustomRange != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, (hasCustomRange == "true"));
         }
-		var resourcePosition = uriElement.getAttribute(ResAttribute.RESOURCE_POSITION);//indicates the position of the resource
+        var resourcePosition = uriElement.getAttribute(ResAttribute.RESOURCE_POSITION);//indicates the position of the resource
         if (resourcePosition != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
-		var lang = uriElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
+        var lang = uriElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
         if (lang != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.LANG, lang);
         }
@@ -134,33 +131,33 @@ export class Deserializer {
         if (graphs != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
-		
-		return artURIRes;
-	}
-	
-	static createBlankNode(bnodeElement): ARTBNode {
-		var bnodeElement;
-		if(bnodeElement.tagName == 'bnode') {
-			bnodeElement = bnodeElement;
-		} else {
-			bnodeElement = bnodeElement.getElementsByTagName('bnode')[0];
-		}
-		
-		var id = bnodeElement.textContent;
-		var show = bnodeElement.getAttribute(ResAttribute.SHOW);
-		var role = bnodeElement.getAttribute(ResAttribute.ROLE);
+
+        return artURIRes;
+    }
+
+    static createBlankNode(bnodeElement: Element): ARTBNode {
+        // var bnodeElement;
+        if (bnodeElement.tagName == 'bnode') {
+            bnodeElement = bnodeElement;
+        } else {
+            bnodeElement = bnodeElement.getElementsByTagName('bnode')[0];
+        }
+
+        var id = bnodeElement.textContent;
+        var show = bnodeElement.getAttribute(ResAttribute.SHOW);
+        var role = RDFResourceRolesEnum[bnodeElement.getAttribute(ResAttribute.ROLE)];
         var bNodeRes = new ARTBNode(id, show, role);
-        
+
         //optional properties
-		var explicit = bnodeElement.getAttribute(ResAttribute.EXPLICIT);
+        var explicit = bnodeElement.getAttribute(ResAttribute.EXPLICIT);
         if (explicit != undefined) {
-             bNodeRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
+            bNodeRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
         }
         var resourcePosition = bnodeElement.getAttribute(ResAttribute.RESOURCE_POSITION);//indicates the position of the resource
         if (resourcePosition != undefined) {
             bNodeRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
-		var lang = bnodeElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
+        var lang = bnodeElement.getAttribute(ResAttribute.LANG);//indicates the language of an xLabel
         if (lang != undefined) {
             bNodeRes.setAdditionalProperty(ResAttribute.LANG, lang);
         }
@@ -169,10 +166,10 @@ export class Deserializer {
             bNodeRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
 
-		return bNodeRes;
-	}
-	
-    static createLiteral(response): ARTLiteral {
+        return bNodeRes;
+    }
+
+    static createLiteral(response: Element): ARTLiteral {
         var isTypedLiteral;
         var literalElement;
         if (response.tagName == 'plainLiteral' || response.tagName == 'typedLiteral') {
@@ -190,7 +187,7 @@ export class Deserializer {
         } else {
             isTypedLiteral = false;
         }
-        
+
         var label = literalElement.textContent;
         var datatype;
         if (isTypedLiteral) {
@@ -221,8 +218,8 @@ export class Deserializer {
 
         return artLiteralRes;
     }
-	
-    static createRDFNode(element): ARTNode {
+
+    static createRDFNode(element: Element): ARTNode {
         var tagName = element.tagName;
         if (tagName == 'uri') {
             return this.createURI(element);
@@ -234,33 +231,33 @@ export class Deserializer {
             throw new Error("Not a RDFNode");
         }
     }
-	
-	static createRDFResource(element): ARTResource {
-		var tagName = element.tagName;
-		if(tagName == 'uri' || tagName == 'bnode'){
-			return <ARTResource>this.createRDFNode(element);
-		} else {
-			throw new Error("Not a RDFResource");
-		}
-	}
-	
-	static createPredicateObjectsList(element): ARTPredicateObjects[] {
-		if (element.tagName != "collection") {
-			throw new Error("Not a collection");
-		}
-		var elements = element.children;
-		var result = [];
-		for (var i = 0; i < elements.length; i++) {
-			var el = elements[i];
-			if (el.tagName != "predicateObjects") {
-				continue;
-			}
-			var predicate = this.createURI(el.getElementsByTagName("predicate")[0].children[0]);
-			var objects = this.createRDFArray(el.getElementsByTagName("objects")[0]);
-			var predicateObjects = new ARTPredicateObjects(predicate, objects);
-			result.push(predicateObjects);
-		}
-		return result;
-	};
-    
+
+    static createRDFResource(element: Element): ARTResource {
+        var tagName = element.tagName;
+        if (tagName == 'uri' || tagName == 'bnode') {
+            return <ARTResource>this.createRDFNode(element);
+        } else {
+            throw new Error("Not a RDFResource");
+        }
+    }
+
+    static createPredicateObjectsList(element: Element): ARTPredicateObjects[] {
+        if (element.tagName != "collection") {
+            throw new Error("Not a collection");
+        }
+        var elements = element.children;
+        var result = [];
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el.tagName != "predicateObjects") {
+                continue;
+            }
+            var predicate = this.createURI(el.getElementsByTagName("predicate")[0].children[0]);
+            var objects = this.createRDFArray(el.getElementsByTagName("objects")[0]);
+            var predicateObjects = new ARTPredicateObjects(predicate, objects);
+            result.push(predicateObjects);
+        }
+        return result;
+    };
+
 }
