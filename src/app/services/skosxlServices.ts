@@ -382,10 +382,9 @@ export class SkosxlServices {
      */
     createRootCollection(prefLabel: string, prefLabelLang: string, collection?: string, lang?: string, mode?: string) {
         console.log("[SkosServices] createCollection");
-        var params: any = {};
-        if (collection != undefined) {
-            prefLabel = prefLabel,
-            prefLabelLang = prefLabelLang
+        var params: any = {
+            prefLabel: prefLabel,
+            prefLabelLang: prefLabelLang
         }
         if (collection != undefined) {
             params.collection = collection;
@@ -415,7 +414,7 @@ export class SkosxlServices {
      * @param lang language in which the show attribute should be rendered
      * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
      */
-    createNestedCollection(container: ARTResource, prefLabel?: string, prefLabelLang?: string, 
+    createNestedCollection(container: ARTResource, prefLabel: string, prefLabelLang: string, 
         collection?: string, lang?: string, mode?: string) {
 
         console.log("[SkosServices] createCollection");

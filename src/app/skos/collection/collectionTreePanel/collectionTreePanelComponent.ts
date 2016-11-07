@@ -35,7 +35,7 @@ export class CollectionTreePanelComponent {
                     this.skosService.createRootCollection(result.label, result.lang, result.name, 
                         this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 } else { //SKOSXL
-                    this.skosxlService.createRootCollection(result.name, result.label, result.lang,
+                    this.skosxlService.createRootCollection(result.label, result.lang, result.name,
                         this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe();
                 }
             },
