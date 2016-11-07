@@ -26,6 +26,43 @@ export class Deserializer {
         }
         return collectionArray;
     };
+
+    /**
+     * creates an array of ARTURIResource and ARTResource from a <collection> element.
+     */
+    static createResourceArray(response): ARTResource[] {
+        var resourceArray: ARTResource[] = new Array();
+        var childElements = response.getElementsByTagName('collection')[0].childNodes;
+        for (var i = 0; i < childElements.length; i++) {
+            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
+                if (childElements[i].tagName == "uri") {
+                    resourceArray.push(this.createURI(childElements[i]));
+                } else if (childElements[i].tagName == "bnode") {
+                    resourceArray.push(this.createBlankNode(childElements[i]));
+                }
+            }
+        }
+        return resourceArray;
+    }
+    
+    /**
+     * creates an array of ARTURIResource and ARTResource 
+     */
+    static createResourceArrayGivenList(childElements): ARTResource[] {
+        var collectionArray: ARTResource[] = new Array();
+        if (typeof childElements.length == "undefined")
+            return null;
+        for (var i = 0; i < childElements.length; i++) {
+            if (childElements[i].nodeType == 1) {// == ELEMENT_NODE
+                if (childElements[i].tagName == "uri") {
+                    collectionArray.push(this.createURI(childElements[i]));
+                } else if (childElements[i].tagName == "bnode") {
+                    collectionArray.push(this.createBlankNode(childElements[i]));
+                }
+            }
+        }
+        return collectionArray;
+    };
     
     /**
      * creates an array of only ARTURIResource from a <collection> element.

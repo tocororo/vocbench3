@@ -28,7 +28,7 @@ export class ResourceViewComponent {
         //so this variable is useful keep this.resource separated (and in sync with the tree)
 
     private resViewXmlResponse = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
-    private typesColl: ARTURIResource[] = null;
+    private typesColl: ARTResource[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
     private topconceptofColl: ARTURIResource[] = null;
     private schemesColl: ARTURIResource[] = null;
@@ -42,6 +42,7 @@ export class ResourceViewComponent {
     private propertiesColl: ARTPredicateObjects[] = null;
     private propertyFacets: any[] = null;
     private inverseofColl: ARTURIResource[] = null;
+    private labelRelationsColl: ARTResource[] = null;
     
     private eventSubscriptions = [];
     
@@ -112,6 +113,7 @@ export class ResourceViewComponent {
         this.propertiesColl = null;
         this.propertyFacets = null;
         this.inverseofColl = null;
+        this.labelRelationsColl = null;
         
         var respResourceElement = this.resViewXmlResponse.getElementsByTagName("resource")[0];
         var respPartitions = this.resViewXmlResponse.children;
@@ -122,8 +124,8 @@ export class ResourceViewComponent {
             if (partitionName == "resource") {
                 this.describedResource = Deserializer.createRDFResource(partition.children[0]);
             } else if (partitionName == "types") {
-                this.typesColl = Deserializer.createURIArray(partition);
-                this.typesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.typesColl);
+                this.typesColl = Deserializer.createResourceArray(partition);
+                this.typesColl = <ARTResource[]>this.filterInferredFromResourceList(this.typesColl);
             } else if (partitionName == "classaxioms") {
                 this.classAxiomColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                 this.classAxiomColl = this.filterInferredFromPredObjList(this.classAxiomColl);
@@ -156,6 +158,9 @@ export class ResourceViewComponent {
             } else if (partitionName == "membersOrdered") {
                 this.membersOrderedColl = Deserializer.createRDFArray(partition);
                 this.membersOrderedColl = this.filterInferredFromResourceList(this.membersOrderedColl);
+            } else if (partitionName == "labelRelations") {
+                this.labelRelationsColl = Deserializer.createResourceArray(partition);
+                this.labelRelationsColl = <ARTResource[]>this.filterInferredFromResourceList(this.labelRelationsColl);
             } else if (partitionName == "properties") {
                 this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
                 this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);

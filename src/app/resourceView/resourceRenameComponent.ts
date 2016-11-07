@@ -32,7 +32,9 @@ export class ResourceRenameComponent {
 
     ngOnChanges(changes) {
         if (changes.resource.currentValue) {
-            this.localName = (<ARTURIResource>this.resource).getLocalName();
+            if (this.resource.isURIResource()) {
+                this.localName = (<ARTURIResource>this.resource).getLocalName();
+            }
         }
     }
     

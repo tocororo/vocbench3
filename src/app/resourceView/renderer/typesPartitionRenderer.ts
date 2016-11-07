@@ -9,7 +9,7 @@ import {OwlServices} from "../../services/owlServices";
 })
 export class TypesPartitionRenderer {
     
-    @Input('object-list') objectList:ARTURIResource[];
+    @Input('object-list') objectList:ARTResource[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
