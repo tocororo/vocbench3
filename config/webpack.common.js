@@ -35,6 +35,15 @@ module.exports = {
         // ],
 
         loaders: [
+            //to fix issue https://github.com/shlomiassaf/angular2-modal/issues/244
+            {
+                test: /\.js$/,
+                include: /(angular2-modal)/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['es2015']
+                }
+            },
             //.ts files
             //ts loader transpiles the Typescript code to ES5, guided by the tsconfig.json file
             //angular2-template-loader loads angular components' template and styles
@@ -52,7 +61,7 @@ module.exports = {
             //style and css loaders 
             {
                 test: /\.css$/,
-                exclude: helpers.root('src', 'app'), 
+                exclude: helpers.root('src', 'app'),
                 loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
             },
             //css files in src/app/ (component-scoped styles specified in a styleUrls metadata property)
@@ -80,7 +89,7 @@ module.exports = {
     plugins: [
 
         //This will let bootstrap to find jquery
-        new webpack.ProvidePlugin({   
+        new webpack.ProvidePlugin({
             jQuery: 'jquery',
             $: 'jquery',
             jquery: 'jquery'
