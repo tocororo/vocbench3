@@ -9,7 +9,7 @@ Required Semantic Turkey server running.
 ### Run the application ###
 
 * Download the project
-* From the project folder execute `npm install` to install all the dependencies
+* From the project folder execute `npm install` (or `npm i`) to install all the dependencies
 * Execute `npm start` to run the webpack lightweight server (it compiles and watches for file changes), then launch the application in a browser at page `localhost:8080` (unless you have changed the port in `package.json` `"start": "webpack-dev-server --inline --progress --port 8080"`)
 
 
