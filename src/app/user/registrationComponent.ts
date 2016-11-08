@@ -38,12 +38,8 @@ export class RegistrationComponent {
     private submit() {
         this.submitted = true;
         if (this.isDataValid()) {
-            //call service
-            console.log("email:", this.email, "\nusername", this.username, "\npassword", this.password, 
-                "\nfirstName:", this.firstName, "\nlastName:", this.lastName, "\nbirthday:", this.birthday,
-                "\ngender:", this.gender, "\ncountry:", this.country, "\naddress:", this.address,
-                "\naffiliation:", this.affiliation, "\nurl:", this.url, "\nphone:", this.phone);
-            this.userService.registerUser(this.email, this.password, this.firstName, this.lastName).subscribe(
+            this.userService.registerUser(this.email, this.password, this.firstName, this.lastName,
+                this.birthday, this.gender, this.country, this.address, this.affiliation, this.url, this.phone).subscribe(
                 stResp => {
                     this.modalService.alert("Registration complete",
                         "User " + this.firstName + " " + this.lastName + " registered succesfully." +
@@ -64,7 +60,6 @@ export class RegistrationComponent {
         // var usernameValid = this.username && this.username.trim() != "";
         var pwdValid = this.password && this.password.trim() != "" && this.isConfirmPwdOk();
         var firstLastNameValid = this.firstName && this.firstName.trim() != "" && this.lastName && this.lastName.trim() != "";
-        console.log("emailValid " + emailValid + ", pwdValid " + pwdValid + ", firstLastNameValid " + firstLastNameValid)
         return emailValid && pwdValid && firstLastNameValid;
     }
 

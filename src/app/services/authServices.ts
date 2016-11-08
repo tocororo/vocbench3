@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {Deserializer} from "../utils/Deserializer";
 import {HttpManager} from "../utils/HttpManager";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {User} from "../utils/User";
@@ -24,8 +25,7 @@ export class AuthServices {
         }
         return this.httpMgr.doPost(this.serviceName, "login", params, this.oldTypeService, true, true).map(
             stResp => {
-                var loggedUser: User = new User(
-                    stResp.user.email, stResp.user.firstName, stResp.user.lastName, stResp.user.roles);
+                var loggedUser: User = Deserializer.createUser(stResp);
                 this.vbCtx.setLoggedUser(loggedUser); 
                 return loggedUser;
             }

@@ -1,5 +1,8 @@
-import { ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects,
-    ResAttribute, RDFResourceRolesEnum } from "./ARTResources";
+import {
+    ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects,
+    ResAttribute, RDFResourceRolesEnum
+} from "./ARTResources";
+import { User } from "./User";
 
 export class Deserializer {
 
@@ -259,5 +262,38 @@ export class Deserializer {
         }
         return result;
     };
+
+    static createUser(resp): User {
+        if (resp.user) {
+            var user = new User(resp.user.email, resp.user.firstName, resp.user.lastName, resp.user.roles);
+            if (resp.user.birthday != undefined) {
+                user.setBirthday(resp.user.birthday);
+            }
+            if (resp.user.phone != undefined) {
+                user.setPhone(resp.user.phone);
+            }
+            if (resp.user.gender != undefined) {
+                user.setGender(resp.user.gender)
+            }
+            if (resp.user.country != undefined) {
+                user.setCountry(resp.user.country);
+            }
+            if (resp.user.address != undefined) {
+                user.setAddress(resp.user.address);
+            }
+            if (resp.user.registrationDate != undefined) {
+                user.setRegistrationDate(resp.user.registrationDate);
+            }
+            if (resp.user.affiliation != undefined) {
+                user.setAffiliation(resp.user.affiliation);
+            }
+            if (resp.user.url != undefined) {
+                user.setUrl(resp.user.ur);
+            }
+            return user;
+        } else {
+            return null;
+        }
+    }
 
 }

@@ -27,6 +27,12 @@ export class LoginComponent {
             }
         )
     }
+
+    private onKeydown(event) {
+        if (event.which == "13") {
+            this.login();
+        }
+    }
     
     private login() {
         //here I should do an authentication request to server. In case of success, store the returned token and redirect to project
