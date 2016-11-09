@@ -1,9 +1,59 @@
 <div class="vbox">
-    <div><label>Email:</label> {{user.getEmail()}}</div>
-    <div><label>Complete name:</label> {{user.getFirstName()}} {{user.getLastName()}}</div>
-    <div><label>Roles:</label> {{user.listRoles() | json}}</div>
-    <div>
-        Following button performs a request to a service for which ROLE_ADMIN is required
-        <button class="btn btn-primary" (click)="testAdmin()">Test required admin</button>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <label><span class="glyphicon glyphicon-user"></span> User details</label>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-condensed table-borderless">
+                <colgroup>
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 40%;">
+                    <col span="1" style="width: 10%;">
+                    <col span="1" style="width: 40%;">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td nowrap><label>First name:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getFirstName()" disabled></td>
+                        <td nowrap><label>Last name:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getLastName()" disabled></td>
+                    </tr>
+                    <tr>
+                        <td nowrap><label>E-mail:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getEmail()" disabled></td>
+                        <td nowrap><label>Phone:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getPhone()" disabled></td>
+                    </tr>
+                    <tr>
+                        <td nowrap><label>Birthday:</label></td>
+                        <td><input type="date" class="form-control input-sm" [ngModel]="user.getBirthday()" disabled></td>
+                        <td nowrap><label>Gender:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getGender()" disabled></td>
+                    </tr>
+                    <tr>
+                        <td nowrap><label>Country:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getCountry()" disabled></td>
+                        <td nowrap><label>Address:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getAddress()" disabled></td>
+                    </tr>
+                    <tr>
+                        <td nowrap><label>Affiliation:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getAffiliation()" disabled></td>
+                        <td nowrap><label>Url:</label></td>
+                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getUrl()" disabled></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel-footer">
+            <label>Registered: </label> {{user.getRegistrationDate()}}
+        </div>
+
     </div>
+
+
 </div>

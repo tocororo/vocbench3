@@ -35,17 +35,6 @@ module.exports = {
         // ],
 
         loaders: [
-            //to fix issue https://github.com/shlomiassaf/angular2-modal/issues/244
-            {
-                test: /\.js$/,
-                include: /(angular2-modal)/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['es2015']
-                }
-            },
-            //.ts files
-            //ts loader transpiles the Typescript code to ES5, guided by the tsconfig.json file
             //angular2-template-loader loads angular components' template and styles
             {
                 test: /\.ts$/,
