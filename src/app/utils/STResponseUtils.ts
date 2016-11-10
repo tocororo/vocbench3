@@ -155,7 +155,7 @@ export class STResponseUtils {
 	 */
     private static getFailMessage(stResp) {
         if (stResp instanceof Document) { //XML
-            return stResp.getElementsByTagName("reply")[0].textContent;
+            return stResp.getElementsByTagName("data")[0].textContent;
         } else { //JSON
             return stResp.stresponse.reply.msg;
         }

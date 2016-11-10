@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, Response, RequestOptions} from '@angular/http';
+import {Router} from "@angular/router";
 import 'rxjs/Rx'; //for map function
 import {Observable} from 'rxjs/Observable';
 import {STResponseUtils} from "../utils/STResponseUtils";
@@ -20,7 +21,7 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
+    constructor(private http: Http, private vbCtx: VocbenchCtx, private router: Router, private modalService: ModalServices) {
         //init serverhost ip (see /config/webpack.prod.js)
         if (process.env.SERVERHOST == undefined) {
             this.serverhost = "127.0.0.1:1979";
@@ -310,10 +311,10 @@ export class HttpManager {
             //In this case the response (err) body contains an error message
             this.modalService.alert("Error", err._body, "error").then(
                 result => {
-                    //in case user is not logged at all, reload app,
-                    //so it performs a new check on authentication and then redirect to home
+                    //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
-                        window.location.reload();
+                        this.vbCtx.resetContext();
+                        this.router.navigate(['/Projects']);
                     }
                 }
             );

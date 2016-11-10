@@ -15,8 +15,8 @@
     <class-tree *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)">
     </class-tree>
             
-    <concept-tree *ngIf="showConceptTree()" (nodeSelected)="onResourceSelected($event)" 
-        [schemeChangeable]="true" [scheme]="currentScheme" (schemeChanged)="onSchemeChanged()">
+    <concept-tree *ngIf="showConceptTree()" (nodeSelected)="onResourceSelected($event)"
+        schemeChangeable="true" [scheme]="currentScheme" (schemeChanged)="onSchemeChanged()">
     </concept-tree>
             
     <property-tree *ngIf="showPropertyTree()" (nodeSelected)="onResourceSelected($event)">

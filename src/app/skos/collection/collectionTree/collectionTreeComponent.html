@@ -1,11 +1,32 @@
-<div class="scrollableContainer">
-    <collection-tree-node *ngFor="let r of roots" [node]="r" (nodeSelected)="onNodeSelected($event)"></collection-tree-node>
-</div>
+<div class="panel panel-default vbox">
 
-<div #blockDivTree class="blockingDiv" style="display:none">
-    <div class="loadingDiv">
-        <div>
-            <p>Loading...</p><img src="../../../../assets/images/loading.gif" />
+    <div class="panel-body vbox">
+
+        <div class="scrollableContainer">
+            <collection-tree-node *ngFor="let r of roots" [node]="r" (nodeSelected)="onNodeSelected($event)"></collection-tree-node>
+        </div>
+
+        <div #blockDivTree class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="../../../../assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+    
+    </div>
+
+    <!-- Search -->
+    <div *ngIf="!hideSearch" class="panel-footer">
+        <div class="input-group input-group-xs">
+            <input #searchinput type="text" class="form-control" placeholder="Search..." 
+                (keydown)="searchKeyHandler($event.which, searchinput.value)">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
         </div>
     </div>
+
 </div>

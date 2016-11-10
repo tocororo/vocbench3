@@ -5,6 +5,7 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
 import {SearchServices} from "../../../services/searchServices";
 import {CollectionTreeNodeComponent} from "./collectionTreeNodeComponent";
+import {ModalServices} from "../../../widget/modal/modalServices";
 
 @Component({
     selector: "collection-tree",
@@ -13,6 +14,7 @@ import {CollectionTreeNodeComponent} from "./collectionTreeNodeComponent";
 })
 export class CollectionTreeComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Input() hideSearch: boolean = false;
     
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
@@ -25,8 +27,8 @@ export class CollectionTreeComponent {
     
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private eventHandler: VBEventHandler,
-        private vbCtx: VocbenchCtx) {
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
+        private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
             newColl => this.onRootCollectionCreated(newColl)));
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
@@ -65,9 +67,44 @@ export class CollectionTreeComponent {
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
+
+    private doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain",
+                this.vbCtx.getContentLanguage(true)).subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.openTreeAt(selectedResource);
+                                },
+                                () => {}
+                            );
+                        }
+                    }
+                }
+            );
+        }
+    }
+    
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key, searchedText) {
+        if (key == "13") {
+            this.doSearch(searchedText);           
+        }
+    }
     
     public openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
+        this.searchService.getPathFromRoot(node, node.getRole()).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node

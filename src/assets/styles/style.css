@@ -124,8 +124,9 @@ concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-
     flex-flow: column;
 }
 
-concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list {
-    border: 1px solid #ddd;
+concept-tree .panel-body, class-tree .panel-body, property-tree .panel-body,
+collection-tree .panel-body, instance-list .panel-body, scheme-list .panel-body {
+    padding: 0px;
 }
 
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */

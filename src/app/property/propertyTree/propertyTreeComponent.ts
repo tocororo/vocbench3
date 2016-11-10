@@ -4,13 +4,15 @@ import {VBEventHandler} from "../../utils/VBEventHandler";
 import {PropertyServices} from "../../services/propertyServices";
 import {SearchServices} from "../../services/searchServices";
 import {PropertyTreeNodeComponent} from "./propertyTreeNodeComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "property-tree",
 	templateUrl: "./propertyTreeComponent.html",
 })
 export class PropertyTreeComponent {
-    @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource 
+    @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource
+    @Input() hideSearch: boolean = false;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
@@ -21,7 +23,8 @@ export class PropertyTreeComponent {
     
     private eventSubscriptions = [];
 	
-	constructor(private propertyService:PropertyServices, private searchService: SearchServices, private eventHandler:VBEventHandler) {
+	constructor(private propertyService:PropertyServices, private searchService: SearchServices,
+        private modalService: ModalServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
@@ -63,6 +66,40 @@ export class PropertyTreeComponent {
     
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+
+    private doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], true, true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.openTreeAt(selectedResource);
+                                },
+                                () => {}
+                            );
+                        }
+                    }
+                }
+            );
+        }
+    }
+    
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key, searchedText) {
+        if (key == "13") {
+            this.doSearch(searchedText);           
+        }
     }
     
     public openTreeAt(node: ARTURIResource) {

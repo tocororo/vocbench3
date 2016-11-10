@@ -1,7 +1,9 @@
 import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
+import {ModalServices} from "../../widget/modal/modalServices";
+import {SearchServices} from "../../services/searchServices";
 
 @Component({
 	selector: "instance-list",
@@ -9,7 +11,8 @@ import {OwlServices} from "../../services/owlServices";
     host: { class: "blockingDivHost" }
 })
 export class InstanceListComponent {
-    @Input('cls') cls:ARTURIResource;
+    @Input() cls:ARTURIResource;
+    @Input() hideSearch: boolean = false;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get the element in the view referenced with #blockDivTree
@@ -28,7 +31,8 @@ export class InstanceListComponent {
     
     private eventSubscriptions = [];
     
-    constructor(private owlServices: OwlServices, private eventHandler: VBEventHandler) {
+    constructor(private owlServices: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
+        private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             data => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
@@ -85,6 +89,40 @@ export class InstanceListComponent {
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
+
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key, searchedText) {
+        if (key == "13") {
+            this.doSearch(searchedText);           
+        }
+    }
+
+    private doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchInstancesOfClass(this.cls, searchedText, true, true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.selectSearchedInstance(this.cls, searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.selectSearchedInstance(this.cls, selectedResource);
+                                },
+                                () => {}
+                            );
+                        }
+                    }
+                }
+            );
+        }
+    }
     
     private selectInstance(instance: ARTURIResource) {
         if (this.selectedInstance == undefined) {
@@ -99,8 +137,12 @@ export class InstanceListComponent {
         this.nodeSelected.emit(instance);
     }
     
+    /**
+     * cls is useful when the instance list is inside the classTreePanel and so this component need to 
+     * be in sync with the class selected in the tree
+     */
     public selectSearchedInstance(cls: ARTURIResource, instance: ARTURIResource) {
-        //Input cls has still not been bound or not changed (cls has been bound previously with a different type) 
+        //In the tree, input cls has still not been bound or not changed (cls has been bound previously with a different type) 
         if (this.cls == undefined || cls.getURI() != this.cls.getURI()) {//save the pending search
             this.pendingSearch.pending = true;
             this.pendingSearch.instance = instance;

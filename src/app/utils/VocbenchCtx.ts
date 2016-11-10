@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {ARTURIResource, RDFResourceRolesEnum} from './ARTResources';
-import {Project} from './Project';
-import {Cookie} from "./Cookie";
-import {User} from './User';
+import { Injectable } from '@angular/core';
+import { ARTURIResource, RDFResourceRolesEnum } from './ARTResources';
+import { Project } from './Project';
+import { Cookie } from "./Cookie";
+import { User } from './User';
 
 @Injectable()
 export class VocbenchCtx {
@@ -14,7 +14,7 @@ export class VocbenchCtx {
     private loggedUser: User;
 
     constructor() { }
-    
+
     setWorkingProject(project: Project) {
         this.workingProject = project;
     }
@@ -22,7 +22,7 @@ export class VocbenchCtx {
     getWorkingProject(): Project {
         return this.workingProject;
     }
-    
+
     removeWorkingProject() {
         this.workingProject = undefined;
         this.defaultNamespace = undefined;
@@ -36,7 +36,7 @@ export class VocbenchCtx {
     getDefaultNamespace(): string {
         return this.defaultNamespace;
     }
-    
+
     setContextProject(project: Project) {
         this.ctxProject = project;
     }
@@ -44,7 +44,7 @@ export class VocbenchCtx {
     getContextProject(): Project {
         return this.ctxProject;
     }
-    
+
     removeContextProject() {
         this.ctxProject = undefined;
     }
@@ -65,7 +65,7 @@ export class VocbenchCtx {
      * Saves the given scheme for the project in use as cookie
      */
     setScheme(scheme: ARTURIResource) {
-        Cookie.setCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName(), scheme.getURI(), 365*10);
+        Cookie.setCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName(), scheme.getURI(), 365 * 10);
     }
 
     /**
@@ -87,26 +87,26 @@ export class VocbenchCtx {
     removeScheme(project: Project) {
         Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
     }
-    
+
     setSessionToken(token: string) {
         this.sessionToken = token
     }
-    
+
     getSessionToken(): string {
         return this.sessionToken;
     }
-    
+
     removeSessionToken() {
         this.sessionToken = undefined;
     }
-    
+
     /**
      * Sets the content language for project in use as cookie.
      */
     setContentLanguage(langTag: string) {
-        Cookie.setCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName(), langTag, 365*10);
+        Cookie.setCookie(Cookie.VB_CONTENT_LANG + "_" + this.getWorkingProject().getName(), langTag, 365 * 10);
     }
-    
+
     /**
      * Returns the content language for project in use set as cookie.
      * If no language is set, return "en" as default.
@@ -140,23 +140,23 @@ export class VocbenchCtx {
      * The language of the labels is then determined by the content language.
      */
     setHumanReadable(humanReadable: boolean) {
-        Cookie.setCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName(), humanReadable + "", 365*10);
+        Cookie.setCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName(), humanReadable + "", 365 * 10);
     }
-    
+
     /**
      * Returns the human_readable cookie that tells if the resources in trees should be rendered with human readable labels.
      */
     getHumanReadable(): boolean {
         return Cookie.getCookie(Cookie.VB_HUMAN_READABLE + "_" + this.getWorkingProject().getName()) == "true";
     }
-    
+
     /**
      * Sets the preference to show or hide the inferred information in resource view
      */
     setInferenceInResourceView(showInferred: boolean) {
-        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365*10);
+        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365 * 10);
     }
-    
+
     /**
      * Gets the preference to show or hide the inferred information in resource view
      */
@@ -178,6 +178,17 @@ export class VocbenchCtx {
      */
     isLoggedIn(): boolean {
         return this.loggedUser != undefined;
+    }
+
+    /**
+     * Reset to null all the variable of the context
+     */
+    resetContext() {
+        this.workingProject = null;
+        this.defaultNamespace = null;
+        this.ctxProject = null;
+        this.sessionToken = null;
+        this.loggedUser = null;
     }
 
 }

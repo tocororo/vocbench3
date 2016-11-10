@@ -20,21 +20,8 @@
     <!-- Tree -->
     <div class="panel-body vbox">
         <concept-tree [scheme]="scheme" (nodeSelected)="onNodeSelected($event)"
-            (nodeCtrlClicked)="onNodeCtrlClicked($event)"
-            (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
+            (nodeCtrlClicked)="onNodeCtrlClicked($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>
     
-    <!-- Search -->
-    <div class="panel-footer">
-        <div class="input-group input-group-sm">
-            <input #searchinput type="text" class="form-control" [placeholder]="searchInputPlaceholder" 
-                (keydown)="searchKeyHandler($event.which, searchinput.value)" [disabled]="!scheme">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)" [disabled]="!scheme">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </span>
-        </div>
-    </div>
 </div>

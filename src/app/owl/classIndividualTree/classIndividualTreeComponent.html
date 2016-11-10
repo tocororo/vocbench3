@@ -6,6 +6,6 @@
         (nodeSelected)="onInstanceSelected($event)">
     </instance-list>
     <concept-tree *ngIf="isRangeConcept()" style="margin-left: 4px;" (nodeSelected)="onInstanceSelected($event)"
-        [schemeChangeable]="true" [scheme]="currentScheme" (schemeChanged)="onConceptTreeSchemeChange($event)">
+        schemeChangeable="true" [scheme]="currentScheme" (schemeChanged)="onConceptTreeSchemeChange($event)">
     </concept-tree>
 </div>

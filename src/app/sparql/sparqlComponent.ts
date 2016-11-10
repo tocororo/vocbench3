@@ -48,6 +48,7 @@ export class SparqlComponent {
     
     private doQuery(tab) {
         var initTime = new Date().getTime();
+        tab.queryResult = null;
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
             data => {

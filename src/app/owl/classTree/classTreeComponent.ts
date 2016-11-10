@@ -5,6 +5,7 @@ import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
 import {SearchServices} from "../../services/searchServices";
 import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
+import {ModalServices} from "../../widget/modal/modalServices";
 
 @Component({
 	selector: "class-tree",
@@ -13,6 +14,7 @@ import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
 })
 export class ClassTreeComponent {
     @Input('roots') rootClasses: ARTURIResource[];
+    @Input() hideSearch: boolean = false;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
@@ -28,7 +30,8 @@ export class ClassTreeComponent {
     
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
-    constructor(private owlService: OwlServices, private searchService: SearchServices, private eventHandler: VBEventHandler) {
+    constructor(private owlService: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
+        private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
     }
     
@@ -70,6 +73,40 @@ export class ClassTreeComponent {
     
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key, searchedText) {
+        if (key == "13") {
+            this.doSearch(searchedText);           
+        }
+    }
+
+    private doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], true, true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.openTreeAt(selectedResource);
+                                },
+                                () => {}
+                            );
+                        }
+                    }
+                }
+            );
+        }
     }
     
     public openTreeAt(node: ARTURIResource) {
