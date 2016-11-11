@@ -51,11 +51,11 @@ export class SchemeListComponent {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            this.selectScheme(searchResult[0]);
+                            this.selectScheme(this.getSchemeToSelectFromList(searchResult[0]));
                         } else { //multiple results, ask the user which one select
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 selectedResource => {
-                                    this.selectScheme(selectedResource);
+                                    this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
                                 },
                                 () => {}
                             );
@@ -72,6 +72,19 @@ export class SchemeListComponent {
     private searchKeyHandler(key, searchedText) {
         if (key == "13") {
             this.doSearch(searchedText);           
+        }
+    }
+
+    /**
+     * Retrieves from the schemeList the scheme to select. This method is necessary because searchResource service
+     * returns a new ARTURIResource that has the same attribute of the one in the schemeList but is not the same object,
+     * so I need to invoke selectScheme to the one in the list, not to the one returned from service
+     */
+    private getSchemeToSelectFromList(scheme: ARTURIResource): ARTURIResource {
+        for (var i = 0; i < this.schemeList.length; i++) {
+            if (this.schemeList[i].getURI() == scheme.getURI()) {
+                return this.schemeList[i];
+            }
         }
     }
     

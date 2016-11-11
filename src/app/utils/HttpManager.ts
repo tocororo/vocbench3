@@ -314,7 +314,7 @@ export class HttpManager {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
                         this.vbCtx.resetContext();
-                        this.router.navigate(['/Projects']);
+                        this.router.navigate(['/Home']);
                     }
                 }
             );

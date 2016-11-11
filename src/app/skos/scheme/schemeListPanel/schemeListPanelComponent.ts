@@ -1,8 +1,9 @@
 import {Component, Output, EventEmitter} from "@angular/core";
 import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
+import {SearchServices} from "../../../services/searchServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 
@@ -22,7 +23,7 @@ export class SchemeListPanelComponent {
     
     private eventSubscriptions = [];
 
-    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, 
+    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
         
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
@@ -134,7 +135,7 @@ export class SchemeListPanelComponent {
     }
     
     /**
-     * Called when a scheme is clicked. Set the clicked scheme as selected. Useful to select a scheme to delete
+     * Called when a scheme is clicked. Set the clicked scheme as selected
      */
     private selectScheme(scheme: ARTURIResource) {
         if (this.selectedScheme == undefined) {
@@ -156,6 +157,56 @@ export class SchemeListPanelComponent {
         this.nodeSelected.emit(undefined);
         //and reinitialize tree
         this.initList();
+    }
+
+
+    private doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain",
+                this.vbCtx.getContentLanguage(true)).subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            console.log("1 result");
+                            this.selectScheme(this.getSchemeToSelectFromList(searchResult[0]));
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                selectedResource => {
+                                    this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
+                                },
+                                () => {}
+                            );
+                        }
+                    }
+                }
+            );
+        }
+    }
+    
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key, searchedText) {
+        if (key == "13") {
+            this.doSearch(searchedText);           
+        }
+    }
+
+    /**
+     * Retrieves from the schemeList the scheme to select. This method is necessary because searchResource service
+     * returns a new ARTURIResource that has the same attribute of the one in the schemeList but is not the same object,
+     * so I need to invoke selectScheme to the one in the list, not to the one returned from service
+     */
+    private getSchemeToSelectFromList(scheme: ARTURIResource): ARTURIResource {
+        for (var i = 0; i < this.schemeList.length; i++) {
+            if (this.schemeList[i].getURI() == scheme.getURI()) {
+                return this.schemeList[i];
+            }
+        }
     }
     
 }
