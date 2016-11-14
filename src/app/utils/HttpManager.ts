@@ -157,8 +157,6 @@ export class HttpManager {
     
     /**
      * Upload a file through an HTTP POST request. 
-     * Note, this method doesn't use the Http module of Angular2 (since in Angular2 the FormData in the POST is non yet supported),
-     * but it uses a classic XMLHttpRequest and return an Observable to align this method response with the others.
      * In the params object at least one parameter should be a File, otherwise there's no difference between this method and doPost.
      * @param service the service name
      * @param request the request name
@@ -171,7 +169,7 @@ export class HttpManager {
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      */
-    uploadFile(service: string, request: string, params, oldType: boolean) {
+    uploadFile(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
@@ -181,47 +179,41 @@ export class HttpManager {
         
         //add ctx parameters
         url += this.getContextParametersForUrl();
+
         console.log("[POST]: " + url);
-        
+
+        //prepare form data
         var formData = new FormData();
         for (var paramName in params) {
             formData.append(paramName, params[paramName]);
         }
-        
-        var httpReq = new XMLHttpRequest();
-        httpReq.withCredentials = true;
-        httpReq.open("POST", url, true);
-        //headers
-        httpReq.setRequestHeader("Accept", "application/xml");
 
-        return new Observable(o => {
-            //handle the request completed
-            httpReq.onreadystatechange = function(event) {
-                if (httpReq.readyState === 4) { //request finished and response is ready
-                    if (httpReq.status === 200) {
-                        var parser = new DOMParser();
-                        var stResp = parser.parseFromString(httpReq.responseText, "application/xml");
-                        o.next(stResp);
-                        o.complete();
-                    } else {
-                        throw new Error(httpReq.statusText);
-                    }
+        var headers = new Headers();
+        var acceptRespType = respJson ? "application/json" : "application/xml";
+        headers.append('Accept', acceptRespType);
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
+
+        //execute request
+        return this.http.post(url, formData, options)
+            .map(res => {
+                if (this.isResponseXml(res)) {
+                    var parser = new DOMParser();
+                    var stResp = parser.parseFromString(res.text(), "application/xml");
+                    return stResp;
+                } else if (this.isResponseJson(res)) {
+                    return res.json();
                 }
-            };
-            //execute the post
-            httpReq.send(formData);
-        })
-        .map(stResp => {
-            if (STResponseUtils.isErrorResponse(stResp)) {
-                throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
-            } else {
-                return STResponseUtils.getResponseData(stResp);
-            }
-        })
-        .catch(error => {
-            return this.handleError(error);
-        });
-        
+            })
+            .map(stResp => {
+                if (STResponseUtils.isErrorResponse(stResp)) {
+                    throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
+                } else {
+                    return STResponseUtils.getResponseData(stResp);
+                }
+            })
+            .catch(error => {
+                return this.handleError(error, skipErrorAlert);
+            });
     }
     
     /**
