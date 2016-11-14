@@ -1,4 +1,5 @@
-<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="padding: 10px;">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="padding: 10px;" 
+	(click)="onMenuOpen()" [title]="currentUser.getFirstName() + ' ' + currentUser.getLastName()">
 	<img src="../../assets/images/logos/user.svg" style="background: #95A5BC; border-radius: 4px;" height="24" width="24">
 </a>
 <ul class="dropdown-menu" style="font-size: 12px;">

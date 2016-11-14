@@ -17,33 +17,33 @@
                 <tbody>
                     <tr>
                         <td nowrap><label>First name:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getFirstName()" disabled></td>
+                        <td><input-editable [value]="user.getFirstName()" (valueEdited)="updateFirstName($event)"></input-editable></td>
                         <td nowrap><label>Last name:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getLastName()" disabled></td>
+                        <td><input-editable [value]="user.getLastName()" (valueEdited)="updateLastName($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>E-mail:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getEmail()" disabled></td>
+                        <td><input type="email" class="form-control input-sm" [ngModel]="user.getEmail()" readonly></td>
                         <td nowrap><label>Phone:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getPhone()" disabled></td>
+                        <td><input-editable [value]="user.getPhone()" (valueEdited)="updatePhone($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Birthday:</label></td>
-                        <td><input type="date" class="form-control input-sm" [ngModel]="user.getBirthday()" disabled></td>
+                        <td><input-editable type="date" [value]="user.getBirthday()" (valueEdited)="updateBirthday($event)"></input-editable></td>
                         <td nowrap><label>Gender:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getGender()" disabled></td>
+                        <td><input-editable type="select" [options]="genders" [value]="user.getGender()" (valueEdited)="updateGender($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Country:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getCountry()" disabled></td>
+                        <td><input-editable type="select" [options]="countries" [value]="user.getCountry()" (valueEdited)="updateCountry($event)"></input-editable></td>
                         <td nowrap><label>Address:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getAddress()" disabled></td>
+                        <td><input-editable [value]="user.getAddress()" (valueEdited)="updateAddress($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Affiliation:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getAffiliation()" disabled></td>
+                        <td><input-editable [value]="user.getAffiliation()" (valueEdited)="updateAffiliation($event)"></input-editable></td>
                         <td nowrap><label>Url:</label></td>
-                        <td><input type="text" class="form-control input-sm" [ngModel]="user.getUrl()" disabled></td>
+                        <td><input-editable [value]="user.getUrl()" (valueEdited)="updateUrl($event)"></input-editable></td>
                     </tr>
                 </tbody>
             </table>

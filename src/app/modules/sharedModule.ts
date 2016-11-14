@@ -7,6 +7,7 @@ import {LangPickerComponent} from '../widget/langPicker/langPickerComponent';
 import {RdfResourceComponent} from '../widget/rdfResource/rdfResourceComponent';
 import {SanitizerDirective} from "../widget/directives/sanitizerDirective";
 import {CodemirrorComponent} from "../widget/codemirror/codemirrorComponent";
+import {InputEditableComponent} from '../widget/inputEditable/inputEditableComponent';
 
 import {YasguiComponent} from '../sparql/yasguiComponent';
 
@@ -14,10 +15,11 @@ import {YasguiComponent} from '../sparql/yasguiComponent';
     imports: [CommonModule, FormsModule],
     declarations: [
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
-        YasguiComponent, CodemirrorComponent],
+        YasguiComponent, CodemirrorComponent, InputEditableComponent
+    ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
-        YasguiComponent, CodemirrorComponent
+        YasguiComponent, CodemirrorComponent, InputEditableComponent
     ],
     providers: []
 })

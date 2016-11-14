@@ -23,6 +23,14 @@ export class UserMenuComponent {
     }
 
     /**
+     * Listener when menu is clicked to open. Updates currentUser variable.
+     * This is needed because the user in the context could have been changed from user profile page.
+     */
+    private onMenuOpen() {
+        this.currentUser = this.vbCtx.getLoggedUser();
+    }
+
+    /**
      * returns true if a project is open. Useful to enable/disable navbar links
      */ 
     private isProjectOpen(): boolean {
