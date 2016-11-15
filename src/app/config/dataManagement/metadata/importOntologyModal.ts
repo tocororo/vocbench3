@@ -12,6 +12,7 @@ export class ImportOntologyModalData extends BSModalContext {
         public importType: ImportType
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

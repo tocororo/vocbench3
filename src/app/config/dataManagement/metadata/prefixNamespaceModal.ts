@@ -16,6 +16,7 @@ export class PrefixNamespaceModalData extends BSModalContext {
         public namespaceReadonly: boolean = false
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

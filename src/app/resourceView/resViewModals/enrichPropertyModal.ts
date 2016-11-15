@@ -19,6 +19,7 @@ export class EnrichPropertyModalData extends BSModalContext {
     ) {
         super();
         this.size = "lg";
+        this.keyboard = null;
         if (rangeClasses != undefined && rangeClasses.length > 0) {
             this.rangeClasses = rangeClasses;
         }

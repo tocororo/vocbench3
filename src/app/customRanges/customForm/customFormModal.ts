@@ -14,6 +14,7 @@ export class CustomFormModalData extends BSModalContext {
         public creId: string
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

@@ -6,6 +6,7 @@ import {ARTURIResource} from '../../../../utils/ARTResources';
 export class SchemeListModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
         super();
+        this.keyboard = null;
     }
 }
 

@@ -10,6 +10,7 @@ import {Cookie} from "../../../utils/Cookie";
 export class ValidationSettingsModalData extends BSModalContext {
     constructor() {
         super();
+        this.keyboard = null;
     }
 }
 

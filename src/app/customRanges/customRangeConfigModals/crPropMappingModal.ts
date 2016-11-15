@@ -12,6 +12,7 @@ import {ARTURIResource} from "../../utils/ARTResources";
 export class CustomRangePropMappingModalData extends BSModalContext {
     constructor() {
         super();
+        this.keyboard = null;
     }
 }
 

@@ -15,6 +15,7 @@ export class ResourceAlignmentModalData extends BSModalContext {
      */
     constructor(public resource: ARTResource) {
         super();
+        this.keyboard = null;
     }
 }
 

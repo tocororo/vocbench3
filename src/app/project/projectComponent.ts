@@ -1,6 +1,9 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
 import {Router} from "@angular/router";
 import {Observable} from 'rxjs/Observable';
+import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {OverlayConfig} from 'angular2-modal';
+import {ProjectPropertiesModal, ProjectPropertiesModalData} from "./projectPropertiesModal";
 import {ProjectServices} from "../services/projectServices";
 import {MetadataServices} from "../services/metadataServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
@@ -20,7 +23,8 @@ export class ProjectComponent implements OnInit {
     private eventSubscriptions = [];
     
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private vbCtx: VocbenchCtx, private router: Router, private eventHandler: VBEventHandler, private modalService: ModalServices) {
+        private vbCtx: VocbenchCtx, private router: Router, private eventHandler: VBEventHandler, 
+        private modalService: ModalServices, private modal: Modal) {
         this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(project => this.onProjectClosed(project)));
     }
 
@@ -175,6 +179,20 @@ export class ProjectComponent implements OnInit {
             stResp => {
                 this.modalService.alert("Save project", "Project " + project.getName() + " saved successfully");
             }
+        );
+    }
+
+    /**
+     * Opens a modal to show the properties of the selected project
+     */
+    private openPropertyModal() {
+        var modalData = new ProjectPropertiesModalData(this.selectedProject);
+        const builder = new BSModalContextBuilder<ProjectPropertiesModalData>(
+            modalData, undefined, ProjectPropertiesModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ProjectPropertiesModal, overlayConfig).then(
+            dialog => dialog.result
         );
     }
     

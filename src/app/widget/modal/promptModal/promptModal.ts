@@ -20,6 +20,7 @@ export class PromptModalData extends BSModalContext {
         public inputSanitized: boolean = false
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

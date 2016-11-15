@@ -15,6 +15,7 @@ export class NewTypedLiteralModalData extends BSModalContext {
         public allowedDatatypes: Array<string>
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

@@ -9,6 +9,7 @@ export class ValidationReportModalData extends BSModalContext {
     constructor(public report: Array<any>) {
         super();
         this.size = "lg";
+        this.keyboard = null;
     }
 }
 

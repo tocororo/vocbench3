@@ -19,6 +19,7 @@ export class ConfirmModalData extends BSModalContext {
         public noText: string = 'No'
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

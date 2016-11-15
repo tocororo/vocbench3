@@ -11,6 +11,7 @@ import {VBEventHandler} from "../../../utils/VBEventHandler";
 export class ContentLangModalData extends BSModalContext {
     constructor() {
         super();
+        this.keyboard = null;
     }
 }
 

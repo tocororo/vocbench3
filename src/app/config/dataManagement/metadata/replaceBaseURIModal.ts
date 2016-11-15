@@ -13,6 +13,7 @@ export class ReplaceBaseURIModalData extends BSModalContext {
         public baseURI: string
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

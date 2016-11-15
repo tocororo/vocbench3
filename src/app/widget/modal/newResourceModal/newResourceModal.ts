@@ -9,6 +9,7 @@ export class NewResourceModalData extends BSModalContext {
         public lang: string = "en"
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

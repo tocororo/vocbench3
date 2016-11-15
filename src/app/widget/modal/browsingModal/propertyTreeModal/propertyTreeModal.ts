@@ -12,7 +12,8 @@ export class PropertyTreeModalData extends BSModalContext {
         public title: string = 'Modal Title',
         public resource: ARTURIResource
     ) {
-        super()
+        super();
+        this.keyboard = null;
     }
 }
 

@@ -18,6 +18,7 @@ export class NewPlainLiteralModalData extends BSModalContext {
         public langReadonly: boolean = false
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

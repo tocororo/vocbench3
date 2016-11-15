@@ -18,6 +18,7 @@ export class SelectionModalData extends BSModalContext {
         public optionsWithDescription?: boolean
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

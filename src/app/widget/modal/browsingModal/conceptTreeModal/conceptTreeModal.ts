@@ -15,6 +15,7 @@ export class ConceptTreeModalData extends BSModalContext {
         public schemeChangeable: boolean = false
     ) {
         super();
+        this.keyboard = null;
     }
 }
 

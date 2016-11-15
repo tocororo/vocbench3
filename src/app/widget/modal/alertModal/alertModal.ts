@@ -14,7 +14,8 @@ export class AlertModalData extends BSModalContext {
         public message: string = 'Modal Body!',
         public type: string = 'info'
     ) {
-       super(); 
+       super();
+       this.keyboard = null;
     }
 }
 

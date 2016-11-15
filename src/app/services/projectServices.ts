@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Project} from '../utils/Project';
 import {VBEventHandler} from '../utils/VBEventHandler';
@@ -186,7 +187,31 @@ export class ProjectServices {
         var params = {
             project: project.getName()
         };
-        return this.httpMgr.downloadFile(this.serviceName, "saveProject", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "saveProject", params, this.oldTypeService);
+    }
+
+    /**
+     * Returns a map of pairs name-value of the project's properties
+     * @param project 
+     */
+    getProjectPropertyMap(project: Project): Observable<any[]> {
+        console.log("[ProjectServices] getProjectPropertyMap");
+        var params = {
+            projectName: project.getName()
+        };
+        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params, this.oldTypeService).map(
+            stResp => {
+                var propertyList: Array<any> = [];
+                var propertyElemColl: HTMLCollection = stResp.getElementsByTagName("property");
+                for (var i = 0; i < propertyElemColl.length; i++) {
+                    var prop: any = {};
+                    prop.name = propertyElemColl[i].getAttribute("name");
+                    prop.value = propertyElemColl[i].getAttribute("value");
+                    propertyList.push(prop);
+                }
+                return propertyList;
+            }
+        );
     }
 
 }
