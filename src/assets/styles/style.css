@@ -188,6 +188,10 @@ reified-resource {
     flex: 1;
 }
 
+.expandCollapseBtnContainer > img {
+    cursor: pointer;
+}
+
 .subTree {
 	padding-left:15px;
 }

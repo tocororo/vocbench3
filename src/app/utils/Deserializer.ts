@@ -102,7 +102,7 @@ export class Deserializer {
 
         var uri = uriElement.textContent;
         var show = uriElement.getAttribute(ResAttribute.SHOW);
-        var role = uriElement.getAttribute(ResAttribute.ROLE);
+        var role: RDFResourceRolesEnum = <RDFResourceRolesEnum> uriElement.getAttribute(ResAttribute.ROLE);
         var artURIRes = new ARTURIResource(uri, show, role);
 
         //optional properties
