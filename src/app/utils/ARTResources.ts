@@ -199,11 +199,11 @@ export class ARTLiteral implements ARTNode {
     }
 
     getNominalValue(): string {
-        return this.label;
+        return this.toNT();
     };
 
     getShow(): string {
-        return this.toNT();
+        return this.label;
     }
 
     toNT(): string {
