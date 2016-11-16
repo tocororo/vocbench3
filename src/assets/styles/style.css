@@ -202,6 +202,10 @@ reified-resource {
     min-height: 24px;
 }
 
+.schemeItem input {
+    min-width: 13px;
+}
+
 .schemeItem rdf-resource {
 	border-radius: 2px;
 	flex: 1;

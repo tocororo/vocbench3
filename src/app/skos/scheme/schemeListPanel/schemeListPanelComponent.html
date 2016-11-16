@@ -12,10 +12,12 @@
     </div>
     <div class="panel-body vbox">
         <div class="scrollableContainer">
-            <div *ngFor="let s of schemeList" class="schemeItem">
-                <input style="margin-right: 5px" type="radio" name="scheme" [value]="s" 
-                    (click)="activateScheme(s)" [checked]="isActive(s)"/>    
-                <scheme-list-node [node]="s" (nodeSelected)="selectScheme(s)" style="flex:1"></scheme-list-node>
+            <div *ngFor="let s of schemeList">
+                <div class="schemeItem">
+                    <input style="margin-right: 5px;" type="radio" name="scheme" [value]="s"
+                        (click)="activateScheme(s)" [checked]="isActive(s)"/>
+                    <scheme-list-node [node]="s" (nodeSelected)="selectScheme(s)" style="flex:1"></scheme-list-node>
+                </div>
             </div>
         </div>
     </div>
