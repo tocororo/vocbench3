@@ -53,6 +53,14 @@
  *  }
  * }
  * 
+ * New JSON response contains a "result" object (in case of error, the server returns an XML response)
+ * example (getTopConcepts): 
+ * {"result":[
+ *      {"@id":"http://baseuri#concept1","role":"concept","more":false,"show":"concept 1"},
+ *      {"@id":"http://baseuri#concept12","role":"concept","more":false,"show":"concept 2"}
+ *      ...
+ * ]}
+ * 
  */
 
 export class STResponseUtils {
@@ -67,7 +75,11 @@ export class STResponseUtils {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("data")[0];
         } else { //JSON
-            return stResp.stresponse.data;
+            if (stResp.stresponse != undefined) {
+                return stResp.stresponse.data; //old ST json response
+            } else {
+                return stResp.result; //new ST json response
+            }
         }
     }
     
@@ -101,7 +113,11 @@ export class STResponseUtils {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("type") == "exception";
         } else { //JSON
-            return stResp.stresponse.type == "exception";
+            if (stResp.stresponse != undefined) {
+                return stResp.stresponse.type == "exception"; //old json responses have stresponse object
+            } else {
+                return false; //new json responses, in case of error return an XML response
+            }
         }
     }
     
@@ -123,7 +139,11 @@ export class STResponseUtils {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("type") == "error";
         } else { //JSON
-            return stResp.stresponse.type == "error";
+            if (stResp.stresponse != undefined) {
+                return stResp.stresponse.type == "error"; //old json responses have stresponse object
+            } else {
+                return false; //new json responses, in case of error return an XML response
+            }
         }
     }
 	
@@ -145,7 +165,11 @@ export class STResponseUtils {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("reply")[0].getAttribute("status") == "fail";
         } else { //JSON
-            return stResp.stresponse.reply.status == "fail";
+            if (stResp.stresponse != undefined) {
+                return stResp.stresponse.reply.status == "fail"; //old json responses have stresponse object
+            } else {
+                return false; //new json responses, in case of error return an XML response
+            }
         }
 
     }

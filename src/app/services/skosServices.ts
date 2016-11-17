@@ -8,7 +8,8 @@ import {SKOS} from "../utils/Vocabulary";
 @Injectable()
 export class SkosServices {
 
-    private serviceName = "skos";
+    private serviceName_old = "skos";
+    private serviceName = "SKOS";
     private oldTypeService = true;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
@@ -21,7 +22,7 @@ export class SkosServices {
      * @param lang
      * @return an array of top concepts
      */
-    getTopConcepts(scheme: ARTURIResource, lang?: string) {
+    getTopConcepts_old(scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] getTopConcepts");
         var params: any = {};
         if (scheme != null) {
@@ -30,7 +31,29 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getTopConcepts", params, this.oldTypeService).map(
+            stResp => {
+                var topConcepts = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topConcepts.length; i++) {
+                    topConcepts[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topConcepts;
+            }
+        );
+    }
+
+    /**
+     * Returns the topConcepts of the given scheme
+     * @param scheme
+     * @return an array of top concepts
+     */
+    getTopConcepts(scheme: ARTURIResource) {
+        console.log("[SkosServices] getTopConcepts");
+        var params: any = {};
+        if (scheme != null) {
+            params.scheme = scheme;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, false, true).map(
             stResp => {
                 var topConcepts = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topConcepts.length; i++) {
@@ -48,7 +71,7 @@ export class SkosServices {
      * @param lang
      * @return an array of narrowers
      */
-    getNarrowerConcepts(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
+    getNarrowerConcepts_old(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params: any = {
             concept: concept.getURI(),
@@ -60,7 +83,33 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getNarrowerConcepts", params, this.oldTypeService).map(
+            stResp => {
+                var narrower = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < narrower.length; i++) {
+                    narrower[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return narrower;
+            }
+        );
+    }
+
+    /**
+     * Returns the narrowers of the given concept
+     * @param concept
+     * @param scheme scheme where the narrower should belong
+     * @return an array of narrowers
+     */
+    getNarrowerConcepts(concept: ARTURIResource, scheme: ARTURIResource) {
+        console.log("[SkosServices] getNarrowerConcepts");
+        var params: any = {
+            concept: concept,
+            treeView: true,
+        };
+        if (scheme != null) {
+            params.scheme = scheme;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, false, true).map(
             stResp => {
                 var narrower = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < narrower.length; i++) {
@@ -94,7 +143,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -102,7 +151,7 @@ export class SkosServices {
                 return {concept: newConc, scheme: scheme};
             });
     }
-    
+
     /**
      * Set a concept as top concept of a scheme. Emits a topConceptAddedEvent with concept and scheme
      * @param concept concept to set as top concept
@@ -115,7 +164,7 @@ export class SkosServices {
             concept: concept.getURI(),
             scheme: scheme.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "addTopConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addTopConcept", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.topConceptCreatedEvent.emit({concept: concept, scheme: scheme});
                 return {concept: concept, scheme: scheme};
@@ -134,7 +183,7 @@ export class SkosServices {
             concept: concept.getURI(),
             scheme: scheme.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removeTopConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removeTopConcept", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: concept, scheme: scheme});
                 return stResp;
@@ -151,7 +200,7 @@ export class SkosServices {
         var params: any = {
             concept: concept.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "deleteConcept", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
@@ -184,7 +233,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -204,7 +253,7 @@ export class SkosServices {
             concept: concept.getURI(),
             broaderConcept: broaderConcept.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "addBroaderConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addBroaderConcept", params, this.oldTypeService).map(
             stResp => {
                 var narrower: ARTURIResource = Deserializer.createURI(stResp);
                 narrower.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -226,7 +275,7 @@ export class SkosServices {
             concept: concept.getURI(),
             broaderConcept: broaderConcept.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removeBroaderConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removeBroaderConcept", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.broaderRemovedEvent.emit({concept: concept, broader: broaderConcept});
                 return stResp;
@@ -248,7 +297,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "addConceptToScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "addConceptToScheme", params, this.oldTypeService);
     }
 
     /**
@@ -263,7 +312,7 @@ export class SkosServices {
             concept: concept.getURI(),
             scheme: scheme.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removeConceptFromScheme", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removeConceptFromScheme", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.conceptRemovedFromSchemeEvent.emit({concept: concept, scheme: scheme});
                 return {concept: concept, scheme: scheme};
@@ -274,7 +323,7 @@ export class SkosServices {
     //====== Scheme services ======
     
     /**
-     * Returns the list of available skos:ConceptScheme
+     * Returns the list of available skos:ConceptScheme (old service)
      * @param lang
      * @return an array of schemes
      */
@@ -284,7 +333,21 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "getAllSchemesList", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getAllSchemesList", params, this.oldTypeService).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns the list of available skos:ConceptScheme (New service)
+     * @return an array of schemes
+     */
+    getAllSchemes() {
+        console.log("[SkosServices] getAllSchemes");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, false, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -312,7 +375,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createScheme", params, this.oldTypeService).map(
             stResp => {
                 var newScheme = Deserializer.createURI(stResp);
                 return newScheme;
@@ -335,7 +398,7 @@ export class SkosServices {
         }
         //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component
         //(e.g. ask to the user to delete or retain dangling concepts) 
-        return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
+        return this.httpMgr.doGet(this.serviceName_old, "deleteScheme", params, this.oldTypeService, false, true);
     }
     
     //====== Label services ======
@@ -354,7 +417,7 @@ export class SkosServices {
             label: label,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.skosPrefLabelSetEvent.emit({resource: concept, label: label, lang: lang});
                 return stResp;
@@ -378,7 +441,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.skosPrefLabelRemovedEvent.emit({resource: concept, label: label, lang: lang});
                 return stResp;
@@ -397,7 +460,7 @@ export class SkosServices {
             concept: concept.getURI(),
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getAltLabels", params, this.oldTypeService).map(
             stResp => {
                 return Deserializer.createRDFArray(stResp);
             }
@@ -417,7 +480,7 @@ export class SkosServices {
             label: label,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "addAltLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "addAltLabel", params, this.oldTypeService);
     }
 
     /**
@@ -435,7 +498,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removeAltLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "removeAltLabel", params, this.oldTypeService);
 	}
 
     /**
@@ -451,7 +514,7 @@ export class SkosServices {
             label: label,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "addHiddenLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "addHiddenLabel", params, this.oldTypeService);
     }
 
     /**
@@ -469,7 +532,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removeHiddenLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "removeHiddenLabel", params, this.oldTypeService);
 	}
     
     /**
@@ -485,7 +548,7 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "getShow", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getShow", params, this.oldTypeService).map(
             stResp => {
                 return stResp.getElementsByTagName("show")[0].getAttribute("value");
             }
@@ -498,13 +561,30 @@ export class SkosServices {
      * Gets the root collections
      * @param lang language in which the show attribute should be rendered
      */
-    getRootCollections(lang?: string) {
+    getRootCollections_old(lang?: string) {
         console.log("[SkosServices] getRootCollections");
         var params: any = {};
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getRootCollections", params, this.oldTypeService).map(
+            stResp => {
+                var rootColl = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < rootColl.length; i++) {
+                    rootColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return rootColl;
+            }
+        );
+    }
+
+    /**
+     * Gets the root collections
+     */
+    getRootCollections() {
+        console.log("[SkosServices] getRootCollections");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, false, true).map(
             stResp => {
                 var rootColl = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < rootColl.length; i++) {
@@ -520,7 +600,7 @@ export class SkosServices {
      * @param container the URI of the container collection
      * @param lang language in which the show attribute should be rendered
      */
-    getNestedCollections(container: ARTResource, lang?: string) {
+    getNestedCollections_old(container: ARTResource, lang?: string) {
         console.log("[SkosServices] getNestedCollections");
         var params: any = {
             container: container.getNominalValue()
@@ -528,7 +608,27 @@ export class SkosServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getNestedCollections", params, this.oldTypeService).map(
+            stResp => {
+                var nestedColl = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < nestedColl.length; i++) {
+                    nestedColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return nestedColl;
+            }
+        );
+    }
+
+    /**
+     * Get the nested collections of a container collection
+     * @param container the URI of the container collection
+     */
+    getNestedCollections(container: ARTResource) {
+        console.log("[SkosServices] getNestedCollections");
+        var params: any = {
+            container: container
+        };
+        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, false, true).map(
             stResp => {
                 var nestedColl = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < nestedColl.length; i++) {
@@ -562,7 +662,7 @@ export class SkosServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -599,7 +699,7 @@ export class SkosServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -624,7 +724,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "addToCollection", params, true).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addToCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -654,7 +754,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removeFromCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removeFromCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -680,7 +780,7 @@ export class SkosServices {
         var params: any = {
             collection: collection.getNominalValue(),
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "deleteCollection", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.collectionDeletedEvent.emit(collection);
                 return stResp;
@@ -711,7 +811,7 @@ export class SkosServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -748,7 +848,7 @@ export class SkosServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -774,7 +874,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "addFirstToOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addFirstToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -803,7 +903,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "addLastToOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addLastToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -834,7 +934,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "addInPositionToOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addInPositionToOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -864,7 +964,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removeFromOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removeFromOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 //TODO remove true in following check, now it's necessary only because in resourceView, currently, 
                 //collection members have individual as role 
@@ -892,7 +992,7 @@ export class SkosServices {
         var params: any = {
             collection: collection.getNominalValue(),
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "deleteOrderedCollection", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.collectionDeletedEvent.emit(collection);
                 return stResp;

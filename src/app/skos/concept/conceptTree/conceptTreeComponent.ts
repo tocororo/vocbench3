@@ -57,7 +57,8 @@ export class ConceptTreeComponent {
         this.workingScheme = this.scheme;
         //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
-            this.skosService.getAllSchemesList().subscribe(
+            this.skosService.getAllSchemesList().subscribe( //old service
+            // this.skosService.getAllSchemes().subscribe( //new service
                 schemes => {
                     this.schemeList = schemes;
                     if (this.scheme != undefined) {
@@ -80,7 +81,8 @@ export class ConceptTreeComponent {
     
     private initTree() {
         this.blockDivElement.nativeElement.style.display = "block";
-        this.skosService.getTopConcepts(this.workingScheme, this.vbCtx.getContentLanguage(true)).subscribe(
+        // this.skosService.getTopConcepts_old(this.workingScheme, this.vbCtx.getContentLanguage(true)).subscribe( //old service
+        this.skosService.getTopConcepts(this.workingScheme).subscribe( //new service (whithout lang param)
             topConcepts => {
                 this.roots = topConcepts;
                 this.blockDivElement.nativeElement.style.display = "none";

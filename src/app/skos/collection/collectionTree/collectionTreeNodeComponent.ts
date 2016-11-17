@@ -115,7 +115,8 @@ export class CollectionTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
-        this.skosService.getNestedCollections(this.node, this.vbCtx.getContentLanguage(true)).subscribe(
+        // this.skosService.getNestedCollections(this.node, this.vbCtx.getContentLanguage(true)).subscribe( //old service
+        this.skosService.getNestedCollections(this.node).subscribe( //new service
             nestedColl => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);

@@ -6,9 +6,9 @@ export interface ARTNode {
     getNominalValue(): string;
     getShow(): string;
     toNT(): string;
-    setAdditionalProperty(propName: string, propValue): void;
+    setAdditionalProperty(propName: string, propValue: any): void;
     deleteAdditionalProperty(propName: string): void;
-    getAdditionalProperty(propName: string): string;
+    getAdditionalProperty(propName: string): any;
 }
 
 export interface ARTResource extends ARTNode {

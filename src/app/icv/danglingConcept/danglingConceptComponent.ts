@@ -21,7 +21,8 @@ export class DanglingConceptComponent {
         private modalService: ModalServices, private browsingService: BrowsingServices) {}
     
     ngOnInit() {
-        this.skosService.getAllSchemesList().subscribe(
+        this.skosService.getAllSchemesList().subscribe( //old service
+        // this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 this.schemeList = schemeList;
                 var currentScheme = this.vbCtx.getScheme();

@@ -36,71 +36,72 @@ export class ResourceUtils {
         var imgSrc;
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
-            var explicit = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT);
+            var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+                    rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = classImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = classImportedImgSrc;
+                } else {
+                    imgSrc = classImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.concept.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = conceptImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = conceptImportedImgSrc;
+                } else {
+                    imgSrc = conceptImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = individualImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = individualImportedImgSrc;
+                } else {
+                    imgSrc = individualImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
                 imgSrc = conceptSchemeImgSrc;
             } else if (role == RDFResourceRolesEnum.objectProperty.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = propObjectImgSrc;
+                if (!explicit) {
+                    imgSrc = propObjectImportedImgSrc;
                 } else {
-                    imgSrc = propObjectImportedImgSrc;       
+                    imgSrc = propObjectImgSrc;       
                 }
             } else if (role == RDFResourceRolesEnum.skosCollection.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = collectionImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = collectionImportedImgSrc;
+                } else {
+                    imgSrc = collectionImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.skosOrderedCollection.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = collectionImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = collectionImportedImgSrc;
+                } else {
+                    imgSrc = collectionImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.datatypeProperty.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = propDatatypeImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = propDatatypeImportedImgSrc;
+                } else {
+                    imgSrc = propDatatypeImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.annotationProperty.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = propAnnotationImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = propAnnotationImportedImgSrc;
+                } else {
+                    imgSrc = propAnnotationImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.ontologyProperty.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = propObjectImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = propObjectImportedImgSrc;
+                } else {
+                    imgSrc = propObjectImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.property.toLowerCase()) {
-                if (explicit) {
-                    imgSrc = propImgSrc;
-                } else {
+                if (!explicit) {
                     imgSrc = propImportedImgSrc;
+                } else {
+                    imgSrc = propImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
-                var lang = rdfResource.getAdditionalProperty(ResAttribute.LANG);
+                let lang: string = rdfResource.getAdditionalProperty(ResAttribute.LANG);
                 if (lang != undefined && lang != null) {
                     if (this.availableFlagLang.indexOf(lang) != -1) {
                         imgSrc = require("../../assets/images/flags/flag_" + lang + ".png");    
@@ -108,15 +109,15 @@ export class ResourceUtils {
                         imgSrc = require("../../assets/images/flags/flag_unknown.png");    
                     }
                 } else {
-                    if (explicit) {
-                        imgSrc = xLabelImgSrc;
-                    } else {
+                    if (!explicit) {
                         imgSrc = xLabelImportedImgSrc;
+                    } else {
+                        imgSrc = xLabelImgSrc;
                     }
                 }
             }
         } else if (rdfResource.isLiteral()) {
-            var lang = (<ARTLiteral>rdfResource).getLang();
+            let lang: string = (<ARTLiteral>rdfResource).getLang();
             if (lang != undefined && lang != null && lang != "") {
                 if (this.availableFlagLang.indexOf(lang) != -1) {
                     imgSrc = require("../../assets/images/flags/flag_" + lang + ".png");

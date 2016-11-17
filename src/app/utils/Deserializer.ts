@@ -64,15 +64,34 @@ export class Deserializer {
         return collectionArray;
     };
 
+    static createURIArray(response: any): ARTURIResource[] {
+        if (response instanceof Element) {
+            return this.createURIArrayFromXML(response);
+        } else { //new json response
+            return this.createURIArrayFromJson(response);
+        }
+    }
+
     /**
      * creates an array of only ARTURIResource from a <collection> element.
      */
-    static createURIArray(response: Element): ARTURIResource[] {
+    static createURIArrayFromXML(response: Element): ARTURIResource[] {
         var uriResourceArray: ARTURIResource[] = new Array();
         var collectionElement = response.getElementsByTagName('collection')[0];
         var uriElemens = collectionElement.getElementsByTagName('uri');
         for (var i = 0; i < uriElemens.length; i++) {
             uriResourceArray.push(this.createURI(uriElemens[i]))
+        }
+        return uriResourceArray;
+    }
+
+    /**
+     * creates an array of only ARTURIResource from a json result
+     */
+    static createURIArrayFromJson(result: Array<any>): ARTURIResource[] {
+        var uriResourceArray: ARTURIResource[] = new Array();
+        for (var i = 0; i < result.length; i++) {
+            uriResourceArray.push(this.createURI(result[i]));
         }
         return uriResourceArray;
     }
@@ -92,7 +111,15 @@ export class Deserializer {
         return collectionArray;
     };
 
-    static createURI(response: Element): ARTURIResource {
+    static createURI(response: any): ARTURIResource {
+        if (response instanceof Element) {
+            return this.createURIFromXML(response);
+        } else {
+            return this.createURIFromJson(response);
+        }
+    }
+
+    static createURIFromXML(response: Element): ARTURIResource {
         var uriElement;
         if (response.tagName == 'uri') {
             uriElement = response;
@@ -134,6 +161,46 @@ export class Deserializer {
         if (graphs != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
+
+        return artURIRes;
+    }
+
+    static createURIFromJson(jsonObj: any): ARTURIResource {
+
+        var uri = jsonObj['@id'];
+        var show = jsonObj[ResAttribute.SHOW];
+        var role: RDFResourceRolesEnum = <RDFResourceRolesEnum> jsonObj[ResAttribute.ROLE];
+        var artURIRes = new ARTURIResource(uri, show, role);
+
+        //optional properties
+        // var explicit = jsonObj[ResAttribute.EXPLICIT];
+        // if (explicit != undefined) {
+        //     artURIRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
+        // }
+        var more = jsonObj[ResAttribute.MORE];
+        if (more != undefined) {
+            artURIRes.setAdditionalProperty(ResAttribute.MORE, more);
+        }
+        // var numInst = jsonObj[ResAttribute.NUM_INST];
+        // if (numInst != undefined) {
+        //     artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
+        // }
+        // var hasCustomRange = jsonObj[ResAttribute.HAS_CUSTOM_RANGE];
+        // if (hasCustomRange != undefined) {
+        //     artURIRes.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
+        // }
+        // var resourcePosition = jsonObj[ResAttribute.RESOURCE_POSITION];
+        // if (resourcePosition != undefined) {
+        //     artURIRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
+        // }
+        // var lang = jsonObj[ResAttribute.LANG];
+        // if (lang != undefined) {
+        //     artURIRes.setAdditionalProperty(ResAttribute.LANG, lang);
+        // }
+        // var graphs = jsonObj[ResAttribute.GRAPHS];
+        // if (graphs != undefined) {
+        //     artURIRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
+        // }
 
         return artURIRes;
     }

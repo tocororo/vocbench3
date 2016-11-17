@@ -20,7 +20,8 @@ export class SchemeListComponent {
         private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
     
     ngOnInit() {
-        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage(true)).subscribe(
+        this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage(true)).subscribe( //old service
+        // this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 this.schemeList = schemeList;
             }

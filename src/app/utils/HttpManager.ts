@@ -1,11 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Http, Headers, Response, RequestOptions} from '@angular/http';
-import {Router} from "@angular/router";
+import { Injectable } from '@angular/core';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Router } from "@angular/router";
 import 'rxjs/Rx'; //for map function
-import {Observable} from 'rxjs/Observable';
-import {STResponseUtils} from "../utils/STResponseUtils";
-import {VocbenchCtx} from './VocbenchCtx';
-import {ModalServices} from "../widget/modal/modalServices";
+import { Observable } from 'rxjs/Observable';
+import { STResponseUtils } from "../utils/STResponseUtils";
+import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../utils/ARTResources";
+import { VocbenchCtx } from './VocbenchCtx';
+import { ModalServices } from "../widget/modal/modalServices";
 
 @Injectable()
 export class HttpManager {
@@ -29,7 +30,7 @@ export class HttpManager {
             this.serverhost = process.env.SERVERHOST;
         }
     }
-    
+
     /**
      * Performs an HTTP GET request.
      * @param service the service name
@@ -46,27 +47,25 @@ export class HttpManager {
      *      Is useful to handle the error from the component that invokes the service
      *      (e.g. see deleteScheme in skos or skosxl services)
      */
-    doGet(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
+    doGet(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {
             url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         }
-        
+
         //add parameters
-        for (var paramName in params) {
-            url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
-        }
+        url += this.getParametersForUrl(params);
         url += this.getContextParametersForUrl();
 
         console.log("[GET]: " + url);
-        
+
         var headers = new Headers();
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
         var options = new RequestOptions({ headers: headers, withCredentials: true });
-        
+
         //execute request
         return this.http.get(url, options)
             .map(res => {
@@ -89,7 +88,7 @@ export class HttpManager {
                 return this.handleError(error, skipErrorAlert);
             });
     }
-    
+
     /**
      * Performs an HTTP POST request.
      * @param service the service name
@@ -112,12 +111,12 @@ export class HttpManager {
         } else {
             url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         }
-        
+
         //add ctx parameters
         url += this.getContextParametersForUrl();
 
         console.log("[POST]: " + url);
-        
+
         //prepare form data
         var headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -130,8 +129,8 @@ export class HttpManager {
         for (var paramName in params) {
             strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(params[paramName]));
         }
-        postData = strBuilder.join("&"); 
-        
+        postData = strBuilder.join("&");
+
         //execute request
         return this.http.post(url, postData, options)
             .map(res => {
@@ -154,7 +153,7 @@ export class HttpManager {
                 return this.handleError(error, skipErrorAlert);
             });
     }
-    
+
     /**
      * Upload a file through an HTTP POST request. 
      * In the params object at least one parameter should be a File, otherwise there's no difference between this method and doPost.
@@ -176,7 +175,7 @@ export class HttpManager {
         } else {
             url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         }
-        
+
         //add ctx parameters
         url += this.getContextParametersForUrl();
 
@@ -215,7 +214,7 @@ export class HttpManager {
                 return this.handleError(error, skipErrorAlert);
             });
     }
-    
+
     /**
      * Executes an XMLHttpRequest GET to get a file
      */
@@ -226,7 +225,7 @@ export class HttpManager {
         } else {
             url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         }
-        
+
         //add parameters
         for (var paramName in params) {
             url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
@@ -234,15 +233,15 @@ export class HttpManager {
         url += this.getContextParametersForUrl();
 
         console.log("[GET]: " + url);
-        
+
         var httpReq = new XMLHttpRequest();
         httpReq.withCredentials = true;
         httpReq.open("GET", url, true);
         httpReq.responseType = "blob";
-        
+
         return new Observable(o => {
             //handle the request completed
-            httpReq.onreadystatechange = function(event) {
+            httpReq.onreadystatechange = function (event) {
                 if (httpReq.readyState === 4) { //request finished and response is ready
                     if (httpReq.status === 200) {
                         o.next(httpReq.response);
@@ -254,26 +253,48 @@ export class HttpManager {
             };
             //execute the get
             httpReq.send(null);
-        })
-        .catch(error => {
+        }).catch(error => {
             return this.handleError(error);
         });
-        
+
     }
-    
+
+    /**
+     * Returns the url parameters to append to the request 
+     * @param params the parameters to send in the GET request (as url parameter). This parameter must be an object like:
+     * {    
+     *  "urlParName1" : ParValue1,
+     *  "urlParName2" : ParValue2,
+     *  "urlParName3" : ParValue3,
+     * }
+     * The value of the parameter can be a simple string or any of the ARTResource implementations
+     */
+    private getParametersForUrl(params: any): string {
+        var urlParams: string = "";
+        for (var paramName in params) {
+            var paramValue = params[paramName];
+            if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
+                urlParams += paramName + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()) + "&";
+            } else {
+                urlParams += paramName + "=" + encodeURIComponent(paramValue) + "&";
+            }
+        }
+        return urlParams;
+    }
+
     /**
      * Returns the request context parameters.
      */
     private getContextParametersForUrl(): string {
         var params: string = "";
-        
+
         //if a (temp) context project is set, use it
         if (this.vbCtx.getContextProject() != undefined) {
             params += "ctx_project=" + encodeURIComponent(this.vbCtx.getContextProject().getName()) + "&";
         } else if (this.vbCtx.getWorkingProject() != undefined) { //use the working project otherwise
-            params += "ctx_project=" + encodeURIComponent(this.vbCtx.getWorkingProject().getName()) + "&";    
+            params += "ctx_project=" + encodeURIComponent(this.vbCtx.getWorkingProject().getName()) + "&";
         }
-        
+
         if (this.vbCtx.getSessionToken() != undefined) {
             params += "ctx_token=" + encodeURIComponent(this.vbCtx.getSessionToken()) + "&";
         }
