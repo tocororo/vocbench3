@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
-import {OntoMgrConfigModal, OntoMgrConfigModalData} from "./ontoMgrConfigModal";
-import {Router} from "@angular/router";
-import {ProjectServices} from "../../services/projectServices";
-import {OntoManagerServices} from "../../services/ontoManagerServices";
-import {PluginsServices} from "../../services/pluginsServices";
-import {ModalServices} from "../../widget/modal/modalServices";
+import { Component } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { OntoMgrConfigModal, OntoMgrConfigModalData } from "./ontoMgrConfigModal";
+import { Router } from "@angular/router";
+import { ProjectServices } from "../../services/projectServices";
+import { OntoManagerServices } from "../../services/ontoManagerServices";
+import { PluginsServices } from "../../services/pluginsServices";
+import { ModalServices } from "../../widget/modal/modalServices";
 
 /**
  * extPointStructList is a list of structures with info about extension point. Each element is structured as follow:
@@ -28,63 +28,70 @@ import {ModalServices} from "../../widget/modal/modalServices";
  */
 
 @Component({
-	selector: "create-project-component",
-	templateUrl: "./createProjectComponent.html",
-    host: { class : "pageComponent" }
+    selector: "create-project-component",
+    templateUrl: "./createProjectComponent.html",
+    host: { class: "pageComponent" }
 })
 export class CreateProjectComponent {
-    
+
     private projectName: string;
     private baseURI: string;
-    
+
     private ontoTypeList = [
-        {value: "it.uniroma2.art.owlart.models.OWLModel", label: "OWL"},
-        {value: "it.uniroma2.art.owlart.models.SKOSModel", label: "SKOS"},
-        {value: "it.uniroma2.art.owlart.models.SKOSXLModel", label: "SKOSXL"}
+        { value: "it.uniroma2.art.owlart.models.OWLModel", label: "OWL" },
+        { value: "it.uniroma2.art.owlart.models.SKOSModel", label: "SKOS" },
+        { value: "it.uniroma2.art.owlart.models.SKOSXLModel", label: "SKOSXL" }
     ];
     private ontoType: string = this.ontoTypeList[0].value;
-    
+
     private ontoMgrList: Array<string>;
     private ontoMgrId: string = "it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl";
     private ontoMgrConfigList: Array<any>;
     private selectedOntoMgrConfig: any = {};
     //config represents the configuration of the ontology manager (shortName, type, params, ...)
     //open tells if the panel is open or close 
-    
+
     private extPointList = [
         "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator",
         "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine"
     ];
     private extPointStructList: Array<any> = [];
     private extPointPanelOpen: boolean = false;
-    
+
     private submitted: boolean = false;
-    
-    constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, 
+
+    constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices,
         private pluginService: PluginsServices, private router: Router, private modalService: ModalServices,
         private modal: Modal) {
     }
-    
+
     ngOnInit() {
-        this.ontMgrService.listOntoManager().subscribe(
-            ontoMgrs => {
-                this.ontoMgrList = ontoMgrs;
-                this.ontoMgrId;
-                this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
-                    configList => {
-                        this.ontoMgrConfigList = configList;
-                        this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
-                    }
-                );
+        // this.ontMgrService.listOntoManager().subscribe(
+        //     ontoMgrs => {
+        //         this.ontoMgrList = ontoMgrs;
+        //         this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
+        //             configList => {
+        //                 this.ontoMgrConfigList = configList;
+        //                 this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
+        //             }
+        //         );
+        //     }
+        // )
+
+        this.ontoMgrList = ["it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl"];
+        this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
+            configList => {
+                this.ontoMgrConfigList = configList;
+                this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
             }
-        )
-        
+        );
+
         for (var i = 0; i < this.extPointList.length; i++) {
             var extPoint: any = {};
             this.extPointStructList.push(extPoint);
             extPoint.id = this.extPointList[i];
             extPoint.selectedExtPointPluginId = "---";
-            extPoint.selectedExtPointPlugin = { id: null, configurations: null, selectedConfigType: null};
+            extPoint.selectedExtPointPlugin = { id: null, configurations: null, selectedConfigType: null };
             //extPoint.plugins
             this.pluginService.getAvailablePlugins(this.extPointList[i]).subscribe(
                 extPointPlugins => {
@@ -100,7 +107,7 @@ export class CreateProjectComponent {
             );
         }
     }
-    
+
     /**
      * Called when user change the onto manager. Updates the configuration list of the onto manager.
      */
@@ -112,21 +119,21 @@ export class CreateProjectComponent {
             }
         );
     }
-    
+
     /**
      * Opens a modal to configure ontology manager triple store
      */
     private configureOntoMgr() {
         this.openConfigurationModal(this.selectedOntoMgrConfig);
     }
-    
+
     /**
      * opens/closes extension point panel
      */
     private toggleExtPointPanel() {
         this.extPointPanelOpen = !this.extPointPanelOpen;
     }
-    
+
     /**
      * Called when change selection of the plugins menu of an extension point
      */
@@ -140,10 +147,10 @@ export class CreateProjectComponent {
                     extPointStruct.selectedExtPointPlugin.configurations = configurations;
                     extPointStruct.selectedExtPointPlugin.selectedConfigType = configurations[0].type;
                 }
-            );       
+            );
         }
     }
-    
+
     /**
      * Given the structure of an extension point, opens a modal to change its plugin configuration
      */
@@ -156,27 +163,27 @@ export class CreateProjectComponent {
             }
         }
     }
-    
+
     /**
      * retrieves the new project setting and calls the newProject service
      */
     private create() {
-        
+
         this.submitted = true;
-        
+
         if (!this.projectName || this.projectName.trim() == "" || !this.baseURI || this.baseURI.trim() == "") {
             return; //project name or baseURI not valid
         }
-        
+
         if (this.projectName && this.projectName.trim() != "" && this.baseURI && this.baseURI.trim() != "") {
-            
+
             var uriGenFactoryID;
             var uriGenConfigurationClass;
             var uriGenConfigurationArray;
             var renderingEngineFactoryID;
             var renderingEngineConfigurationClass;
             var renderingEngineConfigurationArray;
-            
+
             /* NOTE: currently I need to prepare the above parameters in a not-general way because 
              the newProject method gets precise parameters so they must be distinguished.
         	 We should generalize the request and then this operations will be generalized too.
@@ -208,9 +215,9 @@ export class CreateProjectComponent {
                     }
                 }
             }
-            
+
             document.getElementById("blockDivFullScreen").style.display = "block";
-            this.projectService.createProject(this.projectName, this.ontoType, this.baseURI, 
+            this.projectService.createProject(this.projectName, this.ontoType, this.baseURI,
                 this.ontoMgrId, this.selectedOntoMgrConfig.type, this.selectedOntoMgrConfig.params,
                 uriGenFactoryID, uriGenConfigurationClass, uriGenConfigurationArray,
                 renderingEngineFactoryID, renderingEngineConfigurationClass, renderingEngineConfigurationArray).subscribe(
@@ -221,11 +228,11 @@ export class CreateProjectComponent {
                     );
                 },
                 err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
-            );
-            
+                );
+
         }
     }
-    
+
     /**
      * Opens a modal to change configurations
      */
@@ -239,5 +246,5 @@ export class CreateProjectComponent {
             dialog => dialog.result
         );
     }
-    
+
 }

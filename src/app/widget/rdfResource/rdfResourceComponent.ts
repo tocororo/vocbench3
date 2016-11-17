@@ -24,10 +24,10 @@ export class RdfResourceComponent {
 		if (this.resource.isResource()) {
 			var role = (<ARTResource>this.resource).getRole().toLowerCase();
 			if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
-				var lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
+				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
 			}
 		} else if (this.resource.isLiteral()) {
-			var lang = (<ARTLiteral>this.resource).getLang();
+			lang = (<ARTLiteral>this.resource).getLang();
 		}
 		return (lang != undefined && lang != null && lang != "");
 	}
@@ -41,10 +41,10 @@ export class RdfResourceComponent {
 		if (this.resource.isResource()) {
 			var role = (<ARTResource>this.resource).getRole().toLowerCase();
 			if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
-				var lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
+				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
 			}
 		} else if (this.resource.isLiteral()) {
-			var lang = (<ARTLiteral>this.resource).getLang();
+			lang = (<ARTLiteral>this.resource).getLang();
 		}
 		return lang;
 	}
