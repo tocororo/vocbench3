@@ -24,9 +24,6 @@ export class ResourceViewComponent {
     private showInferred = false;
     
     //partitions
-    private describedResource: ARTResource; //resource element in RV has different show respect the one in the tree
-        //so this variable is useful keep this.resource separated (and in sync with the tree)
-
     private resViewXmlResponse = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTResource[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
@@ -122,7 +119,7 @@ export class ResourceViewComponent {
             var partition = respPartitions[i];
             var partitionName = partition.tagName;
             if (partitionName == "resource") {
-                this.describedResource = Deserializer.createRDFResource(partition.children[0]);
+                this.resource = Deserializer.createRDFResource(partition.children[0]);
             } else if (partitionName == "types") {
                 this.typesColl = Deserializer.createResourceArray(partition);
                 this.typesColl = <ARTResource[]>this.filterInferredFromResourceList(this.typesColl);
