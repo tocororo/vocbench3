@@ -42,6 +42,11 @@
                             <img *ngIf="!p.isOpen()" src="../../assets/images/folder.gif">
                             <img *ngIf="p.isOpen()" src="../../assets/images/folder-open.gif">
                         </button>
+                        <!--Alternative style-->
+                        <!--<button class="btn btn-default btn-xs" [ngClass]="{active: p.isOpen()}" (click)="openOrCloseProject(p)">
+                            <span *ngIf="!p.isOpen()" class="glyphicon glyphicon-folder-close"></span>
+                            <span *ngIf="p.isOpen()" class="glyphicon glyphicon-folder-open"></span>
+                        </button>-->
                     </td>
                     <td class="text-center">
                         {{p.getName()}}

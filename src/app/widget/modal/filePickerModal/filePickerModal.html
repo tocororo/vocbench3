@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="alert alert-info" *ngIf="context.message" style="margin-bottom: 4px">
+        {{context.message}}
+    </div>
+    <file-picker (fileChanged)="fileChangeEvent($event)" [label]="context.label"
+        [accept]="context.accept" [placeholder]="context.placeholder">
+    </file-picker>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

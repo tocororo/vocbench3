@@ -13,7 +13,6 @@ export class BrowseExternalResourceModalData extends BSModalContext {
      */
     constructor(public title: string, public resRole: RDFResourceRolesEnum) {
         super();
-        this.keyboard = null;
     }
 }
 

@@ -190,6 +190,7 @@ export class ProjectComponent implements OnInit {
         const builder = new BSModalContextBuilder<ProjectPropertiesModalData>(
             modalData, undefined, ProjectPropertiesModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(ProjectPropertiesModal, overlayConfig).then(
             dialog => dialog.result

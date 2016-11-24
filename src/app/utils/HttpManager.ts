@@ -117,19 +117,19 @@ export class HttpManager {
 
         console.log("[POST]: " + url);
 
-        //prepare form data
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        var acceptRespType = respJson ? "application/json" : "application/xml";
-        headers.append('Accept', acceptRespType);
-        var options = new RequestOptions({ headers: headers, withCredentials: true });
-
+        //prepare POST data
         var postData;
         var strBuilder = [];
         for (var paramName in params) {
             strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(params[paramName]));
         }
         postData = strBuilder.join("&");
+
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        var acceptRespType = respJson ? "application/json" : "application/xml";
+        headers.append('Accept', acceptRespType);
+        var options = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
         return this.http.post(url, postData, options)

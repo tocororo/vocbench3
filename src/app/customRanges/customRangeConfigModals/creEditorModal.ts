@@ -12,8 +12,6 @@ export class CustomRangeEntryEditorModalData extends BSModalContext {
      */
     constructor(public id?: string, public existingCre?: string[]) {
         super();
-        this.size = "lg";
-        this.keyboard = null;
     }
 }
 

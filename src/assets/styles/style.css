@@ -252,6 +252,7 @@ input[type="image"]:disabled  {
     background: linear-gradient(#fff, #eee);
     padding: 4px 8px;
     border-bottom: 1px solid #ccc;
+    min-height: 30px;
 }
 .subPanel-body {
 	padding: 4px;

@@ -30,7 +30,7 @@ export class BrowsingServices {
         const builder = new BSModalContextBuilder<ClassTreeModalData>(
             modalData, undefined, ClassTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ClassTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -47,7 +47,7 @@ export class BrowsingServices {
         const builder = new BSModalContextBuilder<InstanceListModalData>(
             modalData, undefined, InstanceListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(InstanceListModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -65,7 +65,7 @@ export class BrowsingServices {
         const builder = new BSModalContextBuilder<ConceptTreeModalData>(
             modalData, undefined, ConceptTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ConceptTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -81,7 +81,7 @@ export class BrowsingServices {
         const builder = new BSModalContextBuilder<SchemeListModalData>(
             modalData, undefined, SchemeListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(SchemeListModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -99,7 +99,7 @@ export class BrowsingServices {
         const builder = new BSModalContextBuilder<PropertyTreeModalData>(
             modalData, undefined, PropertyTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PropertyTreeModal, overlayConfig).then(
             dialog => dialog.result
         );

@@ -15,7 +15,6 @@ export class ResourceAlignmentModalData extends BSModalContext {
      */
     constructor(public resource: ARTResource) {
         super();
-        this.keyboard = null;
     }
 }
 
@@ -97,7 +96,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         const builder = new BSModalContextBuilder<BrowseExternalResourceModalData>(
             modalData, undefined, BrowseExternalResourceModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(BrowseExternalResourceModal, overlayConfig).then(
             dialog => dialog.result
         );

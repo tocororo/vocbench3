@@ -14,6 +14,7 @@ import {AlertModal} from '../widget/modal/alertModal/alertModal';
 import {ConfirmModal} from '../widget/modal/confirmModal/confirmModal';
 import {ConfirmCheckModal} from '../widget/modal/confirmModal/confirmCheckModal';
 import {DownloadModal} from '../widget/modal/downloadModal/downloadModal';
+import {FilePickerModal} from '../widget/modal/filePickerModal/filePickerModal';
 import {NewPlainLiteralModal} from '../widget/modal/newPlainLiteralModal/newPlainLiteralModal';
 import {NewResourceModal} from '../widget/modal/newResourceModal/newResourceModal';
 import {NewTypedLiteralModal} from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
@@ -53,8 +54,8 @@ import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule],
     declarations: [
-        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, NewPlainLiteralModal, NewResourceModal,
-        NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
+        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal, NewPlainLiteralModal,
+        NewResourceModal, NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
         ClassTreeModal, ConceptTreeModal, InstanceListModal, PropertyTreeModal, SchemeListModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
@@ -72,8 +73,8 @@ import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
      * There's no harm in exporting them but no benefit either. 
      */
     entryComponents: [
-        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, NewPlainLiteralModal, NewResourceModal,
-        NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
+        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal, NewPlainLiteralModal,
+        NewResourceModal, NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
         ClassTreeModal, ConceptTreeModal, InstanceListModal, PropertyTreeModal, SchemeListModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,

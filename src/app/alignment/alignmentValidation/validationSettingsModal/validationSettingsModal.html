@@ -38,7 +38,7 @@
         </div>
     </div>
     
-    <div class="hbox" style="align-items: center; flex: initial;">
+    <div class="hbox" style="align-items: center; flex: initial; margin-top: 5px">
         <label style="white-space: nowrap; margin-right: 3px;">Maximum number of alignments shown (1&#247;100):</label>
         <input class="form-control input-xs" type="number" step="1" [(ngModel)]="maxAlignment"
             [ngClass]="{submitted: submitted, 'ng-invalid': maxAlignment < 1 || maxAlignment > 100 }">

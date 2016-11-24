@@ -7,12 +7,13 @@ import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
 import {ConfirmCheckModal, ConfirmCheckModalData} from "./confirmModal/confirmCheckModal";
 import {AlertModal, AlertModalData} from "./alertModal/alertModal";
 import {DownloadModal, DownloadModalData} from "./downloadModal/downloadModal";
+import {FilePickerModal, FilePickerModalData} from "./filePickerModal/filePickerModal";
 import {NewResourceModal, NewResourceModalData} from "./newResourceModal/newResourceModal";
 import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralModal/newPlainLiteralModal";
 import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
 import {SelectionModal, SelectionModalData} from "./selectionModal/selectionModal";
 import {ResourceSelectionModal, ResourceSelectionModalData} from "./selectionModal/resourceSelectionModal";
-import {ContentLangModal, ContentLangModalData} from "./contentLangModal/contentLangModal";
+import {ContentLangModal} from "./contentLangModal/contentLangModal";
 
 export type ModalType = "info" | "error" | "warning";
 
@@ -36,7 +37,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<PromptModalData>(
             modalData, undefined, PromptModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PromptModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -57,7 +58,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<ConfirmModalData>(
             modalData, undefined, ConfirmModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ConfirmModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -79,7 +80,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<ConfirmCheckModalData>(
             modalData, undefined, ConfirmCheckModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ConfirmCheckModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -98,7 +99,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<AlertModalData>(
             modalData, undefined, AlertModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(AlertModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -119,7 +120,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<SelectionModalData>(
             modalData, undefined, SelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(SelectionModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -137,8 +138,27 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<DownloadModalData>(
             modalData, undefined, DownloadModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(DownloadModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal with a link to download a file
+     * @param title the title of the modal dialog
+     * @param message the message to show in the modal dialog body. If null no message will be in the modal
+     * @param downloadLink link for download
+     * @param fileName name of the file to download
+     * @param placeholder text to show in the filepicker when no file is selected
+     */
+    selectFile(title: string, message?: string, label?: string, placeholder?: string, accept?: string) {
+        var modalData = new FilePickerModalData(title, message, label, placeholder, accept);
+        const builder = new BSModalContextBuilder<FilePickerModalData>(
+            modalData, undefined, FilePickerModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(FilePickerModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -155,7 +175,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<ResourceSelectionModalData>(
             modalData, undefined, ResourceSelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ResourceSelectionModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -172,7 +192,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<NewResourceModalData>(
             modalData, undefined, NewResourceModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewResourceModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -192,7 +212,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<NewPlainLiteralModalData>(
             modalData, undefined, NewPlainLiteralModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewPlainLiteralModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -209,7 +229,7 @@ export class ModalServices {
         const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
             modalData, undefined, NewTypedLiteralModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewTypedLiteralModal, overlayConfig).then(
             dialog => dialog.result
         );
@@ -220,11 +240,8 @@ export class ModalServices {
      * @return
      */
     changeContentLang() {
-        var modalData = new ContentLangModalData();
-        const builder = new BSModalContextBuilder<ContentLangModalData>(
-            modalData, undefined, ContentLangModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ContentLangModal, overlayConfig).then(
             dialog => dialog.result
         );

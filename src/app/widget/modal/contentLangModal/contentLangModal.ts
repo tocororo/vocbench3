@@ -4,27 +4,16 @@ import {DialogRef, ModalComponent} from "angular2-modal";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 
-/**
- * Useless class with empty data
- * (I need this cause currently I don't know how to create a Custom Modal without context data)
- */
-export class ContentLangModalData extends BSModalContext {
-    constructor() {
-        super();
-        this.keyboard = null;
-    }
-}
-
 @Component({
     selector: "content-lang-modal",
     templateUrl: "./contentLangModal.html",
 })
-export class ContentLangModal implements ModalComponent<ContentLangModalData> {
-    context: ContentLangModalData;
+export class ContentLangModal implements ModalComponent<BSModalContext> {
+    context: BSModalContext;
     
     private contentLang: string;
     
-    constructor(public dialog: DialogRef<ContentLangModalData>, public vbCtx: VocbenchCtx, public evtHandler: VBEventHandler) {
+    constructor(public dialog: DialogRef<BSModalContext>, public vbCtx: VocbenchCtx, public evtHandler: VBEventHandler) {
         this.context = dialog.context;
     }
     

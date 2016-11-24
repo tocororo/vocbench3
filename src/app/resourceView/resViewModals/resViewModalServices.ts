@@ -26,6 +26,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<ClassListCreatorModalData>(
             modalData, undefined, ClassListCreatorModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(ClassListCreatorModal, overlayConfig).then(
             dialog => dialog.result
@@ -42,6 +43,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
             modalData, undefined, InstanceListCreatorModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(InstanceListCreatorModal, overlayConfig).then(
             dialog => dialog.result
@@ -60,6 +62,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<EnrichPropertyModalData>(
             modalData, undefined, EnrichPropertyModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(EnrichPropertyModal, overlayConfig).then(
             dialog => dialog.result
@@ -76,7 +79,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<CustomFormModalData>(
             modalData, undefined, CustomFormModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(CustomFormModal, overlayConfig).then(
             dialog => dialog.result
         );

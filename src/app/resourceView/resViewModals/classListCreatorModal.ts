@@ -7,8 +7,6 @@ import {ManchesterServices} from "../../services/manchesterServices";
 export class ClassListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
         super();
-        this.size = "lg";
-        this.keyboard = null;
     }
 }
 

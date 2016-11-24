@@ -42,7 +42,7 @@ export const routes: Routes = [
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},
-    {path: "Test", component: TestComponent, canActivate: [AuthGuard]},
+    {path: "Test", component: TestComponent},
     // route config of config bar
     {path: "Config/ImportData", component: ImportDataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Config/ExportData", component: ExportDataComponent, canActivate: [AuthGuard, ProjectGuard]},

@@ -17,7 +17,6 @@ export class DownloadModalData extends BSModalContext {
         public fileName: string
     ) {
         super();
-        this.keyboard = null;
     }
 }
 

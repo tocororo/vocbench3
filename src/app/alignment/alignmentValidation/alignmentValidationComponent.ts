@@ -7,7 +7,7 @@ import {ARTURIResource} from "../../utils/ARTResources";
 import {Cookie} from "../../utils/Cookie";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentCell} from "./AlignmentCell";
-import {ValidationSettingsModal, ValidationSettingsModalData} from "./validationSettingsModal/validationSettingsModal"
+import {ValidationSettingsModal} from "./validationSettingsModal/validationSettingsModal"
 import {ValidationReportModal, ValidationReportModalData} from "./validationReportModal/validationReportModal"
 import {AlignmentServices} from "../../services/alignmentServices";
 
@@ -236,10 +236,8 @@ export class AlignmentValidationComponent {
     private openSettings() {
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
 
-        const builder = new BSModalContextBuilder<ValidationSettingsModalData>(
-            new ValidationSettingsModalData(), undefined, ValidationSettingsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
 
         this.modal.open(ValidationSettingsModal, overlayConfig).then(
             dialog => dialog.result.then(
@@ -349,6 +347,7 @@ export class AlignmentValidationComponent {
                 const builder = new BSModalContextBuilder<ValidationReportModalData>(
                     modalData, undefined, ValidationReportModalData
                 );
+                builder.size("lg").keyboard(null);
                 let overlayConfig: OverlayConfig = { context: builder.toJSON() };
                 return this.modal.open(ValidationReportModal, overlayConfig).then(
                     dialog => dialog.result

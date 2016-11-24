@@ -3,7 +3,7 @@ import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {CustomRangeServices} from "../services/customRangeServices";
 import {ModalServices} from "../widget/modal/modalServices";
-import {CustomRangePropMappingModal, CustomRangePropMappingModalData} from "./customRangeConfigModals/crPropMappingModal"
+import {CustomRangePropMappingModal} from "./customRangeConfigModals/crPropMappingModal"
 import {CustomRangeEditorModal, CustomRangeEditorModalData} from "./customRangeConfigModals/crEditorModal"
 import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./customRangeConfigModals/creEditorModal"
 
@@ -70,11 +70,8 @@ export class CustomRangeComponent {
     }
     
     private createPropCRMapping() {
-        var modalData = new CustomRangePropMappingModalData();
-        const builder = new BSModalContextBuilder<CustomRangePropMappingModalData>(
-            modalData, undefined, CustomRangePropMappingModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(CustomRangePropMappingModal, overlayConfig).then(
             dialog => dialog.result.then(
                 res => this.initCRConfMap(),
@@ -96,6 +93,7 @@ export class CustomRangeComponent {
         const builder = new BSModalContextBuilder<CustomRangeEditorModalData>(
             modalData, undefined, CustomRangeEditorModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(CustomRangeEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
@@ -110,6 +108,7 @@ export class CustomRangeComponent {
         const builder = new BSModalContextBuilder<CustomRangeEditorModalData>(
             modalData, undefined, CustomRangeEditorModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(CustomRangeEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
@@ -138,6 +137,7 @@ export class CustomRangeComponent {
         const builder = new BSModalContextBuilder<CustomRangeEntryEditorModalData>(
             modalData, undefined, CustomRangeEntryEditorModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(CustomRangeEntryEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
@@ -152,6 +152,7 @@ export class CustomRangeComponent {
         const builder = new BSModalContextBuilder<CustomRangeEntryEditorModalData>(
             modalData, undefined, CustomRangeEntryEditorModalData
         );
+        builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(CustomRangeEntryEditorModal, overlayConfig).then(
             dialog => dialog.result.then(

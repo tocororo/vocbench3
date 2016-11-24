@@ -93,6 +93,19 @@
             <span>New literal: <strong>{{newTypedLiteralResult | json}}</strong></span>
         </div>
     </div>
+
+    <div style="margin-bottom: 15px;">
+        <label>File Picker Modal:</label>
+        <div>
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="filePickerTitle">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="filePickerAccept">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="filePickerMessage">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="filePickerLabel">
+            <input type="text" class="form-control input-xs" style="width: initial; display: inline; margin: 2px;" [(ngModel)]="filePickerPlaceholder">
+            <br/><button class="btn btn-primary btn-xs" (click)="selectFile()">Test</button>
+            <span>Picked file: <strong *ngIf="filePickerResult">{{filePickerResult.name}}</strong></span>
+        </div>
+    </div>
     
     <div style="margin-bottom: 15px;">
         <label>Sanitized input:</label>

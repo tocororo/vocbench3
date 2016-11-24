@@ -241,7 +241,7 @@ export class CreateProjectComponent {
         const builder = new BSModalContextBuilder<OntoMgrConfigModalData>(
             modalData, undefined, OntoMgrConfigModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(OntoMgrConfigModal, overlayConfig).then(
             dialog => dialog.result
         );

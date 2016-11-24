@@ -1,48 +1,54 @@
-import {Component} from "@angular/core";
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
+import { Component } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
 
-import {MetadataServices} from "../../../services/metadataServices";
-import {RefactorServices} from "../../../services/refactorServices";
-import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {ModalServices} from "../../../widget/modal/modalServices";
-import {ReplaceBaseURIModal, ReplaceBaseURIModalData} from "./replaceBaseURIModal";
-import {PrefixNamespaceModal, PrefixNamespaceModalData} from "./prefixNamespaceModal";
-import {ImportOntologyModal, ImportOntologyModalData, ImportType} from "./importOntologyModal";
+import { MetadataServices } from "../../../services/metadataServices";
+import { RefactorServices } from "../../../services/refactorServices";
+import { AdministrationServices } from '../../../services/administrationServices';
+import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { ReplaceBaseURIModal, ReplaceBaseURIModalData } from "./replaceBaseURIModal";
+import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
+import { ImportOntologyModal, ImportOntologyModalData, ImportType } from "./importOntologyModal";
 
 @Component({
-	selector: "metadata-management-component",
-	templateUrl: "./metadataManagementComponent.html",
-    host: { class : "pageComponent" },
-    styles: [ ".greyText { color: #999 }" ] //to grey the non-explicit mappings
+    selector: "metadata-management-component",
+    templateUrl: "./metadataManagementComponent.html",
+    host: { class: "pageComponent" },
+    styles: [".greyText { color: #999 }"] //to grey the non-explicit mappings
 })
 export class MetadataManagementComponent {
-    
-    // baseURI namespace params
+
+    // baseURI namespace section
     private pristineBaseURI: string;
     private pristineNamespace: string;
     private baseURI: string;
     private namespace: string;
     private bind: boolean = true; //keep bound the baseURI and the namespace
     private nsBaseURISubmitted: boolean = false; //tells if changes on namespace or baseURI have been submitted
-    
-    // namespace prefix mapping params
+
+    // namespace prefix section
     private nsPrefMappingList: Array<any>;
     private selectedMapping; //the currently selected mapping
-    
-    // Imports params
-    private importList: Array<any>;
-    
-    constructor(private metadataService: MetadataServices, private refactorService: RefactorServices,
-        private vbCtx: VocbenchCtx, private modalService: ModalServices, private modal: Modal) {}
-    
+
+    // Imports params section
+    private importList: Array<any>; //{status:string, uri:string, localfile: string}
+
+    // Ontology mirror management section
+    private mirrorList: Array<any>; //array of {file: string, namespace: string}
+
+    constructor(private metadataService: MetadataServices, private adminService: AdministrationServices,
+        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
+        private modal: Modal) { }
+
     ngOnInit() {
         this.refreshBaseURI();
         this.refreshDefaultNamespace();
         this.refreshImports();
         this.refreshNSPrefixMappings();
+        this.refreshOntoMirror();
     }
-    
+
     //inits or refreshes baseURI
     private refreshBaseURI() {
         this.metadataService.getBaseuri().subscribe(
@@ -52,7 +58,7 @@ export class MetadataManagementComponent {
             }
         );
     }
-    
+
     //inits or refreshes default namespace
     private refreshDefaultNamespace() {
         this.metadataService.getDefaultNamespace().subscribe(
@@ -62,7 +68,7 @@ export class MetadataManagementComponent {
             }
         );
     }
-    
+
     //inits or refreshes imports
     private refreshImports() {
         this.metadataService.getImports().subscribe(
@@ -71,7 +77,7 @@ export class MetadataManagementComponent {
             }
         );
     }
-    
+
     //inits or refreshes namespace prefix mappings
     private refreshNSPrefixMappings() {
         this.metadataService.getNSPrefixMappings().subscribe(
@@ -80,9 +86,18 @@ export class MetadataManagementComponent {
             }
         );
     }
-    
+
+    //inits or refreshes ontology mirror list
+    private refreshOntoMirror() {
+        this.adminService.getOntologyMirror().subscribe(
+            mirrors => {
+                this.mirrorList = mirrors;
+            }
+        );
+    }
+
     //======= NAMESPACE AND BASEURI MANAGEMENT =======
-    
+
     /**
      * Bind/unbind namespace baseURI.
      * If they're bound, changing one of them will change the other
@@ -90,7 +105,7 @@ export class MetadataManagementComponent {
     private bindNamespaceBaseURI() {
         this.bind = !this.bind;
     }
-    
+
     /**
      * When baseURI changes updates the namespace if they are bound 
      */
@@ -100,7 +115,7 @@ export class MetadataManagementComponent {
             this.namespace = this.baseURI + "#";
         }
     }
-    
+
     /**
      * When namespace changes updates the baseURI if they are bound
      */
@@ -114,28 +129,28 @@ export class MetadataManagementComponent {
             }
         }
     }
-    
+
     /**
      * Tells if namespace or baseURI have been changed
      */
     private areNamespaceBaseURIChanged() {
         return (this.baseURI != this.pristineBaseURI || this.namespace != this.pristineNamespace);
     }
-    
+
     /**
      * Tells if baseURI is valid. BaseURI is valid if startsWith http://
      */
     private isBaseURIValid() {
         return (this.baseURI && this.baseURI.startsWith("http://"));
     }
-    
+
     /**
      * Tells if namespace is valid. Namespace is valid if starts with http:// and ends with #
      */
     private isNamespaceValid() {
         return (this.namespace && this.namespace.startsWith("http://") && (this.namespace.endsWith("#") || this.namespace.endsWith("/")));
     }
-    
+
     /**
      * Updates the namespace and baseURI
      */
@@ -213,21 +228,21 @@ export class MetadataManagementComponent {
             this.modalService.alert("Error", "Please insert valid namespace and baseURI", "error");
         }
     }
-    
+
     replaceBaseURI() {
         //open a modal to manage the baseURI replacement
         var modalData = new ReplaceBaseURIModalData(this.pristineBaseURI);
         const builder = new BSModalContextBuilder<ReplaceBaseURIModalData>(
             modalData, undefined, ReplaceBaseURIModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ReplaceBaseURIModal, overlayConfig).then(
-            dialog => dialog.result.then(() => {}, () => {})
+            dialog => dialog.result.then(() => { }, () => { })
         );
     }
-    
+
     //======= PREFIX NAMESPACE MAPPINGS MANAGEMENT =======
-    
+
     /**
      * Set the given prefix namespace mapping as selected
      */
@@ -238,7 +253,7 @@ export class MetadataManagementComponent {
             this.selectedMapping = mapping;
         }
     }
-    
+
     /**
      * Adds a new prefix namespace mapping
      */
@@ -255,10 +270,10 @@ export class MetadataManagementComponent {
                     }
                 )
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Removes the selected mapping
      */
@@ -274,7 +289,7 @@ export class MetadataManagementComponent {
             }
         )
     }
-    
+
     /**
      * Changes the prefix of a prefix namespace mapping
      */
@@ -291,10 +306,10 @@ export class MetadataManagementComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Opens a modal to create/edit a prefix namespace mapping.
      * @param title the title of the modal
@@ -308,14 +323,14 @@ export class MetadataManagementComponent {
         const builder = new BSModalContextBuilder<PrefixNamespaceModalData>(
             modalData, undefined, PrefixNamespaceModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PrefixNamespaceModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
-    
+
     //======= IMPORTS MANAGEMENT =======
-    
+
     /**
      * Opens a modal to import an ontology from web,
      * once done refreshes the imports list and the namespace prefix mapping
@@ -334,10 +349,10 @@ export class MetadataManagementComponent {
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Opens a modal to import an ontology from web and copies it to a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
@@ -352,14 +367,15 @@ export class MetadataManagementComponent {
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
+                        this.refreshOntoMirror();
                     },
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Opens a modal to import an ontology from a local file and copies it to a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
@@ -378,10 +394,10 @@ export class MetadataManagementComponent {
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Opens a modal to import an ontology from a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
@@ -400,40 +416,46 @@ export class MetadataManagementComponent {
                     () => document.getElementById("blockDivFullScreen").style.display = "none"
                 )
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Copies the imported ontology in a local mirror file, then updates the imports
      */
     private mirrorOntology(importedOntology) {
         this.modalService.prompt("Mirror ontology", "Mirror file name").then(
             mirrorFileName => {
+                document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.mirrorOntology(importedOntology.uri, mirrorFileName).subscribe(
                     stResp => {
+                        document.getElementById("blockDivFullScreen").style.display = "none";
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
+                        this.refreshOntoMirror();
                     }
                 );
-            }
+            },
+            () => { }
         )
     }
-    
+
     /**
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
     private removeImport(importedOntology) {
+        document.getElementById("blockDivFullScreen").style.display = "block";
         this.metadataService.removeImport(importedOntology.uri).subscribe(
             stResp => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
                 //Refreshes the imports and the namespace prefix mapping
                 this.refreshImports();
                 this.refreshNSPrefixMappings();
             }
         );
     }
-    
+
     /**
      * Opens a modal to import an ontology
      * @param title the title of the modal
@@ -450,11 +472,86 @@ export class MetadataManagementComponent {
         const builder = new BSModalContextBuilder<ImportOntologyModalData>(
             modalData, undefined, ImportOntologyModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ImportOntologyModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
-    
+
+
+    //======= ONTOLOGY MIRROR MANAGEMENT =======
+
+    /**
+     * Opens a modal in order to update the mirror by providing a new baseURI
+     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
+     */
+    private updateMirrorFromWebWithUri(mirror: any) {
+        this.modalService.prompt("Update ontology mirror from web", "BaseURI").then(
+            newNamespace => {
+                document.getElementById("blockDivFullScreen").style.display = "block";
+                this.adminService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
+                    stResp => {
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        this.refreshOntoMirror();
+                    },
+                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                );
+            },
+            () => { }
+        );
+    }
+
+    /**
+     * Opens a modal in order to update the mirror by providing an URL
+     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
+     */
+    private updateMirrorFromWebFromAltUrl(mirror: any) {
+        this.modalService.prompt("Update ontology mirror from web", "URL").then(
+            url => {
+                document.getElementById("blockDivFullScreen").style.display = "block";
+                this.adminService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
+                    stResp => {
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        this.refreshOntoMirror();
+                    },
+                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                );
+            },
+            () => { }
+        );
+    }
+
+    /**
+     * Opens a modal in order to update the mirror by providing a local file
+     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
+     */
+    private updateMirrorFromLocalFile(mirror: any) {
+        this.modalService.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
+            // this.modalService.selectFile("Update mirror from local file").then(
+            file => {
+                document.getElementById("blockDivFullScreen").style.display = "block";
+                this.adminService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
+                    stResp => {
+                        document.getElementById("blockDivFullScreen").style.display = "none";
+                    },
+                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                )
+            },
+            () => { }
+        );
+    }
+
+    /**
+     * Deletes an ontology mirror stored on server
+     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
+     */
+    private deleteOntoMirror(mirror: any) {
+        this.adminService.deleteOntMirrorEntry(mirror.namespace, mirror.file).subscribe(
+            stReps => {
+                this.refreshImports();
+                this.refreshOntoMirror();
+            }
+        );
+    }
 
 }

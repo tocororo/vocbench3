@@ -13,8 +13,6 @@ export class CustomRangeEditorModalData extends BSModalContext {
      */
     constructor(public id?: string, public existingCr?: string[]) {
         super();
-        this.size = "lg";
-        this.keyboard = null;
     }
 }
 

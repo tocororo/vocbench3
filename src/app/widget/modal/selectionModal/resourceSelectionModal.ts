@@ -15,7 +15,6 @@ export class ResourceSelectionModalData extends BSModalContext {
         public resourceList: Array<ARTNode>
     ) {
         super();
-        this.keyboard = null;
     }
 }
 

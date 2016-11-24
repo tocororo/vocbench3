@@ -7,8 +7,6 @@ import {Project} from '../utils/Project';
 export class ProjectPropertiesModalData extends BSModalContext {
     constructor(public project: Project) {
         super();
-        this.keyboard = null;
-        this.size = "lg";
     }
 }
 

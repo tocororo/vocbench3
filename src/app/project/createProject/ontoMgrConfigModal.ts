@@ -8,7 +8,6 @@ export class OntoMgrConfigModalData extends BSModalContext {
      */
     constructor(public configuration: any = {}) {
         super();
-        this.keyboard = null;
     }
 }
 

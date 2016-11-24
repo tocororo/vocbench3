@@ -3,23 +3,12 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {Cookie} from "../../../utils/Cookie";
 
-/**
- * Useless class with empty data
- * (I need this cause currently I don't know how to create a Custom Modal without context data)
- */
-export class ValidationSettingsModalData extends BSModalContext {
-    constructor() {
-        super();
-        this.keyboard = null;
-    }
-}
-
 @Component({
     selector: "validation-settings-modal",
     templateUrl: "./validationSettingsModal.html",
 })
-export class ValidationSettingsModal implements ModalComponent<ValidationSettingsModalData> {
-    context: ValidationSettingsModalData;
+export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
+    context: BSModalContext;
     
     private rejectedAlignmentAction: string;
     private rejectedOptAsk = {value: "ask", label: "Always ask (Always ask for the action to perform)"};
@@ -38,7 +27,7 @@ export class ValidationSettingsModal implements ModalComponent<ValidationSetting
     
     private submitted: boolean = false;
     
-    constructor(public dialog: DialogRef<ValidationSettingsModalData>) {
+    constructor(public dialog: DialogRef<BSModalContext>) {
         this.context = dialog.context;
     }
     

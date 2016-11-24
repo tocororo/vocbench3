@@ -6,10 +6,10 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 })
 export class FilePickerComponent implements OnInit {
     
-    @Input() label: string = "Browse";
-    @Input() size: string = "sm";
+    @Input() label: string;
+    @Input() size: string;
     @Input() accept: string;
-    @Input() placeholder: string = "Select a file...";
+    @Input() placeholder: string;
     
     @Output() fileChanged = new EventEmitter<File>();
     
@@ -28,6 +28,12 @@ export class FilePickerComponent implements OnInit {
         } else {
             this.btnClass += "sm";
             this.txtClass += "sm";
+        }
+        if (this.label == null) {
+            this.label = "Browse";
+        }
+        if (this.placeholder == null) {
+            this.placeholder = "Select a file...";
         }
     }
     

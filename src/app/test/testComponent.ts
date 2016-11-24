@@ -111,6 +111,22 @@ export class TestComponent {
             () => this.newTypedLiteralResult = null
         );
     }
+
+    private filePickerResult : File;
+    private filePickerTitle = "Select a file";
+    private filePickerAccept = "application/rdf+xml";
+    private filePickerMessage = "Select a file from your filesystem";
+    private filePickerLabel = "File";
+    private filePickerPlaceholder = "select a file";
+    selectFile() {
+        this.modalService.selectFile(this.filePickerTitle, this.filePickerMessage, this.filePickerLabel,
+            this.filePickerPlaceholder, this.filePickerAccept).then(
+            result => {
+                this.filePickerResult = result;
+            },
+            () => this.filePickerResult = null
+        );
+    }
     
     private browseClassTreeResult;
     browseClassTree() {

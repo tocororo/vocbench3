@@ -258,7 +258,7 @@ export class ResourceViewComponent {
         const builder = new BSModalContextBuilder<ResourceAlignmentModalData>(
             modalData, undefined, ResourceAlignmentModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ResourceAlignmentModal, overlayConfig).then(
             dialog => dialog.result
         );

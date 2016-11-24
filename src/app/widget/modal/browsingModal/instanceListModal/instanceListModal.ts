@@ -6,7 +6,6 @@ import {ARTURIResource} from '../../../../utils/ARTResources';
 export class InstanceListModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public cls: ARTURIResource) {
         super();
-        this.keyboard = null;
     }
 }
 
