@@ -6,24 +6,15 @@
         </div>
        
         <div class="panel-body">
-            
             <form role="form">
                 <div class="form-group">
                     <label>Format:</label>
                     <select class="form-control input-sm" [(ngModel)]="format" name="format">
-                        <option value="N3">N3</option>
-                        <option value="NQUADS">NQUADS</option>
-                        <option value="N-TRIPLES">N-TRIPLES</option>
-                        <option value="RDF/XML">RDF/XML</option>
-                        <option value="RDF/XML-ABBREV">RDF/XML-ABBREV</option>
-                        <option value="TRIG">TRIG</option>
-                        <option value="TRIX">TRIX</option>
-                        <option value="TRIX-EXT">TRIX-EXT</option>
-                        <option value="TURTLE">TURTLE</option>
+                        <option *ngFor="let f of formatList" [value]="f.format">{{f.format}}</option>
                     </select>
+
                 </div>
             </form>
-            
         </div>
         
         <div class="panel-footer">

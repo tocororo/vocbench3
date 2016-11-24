@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
+import {RDFFormat} from "../../../utils/RDFFormat";
 
 @Component({
 	selector: "export-data-component",
@@ -9,6 +10,7 @@ import {ModalServices} from "../../../widget/modal/modalServices";
 })
 export class ExportDataComponent {
     
+    private formatList: Array<any> = RDFFormat.formatMap;
     private format: string = "RDF/XML";
     
     constructor(private inOutService: InputOutputServices, private modalService: ModalServices) {}
@@ -25,7 +27,8 @@ export class ExportDataComponent {
                 document.getElementById("blockDivFullScreen").style.display = "none";
                 var data = new Blob([stResp], {type: "octet/stream"});
                 var downloadLink = window.URL.createObjectURL(data);
-                this.modalService.downloadLink("Export data", null, downloadLink, "export.rdf");
+                var fileName = "export." + RDFFormat.getFormatExtensions(this.format);
+                this.modalService.downloadLink("Export data", null, downloadLink, fileName);
             },
             err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
         );
