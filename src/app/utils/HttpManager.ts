@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, ResponseContentType, RequestOptions } from '@angular/http';
 import { Router } from "@angular/router";
 import 'rxjs/Rx'; //for map function
 import { Observable } from 'rxjs/Observable';
@@ -216,7 +216,7 @@ export class HttpManager {
     }
 
     /**
-     * Executes an XMLHttpRequest GET to get a file
+     * Execute a GET to download a file as Blob object
      */
     downloadFile(service: string, request: string, params, oldType: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
@@ -227,37 +227,26 @@ export class HttpManager {
         }
 
         //add parameters
-        for (var paramName in params) {
-            url += paramName + "=" + encodeURIComponent(params[paramName]) + "&";
-        }
+        url += this.getParametersForUrl(params);
         url += this.getContextParametersForUrl();
 
         console.log("[GET]: " + url);
 
-        var httpReq = new XMLHttpRequest();
-        httpReq.withCredentials = true;
-        httpReq.open("GET", url, true);
-        httpReq.responseType = "blob";
-
-        return new Observable(o => {
-            //handle the request completed
-            httpReq.onreadystatechange = function (event) {
-                if (httpReq.readyState === 4) { //request finished and response is ready
-                    if (httpReq.status === 200) {
-                        o.next(httpReq.response);
-                        o.complete();
-                    } else {
-                        throw new Error(httpReq.statusText);
-                    }
-                }
-            };
-            //execute the get
-            httpReq.send(null);
-        }).catch(error => {
-            return this.handleError(error);
+        var options = new RequestOptions({
+            headers: new Headers(),
+            withCredentials: true,
+            responseType: ResponseContentType.Blob
         });
 
-    }
+        //execute request
+        return this.http.get(url, options)
+            .map(res => {
+                    return new Blob([res.blob()]);
+            })
+            .catch(error => {
+                return this.handleError(error);
+            });
+    }    
 
     /**
      * Returns the url parameters to append to the request 
