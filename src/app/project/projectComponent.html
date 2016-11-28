@@ -38,7 +38,8 @@
                             [checked]="isWorkingProject(input.value)" [disabled]="!p.isOpen()"/>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" (click)="openOrCloseProject(p)">
+                        <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
+                            (click)="openOrCloseProject(p)">
                             <img *ngIf="!p.isOpen()" src="../../assets/images/folder.gif">
                             <img *ngIf="p.isOpen()" src="../../assets/images/folder-open.gif">
                         </button>

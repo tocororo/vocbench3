@@ -38,9 +38,11 @@ export class RegistrationComponent {
     private submit() {
         this.submitted = true;
         if (this.isDataValid()) {
+            document.getElementById("blockDivFullScreen").style.display = "block";
             this.userService.registerUser(this.email, this.password, this.firstName, this.lastName,
                 this.birthday, this.gender, this.country, this.address, this.affiliation, this.url, this.phone).subscribe(
                 stResp => {
+                    document.getElementById("blockDivFullScreen").style.display = "none";
                     this.modalService.alert("Registration complete",
                         "User " + this.firstName + " " + this.lastName + " registered succesfully." +
                         " You can now login with your email (" + this.email + ") and the password you provided").then(
@@ -48,7 +50,8 @@ export class RegistrationComponent {
                                 this.router.navigate(['/Home']);
                             }
                         );
-                }
+                },
+                () => { document.getElementById("blockDivFullScreen").style.display = "none"; }
             )
         } else {
             this.modalService.alert("Registration error", "Please, check the inserted data.", "warning");
