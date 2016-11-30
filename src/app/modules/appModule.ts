@@ -10,6 +10,7 @@ import {VBModalModule} from "./vbModalModule";
 import {TreeAndListModule} from "./treeAndListModule";
 import {ResourceViewModule} from "./resourceViewModule";
 import {ICVModule} from "./icvModule";
+import {AdministrationModule} from "./administrationModule";
 import {UserModule} from "./userModule";
 
 import {ModalModule} from 'angular2-modal';
@@ -43,6 +44,7 @@ import {MetadataManagementComponent} from "../config/dataManagement/metadata/met
 import {VocbenchSettingsComponent} from "../settings/vocbenchSettingsComponent";
 import {TestComponent} from "../test/testComponent";
 import {ConfigBarComponent} from "../config/configBar/configBarComponent";
+import {AdministrationComponent} from "../administration/administrationComponent";
 
 @NgModule({
       imports: [
@@ -50,7 +52,7 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
-            UserModule, ICVModule,
+            UserModule, ICVModule, AdministrationModule,
 
             STServicesModule,
             appRouting,
@@ -62,7 +64,7 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
       ],
       declarations: [
             AppComponent,
-            
+            ConfigBarComponent,
             HomeComponent,
             ProjectComponent,
             ImportProjectComponent,
@@ -80,9 +82,9 @@ import {ConfigBarComponent} from "../config/configBar/configBarComponent";
             ExportDataComponent,
             MetadataManagementComponent,
             VocbenchSettingsComponent,
-            TestComponent, //remove???
-
-            ConfigBarComponent
+            AdministrationComponent,
+            //remove???
+            TestComponent
       ],
       bootstrap: [AppComponent],
 })

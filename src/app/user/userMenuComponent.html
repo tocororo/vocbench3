@@ -16,6 +16,7 @@
 	<li role="separator" class="divider"></li>
 	<li><a [routerLink]="['/Profile']"><span class="glyphicon glyphicon-user"></span> View profile</a></li>
 	<li><a [routerLink]="['/Settings']"><span class="glyphicon glyphicon-cog"></span> Vocbench settings</a></li>
+	<li><a [routerLink]="['/Administration/Users']"><span class="glyphicon glyphicon-wrench"></span> Administration</a></li>
 	<li *ngIf="isProjectOpen()">
 		<a (click)="changeContentLang()">
 			<span class="glyphicon glyphicon-flag"></span> Content language

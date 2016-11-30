@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Deserializer} from "../utils/Deserializer";
 import {HttpManager} from "../utils/HttpManager";
-import {User} from "../utils/User";
+import {User, UserStatusEnum} from "../utils/User";
 
 @Injectable()
 export class UserServices {
@@ -20,6 +20,34 @@ export class UserServices {
         return this.httpMgr.doGet(this.serviceName, "getUser", null, this.oldTypeService, true, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
+            }
+        );
+    }
+
+    /**
+     * Lists all the registered users
+     */
+    listUsers(): Observable<User[]> {
+        console.log("[UserServices] listUsers");
+        return this.httpMgr.doGet(this.serviceName, "listUsers", null, this.oldTypeService, true, true).map(
+            stResp => {
+                return Deserializer.createUsersArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Lists all the users with the given status
+     * @param status
+     */
+    listUsersByStatus(status: UserStatusEnum): Observable<User[]> {
+        console.log("[UserServices] listUsersByStatus");
+        var params: any = {
+            status: status
+        }
+        return this.httpMgr.doGet(this.serviceName, "listUsersByStatus", null, this.oldTypeService, true, true).map(
+            stResp => {
+                return Deserializer.createUsersArray(stResp);
             }
         );
     }
@@ -227,6 +255,24 @@ export class UserServices {
             url: url,
         }
         return this.httpMgr.doGet(this.serviceName, "updateUserUrl", params, this.oldTypeService, true).map(
+            stResp => {
+                return Deserializer.createUser(stResp);
+            }
+        );
+    }
+
+    /**
+     * Enables or disables a user
+     * @param email email of the user to enable/disable
+     * @param enabled true enables the user, false disables the user
+     */
+    enableUser(email: string, enabled: boolean): Observable<User> {
+        console.log("[UserServices] enableUser");
+        var params: any = {
+            email: email,
+            enabled: enabled,
+        }
+        return this.httpMgr.doGet(this.serviceName, "enableUser", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }

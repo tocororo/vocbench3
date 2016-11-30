@@ -15,13 +15,13 @@ import {AlignmentValidationComponent} from "./alignment/alignmentValidation/alig
 import {CustomRangeComponent} from "./customRanges/customRangeComponent";
 import {ImportProjectComponent} from "./project/importProject/importProjectComponent";
 import {CreateProjectComponent} from "./project/createProject/createProjectComponent";
-
 import {ImportDataComponent} from "./config/dataManagement/importData/importDataComponent";
 import {ExportDataComponent} from "./config/dataManagement/exportData/exportDataComponent";
 import {MetadataManagementComponent} from "./config/dataManagement/metadata/metadataManagementComponent";
 import {VocbenchSettingsComponent} from "./settings/vocbenchSettingsComponent";
 import {UserProfileComponent} from "./user/userProfileComponent";
 import {RegistrationComponent} from "./user/registrationComponent";
+import {AdministrationComponent} from "./administration/administrationComponent"
 
 import {TestComponent} from "./test/testComponent";
 
@@ -42,6 +42,7 @@ export const routes: Routes = [
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},
+    {path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard]}, //TODO guard for admin?
     {path: "Test", component: TestComponent},
     // route config of config bar
     {path: "Config/ImportData", component: ImportDataComponent, canActivate: [AuthGuard, ProjectGuard]},

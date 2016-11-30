@@ -230,9 +230,8 @@ input[type="image"]:disabled  {
 }
 
 .listItem {
-    display: flex;
-    align-items: center;
     padding: 3px;
+    width: 100%;
 }
 .listItem:hover {
     background-color: #e5f3ff;

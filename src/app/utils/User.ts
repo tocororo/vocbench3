@@ -2,7 +2,7 @@ export class User {
     private email: string;
     private firstName: string;
     private lastName: string
-    private roles: string[];
+    // private roles: string[];
     private birthday: Date;
     private phone: string;
     private gender: string;
@@ -11,12 +11,12 @@ export class User {
     private registrationDate: Date;
     private affiliation: string;
     private url: string;
+    private status: UserStatusEnum;
 
-    constructor(email: string, firstName, lastName, roles: string[]) {
+    constructor(email: string, firstName, lastName) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.roles = roles;
     }
 
     getEmail(): string {
@@ -31,13 +31,13 @@ export class User {
         return this.lastName;
     }
 
-    listRoles(): string[] {
-        return this.roles;
-    }
+    // listRoles(): string[] {
+    //     return this.roles;
+    // }
 
-    hasRole(role: string): boolean {
-        return this.roles.includes(role);
-    }
+    // hasRole(role: string): boolean {
+    //     return this.roles.includes(role);
+    // }
 
     setBirthday(birthday: Date) {
         this.birthday = birthday;
@@ -103,4 +103,20 @@ export class User {
         return this.url;
     }
 
+    setStatus(status: UserStatusEnum) {
+        this.status = status;
+    }
+
+    getStatus(): UserStatusEnum {
+        return this.status;
+    }
+
+}
+
+export type UserStatusEnum = "REGISTERED" | "DISABLED" | "ENABLED";
+
+export const UserStatusEnum = {
+    REGISTERED: "REGISTERED" as UserStatusEnum,
+    DISABLED: "DISABLED" as UserStatusEnum,
+    ENABLED: "ENABLED" as UserStatusEnum
 }

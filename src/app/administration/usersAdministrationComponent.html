@@ -1,0 +1,116 @@
+<div class="vbox">
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>User Management</label>
+        </div>
+
+        <div class="panel-body hbox">
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label>Users:</label>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let u of users" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                            <span>{{u.getFirstName()}} {{u.getLastName()}}</span>
+                            <span *ngIf="u.getStatus() == 'REGISTERED'" class="glyphicon glyphicon-exclamation-sign pull-right"
+                                style="color: red" title="New registered user"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subPanel vbox" style="flex: 3; margin-left: 5px;">
+                <div class="subPanel-heading">
+                    <label>User Details:</label>
+                </div>
+                <div class="subPanel-body" style="flex: 1;">
+                    <div *ngIf="selectedUser">
+                        <table class="table table-condensed table-borderless">
+                            <colgroup>
+                                <col span="1" style="width: 10%;">
+                                <col span="1" style="width: 40%;">
+                                <col span="1" style="width: 10%;">
+                                <col span="1" style="width: 40%;">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td nowrap><label>First name:</label></td>
+                                    <td><input class="form-control input-sm" [value]="selectedUser.getFirstName()" readonly></td>
+                                    <td nowrap><label>Last name:</label></td>
+                                    <td><input class="form-control input-sm" [value]="selectedUser.getLastName()" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>E-mail:</label></td>
+                                    <td><input class="form-control input-sm" [value]="selectedUser.getEmail()" readonly></td>
+                                    <td nowrap><label>Phone:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getPhone()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getPhone()" class="form-control input-sm" [value]="selectedUser.getPhone()" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>Birthday:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getBirthday()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getBirthday()" class="form-control input-sm" [value]="selectedUser.getBirthday()" readonly>
+                                    </td>
+                                    <td nowrap><label>Gender:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getGender()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getGender()" class="form-control input-sm" [value]="selectedUser.getGender()" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>Country:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getCountry()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getCountry()" class="form-control input-sm" [value]="selectedUser.getCountry()" readonly>
+                                    </td>
+                                    <td nowrap><label>Address:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getAddress()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getAddress()" class="form-control input-sm" [value]="selectedUser.getAddress()" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>Affiliation:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getAffiliation()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getAffiliation()" class="form-control input-sm" [value]="selectedUser.getAffiliation()" readonly>
+                                    </td>
+                                    <td nowrap><label>Url:</label></td>
+                                    <td>
+                                        <input *ngIf="!selectedUser.getUrl()" class="form-control input-sm" readonly>
+                                        <input *ngIf="selectedUser.getUrl()" class="form-control input-sm" [value]="selectedUser.getUrl()" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td nowrap><label>Registration Date:</label></td>
+                                    <td><input class="form-control input-sm" [value]="selectedUser.getRegistrationDate()" readonly></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="subPanel-footer" *ngIf="selectedUser">
+                    <button class="btn btn-default btn-xs" [ngClass]="{active: selectedUser.getStatus() == 'ENABLED'}"
+                        (click)="enableDisableUser()">
+                        <span *ngIf="selectedUser.getStatus() == 'ENABLED'">Enabled</span>
+                        <span *ngIf="selectedUser.getStatus() != 'ENABLED'">Disabled</span>
+                    </button>
+                    <!--<div style="display: flex; align-items: center" title="Enable/Disable user">
+                        <span>Enabled:</span>
+                        <input type="checkbox" style="margin-left: 3px;" [checked]="allPropCheck" 
+                            (change)="onAllPropCheckChange($event.target.checked)">
+                    </div>-->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
