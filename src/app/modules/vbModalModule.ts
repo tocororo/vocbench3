@@ -51,6 +51,9 @@ import {BrowseExternalResourceModal} from '../alignment/resourceAlignment/browse
 import {OntoMgrConfigModal} from "../project/createProject/ontoMgrConfigModal";
 import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
 
+//administration modal
+import {UserProjBindingModal} from "../administration/userProjBindingModal";
+
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule],
     declarations: [
@@ -60,7 +63,7 @@ import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, ProjectPropertiesModal
+        OntoMgrConfigModal, ProjectPropertiesModal, UserProjBindingModal
     ],
     exports: [],
     providers: [ModalServices, BrowsingServices],
@@ -79,7 +82,7 @@ import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, ProjectPropertiesModal
+        OntoMgrConfigModal, ProjectPropertiesModal, UserProjBindingModal
     ]
 })
 export class VBModalModule { }

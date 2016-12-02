@@ -12,7 +12,7 @@ import {VocbenchCtx} from "../utils/VocbenchCtx";
 export class LoginComponent {
     
     private rememberMe: boolean = false;
-    private email: string = "admin@admin.com";
+    private email: string = "admin@vocbench.com";
     private password: string = "admin";
     
     constructor(private router: Router, private authService: AuthServices, private userService: UserServices,

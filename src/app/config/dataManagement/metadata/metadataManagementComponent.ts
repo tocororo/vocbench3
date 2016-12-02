@@ -4,7 +4,7 @@ import { OverlayConfig } from 'angular2-modal';
 
 import { MetadataServices } from "../../../services/metadataServices";
 import { RefactorServices } from "../../../services/refactorServices";
-import { AdministrationServices } from '../../../services/administrationServices';
+import { OntoManagerServices } from '../../../services/ontoManagerServices';
 import { VocbenchCtx } from "../../../utils/VocbenchCtx";
 import { ModalServices } from "../../../widget/modal/modalServices";
 import { ReplaceBaseURIModal, ReplaceBaseURIModalData } from "./replaceBaseURIModal";
@@ -15,7 +15,6 @@ import { ImportOntologyModal, ImportOntologyModalData, ImportType } from "./impo
     selector: "metadata-management-component",
     templateUrl: "./metadataManagementComponent.html",
     host: { class: "pageComponent" },
-    styles: [".greyText { color: #999 }"] //to grey the non-explicit mappings
 })
 export class MetadataManagementComponent {
 
@@ -37,7 +36,7 @@ export class MetadataManagementComponent {
     // Ontology mirror management section
     private mirrorList: Array<any>; //array of {file: string, namespace: string}
 
-    constructor(private metadataService: MetadataServices, private adminService: AdministrationServices,
+    constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
         private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
         private modal: Modal) { }
 
@@ -89,7 +88,7 @@ export class MetadataManagementComponent {
 
     //inits or refreshes ontology mirror list
     private refreshOntoMirror() {
-        this.adminService.getOntologyMirror().subscribe(
+        this.ontoMgrService.getOntologyMirror().subscribe(
             mirrors => {
                 this.mirrorList = mirrors;
             }
@@ -489,7 +488,7 @@ export class MetadataManagementComponent {
         this.modalService.prompt("Update ontology mirror from web", "BaseURI").then(
             newNamespace => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.adminService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
+                this.ontoMgrService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         this.refreshOntoMirror();
@@ -509,7 +508,7 @@ export class MetadataManagementComponent {
         this.modalService.prompt("Update ontology mirror from web", "URL").then(
             url => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.adminService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
+                this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         this.refreshOntoMirror();
@@ -530,7 +529,7 @@ export class MetadataManagementComponent {
             // this.modalService.selectFile("Update mirror from local file").then(
             file => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.adminService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
+                this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                     },
@@ -546,7 +545,7 @@ export class MetadataManagementComponent {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private deleteOntoMirror(mirror: any) {
-        this.adminService.deleteOntMirrorEntry(mirror.namespace, mirror.file).subscribe(
+        this.ontoMgrService.deleteOntMirrorEntry(mirror.namespace, mirror.file).subscribe(
             stReps => {
                 this.refreshImports();
                 this.refreshOntoMirror();

@@ -14,6 +14,10 @@ export class UsersAdministrationComponent {
     private users: User[];
     private selectedUser: User;
 
+    private showEnabled: boolean = true;
+    private showDisabled: boolean = true;
+    private showNew: boolean = true;
+
     constructor(private userService: UserServices, private modalService: ModalServices) { }
 
     ngOnInit() {
@@ -26,6 +30,12 @@ export class UsersAdministrationComponent {
 
     private selectUser(user: User) {
         this.selectedUser = user;
+    }
+
+    private isUserVisible(user: User): boolean {
+        return ((user.getStatus() == UserStatusEnum.ENABLED && this.showEnabled) ||
+            (user.getStatus() == UserStatusEnum.DISABLED && this.showDisabled) ||
+            (user.getStatus() == UserStatusEnum.REGISTERED && this.showNew));
     }
 
     private enableDisableUser() {

@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 
 import {AdministrationComponent} from "../administration/administrationComponent";
 import {UsersAdministrationComponent} from "../administration/usersAdministrationComponent";
+import {RolesAdministrationComponent} from "../administration/rolesAdministrationComponent";
 import {ConfigAdministrationComponent} from "../administration/configAdministrationComponent";
 import {ProjectsAdministrationComponent} from "../administration/projectsAdministrationComponent";
 
@@ -13,6 +14,7 @@ import {adminRouting} from "../administration/administrationRoutes";
     imports: [CommonModule, FormsModule, adminRouting],
     declarations: [
         UsersAdministrationComponent,
+        RolesAdministrationComponent,
         ConfigAdministrationComponent,
         ProjectsAdministrationComponent
     ],

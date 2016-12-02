@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 
 import {HttpModule} from '@angular/http';
 
-import {AdministrationServices} from "../services/administrationServices";
+// import {AdministrationServices} from "../services/administrationServices";
 import {AlignmentServices} from "../services/alignmentServices";
 import {AuthServices} from "../services/authServices";
 import {CustomRangeServices} from "../services/customRangeServices";
@@ -30,7 +30,7 @@ import {UserServices} from "../services/userServices";
     declarations: [],
     exports: [],
     providers: [
-        AdministrationServices,
+        // AdministrationServices,
         AlignmentServices,
         AuthServices,
         CustomRangeServices,

@@ -41,6 +41,7 @@ export class AuthServices {
         return this.httpMgr.doGet(this.serviceName, "logout", null, this.oldTypeService, true).map(
             stResp => {
                 this.vbCtx.removeLoggedUser();
+                this.vbCtx.removeWorkingProject();
                 return stResp;
             }
         );

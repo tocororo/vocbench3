@@ -5,9 +5,56 @@
             <label>Projects management</label>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body hbox">
 
-            Project management here
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label>Projects:</label>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let p of projects" class="listItem" [ngClass]="{active: p == selectedProject}" (click)="selectProject(p)">
+                            <span>{{p.getName()}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subPanel vbox" style="margin-left: 5px;">
+                <div class="subPanel-heading">
+                    <label style="flex: 1;">Users:</label>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="addUserToProject()" [disabled]="!selectedProject">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="removeUserFromProject()" [disabled]="!selectedUser || !selectedProject">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let u of users" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                            <span>{{u.getFirstName()}} {{u.getLastName()}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subPanel vbox" style="margin-left: 5px; flex: 3;">
+                <div class="subPanel-heading">
+                    <label>Project-User properties:</label>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+
+                        <span *ngIf="selectedProject && selectedUser">
+                            Properties of {{selectedProject.getName()}} - {{selectedUser.getFirstName()}} {{selectedUser.getLastName()}}
+                        </span>
+
+                    </div>
+                </div>
+            </div>
 
         </div>
 

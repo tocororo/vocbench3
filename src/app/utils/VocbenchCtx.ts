@@ -9,20 +9,29 @@ export class VocbenchCtx {
 
     private workingProject: Project; //working project
     private defaultNamespace: string; //namespace of the current working project
-    private ctxProject: Project; //project temporarly used in some context (e.g. exploring other projects)
+    private ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
     private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     private loggedUser: User;
 
     constructor() { }
 
+    /**
+     * Sets the working project (the one set as ctx_project requests parameter)
+     */
     setWorkingProject(project: Project) {
         this.workingProject = project;
     }
 
+    /**
+     * Gets the working project (the one set as ctx_project requests parameter)
+     */
     getWorkingProject(): Project {
         return this.workingProject;
     }
 
+    /**
+     * Removes the working project (the one set as ctx_project requests parameter)
+     */
     removeWorkingProject() {
         this.workingProject = undefined;
         this.defaultNamespace = undefined;
@@ -37,14 +46,23 @@ export class VocbenchCtx {
         return this.defaultNamespace;
     }
 
+    /**
+     * Sets a contextual project (project temporarly used in some scenarios)
+     */
     setContextProject(project: Project) {
         this.ctxProject = project;
     }
 
+    /**
+     * Gets a contextual project (project temporarly used in some scenarios)
+     */
     getContextProject(): Project {
         return this.ctxProject;
     }
 
+    /**
+     * Removes a contextual project (project temporarly used in some scenarios)
+     */
     removeContextProject() {
         this.ctxProject = undefined;
     }
@@ -88,14 +106,23 @@ export class VocbenchCtx {
         Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
     }
 
+    /**
+     * Sets a sessione token (to keep track of session in some tools/scenarios)
+     */
     setSessionToken(token: string) {
         this.sessionToken = token
     }
 
+    /**
+     * Gets a sessione token (to keep track of session in some tools/scenarios)
+     */
     getSessionToken(): string {
         return this.sessionToken;
     }
 
+    /**
+     * Removes a sessione token (to keep track of session in some tools/scenarios)
+     */
     removeSessionToken() {
         this.sessionToken = undefined;
     }

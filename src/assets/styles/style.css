@@ -240,6 +240,11 @@ input[type="image"]:disabled  {
     background-color: #cde8ff;
 }
 
+.listItem.disabled {
+    cursor: not-allowed;
+    color: #999;
+}
+
 .subPanel {
 	border: 1px solid #ddd;
 	border-radius: 4px;
@@ -394,6 +399,10 @@ button.resViewPartitionBtn:disabled  {
     filter: alpha(opacity=20);
     cursor: default;
     /*cursor: not-allowed;*/
+}
+
+.greyText {
+    color: #999;
 }
 
 /* BOOTSTRAP OVERRIDE */

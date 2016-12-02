@@ -37,15 +37,15 @@ export class UserServices {
     }
 
     /**
-     * Lists all the users with the given status
-     * @param status
+     * Lists the users that have at least a role assigned in the given project
+     * @param projectName
      */
-    listUsersByStatus(status: UserStatusEnum): Observable<User[]> {
-        console.log("[UserServices] listUsersByStatus");
+    listUsersBoundToProject(projectName: string): Observable<User[]> {
+        console.log("[UserServices] listUsersBoundToProject");
         var params: any = {
-            status: status
+            projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "listUsersByStatus", null, this.oldTypeService, true, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params, this.oldTypeService, true, true).map(
             stResp => {
                 return Deserializer.createUsersArray(stResp);
             }

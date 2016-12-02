@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {AdministrationServices} from '../../../services/administrationServices';
+import {OntoManagerServices} from '../../../services/ontoManagerServices';
 
 export class ImportOntologyModalData extends BSModalContext {
     /**
@@ -32,14 +32,14 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     private mirrorList: Array<any>; //used for type "fromOntologyMirror"
     private selectedMirror; //used for type "fromOntologyMirror"
     
-    constructor(public dialog: DialogRef<ImportOntologyModalData>, public adminService: AdministrationServices) {
+    constructor(public dialog: DialogRef<ImportOntologyModalData>, public ontoMgrService: OntoManagerServices) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
         //init mirror list if modal import type is fromOntologyMirror
         if (this.context.importType == ImportType.fromOntologyMirror) {
-            this.adminService.getOntologyMirror().subscribe(
+            this.ontoMgrService.getOntologyMirror().subscribe(
                 mirrors => {
                     this.mirrorList = mirrors;
                 }
