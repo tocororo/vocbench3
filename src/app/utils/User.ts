@@ -113,6 +113,100 @@ export class User {
 
 }
 
+export class ProjectUserBinding {
+
+    private projectName: string;
+    private userEmail: string;
+    private roles: string[];
+
+    constructor(projectName: string, userEmail: string, roles?: string[]) {
+        this.projectName = projectName;
+        this.userEmail = userEmail;
+        if (roles != undefined) {
+            this.roles = roles;
+        } else {
+            this.roles = [];
+        }
+    }
+
+    setProjectName(projectName: string) {
+        this.projectName = projectName;
+    }
+
+    getProjectName(): string {
+        return this.projectName;
+    }
+
+    setUserEmail(userEmail: string) {
+        this.userEmail = userEmail;
+    }
+
+    getUserEmail(): string  {
+        return this.userEmail;
+    }
+    
+    setRoles(roles: string[]) {
+        this.roles = roles;
+    }
+
+    getRoles(): string[] {
+        return this.roles;
+    }
+
+    addRole(role: string) {
+        this.roles.push(role);
+    }
+
+    removeRole(role: string) {
+        this.roles.splice(this.roles.indexOf(role), 1);
+    }
+}
+
+export class Role {
+
+    private name: string;
+    private capabilities: string[]; //TODO later this should be an array of enum in sync with the UserCapabilitiesEnum in ST
+
+    constructor(name: string, capabilities?: string[]) {
+        this.name = name;
+        if (capabilities != undefined) {
+            this.capabilities = capabilities;
+        } else {
+            this.capabilities = [];
+        }
+    }
+
+    public setName(name: string) {
+        this.name = name;
+    }
+
+    public getName(): string {
+        return this.name;
+    }
+
+    public setCapabilities(capabilities: string[]) {
+        this.capabilities = capabilities;
+    }
+
+    public getCapabilities(): string[] {
+        return this.capabilities;
+    }
+
+    public addCapability(capability: string) {
+        if (!this.capabilities.includes(capability)) {
+            this.capabilities.push(capability);
+        }
+    }
+
+    public removeCapability(capability: string) {
+        var idx = this.capabilities.indexOf(capability);
+        if (idx != -1) {
+            this.capabilities.splice(idx, 1);
+        }
+    }
+
+}
+
 export type UserStatusEnum = "REGISTERED" | "DISABLED" | "ENABLED";
 
 export const UserStatusEnum = {

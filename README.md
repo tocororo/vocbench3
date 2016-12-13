@@ -25,7 +25,7 @@ output: {
 ```
 
 ### Further configuration ###
-If *VocBench3* and the *SemanticTurkey* servers run on two different hosts, be sure to update the server ip that hosts *SemanticTurkey*, by changing in `config/webpack.prod.js` (if you are running VB3 in development mode with `npm start`) or `config/webpack.dev.js` (if you are creating a build with `npm run build`) the following
+If *VocBench3* and the *SemanticTurkey* servers run on two different hosts, be sure to update the server ip that hosts *SemanticTurkey*, by changing in `config/webpack.dev.js` (if you are running VB3 in development mode with `npm start`) or `config/webpack.prod.js` (if you are creating a build with `npm run build`) the following
 ```
 const SERVERHOST = '127.0.0.1:1979';
 ```

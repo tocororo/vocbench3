@@ -26,7 +26,7 @@
             <div class="panel-body vbox" style="padding: 0px;">
                 <div class="scrollableContainer">
                     <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: isRoleSelected(r)}" (click)="selectRole(r)">
-                        {{r}}
+                        {{r.getName()}}
                     </div>
                 </div>
             </div>

@@ -5,9 +5,67 @@
             <label>Roles management</label>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body hbox">
 
-            roles
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1;">Roles:</label>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="createRole()" title="Create role">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="deleteRole()" [disabled]="!selectedRole" title="Delete role">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: r == selectedRole}" (click)="selectRole(r)">
+                            <span>{{r.getName()}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subPanel vbox" style="margin-left: 5px;">
+                <div class="subPanel-heading">
+                    <label>Role capabilities:</label>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <template [ngIf]="selectedRole">
+                            <div *ngFor="let c of selectedRole.getCapabilities()" class="listItem" [ngClass]="{active: c == selectedRoleCapability}"
+                                (click)="selectRoleCapability(c)">
+                                {{c}}
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
+                <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addCapability()" [disabled]="!selectedCapability">
+                    <span class="glyphicon glyphicon-chevron-left"></span> Add
+                </button>
+                <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeCapability()" [disabled]="!selectedRoleCapability">
+                    Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                </button>
+            </div>
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label>Available capabilities:</label>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let c of capabilityList" class="listItem"
+                            [ngClass]="{active: c == selectedCapability, disabled: isCapabilityAlreadyAssigned(c)}" (click)="selectCapability(c)">
+                            {{c}}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 

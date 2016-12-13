@@ -2,7 +2,8 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import { UserServices } from "../services/userServices";
-import { User } from "../utils/User";
+import { AdministrationServices } from "../services/administrationServices";
+import { User, Role } from "../utils/User";
 
 export class UserProjBindingModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public usersBound: Array<User>) {
@@ -20,12 +21,11 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
     private userList: User[] = [];
     private selectedUser: User;
 
-    private roleList: any[] = [
-        "ROLE_ADMIN", "ROLE_USER"
-    ]; //TODO this will be retrieved from server and I should foreseen a class Role {name: string, capabilities: string[]}
-    private selectedRoles: string[] = [];
+    private roleList: Role[] = [];
+    private selectedRoles: Role[] = [];
     
-    constructor(public dialog: DialogRef<UserProjBindingModalData>, public userService: UserServices) {
+    constructor(public dialog: DialogRef<UserProjBindingModalData>, public userService: UserServices,
+        public adminService: AdministrationServices) {
         this.context = dialog.context;
     }
 
@@ -33,6 +33,11 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
         this.userService.listUsers().subscribe(
             users => {
                 this.userList = users;
+            }
+        )
+        this.adminService.listRoles().subscribe(
+            roles => {
+                this.roleList = roles;
             }
         )
     }
@@ -57,7 +62,7 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
         return false;
     }
 
-    private selectRole(role: string) {
+    private selectRole(role: Role) {
         var idx = this.selectedRoles.indexOf(role);
         if (idx != -1) {
             this.selectedRoles.splice(idx, 1);
@@ -66,14 +71,18 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
         }
     }
 
-    private isRoleSelected(role: string): boolean {
+    private isRoleSelected(role: Role): boolean {
         return this.selectedRoles.includes(role);
     }
     
     ok(event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({user: this.selectedUser, roles: this.selectedRoles});
+        var roleList: string[] = [];
+        for (var i = 0; i < this.selectedRoles.length; i++) {
+            roleList.push(this.selectedRoles[i].getName());
+        }
+        this.dialog.close({user: this.selectedUser, roles: roleList});
     }
 
     cancel() {
