@@ -29,7 +29,10 @@
                     </tr>
                     <tr>
                         <td nowrap><label>Birthday:</label></td>
-                        <td><input-editable type="date" [value]="user.getBirthday()" (valueEdited)="updateBirthday($event)"></input-editable></td>
+                        <td>
+                            <input-editable type="date" [value]="user.getBirthday()" (valueEdited)="updateBirthday($event)" placeholder="yyyy-MM-dd">
+                            </input-editable>
+                        </td>
                         <td nowrap><label>Gender:</label></td>
                         <td><input-editable type="select" [options]="genders" [value]="user.getGender()" (valueEdited)="updateGender($event)"></input-editable></td>
                     </tr>

@@ -1,6 +1,7 @@
 <div [class]="inputClass">
     
-    <input *ngIf="type != 'select'" [type]="inputType" class="form-control" [(ngModel)]="value" [readonly]="!editInProgress">
+    <input *ngIf="type != 'select'" [type]="inputType" class="form-control" [(ngModel)]="value"
+        [placeholder]="placeholder" [readonly]="!editInProgress">
 
     <!-- to show only if type == "select" and create a drop-down list with the items provided with "options" -->
     <select *ngIf="type == 'select'" [(ngModel)]="value" class="form-control" [disabled]="!editInProgress">

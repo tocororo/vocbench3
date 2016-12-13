@@ -10,6 +10,7 @@ export class InputEditableComponent implements OnInit {
     @Input() options: string[]; //options of select element. Used only if type = "select"
     @Input() size: string = "sm"; //xs, sm (default), md, lg
     @Input() type: string; //text (default), email, date, select
+    @Input() placeholder: string;
 
     @Output() valueEdited = new EventEmitter<string>();
 
