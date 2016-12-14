@@ -11,6 +11,44 @@ export class AdministrationServices {
 
     constructor(private httpMgr: HttpManager) { }
 
+    // ADMINISTRATION CONFIGURATION SERVICES 
+
+    /**
+     * Gets the administration config: a map with key value of configuration parameters
+     */
+    getAdministrationConfig() {
+        console.log("[AdministrationServices] getAdministrationConfig");
+        return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", null, this.oldTypeService, true).map(
+            stResp => {
+                return stResp.config;
+            }
+        );
+    }
+
+    /**
+     * Updates the administration config parameters
+	 * @param emailAdminAddress
+	 * @param emailFromAddress
+	 * @param emailFromPassword
+	 * @param emailFromAlias
+	 * @param emailFromHost
+	 * @param emailFromPort
+     */
+    updateAdministrationConfig(emailAdminAddress: string, emailFromAddress: string, emailFromPassword: string,
+        emailFromAlias: string, emailFromHost: string, emailFromPort: string) {
+        console.log("[AdministrationServices] updateAdministrationConfig");
+        var params: any = {
+            emailAdminAddress: emailAdminAddress,
+            emailFromAddress: emailFromAddress,
+            emailFromPassword: emailFromPassword,
+            emailFromAlias: emailFromAlias,
+            emailFromHost: emailFromHost,
+            emailFromPort: emailFromPort
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateAdministrationConfig", params, this.oldTypeService, true);
+    }
+
+
     //PROJECT-USER BINDING SERVICES
 
     /**
@@ -39,7 +77,6 @@ export class AdministrationServices {
      * @param roles
      */
     addProjectUserBinding(projectName: string, email: string, roles: string[]) {
-        console.log(roles.length);
         console.log("[AdministrationServices] addProjectUserBinding");
         var params: any = {
             projectName: projectName,
@@ -143,7 +180,6 @@ export class AdministrationServices {
                 for (var i = 0; i < capabilityList.length; i++) {
                     capabilities.push(capabilityList[i]);
                 }
-                console.log(JSON.stringify(capabilities));
                 return capabilities;
             }
         );

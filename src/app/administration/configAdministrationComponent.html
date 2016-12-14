@@ -7,7 +7,49 @@
 
         <div class="panel-body">
 
-            configuration here
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label>Email properties:</label>
+                </div>
+                <div class="subPanel-body" style="flex: 1;">
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td nowrap><label>Email admin address:</label></td>
+                                <td><input class="form-control input-sm" type="email" [(ngModel)]="config.emailAdminAddress"></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Email from address:</label></td>
+                                <td><input class="form-control input-sm" type="email" [(ngModel)]="config.emailFromAddress"></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Email from password:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromPassword"></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Email from alias:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromAlias"></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Email from host:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromHost"></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Email from port:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromPort"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="subPanel-footer">
+                    <button type="submit" class="btn btn-default btn-sm pull-right" (click)="submitChange()" [disabled]="!isConfigChanged()">Submit</button>
+                    <!--<button type="submit" class="btn btn-default btn-sm pull-right" (click)="submitChange()">Submit</button>-->
+                </div>
+            </div>
 
         </div>
 
