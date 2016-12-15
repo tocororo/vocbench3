@@ -41,6 +41,8 @@ export class Languages {
         { name: "German", tag: "de" },
         { name: "Greek", tag: "el" },
         { name: "English", tag: "en" },
+        { name: "English American", tag: "en-US" },
+        { name: "English British", tag: "en-GB" },
         { name: "Spanish", tag: "es" },
         { name: "French", tag: "fr" },
         { name: "Hindi", tag: "hi" },

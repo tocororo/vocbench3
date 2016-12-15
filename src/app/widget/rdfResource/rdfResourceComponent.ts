@@ -11,7 +11,7 @@ export class RdfResourceComponent {
 
 	constructor() { }
 
-	private getImgSrc() {
+	private getImgSrc(): string {
 		return ResourceUtils.getImageSrc(this.resource);
 	}
 
@@ -30,6 +30,15 @@ export class RdfResourceComponent {
 			lang = (<ARTLiteral>this.resource).getLang();
 		}
 		return (lang != undefined && lang != null && lang != "");
+	}
+
+	/**
+	 * Returns true if the current resource langTag has a flag image available.
+	 * This method should be called only for resource with lang, so it should depend from isResourceWithLang
+	 */
+	private isLangFlagAvailable(): boolean {
+		//just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
+		return !this.getImgSrc().includes("unknown");
 	}
 
 	/**

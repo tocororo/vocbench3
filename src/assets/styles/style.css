@@ -149,6 +149,19 @@ rdf-resource > .rdfResourceIcon {
     min-width: 16px;
     margin-right: 5px;
 }
+rdf-resource .flagIcon {
+    position: relative;
+}
+rdf-resource .flagIcon > span{
+    position: absolute;
+    top: 0px;
+    padding: 2px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 10px;
+    cursor: default;
+    user-select: none;
+}
 
 .treeNode > rdf-resource {
     min-height: 24px;

@@ -1,8 +1,15 @@
 <div class="rdfResourceIcon">
     <template [ngIf]="getImgSrc()">
         <img *ngIf="!isResourceWithLang()" [src]="getImgSrc()">
-        <!--If resource is with lang (literal with lang or skosxl:Label with lang set its language as title-->
-        <img *ngIf="isResourceWithLang()" [src]="getImgSrc()" [title]="getLang()">
+        <!--If resource is with lang (literal with lang or skosxl:Label with lang put a flag as icon-->
+        <template [ngIf]="isResourceWithLang()">
+            <!--If flag is not available write the langTag over an empty flag-->
+            <div *ngIf="!isLangFlagAvailable()" class="flagIcon" [title]="getLang()">
+                <img [src]="getImgSrc()">
+                <span>{{getLang()}}</span>
+            </div>
+            <img *ngIf="isLangFlagAvailable()" [src]="getImgSrc()" [title]="getLang()">
+        </template>
     </template>
 </div>
 <span [title]="resource.toNT()" style="flex: 1" style="margin-right: 6px;">
