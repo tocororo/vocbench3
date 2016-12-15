@@ -58,6 +58,7 @@ export class PropertyServices {
         p.setAdditionalProperty(ResAttribute.CHILDREN, subProperties);
         if (subProperties.length > 0) {
             p.setAdditionalProperty(ResAttribute.OPEN, true); //to initialize tree all expanded
+            p.setAdditionalProperty(ResAttribute.MORE, 1);
         }
         return p;
     }

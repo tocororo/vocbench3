@@ -175,10 +175,13 @@ export class ProjectComponent implements OnInit {
     }
     
     private saveProject(project: Project) {
+        document.getElementById("blockDivFullScreen").style.display = "block";
         this.projectService.saveProject(project).subscribe(
             stResp => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
                 this.modalService.alert("Save project", "Project " + project.getName() + " saved successfully");
-            }
+            },
+            err => document.getElementById("blockDivFullScreen").style.display = "none"
         );
     }
 
