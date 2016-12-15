@@ -6,7 +6,7 @@ export class ResourceUtils {
     // private static classImgSrc = require("../../assets/images/class.png");
     // private static classImportedImgSrc = require("../../assets/images/class_imported.png");
 
-    private static availableFlagLang = ["ar", "cs", "de", "el", "en", "es", "fr", "hi", "it", "ja", 
+    private static availableFlagLang = ["ar", "cs", "de", "el", "en", "en-US", "en-GB", "es", "fr", "hi", "it", "ja", 
             "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
 
     static getImageSrc(rdfResource: ARTNode): string {
