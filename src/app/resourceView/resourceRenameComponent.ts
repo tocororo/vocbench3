@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from "@angular/core";
+import {Component, Input, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTResource, ARTURIResource} from "../utils/ARTResources";
 import {ModalServices} from "../widget/modal/modalServices";
@@ -12,8 +12,8 @@ export class ResourceRenameComponent {
     
     @Input() resource: ARTResource;
     
-    @ViewChild('localrenameinput') localRenameInput;
-    @ViewChild('totalrenameinput') totalRenameInput;
+    @ViewChild('localrenameinput') localRenameInput: ElementRef;
+    @ViewChild('totalrenameinput') totalRenameInput: ElementRef;
     
     private localName: string;
     private pristineNamespace: string;
@@ -30,8 +30,8 @@ export class ResourceRenameComponent {
         }
     }
 
-    ngOnChanges(changes) {
-        if (changes.resource.currentValue) {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource'].currentValue) {
             if (this.resource.isURIResource()) {
                 this.localName = (<ARTURIResource>this.resource).getLocalName();
             }

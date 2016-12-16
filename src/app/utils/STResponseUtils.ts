@@ -71,7 +71,7 @@ export class STResponseUtils {
     /**
      * Returns the data content of the response
      */
-    static getResponseData(stResp) {
+    static getResponseData(stResp: any) {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("data")[0];
         } else { //JSON
@@ -86,7 +86,7 @@ export class STResponseUtils {
     /**
      * Returns true if the response is an error/exception/fail response
      */
-    static isErrorResponse(stResp): boolean {
+    static isErrorResponse(stResp: any): boolean {
         return (this.isError(stResp) || this.isException(stResp) || this.isFail(stResp));
     }
     
@@ -94,8 +94,8 @@ export class STResponseUtils {
      * Returns the error message in case the response is an error/exception/fail response
      * To use only in case isErrorResponse returns true
      */
-    static getErrorResponseMessage(stResp): string {
-        var msg;
+    static getErrorResponseMessage(stResp: any): string {
+        var msg: string;
         if (this.isError(stResp)) {
             msg = this.getErrorMessage(stResp);
         } else if (this.isException(stResp)) {
@@ -109,7 +109,7 @@ export class STResponseUtils {
     /**
      * Checks if the response is an exception response
      */
-    private static isException(stResp) {
+    private static isException(stResp: any): boolean {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("type") == "exception";
         } else { //JSON
@@ -124,7 +124,7 @@ export class STResponseUtils {
     /**
 	 * Returns the exception message
 	 */
-    private static getExceptionMessage(stResp) {
+    private static getExceptionMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("msg")[0].textContent;
         } else { //JSON
@@ -135,7 +135,7 @@ export class STResponseUtils {
 	/**
 	 * Checks if the response is an exception response
 	 */
-    private static  isError(stResp) {
+    private static  isError(stResp: any): boolean {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("type") == "error";
         } else { //JSON
@@ -150,7 +150,7 @@ export class STResponseUtils {
 	/**
 	 * Returns the exception message
 	 */
-    private static getErrorMessage(stResp) {
+    private static getErrorMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("msg")[0].textContent;
         } else { //JSON
@@ -161,7 +161,7 @@ export class STResponseUtils {
 	/**
 	 * Checks if the response is a fail response
 	 */
-    private static isFail(stResp) {
+    private static isFail(stResp: any): boolean {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("reply")[0].getAttribute("status") == "fail";
         } else { //JSON
@@ -177,7 +177,7 @@ export class STResponseUtils {
 	/**
 	 * Returns the fail message
 	 */
-    private static getFailMessage(stResp) {
+    private static getFailMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("data")[0].textContent;
         } else { //JSON

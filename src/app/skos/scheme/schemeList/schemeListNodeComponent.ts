@@ -12,19 +12,19 @@ export class SchemeListNodeComponent {
     @Input() node: ARTURIResource;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
 	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
-            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelSetEvent.subscribe(
-            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelRemovedEvent.subscribe(
-            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelRemovedEvent.subscribe(
-            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
     
     ngOnDestroy() {

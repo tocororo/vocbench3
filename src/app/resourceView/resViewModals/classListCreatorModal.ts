@@ -101,7 +101,7 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
         return this.selectedListElement == element;
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.classList);

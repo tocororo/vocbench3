@@ -85,7 +85,7 @@ export class RolesAdministrationComponent {
         if (this.selectedRole == undefined) {
             return true;
         }
-        return this.selectedRole.getCapabilities().includes(capability);
+        return this.selectedRole.getCapabilities().indexOf(capability) != -1;
     }
 
     private addCapability() {

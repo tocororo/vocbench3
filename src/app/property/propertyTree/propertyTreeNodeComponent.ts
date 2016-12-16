@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef} from "@angular/core";
 import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 
@@ -11,27 +11,28 @@ export class PropertyTreeNodeComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
-    @ViewChild('treeNodeElement') treeNodeElement;
+    @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
     //PropertyTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
     //structure to support the tree opening
-    private pendingSearch = {
+    private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         path: [], //remaining path of the tree to open
     }
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
 	constructor(private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
-            data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
+            (data: any) => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
-            data => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
+            (data: any) => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
+            (property: ARTURIResource) => this.onPropertyDeleted(property)));
         this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
-            data => this.onSuperPropertyRemoved(data.property, data.superProperty)));
+            (data: any) => this.onSuperPropertyRemoved(data.property, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource))); 
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource))); 
     }
     
     ngAfterViewInit() {

@@ -31,13 +31,13 @@ export class SelectionModalData extends BSModalContext {
 export class SelectionModal implements ModalComponent<SelectionModalData> {
     context: SelectionModalData;
     
-    private optionSelected;
+    private optionSelected: any;
     
     constructor(public dialog: DialogRef<SelectionModalData>) {
         this.context = dialog.context;
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         this.dialog.close(this.optionSelected);
     }

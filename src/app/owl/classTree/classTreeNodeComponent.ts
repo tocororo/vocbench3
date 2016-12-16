@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef} from "@angular/core";
 import {ARTURIResource, ResAttribute} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OWL} from "../../utils/Vocabulary";
@@ -13,36 +13,36 @@ export class ClassTreeNodeComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
-    @ViewChild('treeNodeElement') treeNodeElement;
+    @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
     //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
     //structure to support the tree opening
-    private pendingSearch = {
+    private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         path: [], //remaining path of the tree to open
     }
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
 	constructor(private owlService:OwlServices, private eventHandler:VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
-            data => this.onSubClassCreated(data.subClass, data.superClass)));
+            (data: any) => this.onSubClassCreated(data.subClass, data.superClass)));
         this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(
-            data => this.onSuperClassAdded(data.subClass, data.superClass)));    
+            (data: any) => this.onSuperClassAdded(data.subClass, data.superClass)));    
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
-            cls => this.onClassDeleted(cls)));
+            (cls: ARTURIResource) => this.onClassDeleted(cls)));
         this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
-            data => this.onSubClassRemoved(data.cls, data.subClass)));
+            (data: any) => this.onSubClassRemoved(data.cls, data.subClass)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
-            data => this.onInstanceDeleted(data.cls)));
+            (data: any) => this.onInstanceDeleted(data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
-            data => this.onInstanceCreated(data.cls)));
+            (data: any) => this.onInstanceCreated(data.cls)));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
-            data => this.onInstanceDeleted(data.type)));
+            (data: any) => this.onInstanceDeleted(data.type)));
         this.eventSubscriptions.push(eventHandler.typeAddedEvent.subscribe(
-            data => this.onInstanceCreated(data.type)));
+            (data: any) => this.onInstanceCreated(data.type)));
     }
     
     ngOnInit() {

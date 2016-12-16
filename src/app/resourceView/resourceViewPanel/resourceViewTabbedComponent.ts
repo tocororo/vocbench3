@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, SimpleChanges} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
 
 @Component({
@@ -10,13 +10,13 @@ export class ResourceViewTabbedComponent {
     @Input() resource: ARTResource;
     
     private tabs: Array<any> = [];
-    private activeTab;
+    private activeTab: any;
     
     constructor() {}
     
-    ngOnChanges(changes) {
-        if (changes.resource) {
-            var res: ARTResource = changes.resource.currentValue;
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource']) {
+            var res: ARTResource = changes['resource'].currentValue;
             var tab = this.getTabWithResource(res);
             if (tab != null) {//resource already open in a tab => moves it as first tab
                 this.closeTab(tab);
@@ -82,13 +82,13 @@ export class ResourceViewTabbedComponent {
         this.activeTab = this.tabs[this.tabs.length-1];
     }
     
-    private selectTab(t) {
+    private selectTab(t: any) {
         this.activeTab.active = false;
         t.active = true;
         this.activeTab = t;
     }
     
-    private closeTab(t) {
+    private closeTab(t: any) {
         var tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active and not the only one, change the active tab
         if (t.active && this.tabs.length > 1) {

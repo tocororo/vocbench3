@@ -22,7 +22,7 @@ export class OntoManagerServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getOntManagerParameters", params, this.oldTypeService).map(
             stResp => {
-                var configurations = [];
+                var configurations: any[] = [];
                 var configColl = stResp.getElementsByTagName("configuration");
                 for (var i = 0; i < configColl.length; i++) {
                     var config: any = {};
@@ -30,7 +30,7 @@ export class OntoManagerServices {
                     config.editRequired = configColl[i].getAttribute("editRequired") == "true";
                     config.type = configColl[i].getAttribute("type");
                     
-                    var params = [];
+                    var params: any[] = [];
                     var parColl = configColl[i].getElementsByTagName("par");
                     for (var j = 0; j < parColl.length; j++) {
                         var param: any = {};
@@ -56,7 +56,7 @@ export class OntoManagerServices {
         var params = {};
         return this.httpMgr.doGet("systemStart", "listTripleStores", params, this.oldTypeService).map(
             stResp => {
-                var ontMgrList = [];
+                var ontMgrList: string[] = [];
                 var repElemColl: Array<Element> = stResp.getElementsByTagName("Repository");
                 for (var i = 0; i < repElemColl.length; i++) {
                     ontMgrList.push(repElemColl[i].getAttribute("repName"));
@@ -78,7 +78,7 @@ export class OntoManagerServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, this.oldTypeService).map(
             stResp => {
-                var mirrors = [];
+                var mirrors: any[] = [];
                 var mirrorElemColl: Array<Element> = stResp.getElementsByTagName("Mirror");
                 for (var i = 0; i < mirrorElemColl.length; i++) {
                     var m: any = {};

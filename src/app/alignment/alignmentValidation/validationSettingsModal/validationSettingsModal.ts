@@ -39,7 +39,7 @@ export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
         this.maxAlignment = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.submitted = true;
         if (this.maxAlignment < 1 || this.maxAlignment > 100) {
             return;

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, SimpleChanges} from "@angular/core";
 import {ARTURIResource} from "../../utils/ARTResources";
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
 import {SKOS} from '../../utils/Vocabulary';
@@ -24,8 +24,8 @@ export class ClassIndividualTreeComponent {
         this.currentScheme = this.vbCtx.getScheme();
     }
     
-    ngOnChanges(changes) {
-        if (changes.roots) { //when roots changes, deselect eventals class and instance selected
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['roots']) { //when roots changes, deselect eventals class and instance selected
             this.selectedClass = null;
             this.selectedInstance = null;
         }

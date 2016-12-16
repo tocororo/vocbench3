@@ -28,7 +28,7 @@ export class ConceptTreePanelComponent {
     
     private createConcept() {
         this.modalService.newResource("Create new skos:Concept", this.vbCtx.getContentLanguage()).then(
-            result => {
+            (result: any) => {
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createTopConcept(result.label, result.lang, this.vbCtx.getScheme(),
                         result.name, this.vbCtx.getContentLanguage()).subscribe();
@@ -43,7 +43,7 @@ export class ConceptTreePanelComponent {
     
     private createNarrower() {
         this.modalService.newResource("Create a skos:narrower", this.vbCtx.getContentLanguage()).then(
-            result => {
+            (result: any) => {
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createNarrower(result.label, result.lang, this.selectedConcept, this.vbCtx.getScheme(),
                         result.name, this.vbCtx.getContentLanguage()).subscribe();

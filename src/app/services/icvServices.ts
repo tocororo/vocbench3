@@ -103,7 +103,7 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSAltLabel", params, this.oldTypeService).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records = [];
+                var records: any[] = [];
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource = Deserializer.createURI(recordElemColl[i]);
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
@@ -125,7 +125,7 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSXLAltLabel", params, this.oldTypeService).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records = [];
+                var records: any[] = [];
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource = Deserializer.createURI(recordElemColl[i]);
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
@@ -190,7 +190,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSLabel", params, this.oldTypeService).map(
             stResp => {
-                var records = [];
+                var records: any[] = [];
                 var recordElemColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
@@ -212,7 +212,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSXLLabel", params, this.oldTypeService).map(
             stResp => {
-                var records = [];
+                var records: any[] = [];
                 var recordElemColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
@@ -235,7 +235,7 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSLabel", params, this.oldTypeService).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records = [];
+                var records: any[] = [];
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
                     var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
@@ -256,7 +256,7 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params, this.oldTypeService).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records = [];
+                var records: any[] = [];
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
                     var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);

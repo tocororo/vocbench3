@@ -89,7 +89,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         return valid;
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.submitted = true;
         if (this.isInputValid()) {
             this.dialog.close({value: this.value, datatype: this.datatype});    

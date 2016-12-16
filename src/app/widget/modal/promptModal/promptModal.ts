@@ -43,7 +43,7 @@ export class PromptModal implements ModalComponent<PromptModalData> {
         document.getElementById("toFocus").focus();
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.inputTxt);
@@ -53,8 +53,8 @@ export class PromptModal implements ModalComponent<PromptModalData> {
         this.dialog.dismiss();
     }
     
-    private onKeydown(event) {
-        if (event.which == "13") {
+    private onKeydown(event: KeyboardEvent) {
+        if (event.which == 13) {
             this.submitted = true;
             if (this.isInputValid()) {
                 this.ok(event);

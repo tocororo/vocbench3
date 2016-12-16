@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input} from '@angular/core';
+import {Directive, ElementRef, Input, SimpleChanges} from '@angular/core';
 
 /**
  * Directive to sanitize a text in an input text element
@@ -25,9 +25,9 @@ export class SanitizerDirective {
     
     constructor(private el: ElementRef) {}
     
-    ngOnChanges(changes) {
+    ngOnChanges(changes: SimpleChanges) {
         //check needed when sanitized is used as <input type="text" sanitized>, so active is bound as ""
-        if (changes.active.currentValue === "") {
+        if (changes['active'].currentValue === "") {
             this.active = true;
         }
     }
@@ -45,7 +45,7 @@ export class SanitizerDirective {
     /**
      * Sanitized pasted text
      */
-    onPasteListener = function(event) {
+    onPasteListener = function(event: ClipboardEvent) {
         if (this.active) {
             var inputElement = this.el.nativeElement;
             var txtContent = inputElement.value;
@@ -70,7 +70,7 @@ export class SanitizerDirective {
     /**
      * Sanitizes typed text
      */
-    onKeypressListener = function(event) {
+    onKeypressListener = function(event: KeyboardEvent) {
         if (this.active) {
             var inputElement = this.el.nativeElement;
             var txtContent = inputElement.value;

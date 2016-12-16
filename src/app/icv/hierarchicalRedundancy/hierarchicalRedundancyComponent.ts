@@ -38,7 +38,7 @@ export class HierarchicalRedundancyComponent {
     /**
      * Fixes redundancies by removing the redundant relation between broader and narrower
      */
-    fix(record) {
+    fix(record: any) {
         var broader = record.broader;
         var narrower = record.narrower;
         this.skosService.removeBroaderConcept(narrower, broader).subscribe(

@@ -86,7 +86,7 @@ export class IcvListComponent {
     /**
      * Listener of the "Go" button. It redirect to the page of the requested ICV.
      */
-    goToIcv(icvStruct) {
+    goToIcv(icvStruct: any) {
         if (icvStruct.routeName == undefined) {
            alert(icvStruct.name + " still not available");
            return; 
@@ -101,7 +101,7 @@ export class IcvListComponent {
     /**
      * Changes the open attribute of the icv structure, so that in the UI the panel expands/collapses
      */
-    private togglePanel(icvStruct) {
+    private togglePanel(icvStruct: any) {
         icvStruct.open = !icvStruct.open;
     }
     
@@ -109,7 +109,7 @@ export class IcvListComponent {
      * Returns true if the given icv ontoType is the same of the current project ontoType.
      * Useful to show/hide the icv.
      */
-    private isCompatibleWithProject(icvStruct): boolean {
+    private isCompatibleWithProject(icvStruct: any): boolean {
         return icvStruct.ontoType.indexOf(this.ontotype) != -1;
     }
 

@@ -13,7 +13,7 @@ export class User {
     private url: string;
     private status: UserStatusEnum;
 
-    constructor(email: string, firstName, lastName) {
+    constructor(email: string, firstName: string, lastName: string) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -193,7 +193,7 @@ export class Role {
     }
 
     public addCapability(capability: string) {
-        if (!this.capabilities.includes(capability)) {
+        if (this.capabilities.indexOf(capability) == -1) {
             this.capabilities.push(capability);
         }
     }

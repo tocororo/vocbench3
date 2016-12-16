@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "@angular/core";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
+import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef} from "@angular/core";
+import {ARTURIResource, ARTResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
@@ -13,36 +13,36 @@ import {ModalServices} from "../../../widget/modal/modalServices";
     host: { class: "blockingDivHost" }
 })
 export class CollectionTreeComponent {
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTResource>();
     @Input() hideSearch: boolean = false;
     
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') blockDivElement;
+    @ViewChild('blockDivTree') blockDivElement: ElementRef;
 
-    public roots: ARTURIResource[];
-    private selectedNode: ARTURIResource;
+    public roots: ARTResource[];
+    private selectedNode: ARTResource;
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
         private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
-            newColl => this.onRootCollectionCreated(newColl)));
+            (newColl: ARTResource) => this.onRootCollectionCreated(newColl)));
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
-            deletedCollection => this.onCollectionDeleted(deletedCollection)));
+            (deletedCollection: ARTResource) => this.onCollectionDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
-            data => this.onNestedCollectionAdded(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
-            data => this.onNestedCollectionAdded(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedLastEvent.subscribe(
-            data => this.onNestedCollectionAdded(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
-            data => this.onNestedCollectionAdded(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
-            newLang => this.onContentLangChanged(newLang)));
+            (newLang: string) => this.onContentLangChanged(newLang)));
     }
     
     /**
@@ -98,8 +98,8 @@ export class CollectionTreeComponent {
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key, searchedText) {
-        if (key == "13") {
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
             this.doSearch(searchedText);           
         }
     }
@@ -123,7 +123,7 @@ export class CollectionTreeComponent {
     
     //EVENT LISTENERS
     
-    private onNodeSelected(node: ARTURIResource) {
+    private onNodeSelected(node: ARTResource) {
         if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
         }
@@ -132,24 +132,24 @@ export class CollectionTreeComponent {
         this.nodeSelected.emit(node);
     }
 
-    private onRootCollectionCreated(collection: ARTURIResource) {
+    private onRootCollectionCreated(collection: ARTResource) {
         this.roots.push(collection);       
     }
 
     private onNestedCollectionAdded(nested: ARTURIResource, container: ARTURIResource) {
         //if the nested was a root collection, then remove it from root (since it is no more a root by definition)
         for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == nested.getURI()) {
+            if (this.roots[i].getNominalValue() == nested.getURI()) {
                 this.roots.splice(i, 1);
                 break;
             }
         }
     }
 
-    private onCollectionDeleted(deletedCollection: ARTURIResource) {
+    private onCollectionDeleted(deletedCollection: ARTResource) {
         //check if the collection to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == deletedCollection.getURI()) {
+            if (this.roots[i].getNominalValue() == deletedCollection.getNominalValue()) {
                 this.roots.splice(i, 1);
                 break;
             }

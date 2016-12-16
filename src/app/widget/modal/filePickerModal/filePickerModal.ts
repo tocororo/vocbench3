@@ -41,7 +41,7 @@ export class FilePickerModal implements ModalComponent<FilePickerModalData> {
         this.pickedFile = file;
     }
 
-    ok(event) {
+    ok(event: Event) {
         this.dialog.close(this.pickedFile);
     }
 

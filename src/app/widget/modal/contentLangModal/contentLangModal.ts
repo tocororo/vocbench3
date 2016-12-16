@@ -21,11 +21,11 @@ export class ContentLangModal implements ModalComponent<BSModalContext> {
         this.contentLang = this.vbCtx.getContentLanguage();
     }
     
-    private onLangChange(newLang) {
+    private onLangChange(newLang: string) {
         this.contentLang = newLang;
     }
 
-    ok(event) {
+    ok(event: Event) {
         var oldLang = this.vbCtx.getContentLanguage();
         //update content language only if changed and emit event
         if (oldLang != this.contentLang) {

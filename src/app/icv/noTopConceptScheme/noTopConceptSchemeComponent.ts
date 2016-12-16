@@ -46,7 +46,7 @@ export class NoTopConceptSchemeComponent {
         this.browsingService.browseConceptTree("Select a top concept", scheme, true).then(
             concept => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
-                    stResp => {
+                    (stResp: any) => {
                         this.runIcv();
                     }
                 );
@@ -95,7 +95,7 @@ export class NoTopConceptSchemeComponent {
         this.modalService.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
                 "will generate concepts in no scheme. Are you sure to proceed?").then(
             confirm => {
-                var deleteSchemeFnArray = [];
+                var deleteSchemeFnArray: any[] = [];
                 deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteScheme(sc));
                 //call the collected functions and subscribe when all are completed
                 Observable.forkJoin(deleteSchemeFnArray).subscribe(

@@ -33,8 +33,8 @@ export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> 
     
     private check: boolean = false;
     
-    private headerStyle;
-    private msgStyle;
+    private headerStyle: string;
+    private msgStyle: string;
 
     constructor(public dialog: DialogRef<ConfirmCheckModalData>) {
         this.context = dialog.context;
@@ -60,7 +60,7 @@ export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> 
         }
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.dialog.close(this.check);
     }
 

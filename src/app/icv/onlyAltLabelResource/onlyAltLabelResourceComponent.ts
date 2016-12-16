@@ -53,7 +53,7 @@ export class OnlyAltLabelResourceComponent {
     /**
      * Fixes resource by setting the alternative label as preferred
      */
-    setAltAsPrefLabel(record) {
+    setAltAsPrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
             this.skosService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
@@ -92,7 +92,7 @@ export class OnlyAltLabelResourceComponent {
      * in setAltAsPrefLabel it can be subscribed and execute operations once it's done
      */
     private changeAltToPref(resource: ARTURIResource, label: ARTNode) {
-        return new Observable(observer => {
+        return new Observable((observer: any) => {
             if (this.ontoType == "SKOS") {
                 this.skosService.removeAltLabel(resource, (<ARTLiteral>label).getLabel(), (<ARTLiteral>label).getLang()).subscribe(
                     stResp => {
@@ -118,7 +118,7 @@ export class OnlyAltLabelResourceComponent {
     /**
      * Fixes resource by adding a preferred label
      */
-    addPrefLabel(record) {
+    addPrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
             this.modalService.newPlainLiteral("Add skos:prefLabel").then(
                 data => {

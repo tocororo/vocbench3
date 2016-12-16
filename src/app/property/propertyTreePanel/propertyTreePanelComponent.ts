@@ -37,7 +37,7 @@ export class PropertyTreePanelComponent {
         this.createPropertyForType(RDFResourceRolesEnum.ontologyProperty);
     }
 
-    private createPropertyForType(type) {
+    private createPropertyForType(type: RDFResourceRolesEnum) {
         //currently uses prompt instead of newResource since addProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a new " + type, "Name", null, false, true).then(
             result => {

@@ -37,8 +37,8 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
         this.namespace = this.vbCtx.getDefaultNamespace();
     }
     
-    private onKeydown(event) {
-        if (event.which == "13") {
+    private onKeydown(event: KeyboardEvent) {
+        if (event.which == 13) {
             this.submitted = true;
             if (this.isInputValid()) {
                 this.ok(event);
@@ -54,7 +54,7 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
         return (this.label != undefined && this.label.trim() != "");
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         if (this.localName && this.localName.trim() == "") {//if localName has no content return null localName

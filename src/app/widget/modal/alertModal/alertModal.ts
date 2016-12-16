@@ -25,8 +25,8 @@ export class AlertModalData extends BSModalContext {
 export class AlertModal implements ModalComponent<AlertModalData> {
     context: AlertModalData;
     
-    private headerStyle;
-    private msgStyle;
+    private headerStyle: string;
+    private msgStyle: string;
     
     constructor(public dialog: DialogRef<AlertModalData>) {
         this.context = dialog.context;

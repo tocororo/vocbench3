@@ -53,7 +53,7 @@ export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalDa
      * Called when "Show all classes" checkbox changes status.
      * Resets the selectedInstance and update the  roots of the tree
      */
-    private onCheckboxChange(checked) {
+    private onCheckboxChange(checked: boolean) {
         this.selectedInstance = null;
         if (checked) {
             this.treeRoots = null;
@@ -69,7 +69,7 @@ export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalDa
         this.selectedInstance = instance;
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         //to avoid that the returned resource has the "selected" attribute set to true

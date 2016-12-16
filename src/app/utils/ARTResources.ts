@@ -78,7 +78,7 @@ export class ARTURIResource implements ARTResource {
         return "<" + this.uri + ">";
     };
 
-    setAdditionalProperty(propName: string, propValue): void {
+    setAdditionalProperty(propName: string, propValue: any): void {
         this[propName] = propValue;
     }
 
@@ -139,7 +139,7 @@ export class ARTBNode implements ARTResource {
         return this.getNominalValue();
     };
 
-    setAdditionalProperty(propName: string, propValue): void {
+    setAdditionalProperty(propName: string, propValue: any): void {
         this[propName] = propValue;
     }
 
@@ -216,15 +216,15 @@ export class ARTLiteral implements ARTNode {
         return nt;
     };
 
-    setAdditionalProperty(propName: string, propValue): void {
+    setAdditionalProperty(propName: string, propValue: any): void {
         this[propName] = propValue;
     }
 
-    deleteAdditionalProperty(propName: string) {
+    deleteAdditionalProperty(propName: string): void {
         delete this[propName];
     }
 
-    getAdditionalProperty(propName: string) {
+    getAdditionalProperty(propName: string): any {
         return this[propName];
     }
 
@@ -235,7 +235,7 @@ export class ARTPredicateObjects {
     private predicate: ARTURIResource;
     private objects: ARTNode[];
 
-    constructor(predicate: ARTURIResource, objects) {
+    constructor(predicate: ARTURIResource, objects: ARTNode[]) {
         this.predicate = predicate;
         this.objects = objects;
     }

@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, SimpleChanges} from "@angular/core";
 import {ARTResource} from "../../utils/ARTResources";
 import {ResourceViewComponent} from "../ResourceViewComponent";
 
@@ -15,8 +15,8 @@ export class ResourceViewSplittedComponent {
     
     constructor() {}
     
-    ngOnChanges(changes) {
-        if (changes.resource) {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource']) {
             this.object = null;
             this.resStack = [];
         }

@@ -104,7 +104,7 @@ export class HttpManager {
      * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
      *      Is useful to handle the error from the component that invokes the service.
      */
-    doPost(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
+    doPost(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
@@ -118,8 +118,8 @@ export class HttpManager {
         console.log("[POST]: " + url);
 
         //prepare POST data
-        var postData;
-        var strBuilder = [];
+        var postData: any;
+        var strBuilder: string[] = [];
         for (var paramName in params) {
             strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(params[paramName]));
         }
@@ -168,7 +168,7 @@ export class HttpManager {
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      */
-    uploadFile(service: string, request: string, params, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
+    uploadFile(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
@@ -218,7 +218,7 @@ export class HttpManager {
     /**
      * Execute a GET to download a file as Blob object
      */
-    downloadFile(service: string, request: string, params, oldType: boolean) {
+    downloadFile(service: string, request: string, params: any, oldType: boolean) {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";

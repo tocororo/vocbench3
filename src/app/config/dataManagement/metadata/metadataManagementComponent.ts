@@ -28,7 +28,7 @@ export class MetadataManagementComponent {
 
     // namespace prefix section
     private nsPrefMappingList: Array<any>;
-    private selectedMapping; //the currently selected mapping
+    private selectedMapping: any; //the currently selected mapping {namespace: string, prefix: string}
 
     // Imports params section
     private importList: Array<any>; //{status:string, uri:string, localfile: string}
@@ -108,7 +108,7 @@ export class MetadataManagementComponent {
     /**
      * When baseURI changes updates the namespace if they are bound 
      */
-    private onBaseURIChanged(newBaseURI) {
+    private onBaseURIChanged(newBaseURI: string) {
         this.baseURI = newBaseURI;
         if (this.bind) {
             this.namespace = this.baseURI + "#";
@@ -118,7 +118,7 @@ export class MetadataManagementComponent {
     /**
      * When namespace changes updates the baseURI if they are bound
      */
-    private onNamespaceChanged(newNamespace) {
+    private onNamespaceChanged(newNamespace: string) {
         this.namespace = newNamespace;
         if (this.bind) {
             if (this.namespace.endsWith("#")) {
@@ -245,7 +245,7 @@ export class MetadataManagementComponent {
     /**
      * Set the given prefix namespace mapping as selected
      */
-    private selectMapping(mapping) {
+    private selectMapping(mapping: any) {
         if (this.selectedMapping == mapping) {
             this.selectedMapping = null;
         } else {
@@ -422,7 +422,7 @@ export class MetadataManagementComponent {
     /**
      * Copies the imported ontology in a local mirror file, then updates the imports
      */
-    private mirrorOntology(importedOntology) {
+    private mirrorOntology(importedOntology: any) {
         this.modalService.prompt("Mirror ontology", "Mirror file name").then(
             mirrorFileName => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
@@ -443,7 +443,7 @@ export class MetadataManagementComponent {
     /**
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
-    private removeImport(importedOntology) {
+    private removeImport(importedOntology: any) {
         document.getElementById("blockDivFullScreen").style.display = "block";
         this.metadataService.removeImport(importedOntology.uri).subscribe(
             stResp => {

@@ -8,14 +8,14 @@ import {ARTURIResource} from "../utils/ARTResources";
 })
 export class ClassComponent {
     
-    private resource:ARTURIResource;
+    private resource: ARTURIResource;
     
     //EVENT LISTENERS 
-    private onClassSelected(cls) {
+    private onClassSelected(cls: ARTURIResource) {
         this.resource = cls;
     }
     
-    private onInstanceSelected(instance) {
+    private onInstanceSelected(instance: ARTURIResource) {
         this.resource = instance;
     }
     

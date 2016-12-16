@@ -120,7 +120,7 @@ export class Deserializer {
     }
 
     static createURIFromXML(response: Element): ARTURIResource {
-        var uriElement;
+        var uriElement: Element;
         if (response.tagName == 'uri') {
             uriElement = response;
         } else {
@@ -143,7 +143,7 @@ export class Deserializer {
         }
         var numInst = uriElement.getAttribute(ResAttribute.NUM_INST);
         if (numInst != undefined) {
-            artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, parseInt(numInst));
+            artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, Number(numInst));
         }
         var hasCustomRange = uriElement.getAttribute(ResAttribute.HAS_CUSTOM_RANGE);//indicates if a property has a CustomRange
         if (hasCustomRange != undefined) {
@@ -240,14 +240,15 @@ export class Deserializer {
     }
 
     static createLiteral(response: Element): ARTLiteral {
-        var isTypedLiteral;
-        var literalElement;
+        var isTypedLiteral: boolean;
+        var literalElement: Element;
         if (response.tagName == 'plainLiteral' || response.tagName == 'typedLiteral') {
             literalElement = response;
         } else {
-            literalElement = response.getElementsByTagName('typedLiteral');
-            if (literalElement.length != 0) {
-                literalElement = response.getElementsByTagName('typedLiteral')[0];
+            //get literalElement in any case: if is a typedLiteral or plainLiteral
+            var literalElements: NodeListOf<Element> = response.getElementsByTagName('typedLiteral');
+            if (literalElements.length != 0) {
+                literalElement = literalElements[0];
             } else {
                 literalElement = response.getElementsByTagName('plainLiteral')[0];
             }
@@ -259,13 +260,13 @@ export class Deserializer {
         }
 
         var label = literalElement.textContent;
-        var datatype;
+        var datatype: string;
         if (isTypedLiteral) {
             datatype = literalElement.getAttribute(ResAttribute.TYPE);
         } else {
             datatype = "";
         }
-        var lang;
+        var lang: string;
         if (isTypedLiteral) {
             lang = "";
         } else {
@@ -316,7 +317,7 @@ export class Deserializer {
             throw new Error("Not a collection");
         }
         var elements = element.children;
-        var result = [];
+        var result: ARTPredicateObjects[] = [];
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
             if (el.tagName != "predicateObjects") {
@@ -333,7 +334,7 @@ export class Deserializer {
     /**
      * @param resp json response containing {"user"" : [{firstName: string, lastName: string, ...}, {...}]}
      */
-    static createUsersArray(resp): User[] {
+    static createUsersArray(resp: any): User[] {
         var users: User[] = [];
         for (var i = 0; i < resp.users.length; i++) {
             users.push(this.createUser(resp.users[i]));
@@ -346,8 +347,8 @@ export class Deserializer {
      * @param resp could be a "data" element of a response (containing a "user" element)
      * or directly a "user" element
      */
-    static createUser(resp): User {
-        var userJson;
+    static createUser(resp: any): User {
+        var userJson: any;
         if (resp.user != null) {
             userJson = resp.user; //resp is the "data" element
         } else {

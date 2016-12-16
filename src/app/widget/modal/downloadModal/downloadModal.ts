@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {DomSanitizer} from "@angular/platform-browser"
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser"
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 
@@ -27,7 +27,7 @@ export class DownloadModalData extends BSModalContext {
 export class DownloadModal implements ModalComponent<DownloadModalData> {
     context: DownloadModalData;
     
-    private safeDownloadLink;
+    private safeDownloadLink: SafeUrl;
     
     constructor(public dialog: DialogRef<DownloadModalData>, public sanitizer: DomSanitizer) {
         this.context = dialog.context;
@@ -37,7 +37,7 @@ export class DownloadModal implements ModalComponent<DownloadModalData> {
         this.safeDownloadLink = this.sanitizer.bypassSecurityTrustUrl(this.context.downloadLink);
     }
 
-    ok(event) {
+    ok(event: Event) {
         this.dialog.close(true);
     }
 

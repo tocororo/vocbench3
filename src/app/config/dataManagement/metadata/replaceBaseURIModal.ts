@@ -43,7 +43,7 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
         }
     }
     
-    ok(event) {
+    ok(event: Event) {
         if (!this.oldBaseURI.startsWith("http://")) {
             this.errorMsg = "Invalid Old baseURI";
             this.submittedWithError = true;

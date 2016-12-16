@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
@@ -18,13 +18,13 @@ export class ResourceViewComponent {
     @Input() resource: ARTResource;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     
-    @ViewChild('blockDiv') blockingDivElement;
+    @ViewChild('blockDiv') blockingDivElement: ElementRef;
     private viewInitialized: boolean = false;
     
     private showInferred = false;
     
     //partitions
-    private resViewXmlResponse = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
+    private resViewXmlResponse: Element = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTResource[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
     private topconceptofColl: ARTURIResource[] = null;
@@ -41,18 +41,18 @@ export class ResourceViewComponent {
     private inverseofColl: ARTURIResource[] = null;
     private labelRelationsColl: ARTResource[] = null;
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
 	constructor(private resViewService:ResourceViewServices, private alignServices: AlignmentServices, private vbCtx: VocbenchCtx, 
         private eventHandler: VBEventHandler, private modal: Modal) {
             
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.buildResourceView(data.newResource)));
+            (data: any) => this.buildResourceView(data.newResource)));
     }
     
-    ngOnChanges(changes) {
+    ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.vbCtx.getInferenceInResourceView();
-        if (changes.resource.currentValue) {
+        if (changes['resource'].currentValue) {
             if (this.viewInitialized) {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }
@@ -112,7 +112,7 @@ export class ResourceViewComponent {
         this.inverseofColl = null;
         this.labelRelationsColl = null;
         
-        var respResourceElement = this.resViewXmlResponse.getElementsByTagName("resource")[0];
+        var respResourceElement: Element = this.resViewXmlResponse.getElementsByTagName("resource")[0];
         var respPartitions = this.resViewXmlResponse.children;
 
         for (var i = 0; i < respPartitions.length; i++) {
@@ -207,7 +207,7 @@ export class ResourceViewComponent {
      * Facets partition has a structure different from the other (object list and predicate-object list),
      * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)
      */
-    private parseFacetsPartition(facetsElement) {
+    private parseFacetsPartition(facetsElement: Element) {
         //init default facets
         this.propertyFacets = [
             {name: "symmetric", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},

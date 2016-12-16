@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges} from "@angular/core";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {OWL} from "../../utils/Vocabulary";
 import {VBEventHandler} from "../../utils/VBEventHandler";
@@ -21,18 +21,18 @@ export class ClassTreeComponent {
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') blockDivElement;
+    @ViewChild('blockDivTree') blockDivElement: ElementRef;
     
     public roots:ARTURIResource[] = [];
     private selectedNode:ARTURIResource;
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
     constructor(private owlService: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
         private eventHandler: VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(cls => this.onClassDeleted(cls)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe((cls: ARTURIResource) => this.onClassDeleted(cls)));
     }
     
     /**
@@ -45,10 +45,10 @@ export class ClassTreeComponent {
         this.initTree();
     }
     
-    ngOnChanges(changes) {
+    ngOnChanges(changes: SimpleChanges) {
         //viewInitialized needed to avoid initializing tree before view is initialized
         //(ngOnChanges is called before ngOnInit)
-        if (changes.rootClasses && this.viewInitialized) {
+        if (changes['rootClasses'] && this.viewInitialized) {
             this.initTree();
         }
     }
@@ -78,8 +78,8 @@ export class ClassTreeComponent {
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key, searchedText) {
-        if (key == "13") {
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
             this.doSearch(searchedText);           
         }
     }

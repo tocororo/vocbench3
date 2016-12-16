@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef} from "@angular/core";
 import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
@@ -15,38 +15,38 @@ export class ConceptTreeNodeComponent {
     @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
-    @ViewChild('treeNodeElement') treeNodeElement;
+    @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
     //structure to support the tree opening
-    private pendingSearch = {
+    private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         path: [], //remaining path of the tree to open
     }
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
 	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-            deletedConcept => this.onConceptDeleted(deletedConcept)));
+            (deletedConcept: ARTURIResource) => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
-            data => this.onNarrowerCreated(data.narrower, data.broader)));
+            (data: any) => this.onNarrowerCreated(data.narrower, data.broader)));
         this.eventSubscriptions.push(eventHandler.broaderAddedEvent.subscribe(
-            data => this.onBroaderAdded(data.narrower, data.broader)));
+            (data: any) => this.onBroaderAdded(data.narrower, data.broader)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
+            (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
-            data => this.onBroaderRemoved(data.concept, data.broader)));
+            (data: any) => this.onBroaderRemoved(data.concept, data.broader)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
-            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelSetEvent.subscribe(
-            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelRemovedEvent.subscribe(
-            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelRemovedEvent.subscribe(
-            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
     
     ngAfterViewInit() {

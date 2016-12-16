@@ -85,7 +85,7 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
         return this.selectedTargetInstance == instance;
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.instanceList);

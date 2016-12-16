@@ -34,7 +34,7 @@ export class TopConceptWithBroaderComponent {
         );
     }
     
-    removeBroaders(record) {
+    removeBroaders(record: any) {
         var concept = record.concept;
         var scheme = record.scheme;
         this.icvService.removeBroadersToConcept(concept, scheme).subscribe(
@@ -44,7 +44,7 @@ export class TopConceptWithBroaderComponent {
         );
     }
     
-    removeAsTopConceptOf(record) {
+    removeAsTopConceptOf(record: any) {
         var concept = record.concept;
         var scheme = record.scheme;
         this.skosService.removeTopConcept(concept, scheme).subscribe(

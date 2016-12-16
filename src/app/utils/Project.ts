@@ -62,7 +62,7 @@ export class Project {
     }
     
     public getPrettyPrintOntoMgr(): string {
-        var prettyPrint = null;
+        var prettyPrint: string = null;
         prettyPrint = Project.knownOntoMgrInterfaces[this.ontmgr];
         if (prettyPrint == null) {
             prettyPrint = this.ontmgr.substring(this.ontmgr.lastIndexOf("."));
@@ -79,7 +79,7 @@ export class Project {
     }
     
     public getPrettyPrintOntoType(): string {
-        var prettyPrint = null;
+        var prettyPrint: string = null;
         prettyPrint = Project.knownRDFModelInterfaces[this.ontoType];
         if (prettyPrint == null) {
             prettyPrint = this.ontoType.substring(this.ontoType.lastIndexOf("."));

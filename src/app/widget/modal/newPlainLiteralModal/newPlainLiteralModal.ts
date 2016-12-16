@@ -43,8 +43,8 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
         document.getElementById("toFocus").focus();
     }
     
-    private onKeydown(event) {
-        if (event.which == "13") {
+    private onKeydown(event: KeyboardEvent) {
+        if (event.which == 13) {
             this.submitted = true;
             if (this.isInputValid()) {
                 this.ok(event);
@@ -60,7 +60,7 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
         return (this.value != undefined && this.value.trim() != "");
     }
 
-    ok(event) {
+    ok(event: Event) {
         this.dialog.close({value: this.value, lang: this.lang});
     }
 

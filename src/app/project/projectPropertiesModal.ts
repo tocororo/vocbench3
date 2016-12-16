@@ -31,7 +31,7 @@ export class ProjectPropertiesModal implements ModalComponent<ProjectPropertiesM
         )
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close();

@@ -51,7 +51,7 @@ export class OverlappedLabelComponent {
     /**
      * Fixes by changing prefLabel
      */
-    changePrefLabel(record) {
+    changePrefLabel(record: any) {
         this.modalService.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getLabel(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
             data => {
@@ -88,7 +88,7 @@ export class OverlappedLabelComponent {
     /**
      * Fixes by removing prefLabel
      */
-    removePrefLabel(record) {
+    removePrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
             this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
                 stReso => {
@@ -107,7 +107,7 @@ export class OverlappedLabelComponent {
     /**
      * Fixes by changing altLabel
      */
-    changeAltLabel(record) {
+    changeAltLabel(record: any) {
         this.modalService.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getLabel(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
             data => {
@@ -149,7 +149,7 @@ export class OverlappedLabelComponent {
     /**
      * Fixes by removing altLabel
      */
-    removeAltLabel(record) {
+    removeAltLabel(record: any) {
         if (this.ontoType == "SKOS") {
             this.skosService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getLabel(), (<ARTLiteral>record.label).getLang()).subscribe(
                 stReso => {

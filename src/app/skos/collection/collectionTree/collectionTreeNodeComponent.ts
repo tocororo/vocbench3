@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
-import {ARTURIResource, ResAttribute} from "../../../utils/ARTResources";
+import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef} from "@angular/core";
+import {ARTURIResource, ARTResource, ResAttribute} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../services/skosServices";
@@ -13,44 +13,44 @@ export class CollectionTreeNodeComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
-    @ViewChild('treeNodeElement') treeNodeElement;
+    @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
 
     //CollectionTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
     
     //structure to support the tree opening
-    private pendingSearch = {
+    private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         path: [], //remaining path of the tree to open
     }
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
 	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
-            deletedCollection => this.onCollectionDeleted(deletedCollection)));
+            (deletedCollection: ARTResource) => this.onCollectionDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionCreatedEvent.subscribe(
-            data => this.onNestedCollectionCreated(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionCreated(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
-            data => this.onNestedCollectionCreated(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionCreated(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
-            data => this.onNestedCollectionAddedFirst(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionAddedFirst(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedLastEvent.subscribe(
-            data => this.onNestedCollectionAddedLast(data.nested, data.container)));
+            (data: any) => this.onNestedCollectionAddedLast(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
-            data => this.onNestedCollectionAddedInPosition(data.nested, data.container, data.position)));
+            (data: any) => this.onNestedCollectionAddedInPosition(data.nested, data.container, data.position)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionRemovedEvent.subscribe(
-            data => this.onNestedCollectionRemoved(data.nested, data.container)));    
+            (data: any) => this.onNestedCollectionRemoved(data.nested, data.container)));    
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
-            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelSetEvent.subscribe(
-            data => this.onPrefLabelSet(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelRemovedEvent.subscribe(
-            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelRemovedEvent.subscribe(
-            data => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
+            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
     
     ngAfterViewInit() {
@@ -145,10 +145,10 @@ export class CollectionTreeNodeComponent {
         this.nodeSelected.emit(node);
     }
     
-    private onCollectionDeleted(deletedCollection: ARTURIResource) {
+    private onCollectionDeleted(deletedCollection: ARTResource) {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
         for (var i = 0; i < children.length; i++) {
-            if (children[i].getURI() == deletedCollection.getURI()) {
+            if (children[i].getURI() == deletedCollection.getNominalValue()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
    				if (children.length == 0) {

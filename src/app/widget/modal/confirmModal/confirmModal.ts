@@ -29,8 +29,8 @@ export class ConfirmModalData extends BSModalContext {
 export class ConfirmModal implements ModalComponent<ConfirmModalData> {
     context: ConfirmModalData;
     
-    private headerStyle;
-    private msgStyle;
+    private headerStyle: string;
+    private msgStyle: string;
 
     constructor(public dialog: DialogRef<ConfirmModalData>) {
         this.context = dialog.context;
@@ -56,7 +56,7 @@ export class ConfirmModal implements ModalComponent<ConfirmModalData> {
         }
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.dialog.close(true);
     }
 

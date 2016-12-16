@@ -122,7 +122,7 @@ export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorM
         return valid;
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.submitted = true;
         if (!this.isDataValid()) {
             return;
@@ -143,7 +143,7 @@ export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorM
                 }
             }
             //collect the removeEntryFromCustomRange and addEntryToCustomRange functions 
-            var changesFnArray = [];
+            var changesFnArray: any[] = [];
             creToRemove.forEach(cre => {changesFnArray.push(this.crService.removeEntryFromCustomRange(this.crId, cre))});
             creToAdd.forEach(cre => {changesFnArray.push(this.crService.addEntryToCustomRange(this.crId, cre))});
             if (changesFnArray.length == 0) { //no changes
@@ -162,7 +162,7 @@ export class CustomRangeEditorModal implements ModalComponent<CustomRangeEditorM
             this.crService.createCustomRange(this.crPrefix + this.crShortId).subscribe(
                 stResp => {
                     //collecting addEntryToCustomRange functions 
-                    var addEntryFnArray = [];
+                    var addEntryFnArray: any[] = [];
                     addEntryFnArray = this.crEntries.map((cr) => this.crService.addEntryToCustomRange(this.crPrefix + this.crShortId, cr));
                     //call the collected functions and subscribe when all are completed
                     Observable.forkJoin(addEntryFnArray).subscribe(

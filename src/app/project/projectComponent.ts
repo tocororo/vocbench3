@@ -20,12 +20,13 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
         private vbCtx: VocbenchCtx, private router: Router, private eventHandler: VBEventHandler, 
         private modalService: ModalServices, private modal: Modal) {
-        this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(project => this.onProjectClosed(project)));
+        this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(
+            (project: Project) => this.onProjectClosed(project)));
     }
 
     ngOnInit() {

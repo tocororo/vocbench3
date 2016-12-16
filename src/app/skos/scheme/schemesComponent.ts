@@ -11,7 +11,7 @@ export class SchemesComponent {
     public resource:ARTURIResource;
     
     //EVENT LISTENERS 
-    private onSchemeSelected(node) {
+    private onSchemeSelected(node: ARTURIResource) {
         this.resource = node;
     }
     

@@ -82,7 +82,7 @@ export class NoSchemeConceptComponent {
      * Fixes concepts by deleting them all 
      */
     deleteAllConcept() {
-        var deleteConcFnArray = [];
+        var deleteConcFnArray: any[] = [];
         deleteConcFnArray = this.brokenConceptList.map((conc) => this.skosService.deleteConcept(conc));
         //call the collected functions and subscribe when all are completed
         Observable.forkJoin(deleteConcFnArray).subscribe(

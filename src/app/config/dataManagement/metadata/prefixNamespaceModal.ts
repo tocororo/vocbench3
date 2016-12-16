@@ -46,7 +46,7 @@ export class PrefixNamespaceModal implements ModalComponent<PrefixNamespaceModal
         return (prefixValid && namespaceValid && (prefixChanged || namespaceChanged));
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close({prefix: this.prefix, namespace: this.namespace});

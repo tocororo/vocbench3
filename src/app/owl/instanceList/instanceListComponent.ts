@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input, Output, EventEmitter} from "@angular/core";
+import {Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges} from "@angular/core";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {OwlServices} from "../../services/owlServices";
@@ -16,9 +16,9 @@ export class InstanceListComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivInstanceList') blockDivElement;
+    @ViewChild('blockDivInstanceList') blockDivElement: ElementRef;
     
-    private pendingSearch = {
+    private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         instance: null, //searched instance
         cls: null //class of the searched instance
@@ -29,25 +29,25 @@ export class InstanceListComponent {
     private instanceList: ARTURIResource[];
     private selectedInstance: ARTURIResource;
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
     
     constructor(private owlServices: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
         private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
-            data => this.onInstanceDeleted(data.instance, data.cls)));
+            (data: any) => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
-            data => this.onInstanceCreated(data.instance, data.cls)));
+            (data: any) => this.onInstanceCreated(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
-            data => this.onTypeRemoved(data.resource, data.type)));
+            (data: any) => this.onTypeRemoved(data.resource, data.type)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            data => this.onResourceRenamed(data.oldResource, data.newResource)));
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
     
-    ngOnChanges(changes) {
+    ngOnChanges(changes: SimpleChanges) {
         this.selectedInstance = null;
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
-            if (changes.cls.currentValue) {
+            if (changes['cls'].currentValue) {
                 this.initList();
             } else { //cls is null => reset instanceList
                 this.instanceList = null;
@@ -93,8 +93,8 @@ export class InstanceListComponent {
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key, searchedText) {
-        if (key == "13") {
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
             this.doSearch(searchedText);           
         }
     }

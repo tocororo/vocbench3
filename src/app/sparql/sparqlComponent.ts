@@ -12,7 +12,7 @@ export class SparqlComponent {
     
     private sampleQuery: string = "SELECT * WHERE {\n    ?s ?p ?o .\n} LIMIT 10";
     private tabs: Array<any> = [];
-    private activeTab;
+    private activeTab: any;
     
     constructor(private sparqlService:SparqlServices, private metadataService: MetadataServices, private modalService: ModalServices) {}
     
@@ -46,7 +46,7 @@ export class SparqlComponent {
         )
     }
     
-    private doQuery(tab) {
+    private doQuery(tab: any) {
         var initTime = new Date().getTime();
         tab.queryResult = null;
         document.getElementById("blockDivFullScreen").style.display = "block";
@@ -81,24 +81,24 @@ export class SparqlComponent {
      * valid tells wheter the query is syntactically correct
      * mode tells the query mode (query/update) 
      */
-    private onQueryChange(event) {
+    private onQueryChange(event: any) {
         this.activeTab.query = event.query;
         this.activeTab.queryValid = event.valid;
         this.activeTab.queryMode = event.mode;
     }
 
-    private clear(tab) {
+    private clear(tab: any) {
         tab.respSparqlJSON = null;
         tab.headers = null;
         tab.queryResult = null;
         tab.queryTime = null;
     }
     
-    private exportAsJSON(tab) {
+    private exportAsJSON(tab: any) {
         this.downloadSavedResult(JSON.stringify(tab.respSparqlJSON), "json");
     }
 
-    private exportAsCSV(tab) {
+    private exportAsCSV(tab: any) {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
         var serialization = "";
         var separator = ",";
@@ -153,7 +153,7 @@ export class SparqlComponent {
         return value;
     }
 
-    private exportAsTSV(tab) {
+    private exportAsTSV(tab: any) {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
         var serialization = "";
         var separator = "\t";
@@ -229,7 +229,7 @@ export class SparqlComponent {
         );
     }
     
-    private getPrettyPrintTime(time) {
+    private getPrettyPrintTime(time: number) {
         if (time < 1000) {
             return time + " millisec";
         } else {
@@ -263,13 +263,13 @@ export class SparqlComponent {
         this.activeTab = this.tabs[this.tabs.length-1];
     }
     
-    selectTab(t) {
+    selectTab(t: any) {
         this.activeTab.active = false;
         t.active = true;
         this.activeTab = t;
     }
     
-    closeTab(t) {
+    closeTab(t: any) {
         var tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active, change the active tab
         if (t.active) {

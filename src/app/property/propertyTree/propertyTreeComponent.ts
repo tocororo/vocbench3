@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, QueryList} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges} from "@angular/core";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VBEventHandler} from "../../utils/VBEventHandler";
 import {PropertyServices} from "../../services/propertyServices";
@@ -21,16 +21,18 @@ export class PropertyTreeComponent {
     private propertyTree: ARTURIResource[];
     private selectedNode: ARTURIResource;
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
 	
 	constructor(private propertyService:PropertyServices, private searchService: SearchServices,
         private modalService: ModalServices, private eventHandler:VBEventHandler) {
-        this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(node => this.onTopPropertyCreated(node)));
-        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(property => this.onPropertyDeleted(property)));
+        this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(
+            (node: ARTURIResource) => this.onTopPropertyCreated(node)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
+            (property: ARTURIResource) => this.onPropertyDeleted(property)));
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
-            data => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
+            (data: any) => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
-            data => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
+            (data: any) => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
     }
     
     /**
@@ -49,8 +51,8 @@ export class PropertyTreeComponent {
     /**
      * Called when @Input resource changes, reinitialize the tree
      */
-    ngOnChanges(changes) {
-        if (changes.resource) {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource']) {
             this.propertyTree = []; //so ngOnInit will not be called a 2nd time
             this.initTree();
         }
@@ -96,8 +98,8 @@ export class PropertyTreeComponent {
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key, searchedText) {
-        if (key == "13") {
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
             this.doSearch(searchedText);           
         }
     }

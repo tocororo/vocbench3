@@ -24,7 +24,7 @@ export class MetadataServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getNSPrefixMappings", params, this.oldTypeService).map(
             stResp => {
-                var mappings = [];
+                var mappings: any[] = [];
                 var mappingColl: Array<Element> = stResp.getElementsByTagName("Mapping");
                 for (var i = 0; i < mappingColl.length; i++) {
                     var m: any = {};
@@ -96,7 +96,7 @@ export class MetadataServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params, this.oldTypeService).map(
             stResp => {
-                var importedOntologies = [];
+                var importedOntologies: any[] = [];
                 var ontologyElemColl: Array<Element> = stResp.getElementsByTagName("ontology");
                 for (var i = 0; i < ontologyElemColl.length; i++) {
                     var onto: any = {}

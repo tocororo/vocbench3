@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef} from "@angular/core";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../utils/VocbenchCtx";
@@ -26,7 +26,7 @@ export class ConceptTreeComponent {
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') blockDivElement;
+    @ViewChild('blockDivTree') blockDivElement: ElementRef;
 
     public roots: ARTURIResource[];
     private selectedNode: ARTURIResource;
@@ -37,20 +37,20 @@ export class ConceptTreeComponent {
     private workingScheme: ARTURIResource;//keep track of the selected scheme 
         //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
         private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
-            data => this.onTopConceptCreated(data.concept, data.scheme)));
+            (data: any) => this.onTopConceptCreated(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-            deletedConcept => this.onConceptDeleted(deletedConcept)));
+            (deletedConcept: ARTURIResource) => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
+            (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
-            data => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
+            (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
-            newLang => this.onContentLangChanged(newLang)));
+            (newLang: string) => this.onContentLangChanged(newLang)));
     }
     
     ngOnInit() {
@@ -124,8 +124,8 @@ export class ConceptTreeComponent {
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key, searchedText) {
-        if (key == "13") {
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
             this.doSearch(searchedText);           
         }
     }

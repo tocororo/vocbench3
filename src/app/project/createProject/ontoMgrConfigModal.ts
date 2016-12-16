@@ -22,7 +22,7 @@ export class OntoMgrConfigModal implements ModalComponent<OntoMgrConfigModalData
         this.context = dialog.context;
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.context.configuration);

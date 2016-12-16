@@ -28,7 +28,7 @@ export class ResourceSelectionModalData extends BSModalContext {
 export class ResourceSelectionModal implements ModalComponent<ResourceSelectionModalData> {
     context: ResourceSelectionModalData;
     
-    private resourceSelected;
+    private resourceSelected: ARTNode;
     
     constructor(public dialog: DialogRef<ResourceSelectionModalData>) {
         this.context = dialog.context;
@@ -42,7 +42,7 @@ export class ResourceSelectionModal implements ModalComponent<ResourceSelectionM
         this.resourceSelected = resource;
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         this.dialog.close(this.resourceSelected);
     }

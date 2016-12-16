@@ -23,7 +23,7 @@ export class PluginsServices {
         return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params, this.oldTypeService).map(
             stResp => {
                 var pluginColl = stResp.getElementsByTagName("plugin");
-                var plugins = [];
+                var plugins: string[] = [];
                 for (var j = 0; j < pluginColl.length; j++) {
                     var plugin = pluginColl[j].getAttribute("factoryID");
                     plugins.push(plugin);
@@ -46,7 +46,7 @@ export class PluginsServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params, this.oldTypeService).map(
             stResp => {
-                var configurations = [];
+                var configurations: any[] = [];
                 var configColl = stResp.getElementsByTagName("configuration");
                 for (var i = 0; i < configColl.length; i++) {
                     var config: any = {};
@@ -54,7 +54,7 @@ export class PluginsServices {
                     config.editRequired = configColl[i].getAttribute("editRequired") == "true";
                     config.type = configColl[i].getAttribute("type");
                     
-                    var params = [];
+                    var params: any[] = [];
                     var parColl = configColl[i].getElementsByTagName("par");
                     for (var j = 0; j < parColl.length; j++) {
                         var param: any = {};

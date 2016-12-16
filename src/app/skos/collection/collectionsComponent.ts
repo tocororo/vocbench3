@@ -8,10 +8,10 @@ import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
 })
 export class CollectionsComponent {
 
-    private resource: ARTURIResource; //this represent the selected resource in the tree (so it is for sure a URIResource)
+    private resource: ARTResource;
     
     //EVENT LISTENERS 
-    private onNodeSelected(node) {
+    private onNodeSelected(node: ARTResource) {
         this.resource = node;
     }
     

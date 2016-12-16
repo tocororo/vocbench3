@@ -30,7 +30,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     private forceFormatCheck: boolean = false; //used for type "fromWeb", "fromWebToMirror"
     private rdfFormat: string; //used for type "fromWeb", "fromWebToMirror"
     private mirrorList: Array<any>; //used for type "fromOntologyMirror"
-    private selectedMirror; //used for type "fromOntologyMirror"
+    private selectedMirror: any; //used for type "fromOntologyMirror"
     
     constructor(public dialog: DialogRef<ImportOntologyModalData>, public ontoMgrService: OntoManagerServices) {
         this.context = dialog.context;
@@ -73,7 +73,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
         }
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         if (this.context.importType == ImportType.fromWeb) {

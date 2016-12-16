@@ -29,7 +29,7 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "getPropertiesTree", params, this.oldTypeService).map(
             stResp => {
                 var propertyTree: ARTURIResource[] = new Array()
-                var propertiesXml = stResp.querySelectorAll("data > Property");
+                var propertiesXml: NodeListOf<Element> = stResp.querySelectorAll("data > Property");
                 for (var i = 0; i < propertiesXml.length; i++) {
                     var p = this.parseProperty(propertiesXml[i]);
                     propertyTree.push(p);
@@ -40,9 +40,9 @@ export class PropertyServices {
     }
     
     //when property service will be reimplemented with <uri> element this will be not useful anymore
-    private parseProperty(propXml): ARTURIResource {
+    private parseProperty(propXml: Element): ARTURIResource {
         var show = propXml.getAttribute("name");
-        var role = propXml.getAttribute("type");
+        var role = RDFResourceRolesEnum[propXml.getAttribute("type")];
         var uri = propXml.getAttribute("uri");
         //properties use deleteForbidden instead of explicit, use explicit in order to standardize the attributes
         var explicit = propXml.getAttribute("deleteForbidden") != "true";

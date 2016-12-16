@@ -16,13 +16,13 @@ export class InstanceListModalData extends BSModalContext {
 export class InstanceListModal implements ModalComponent<InstanceListModalData> {
     context: InstanceListModalData;
     
-    private selectedInstance;
+    private selectedInstance: ARTURIResource;
     
     constructor(public dialog: DialogRef<InstanceListModalData>) {
         this.context = dialog.context;
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.selectedInstance);

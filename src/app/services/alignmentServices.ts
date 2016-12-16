@@ -310,7 +310,7 @@ export class AlignmentServices {
      * @param relation the relation of the alignment cell
      * @return collection of ARTURIResource representing suggested mapping property
      */
-    listSuggestedProperties(entity, relation) {
+    listSuggestedProperties(entity: string, relation: string) {
 	    console.log("[AlignmentServices] listSuggestedProperties");
         var params = {
             entity: entity,

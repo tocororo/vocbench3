@@ -16,13 +16,13 @@ export class SchemeListModalData extends BSModalContext {
 export class SchemeListModal implements ModalComponent<SchemeListModalData> {
     context: SchemeListModalData;
     
-    private selectedScheme;
+    private selectedScheme: ARTURIResource;
     
     constructor(public dialog: DialogRef<SchemeListModalData>) {
         this.context = dialog.context;
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.selectedScheme);

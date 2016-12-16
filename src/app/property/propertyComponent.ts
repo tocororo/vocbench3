@@ -8,10 +8,10 @@ import {ARTURIResource} from "../utils/ARTResources";
 })
 export class PropertyComponent {
     
-    private resource:ARTURIResource;
+    private resource: ARTURIResource;
     
     //EVENT LISTENERS 
-    private onNodeSelected(node) {
+    private onNodeSelected(node: ARTURIResource) {
         this.resource = node;
     }
 }

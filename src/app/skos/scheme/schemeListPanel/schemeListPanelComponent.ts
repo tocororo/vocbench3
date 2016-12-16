@@ -21,13 +21,13 @@ export class SchemeListPanelComponent {
     
     private ONTO_TYPE: string;
     
-    private eventSubscriptions = [];
+    private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
         
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
-            newLang => this.onContentLangChanged(newLang)));
+            (newLang: string) => this.onContentLangChanged(newLang)));
     }
     
     ngOnInit() {
@@ -47,7 +47,7 @@ export class SchemeListPanelComponent {
     
     private createScheme() {
         this.modalService.newResource("Create new skos:ConceptScheme", this.vbCtx.getContentLanguage()).then(
-            result => {
+            (result: any) => {
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createScheme(result.label, result.lang, result.name, this.vbCtx.getContentLanguage()).subscribe(
                         newScheme => {
@@ -104,7 +104,7 @@ export class SchemeListPanelComponent {
     /**
      * Handles the scheme deletion
      */
-    private deleteSchemeRespHandler(stResp) {
+    private deleteSchemeRespHandler(stResp: any) {
         for (var i = 0; i < this.schemeList.length; i++) {//Update the schemeList
             if (this.schemeList[i].getURI() == this.selectedScheme.getURI()) {
                 this.schemeList.splice(i, 1);
@@ -191,8 +191,8 @@ export class SchemeListPanelComponent {
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key, searchedText) {
-        if (key == "13") {
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
             this.doSearch(searchedText);           
         }
     }

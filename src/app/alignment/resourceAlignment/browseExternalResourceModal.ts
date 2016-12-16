@@ -105,7 +105,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
         return this.alignedObject != undefined;
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.vbCtx.removeContextProject();
         event.stopPropagation();
         this.dialog.close(this.alignedObject);

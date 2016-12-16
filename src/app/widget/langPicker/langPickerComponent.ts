@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {Languages} from "../../utils/LanguagesCountries";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
@@ -35,13 +35,13 @@ export class LangPickerComponent implements OnInit {
     }
     
     //handle the change of lang from "outside" the component and not from UI
-    ngOnChanges(changes) {
-        if (changes.lang) {
-            this.language = changes.lang.currentValue;
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['lang']) {
+            this.language = changes['lang'].currentValue;
         }
     }
     
-    private onLangChange(newLang) {
+    private onLangChange(newLang: string) {
         this.language = newLang;
         this.langChange.emit(newLang);
     }

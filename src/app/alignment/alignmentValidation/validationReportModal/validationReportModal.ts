@@ -22,7 +22,7 @@ export class ValidationReportModal implements ModalComponent<ValidationReportMod
         this.context = dialog.context;
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         this.dialog.close();
     }

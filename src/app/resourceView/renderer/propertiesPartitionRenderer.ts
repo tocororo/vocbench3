@@ -81,7 +81,7 @@ export class PropertiesPartitionRenderer {
                         } else if (rngType == RDFTypesEnum.plainLiteral) {
                             this.enrichWithPlainLiteral(predicate);
                         } else if (rngType == RDFTypesEnum.typedLiteral) {
-                            var datatypes = [];
+                            var datatypes: string[] = [];
                             for (var i = 0; i < ranges.length; i++) {
                                 datatypes.push(ranges[i].getNominalValue());
                             }
@@ -116,7 +116,7 @@ export class PropertiesPartitionRenderer {
                             this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
                     } else { //both "classic" and custom range
-                        var rangeOptions = [];//prepare the range options...
+                        var rangeOptions: any[] = [];//prepare the range options...
                         var crEntries = customRanges.getEntries();
                         //...with the custom range entries
                         for (var i = 0; i < crEntries.length; i++) {

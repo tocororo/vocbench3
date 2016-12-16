@@ -33,7 +33,7 @@ export class ResourceUtils {
         var propOntologyImgSrc = require("../../assets/images/propOntology.png");
         var propOntologyImportedImgSrc = require("../../assets/images/propOntology_imported.png");
 
-        var imgSrc;
+        var imgSrc: string;
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
@@ -133,7 +133,7 @@ export class ResourceUtils {
      * Available values for action are: "create" and "delete"
      */
     static getActionPropImageSrc(rdfResource: ARTURIResource, action: string): string {
-        var imgSrc;
+        var imgSrc: string;
         var role = rdfResource.getRole().toLowerCase();
         if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
             imgSrc = require("../../assets/images/class_" + action + ".png");    

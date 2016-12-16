@@ -25,13 +25,13 @@ export class ConceptTreeModalData extends BSModalContext {
 export class ConceptTreeModal implements ModalComponent<ConceptTreeModalData> {
     context: ConceptTreeModalData;
     
-    private selectedConcept;
+    private selectedConcept: ARTURIResource;
     
     constructor(public dialog: DialogRef<ConceptTreeModalData>) {
         this.context = dialog.context;
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.selectedConcept);

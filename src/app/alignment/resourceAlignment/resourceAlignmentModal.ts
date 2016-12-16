@@ -48,7 +48,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         )
     }
     
-    private onAllPropCheckChange(checked) {
+    private onAllPropCheckChange(checked: boolean) {
         this.allPropCheck = checked;
         this.initPropList();
     }
@@ -106,7 +106,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         return (this.alignedObject != undefined && this.mappingProperty != undefined);
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         this.dialog.close({property: this.mappingProperty, object: this.alignedObject});
     }

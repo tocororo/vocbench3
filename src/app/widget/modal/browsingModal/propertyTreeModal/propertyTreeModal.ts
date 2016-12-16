@@ -23,7 +23,7 @@ export class PropertyTreeModalData extends BSModalContext {
 export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> {
     context: PropertyTreeModalData;
     
-    private selectedProperty;
+    private selectedProperty: ARTURIResource;
     private domainRes: ARTURIResource;
     
     constructor(public dialog: DialogRef<PropertyTreeModalData>) {
@@ -52,7 +52,7 @@ export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> 
         }
     }
 
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close(this.selectedProperty);

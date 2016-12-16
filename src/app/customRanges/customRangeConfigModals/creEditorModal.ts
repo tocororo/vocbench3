@@ -77,7 +77,7 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
         return valid;
     }
     
-    ok(event) {
+    ok(event: Event) {
         this.submitted = true;
         if (!this.isDataValid()) {
             return;

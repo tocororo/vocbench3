@@ -1,6 +1,6 @@
 ///<reference path="../../../../typings/index.d.ts"/>
 
-import {Component, ViewChild, Input, Output, EventEmitter} from '@angular/core';
+import {Component, ViewChild, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import "./pearl";
 
 var CodeMirror = require('codemirror/lib/codemirror');
@@ -50,13 +50,13 @@ export class CodemirrorComponent {
 
     }
 
-    ngOnChanges(changes) {
+    ngOnChanges(changes: SimpleChanges) {
         /* Since the @Input code is initialized after the initialization of the codemirror editor (code is init 
         asynchronously in the parent component creEditorModal), I need to set the value in codemirror editor manually
         and only at the first change (when previousValue is undefined and currentValue is not undefined), otherwise
         every single change will reset the cursor at the begin of the editor (setValue() resets the cursor) */
-        if (changes.code.previousValue == undefined && changes.code.currentValue) {
-            this.cmEditor.setValue(changes.code.currentValue);
+        if (changes['code'].previousValue == undefined && changes['code'].currentValue) {
+            this.cmEditor.setValue(changes['code'].currentValue);
         }
     }
 

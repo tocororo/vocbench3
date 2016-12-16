@@ -71,7 +71,7 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
         }
     }
     
-    ok(event) {
+    ok(event: Event) {
         //check if all required field are filled
         for (var i = 0; i < this.formEntries.length; i++) {
             var entry = this.formEntries[i];

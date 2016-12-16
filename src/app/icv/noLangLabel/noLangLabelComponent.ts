@@ -59,7 +59,7 @@ export class NoLangLabelComponent {
      * Fixes resource by setting a language tag to the label. In order to do that, first removes the current
      * label, then adds a new one with language.
      */
-    setLanguage(record) {
+    setLanguage(record: any) {
         if (this.ontoType == "SKOS") {
             let label: ARTLiteral = <ARTLiteral>record.label;
             this.modalService.newPlainLiteral("Set language", label.getLabel(), true).then(
@@ -118,7 +118,7 @@ export class NoLangLabelComponent {
     /**
      * Fixes resource by removing the label.
      */
-    removeLabel(record) {
+    removeLabel(record: any) {
         if (this.ontoType == "SKOS") {
             if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
                 this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getLabel()).subscribe(

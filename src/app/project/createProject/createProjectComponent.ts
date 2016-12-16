@@ -137,7 +137,7 @@ export class CreateProjectComponent {
     /**
      * Called when change selection of the plugins menu of an extension point
      */
-    private changeExtPointPlugin(extPointStruct) {
+    private changeExtPointPlugin(extPointStruct: any) {
         if (extPointStruct.selectedExtPointPluginId == "---") {
             extPointStruct.selectedExtPointPlugin.configurations = null;
             extPointStruct.selectedExtPointPlugin.selectedConfigType = null;
@@ -154,7 +154,7 @@ export class CreateProjectComponent {
     /**
      * Given the structure of an extension point, opens a modal to change its plugin configuration
      */
-    private configurePluginConfig(extPointStruct) {
+    private configurePluginConfig(extPointStruct: any) {
         //search in configurations the one with the given selectedConfigType
         for (var i = 0; i < extPointStruct.selectedExtPointPlugin.configurations.length; i++) {
             if (extPointStruct.selectedExtPointPlugin.configurations[i].type == extPointStruct.selectedExtPointPlugin.selectedConfigType) {
@@ -177,12 +177,12 @@ export class CreateProjectComponent {
 
         if (this.projectName && this.projectName.trim() != "" && this.baseURI && this.baseURI.trim() != "") {
 
-            var uriGenFactoryID;
-            var uriGenConfigurationClass;
-            var uriGenConfigurationArray;
-            var renderingEngineFactoryID;
-            var renderingEngineConfigurationClass;
-            var renderingEngineConfigurationArray;
+            var uriGenFactoryID: string;
+            var uriGenConfigurationClass: string;
+            var uriGenConfigurationArray: any[];
+            var renderingEngineFactoryID: string;
+            var renderingEngineConfigurationClass: string;
+            var renderingEngineConfigurationArray: any[];
 
             /* NOTE: currently I need to prepare the above parameters in a not-general way because 
              the newProject method gets precise parameters so they must be distinguished.

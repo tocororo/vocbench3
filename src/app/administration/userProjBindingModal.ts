@@ -72,10 +72,10 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
     }
 
     private isRoleSelected(role: Role): boolean {
-        return this.selectedRoles.includes(role);
+        return this.selectedRoles.indexOf(role) != -1;
     }
     
-    ok(event) {
+    ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         var roleList: string[] = [];

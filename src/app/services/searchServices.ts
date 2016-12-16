@@ -95,11 +95,11 @@ export class SearchServices {
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService).map(
             stResp => {
                 var path = new Array<ARTURIResource>();
-                var pathColl = stResp.getElementsByTagName("path");
+                var pathColl: NodeListOf<Element> = stResp.getElementsByTagName("path");
                 var shortestPathLength = 99999;
-                var shortestPathElem;
+                var shortestPathElem: Element;
                 for (var i = 0; i < pathColl.length; i++) { //retrieve shortest path
-                    var pathLength = pathColl[i].getAttribute("length");
+                    var pathLength: number = Number(pathColl[i].getAttribute("length"));
                     if (pathLength < shortestPathLength) {
                         shortestPathElem = pathColl[i];
                         shortestPathLength = pathLength;

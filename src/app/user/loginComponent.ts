@@ -28,8 +28,8 @@ export class LoginComponent {
         )
     }
 
-    private onKeydown(event) {
-        if (event.which == "13") {
+    private onKeydown(event: KeyboardEvent) {
+        if (event.which == 13) {
             this.login();
         }
     }
