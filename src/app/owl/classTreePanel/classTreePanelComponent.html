@@ -27,7 +27,7 @@
     <!-- Tree -->
     <div class="panel-body vbox">
         <class-tree (nodeSelected)="onClassSelected($event)" style="flex: 3" hideSearch="true"></class-tree>
-        <span class="glyphicon glyphicon-chevron-up"></span><span class="glyphicon glyphicon-chevron-down"></span>
+        <!--<span class="glyphicon glyphicon-chevron-up"></span><span class="glyphicon glyphicon-chevron-down"></span>-->
         <instance-list [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" style="margin-top: 4px;" hideSearch="true">
         </instance-list>
     </div>

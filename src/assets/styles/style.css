@@ -249,6 +249,7 @@ input[type="image"]:disabled  {
 .listItem {
     padding: 3px;
     width: 100%;
+    display: flex;
 }
 .listItem:hover {
     background-color: #e5f3ff;
