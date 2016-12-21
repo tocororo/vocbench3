@@ -1,7 +1,8 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
-import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
+import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ARTPredicateValues,
+    ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {VBEventHandler} from "../utils/VBEventHandler";
@@ -24,22 +25,22 @@ export class ResourceViewComponent {
     private showInferred = false;
     
     //partitions
-    private resViewXmlResponse: Element = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
-    private typesColl: ARTResource[] = null;
-    private classAxiomColl: ARTPredicateObjects[] = null;
-    private topconceptofColl: ARTURIResource[] = null;
-    private schemesColl: ARTURIResource[] = null;
-    private broadersColl: ARTURIResource[] = null;
-    private superpropertiesColl: ARTURIResource[] = null;
-    private domainsColl: ARTNode[] = null;
-    private rangesColl: ARTNode[] = null;
-    private lexicalizationsColl: ARTPredicateObjects[] = null;
-    private membersColl: ARTNode[] = null;
-    private membersOrderedColl: ARTNode[] = null;
+    private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
+    private typesColl: ARTPredicateObjects[] = null;
+    private classAxiomColl: ARTPredicateValues[] = null;
+    private topconceptofColl: ARTPredicateObjects[] = null;
+    private schemesColl: ARTPredicateObjects[] = null;
+    private broadersColl: ARTPredicateObjects[] = null;
+    private superpropertiesColl: ARTPredicateObjects[] = null;
+    private domainsColl: ARTPredicateObjects[] = null;
+    private rangesColl: ARTPredicateObjects[] = null;
+    private lexicalizationsColl: ARTPredicateValues[] = null;
+    private membersColl: ARTPredicateObjects[] = null;
+    private membersOrderedColl: ARTPredicateObjects[] = null;
     private propertiesColl: ARTPredicateObjects[] = null;
     private propertyFacets: any[] = null;
-    private inverseofColl: ARTURIResource[] = null;
-    private labelRelationsColl: ARTResource[] = null;
+    private inverseofColl: ARTPredicateObjects[] = null;
+    private labelRelationsColl: ARTPredicateObjects[] = null;
     
     private eventSubscriptions: any[] = [];
     
@@ -81,7 +82,7 @@ export class ResourceViewComponent {
         this.blockingDivElement.nativeElement.style.display = "block";
         this.resViewService.getResourceView(res).subscribe(
             stResp => {
-                this.resViewXmlResponse = stResp;
+                this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.blockingDivElement.nativeElement.style.display = "none";
             },
@@ -112,57 +113,86 @@ export class ResourceViewComponent {
         this.inverseofColl = null;
         this.labelRelationsColl = null;
         
-        var respResourceElement: Element = this.resViewXmlResponse.getElementsByTagName("resource")[0];
-        var respPartitions = this.resViewXmlResponse.children;
+        var resourcePartition: any = this.resViewResponse.resource;
+        this.resource = Deserializer.createRDFResource(resourcePartition);
 
-        for (var i = 0; i < respPartitions.length; i++) {
-            var partition = respPartitions[i];
-            var partitionName = partition.tagName;
-            if (partitionName == "resource") {
-                this.resource = Deserializer.createRDFResource(partition.children[0]);
-            } else if (partitionName == "types") {
-                this.typesColl = Deserializer.createResourceArray(partition);
-                this.typesColl = <ARTResource[]>this.filterInferredFromResourceList(this.typesColl);
-            } else if (partitionName == "classaxioms") {
-                this.classAxiomColl = Deserializer.createPredicateObjectsList(partition.children[0]);
-                this.classAxiomColl = this.filterInferredFromPredObjList(this.classAxiomColl);
-            } else if (partitionName == "topconceptof") {
-                this.topconceptofColl = Deserializer.createURIArray(partition);
-                this.topconceptofColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.topconceptofColl);
-            } else if (partitionName == "schemes") {
-                this.schemesColl = Deserializer.createURIArray(partition);
-                this.schemesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.schemesColl);
-            } else if (partitionName == "broaders") {
-                this.broadersColl = Deserializer.createURIArray(partition);
-                this.broadersColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.broadersColl);
-            } else if (partitionName == "superproperties") {
-                this.superpropertiesColl = Deserializer.createURIArray(partition);
-                this.superpropertiesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.superpropertiesColl);
-            } else if (partitionName == "facets") {
-                this.parseFacetsPartition(partition);
-            } else if (partitionName == "domains") {
-                this.domainsColl = Deserializer.createRDFArray(partition);
-                this.domainsColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.domainsColl);
-            } else if (partitionName == "ranges") {
-                this.rangesColl = Deserializer.createRDFArray(partition);
-                this.rangesColl = <ARTURIResource[]>this.filterInferredFromResourceList(this.rangesColl);
-            } else if (partitionName == "lexicalizations") {
-                this.lexicalizationsColl = Deserializer.createPredicateObjectsList(partition.children[0]);
-                this.lexicalizationsColl = this.filterInferredFromPredObjList(this.lexicalizationsColl);
-            } else if (partitionName == "members") {
-                this.membersColl = Deserializer.createRDFArray(partition);
-                this.membersColl = this.filterInferredFromResourceList(this.membersColl);
-            } else if (partitionName == "membersOrdered") {
-                this.membersOrderedColl = Deserializer.createRDFArray(partition);
-                this.membersOrderedColl = this.filterInferredFromResourceList(this.membersOrderedColl);
-            } else if (partitionName == "labelRelations") {
-                this.labelRelationsColl = Deserializer.createResourceArray(partition);
-                this.labelRelationsColl = <ARTResource[]>this.filterInferredFromResourceList(this.labelRelationsColl);
-            } else if (partitionName == "properties") {
-                this.propertiesColl = Deserializer.createPredicateObjectsList(partition.children[0]);
-                this.propertiesColl = this.filterInferredFromPredObjList(this.propertiesColl);
-            }
+        var typesPartition: any = this.resViewResponse.types;
+        if (typesPartition != null) {
+            this.typesColl = Deserializer.createPredicateObjectsList(typesPartition);
+            this.filterInferredFromPredObjList(this.typesColl);
         }
+
+        var classAxiomsPartition: any = this.resViewResponse.classaxioms;
+        if (classAxiomsPartition != null) {
+            this.classAxiomColl = Deserializer.createPredicateValueList(classAxiomsPartition);
+            this.filterInferredFromPredValuesList(this.classAxiomColl);
+        }
+
+        var topConceptOfPartition: any = this.resViewResponse.topconceptof;
+        if (topConceptOfPartition != null) {
+            this.topconceptofColl = Deserializer.createPredicateObjectsList(topConceptOfPartition);
+            this.filterInferredFromPredObjList(this.topconceptofColl);
+        }
+
+        var schemesPartition: any = this.resViewResponse.schemes;
+        if (schemesPartition != null) {
+            this.schemesColl = Deserializer.createPredicateObjectsList(schemesPartition);
+            this.filterInferredFromPredObjList(this.schemesColl);
+        }
+
+        var broadersPartition: any = this.resViewResponse.broaders;
+        if (broadersPartition != null) {
+            this.broadersColl = Deserializer.createPredicateObjectsList(broadersPartition);
+            this.filterInferredFromPredObjList(this.broadersColl);
+        }
+
+        var superPropertiesPartition: any = this.resViewResponse.superproperties;
+        if (superPropertiesPartition != null) {
+            this.superpropertiesColl = Deserializer.createPredicateObjectsList(superPropertiesPartition);
+            this.filterInferredFromPredObjList(this.superpropertiesColl);
+        }
+
+        var facetsPartition: any = this.resViewResponse.facets;
+        if (facetsPartition != null) {
+            this.parseFacetsPartition(facetsPartition);
+        }
+
+        var domainsPartition: any = this.resViewResponse.domains;
+        if (domainsPartition != null) {
+            this.domainsColl = Deserializer.createPredicateObjectsList(domainsPartition);
+            this.filterInferredFromPredObjList(this.domainsColl);
+        }
+
+        var rangesPartition: any = this.resViewResponse.ranges;
+        if (rangesPartition != null) {
+            this.rangesColl = Deserializer.createPredicateObjectsList(rangesPartition);
+            this.filterInferredFromPredObjList(this.rangesColl);
+        }
+
+        var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
+        if (lexicalizationsPartition != null) {
+            this.lexicalizationsColl = Deserializer.createPredicateValueList(lexicalizationsPartition);
+            this.filterInferredFromPredValuesList(this.lexicalizationsColl);
+        }
+
+        var membersPartition: any = this.resViewResponse.members;
+        if (membersPartition != null) {
+            this.membersColl = Deserializer.createPredicateObjectsList(membersPartition);
+            this.filterInferredFromPredObjList(this.membersColl);
+        }
+
+        var membersOrderedPartition: any = this.resViewResponse.membersOrdered;
+        if (membersOrderedPartition != null) {
+            this.membersOrderedColl = Deserializer.createPredicateObjectsList(membersOrderedPartition);
+            this.filterInferredFromPredObjList(this.membersOrderedColl);
+        }
+
+        var labelRelationsPartition: any = this.resViewResponse.labelRelations;
+
+        var propertiesPartition: any = this.resViewResponse.properties;
+        this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
+        this.filterInferredFromPredObjList(this.propertiesColl);
+
     }
     
     /**
@@ -181,9 +211,9 @@ export class ResourceViewComponent {
     }
     
     /**
-     * Based on the showInferred param, filter out or let pass inferred information in a predicate-object list
+     * Based on the showInferred param, filter out or let pass inferred information in a predicate-objects list
      */
-    private filterInferredFromPredObjList(predObjList: ARTPredicateObjects[]): ARTPredicateObjects[] {
+    private filterInferredFromPredObjList(predObjList: ARTPredicateObjects[]) {
         if (!this.showInferred) {
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
@@ -200,46 +230,50 @@ export class ResourceViewComponent {
                 }
             }
         }
-        return predObjList;
+        // return predObjList;
+    }
+
+    /**
+     * Based on the showInferred param, filter out or let pass inferred information in a predicate-values list
+     */
+    private filterInferredFromPredValuesList(predValueList: ARTPredicateValues[]) {
+        for (var i = 0; i < predValueList.length; i++) {
+            this.filterInferredFromPredObjList(predValueList[i].getValues());
+        }
     }
     
     /**
      * Facets partition has a structure different from the other (object list and predicate-object list),
      * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)
      */
-    private parseFacetsPartition(facetsElement: Element) {
+    private parseFacetsPartition(facetsPartition: any) {
+        var facetsName = ["functional", "inverseFunctional", "symmetric", "transitive"];
         //init default facets
-        this.propertyFacets = [
-            {name: "symmetric", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
-            {name: "functional", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
-            {name: "inverseFunctional", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
-            {name: "transitive", explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false},
-        ];
-        var facetsChildren = facetsElement.children;
-        for (var i = 0; i < facetsChildren.length; i++) {
-            var facetName = facetsChildren[i].tagName;
-            if (facetName == "symmetric" || facetName == "functional" || facetName == "inverseFunctional" || facetName == "transitive") {
-                var facet = {
-                    name: facetName,
-                    explicit: (facetsChildren[i].getAttribute(ResAttribute.EXPLICIT) == "true"),
-                    value: (facetsChildren[i].getAttribute("value") == "true")
-                };
+        this.propertyFacets = [];
+        for (var i = 0; i < facetsName.length; i++) {
+            this.propertyFacets.push({name: facetsName[i], explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false});
+        }
+        //look for facets in resource view
+        for (var i = 0; i < facetsName.length; i++) {
+            var specificFacetPartition = facetsPartition[facetsName[i]];
+            if (specificFacetPartition != undefined) {
+                var facet = {name: facetsName[i], explicit: specificFacetPartition.explicit, value: specificFacetPartition.value};
                 //replace the default facets
                 for (var j = 0; j < this.propertyFacets.length; j++) {
-                    if (this.propertyFacets[j].name == facetName) {
+                    if (this.propertyFacets[j].name == facetsName[i]) {
                         this.propertyFacets[j] = facet;
                         break;
                     }
                 }
-            } else if (facetName == "inverseof") {
-                this.inverseofColl = Deserializer.createURIArray(facetsChildren[i]);
             }
         }
+        //parse inverseOf partition in facets
+        this.inverseofColl = Deserializer.createPredicateObjectsList(facetsPartition.inverseOf);
     }
     
     private alignResource() {
         this.openAlignmentModal().then(
-            data => {
+            (data: any) => {
                 this.alignServices.addAlignment(this.resource, data.property, data.object).subscribe(
                     stResp => { this.buildResourceView(this.resource); }
                 );

@@ -157,13 +157,11 @@ export class ARTLiteral implements ARTNode {
     private label: string;
     private datatype: string;
     private lang: string;
-    private typedLiteral: boolean
 
-    constructor(label: string, datatype: string, lang: string, typedLiteral: boolean) {
+    constructor(label: string, datatype: string, lang: string) {
         this.label = label;
         this.datatype = datatype;
         this.lang = lang;
-        this.typedLiteral = typedLiteral;
     }
 
     getLabel(): string {
@@ -191,7 +189,7 @@ export class ARTLiteral implements ARTNode {
     };
 
     isTypedLiteral(): boolean {
-        return this.typedLiteral;
+        return this.datatype != null;
     };
 
     isBNode(): boolean {
@@ -231,7 +229,6 @@ export class ARTLiteral implements ARTNode {
 }
 
 export class ARTPredicateObjects {
-
     private predicate: ARTURIResource;
     private objects: ARTNode[];
 
@@ -247,7 +244,27 @@ export class ARTPredicateObjects {
     getObjects(): ARTNode[] {
         return this.objects;
     };
+}
 
+export class ARTPredicateValues {
+    private predicate: ARTURIResource;
+    private values: ARTPredicateObjects[];
+
+    constructor(predicate: ARTURIResource, values: ARTPredicateObjects[]) {
+        this.predicate = predicate;
+        this.values = values;
+    }
+
+    getPredicate(): ARTURIResource {
+        return this.predicate;
+    };
+
+    getValues(): ARTPredicateObjects[] {
+        return this.values;
+    };
+    setValues(values: ARTPredicateObjects[]) {
+        this.values = values;
+    }
 }
 
 export class ResAttribute {

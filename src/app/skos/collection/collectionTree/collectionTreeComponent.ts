@@ -20,7 +20,7 @@ export class CollectionTreeComponent {
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') blockDivElement: ElementRef;
+    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
 
     public roots: ARTResource[];
     private selectedNode: ARTResource;
@@ -83,7 +83,7 @@ export class CollectionTreeComponent {
                             this.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                selectedResource => {
+                                (selectedResource: any) => {
                                     this.openTreeAt(selectedResource);
                                 },
                                 () => {}
@@ -163,6 +163,16 @@ export class CollectionTreeComponent {
         this.nodeSelected.emit(undefined);
         //and reinitialize tree
         this.initTree();
+    }
+
+    //Listeners to node expansion start/end. Simply show/hide the loading div
+    private onNodeExpandStart() {
+        console.log("block");
+        this.blockDivElement.nativeElement.style.display = "block";
+    }
+    private onNodeExpandEnd() {
+        console.log("none");
+        this.blockDivElement.nativeElement.style.display = "none";
     }
 
 }

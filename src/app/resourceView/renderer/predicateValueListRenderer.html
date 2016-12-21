@@ -1,0 +1,50 @@
+<div class="groupPanel">
+    <div class="groupPanel-heading">
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <div class="groupPanel-heading-content dropdown pull-right">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
+                title="Add a lexicalization" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <img [src]="addBtnImgSrc" style="height: 16px"/>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li *ngFor="let pv of predicateValueList">
+                    <a (click)="add(pv.getPredicate())">
+                        <rdf-resource [resource]="pv.getPredicate()"></rdf-resource>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="groupPanel-body">
+        <!-- each item is a PredicateValues -->
+        <template ngFor let-pv [ngForOf]="predicateValueList">
+            <div class="subPanel" *ngIf="pv.getValues().length != 0">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">{{pv.predicate.getShow()}}</label>
+                    <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(pv.predicate)" (click)="enrichProperty(pv.predicate)"
+                        [disabled]="!resource.getAdditionalProperty('explicit')">
+                        <span>+</span>
+                    </button>
+                </div>
+                <div class="subPanel-body">
+                    <template ngFor let-value [ngForOf]="pv.getValues()">
+                        <div *ngFor="let obj of value.getObjects()" class="listItem">
+                            <reified-resource *ngIf="renderAsReified(pv.getPredicate(), obj)" [resource]="obj" [predicate]="pv.getPredicate()" 
+                                (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                            <rdf-resource *ngIf="!renderAsReified(pv.getPredicate(), obj)" [resource]="obj"
+                                (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                            <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(pv.getPredicate())" (click)="removePredicateObject(pv.getPredicate(), obj)"  
+                                [disabled]="!obj.getAdditionalProperty('explicit')">
+                                <span>-</span>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>

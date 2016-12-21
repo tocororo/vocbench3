@@ -13,6 +13,8 @@ export class ConceptTreeNodeComponent {
     @Input() scheme: ARTURIResource;
     @Output() nodeClicked = new EventEmitter<ARTURIResource>();
     @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
+    @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
+    @Output() nodeExpandEnd = new EventEmitter<any>(); //emit an event when the subTree expansion is completed
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
@@ -111,15 +113,17 @@ export class ConceptTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
+        this.nodeExpandStart.emit();
         // this.skosService.getNarrowerConcepts_old(this.node, this.scheme, this.vbCtx.getContentLanguage(true)).subscribe( //old service
         this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe( //new service
             narrower => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+                this.nodeExpandEnd.emit();
             }
         );
     }
-    
+
     /**
    	 * Function called when "-" button is clicked.
    	 * Collapse the subtree div.
@@ -230,6 +234,14 @@ export class ConceptTreeNodeComponent {
                 }
             )
         }
+    }
+
+    //Listeners to node expansion start/end. Simply forward the event to the parent
+    private onNodeExpandStart() {
+        this.nodeExpandStart.emit();
+    }
+    private onNodeExpandEnd() {
+        this.nodeExpandEnd.emit();
     }
     
 }

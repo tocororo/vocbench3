@@ -16,34 +16,48 @@
         </div>
     </div>
     <div class="panel-body scrollableContainer blockingDivHost">
-        <types-renderer [object-list]="typesColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></types-renderer>
-        <class-axiom-renderer [pred-obj-list]="classAxiomColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></class-axiom-renderer>
-        <top-concepts-renderer [object-list]="topconceptofColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></top-concepts-renderer>
-        <schemes-renderer [object-list]="schemesColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></schemes-renderer>
-        <broaders-renderer [object-list]="broadersColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></broaders-renderer>
-        <superproperties-renderer [object-list]="superpropertiesColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></superproperties-renderer>
-        <lexicalizations-renderer [pred-obj-list]="lexicalizationsColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></lexicalizations-renderer>
-        <property-facets-renderer [object-list]="inverseofColl" [facets]="propertyFacets" [resource]="resource"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)"></property-facets-renderer>
-        <domains-renderer [object-list]="domainsColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></domains-renderer>
-        <ranges-renderer [object-list]="rangesColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></ranges-renderer>
-        <members-renderer [object-list]="membersColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></members-renderer>
-        <members-ordered-renderer [object-list]="membersOrderedColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></members-ordered-renderer>
-        <label-relations-renderer [object-list]="labelRelationsColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></label-relations-renderer>
-        <properties-renderer [pred-obj-list]="propertiesColl" [resource]="resource" (update)="buildResourceView(resource)"
-            (dblclickObj)="objectDblClick($event)"></properties-renderer>
+        <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </types-renderer>
+        <class-axiom-renderer *ngIf="classAxiomColl" [pred-value-list]="classAxiomColl"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </class-axiom-renderer>
+        <top-concepts-renderer *ngIf="topconceptofColl" [pred-obj-list]="topconceptofColl"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </top-concepts-renderer>
+        <schemes-renderer *ngIf="schemesColl" [pred-obj-list]="schemesColl"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </schemes-renderer>
+        <broaders-renderer *ngIf="broadersColl" [pred-obj-list]="broadersColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </broaders-renderer>
+        <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </superproperties-renderer>
+        <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-value-list]="lexicalizationsColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </lexicalizations-renderer>
+        <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </property-facets-renderer>
+        <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </domains-renderer>
+        <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </ranges-renderer>
+        <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </members-renderer>
+        <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </members-ordered-renderer>
+        <label-relations-renderer *ngIf="labelRelationsColl" [object-list]="labelRelationsColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </label-relations-renderer>
+        <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" 
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </properties-renderer>
         
         <div #blockDiv class="blockingDiv" style="display:none">
             <div class="loadingDiv">

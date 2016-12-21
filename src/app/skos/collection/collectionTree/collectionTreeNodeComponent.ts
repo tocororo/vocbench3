@@ -11,6 +11,8 @@ import {SkosServices} from "../../../services/skosServices";
 export class CollectionTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
+    @Output() nodeExpandEnd = new EventEmitter<any>(); //emit an event when the subTree expansion is completed
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
@@ -115,11 +117,13 @@ export class CollectionTreeNodeComponent {
  	 * then expands the subtree div.
  	 */
     public expandNode() {
+        this.nodeExpandStart.emit();
         // this.skosService.getNestedCollections(this.node, this.vbCtx.getContentLanguage(true)).subscribe( //old service
         this.skosService.getNestedCollections(this.node).subscribe( //new service
             nestedColl => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+                this.nodeExpandEnd.emit();
             }
         );
     }
@@ -203,12 +207,6 @@ export class CollectionTreeNodeComponent {
         }
     }
 
-    // private onBroaderRemoved(concept: ARTURIResource, broader: ARTURIResource) {
-    //     if (broader.getURI() == this.node.getURI()) {
-    //         this.onConceptDeleted(concept);
-    //     }
-    // }
-    
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (oldResource.getURI() == this.node.getURI()) {
             if (this.vbCtx.getHumanReadable()) {
@@ -239,6 +237,14 @@ export class CollectionTreeNodeComponent {
                 }
             )
         }
+    }
+
+    //Listeners to node expansion start/end. Simply forward the event to the parent
+    private onNodeExpandStart() {
+        this.nodeExpandStart.emit();
+    }
+    private onNodeExpandEnd() {
+        this.nodeExpandEnd.emit();
     }
     
 }

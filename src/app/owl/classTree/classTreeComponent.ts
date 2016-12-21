@@ -21,7 +21,7 @@ export class ClassTreeComponent {
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') blockDivElement: ElementRef;
+    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
     
     public roots:ARTURIResource[] = [];
     private selectedNode:ARTURIResource;
@@ -97,7 +97,7 @@ export class ClassTreeComponent {
                             this.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                selectedResource => {
+                                (selectedResource: any) => {
                                     this.openTreeAt(selectedResource);
                                 },
                                 () => {}
@@ -158,4 +158,12 @@ export class ClassTreeComponent {
         this.nodeSelected.emit(undefined);
     }
     
+    //Listeners to node expansion start/end. Simply show/hide the loading div
+    private onNodeExpandStart() {
+        this.blockDivElement.nativeElement.style.display = "block";
+    }
+    private onNodeExpandEnd() {
+        this.blockDivElement.nativeElement.style.display = "none";
+    }
+
 }

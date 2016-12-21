@@ -25,7 +25,7 @@ export class PropertiesPartitionRenderer {
     private label = "Properties";
     private addBtnImgSrc = require("../../../assets/images/prop_create.png");
     private addBtnImgTitle = "Add a property value";
-    private removeBtnImgSrc = require("../../../assets/images/prop_delete.png");
+    private removeBtnImgSrc = require("../../../assets/images/prop_delete.png"); //TODO delete?
     private removeBtnImgTitle = "Remove property value";
     
     constructor(private propertyService:PropertyServices, private skosxlService: SkosxlServices, private resourceService: ResourceServices,
@@ -34,7 +34,7 @@ export class PropertiesPartitionRenderer {
         
     private add() {
         this.browsingService.browsePropertyTree("Select a property", this.resource).then(
-            selectedProp => {
+            (selectedProp: any) => {
                 this.enrichProperty(selectedProp);
             },
             () => {}
@@ -47,7 +47,7 @@ export class PropertiesPartitionRenderer {
             predicate.getURI() == SKOSXL.altLabel.getURI() ||
             predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
             this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
-                literal => {
+                (literal: any) => {
                     switch (predicate.getURI()) {
                         case SKOSXL.prefLabel.getURI():
                             this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
@@ -89,7 +89,7 @@ export class PropertiesPartitionRenderer {
                         } else if (rngType == RDFTypesEnum.literal) {
                             var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                             this.modalService.select("Select range type", null, options).then(
-                                selectedRange => {
+                                (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.typedLiteral) {
                                         this.enrichWithTypedLiteral(predicate);
                                     } else if (selectedRange == RDFTypesEnum.plainLiteral) {
@@ -101,7 +101,7 @@ export class PropertiesPartitionRenderer {
                         } else if (rngType == RDFTypesEnum.undetermined) {
                             var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                             this.modalService.select("Select range type", null, options).then(
-                                selectedRange => {
+                                (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
                                         this.enrichWithResource(predicate);
                                     } else if (selectedRange == RDFTypesEnum.typedLiteral) {
@@ -135,7 +135,7 @@ export class PropertiesPartitionRenderer {
                         }
                         //ask the user to choose
                         this.modalService.select("Select range type", null, rangeOptions, true).then(
-                            selectedRange => {
+                            (selectedRange: any) => {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < crEntries.length; i++) {
                                     if (selectedRange == crEntries[i].getName()) {
@@ -161,9 +161,9 @@ export class PropertiesPartitionRenderer {
     
     private enrichWithCustomRange(predicate: ARTURIResource, crEntry: CustomRangeEntry) {
         this.resViewModalService.enrichCustomForm("Add " + predicate.getShow(), crEntry.getId()).then(
-            entryMap => {
+            (entryMap: any) => {
                 this.customRangeService.runCoda(this.resource, predicate, crEntry.getId(), entryMap).subscribe(
-                    stResp => {
+                    (stResp: any) => {
                         this.update.emit(null);
                     }
                 );
@@ -177,7 +177,7 @@ export class PropertiesPartitionRenderer {
      */
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
         this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
-            literal => {
+            (literal: any) => {
                 this.propertyService.createAndAddPropValue(
                     this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
                     stResp => { this.update.emit(null) }
@@ -192,7 +192,7 @@ export class PropertiesPartitionRenderer {
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: string[]) {
         this.modalService.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
-            literal => {
+            (literal: any) => {
                 this.propertyService.createAndAddPropValue(
                     this.resource, predicate, literal.value, literal.datatype, RDFTypesEnum.typedLiteral).subscribe(
                     stResp => this.update.emit(null)    
@@ -207,7 +207,7 @@ export class PropertiesPartitionRenderer {
      */
     private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
         this.resViewModalService.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
-            resource => {
+            (resource: any) => {
                 this.propertyService.addExistingPropValue(
                     this.resource, predicate, resource.getNominalValue(), RDFTypesEnum.resource).subscribe(
                     stResp => this.update.emit(null)

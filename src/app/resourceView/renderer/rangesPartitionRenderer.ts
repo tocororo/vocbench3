@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTNode, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTNode, ARTURIResource, RDFResourceRolesEnum, ARTPredicateObjects, ResAttribute} from "../../utils/ARTResources";
 import {RDFS, XmlSchema} from "../../utils/Vocabulary";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -8,14 +8,19 @@ import {ManchesterServices} from "../../services/manchesterServices";
 
 @Component({
 	selector: "ranges-renderer",
-	templateUrl: "./rangesPartitionRenderer.html",
+	templateUrl: "./predicateObjectListRenderer.html",
 })
 export class RangesPartitionRenderer {
     
-    @Input('object-list') objectList:ARTURIResource[];
+    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    private label = "Ranges";
+    private addBtnImgTitle = "Add a range";
+    private addBtnImgSrc = require("../../../assets/images/class_create.png");
+    private removeBtnImgTitle = "Remove range"; 
     
     constructor(private propService:PropertyServices, private manchService: ManchesterServices,
         private browsingService: BrowsingServices, private modalService: ModalServices) {}
@@ -31,7 +36,7 @@ export class RangesPartitionRenderer {
     
     private addExistingClass() {
         this.browsingService.browseClassTree("Select a range class").then(
-            selectedClass => {
+            (selectedClass: any) => {
                 this.propService.addPropertyRange(this.resource, selectedClass).subscribe(
                     stResp => this.update.emit(null)
                 );
@@ -42,7 +47,7 @@ export class RangesPartitionRenderer {
     
     private addClassExpression() {
         this.modalService.prompt("Class Expression (Manchester Syntax)").then(
-            manchExpr => {
+            (manchExpr: any) => {
                 this.manchService.checkExpression(manchExpr).subscribe(
                     stResp => {
                         this.manchService.createRestriction(this.resource, RDFS.range, manchExpr).subscribe(
@@ -63,7 +68,7 @@ export class RangesPartitionRenderer {
             XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string]; 
             
         this.modalService.selectResource("Select range datatype", null, datatypes).then(
-            selection => {
+            (selection: any) => {
                 this.propService.addPropertyRange(this.resource, selection).subscribe(
                     stResp => this.update.emit(null)
                 )
@@ -89,6 +94,25 @@ export class RangesPartitionRenderer {
     private objectDblClick(obj: ARTResource) {
         //clicked object (range class) can be a URIResource or BNode
         this.dblclickObj.emit(obj);
+    }
+
+    /**
+     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
+     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
+     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
+     * or the predicate has no custom range, the object should be rendered as simple rdfResource
+     * @param object object of the predicate object list to render in view.
+     */
+    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
+        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
+    }
+
+    private getAddPropImgTitle(predicate: ARTURIResource) {
+        return "Add a " + predicate.getShow();
+    }
+    
+    private getRemovePropImgTitle(predicate: ARTURIResource) {
+        return "Remove " + predicate.getShow();
     }
     
 }

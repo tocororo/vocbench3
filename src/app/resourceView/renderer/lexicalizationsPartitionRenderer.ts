@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateValues, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {RDFS, SKOS, SKOSXL} from "../../utils/Vocabulary";
 import {ModalServices} from "../../widget/modal/modalServices";
@@ -11,28 +11,26 @@ import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
     selector: "lexicalizations-renderer",
-    templateUrl: "./lexicalizationsPartitionRenderer.html",
+    templateUrl: "./predicateValueListRenderer.html",
 })
 export class LexicalizationsPartitionRenderer {
     
-    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-    
-    private showAllLexicalProp = false;
-    
-    private lexicalizationProperties = [
-        SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel,
-        SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel, RDFS.label
-    ];
+
+    private label = "Lexicalizations";
+    private addBtnImgTitle = "Add a lexicalization";
+    private addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
+    private removeBtnImgTitle = "Remove lexicalization"; 
     
     constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
         private propertyService:PropertyServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
     
     private add(predicate: ARTURIResource) {
         this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
-            literal => {
+            (literal: any) => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
                         this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
@@ -117,29 +115,22 @@ export class LexicalizationsPartitionRenderer {
             }
     }
     
-    /**
-     * Given a lexicalization property, tells if it is compliant with the current project onto type.
-     * If the property is one of the skosxl lexicalization properties, returns true if project is SKOS-XL
-     * If the property is one of the skos lexicalization properties, returns true if project is SKOS
-     * If the property is rdfs:label, returns true if the project is OWL
-     */
-    private isPropOntoTypeCompliant(property: ARTURIResource) {
-        var ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
-        return (
-            this.showAllLexicalProp ||
-            (
-                property.getShow().startsWith("rdfs:") && ontoType == "OWL" ||
-                property.getShow().startsWith("skos:") && ontoType == "SKOS" ||
-                property.getShow().startsWith("skosxl:") && ontoType == "SKOS-XL"
-            )
-        );
-    }
-    
     private objectDblClick(obj: ARTNode) {
         //clicked object (label) can be a Resource (xlabel bnode or uri) or literal (plain label)
         if (obj.isResource()) {//emit double click for open a new res view only for resources
             this.dblclickObj.emit(<ARTResource>obj);
         }
+    }
+
+    /**
+     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
+     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
+     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
+     * or the predicate has no custom range, the object should be rendered as simple rdfResource
+     * @param object object of the predicate object list to render in view.
+     */
+    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
+        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
     
     private getAddPropImgTitle(predicate: ARTURIResource) {

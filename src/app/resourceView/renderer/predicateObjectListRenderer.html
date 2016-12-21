@@ -1,4 +1,4 @@
-<div class="groupPanel" *ngIf="predicateObjectList">
+<div class="groupPanel">
     <div class="groupPanel-heading">
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
@@ -25,8 +25,8 @@
                         (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
                     <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
                         (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())" (click)="removePredicateObject(po.getPredicate(), obj)"  
-                        [disabled]="!obj.getAdditionalProperty('explicit')">
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
+                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
                         <span>-</span>
                     </button>
                 </div>

@@ -1,11 +1,11 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef} from "@angular/core";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
-import {VBEventHandler} from "../../../utils/VBEventHandler";
-import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {SkosServices} from "../../../services/skosServices";
-import {SearchServices} from "../../../services/searchServices";
-import {ConceptTreeNodeComponent} from "./conceptTreeNodeComponent";
-import {ModalServices} from "../../../widget/modal/modalServices";
+import { Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef } from "@angular/core";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../utils/ARTResources";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { SkosServices } from "../../../services/skosServices";
+import { SearchServices } from "../../../services/searchServices";
+import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
+import { ModalServices } from "../../../widget/modal/modalServices";
 
 @Component({
     selector: "concept-tree",
@@ -19,23 +19,23 @@ export class ConceptTreeComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
-            //only when the scheme is the one used in the current concept tree
+    //only when the scheme is the one used in the current concept tree
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
-    
+
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
-    
+
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') blockDivElement: ElementRef;
+    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
 
     public roots: ARTURIResource[];
     private selectedNode: ARTURIResource;
-    
+
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
-        //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
+    //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
     private workingScheme: ARTURIResource;//keep track of the selected scheme 
-        //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
+    //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     private eventSubscriptions: any[] = [];
 
@@ -52,13 +52,13 @@ export class ConceptTreeComponent {
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             (newLang: string) => this.onContentLangChanged(newLang)));
     }
-    
+
     ngOnInit() {
         this.workingScheme = this.scheme;
         //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
             this.skosService.getAllSchemesList().subscribe( //old service
-            // this.skosService.getAllSchemes().subscribe( //new service
+                // this.skosService.getAllSchemes().subscribe( //new service
                 schemes => {
                     this.schemeList = schemes;
                     if (this.scheme != undefined) {
@@ -70,7 +70,7 @@ export class ConceptTreeComponent {
             );
         }
     }
-    
+
     /**
      * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
      * the view #blockDivTree is initialized
@@ -78,7 +78,7 @@ export class ConceptTreeComponent {
     ngAfterViewInit() {
         this.initTree();
     }
-    
+
     private initTree() {
         this.blockDivElement.nativeElement.style.display = "block";
         // this.skosService.getTopConcepts_old(this.workingScheme, this.vbCtx.getContentLanguage(true)).subscribe( //old service
@@ -90,7 +90,7 @@ export class ConceptTreeComponent {
             err => { this.blockDivElement.nativeElement.style.display = "none"; }
         );
     }
-    
+
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
@@ -109,27 +109,27 @@ export class ConceptTreeComponent {
                             this.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                selectedResource => {
+                                (selectedResource: any) => {
                                     this.openTreeAt(selectedResource);
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
                 }
-            );
+                );
         }
     }
-    
+
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
     private searchKeyHandler(key: number, searchedText: string) {
         if (key == 13) {
-            this.doSearch(searchedText);           
+            this.doSearch(searchedText);
         }
     }
-    
+
     private openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.workingScheme).subscribe(
             path => {
@@ -146,7 +146,7 @@ export class ConceptTreeComponent {
             }
         );
     }
-    
+
     /**
      * Listener to <select> element that allows to change dynamically the scheme of the 
      * concept tree (visible only if @Input schemeChangeable is true).
@@ -156,7 +156,7 @@ export class ConceptTreeComponent {
         this.initTree();
         this.schemeChanged.emit(this.workingScheme);
     }
-    
+
     /**
      * Retrieves the ARTURIResource of a scheme URI from the available scheme. Returns null
      * if the URI doesn't represent a scheme in the list.
@@ -169,10 +169,10 @@ export class ConceptTreeComponent {
         }
         return null; //schemeUri was probably "---", so for no-scheme mode return a null object
     }
-    
-    
+
+
     //EVENT LISTENERS
-    
+
     private onNodeClicked(node: ARTURIResource) {
         if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
@@ -196,7 +196,7 @@ export class ConceptTreeComponent {
             }
             this.roots.push(concept);
         } else if (this.scheme.getURI() == scheme.getURI()) {//otherwise add it only if it's been created in the current scheme 
-            this.roots.push(concept);       
+            this.roots.push(concept);
         }
     }
 
@@ -211,7 +211,7 @@ export class ConceptTreeComponent {
         //reset the selected node
         this.nodeSelected.emit(undefined);
     }
-    
+
     //data contains "concept" and "scheme"
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         if (this.workingScheme != undefined && this.workingScheme.getURI() == scheme.getURI()) {
@@ -224,12 +224,20 @@ export class ConceptTreeComponent {
             }
         }
     }
-    
+
     private onContentLangChanged(lang: string) {
         //reset the selected node
         this.nodeSelected.emit(undefined);
         //and reinitialize tree
         this.initTree();
+    }
+
+    //Listeners to node expansion start/end. Simply show/hide the loading div
+    private onNodeExpandStart() {
+        this.blockDivElement.nativeElement.style.display = "block";
+    }
+    private onNodeExpandEnd() {
+        this.blockDivElement.nativeElement.style.display = "none";
     }
 
 }

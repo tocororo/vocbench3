@@ -1,4 +1,4 @@
-<div class="groupPanel" *ngIf="objectList">
+<div class="groupPanel">
     <div class="groupPanel-heading">
         <span>
             <label class="groupPanel-heading-content">Property facets:</label>
@@ -11,18 +11,23 @@
                     [ngModel]="f.value" [disabled]="!f.explicit" (change)="changeFacet(f.name, cb.checked)">{{f.name}}
             </span>
         </div>
-        <div class="subPanel" *ngIf="objectList">
+        <div class="subPanel" *ngFor="let po of predicateObjectList">
+            <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
-                <label style="flex: 1">Inverse of:</label>
-                <button class="resViewPartitionBtn" title="Add a inverse property" (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
+                    [disabled]="!resource.getAdditionalProperty('explicit')">
                     <span>+</span>
                 </button>
             </div>
             <div class="subPanel-body">
-                <div *ngFor="let p of objectList" class="listItem">
-                    <rdf-resource [resource]="p" (dblclick)="objectDblClick(p)" style="flex:1"></rdf-resource>
-                    <button class="resViewPartitionBtn" title="Remove inverse property" (click)="remove(p)"  
-                        [disabled]="!p.getAdditionalProperty('explicit')">
+                <div *ngFor="let obj of po.getObjects()" class="listItem">
+                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
+                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
                         <span>-</span>
                     </button>
                 </div>

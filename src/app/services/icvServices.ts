@@ -107,7 +107,7 @@ export class IcvServices {
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource = Deserializer.createURI(recordElemColl[i]);
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
-                    var langRes = new ARTLiteral(lang, null, lang, false);
+                    var langRes = new ARTLiteral(lang, null, lang);
                     records.push({resource: resource, lang: langRes});
                 }
                 return records;
@@ -129,7 +129,7 @@ export class IcvServices {
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource = Deserializer.createURI(recordElemColl[i]);
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
-                    var langRes = new ARTLiteral(lang, null, lang, false);
+                    var langRes = new ARTLiteral(lang, null, lang);
                     records.push({resource: resource, lang: langRes});
                 }
                 return records;
@@ -297,7 +297,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params, this.oldTypeService).map(
             stResp => {
-                return <ARTResource[]>Deserializer.createRDFArray(stResp);
+                return <ARTResource[]>Deserializer.createRDFNodeArray(stResp);
             }
         );
     }

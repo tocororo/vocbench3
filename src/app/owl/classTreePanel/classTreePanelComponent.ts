@@ -34,8 +34,12 @@ export class ClassTreePanelComponent {
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", null, false, true).then(
-            result => {
-                this.owlService.createClass(OWL.thing, result).subscribe()
+            (result: any) => {
+                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                this.owlService.createClass(OWL.thing, result).subscribe(
+                    stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
+                    err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                );
             },
             () => {}
         );
@@ -45,8 +49,12 @@ export class ClassTreePanelComponent {
     private createSubClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", null, false, true).then(
-            result => {
-                this.owlService.createClass(this.selectedClass, result).subscribe();
+            (result: any) => {
+                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                this.owlService.createClass(this.selectedClass, result).subscribe(
+                    stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
+                    err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                );
             },
             () => {}
         );
@@ -58,25 +66,33 @@ export class ClassTreePanelComponent {
                 " since it has instance(s). Please delete the instance(s) and retry.", "warning");
             return;
         }
+        this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
         this.deleteService.removeClass(this.selectedClass).subscribe(
             stResp => {
                 this.selectedClass = null;
                 this.classSelected.emit(undefined);
-            }
+                this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+            },
+            err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
         );
     }
     
     private createInstance() {
         //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
         this.modalService.prompt("Create new instance", "Name", null, false, true).then(
-            result => {
-                this.owlService.createInstance(this.selectedClass, result).subscribe();
+            (result: any) => {
+                this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "block";
+                this.owlService.createInstance(this.selectedClass, result).subscribe(
+                    stResp => this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none",
+                    err => this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none"
+                );
             },
             () => {}
         );
     }
     
     private deleteInstance() {
+        this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "block";
         this.deleteService.removeInstance(this.selectedInstance, this.selectedClass).subscribe(
             stResp => {
                 this.selectedInstance = null;
@@ -85,7 +101,9 @@ export class ClassTreePanelComponent {
                 if (this.selectedClass != null) {
                     this.classSelected.emit(this.selectedClass);
                 }
-            }
+                this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none";
+            },
+            err => { this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none"; }
         )
     }
     
@@ -102,7 +120,7 @@ export class ClassTreePanelComponent {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                selectedResource => {
+                                (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },
                                 () => {}
@@ -157,4 +175,5 @@ export class ClassTreePanelComponent {
         this.selectedInstance = instance;
         this.instanceSelected.emit(instance);
     }
+
 }

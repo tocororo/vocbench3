@@ -16,7 +16,7 @@ export class InstanceListComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivInstanceList') blockDivElement: ElementRef;
+    @ViewChild('blockDivInstanceList') public blockDivElement: ElementRef;
     
     private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 

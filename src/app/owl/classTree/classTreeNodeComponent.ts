@@ -11,6 +11,8 @@ import {OwlServices} from "../../services/owlServices";
 export class ClassTreeNodeComponent {
 	@Input() node:ARTURIResource;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
+    @Output() nodeExpandEnd = new EventEmitter<any>(); //emit an event when the subTree expansion is completed
     
     //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
     @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
@@ -113,10 +115,12 @@ export class ClassTreeNodeComponent {
 	 * then expands the subtree div.
 	 */
     public expandNode() {
+        this.nodeExpandStart.emit();
         this.owlService.getSubClasses(this.node, true, true).subscribe(
             subClasses => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+                this.nodeExpandEnd.emit();
             }
         );
     }
@@ -205,4 +209,13 @@ export class ClassTreeNodeComponent {
             this.node.setAdditionalProperty(ResAttribute.NUM_INST, numInst+1);
         }
     }
+
+    //Listeners to node expansion start/end. Simply forward the event to the parent
+    private onNodeExpandStart() {
+        this.nodeExpandStart.emit();
+    }
+    private onNodeExpandEnd() {
+        this.nodeExpandEnd.emit();
+    }
+
 }

@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTURIResource, ARTBNode, ARTNode, ARTPredicateObjects, RDFTypesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTBNode, ARTNode, ARTPredicateValues, RDFTypesEnum, ResAttribute} from "../../utils/ARTResources";
 import {RDFS, OWL} from "../../utils/Vocabulary";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
@@ -11,14 +11,19 @@ import {ManchesterServices} from "../../services/manchesterServices";
 
 @Component({
     selector: "class-axiom-renderer",
-    templateUrl: "./classAxiomPartitionRenderer.html",
+    templateUrl: "./predicateValueListRenderer.html",
 })
 export class ClassAxiomPartitionPartitionRenderer {
     
-    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
     @Input() resource:ARTURIResource;
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    private label = "Class axioms";
+    private addBtnImgTitle = "Add a class axiom";
+    private addBtnImgSrc = require("../../../assets/images/class_create.png");
+    private removeBtnImgTitle = "Remove class axiom"; 
     
     private clsAxiomProperties = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
@@ -46,7 +51,7 @@ export class ClassAxiomPartitionPartitionRenderer {
             var existingClassOpt = "Add an existing class";
             var classExpressionOpt = "Create and add a class expression";
             this.modalService.select("Add " + property.getShow(), "Select an option", [existingClassOpt, classExpressionOpt]).then(
-                chosenOption => {
+                (chosenOption: any) => {
                     if (chosenOption == existingClassOpt) {
                         this.addExistingClass(property);
                     } else if (chosenOption == classExpressionOpt) {
@@ -65,7 +70,7 @@ export class ClassAxiomPartitionPartitionRenderer {
      */
     private addExistingClass(property: ARTURIResource) {
         this.browsingService.browseClassTree("Select a class").then(
-            selectedClass => {
+            (selectedClass: any) => {
                 if (property.getURI() == RDFS.subClassOf.getURI()) {
                     this.owlService.addSuperCls(this.resource, selectedClass).subscribe(
                         stResp => this.update.emit(null)
@@ -87,7 +92,7 @@ export class ClassAxiomPartitionPartitionRenderer {
      */
     private createClassExpression(property: ARTURIResource) {
         this.modalService.prompt("Class Expression (Manchester Syntax)").then(
-            manchExpr => {
+            (manchExpr: any) => {
                 this.manchService.checkExpression(manchExpr).subscribe(
                     stResp => {
                         this.manchService.createRestriction(this.resource, property, manchExpr).subscribe(
@@ -106,7 +111,7 @@ export class ClassAxiomPartitionPartitionRenderer {
      */
     private createClassList(property: ARTURIResource) {
         this.resViewModalService.createClassList("Add " + property.getShow()).then(
-            classes => {
+            (classes: any) => {
                 if (property.getURI() == OWL.intersectionOf.getURI()) {
                     this.owlService.addIntersectionOf(this.resource, classes).subscribe(
                         stResp => this.update.emit(null)
@@ -127,7 +132,7 @@ export class ClassAxiomPartitionPartitionRenderer {
      */
     private createInstanceList(property: ARTURIResource) {
         this.resViewModalService.createInstanceList("Add " + property.getShow()).then(
-            instances => {
+            (instances: any) => {
                 this.owlService.addOneOf(this.resource, instances).subscribe(
                     stResp => this.update.emit(null)
                 );
@@ -179,6 +184,17 @@ export class ClassAxiomPartitionPartitionRenderer {
     
     private objectDblClick(obj: ARTResource) {
         this.dblclickObj.emit(obj);//clicked object (class) can be a URIResource or BNode (collection of classes)
+    }
+    
+    /**
+     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
+     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
+     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
+     * or the predicate has no custom range, the object should be rendered as simple rdfResource
+     * @param object object of the predicate object list to render in view.
+     */
+    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
+        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
     
     private getAddPropImgTitle(predicate: ARTURIResource) {

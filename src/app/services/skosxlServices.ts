@@ -247,7 +247,7 @@ export class SkosxlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService).map(
             stResp => {
-                return Deserializer.createRDFArray(stResp);
+                return Deserializer.createRDFNodeArray(stResp);
             }
         );
     }

@@ -26,10 +26,9 @@
  * http://127.0.0.1:1979/semanticturkey/it.uniroma2.art.semanticturkey/st-core-services/Search/
  * searchResource?searchString=&rolesArray=cls&useLocalName=false&useURI=true&searchMode=start&ctx_project=...
  * <stresponse request="searchResource" type="reply">
- *  <reply status="fail"/>
- *  <data>
+ *  <reply status="fail">
  *      the serchString cannot be empty
- *  </data>
+ *  </reply>
  * </stresponse>
  * 
  * Type "exception"
@@ -179,7 +178,7 @@ export class STResponseUtils {
 	 */
     private static getFailMessage(stResp: any): string {
         if (stResp instanceof Document) { //XML
-            return stResp.getElementsByTagName("data")[0].textContent;
+            return stResp.getElementsByTagName("reply")[0].textContent;
         } else { //JSON
             return stResp.stresponse.reply.msg;
         }

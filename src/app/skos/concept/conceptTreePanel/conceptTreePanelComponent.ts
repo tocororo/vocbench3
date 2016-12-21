@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {ConceptTreeComponent} from "../conceptTree/conceptTreeComponent";
 import {SkosServices} from "../../../services/skosServices";
 import {SkosxlServices} from "../../../services/skosxlServices";
@@ -13,28 +13,35 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx";
 export class ConceptTreePanelComponent {
     @Input() scheme:ARTURIResource;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>(); 
+    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
+
+    @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
+
+    private ONTO_TYPE: string;
     
     private selectedConcept:ARTURIResource;
     
-    private ONTO_TYPE: string;
-    
 	constructor(private skosService:SkosServices, private skosxlService: SkosxlServices, 
         private modalService: ModalServices, private vbCtx:VocbenchCtx) {}
-    
+
     ngOnInit() {
         this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
     }
-    
-    private createConcept() {
+
+    private createTopConcept() {
         this.modalService.newResource("Create new skos:Concept", this.vbCtx.getContentLanguage()).then(
-            (result: any) => {
+            (res: any) => {
+                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(result.label, result.lang, this.vbCtx.getScheme(),
-                        result.name, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
+                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                    );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept(result.label, result.lang, this.vbCtx.getScheme(),
-                        result.name, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosxlService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
+                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                    );
                 }
             },
             () => {}
@@ -43,13 +50,18 @@ export class ConceptTreePanelComponent {
     
     private createNarrower() {
         this.modalService.newResource("Create a skos:narrower", this.vbCtx.getContentLanguage()).then(
-            (result: any) => {
+            (res: any) => {
+                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(result.label, result.lang, this.selectedConcept, this.vbCtx.getScheme(),
-                        result.name, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
+                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                    );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(result.label, result.lang, this.selectedConcept, this.vbCtx.getScheme(),
-                        result.name, this.vbCtx.getContentLanguage()).subscribe();
+                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
+                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                    );
                 }
             },
             () => {}
@@ -57,19 +69,24 @@ export class ConceptTreePanelComponent {
     }
     
     private deleteConcept() {
+        this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
         if (this.ONTO_TYPE == "SKOS") {
             this.skosService.deleteConcept(this.selectedConcept).subscribe(
                 stResp => {
                     this.selectedConcept = null;
                     this.nodeSelected.emit(undefined);
-                }
+                    this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
             );
         } else { //SKOSXL
             this.skosxlService.deleteConcept(this.selectedConcept).subscribe(
                 stResp => {
                     this.selectedConcept = null;
                     this.nodeSelected.emit(undefined);
-                }
+                    this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
             );
         }
     }

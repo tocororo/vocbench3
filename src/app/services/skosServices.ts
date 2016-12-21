@@ -462,7 +462,7 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "getAltLabels", params, this.oldTypeService).map(
             stResp => {
-                return Deserializer.createRDFArray(stResp);
+                return Deserializer.createRDFNodeArray(stResp);
             }
         );
     }
