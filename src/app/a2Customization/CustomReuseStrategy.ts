@@ -4,14 +4,14 @@
 import {RouteReuseStrategy, DetachedRouteHandle, ActivatedRouteSnapshot} from "@angular/router";
 import {ComponentRef} from "@angular/core";
 import {ProjectComponent} from "../project/projectComponent";
+import {SparqlComponent} from "../sparql/sparqlComponent";
 import {DataComponent} from "../data/dataComponent";
 
 // This impl. bases upon one that can be found in the router's test cases.
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
     //Projects need to be stored since it keeps the state of projectChanged
-    //Sparql should be without state since it depends from projects (prefix mapping definition in query)
-    private pathWithState: string[] = ["Projects", "Data"];
+    private pathWithState: string[] = ["Projects", "Data", "Sparql"];
 
     /**
      * map containing key-value pair that chaches routes, where
@@ -50,24 +50,29 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      */
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         // console.debug('CustomReuseStrategy:shouldAttach', route);
-
         // Return false (that means "don't attach the cached route") if it's going to "Data" route and project was changed in the meantime
-        if (route.routeConfig.path == "Data" && this.handlers["Projects"]) {
+        if (((route.routeConfig.path == "Data") || (route.routeConfig.path == "Sparql")) && this.handlers["Projects"]) {
             var projRouteHandler: any = this.handlers["Projects"];
             var projComponent: ProjectComponent = projRouteHandler.componentRef._component;
             if (projComponent.projectChanged) {
                 projComponent.projectChanged = false;
-                // destroy the previous stored DataComponent
+                // destroy the previous stored DataComponent and SparqlComponent and remove them from the handlers map
                 if (this.handlers["Data"]) {
-                    var dataDetachedRouteHandle = this.handlers["Data"];
-                    var dataComponentRef: ComponentRef<DataComponent> = dataDetachedRouteHandle['componentRef'];
-                    dataComponentRef.destroy();
+                    let detachedRouteHandle = this.handlers["Data"];
+                    let componentRef: ComponentRef<DataComponent> = detachedRouteHandle['componentRef'];
+                    componentRef.destroy();
+                    delete this.handlers["Data"];
+                }
+                if (this.handlers["Sparql"]) {
+                    let detachedRouteHandle = this.handlers["Sparql"];
+                    let componentRef: ComponentRef<SparqlComponent> = detachedRouteHandle['componentRef'];
+                    componentRef.destroy();
+                    delete this.handlers["Sparql"];
                 }
                 //return false, so it attacches a new DataComponent
                 return false;
             }
         }
-
         return !!route.routeConfig && !!this.handlers[route.routeConfig.path];
     }
 

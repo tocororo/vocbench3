@@ -132,7 +132,7 @@ export class ARTBNode implements ARTResource {
     }
 
     getNominalValue(): string {
-        return "_:" + this.id;
+        return this.id;
     };
 
     toNT(): string {
