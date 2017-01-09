@@ -10,8 +10,9 @@ import {DataComponent} from "../data/dataComponent";
 // This impl. bases upon one that can be found in the router's test cases.
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
-    //Projects need to be stored since it keeps the state of projectChanged
-    private pathWithState: string[] = ["Projects", "Data", "Sparql"];
+    private pathWithState: string[] = ["Data", "Sparql"];
+
+    private projectChanged: boolean;
 
     /**
      * map containing key-value pair that chaches routes, where
@@ -27,8 +28,9 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      * @param is the route that is going to leave
      */
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        // console.debug('CustomReuseStrategy:shouldDetach storing ' + route.routeConfig.path);
-        if (this.pathWithState.indexOf(route.routeConfig.path) != -1) {
+        // console.debug('CustomReuseStrategy:shouldDetach ', route);
+        //Projects doesn't need to be stored but I detach it temporarly, so store() is fired and I can keep the state of projectChanged
+        if (this.pathWithState.indexOf(route.routeConfig.path) != -1 || route.routeConfig.path == "Projects") {
             return true;
         }
         return false;
@@ -41,6 +43,12 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      */
     store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle): void {
         // console.debug('CustomReuseStrategy:store', route, handle);
+        //If it tries to store Projects, just get the projectChanged attribute and skip the store
+        if (route.routeConfig.path == "Projects") {
+            var projComponent: ProjectComponent = handle['componentRef']._component;
+            this.projectChanged = projComponent.projectChanged;
+            return;
+        }
         this.handlers[route.routeConfig.path] = handle;
     }
 
@@ -51,11 +59,10 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         // console.debug('CustomReuseStrategy:shouldAttach', route);
         // Return false (that means "don't attach the cached route") if it's going to "Data" route and project was changed in the meantime
-        if (((route.routeConfig.path == "Data") || (route.routeConfig.path == "Sparql")) && this.handlers["Projects"]) {
-            var projRouteHandler: any = this.handlers["Projects"];
-            var projComponent: ProjectComponent = projRouteHandler.componentRef._component;
-            if (projComponent.projectChanged) {
-                projComponent.projectChanged = false;
+        if (route.routeConfig.path == "Data" || route.routeConfig.path == "Sparql") {
+            if (this.projectChanged) {
+                //reset projectChanged flag
+                this.projectChanged = false;
                 // destroy the previous stored DataComponent and SparqlComponent and remove them from the handlers map
                 if (this.handlers["Data"]) {
                     let detachedRouteHandle = this.handlers["Data"];
@@ -73,6 +80,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
                 return false;
             }
         }
+
         return !!route.routeConfig && !!this.handlers[route.routeConfig.path];
     }
 

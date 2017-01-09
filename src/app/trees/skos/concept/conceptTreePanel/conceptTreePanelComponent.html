@@ -12,9 +12,7 @@
                 <img src="../../../../../assets/images/concept_delete.png" />
             </button>
         </div>
-        <a [routerLink]="['/Schemes']" title="No skos:ConceptScheme selected" *ngIf="!activeScheme">
-            <img src="../../../../../assets/images/warning.png">
-        </a>
+        <img *ngIf="!activeScheme" title="No skos:ConceptScheme selected" src="../../../../../assets/images/warning.png">
     </div>
     
     <!-- Tree -->

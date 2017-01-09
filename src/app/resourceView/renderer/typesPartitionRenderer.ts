@@ -29,24 +29,17 @@ export class TypesPartitionRenderer {
         private browsingService: BrowsingServices) {}
     
     //add type
-    // private add() {
-    //     this.browsingService.browseClassTree("Select a class").then(
-    //         (selectedClass: any) => {
-    //             this.owlService.addType(this.resource, selectedClass).subscribe(
-    //                 stResp => this.update.emit(null)
-    //             )
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // private remove(type: ARTURIResource) {
-    //     this.owlService.removeType(this.resource, type).subscribe(
-    //         stResp => {
-    //             this.update.emit(null);
-    //         }
-    //     );
-    // }
+    private add() {
+        alert("open modal to choose and valorize a property");
+        // this.browsingService.browseClassTree("Select a class").then(
+        //     (selectedClass: any) => {
+        //         this.owlService.addType(this.resource, selectedClass).subscribe(
+        //             stResp => this.update.emit(null)
+        //         )
+        //     },
+        //     () => {}
+        // );
+    }
 
     private enrichProperty(predicate: ARTURIResource) {
         this.browsingService.browseClassTree("Select a class").then(
