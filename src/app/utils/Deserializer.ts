@@ -447,6 +447,9 @@ export class Deserializer {
         var value = literal['@value'];
         var datatype = literal[ResAttribute.TYPE];
         var lang = literal[ResAttribute.LANG];
+        if (lang == undefined) {
+            var lang = literal["@language"];
+        }
         var artLiteralRes: ARTLiteral = new ARTLiteral(value, datatype, lang);
         //optional properties
         // var show = literalElement.getAttribute(ResAttribute.SHOW);
