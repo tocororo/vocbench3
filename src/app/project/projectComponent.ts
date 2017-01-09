@@ -19,6 +19,8 @@ import {ModalServices} from "../widget/modal/modalServices";
 export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
+
+    public projectChanged: boolean = false;
     
     private eventSubscriptions: any[] = [];
     
@@ -126,6 +128,7 @@ export class ProjectComponent implements OnInit {
         this.projectService.accessProject(project).subscribe(
             stResp => {
                 this.vbCtx.setWorkingProject(project);
+                this.projectChanged = true;
                 project.setOpen(true);
                 document.getElementById("blockDivFullScreen").style.display = "none";
                 //get default namespace of the project and set it to the vbContext

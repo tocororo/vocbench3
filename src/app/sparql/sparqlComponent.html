@@ -22,7 +22,7 @@
     <!--Tabs content-->
     <div class="tab-content">
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
-            <div *ngIf="t.active" class="vbox">
+            <template [ngIf]="t.active">
                 
                 <yasgui [query]="t.query" (querychange)="onQueryChange($event)"></yasgui>
                 
@@ -81,7 +81,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
         
     </div>

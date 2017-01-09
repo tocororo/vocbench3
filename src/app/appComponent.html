@@ -13,19 +13,7 @@
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
-                    <a [routerLink]="['/Class']">Class</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
-                    <a [routerLink]="['/Concepts']">Concepts</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
-                    <a [routerLink]="['/Property']">Property</a>
-                </li>
-				<li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
-                    <a [routerLink]="['/Schemes']">Schemes</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectSKOS()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
-                    <a [routerLink]="['/Collections']">Collections</a>
+                    <a [routerLink]="['/Data']">Data</a>
                 </li>
 				<li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
@@ -40,7 +28,6 @@
                         <li><a [routerLink]="['/CustomRange']">Custom Range configuration</a></li>
                     </ul>
                 </li>
-                
 				<!--<li [ngClass]="{active: isActive('/Test')}">
                     <a [routerLink]="['Test']">Test</a>
                 </li>-->

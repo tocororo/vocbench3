@@ -1,0 +1,6 @@
+<div class="hbox">
+    <div class="sidebar vbox">
+        <tree-panel (nodeSelected)="onNodeSelected($event)"></tree-panel>
+    </div>
+    <resource-view-panel *ngIf="selectedResource" [resource]="selectedResource"></resource-view-panel>
+</div>

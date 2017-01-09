@@ -1,0 +1,17 @@
+<div class="treeNode" #treeNodeElement>
+	<div class="expandCollapseBtnContainer">
+            <img *ngIf="node.getAdditionalProperty('more')==1 && !node.getAdditionalProperty('open')"
+                  src="../../../../../assets/images/tree_expand.png" (click)="expandNode()">
+            <img *ngIf="node.getAdditionalProperty('open')"
+                  src="../../../../../assets/images/tree_collapse.png" (click)="collapseNode()">
+	</div>
+	<rdf-resource [resource]="node" (click)="selectNode()" 
+        [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+</div>
+
+<div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
+	<collection-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n"
+        (nodeSelected)="onNodeSelected($event)"
+        (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+    </collection-tree-node>
+</div>

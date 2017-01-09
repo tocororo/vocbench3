@@ -1,0 +1,56 @@
+<div class="vbox">
+
+    <ul class="nav nav-tabs nav-tabs-xs" (click)="$event.preventDefault()">
+        <li [ngClass]="{active : activeTab == 'cls'}">
+            <a href (click)="selectTab('cls')">
+                Class
+            </a>
+        </li>
+        <template [ngIf]="isProjectSKOS()">
+            <li [ngClass]="{active : activeTab == 'concept'}">
+                <a href (click)="selectTab('concept')">
+                    Concept
+                </a>
+            </li>
+            <li [ngClass]="{active : activeTab == 'conceptScheme'}">
+                <a href (click)="selectTab('conceptScheme')">
+                    Scheme
+                </a>
+            </li>
+            <li [ngClass]="{active : activeTab == 'skosCollection'}">
+                <a href (click)="selectTab('skosCollection')">
+                    Collection
+                </a>
+            </li>
+        </template>      
+        <li [ngClass]="{active : activeTab == 'property'}">
+            <a href (click)="selectTab('property')">
+                Property
+            </a>
+        </li>
+    </ul>
+    
+    <!--Tabs content-->
+    <div class="tab-content">
+        <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
+            <div class="vbox">
+                <class-tree-panel (nodeSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"></class-tree-panel>
+            </div>
+        </div>
+        <template [ngIf]="isProjectSKOS()">
+            <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
+                <concept-tree-panel (nodeSelected)="onNodeSelected($event)"></concept-tree-panel>
+            </div>
+            <div [ngClass]="{vbox : activeTab == 'conceptScheme'}" [hidden]="activeTab != 'conceptScheme'">
+                <scheme-list-panel (nodeSelected)="onNodeSelected($event)"></scheme-list-panel>
+            </div>
+            <div [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">
+                <collection-tree-panel (nodeSelected)="onNodeSelected($event)"></collection-tree-panel>
+            </div>
+        </template>
+        <div [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
+            <property-tree-panel (nodeSelected)="onNodeSelected($event)"></property-tree-panel>
+        </div>
+    </div>
+    
+</div>

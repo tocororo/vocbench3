@@ -1,8 +1,9 @@
 import {NgModule} from '@angular/core';
-
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {RouterModule} from "@angular/router";
+import {RouterModule, RouteReuseStrategy} from "@angular/router";
+
+import {CustomReuseStrategy} from "../a2Customization/CustomReuseStrategy";
 
 import {STServicesModule} from "./stServicesModule";
 import {SharedModule} from "./sharedModule";
@@ -27,11 +28,7 @@ import {GUARD_PROVIDERS} from "../utils/CanActivateGuards";
 //Components
 import {HomeComponent} from "../homeComponent";
 import {ProjectComponent} from "../project/projectComponent";
-import {ConceptsComponent} from "../skos/concept/conceptsComponent";
-import {ClassComponent} from "../owl/classComponent";
-import {PropertyComponent} from "../property/propertyComponent";
-import {SchemesComponent} from "../skos/scheme/schemesComponent";
-import {CollectionsComponent} from "../skos/collection/collectionsComponent";
+import {DataComponent} from "../data/dataComponent";
 import {SparqlComponent} from "../sparql/sparqlComponent";
 import {AlignmentValidationComponent} from "../alignment/alignmentValidation/alignmentValidationComponent";
 import {CustomRangeComponent} from "../customRanges/customRangeComponent";
@@ -60,7 +57,8 @@ import {AdministrationComponent} from "../administration/administrationComponent
       ],
       //services with application scope
       providers: [
-            HttpManager, VocbenchCtx, VBEventHandler, GUARD_PROVIDERS
+            HttpManager, VocbenchCtx, VBEventHandler, GUARD_PROVIDERS, 
+            {provide: RouteReuseStrategy, useClass: CustomReuseStrategy}
       ],
       declarations: [
             AppComponent,
@@ -69,11 +67,7 @@ import {AdministrationComponent} from "../administration/administrationComponent
             ProjectComponent,
             ImportProjectComponent,
             CreateProjectComponent,
-            ConceptsComponent,
-            ClassComponent,
-            PropertyComponent,
-            SchemesComponent,
-            CollectionsComponent,
+            DataComponent,
             SparqlComponent,
             IcvComponent,
             AlignmentValidationComponent,

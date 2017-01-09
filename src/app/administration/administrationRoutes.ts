@@ -15,6 +15,12 @@ export const routes: Routes = [
         {path: "Configuration", component: ConfigAdministrationComponent, canActivate: [AuthGuard]},
         {path: "Projects", component: ProjectsAdministrationComponent, canActivate: [AuthGuard]}
     ]},
+    // {path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard], children: [
+    //     {path: "Users", component: UsersAdministrationComponent},
+    //     {path: "Roles", component: RolesAdministrationComponent},
+    //     {path: "Configuration", component: ConfigAdministrationComponent},
+    //     {path: "Projects", component: ProjectsAdministrationComponent}
+    // ]},
 ];
 
 export const adminRouting = RouterModule.forChild(routes);

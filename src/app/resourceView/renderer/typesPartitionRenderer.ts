@@ -1,7 +1,10 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {OwlServices} from "../../services/owlServices";
+// import {OwlServices} from "../../services/owlServices";
+import {PropertyServices} from "../../services/propertyServices";
+import {ResourceServices} from "../../services/resourceServices";
+import {CustomRangeServices} from "../../services/customRangeServices";
 
 @Component({
 	selector: "types-renderer",
@@ -19,26 +22,55 @@ export class TypesPartitionRenderer {
     private addBtnImgSrc = require("../../../assets/images/class_create.png");
     private removeBtnImgTitle = "Remove type"; 
     
-    constructor(private owlService:OwlServices, private browsingService: BrowsingServices) {}
+    constructor(
+        // private owlService:OwlServices,
+        private propService:PropertyServices, 
+        private resourceService: ResourceServices, private crService: CustomRangeServices,
+        private browsingService: BrowsingServices) {}
     
     //add type
-    private add() {
+    // private add() {
+    //     this.browsingService.browseClassTree("Select a class").then(
+    //         (selectedClass: any) => {
+    //             this.owlService.addType(this.resource, selectedClass).subscribe(
+    //                 stResp => this.update.emit(null)
+    //             )
+    //         },
+    //         () => {}
+    //     );
+    // }
+
+    // private remove(type: ARTURIResource) {
+    //     this.owlService.removeType(this.resource, type).subscribe(
+    //         stResp => {
+    //             this.update.emit(null);
+    //         }
+    //     );
+    // }
+
+    private enrichProperty(predicate: ARTURIResource) {
         this.browsingService.browseClassTree("Select a class").then(
             (selectedClass: any) => {
-                this.owlService.addType(this.resource, selectedClass).subscribe(
-                    stResp => this.update.emit(null)
+                this.propService.addExistingPropValue(this.resource, predicate, (<ARTResource>selectedClass).getNominalValue(), RDFTypesEnum.resource).subscribe(
+                    stResp => {
+                        this.update.emit(null);
+                    }
                 )
             },
             () => {}
         );
     }
-    
-    private remove(type: ARTURIResource) {
-        this.owlService.removeType(this.resource, type).subscribe(
-            stResp => {
-                this.update.emit(null);
-            }
-        );
+
+    private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            )
+        } else {
+            this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        }
     }
     
     private objectDblClick(obj: ARTResource) {

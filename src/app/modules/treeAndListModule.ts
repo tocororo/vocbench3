@@ -5,32 +5,35 @@ import {RouterModule} from '@angular/router';
 
 import {SharedModule} from './sharedModule';
 
-import {ConceptTreePanelComponent} from '../skos/concept/conceptTreePanel/conceptTreePanelComponent';
-import {ConceptTreeComponent} from '../skos/concept/conceptTree/conceptTreeComponent';
-import {ConceptTreeNodeComponent} from '../skos/concept/conceptTree/conceptTreeNodeComponent';
+import {TreePanelComponent} from '../trees/treePanelComponent';
 
-import {CollectionTreePanelComponent} from '../skos/collection/collectionTreePanel/collectionTreePanelComponent';
-import {CollectionTreeComponent} from '../skos/collection/collectionTree/collectionTreeComponent';
-import {CollectionTreeNodeComponent} from '../skos/collection/collectionTree/collectionTreeNodeComponent';
+import {ConceptTreePanelComponent} from '../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent';
+import {ConceptTreeComponent} from '../trees/skos/concept/conceptTree/conceptTreeComponent';
+import {ConceptTreeNodeComponent} from '../trees/skos/concept/conceptTree/conceptTreeNodeComponent';
 
-import {SchemeListPanelComponent} from '../skos/scheme/schemeListPanel/schemeListPanelComponent';
-import {SchemeListComponent} from '../skos/scheme/schemeList/schemeListComponent';
-import {SchemeListNodeComponent} from '../skos/scheme/schemeList/schemeListNodeComponent';
+import {CollectionTreePanelComponent} from '../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent';
+import {CollectionTreeComponent} from '../trees/skos/collection/collectionTree/collectionTreeComponent';
+import {CollectionTreeNodeComponent} from '../trees/skos/collection/collectionTree/collectionTreeNodeComponent';
 
-import {PropertyTreePanelComponent} from '../property/propertyTreePanel/propertyTreePanelComponent';
-import {PropertyTreeComponent} from '../property/propertyTree/propertyTreeComponent';
-import {PropertyTreeNodeComponent} from '../property/propertyTree/propertyTreeNodeComponent';
+import {SchemeListPanelComponent} from '../trees/skos/scheme/schemeListPanel/schemeListPanelComponent';
+import {SchemeListComponent} from '../trees/skos/scheme/schemeList/schemeListComponent';
+import {SchemeListNodeComponent} from '../trees/skos/scheme/schemeList/schemeListNodeComponent';
 
-import {ClassTreePanelComponent} from '../owl/classTreePanel/classTreePanelComponent';
-import {ClassTreeComponent} from '../owl/classTree/classTreeComponent';
-import {ClassTreeNodeComponent} from '../owl/classTree/classTreeNodeComponent';
+import {PropertyTreePanelComponent} from '../trees/property/propertyTreePanel/propertyTreePanelComponent';
+import {PropertyTreeComponent} from '../trees/property/propertyTree/propertyTreeComponent';
+import {PropertyTreeNodeComponent} from '../trees/property/propertyTree/propertyTreeNodeComponent';
 
-import {ClassIndividualTreeComponent} from '../owl/classIndividualTree/classIndividualTreeComponent';
-import {InstanceListComponent} from '../owl/instanceList/instanceListComponent';
+import {ClassTreePanelComponent} from '../trees/owl/classTreePanel/classTreePanelComponent';
+import {ClassTreeComponent} from '../trees/owl/classTree/classTreeComponent';
+import {ClassTreeNodeComponent} from '../trees/owl/classTree/classTreeNodeComponent';
+
+import {ClassIndividualTreeComponent} from '../trees/owl/classIndividualTree/classIndividualTreeComponent';
+import {InstanceListComponent} from '../trees/owl/instanceList/instanceListComponent'
 
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule],
     declarations: [
+        TreePanelComponent,
         ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent, 
         CollectionTreePanelComponent, CollectionTreeComponent, CollectionTreeNodeComponent,
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
@@ -39,6 +42,7 @@ import {InstanceListComponent} from '../owl/instanceList/instanceListComponent';
         ClassIndividualTreeComponent, InstanceListComponent,
     ],
     exports: [
+        TreePanelComponent,
         ConceptTreePanelComponent, ConceptTreeComponent,
         CollectionTreePanelComponent, CollectionTreeComponent,
         SchemeListPanelComponent, SchemeListComponent,

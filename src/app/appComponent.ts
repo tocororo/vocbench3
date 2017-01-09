@@ -33,18 +33,4 @@ export class AppComponent {
         return this.vbCtx.getWorkingProject() != undefined;
     }
     
-    /**
-     * returns true if a project is SKOS or SKOS-XL. Useful to show/hide navbar links available only in SKOS (ex. concept, scheme)
-     */
-    private isProjectSKOS(): boolean {
-        return (this.vbCtx.getWorkingProject().getPrettyPrintOntoType().indexOf("SKOS") > -1);
-    }
-    
-    /**
-     * returns true if a project is OWL. Useful to show/hide navbar links available only in OWL (ex. class)
-     */
-    private isProjectOWL(): boolean {
-        return (this.vbCtx.getWorkingProject().getPrettyPrintOntoType() == "OWL");
-    }
-    
 }

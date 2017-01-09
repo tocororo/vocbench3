@@ -4,13 +4,9 @@ import {AuthGuard, ProjectGuard} from "./utils/CanActivateGuards";
 
 import {HomeComponent} from "./homeComponent";
 import {ProjectComponent} from "./project/projectComponent";
-import {ConceptsComponent} from "./skos/concept/conceptsComponent";
-import {ClassComponent} from "./owl/classComponent";
-import {PropertyComponent} from "./property/propertyComponent";
-import {SchemesComponent} from "./skos/scheme/schemesComponent";
-import {CollectionsComponent} from "./skos/collection/collectionsComponent";
+import {DataComponent} from "./data/dataComponent";
 import {SparqlComponent} from "./sparql/sparqlComponent";
-import {IcvComponent} from "./icv/icvComponent";
+// import {IcvComponent} from "./icv/icvComponent";
 import {AlignmentValidationComponent} from "./alignment/alignmentValidation/alignmentValidationComponent";
 import {CustomRangeComponent} from "./customRanges/customRangeComponent";
 import {ImportProjectComponent} from "./project/importProject/importProjectComponent";
@@ -21,7 +17,7 @@ import {MetadataManagementComponent} from "./config/dataManagement/metadata/meta
 import {VocbenchSettingsComponent} from "./settings/vocbenchSettingsComponent";
 import {UserProfileComponent} from "./user/userProfileComponent";
 import {RegistrationComponent} from "./user/registrationComponent";
-import {AdministrationComponent} from "./administration/administrationComponent"
+// import {AdministrationComponent} from "./administration/administrationComponent"
 
 import {TestComponent} from "./test/testComponent";
 
@@ -30,20 +26,19 @@ export const routes: Routes = [
     {path: "Home", component: HomeComponent},
     // route config of navigation bar
     {path: "Projects", component: ProjectComponent, canActivate: [AuthGuard]},
-    {path: "Class", component: ClassComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "Property", component: PropertyComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "Concepts", component: ConceptsComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "Schemes", component: SchemesComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "Collections", component: CollectionsComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
+    // {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard]},
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},
-    {path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard]}, //TODO guard for admin?
+    // {path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard]}, 
     {path: "Test", component: TestComponent},
+    //lazy loading of module with child route
+    {path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard]},//TODO guard for admin?
+    {path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard]},
     // route config of config bar
     {path: "Config/ImportData", component: ImportDataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Config/ExportData", component: ExportDataComponent, canActivate: [AuthGuard, ProjectGuard]},

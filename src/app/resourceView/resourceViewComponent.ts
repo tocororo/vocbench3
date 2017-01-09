@@ -115,6 +115,7 @@ export class ResourceViewComponent {
         
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
+        this.resource.setAdditionalProperty(ResAttribute.EXPLICIT, true); //temporarly until Manuel will fix explicit attribute in getRerousceView response
 
         var typesPartition: any = this.resViewResponse.types;
         if (typesPartition != null) {

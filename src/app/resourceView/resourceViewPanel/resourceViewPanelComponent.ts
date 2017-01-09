@@ -4,8 +4,7 @@ import {Cookie} from "../../utils/Cookie";
 
 @Component({
     selector: "resource-view-panel",
-    templateUrl: "./resourceViewPanelComponent.html",
-    host: { class: "resViewContainer" }
+    templateUrl: "./resourceViewPanelComponent.html"
 })
 export class ResourceViewPanelComponent {
     
