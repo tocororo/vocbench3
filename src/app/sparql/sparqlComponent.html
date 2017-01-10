@@ -37,7 +37,11 @@
                         <input #inferredcb type="checkbox" (change)="t.inferred=inferredcb.checked">
                     </div>
                     <div *ngIf="t.queryResult" class="hbox pull-right" style="align-items: center">
-                        <span style="display: inline; margin-left: 5px;">(Done in {{t.queryTime}})</span>
+                        <span style="display: inline; margin-left: 5px;">
+                            <template [ngIf]="t.resultType == 'graph'">{{t.queryResult.length}} triples.</template>
+                            <template [ngIf]="t.resultType == 'tuple'">{{t.queryResult.length}} results.</template>
+                            (Done in {{t.queryTime}})
+                        </span>
                         <div class="dropdown pull-right" style="margin-left: 5px;">
                             <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
                                 Save results as... <span class="caret"></span>

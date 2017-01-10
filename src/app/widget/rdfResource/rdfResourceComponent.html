@@ -5,10 +5,10 @@
         <template [ngIf]="isResourceWithLang()">
             <!--If flag is not available write the langTag over an empty flag-->
             <div *ngIf="!isLangFlagAvailable()" class="flagIcon" [title]="getLang()">
-                <img [src]="getImgSrc()">
+                <img [src]="getImgSrc()" [ngClass]="{disabled: !isExplicit()}">
                 <span>{{getLang()}}</span>
             </div>
-            <img *ngIf="isLangFlagAvailable()" [src]="getImgSrc()" [title]="getLang()">
+            <img *ngIf="isLangFlagAvailable()" [src]="getImgSrc()" [title]="getLang()" [ngClass]="{disabled: !isExplicit()}">
         </template>
     </template>
 </div>

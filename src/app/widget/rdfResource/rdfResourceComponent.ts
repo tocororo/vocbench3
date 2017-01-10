@@ -61,10 +61,18 @@ export class RdfResourceComponent {
 	/**
 	 * Returns true if the current resource has instances. Useful to show instances number next to the resource (class)
 	 */
-	private hasInstance() {
+	private hasInstance(): boolean {
 		return (this.resource.isResource() &&
 			this.resource.getAdditionalProperty(ResAttribute.NUM_INST) &&
 			this.resource.getAdditionalProperty(ResAttribute.NUM_INST) != "0");
+	}
+
+	/**
+	 * Tells if the described resource is explicit.
+	 * Useful for flag icons since they have not the "transparent" version (as for the concept/class/property... icons)
+	 */
+	private isExplicit(): boolean {
+		return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT);
 	}
 
 }

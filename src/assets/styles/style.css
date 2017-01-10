@@ -149,7 +149,8 @@ rdf-resource .flagIcon {
 }
 rdf-resource .flagIcon > span{
     position: absolute;
-    top: 0px;
+    top: 1px;
+    left: 0px;
     width: 16px;
     margin: 0 auto;
     font-family: monospace;
@@ -224,7 +225,10 @@ reified-resource {
 }
 
 input[type="image"]:disabled  {
-	filter : grayscale(100%);
+	opacity: 0.5;
+}
+
+img.disabled  {
 	opacity: 0.5;
 }
 
