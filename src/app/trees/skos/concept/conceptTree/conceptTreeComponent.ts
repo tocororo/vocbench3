@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef, SimpleChanges } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../../utils/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
@@ -34,7 +34,7 @@ export class ConceptTreeComponent {
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
-    private workingScheme: ARTURIResource;//keep track of the selected scheme
+    private workingScheme: ARTURIResource;//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     private eventSubscriptions: any[] = [];
@@ -51,11 +51,10 @@ export class ConceptTreeComponent {
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             (newLang: string) => this.onContentLangChanged(newLang)));
-        this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-            (newScheme: ARTURIResource) => this.onSchemeChanged(newScheme)));
     }
 
     ngOnInit() {
+        this.workingScheme = this.vbCtx.getScheme();
         //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
             this.skosService.getAllSchemesList().subscribe( //old service
@@ -80,14 +79,18 @@ export class ConceptTreeComponent {
         this.initTree();
     }
 
+    /**
+     * Listener on changes of @Input scheme. When it changes, update the tree
+     */
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['scheme']) {
+            this.workingScheme = changes['scheme'].currentValue;
+            this.initTree();
+        }
+    }
+
     private initTree() {
         this.selectedNode = null;
-        //if @Input scheme is null, check the scheme from the context
-        if (this.scheme == null) {
-            this.workingScheme = this.vbCtx.getScheme();
-        } else {
-            this.workingScheme = this.scheme;
-        }
 
         this.blockDivElement.nativeElement.style.display = "block";
         // this.skosService.getTopConcepts_old(this.workingScheme, this.vbCtx.getContentLanguage(true)).subscribe( //old service
@@ -160,7 +163,7 @@ export class ConceptTreeComponent {
      * Listener to <select> element that allows to change dynamically the scheme of the
      * concept tree (visible only if @Input schemeChangeable is true).
      */
-    private onSchemeChange() {
+    private onSchemeSelectionChange() {
         this.workingScheme = this.getSchemeResourceFromUri(this.selectedSchemeUri);
         this.initTree();
         this.schemeChanged.emit(this.workingScheme);
@@ -245,11 +248,6 @@ export class ConceptTreeComponent {
         //reset the selected node
         this.nodeSelected.emit(undefined);
         //and reinitialize tree
-        this.initTree();
-    }
-
-    private onSchemeChanged(scheme: ARTURIResource) {
-        this.workingScheme = scheme;
         this.initTree();
     }
 
