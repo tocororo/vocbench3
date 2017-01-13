@@ -111,7 +111,8 @@ resource-view-splitted, resource-view-tabbed {
 }
 
 tree-panel, concept-tree-panel, scheme-list-panel, class-tree-panel, property-tree-panel, collection-tree-panel, 
-concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, class-individual-tree, resource-view {
+concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list,
+class-individual-tree, resource-view {
     display: flex;
     flex: 1;
     min-height: 0;

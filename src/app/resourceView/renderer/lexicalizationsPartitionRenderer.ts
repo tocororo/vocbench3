@@ -9,56 +9,70 @@ import {SkosxlServices} from "../../services/skosxlServices";
 import {OwlServices} from "../../services/owlServices";
 import {PropertyServices} from "../../services/propertyServices";
 
+import { CustomRangeServices } from "../../services/customRangeServices";
+import {AbstractPredicateValueListRenderer} from "./abstractPerdicateValueListRenderer";
+
 @Component({
     selector: "lexicalizations-renderer",
     templateUrl: "./predicateValueListRenderer.html",
 })
-export class LexicalizationsPartitionRenderer {
+export class LexicalizationsPartitionRenderer extends AbstractPredicateValueListRenderer {
     
-    @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
-    @Input() resource:ARTURIResource;
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+    //inherited from AbstractPredicateValueListRenderer
+    // @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
+    // @Input() resource:ARTURIResource;
+    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    private label = "Lexicalizations";
-    private addBtnImgTitle = "Add a lexicalization";
-    private addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
-    private removeBtnImgTitle = "Remove lexicalization"; 
+    rootProperties: ARTURIResource[] = [RDFS.label,
+        SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
+        SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
+    label = "Lexicalizations";
+    addBtnImgTitle = "Add a lexicalization";
+    addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
+    removeBtnImgTitle = "Remove lexicalization"; 
     
-    constructor(private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
-        private propertyService:PropertyServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
+    constructor(crService: CustomRangeServices,
+        private skosService:SkosServices, private owlService:OwlServices, private skosxlService: SkosxlServices,
+        private propertyService:PropertyServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {
+        super(crService);
+    }
+
+    add() {
+        alert("open modal to choose and valorize a property");
+    }
     
-    private add(predicate: ARTURIResource) {
+    enrichProperty(predicate: ARTURIResource) {
         this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
-                        this.skosxlService.setPrefLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                        this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
-                        this.skosxlService.addAltLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                        this.skosxlService.addAltLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
-                        this.skosxlService.addHiddenLabel(this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                        this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.prefLabel.getURI():
-                        this.skosService.setPrefLabel(this.resource, literal.value, literal.lang).subscribe(
+                        this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal.value, literal.lang).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.altLabel.getURI():
-                        this.skosService.addAltLabel(this.resource, literal.value, literal.lang).subscribe(
+                        this.skosService.addAltLabel(<ARTURIResource>this.resource, literal.value, literal.lang).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.hiddenLabel.getURI():
-                        this.skosService.addHiddenLabel(this.resource, literal.value, literal.lang).subscribe(
+                        this.skosService.addHiddenLabel(<ARTURIResource>this.resource, literal.value, literal.lang).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
@@ -74,71 +88,45 @@ export class LexicalizationsPartitionRenderer {
         );
     }
     
-    private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+    removeObjectForRootProperty(predicate: ARTURIResource, object: ARTNode) {
         switch (predicate.getURI()) {
             case SKOSXL.prefLabel.getURI():
-                this.skosxlService.removePrefLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
+                this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOSXL.altLabel.getURI():
-                this.skosxlService.removeAltLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
+                this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOSXL.hiddenLabel.getURI():
-                this.skosxlService.removeHiddenLabel(this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
+                this.skosxlService.removeHiddenLabel(<ARTURIResource>this.resource, object.getShow(), object.getAdditionalProperty(ResAttribute.LANG)).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.prefLabel.getURI():
-                this.skosService.removePrefLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removePrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.altLabel.getURI():
-                this.skosService.removeAltLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removeAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.hiddenLabel.getURI():
-                this.skosService.removeHiddenLabel(this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case RDFS.label.getURI():
-                this.propertyService.removePropValue(this.resource, predicate, (<ARTLiteral>object).getLabel(),
+                this.propertyService.removePropValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object).getLabel(),
                     null, RDFTypesEnum.plainLiteral, (<ARTLiteral>object).getLang()).subscribe(
                         stResp => this.update.emit(null)
                     );
                 break;
             }
-    }
-    
-    private objectDblClick(obj: ARTNode) {
-        //clicked object (label) can be a Resource (xlabel bnode or uri) or literal (plain label)
-        if (obj.isResource()) {//emit double click for open a new res view only for resources
-            this.dblclickObj.emit(<ARTResource>obj);
-        }
-    }
-
-    /**
-     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
-     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
-     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
-     * or the predicate has no custom range, the object should be rendered as simple rdfResource
-     * @param object object of the predicate object list to render in view.
-     */
-    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
-        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
-    }
-    
-    private getAddPropImgTitle(predicate: ARTURIResource) {
-        return "Add a " + predicate.getShow();
-    }
-    
-    private getRemovePropImgTitle(predicate: ARTURIResource) {
-        return "Remove " + predicate.getShow();
     }
     
 }

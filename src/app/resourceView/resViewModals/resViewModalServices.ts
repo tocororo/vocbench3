@@ -4,8 +4,9 @@ import {OverlayConfig} from 'angular2-modal';
 import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreatorModal";
 import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
 import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
+import {AddPropertyValueModal, AddPropertyValueModalData} from "./addPropertyValueModal";
 import {CustomFormModal, CustomFormModalData} from "../../customRanges/customForm/customFormModal";
-import {ARTURIResource} from '../../utils/ARTResources';
+import {ARTResource, ARTURIResource} from '../../utils/ARTResources';
 
 /**
  * Service to open modals that allow to create a classes list or instances list
@@ -81,6 +82,28 @@ export class ResViewModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(CustomFormModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal that allows to select a property and add a value to it.
+     * Returns and object containing "property" and "value".
+     * @param title title of the dialog
+     * @param resource resource that is going to enrich with the property-value pair.
+     * @param properties root properties that the modal should allow to enrich
+     * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
+     *  If false, the button to change property is hidden
+     */
+    addPropertyValue(title: string, resource: ARTResource, properties: ARTURIResource[], propChangeable?: boolean) {
+        var modalData = new AddPropertyValueModalData(title, resource, properties, propChangeable);
+        const builder = new BSModalContextBuilder<AddPropertyValueModalData>(
+            modalData, undefined, AddPropertyValueModalData
+        );
+        // builder.size("lg").keyboard(null);
+        builder.keyboard(null);
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(AddPropertyValueModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

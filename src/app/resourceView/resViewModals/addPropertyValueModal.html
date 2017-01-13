@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body vbox" style="height:70vh;">
+
+    <div style="margin-bottom: 4px;">
+        <label>Property:</label>
+        <rdf-resource [resource]="selectedProperty"></rdf-resource>
+        <!-- TODO this button should be disabled if the rootProperty is just one and it has no subProperties.
+            This requires Property service to know if a property has subProperties -->
+        <button *ngIf="context.propChangeable" class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()">Change</button>
+
+        <div *ngIf="showClassManchSelector()" class="btn-group btn-group-xs pull-right">
+            <button class="btn btn-default" [ngClass]="{active: !manchExprEnabled}" (click)="manchExprEnabled = false">Existing class</button>
+            <button class="btn btn-default" [ngClass]="{active: manchExprEnabled}" (click)="manchExprEnabled = true">Manchester expression</button>
+        </div>
+    </div>
+
+    <!--Alternative views-->
+    <class-tree *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)"></class-tree>
+    <concept-tree *ngIf="showConceptTree()" [scheme]="scheme" schemeChangeable="true" (nodeSelected)="onResourceSelected($event)"></concept-tree>
+    <scheme-list *ngIf="showSchemeList()" (nodeSelected)="onResourceSelected($event)"></scheme-list>
+    <resource-list *ngIf="showDatatypeList()" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
+    <instance-list *ngIf="showInstanceList()" [cls]="getClassForInstanceList()" (nodeSelected)="onResourceSelected($event)"></instance-list>
+    <input *ngIf="manchExprEnabled" type="text" class="form-control input-sm" [(ngModel)]="manchExpr" placeholder="Manchester expression">
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

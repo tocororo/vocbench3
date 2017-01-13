@@ -180,7 +180,8 @@ export class InstanceListComponent {
     }
     
     private onTypeRemoved(instance: ARTURIResource, cls: ARTURIResource) {
-        if (this.cls.getURI() == cls.getURI()) {
+        //check of cls not undefined is required if instance list has never been initialized with an @Input class
+        if (this.cls && this.cls.getURI() == cls.getURI()) {
             for (var i=0; i < this.instanceList.length; i++) {
                 if (this.instanceList[i].getURI() == instance.getURI()) {
                     this.instanceList.splice(i, 1);

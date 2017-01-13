@@ -38,8 +38,7 @@
                     </div>
                     <div *ngIf="t.queryResult" class="hbox pull-right" style="align-items: center">
                         <span style="display: inline; margin-left: 5px;">
-                            <template [ngIf]="t.resultType == 'graph'">{{t.queryResult.length}} triples.</template>
-                            <template [ngIf]="t.resultType == 'tuple'">{{t.queryResult.length}} results.</template>
+                            <template [ngIf]="t.resultType != 'boolean'">Results count: {{t.queryResult.length}}</template>
                             (Done in {{t.queryTime}})
                         </span>
                         <div class="dropdown pull-right" style="margin-left: 5px;">

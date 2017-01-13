@@ -131,10 +131,10 @@ export class CustomRangeServices {
      * @param entryMap array of object {userPrompt: string, value: string} where "userPrompt" is the feature
      * name in the pearl rule which its "value" is provided by means a custom form
      */
-    runCoda(subject: ARTURIResource, predicate: ARTURIResource, crEntryId: string, entryMap: Array<any>) {
+    runCoda(subject: ARTResource, predicate: ARTURIResource, crEntryId: string, entryMap: Array<any>) {
         console.log("[CustomRangeServices] runCoda");
         var params: any = {
-            subject: subject.getURI(),
+            subject: subject.getNominalValue(),
             predicate: predicate.getURI(),
             crEntryId: crEntryId,
         };

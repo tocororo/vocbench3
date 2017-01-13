@@ -298,6 +298,10 @@ export class SkosServices {
             params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName_old, "addConceptToScheme", params, this.oldTypeService);
+        /**
+         * here I should emit an event conceptAddedToSchemEvent with {concept, scheme, broader?}
+         * where borader is optional and tells if the concept should appear under another concept or it's a topConcept
+         */
     }
 
     /**

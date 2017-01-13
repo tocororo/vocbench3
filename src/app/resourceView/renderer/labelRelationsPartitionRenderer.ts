@@ -1,52 +1,70 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode } from "../../utils/ARTResources";
-import { SKOSXL } from "../../utils/Vocabulary";
-import { RDFTypesEnum } from "../../utils/ARTResources";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
+import { CustomRangeServices } from "../../services/customRangeServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../utils/ARTResources";
+import { SKOSXL } from "../../utils/Vocabulary";
 
 @Component({
     selector: "label-relations-renderer",
-    templateUrl: "./objectListRenderer.html",
+    templateUrl: "./predicateObjectListRenderer.html",
 })
-export class LaberRelationsPartitionRenderer {
+export class LaberRelationsPartitionRenderer extends AbstractPredicateObjectListRenderer {
 
-    @Input('object-list') objectList: ARTResource[];
-    @Input() resource: ARTURIResource;
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+    //inherited from AbstractPredicateObjectListRenderer
+    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    // @Input() resource:ARTURIResource;
+    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    private label = "Label relations";
-    private addBtnImgTitle = "Add a relation";
-    private removeBtnImgTitle = "Remove relation";
+    rootProperty: ARTURIResource = SKOSXL.labelRelation;
+    label = "Label relations";
+    addBtnImgTitle = "Add a label relation";
+    addBtnImgSrc = require("../../../assets/images/propObject_create.png");
+    removeBtnImgTitle = "Remove label relation";
 
-    constructor(private propertyService: PropertyServices, private resourceService: ResourceServices,
-        private resViewModalService: ResViewModalServices, private browsingService: BrowsingServices) { }
+    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+        private rvModalService: ResViewModalServices) {
+        super(propService, resourceService, crService);
+    }
 
-    //add type
-    private add() {
-        this.resViewModalService.enrichProperty("Add " + SKOSXL.labelRelation.getShow(), SKOSXL.labelRelation, [SKOSXL.label]).then(
-            resource => {
-                this.propertyService.addExistingPropValue(
-                    this.resource, SKOSXL.labelRelation, resource.getNominalValue(), RDFTypesEnum.resource).subscribe(
+    add() {
+        this.rvModalService.addPropertyValue("Add a label relation", this.resource, [this.rootProperty]).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var label: ARTResource = data.value;
+                this.propService.addExistingPropValue(this.resource, prop, label.getNominalValue(), RDFTypesEnum.resource).subscribe(
                     stResp => this.update.emit(null)
-                    )
+                );
             },
-            () => { }
+            () => {}
+        )
+    }
+
+    enrichProperty(predicate: ARTURIResource) {
+        this.rvModalService.addPropertyValue("Add a " + predicate.getShow(), this.resource, [predicate], false).then(
+            (data: any) => {
+                var label: ARTResource = data.value;
+                this.propService.addExistingPropValue(this.resource, predicate, label.getNominalValue(), RDFTypesEnum.resource).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            },
+            () => {}
         );
     }
 
-    private remove(label: ARTURIResource) {
-        this.resourceService.removePropertyValue(this.resource, SKOSXL.labelRelation, label).subscribe(
-            stResp => this.update.emit(null)
-        );
+    removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        } else {
+            this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        }
     }
-
-    private objectDblClick(obj: ARTResource) {
-        this.dblclickObj.emit(obj);//clicked object (type) can be a URIResource or BNode
-    }
-
 
 }

@@ -205,11 +205,11 @@ export class OwlServices {
      * @param resource the resource whose the type need to be removed
      * @param type type to remove 
      */
-    removeType(resource: ARTURIResource, type: ARTURIResource) {
+    removeType(resource: ARTURIResource, type: ARTResource) {
         console.log("[owlServices] removeType");
         var params: any = {
             indqname: resource.getURI(),
-            typeqname: type.getURI(),
+            typeqname: type.getNominalValue(),
         };
         return this.httpMgr.doGet("individual", "removeType", params, this.oldTypeService).map(
             stResp => {

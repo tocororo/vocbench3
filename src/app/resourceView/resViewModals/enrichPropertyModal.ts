@@ -2,9 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource, ResAttribute} from '../../utils/ARTResources';
-import {VocbenchCtx} from '../../utils/VocbenchCtx';
 import {SKOS} from '../../utils/Vocabulary';
-import {PropertyServices} from '../../services/propertyServices';
 
 export class EnrichPropertyModalData extends BSModalContext {
     /**
@@ -35,11 +33,8 @@ export class EnrichPropertyModal implements ModalComponent<EnrichPropertyModalDa
     private treeRoots: ARTURIResource[];
     private selectedInstance: ARTURIResource;
     
-    vbCtx: VocbenchCtx;
-
-    constructor(public dialog: DialogRef<EnrichPropertyModalData>, vbCtx: VocbenchCtx) {
+    constructor(public dialog: DialogRef<EnrichPropertyModalData>) {
         this.context = dialog.context;
-        this.vbCtx = vbCtx;
     }
     
     ngOnInit() {

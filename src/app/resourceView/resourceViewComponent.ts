@@ -188,6 +188,10 @@ export class ResourceViewComponent {
         }
 
         var labelRelationsPartition: any = this.resViewResponse.labelRelations;
+        if (labelRelationsPartition != null) {
+            this.labelRelationsColl = Deserializer.createPredicateObjectsList(labelRelationsPartition);
+            this.filterInferredFromPredObjList(this.labelRelationsColl);
+        }
 
         var propertiesPartition: any = this.resViewResponse.properties;
         this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
@@ -195,20 +199,20 @@ export class ResourceViewComponent {
 
     }
     
-    /**
-     * Based on the showInferred param, filter out or let pass inferred information in an object list
-     */
-    private filterInferredFromResourceList(resourceArray: ARTNode[]): ARTNode[] {
-        if (!this.showInferred) {
-            for (var i = 0; i < resourceArray.length; i++) {
-                if (resourceArray[i].getAdditionalProperty(ResAttribute.GRAPHS).includes("http://semanticturkey/inference-graph")) {
-                    resourceArray.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-        return resourceArray;
-    }
+    // /**
+    //  * Based on the showInferred param, filter out or let pass inferred information in an object list
+    //  */
+    // private filterInferredFromResourceList(resourceArray: ARTNode[]): ARTNode[] {
+    //     if (!this.showInferred) {
+    //         for (var i = 0; i < resourceArray.length; i++) {
+    //             if (resourceArray[i].getAdditionalProperty(ResAttribute.GRAPHS).includes("http://semanticturkey/inference-graph")) {
+    //                 resourceArray.splice(i, 1);
+    //                 i--;
+    //             }
+    //         }
+    //     }
+    //     return resourceArray;
+    // }
     
     /**
      * Based on the showInferred param, filter out or let pass inferred information in a predicate-objects list

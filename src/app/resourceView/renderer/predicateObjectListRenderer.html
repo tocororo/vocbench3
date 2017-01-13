@@ -1,4 +1,59 @@
-<div class="groupPanel" *ngIf="predicateObjectList.length != 1">
+<!--<div class="groupPanel" *ngIf="predicateObjectList.length != 1">
+    <div class="groupPanel-heading">
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <span class="groupPanel-heading-content">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+        </span>
+    </div>
+
+    <div class="groupPanel-body">
+        <div class="subPanel" *ngFor="let po of predicateObjectList"> -->
+            <!-- each item is a predicateObjects -->
+            <!-- <div class="subPanel-heading">
+                <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
+                    [disabled]="!resource.getAdditionalProperty('explicit')">
+                    <span>+</span>
+                </button>
+            </div>
+            <div class="subPanel-body">
+                <div *ngFor="let obj of po.getObjects()" class="listItem">
+                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
+                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="subPanel" *ngIf="predicateObjectList.length == 1">
+    <div class="subPanel-heading">
+        <label style="flex: 1">{{label}}:</label>
+        <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+    </div>
+    <div class="subPanel-body">
+        <div *ngFor="let obj of predicateObjectList[0].getObjects()" class="listItem">
+            <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+            <button class="resViewPartitionBtn" [title]="removeBtnImgTitle" [disabled]="!obj.getAdditionalProperty('explicit')"
+                (click)="removePredicateObject(predicateObjectList[0].getPredicate(), obj)">
+                <span>-</span>
+            </button>
+        </div>
+    </div>
+</div>-->
+
+
+<div class="groupPanel">
     <div class="groupPanel-heading">
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
@@ -34,58 +89,3 @@
         </div>
     </div>
 </div>
-
-<div class="subPanel" *ngIf="predicateObjectList.length == 1">
-    <div class="subPanel-heading">
-        <label style="flex: 1">{{label}}:</label>
-        <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
-                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
-    </div>
-    <div class="subPanel-body">
-        <div *ngFor="let obj of predicateObjectList[0].getObjects()" class="listItem">
-            <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-            <button class="resViewPartitionBtn" [title]="removeBtnImgTitle" (click)="remove(obj)"  
-                [disabled]="!obj.getAdditionalProperty('explicit')">
-                <span>-</span>
-            </button>
-        </div>
-    </div>
-</div>
-
-
-<!--<div class="groupPanel">
-    <div class="groupPanel-heading">
-        <span style="flex: 1">
-            <label class="groupPanel-heading-content">{{label}}:</label>
-        </span>
-        <span class="groupPanel-heading-content">
-            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
-                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
-        </span>
-    </div>
-
-    <div class="groupPanel-body">
-        <div class="subPanel" *ngFor="let po of predicateObjectList">-->
-            <!-- each item is a predicateObjects -->
-            <!--<div class="subPanel-heading">
-                <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
-                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
-                    [disabled]="!resource.getAdditionalProperty('explicit')">
-                    <span>+</span>
-                </button>
-            </div>
-            <div class="subPanel-body">
-                <div *ngFor="let obj of po.getObjects()" class="listItem">
-                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
-                        (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
-                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
-                        (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
-                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
-                        <span>-</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->

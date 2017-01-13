@@ -1,67 +1,99 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute} from "../../utils/ARTResources";
-import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {SkosServices} from "../../services/skosServices";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { PropertyServices } from "../../services/propertyServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { CustomRangeServices } from "../../services/customRangeServices";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { SkosServices } from "../../services/skosServices";
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
+import { VBEventHandler } from "../../utils/VBEventHandler"
+import { SKOS } from "../../utils/Vocabulary"
+
 
 @Component({
-	selector: "top-concepts-renderer",
-	templateUrl: "./predicateObjectListRenderer.html",
+    selector: "top-concepts-renderer",
+    templateUrl: "./predicateObjectListRenderer.html",
 })
-export class TopConceptsPartitionRenderer {
-    
-    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    @Input() resource:ARTURIResource;
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-    
-    private label = "Top Concept of";
-    private addBtnImgTitle = "Add to a ConceptScheme as topConcept";
-    private addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
-    private removeBtnImgTitle = "Remove as topConcept";
-    
-    constructor(private skosService:SkosServices, private browsingService: BrowsingServices) {}
-    
+export class TopConceptsPartitionRenderer extends AbstractPredicateObjectListRenderer {
+
+    //inherited from AbstractPredicateObjectListRenderer
+    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    // @Input() resource: ARTURIResource;
+    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
+
+    rootProperty: ARTURIResource = SKOS.topConceptOf;
+    label = "Top Concept of";
+    addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
+    addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
+    removeBtnImgTitle = "Remove as topConcept";
+
+    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices, 
+        private skosService: SkosServices, private eventHandler: VBEventHandler, 
+        private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
+        super(propService, resourceService, crService);
+    }
+
     //add as top concept
-    private add() {
-        this.browsingService.browseSchemeList("Select a scheme").then(
-            (selectedScheme: any) => {
-                this.skosService.addTopConcept(this.resource, selectedScheme).subscribe(
-                    stResp => this.update.emit(null)
-                );
+    add() {
+        this.rvModalService.addPropertyValue("Set as top Concept of", this.resource, [this.rootProperty]).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var scheme: ARTURIResource = data.value;
+                if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:topConceptOf
+                    this.skosService.addTopConcept(<ARTURIResource>this.resource, scheme).subscribe(
+                        stResp => this.update.emit(null)
+                    ) ;
+                } else { //it's adding a subProperty of skos:topConceptOf
+                    this.propService.addExistingPropValue(this.resource, prop, scheme.getURI(), RDFTypesEnum.resource).subscribe(
+                        stResp => {
+                            this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, scheme: scheme});
+                            this.update.emit(null);
+                        }
+                    );
+                }
             },
             () => {}
         );
     }
-    
-    private remove(scheme: ARTURIResource) {
-        this.skosService.removeTopConcept(this.resource, scheme).subscribe(
-            stResp => {
-                this.update.emit(null);
-            }
+
+    enrichProperty(predicate: ARTURIResource) {
+        this.browsingService.browseSchemeList("Add a " + predicate.getShow()).then(
+            (selectedScheme: any) => {
+                if (predicate.getURI() == this.rootProperty.getURI()) {
+                    this.skosService.addTopConcept(<ARTURIResource>this.resource, selectedScheme).subscribe(
+                        stResp => this.update.emit()
+                    );
+                } else { //predicate is some subProperty of skos:topConceptOf
+                    this.propService.addExistingPropValue(this.resource, predicate, (<ARTURIResource>selectedScheme).getNominalValue(), RDFTypesEnum.resource).subscribe(
+                        stResp => this.update.emit(null)
+                    );
+                }
+            },
+            () => { }
         );
     }
-    
-    private objectDblClick(obj: ARTNode) {
-        this.dblclickObj.emit(<ARTURIResource>obj);//clicked object (scheme) can only be a URIResource
+
+    removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        } else {
+            if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:topConceptOf relation
+                this.skosService.removeTopConcept(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            } else {//predicate is some subProperty of skos:topConceptOf
+                this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                    stResp => {
+                        this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object});
+                        this.update.emit(null);
+                    }
+                );
+            }
+        }
     }
 
-    /**
-     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
-     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
-     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
-     * or the predicate has no custom range, the object should be rendered as simple rdfResource
-     * @param object object of the predicate object list to render in view.
-     */
-    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
-        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
-    }
-
-    private getAddPropImgTitle(predicate: ARTURIResource) {
-        return "Add a " + predicate.getShow();
-    }
-    
-    private getRemovePropImgTitle(predicate: ARTURIResource) {
-        return "Remove " + predicate.getShow();
-    }
-    
 }

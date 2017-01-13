@@ -13,94 +13,63 @@ import {Project} from './Project';
 export class VBEventHandler {
     
     //CONCEPT EVENTS
-    //event should contain an object with "concept" and "scheme"
-    public topConceptCreatedEvent: EventEmitter<any> = new VBEventEmitter("topConceptCreatedEvent");
-    //event should contain an object with "narrower" (the narrower created) and "broader"
-    public narrowerCreatedEvent: EventEmitter<any> = new VBEventEmitter("narrowerCreatedEvent");
-    //event should contain an object with "narrower" and "broader"
-    public broaderAddedEvent: EventEmitter<any> = new VBEventEmitter("broaderAddedEvent");
-    //event should contain the deleted concept
+    public topConceptCreatedEvent: EventEmitter<{concept: ARTURIResource, scheme: ARTURIResource}> = new VBEventEmitter("topConceptCreatedEvent");
+    public narrowerCreatedEvent: EventEmitter<{narrower: ARTURIResource, broader: ARTURIResource}> = new VBEventEmitter("narrowerCreatedEvent");
+    public broaderAddedEvent: EventEmitter<{narrower: ARTURIResource, broader: ARTURIResource}> = new VBEventEmitter("broaderAddedEvent");
+    //optional "broader" (if not top Concept) to tells the position where the concept should be attached in the tree
+    //NOTE: this is still not used since the server support is missing (it needs a response that tells if the concept has broader)
+    public conceptAddedToSchemeEvent: EventEmitter<{concept: ARTURIResource, scheme: ARTURIResource, broader?: ARTURIResource}> = new VBEventEmitter("conceptAddedToSchemeEvent");
     public conceptDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("conceptDeletedEvent");
-    //event should contain an object with "concept" and "scheme"
-    public conceptRemovedFromSchemeEvent: EventEmitter<any> = new VBEventEmitter("conceptRemovedFromSchemeEvent");
-    //event should contain an object with "concept" and "scheme"
-    public conceptRemovedAsTopConceptEvent: EventEmitter<any> = new VBEventEmitter("conceptRemovedAsTopConceptEvent");
-    //event should contain an object with "concept" and "broader"
-    public broaderRemovedEvent: EventEmitter<any> = new VBEventEmitter("broaderRemovedEvent");
+    public conceptRemovedFromSchemeEvent: EventEmitter<{concept: ARTURIResource, scheme: ARTURIResource}> = new VBEventEmitter("conceptRemovedFromSchemeEvent");
+    public conceptRemovedAsTopConceptEvent: EventEmitter<{concept: ARTURIResource, scheme: ARTURIResource}> = new VBEventEmitter("conceptRemovedAsTopConceptEvent");
+    public broaderRemovedEvent: EventEmitter<{concept: ARTURIResource, broader: ARTURIResource}> = new VBEventEmitter("broaderRemovedEvent");
 
     //SCHEME EVENTS
     //event should contain the selected scheme
     public schemeChangedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeChangedEvent");
 
     //COLLECTION EVENTS
-    //event should contain the created collection
     public rootCollectionCreatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTURIResource>("rootCollectionCreatedEvent");
-    //event should contain an object with "nested" (the nested coll created) and "container"
-    public nestedCollectionCreatedEvent: EventEmitter<any> = new VBEventEmitter("nestedCollectionCreatedEvent");
-    //event should contain an object with "nested" (the nested coll added) and "container"
-    public nestedCollectionAddedEvent: EventEmitter<any> = new VBEventEmitter("nestedCollectionAddedEvent");
-    //event should contain an object with "nested" (the nested coll added), "container"
-    public nestedCollectionAddedFirstEvent: EventEmitter<any> = new VBEventEmitter("nestedCollectionAddedFirstEvent");
-    //event should contain an object with "nested" (the nested coll added), "container"
-    public nestedCollectionAddedLastEvent: EventEmitter<any> = new VBEventEmitter("nestedCollectionAddedLastEvent");
-    //event should contain an object with "nested" (the nested coll added), "container" and "position"
-    public nestedCollectionAddedInPositionEvent: EventEmitter<any> = new VBEventEmitter("nestedCollectionAddedInPositionEvent");
-    //event should contain an object with "nested" (the nested coll removed) and "container"
-    public nestedCollectionRemovedEvent: EventEmitter<any> = new VBEventEmitter("nestedCollectionRemovedEvent");
-    //event should contain the deleted collection
+    public nestedCollectionCreatedEvent: EventEmitter<{nested: ARTResource, container: ARTResource}> = new VBEventEmitter("nestedCollectionCreatedEvent");
+    public nestedCollectionAddedEvent: EventEmitter<{nested: ARTResource, container: ARTResource}> = new VBEventEmitter("nestedCollectionAddedEvent");
+    public nestedCollectionAddedFirstEvent: EventEmitter<{nested: ARTResource, container: ARTResource}> = new VBEventEmitter("nestedCollectionAddedFirstEvent");
+    public nestedCollectionAddedLastEvent: EventEmitter<{nested: ARTResource, container: ARTResource}> = new VBEventEmitter("nestedCollectionAddedLastEvent");
+    public nestedCollectionAddedInPositionEvent: EventEmitter<{nested: ARTResource, container: ARTResource, position: number}> = new VBEventEmitter("nestedCollectionAddedInPositionEvent");
+    public nestedCollectionRemovedEvent: EventEmitter<{nested: ARTResource, container: ARTResource}> = new VBEventEmitter("nestedCollectionRemovedEvent");
     public collectionDeletedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("collectionDeletedEvent");
     
     //CLASS EVENTS
-    //event should contain an object with "subClass" (the subClass created) and "superClass"
-    public subClassCreatedEvent: EventEmitter<any> = new VBEventEmitter("subClassCreatedEvent");
-    //event should contain an object with "subClass" and "superClass"
-    public superClassAddedEvent: EventEmitter<any> = new VBEventEmitter("superClassAddedEvent");
-    //event should contain the deleted class
+    public subClassCreatedEvent: EventEmitter<{subClass: ARTResource, superClass: ARTResource}> = new VBEventEmitter("subClassCreatedEvent");
+    public superClassAddedEvent: EventEmitter<{subClass: ARTResource, superClass: ARTResource}> = new VBEventEmitter("superClassAddedEvent");
     public classDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("classDeletedEvent");
-    //event should contain an object with "resource" and "type"
-    public typeRemovedEvent: EventEmitter<any> = new VBEventEmitter("typeRemovedEvent");
-    //event should contain an object with "resource" and "type"
-    public typeAddedEvent: EventEmitter<any> = new VBEventEmitter("typeAddedEvent");
-    //event should contain an object with "cls" and "subClass"
-    public subClassRemovedEvent: EventEmitter<any> = new VBEventEmitter("subClassRemovedEvent");
+    public typeRemovedEvent: EventEmitter<{resource: ARTResource, type: ARTResource}> = new VBEventEmitter("typeRemovedEvent");
+    public typeAddedEvent: EventEmitter<{resource: ARTResource, type: ARTResource}> = new VBEventEmitter("typeAddedEvent");
+    public subClassRemovedEvent: EventEmitter<{cls: ARTResource, subClass: ARTResource}> = new VBEventEmitter("subClassRemovedEvent");
     
     //INSTANCE EVENTS
-    //event should contain an object with "instance" and "cls" (the class of the instance)
-    public instanceCreatedEvent: EventEmitter<any> = new VBEventEmitter("instanceCreatedEvent");
-    //event should contain an object with "instance" and "cls"
-    public instanceDeletedEvent: EventEmitter<any> = new VBEventEmitter("instanceDeletedEvent");
+    public instanceCreatedEvent: EventEmitter<{instance: ARTResource, cls: ARTResource}> = new VBEventEmitter("instanceCreatedEvent");
+    public instanceDeletedEvent: EventEmitter<{instance: ARTResource, cls: ARTResource}> = new VBEventEmitter("instanceDeletedEvent");
     
     //PROPERTY EVENTS
     public topPropertyCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("topPropertyCreatedEvent");
-    //event should contain an object with "subProperty" (the subproperty created) and "superProperty"
-    public subPropertyCreatedEvent: EventEmitter<any> = new VBEventEmitter("subPropertyCreatedEvent");
-    //event should contain an object with "subProperty" and "superProperty"
-    public superPropertyAddedEvent: EventEmitter<any> = new VBEventEmitter("superPropertyAddedEvent");
-    //event should contain the deleted property
+    public subPropertyCreatedEvent: EventEmitter<{subProperty: ARTURIResource, superProperty: ARTURIResource}> = new VBEventEmitter("subPropertyCreatedEvent");
+    public superPropertyAddedEvent: EventEmitter<{subProperty: ARTURIResource, superProperty: ARTURIResource}> = new VBEventEmitter("superPropertyAddedEvent");
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("propertyDeletedEvent");
-    //event should contain an object with "property" and "superProperty"
-    public superPropertyRemovedEvent: EventEmitter<any> = new VBEventEmitter("superPropertyRemovedEvent");
+    public superPropertyRemovedEvent: EventEmitter<{property: ARTURIResource, superProperty: ARTURIResource}> = new VBEventEmitter("superPropertyRemovedEvent");
     
     //LABEL EVENTS
-    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
-    public skosPrefLabelSetEvent: EventEmitter<any> = new VBEventEmitter("skosPrefLabelSetEvent");
-    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
-    public skosPrefLabelRemovedEvent: EventEmitter<any> = new VBEventEmitter("skosPrefLabelRemovedEvent");
-    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
-    public skosxlPrefLabelSetEvent: EventEmitter<any> = new VBEventEmitter("skosxlPrefLabelSetEvent");
-    //event should contain an object with "resource" (resource which the label has been set) "label" and "lang"
-    public skosxlPrefLabelRemovedEvent: EventEmitter<any> = new VBEventEmitter("skosxlPrefLabelRemovedEvent");
+    public skosPrefLabelSetEvent: EventEmitter<{resource: ARTResource, label: string, lang: string}> = new VBEventEmitter("skosPrefLabelSetEvent");
+    public skosPrefLabelRemovedEvent: EventEmitter<{resource: ARTResource, label: string, lang: string}> = new VBEventEmitter("skosPrefLabelRemovedEvent");
+    public skosxlPrefLabelSetEvent: EventEmitter<{resource: ARTResource, label: string, lang: string}> = new VBEventEmitter("skosxlPrefLabelSetEvent");
+    public skosxlPrefLabelRemovedEvent: EventEmitter<{resource: ARTResource, label: string, lang: string}> = new VBEventEmitter("skosxlPrefLabelRemovedEvent");
     
     
     //MISC EVENTS 
     
-    //event should contain an object with "oldResource" and "newResource"
-    public resourceRenamedEvent: EventEmitter<any> = new VBEventEmitter("resourceRenamedEvent");
+    public resourceRenamedEvent: EventEmitter<{oldResource: ARTResource, newResource: ARTResource}> = new VBEventEmitter("resourceRenamedEvent");
     
-    //event contains the new content language
     public contentLangChangedEvent: EventEmitter<string> = new VBEventEmitter<string>("contentLangChangedEvent");
     
-    //event contains the project closed
     public projectClosedEvent: EventEmitter<Project> = new VBEventEmitter<Project>("projectClosedEvent"); 
     
 	constructor() {}
@@ -117,7 +86,6 @@ export class VBEventHandler {
 }
 
 class VBEventEmitter<T> extends EventEmitter<T> {
-
     private eventName: string
 
     constructor(eventName: string, isAsync?: boolean) {
@@ -129,9 +97,5 @@ class VBEventEmitter<T> extends EventEmitter<T> {
         console.debug("[", this.eventName, "]", value);
         super.emit(value);
     }
-
-    // subscribe(generatorOrNext?: any, error?: any, complete?: any): any {
-    //     super.subscribe(generatorOrNext, error, complete);
-    // }
 
 }

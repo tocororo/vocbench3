@@ -1,4 +1,6 @@
-import {Directive, ElementRef, Input, SimpleChanges} from '@angular/core';
+import { Directive, ElementRef, Input, SimpleChanges } from '@angular/core';
+import { NgModel } from '@angular/forms';
+
 
 /**
  * Directive to sanitize a text in an input text element
@@ -17,35 +19,35 @@ import {Directive, ElementRef, Input, SimpleChanges} from '@angular/core';
     }
 })
 export class SanitizerDirective {
-    
+
     @Input('sanitized') active: boolean;
-    
+
     private sourceChar = " ";
     private targetChar = "_";
-    
-    constructor(private el: ElementRef) {}
-    
+
+    constructor(private el: ElementRef, private model: NgModel) { }
+
     ngOnChanges(changes: SimpleChanges) {
         //check needed when sanitized is used as <input type="text" sanitized>, so active is bound as ""
         if (changes['active'].currentValue === "") {
             this.active = true;
         }
     }
-    
+
     /**
 	 * Sanitizes the input text replacing the white space with underscore.
 	 * @param text the input text to sanitize
 	 */
-	sanitize(text: string) {
+    sanitize(text: string) {
         //'g' = global match (find all matches, doesn't stop after 1st match)
-		var text = text.replace(new RegExp(this.sourceChar, 'g'), this.targetChar);
-		return text;
-	}
-    
+        var text = text.replace(new RegExp(this.sourceChar, 'g'), this.targetChar);
+        return text;
+    }
+
     /**
      * Sanitized pasted text
      */
-    onPasteListener = function(event: ClipboardEvent) {
+    onPasteListener = function (event: ClipboardEvent) {
         if (this.active) {
             var inputElement = this.el.nativeElement;
             var txtContent = inputElement.value;
@@ -63,18 +65,21 @@ export class SanitizerDirective {
             // Move the cursor
             inputElement.selectionStart = inputElement.selectionEnd = start + transformedText.length;
 
-            event.preventDefault();//prevent the default keypress listener
+            event.preventDefault();//prevent the default ctrl+v keypress listener
+
+            //To fix missing ngModel update after paste http://stackoverflow.com/a/41240843/5805661
+            this.model.control.setValue(transformedText);
         }
     }
 
     /**
      * Sanitizes typed text
      */
-    onKeypressListener = function(event: KeyboardEvent) {
+    onKeypressListener = function (event: KeyboardEvent) {
         if (this.active) {
             var inputElement = this.el.nativeElement;
             var txtContent = inputElement.value;
-            
+
             var charPressed = String.fromCharCode(event.which);
 
             if (charPressed == this.sourceChar) {
@@ -91,5 +96,5 @@ export class SanitizerDirective {
             }
         }
     }
-    
+
 }

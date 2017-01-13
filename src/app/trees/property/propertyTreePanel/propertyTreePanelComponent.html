@@ -2,7 +2,7 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create Property" (click)="createProperty()">
+            <!--<button class="btn btn-default" title="Create Property" (click)="createProperty()">
                 <img src="../../../../assets/images/prop_create.png" />
             </button>
             <button class="btn btn-default" title="Create Object Property" (click)="createObjectProperty()">
@@ -16,7 +16,41 @@
             </button>
             <button class="btn btn-default" title="Create Ontology Property" (click)="createOntologyProperty()">
                 <img src="../../../../assets/images/propOntology_create.png" />
-            </button>
+            </button>-->
+
+            <div class="btn-group btn-group-xs" role="group">
+                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property">
+                    <img src="../../../../assets/images/prop_create.png"/>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a (click)="createProperty()">
+                            <img src="../../../../assets/images/prop.png"/>rdf:Property
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createObjectProperty()">
+                            <img src="../../../../assets/images/propObject.png"/>owl:ObjectProperty
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createDatatypeProperty()">
+                            <img src="../../../../assets/images/propDatatype.png"/>owl:DatatypeProperty
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createAnnotationProperty()">
+                            <img src="../../../../assets/images/propAnnotation.png"/>owl:AnnotationProperty
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="createOntologyProperty()">
+                            <img src="../../../../assets/images/propOntology.png"/>owl:OntologyProperty
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
             <button class="btn btn-default" title="Create SubProperty" (click)="createSubProperty()" [disabled]="!selectedProperty">
                 <img src="../../../../assets/images/prop_addSubProperty.png" />
             </button>

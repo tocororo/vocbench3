@@ -40,7 +40,7 @@ export class PropertyTreePanelComponent {
     private createPropertyForType(type: RDFResourceRolesEnum) {
         //currently uses prompt instead of newResource since addProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a new " + type, "Name", null, false, true).then(
-            result => {
+            (result: any) => {
                 this.propService.addProperty(result, type).subscribe();
             },
             () => { }
@@ -50,7 +50,7 @@ export class PropertyTreePanelComponent {
     private createSubProperty() {
         //currently uses prompt instead of newResource since addSubProperty service doesn't allow to provide a label
         this.modalService.prompt("Create a subProperty", "Name", null, false, true).then(
-            result => {
+            (result: any) => {
                 this.propService.addSubProperty(result, this.selectedProperty).subscribe();
             },
             () => { }

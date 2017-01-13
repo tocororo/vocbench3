@@ -52,7 +52,7 @@
         <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" 
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </members-ordered-renderer>
-        <label-relations-renderer *ngIf="labelRelationsColl" [object-list]="labelRelationsColl" 
+        <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" 
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </label-relations-renderer>
         <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" 

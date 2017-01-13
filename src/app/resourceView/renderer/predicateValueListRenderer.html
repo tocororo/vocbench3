@@ -3,9 +3,13 @@
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
-        <div class="groupPanel-heading-content dropdown pull-right">
+        <span class="groupPanel-heading-content">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+        </span>
+        <!--<div class="groupPanel-heading-content dropdown pull-right">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
-                title="Add a lexicalization" [disabled]="!resource.getAdditionalProperty('explicit')">
+                [title]="addBtnImgTitle" [disabled]="!resource.getAdditionalProperty('explicit')">
                 <img [src]="addBtnImgSrc" style="height: 16px"/>
                 <span class="caret"></span>
             </button>
@@ -16,7 +20,7 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div>-->
     </div>
 
     <div class="groupPanel-body">

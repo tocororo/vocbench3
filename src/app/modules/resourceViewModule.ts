@@ -31,6 +31,7 @@ import {ResViewModalServices} from '../resourceView/resViewModals/resViewModalSe
 import {ClassListCreatorModal} from '../resourceView/resViewModals/classListCreatorModal';
 import {EnrichPropertyModal} from '../resourceView/resViewModals/enrichPropertyModal';
 import {InstanceListCreatorModal} from '../resourceView/resViewModals/instanceListCreatorModal';
+import {AddPropertyValueModal} from '../resourceView/resViewModals/addPropertyValueModal';
 
 @NgModule({
     imports: [
@@ -48,14 +49,14 @@ import {InstanceListCreatorModal} from '../resourceView/resViewModals/instanceLi
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
         TypesPartitionRenderer, LaberRelationsPartitionRenderer,
         //modals
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal
     ],
     exports: [
         ResourceViewPanelComponent
     ],
     providers: [ResViewModalServices],
     entryComponents: [
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal
     ]
 })
 export class ResourceViewModule { }
