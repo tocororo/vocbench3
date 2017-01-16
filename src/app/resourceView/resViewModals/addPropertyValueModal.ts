@@ -3,7 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource, ARTResource, RDFResourceRolesEnum} from '../../utils/ARTResources';
 import {VocbenchCtx} from '../../utils/VocbenchCtx';
-import {RDF, RDFS, SKOS, SKOSXL, XmlSchema} from '../../utils/Vocabulary';
+import {RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema} from '../../utils/Vocabulary';
 import {ManchesterServices} from "../../services/manchesterServices";
 
 /**
@@ -50,8 +50,13 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
     private selectedProperty: ARTURIResource;
+
+    //attribute useful for different Tree/list components
     private scheme: ARTURIResource; //useful if the property that is it going to enrich should allow to select a skos:Concept
         //so the modal should show a concept tree focused on the current scheme
+    private classForInstanceList: ARTURIResource;
+    private rootsForClsIndList: ARTURIResource[];
+    
 
     private manchExprEnabled: boolean = false; //useful to switch between tree selection or manchester expression input field
     private manchExpr: string;
@@ -65,9 +70,20 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
     
     ngOnInit() {
-        this.scheme = this.vbCtx.getScheme();
         this.rootProperty = this.context.properties[0]; //this is ok at the moment just for those partitions that are specific for just one property
         this.selectedProperty = this.rootProperty;
+
+        if (this.showConceptTree()) {
+            this.scheme = this.vbCtx.getScheme();
+        }
+
+        if (this.rootProperty.getURI() == SKOSXL.labelRelation.getURI()) {
+            this.classForInstanceList = SKOSXL.label;
+        }
+        
+        if (this.rootProperty.getURI() == SKOS.member.getURI()) {
+            this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
+        }
 
         /**
          * I wanted to exploit the range (obtained by a server request) to determine the kind of view in the modal (list, tree, manchester..)
@@ -120,6 +136,9 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             return false;
         }
     }
+    private showPropertyTree(): boolean {
+        return (this.rootProperty.getURI() == OWL.inverseOf.getURI());
+    }
     private showConceptTree(): boolean {
         return (this.rootProperty.getURI() == SKOS.broader.getURI());
     }
@@ -134,10 +153,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private showInstanceList(): boolean {
         return (this.rootProperty.getURI() == SKOSXL.labelRelation.getURI());
     }
-    private getClassForInstanceList(): ARTURIResource {
-        if (this.rootProperty.getURI() == SKOSXL.labelRelation.getURI()) {
-            return SKOSXL.label;
-        }
+    private showClsIndList(): boolean {
+        return (this.rootProperty.getURI() == SKOS.member.getURI());
     }
 
 

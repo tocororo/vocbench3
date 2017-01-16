@@ -1,40 +1,74 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
+
+import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { PropertyServices } from "../../services/propertyServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { CustomRangeServices } from "../../services/customRangeServices";
+
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+
 import {ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../../utils/ARTResources";
 import {RDF, OWL} from "../../utils/Vocabulary";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {PropertyServices} from "../../services/propertyServices";
 
 @Component({
 	selector: "property-facets-renderer",
 	templateUrl: "./propertyFacetsPartitionRenderer.html",
 })
-export class PropertyFacetsPartitionRenderer {
+export class PropertyFacetsPartitionRenderer extends AbstractPredicateObjectListRenderer {
     
-    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input('facets') facets: any[]; // array of data structure {name: string, explicit: boolean, value: boolean}
-    @Input() resource: ARTURIResource;
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
+    //inherited from AbstractPredicateObjectListRenderer
+    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    // @Input() resource:ARTURIResource;
+    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    rootProperty: ARTURIResource = OWL.inverseOf;
+    label = "Property facets";
+    addBtnImgTitle = "Add a inverse property";
+    addBtnImgSrc = require("../../../assets/images/prop_create.png");
+    removeBtnImgTitle = "Remove inverse property";
     
-    constructor(private propService:PropertyServices, private browsingService: BrowsingServices) {}
+    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+        private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
+        super(propService, resourceService, crService);
+    }
     
-    private add() {
-        this.browsingService.browsePropertyTree("Select an inverse property").then(
+    add() {
+        this.rvModalService.addPropertyValue("Add an inverse property", this.resource, [this.rootProperty]).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var inverseProp: ARTURIResource = data.value;
+                this.propService.addExistingPropValue(this.resource, prop, inverseProp.getURI(), RDFTypesEnum.resource).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            },
+            () => {}
+        );
+    }
+
+    enrichProperty(predicate: ARTURIResource) {
+        this.browsingService.browsePropertyTree("Add a " + predicate.getShow()).then(
             (selectedProp: any) => {
                 this.propService.addExistingPropValue(this.resource, OWL.inverseOf, selectedProp.getURI(), RDFTypesEnum.resource).subscribe(
                     stResp => this.update.emit(null)
                 )
             },
             () => {}
-        )
+        );
     }
     
-    private remove(property: ARTURIResource) {
-        this.propService.removePropValue(this.resource, OWL.inverseOf, property.getURI(), null, RDFTypesEnum.uri).subscribe(
-            stResp => {
-                this.update.emit(null);
-            }
-        );
+    removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        } else {
+            this.propService.removePropValue(<ARTURIResource>this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
+                stResp => this.update.emit(null)
+            );
+        }
     }
     
     private changeFacet(facetName: string, checked: boolean) {
@@ -55,32 +89,10 @@ export class PropertyFacetsPartitionRenderer {
                 stResp => this.update.emit(null)
             );
         } else {
-            this.propService.removePropValue(this.resource, RDF.type, propertyClass.getURI(), null, RDFTypesEnum.uri).subscribe(
+            this.propService.removePropValue(<ARTURIResource>this.resource, RDF.type, propertyClass.getURI(), null, RDFTypesEnum.uri).subscribe(
                 stResp => this.update.emit(null)
             );
         }
     }
     
-    private objectDblClick(obj: ARTURIResource) {
-        this.dblclickObj.emit(obj);//clicked object (property) can only be a URIResource
-    }
-    
-    /**
-     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
-     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
-     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
-     * or the predicate has no custom range, the object should be rendered as simple rdfResource
-     * @param object object of the predicate object list to render in view.
-     */
-    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
-        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
-    }
-    
-    private getAddPropImgTitle(predicate: ARTURIResource) {
-        return "Add a " + predicate.getShow();
-    }
-    
-    private getRemovePropImgTitle(predicate: ARTURIResource) {
-        return "Remove " + predicate.getShow();
-    }
 }

@@ -1,7 +1,11 @@
 <div class="groupPanel">
     <div class="groupPanel-heading">
-        <span>
-            <label class="groupPanel-heading-content">Property facets:</label>
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <span class="groupPanel-heading-content">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
         </span>
     </div>
     <div class="groupPanel-body">

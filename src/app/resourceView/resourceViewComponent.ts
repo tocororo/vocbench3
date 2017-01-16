@@ -155,6 +155,7 @@ export class ResourceViewComponent {
         var facetsPartition: any = this.resViewResponse.facets;
         if (facetsPartition != null) {
             this.parseFacetsPartition(facetsPartition);
+            this.filterInferredFromPredObjList(this.inverseofColl);
         }
 
         var domainsPartition: any = this.resViewResponse.domains;
