@@ -58,7 +58,7 @@ export class PropertyTreeComponent {
         }
     }
     
-    private initTree() {
+    initTree() {
         this.propertyService.getPropertiesTree(this.resource).subscribe(
             propertyTree => {
                 this.propertyTree = propertyTree;

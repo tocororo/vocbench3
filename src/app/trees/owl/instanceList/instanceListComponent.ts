@@ -47,43 +47,42 @@ export class InstanceListComponent {
         this.selectedInstance = null;
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
-            if (changes['cls'].currentValue) {
+            if (changes['cls']) {
                 this.initList();
-            } else { //cls is null => reset instanceList
-                this.instanceList = null;
             }
         }
     }
     
     ngAfterViewInit() {
         this.viewInitialized = true;
-        if (this.cls != undefined) {
-            this.initList();
-        }
+        this.initList();
     }
     
     initList() {
-        this.blockDivElement.nativeElement.style.display = "block";
-        this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
-            instances => {
-                this.instanceList = instances;
-                //if there is some pending instance search and the searched instance is of the same type of the current class
-                if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
-                    for (var i = 0; i < this.instanceList.length; i++) { //look for the searched instance
-                        if (this.instanceList[i].getURI() == this.pendingSearch.instance.getURI()) {
-                            //select the instance and reset the pending search
-                            this.selectInstance(this.instanceList[i]);
-                            this.pendingSearch.pending = false;
-                            this.pendingSearch.cls = null;
-                            this.pendingSearch.instance = null;
-                            break;
+        this.instanceList = null;
+        if (this.cls != undefined) {
+            this.blockDivElement.nativeElement.style.display = "block";
+            this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
+                instances => {
+                    this.instanceList = instances;
+                    //if there is some pending instance search and the searched instance is of the same type of the current class
+                    if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
+                        for (var i = 0; i < this.instanceList.length; i++) { //look for the searched instance
+                            if (this.instanceList[i].getURI() == this.pendingSearch.instance.getURI()) {
+                                //select the instance and reset the pending search
+                                this.selectInstance(this.instanceList[i]);
+                                this.pendingSearch.pending = false;
+                                this.pendingSearch.cls = null;
+                                this.pendingSearch.instance = null;
+                                break;
+                            }
                         }
                     }
-                }
-                this.blockDivElement.nativeElement.style.display = "none";
-            },
-            err => { this.blockDivElement.nativeElement.style.display = "none"; }
-        );
+                    this.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            );
+        }
     }
     
     ngOnDestroy() {

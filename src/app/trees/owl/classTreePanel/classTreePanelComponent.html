@@ -13,7 +13,7 @@
                 <img src="../../../../assets/images/class_delete.png" />
             </button>
         </div>
-        <div class="btn-group btn-group-xs" role="group">
+        <div class="btn-group btn-group-xs" role="group" style="flex: 1">
             <button class="btn btn-default" title="Create Instance" (click)="createInstance()" [disabled]="!selectedClass">
                 <img src="../../../../assets/images/individual_create.png" />
             </button>
@@ -21,7 +21,10 @@
                 [disabled]="!selectedClass || !selectedInstance">
                 <img src="../../../../assets/images/individual_delete.png" />
             </button>
-        </div>   
+        </div>
+        <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
     </div>
     
     <!-- Tree -->

@@ -12,7 +12,11 @@
                 <img src="../../../../../assets/images/concept_delete.png" />
             </button>
         </div>
-        <img *ngIf="!activeScheme" title="No skos:ConceptScheme selected, creation operation are disabled" src="../../../../../assets/images/warning.png">
+        <img *ngIf="!activeScheme" style="margin: 0px 5px" src="../../../../../assets/images/warning.png"
+            title="No skos:ConceptScheme selected, creation operation are disabled">
+        <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
     </div>
     
     <!-- Tree -->

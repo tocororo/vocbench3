@@ -14,7 +14,7 @@ import {VBEventHandler} from "../../../../utils/VBEventHandler";
 export class SchemeListPanelComponent {
     
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    
+
     private schemeList:ARTURIResource[];
     private activeScheme:ARTURIResource;
     private selectedScheme:ARTURIResource;
@@ -210,6 +210,10 @@ export class SchemeListPanelComponent {
                 return this.schemeList[i];
             }
         }
+    }
+
+    private refresh() {
+        this.initList();
     }
     
 }

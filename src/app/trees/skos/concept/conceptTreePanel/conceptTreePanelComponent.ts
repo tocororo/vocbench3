@@ -99,6 +99,10 @@ export class ConceptTreePanelComponent {
         }
     }
 
+    private refresh() {
+        this.viewChildTree.initTree();
+    }
+
     //EVENT LISTENERS
     private onNodeSelected(node: ARTURIResource) {
         this.selectedConcept = node;

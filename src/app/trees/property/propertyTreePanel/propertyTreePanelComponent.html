@@ -1,23 +1,8 @@
 <div class="panel panel-default vbox">
     <!-- Commands -->
     <div class="panel-heading">
-        <div class="btn-group btn-group-xs" role="group">
-            <!--<button class="btn btn-default" title="Create Property" (click)="createProperty()">
-                <img src="../../../../assets/images/prop_create.png" />
-            </button>
-            <button class="btn btn-default" title="Create Object Property" (click)="createObjectProperty()">
-                <img src="../../../../assets/images/propObject_create.png" />
-            </button>
-            <button class="btn btn-default" title="Create Datatype Property" (click)="createDatatypeProperty()">
-                <img src="../../../../assets/images/propDatatype_create.png" />
-            </button>
-            <button class="btn btn-default" title="Create Annotation Property" (click)="createAnnotationProperty()">
-                <img src="../../../../assets/images/propAnnotation_create.png" />
-            </button>
-            <button class="btn btn-default" title="Create Ontology Property" (click)="createOntologyProperty()">
-                <img src="../../../../assets/images/propOntology_create.png" />
-            </button>-->
-
+        <div class="btn-group btn-group-xs" role="group" style="flex: 1">
+            
             <div class="btn-group btn-group-xs" role="group">
                 <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property">
                     <img src="../../../../assets/images/prop_create.png"/>
@@ -54,11 +39,16 @@
             <button class="btn btn-default" title="Create SubProperty" (click)="createSubProperty()" [disabled]="!selectedProperty">
                 <img src="../../../../assets/images/prop_addSubProperty.png" />
             </button>
-            <button class="btn btn-default" title="Delete Property" (click)="deleteProperty()"
+            <button class="btn btn-default" title="Delete Property" (click)="deleteProperty()" 
                     [disabled]="!selectedProperty || !selectedProperty.getAdditionalProperty('explicit')">
                 <img src="../../../../assets/images/prop_delete.png" />
             </button>
         </div>
+
+        <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+
     </div>
     
     <!-- Tree -->

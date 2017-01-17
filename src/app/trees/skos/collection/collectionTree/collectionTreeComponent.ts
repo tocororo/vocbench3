@@ -53,7 +53,7 @@ export class CollectionTreeComponent {
         this.initTree();
     }
     
-    private initTree() {
+    initTree() {
         this.blockDivElement.nativeElement.style.display = "block";
         // this.skosService.getRootCollections(this.vbCtx.getContentLanguage(true)).subscribe( //old service
         this.skosService.getRootCollections().subscribe( //new service

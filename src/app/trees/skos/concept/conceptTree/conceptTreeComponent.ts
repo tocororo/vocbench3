@@ -89,7 +89,7 @@ export class ConceptTreeComponent {
         }
     }
 
-    private initTree() {
+    initTree() {
         this.selectedNode = null;
 
         this.blockDivElement.nativeElement.style.display = "block";

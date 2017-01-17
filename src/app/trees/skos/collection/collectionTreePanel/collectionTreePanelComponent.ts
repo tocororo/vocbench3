@@ -130,6 +130,10 @@ export class CollectionTreePanelComponent {
         }
     }
 
+    private refresh() {
+        this.viewChildTree.initTree();
+    }
+
     //EVENT LISTENERS
     private onNodeSelected(node: ARTURIResource) {
         this.selectedCollection = node;

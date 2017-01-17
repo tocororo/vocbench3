@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../utils/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -11,6 +11,8 @@ import { ModalServices } from "../../../widget/modal/modalServices";
 })
 export class PropertyTreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+
+    @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
     private selectedProperty: ARTURIResource;
 
@@ -64,6 +66,10 @@ export class PropertyTreePanelComponent {
                 this.nodeSelected.emit(undefined);
             }
         );
+    }
+
+    private refresh() {
+        this.viewChildTree.initTree();
     }
 
     //EVENT LISTENERS
