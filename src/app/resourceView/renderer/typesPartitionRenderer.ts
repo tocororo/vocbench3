@@ -4,7 +4,6 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { OwlServices } from "../../services/owlServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
@@ -29,13 +28,14 @@ export class TypesPartitionRenderer extends AbstractPredicateObjectListRenderer 
     removeBtnImgTitle = "Remove type";
 
     constructor(private propService: PropertyServices, private resourceService: ResourceServices,
-        private crService: CustomRangeServices, private owlService: OwlServices, private browsingService: BrowsingServices,
-        private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
+        private crService: CustomRangeServices, private owlService: OwlServices, private eventHandler: VBEventHandler,
+        private rvModalService: ResViewModalServices) {
         super();
     }
 
-    add() {
-        this.rvModalService.addPropertyValue("Add a type", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a type", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var typeClass: ARTURIResource = data.value;
@@ -54,23 +54,6 @@ export class TypesPartitionRenderer extends AbstractPredicateObjectListRenderer 
             },
             () => {}
         )
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.browsingService.browseClassTree("Add a " + predicate.getShow()).then(
-            (selectedClass: any) => {
-                if (predicate.getURI() == this.rootProperty.getURI()) {
-                    this.owlService.addType(<ARTURIResource>this.resource, selectedClass).subscribe(
-                        stResp => this.update.emit()
-                    );
-                } else { //predicate is some subProperty of rdf:type
-                    this.propService.addExistingPropValue(this.resource, predicate, (<ARTResource>selectedClass).getNominalValue(), RDFTypesEnum.resource).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                }
-            },
-            () => { }
-        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

@@ -31,8 +31,9 @@ export class DomainsPartitionRenderer extends AbstractPredicateObjectListRendere
         super();
     }
 
-    add() {
-        this.rvModalService.addPropertyValue("Add a domain", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a domain", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class or a manchester Expression
@@ -57,32 +58,6 @@ export class DomainsPartitionRenderer extends AbstractPredicateObjectListRendere
             },
             () => {}
         )
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
-            (data: any) => {
-                var value: any = data.value; //value can be a class or a manchester Expression
-                if (typeof value == "string") {
-                    this.manchService.createRestriction(<ARTURIResource>this.resource, predicate, value).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //value is an ARTURIResource (a class selected from the tree)
-                    if (predicate.getURI() == this.rootProperty.getURI()) { //it's using an rdfs:domain
-                        this.propService.addPropertyDomain(<ARTURIResource>this.resource, value).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                    } else { //it's using a subProperty of rdfs:domain
-                        this.propService.addExistingPropValue(this.resource, predicate, value.getURI(), RDFTypesEnum.resource).subscribe(
-                            stResp => {
-                                this.update.emit(null);
-                            }
-                        );
-                    }
-                }
-            },
-            () => {}
-        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

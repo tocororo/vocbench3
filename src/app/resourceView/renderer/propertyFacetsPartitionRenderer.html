@@ -19,7 +19,7 @@
             <!-- each item is a predicateObjects -->
             <div class="subPanel-heading">
                 <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
-                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
+                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="add(po.getPredicate())"
                     [disabled]="!resource.getAdditionalProperty('explicit')">
                     <span>+</span>
                 </button>

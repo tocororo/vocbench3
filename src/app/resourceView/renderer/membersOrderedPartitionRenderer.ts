@@ -49,7 +49,6 @@ export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectList
     //needed to be implemented since this Component extends AbstractPredicateObjectListRenderer, but not used.
     //Use addFirst addLast addBefore and addAfter instead
     add() { }
-    enrichProperty(predicate: ARTURIResource) { }
 
     /**
      * Adds a first member to an ordered collection 

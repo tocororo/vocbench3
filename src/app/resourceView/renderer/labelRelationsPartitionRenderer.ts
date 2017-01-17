@@ -30,8 +30,9 @@ export class LabelRelationsPartitionRenderer extends AbstractPredicateObjectList
         super();
     }
 
-    add() {
-        this.rvModalService.addPropertyValue("Add a label relation", this.resource, this.rootProperty).then(
+    add(predicate: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a label relation", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var label: ARTResource = data.value;
@@ -41,18 +42,6 @@ export class LabelRelationsPartitionRenderer extends AbstractPredicateObjectList
             },
             () => {}
         )
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add a " + predicate.getShow(), this.resource, predicate, false).then(
-            (data: any) => {
-                var label: ARTResource = data.value;
-                this.propService.addExistingPropValue(this.resource, predicate, label.getNominalValue(), RDFTypesEnum.resource).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            },
-            () => {}
-        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

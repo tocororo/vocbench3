@@ -33,14 +33,22 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
         super();
     }
 
-    add() {
-        alert("open modal to choose a property rooted on " + JSON.stringify(this.rootProperties));
-        //based on the chosen property call enrichProperty
-        var chosenProp: ARTURIResource;
-        if (this.isRootProperty(chosenProp)) {
-            this.enrichProperty(chosenProp);
+    add(predicate?: ARTURIResource) {
+        if (predicate == undefined) {
+            alert("open modal to choose a property rooted on " + JSON.stringify(this.rootProperties));
+            //based on the chosen property call enrichProperty
+            // var chosenProp: ARTURIResource;
+            // if (this.isRootProperty(chosenProp)) {
+            //     this.enrichProperty(chosenProp);
+            // } else {
+            //     alert("enrichment of " + chosenProp.getShow() + " not available");
+            // }
         } else {
-            alert("enrichment of " + chosenProp.getShow() + " not available");
+            if (this.isRootProperty(predicate)) {
+                this.enrichProperty(predicate);
+            } else {
+                alert("enrichment of " + predicate.getShow() + " not available");
+            }
         }
     }
 
@@ -51,7 +59,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
      * subClassOf, equivalentClass, disjointWith, complementOf asks the user if choose an existing class
      * (then opens a class tree modal) or to create a manchester expression (then opens a prompt modal) 
      */
-    enrichProperty(property: ARTURIResource) {
+    private enrichProperty(property: ARTURIResource) {
         //if the property is oneOf open a modal to create an instance list, otherwise ask the user to make a further decision
         if (property.getURI() == OWL.oneOf.getURI()) {
             this.createInstanceList(property);

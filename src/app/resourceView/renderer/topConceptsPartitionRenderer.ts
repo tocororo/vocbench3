@@ -3,7 +3,6 @@ import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectLi
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { SkosServices } from "../../services/skosServices";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
@@ -30,14 +29,14 @@ export class TopConceptsPartitionRenderer extends AbstractPredicateObjectListRen
     removeBtnImgTitle = "Remove as topConcept";
 
     constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices, 
-        private skosService: SkosServices, private eventHandler: VBEventHandler, private browsingService: BrowsingServices,
-        private rvModalService: ResViewModalServices) {
+        private skosService: SkosServices, private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
         super();
     }
 
     //add as top concept
-    add() {
-        this.rvModalService.addPropertyValue("Set as top Concept of", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Set as top Concept of", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var scheme: ARTURIResource = data.value;
@@ -55,23 +54,6 @@ export class TopConceptsPartitionRenderer extends AbstractPredicateObjectListRen
                 }
             },
             () => {}
-        );
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.browsingService.browseSchemeList("Add a " + predicate.getShow()).then(
-            (selectedScheme: any) => {
-                if (predicate.getURI() == this.rootProperty.getURI()) {
-                    this.skosService.addTopConcept(<ARTURIResource>this.resource, selectedScheme).subscribe(
-                        stResp => this.update.emit()
-                    );
-                } else { //predicate is some subProperty of skos:topConceptOf
-                    this.propService.addExistingPropValue(this.resource, predicate, (<ARTURIResource>selectedScheme).getNominalValue(), RDFTypesEnum.resource).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                }
-            },
-            () => { }
         );
     }
 

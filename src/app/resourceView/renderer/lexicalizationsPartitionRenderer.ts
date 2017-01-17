@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateValueListRenderer } from "./abstractPerdicateValueListRenderer";
 import { CustomRangeServices } from "../../services/customRangeServices";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateValues, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { RDFS, SKOS, SKOSXL } from "../../utils/Vocabulary";
@@ -10,8 +9,6 @@ import { SkosServices } from "../../services/skosServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
-
-
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -31,9 +28,8 @@ export class LexicalizationsPartitionRenderer extends AbstractPredicateValueList
     addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
     removeBtnImgTitle = "Remove lexicalization";
 
-    constructor(private crService: CustomRangeServices, private skosService: SkosServices,
-        private skosxlService: SkosxlServices, private propertyService: PropertyServices,
-        private resViewService: ResourceViewServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {
+    constructor(private crService: CustomRangeServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
+        private propertyService: PropertyServices, private resViewService: ResourceViewServices, private modalService: ModalServices) {
         super();
     }
 
@@ -45,18 +41,26 @@ export class LexicalizationsPartitionRenderer extends AbstractPredicateValueList
         );
     }
 
-    add() {
-        alert("open modal to choose a property rooted on " + JSON.stringify(this.rootProperties));
-        //based on the chosen property call enrichProperty
-        // var chosenProp: ARTURIResource;
-        // if (this.isRootProperty(chosenProp)) {
-        //     this.enrichProperty(chosenProp);
-        // } else {
-        //     alert("enrichment of " + chosenProp.getShow() + " not available");
-        // }
+    add(predicate?: ARTURIResource) {
+        if (predicate == undefined) {
+            alert("open modal to choose a property rooted on " + JSON.stringify(this.rootProperties));
+            //based on the chosen property call enrichProperty
+            // var chosenProp: ARTURIResource;
+            // if (this.isRootProperty(chosenProp)) {
+            //     this.enrichProperty(chosenProp);
+            // } else {
+            //     alert("enrichment of " + chosenProp.getShow() + " not available");
+            // }
+        } else {
+            if (this.isRootProperty(predicate)) {
+                this.enrichProperty(predicate);
+            } else {
+                alert("enrichment of " + predicate.getShow() + " not available");
+            }
+        }
     }
 
-    enrichProperty(predicate: ARTURIResource) {
+    private enrichProperty(predicate: ARTURIResource) {
         this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 switch (predicate.getURI()) {

@@ -38,8 +38,9 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectListRendere
     /**
      * Adds a member in a collection (unordered)
      */
-    add() {
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
@@ -54,29 +55,6 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectListRendere
                             if (member.getRole() == RDFResourceRolesEnum.skosCollection ||
                                 member.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                                 this.eventHandler.nestedCollectionAddedEvent.emit({ nested: member, container: this.resource });
-                            }
-                            this.update.emit(null);
-                        }
-                    );
-                }
-            },
-            () => { }
-        );
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.enrichProperty("Add a " + predicate.getShow(), predicate, [SKOS.collection, SKOS.concept]).then(
-            (selectedMember: any) => {
-                if (predicate.getURI() == this.rootProperty.getURI()) {
-                    this.skosService.addToCollection(this.resource, selectedMember, this.vbCtx.getContentLanguage(true)).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //predicate is some subProperty of skos:member
-                    this.propService.addExistingPropValue(this.resource, predicate, (<ARTResource>selectedMember).getNominalValue(), RDFTypesEnum.resource).subscribe(
-                        stResp => {
-                            if (selectedMember.getRole() == RDFResourceRolesEnum.skosCollection ||
-                                selectedMember.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                                this.eventHandler.nestedCollectionAddedEvent.emit({ nested: selectedMember, container: this.resource });
                             }
                             this.update.emit(null);
                         }

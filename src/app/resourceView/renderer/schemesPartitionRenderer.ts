@@ -4,7 +4,6 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { SkosServices } from "../../services/skosServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler"
@@ -29,14 +28,14 @@ export class SchemesPartitionRenderer extends AbstractPredicateObjectListRendere
     removeBtnImgTitle = "Remove from ConceptScheme";
 
     constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
-        private skosService: SkosServices, private eventHandler: VBEventHandler,
-        private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
+        private skosService: SkosServices, private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
         super();
     }
 
     //add as top concept
-    add() {
-        this.rvModalService.addPropertyValue("Add Concept to a Scheme", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add Concept to a Scheme", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var scheme: ARTURIResource = data.value;
@@ -57,27 +56,6 @@ export class SchemesPartitionRenderer extends AbstractPredicateObjectListRendere
             },
             () => { }
         )
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.browsingService.browseSchemeList("Add a " + predicate.getShow()).then(
-            (selectedScheme: any) => {
-                if (predicate.getURI() == this.rootProperty.getURI()) {
-                    this.skosService.addConceptToScheme(<ARTURIResource>this.resource, selectedScheme).subscribe(
-                        stResp => this.update.emit()
-                    );
-                } else { //predicate is some subProperty of skos:inScheme
-                    this.propService.addExistingPropValue(this.resource, predicate, (<ARTURIResource>selectedScheme).getNominalValue(), RDFTypesEnum.resource).subscribe(
-                        stResp => {
-                            //Here I should emit conceptAddedToSchemEvent but I can't since I don't know if this.resource has broader and child
-                            //(to show in tree when attached). In this rare case I suppose that the user should refresh the tree
-                            this.update.emit(null);
-                        }
-                    );
-                }
-            },
-            () => { }
-        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

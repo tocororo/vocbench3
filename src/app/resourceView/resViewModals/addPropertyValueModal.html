@@ -24,7 +24,8 @@
     <resource-list *ngIf="showDatatypeList()" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
     <instance-list *ngIf="showInstanceList()" [cls]="classForInstanceList" (nodeSelected)="onResourceSelected($event)"></instance-list>
     <class-individual-tree *ngIf="showClsIndList()" [roots]="rootsForClsIndList" (nodeSelected)="onResourceSelected($event)"></class-individual-tree>
-    <input *ngIf="manchExprEnabled" type="text" class="form-control input-sm" [(ngModel)]="manchExpr" placeholder="Manchester expression">
+    <input *ngIf="manchExprEnabled" type="text" class="form-control input-sm" style="margin-top: 5px;"
+        [(ngModel)]="manchExpr" placeholder="Manchester expression">
 
 </div>
 <div class="modal-footer">

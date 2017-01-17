@@ -32,21 +32,25 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectListRend
     removeBtnImgTitle = "Remove property value";
 
     constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
-        private skosxlService: SkosxlServices, private browsingService: BrowsingServices,
-        private modalService: ModalServices, private resViewModalService: ResViewModalServices) {
+        private skosxlService: SkosxlServices, private browsingService: BrowsingServices, private modalService: ModalServices,
+        private resViewModalService: ResViewModalServices) {
         super();
     }
 
-    add() {
-        this.browsingService.browsePropertyTree("Select a property", <ARTURIResource>this.resource).then(
-            (selectedProp: any) => {
-                this.enrichProperty(selectedProp);
-            },
-            () => { }
-        );
+    add(predicate?: ARTURIResource) {
+        if (predicate != undefined) {
+            this.enrichProperty(predicate);
+        } else {
+            this.browsingService.browsePropertyTree("Select a property", <ARTURIResource>this.resource).then(
+                (selectedProp: any) => {
+                    this.enrichProperty(selectedProp);
+                },
+                () => { }
+            );
+        }
     }
 
-    enrichProperty(predicate: ARTURIResource) {
+    private enrichProperty(predicate: ARTURIResource) {
         //particular cases SKOSXL label
         if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
             predicate.getURI() == SKOSXL.altLabel.getURI() ||

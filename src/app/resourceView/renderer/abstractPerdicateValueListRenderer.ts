@@ -49,16 +49,16 @@ export abstract class AbstractPredicateValueListRenderer {
      */
 
     /**
-     * Should open a modal to select a property (specific of the partition) and enrich it.
-     * This is fired when the add button is clicked (the one placed on the groupPanel outline,
-     * or in the subPanel heading if just one property of the partition is enriched)
+     * Should allow to enrich a property by opening a modal and selecting a value.
+     * It can get an optional parameter "property".
+     * This is fired when the add button is clicked (the one placed on the groupPanel outline) without property parameter,
+     * or hen the "+" button of a specific property panel is clicked (placed in the subPanel heading) with the property provided.
+     * If property is provided (add fired from specific property panel) the modal won't allow to change it allowing so
+     * to enrich just that property, otherwise, if property is not provided (add fired from the generic partition panel),
+     * a modal will allow to choose the property to enrich.
+     * @param predicate property to enrich.
      */
-    abstract add(): void;
-    /**
-     * Should open a modal to enrich the given property.
-     * This is fired when the "+" button is clicked (placed in the subPanel heading)
-     */
-    abstract enrichProperty(predicate: ARTURIResource): void;
+    abstract add(predicate?: ARTURIResource): void;
     /**
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
@@ -67,6 +67,7 @@ export abstract class AbstractPredicateValueListRenderer {
     //used in removePredicateObject to know if the removing object is about a root property
     isRootProperty(predicate: ARTURIResource): boolean {
         for (var i = 0; i < this.rootProperties.length; i++) {
+            console.log("is root property " + this.rootProperties[i].getURI() + " " + predicate.getURI())
             if (this.rootProperties[i].getURI() == predicate.getURI()) {
                 return true;
             }

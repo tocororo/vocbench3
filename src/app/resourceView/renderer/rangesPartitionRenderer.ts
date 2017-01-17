@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
@@ -6,14 +6,14 @@ import { CustomRangeServices } from "../../services/customRangeServices";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../utils/ARTResources";
-import {RDFS, XmlSchema} from "../../utils/Vocabulary";
+import { RDFS, XmlSchema } from "../../utils/Vocabulary";
 
 @Component({
-	selector: "ranges-renderer",
-	templateUrl: "./predicateObjectListRenderer.html",
+    selector: "ranges-renderer",
+    templateUrl: "./predicateObjectListRenderer.html",
 })
 export class RangesPartitionRenderer extends AbstractPredicateObjectListRenderer {
-    
+
     //inherited from AbstractPredicateObjectListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
@@ -24,19 +24,20 @@ export class RangesPartitionRenderer extends AbstractPredicateObjectListRenderer
     label = "Ranges";
     addBtnImgTitle = "Add a range";
     addBtnImgSrc = require("../../../assets/images/class_create.png");
-    removeBtnImgTitle = "Remove range"; 
-    
+    removeBtnImgTitle = "Remove range";
+
     constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
         private manchService: ManchesterServices, private rvModalService: ResViewModalServices) {
-        super(); 
+        super();
     }
 
-    add() {
-        this.rvModalService.addPropertyValue("Add a range", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a range", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
-                
+
                 if (typeof value == "string") {
                     this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value).subscribe(
                         stResp => this.update.emit(null)
@@ -55,34 +56,8 @@ export class RangesPartitionRenderer extends AbstractPredicateObjectListRenderer
                     }
                 }
             },
-            () => {}
+            () => { }
         )
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
-            (data: any) => {
-                var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
-                if (typeof value == "string") {
-                    this.manchService.createRestriction(<ARTURIResource>this.resource, predicate, value).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //value is an ARTURIResource (a class selected from the tree or a datatype)
-                    if (predicate.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
-                        this.propService.addPropertyRange(<ARTURIResource>this.resource, value).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                    } else { //it's using a subProperty of rdfs:range
-                        this.propService.addExistingPropValue(this.resource, predicate, value.getURI(), RDFTypesEnum.resource).subscribe(
-                            stResp => {
-                                this.update.emit(null);
-                            }
-                        );
-                    }
-                }
-            },
-            () => {}
-        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
@@ -108,71 +83,5 @@ export class RangesPartitionRenderer extends AbstractPredicateObjectListRenderer
             }
         }
     }
-    
-    /**
-     * Returns true if the current described resource is a datatype property. Useful to
-     * render the add function as simple button ("add existing class") or as dropbdown list with two choices
-     * "add existing class" or "Create and add class expression" 
-     */
-    // isDatatypeProperty(): boolean {
-    //     return this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty;
-    // }
-    
-    // private addExistingClass() {
-    //     this.browsingService.browseClassTree("Select a range class").then(
-    //         (selectedClass: any) => {
-    //             this.propService.addPropertyRange(this.resource, selectedClass).subscribe(
-    //                 stResp => this.update.emit(null)
-    //             );
-    //         },
-    //         () => {}
-    //     );
-    // }
-    
-    // private addClassExpression() {
-    //     this.modalService.prompt("Class Expression (Manchester Syntax)").then(
-    //         (manchExpr: any) => {
-    //             this.manchService.checkExpression(manchExpr).subscribe(
-    //                 stResp => {
-    //                     this.manchService.createRestriction(this.resource, RDFS.range, manchExpr).subscribe(
-    //                         stResp => this.update.emit(null)
-    //                     );
-    //                 }
-    //             )
-    //         },
-    //         () => {}
-    //     );
-    // }
-    
-    // /**
-    //  * Invokable just for datatype properties
-    //  */
-    // private addRangeDatatype() {
-    //     var datatypes: Array<ARTURIResource> = [XmlSchema.boolean, XmlSchema.date,
-    //         XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string]; 
-            
-    //     this.modalService.selectResource("Select range datatype", null, datatypes).then(
-    //         (selection: any) => {
-    //             this.propService.addPropertyRange(this.resource, selection).subscribe(
-    //                 stResp => this.update.emit(null)
-    //             )
-    //         },
-    //         () => {}
-    //     );
-    // }
-    
-    // private remove(range: ARTNode) {
-    //     if (range.isBNode()) {
-    //         this.manchService.removeExpression(this.resource, RDFS.range, range).subscribe(
-    //             stResp => this.update.emit(null)
-    //         )
-    //     } else {
-    //         this.propService.removePropertyRange(this.resource, <ARTURIResource>range).subscribe(
-    //             stResp => {
-    //                 this.update.emit(null);
-    //             }
-    //         );
-    //     }
-    // }
-    
+
 }

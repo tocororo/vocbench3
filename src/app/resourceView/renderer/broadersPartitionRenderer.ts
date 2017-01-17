@@ -4,10 +4,8 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { SkosServices } from "../../services/skosServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
 import { VBEventHandler } from "../../utils/VBEventHandler"
 import { SKOS } from "../../utils/Vocabulary"
 
@@ -30,13 +28,13 @@ export class BroadersPartitionRenderer extends AbstractPredicateObjectListRender
     removeBtnImgTitle = "Remove broader";
 
     constructor(private crService: CustomRangeServices, private propService: PropertyServices, private resourceService: ResourceServices,
-        private skosService: SkosServices, private browsingService: BrowsingServices, private rvModalService: ResViewModalServices,
-        private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
+        private skosService: SkosServices, private rvModalService: ResViewModalServices, private eventHandler: VBEventHandler) {
         super();
     }
 
-    add() {
-        this.rvModalService.addPropertyValue("Add a broader", this.resource, this.rootProperty).then(
+    add(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a broader", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var broader: ARTURIResource = data.value;
@@ -54,23 +52,6 @@ export class BroadersPartitionRenderer extends AbstractPredicateObjectListRender
                 }
             },
             () => {}
-        );
-    }
-
-    enrichProperty(predicate: ARTURIResource) {
-        this.browsingService.browseConceptTree("Add a " + predicate.getShow(), this.vbCtx.getScheme(), true).then(
-            (selectedConcept: any) => {
-                if (predicate.getURI() == this.rootProperty.getURI()) {
-                    this.skosService.addBroaderConcept(<ARTURIResource>this.resource, selectedConcept).subscribe(
-                        stResp => this.update.emit()
-                    );
-                } else { //predicate is some subProperty of skos:broader
-                    this.propService.addExistingPropValue(this.resource, predicate, (<ARTURIResource>selectedConcept).getNominalValue(), RDFTypesEnum.resource).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                }
-            },
-            () => { }
         );
     }
 
