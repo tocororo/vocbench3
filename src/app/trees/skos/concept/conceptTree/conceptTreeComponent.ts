@@ -54,7 +54,7 @@ export class ConceptTreeComponent {
     }
 
     ngOnInit() {
-        this.workingScheme = this.vbCtx.getScheme();
+        this.workingScheme = this.scheme;
         //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
             this.skosService.getAllSchemesList().subscribe( //old service
