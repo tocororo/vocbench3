@@ -259,9 +259,15 @@ export class Deserializer {
         }
 
         var label = literalElement.textContent;
+        var artLiteralRes = new ARTLiteral(label);
         var datatype: string = literalElement.getAttribute(ResAttribute.TYPE);
+        if (datatype != undefined) {
+            artLiteralRes.setDatatype(datatype);
+        }
         var lang: string = literalElement.getAttribute(ResAttribute.LANG);
-        var artLiteralRes = new ARTLiteral(label, datatype, lang);
+        if (lang != undefined) {
+            artLiteralRes.setLang(lang);
+        }
         //optional properties
         var show = literalElement.getAttribute(ResAttribute.SHOW);
         if (show != undefined) {
@@ -410,6 +416,14 @@ export class Deserializer {
         if (graphs != undefined) {
             uriRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
+        var members = uri[ResAttribute.MEMBERS];
+        if (members != undefined) {
+            uriRes.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
+        }
+        var index = uri[ResAttribute.INDEX];
+        if (index != undefined) {
+            uriRes.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
+        }
 
         return uriRes;
     }
@@ -437,6 +451,14 @@ export class Deserializer {
         if (graphs != undefined) {
             bNodeRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
         }
+        var members = bnode[ResAttribute.MEMBERS];
+        if (members != undefined) {
+            bNodeRes.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
+        }
+        var index = bnode[ResAttribute.INDEX];
+        if (index != undefined) {
+            bNodeRes.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
+        }
 
         return bNodeRes;
     }
@@ -445,12 +467,19 @@ export class Deserializer {
         var isTypedLiteral: boolean;
 
         var value = literal['@value'];
-        var datatype = literal[ResAttribute.TYPE];
+        var artLiteralRes: ARTLiteral = new ARTLiteral(value);
+        var datatype = literal['@type'];
+        if (datatype != undefined) {
+            artLiteralRes.setDatatype(datatype);
+        }
         var lang = literal[ResAttribute.LANG];
         if (lang == undefined) {
             var lang = literal["@language"];
         }
-        var artLiteralRes: ARTLiteral = new ARTLiteral(value, datatype, lang);
+        if (lang != undefined) {
+            artLiteralRes.setLang(lang);
+        }
+        
         //optional properties
         // var show = literalElement.getAttribute(ResAttribute.SHOW);
         // if (show != undefined) {

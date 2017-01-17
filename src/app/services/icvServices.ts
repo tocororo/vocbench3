@@ -107,7 +107,8 @@ export class IcvServices {
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource = Deserializer.createURI(recordElemColl[i]);
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
-                    var langRes = new ARTLiteral(lang, null, lang);
+                    var langRes = new ARTLiteral(lang);
+                    langRes.setLang(lang);
                     records.push({resource: resource, lang: langRes});
                 }
                 return records;
@@ -129,7 +130,8 @@ export class IcvServices {
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource = Deserializer.createURI(recordElemColl[i]);
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
-                    var langRes = new ARTLiteral(lang, null, lang);
+                    var langRes = new ARTLiteral(lang);
+                    langRes.setLang(lang);
                     records.push({resource: resource, lang: langRes});
                 }
                 return records;

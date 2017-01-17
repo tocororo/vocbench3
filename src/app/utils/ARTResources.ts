@@ -154,23 +154,29 @@ export class ARTBNode implements ARTResource {
 }
 
 export class ARTLiteral implements ARTNode {
-    private label: string;
+    private value: string;
     private datatype: string;
     private lang: string;
 
-    constructor(label: string, datatype: string, lang: string) {
-        this.label = label;
-        this.datatype = datatype;
-        this.lang = lang;
+    constructor(value: string) {
+        this.value = value;
     }
 
-    getLabel(): string {
-        return this.label;
+    getValue(): string {
+        return this.value;
     };
+
+    setDatatype(datatype: string) {
+        this.datatype = datatype;
+    }
 
     getDatatype(): string {
         return this.datatype;
     };
+
+    setLang(lang: string) {
+        this.lang = lang;
+    }
 
     getLang(): string {
         return this.lang;
@@ -201,11 +207,11 @@ export class ARTLiteral implements ARTNode {
     };
 
     getShow(): string {
-        return this.label;
+        return this.value;
     }
 
     toNT(): string {
-        var nt = JSON.stringify(this.label);
+        var nt = JSON.stringify(this.value);
         if (this.lang != null && this.lang.length > 0) {
             nt += "@" + this.lang;
         } else if (this.datatype != null && this.datatype != "") {
@@ -279,6 +285,8 @@ export class ResAttribute {
     public static RESOURCE_POSITION = "resourcePosition";
     public static LANG = "lang";
     public static GRAPHS = "graphs"; //used in getResourceView response
+    public static MEMBERS = "members"; //used for ordered collections
+    public static INDEX = "index"; //used for members of ordered collections
     
     //never in st responses, added because are util for tree
     public static OPEN = "open";

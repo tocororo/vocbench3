@@ -58,7 +58,7 @@ export class OnlyAltLabelResourceComponent {
             this.skosService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
                     this.modalService.selectResource("Select alternative label", null, altLabels).then(
-                        selectedAltLabel => {
+                        (selectedAltLabel: any) => {
                             this.changeAltToPref(record.resource, selectedAltLabel).subscribe(
                                 () => {
                                     this.runIcv();
@@ -73,7 +73,7 @@ export class OnlyAltLabelResourceComponent {
             this.skosxlService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
                     this.modalService.selectResource("Select alternative label", null, altLabels).then(
-                        selectedAltLabel => {
+                        (selectedAltLabel: any) => {
                             this.changeAltToPref(record.resource, selectedAltLabel).subscribe(
                                 () => {
                                     this.runIcv();
@@ -94,9 +94,9 @@ export class OnlyAltLabelResourceComponent {
     private changeAltToPref(resource: ARTURIResource, label: ARTNode) {
         return new Observable((observer: any) => {
             if (this.ontoType == "SKOS") {
-                this.skosService.removeAltLabel(resource, (<ARTLiteral>label).getLabel(), (<ARTLiteral>label).getLang()).subscribe(
+                this.skosService.removeAltLabel(resource, (<ARTLiteral>label).getValue(), (<ARTLiteral>label).getLang()).subscribe(
                     stResp => {
-                        this.skosService.setPrefLabel(resource, (<ARTLiteral>label).getLabel(), (<ARTLiteral>label).getLang()).subscribe(
+                        this.skosService.setPrefLabel(resource, (<ARTLiteral>label).getValue(), (<ARTLiteral>label).getLang()).subscribe(
                             stResp => {
                                 observer.next();
                                 observer.complete();
@@ -121,7 +121,7 @@ export class OnlyAltLabelResourceComponent {
     addPrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
             this.modalService.newPlainLiteral("Add skos:prefLabel").then(
-                data => {
+                (data: any) => {
                     this.skosService.setPrefLabel(record.resource, data.value, data.lang).subscribe(
                         stResp => {
                             this.runIcv();
@@ -132,7 +132,7 @@ export class OnlyAltLabelResourceComponent {
             )
         } else if (this.ontoType == "SKOS-XL") {
             this.modalService.newPlainLiteral("Add skosxl:prefLabel").then(
-                data => {
+                (data: any) => {
                     this.skosxlService.setPrefLabel(record.resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.runIcv();

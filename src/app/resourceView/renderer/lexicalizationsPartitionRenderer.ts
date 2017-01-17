@@ -136,22 +136,22 @@ export class LexicalizationsPartitionRenderer extends AbstractPredicateValueList
                 );
                 break;
             case SKOS.prefLabel.getURI():
-                this.skosService.removePrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removePrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getValue(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.altLabel.getURI():
-                this.skosService.removeAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removeAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getValue(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.hiddenLabel.getURI():
-                this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getLabel(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getValue(), (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case RDFS.label.getURI():
-                this.propertyService.removePropValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object).getLabel(),
+                this.propertyService.removePropValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object).getValue(),
                     null, RDFTypesEnum.plainLiteral, (<ARTLiteral>object).getLang()).subscribe(
                     stResp => this.update.emit(null)
                     );
