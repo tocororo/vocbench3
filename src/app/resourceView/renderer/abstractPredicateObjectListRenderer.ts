@@ -1,9 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../utils/ARTResources";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
-import { RDF } from "../../utils/Vocabulary"
 
 @Component({
     selector: "pred-obj-list-renderer",
@@ -11,10 +7,18 @@ import { RDF } from "../../utils/Vocabulary"
 })
 export abstract class AbstractPredicateObjectListRenderer {
 
+    /**
+     * INPUTS / OUTPUTS
+     */
+
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource: ARTResource; //resource described
     @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    /**
+     * ATTRIBUTES
+     */
 
     /**
      * Root property described in the partition
@@ -39,15 +43,9 @@ export abstract class AbstractPredicateObjectListRenderer {
      */
     abstract removeBtnImgTitle: string;
 
-    protected propService: PropertyServices;
-    protected resourceService: ResourceServices;
-    protected crService: CustomRangeServices;
-
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices) {
-        this.propService = propService;
-        this.resourceService = resourceService;
-        this.crService = crService;
-    }
+    /**
+     * METHODS
+     */
 
     /**
      * Should open a modal to select a property (specific of the partition) and enrich it.

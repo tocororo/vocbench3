@@ -1,10 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateValues, ResAttribute } from "../../utils/ARTResources";
-// import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-// import { PropertyServices } from "../../services/propertyServices";
-// import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
-// import { RDF } from "../../utils/Vocabulary"
 
 @Component({
     selector: "pred-value-list-renderer",
@@ -12,10 +7,18 @@ import { CustomRangeServices } from "../../services/customRangeServices";
 })
 export abstract class AbstractPredicateValueListRenderer {
 
+    /**
+     * INPUTS / OUTPUTS
+     */
+
     @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
     @Input() resource: ARTResource; //resource described
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    /**
+     * ATTRIBUTES
+     */
 
     /**
      * Root properties described in the partition
@@ -41,20 +44,9 @@ export abstract class AbstractPredicateValueListRenderer {
      */
     abstract removeBtnImgTitle: string;
 
-    // protected propService: PropertyServices;
-    // protected resourceService: ResourceServices;
-    protected crService: CustomRangeServices;
-    // protected browsingService: BrowsingServices;
-
-    constructor(
-        // propService: PropertyServices,
-        // resourceService: ResourceServices,
-        crService: CustomRangeServices) {
-        // this.propService = propService;
-        // this.resourceService = resourceService;
-        this.crService = crService;
-        // this.browsingService = browsingService;
-    }
+    /**
+     * METHODS
+     */
 
     /**
      * Should open a modal to select a property (specific of the partition) and enrich it.
@@ -71,23 +63,9 @@ export abstract class AbstractPredicateValueListRenderer {
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
      */
-    private removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else {
-            //if it is removing a value about a root property, call the specific method
-            if (this.isRootProperty(predicate)) {
-                this.removeObjectForRootProperty(predicate, object);
-            } else {//predicate is some subProperty of a root property
-                //TODO I should retrieve the first parent of the predicate that is a rootProperty, then call the specific method
-                
-            }
-        }
-    }
+    abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
     //used in removePredicateObject to know if the removing object is about a root property
-    private isRootProperty(predicate: ARTURIResource): boolean {
+    isRootProperty(predicate: ARTURIResource): boolean {
         for (var i = 0; i < this.rootProperties.length; i++) {
             if (this.rootProperties[i].getURI() == predicate.getURI()) {
                 return true;
@@ -95,23 +73,7 @@ export abstract class AbstractPredicateValueListRenderer {
         }
         return false;
     }
-
-    /**
-     * Remove the value (object) that enrich the root property of the partition.
-     */
-    abstract removeObjectForRootProperty(predicate: ARTURIResource, object: ARTNode): void;
-    /**
-     * Remove the value (object) that enrich a subProperty of a root property of the partition.
-     */
-    private removeObjectForSubRootProperty(predicate: ARTURIResource, superProp: ARTURIResource, object: ARTNode): void {
-        //look for first parent rootProperty, then remove 
-        /** problem: 
-         * :subXlPrefLabel rdfs:subPropertyOf skosxl:prefLabel
-         * C :subXlPrefLabel L
-         * If I remove L as subXlPrefLabel of C, I should remove the triple C :subXlPrefLabel L
-         * but I need also to do all the changes that removePrefLabel involves (L should be removed?)
-         */
-    };
+    
     /**
      * Returns the title of the "+" button placed in a subPanel heading.
      * This is specific of a predicate of a partition, so it depends from a predicate.

@@ -26,13 +26,13 @@ export class DomainsPartitionRenderer extends AbstractPredicateObjectListRendere
     addBtnImgSrc = require("../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove domain";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private crService: CustomRangeServices, private propService: PropertyServices, private resourceService: ResourceServices,
         private manchService: ManchesterServices, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+        super();
     }
 
     add() {
-        this.rvModalService.addPropertyValue("Add a domain", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a domain", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class or a manchester Expression
@@ -60,7 +60,7 @@ export class DomainsPartitionRenderer extends AbstractPredicateObjectListRendere
     }
 
     enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, [predicate], false).then(
+        this.rvModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
             (data: any) => {
                 var value: any = data.value; //value can be a class or a manchester Expression
                 if (typeof value == "string") {

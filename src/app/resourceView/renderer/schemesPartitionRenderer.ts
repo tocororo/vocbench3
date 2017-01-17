@@ -28,15 +28,15 @@ export class SchemesPartitionRenderer extends AbstractPredicateObjectListRendere
     addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
     removeBtnImgTitle = "Remove from ConceptScheme";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler,
         private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+        super();
     }
 
     //add as top concept
     add() {
-        this.rvModalService.addPropertyValue("Add Concept to a Scheme", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add Concept to a Scheme", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var scheme: ARTURIResource = data.value;

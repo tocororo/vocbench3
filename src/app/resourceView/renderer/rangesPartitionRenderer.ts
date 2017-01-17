@@ -26,13 +26,13 @@ export class RangesPartitionRenderer extends AbstractPredicateObjectListRenderer
     addBtnImgSrc = require("../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove range"; 
     
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
         private manchService: ManchesterServices, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService); 
+        super(); 
     }
 
     add() {
-        this.rvModalService.addPropertyValue("Add a range", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a range", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
@@ -60,7 +60,7 @@ export class RangesPartitionRenderer extends AbstractPredicateObjectListRenderer
     }
 
     enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, [predicate], false).then(
+        this.rvModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
             (data: any) => {
                 var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
                 if (typeof value == "string") {

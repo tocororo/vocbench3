@@ -25,7 +25,7 @@ import {SchemesPartitionRenderer} from '../resourceView/renderer/schemesPartitio
 import {SuperPropertiesPartitionRenderer} from '../resourceView/renderer/superPropertiesPartitionRenderer';
 import {TopConceptsPartitionRenderer} from '../resourceView/renderer/topConceptsPartitionRenderer';
 import {TypesPartitionRenderer} from '../resourceView/renderer/typesPartitionRenderer';
-import {LaberRelationsPartitionRenderer} from '../resourceView/renderer/labelRelationsPartitionRenderer';
+import {LabelRelationsPartitionRenderer} from '../resourceView/renderer/labelRelationsPartitionRenderer';
 
 import {ResViewModalServices} from '../resourceView/resViewModals/resViewModalServices';
 import {ClassListCreatorModal} from '../resourceView/resViewModals/classListCreatorModal';
@@ -47,7 +47,7 @@ import {AddPropertyValueModal} from '../resourceView/resViewModals/addPropertyVa
         LexicalizationsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,
         PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
-        TypesPartitionRenderer, LaberRelationsPartitionRenderer,
+        TypesPartitionRenderer, LabelRelationsPartitionRenderer,
         //modals
         ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal
     ],

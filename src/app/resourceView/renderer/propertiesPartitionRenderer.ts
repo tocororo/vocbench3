@@ -31,10 +31,10 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectListRend
     addBtnImgTitle = "Add a property value";
     removeBtnImgTitle = "Remove property value";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
         private skosxlService: SkosxlServices, private browsingService: BrowsingServices,
         private modalService: ModalServices, private resViewModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+        super();
     }
 
     add() {

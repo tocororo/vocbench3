@@ -2,7 +2,6 @@ import {Component, Input, Output, EventEmitter} from "@angular/core";
 
 import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
@@ -30,13 +29,13 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredicateObjectList
     addBtnImgSrc = require("../../../assets/images/prop_create.png");
     removeBtnImgTitle = "Remove inverse property";
     
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
-        private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+    constructor(private propService: PropertyServices, private crService: CustomRangeServices, private browsingService: BrowsingServices,
+        private rvModalService: ResViewModalServices) {
+        super();
     }
     
     add() {
-        this.rvModalService.addPropertyValue("Add an inverse property", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add an inverse property", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var inverseProp: ARTURIResource = data.value;

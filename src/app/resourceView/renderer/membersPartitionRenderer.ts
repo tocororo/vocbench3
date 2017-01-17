@@ -1,22 +1,22 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
-import {SkosServices} from "../../services/skosServices";
-import {ARTResource, ARTURIResource, ARTNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import { SkosServices } from "../../services/skosServices";
+import { ARTResource, ARTURIResource, ARTNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../utils/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler"
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {SKOS} from "../../utils/Vocabulary";
-import {ResViewModalServices} from "../resViewModals/resViewModalServices";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { SKOS } from "../../utils/Vocabulary";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 
 @Component({
-	selector: "members-renderer",
-	templateUrl: "./predicateObjectListRenderer.html",
+    selector: "members-renderer",
+    templateUrl: "./predicateObjectListRenderer.html",
 })
 export class MembersPartitionRenderer extends AbstractPredicateObjectListRenderer {
-    
+
     //inherited from AbstractPredicateObjectListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
@@ -28,18 +28,18 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectListRendere
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../assets/images/collection_create.png");
     removeBtnImgTitle = "Remove member";
-    
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
-        private skosService: SkosServices, private rvModalService: ResViewModalServices,
-        private vbCtx: VocbenchCtx, private eventHandler: VBEventHandler) {
-        super(propService, resourceService, crService);
+
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
+        private skosService: SkosServices, private rvModalService: ResViewModalServices, private vbCtx: VocbenchCtx,
+        private eventHandler: VBEventHandler) {
+        super();
     }
-    
+
     /**
      * Adds a member in a collection (unordered)
      */
     add() {
-        this.rvModalService.addPropertyValue("Add a member", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
@@ -53,15 +53,15 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectListRendere
                         stResp => {
                             if (member.getRole() == RDFResourceRolesEnum.skosCollection ||
                                 member.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                                this.eventHandler.nestedCollectionAddedEvent.emit({nested: member, container: this.resource});
+                                this.eventHandler.nestedCollectionAddedEvent.emit({ nested: member, container: this.resource });
                             }
                             this.update.emit(null);
                         }
                     );
                 }
             },
-            () => {}
-        )
+            () => { }
+        );
     }
 
     enrichProperty(predicate: ARTURIResource) {
@@ -76,7 +76,7 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectListRendere
                         stResp => {
                             if (selectedMember.getRole() == RDFResourceRolesEnum.skosCollection ||
                                 selectedMember.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                                this.eventHandler.nestedCollectionAddedEvent.emit({nested: selectedMember, container: this.resource});
+                                this.eventHandler.nestedCollectionAddedEvent.emit({ nested: selectedMember, container: this.resource });
                             }
                             this.update.emit(null);
                         }
@@ -100,15 +100,11 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectListRendere
             } else {//predicate is some subProperty of rdf:type
                 this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
                     stResp => {
-                        if ((<ARTResource>object).getRole() == RDFResourceRolesEnum.skosCollection ||
-                                (<ARTResource>object).getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                                this.eventHandler.nestedCollectionAddedEvent.emit({nested: <ARTResource>object, container: this.resource});
-                            }
-                        this.update.emit(null);
+                        alert("remove of " + predicate.getShow() + " value is not available");
                     }
                 );
             }
         }
     }
-    
+
 }

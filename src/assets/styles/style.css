@@ -168,9 +168,9 @@ rdf-resource .flagIcon > span{
     min-height: 24px;
 }
 
-instance-list rdf-resource {
+/*instance-list rdf-resource {
     min-height: 24px;
-}
+}*/
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
 collection-tree rdf-resource:hover, scheme-list rdf-resource:hover, property-tree rdf-resource:hover,
@@ -249,6 +249,7 @@ img.disabled  {
 .listItem {
     padding: 3px;
     width: 100%;
+    min-height: 24px;
     display: flex;
 }
 .listItem:hover {

@@ -29,15 +29,15 @@ export class TopConceptsPartitionRenderer extends AbstractPredicateObjectListRen
     addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
     removeBtnImgTitle = "Remove as topConcept";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices, 
-        private skosService: SkosServices, private eventHandler: VBEventHandler, 
-        private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices, 
+        private skosService: SkosServices, private eventHandler: VBEventHandler, private browsingService: BrowsingServices,
+        private rvModalService: ResViewModalServices) {
+        super();
     }
 
     //add as top concept
     add() {
-        this.rvModalService.addPropertyValue("Set as top Concept of", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Set as top Concept of", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var scheme: ARTURIResource = data.value;

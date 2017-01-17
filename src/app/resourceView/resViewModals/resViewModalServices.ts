@@ -91,12 +91,12 @@ export class ResViewModalServices {
      * Returns and object containing "property" and "value".
      * @param title title of the dialog
      * @param resource resource that is going to enrich with the property-value pair.
-     * @param properties root properties that the modal should allow to enrich
+     * @param property root property that the modal should allow to enrich
      * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
      *  If false, the button to change property is hidden
      */
-    addPropertyValue(title: string, resource: ARTResource, properties: ARTURIResource[], propChangeable?: boolean) {
-        var modalData = new AddPropertyValueModalData(title, resource, properties, propChangeable);
+    addPropertyValue(title: string, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean) {
+        var modalData = new AddPropertyValueModalData(title, resource, property, propChangeable);
         const builder = new BSModalContextBuilder<AddPropertyValueModalData>(
             modalData, undefined, AddPropertyValueModalData
         );

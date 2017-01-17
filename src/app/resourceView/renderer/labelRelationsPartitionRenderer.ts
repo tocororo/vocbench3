@@ -11,7 +11,7 @@ import { SKOSXL } from "../../utils/Vocabulary";
     selector: "label-relations-renderer",
     templateUrl: "./predicateObjectListRenderer.html",
 })
-export class LaberRelationsPartitionRenderer extends AbstractPredicateObjectListRenderer {
+export class LabelRelationsPartitionRenderer extends AbstractPredicateObjectListRenderer {
 
     //inherited from AbstractPredicateObjectListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
@@ -25,13 +25,13 @@ export class LaberRelationsPartitionRenderer extends AbstractPredicateObjectList
     addBtnImgSrc = require("../../../assets/images/propObject_create.png");
     removeBtnImgTitle = "Remove label relation";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private crService: CustomRangeServices, private propService: PropertyServices, private resourceService: ResourceServices,
         private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+        super();
     }
 
     add() {
-        this.rvModalService.addPropertyValue("Add a label relation", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a label relation", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var label: ARTResource = data.value;
@@ -44,7 +44,7 @@ export class LaberRelationsPartitionRenderer extends AbstractPredicateObjectList
     }
 
     enrichProperty(predicate: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add a " + predicate.getShow(), this.resource, [predicate], false).then(
+        this.rvModalService.addPropertyValue("Add a " + predicate.getShow(), this.resource, predicate, false).then(
             (data: any) => {
                 var label: ARTResource = data.value;
                 this.propService.addExistingPropValue(this.resource, predicate, label.getNominalValue(), RDFTypesEnum.resource).subscribe(

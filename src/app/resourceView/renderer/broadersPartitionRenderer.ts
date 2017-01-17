@@ -29,14 +29,14 @@ export class BroadersPartitionRenderer extends AbstractPredicateObjectListRender
     addBtnImgSrc = require("../../../assets/images/concept_create.png");
     removeBtnImgTitle = "Remove broader";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private crService: CustomRangeServices, private propService: PropertyServices, private resourceService: ResourceServices,
         private skosService: SkosServices, private browsingService: BrowsingServices, private rvModalService: ResViewModalServices,
         private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
-        super(propService, resourceService, crService);
+        super();
     }
 
     add() {
-        this.rvModalService.addPropertyValue("Add a broader", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a broader", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var broader: ARTURIResource = data.value;

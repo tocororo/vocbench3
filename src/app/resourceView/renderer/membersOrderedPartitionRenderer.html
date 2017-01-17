@@ -1,4 +1,4 @@
-<div class="subPanel">
+<!--<div class="subPanel">
     <div class="subPanel-heading">
         <label style="flex: 1">Members:</label>
         <div class="dropdown pull-right">
@@ -24,4 +24,119 @@
             </button>
         </div>
     </div>
+</div>-->
+
+
+<div class="groupPanel">
+    <div class="groupPanel-heading">
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <!--<span class="groupPanel-heading-content">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+        </span>-->
+        <div class="groupPanel-heading-content dropdown pull-right">
+            <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"
+                [title]="addBtnImgTitle" [disabled]="!resource.getAdditionalProperty('explicit')">
+                <img [src]="addBtnImgSrc" style="height: 16px"/>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a (click)="addFirst()">Add first</a></li>
+                <li><a (click)="addLast()">Add last</a></li>
+                <li [ngClass]="{disabled : !selectedMember}"><a (click)="addBefore()">Add before the selected member</a></li>
+                <li [ngClass]="{disabled : !selectedMember}"><a (click)="addAfter()">Add after the selected member</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="groupPanel-body">
+        <!--<div class="subPanel" *ngFor="let po of predicateObjectList">
+            <div class="subPanel-heading">
+                <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
+                    [disabled]="!resource.getAdditionalProperty('explicit')">
+                    <span>+</span>
+                </button>
+            </div>
+            <div class="subPanel-body">
+                <div *ngFor="let obj of po.getObjects()" class="listItem">
+                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
+                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="subPanel" *ngFor="let po of predicateObjectList">
+            <div class="subPanel-heading">
+                <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                <!--<button class="resViewPartitionBtn" [title]="getAddPropImgTitle(po.getPredicate())" (click)="enrichProperty(po.getPredicate())"
+                    [disabled]="!resource.getAdditionalProperty('explicit')">
+                    <span>+</span>
+                </button>-->
+                <div class="dropdown pull-right">
+                    <button class="resViewPartitionBtn dropdown-toggle" data-toggle="dropdown"
+                        title="Add member" [disabled]="!resource.getAdditionalProperty('explicit')">
+                        <span>+</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a (click)="addFirst(po.getPredicate())">Add first</a></li>
+                        <li><a (click)="addLast(po.getPredicate())">Add last</a></li>
+                        <li [ngClass]="{disabled : !selectedMember}"><a (click)="addBefore(po.getPredicate())">Add before the selected member</a></li>
+                        <li [ngClass]="{disabled : !selectedMember}"><a (click)="addAfter(po.getPredicate())">Add after the selected member</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="subPanel-body">
+                <div *ngFor="let obj of po.getObjects()" (click)="selectMember(obj)"
+                    [ngClass]="{active: obj == selectedMember}" class="listItem">
+                    <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                    <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
+                        (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
+                        (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="subPanel">
+            <div class="subPanel-heading">
+                <label style="flex: 1">Members:</label>
+                <div class="dropdown pull-right">
+                    <button class="resViewPartitionBtn dropdown-toggle" data-toggle="dropdown"
+                        title="Add member" [disabled]="!resource.getAdditionalProperty('explicit')">
+                        <span>+</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a (click)="addFirst()">Add first</a></li>
+                        <li><a (click)="addLast()">Add last</a></li>
+                        <li [ngClass]="{disabled : !selectedMember}"><a (click)="addBefore()">Add before the selected member</a></li>
+                        <li [ngClass]="{disabled : !selectedMember}"><a (click)="addAfter()">Add after the selected member</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="subPanel-body">
+                <div *ngFor="let obj of objectList" class="listItem" [ngClass]="{active: obj == selectedMember}"
+                    (click)="selectMember(obj)">
+                    <rdf-resource [resource]="obj" (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                    <button class="resViewPartitionBtn" title="Remove member" (click)="remove(obj)"  
+                        [disabled]="!obj.getAdditionalProperty('explicit')">
+                        <span>-</span>
+                    </button>
+                </div>
+            </div>
+        </div>-->
+        
+    </div>
+
 </div>

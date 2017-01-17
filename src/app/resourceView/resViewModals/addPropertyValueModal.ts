@@ -27,13 +27,13 @@ export class AddPropertyValueModalData extends BSModalContext {
      * @param title title of the dialog
      * @param resource resource that is going to enrich with the property-value pair. 
      *  Useful in case the modal is used to add a range to a property to know if the property is a datatype
-     * @param properties root properties that the modal should allow to enrich
+     * @param property root property that the modal should allow to enrich
      * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
      */
     constructor(
         public title: string = 'Add property value',
         public resource: ARTResource,
-        public properties: ARTURIResource[] = [],
+        public property: ARTURIResource,
         public propChangeable: boolean = true
     ) {
         super();
@@ -70,17 +70,20 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
     
     ngOnInit() {
-        this.rootProperty = this.context.properties[0]; //this is ok at the moment just for those partitions that are specific for just one property
+        this.rootProperty = this.context.property;
         this.selectedProperty = this.rootProperty;
 
+        //scheme
         if (this.showConceptTree()) {
             this.scheme = this.vbCtx.getScheme();
         }
 
+        //class for instance-list
         if (this.rootProperty.getURI() == SKOSXL.labelRelation.getURI()) {
             this.classForInstanceList = SKOSXL.label;
         }
-        
+
+        //root classes for class-individual-list
         if (this.rootProperty.getURI() == SKOS.member.getURI()) {
             this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
         }
@@ -108,7 +111,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
     
     private changeProperty() {
-        alert("opening property tree rooted on " + JSON.stringify(this.context.properties) + " to change property");
+        alert("opening property tree rooted on " + JSON.stringify(this.context.property) + " to change property");
         //TODO once chosen another property, update selectedProperty
     }
 
@@ -119,8 +122,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private showClassManchSelector() {
         return (
             this.rootProperty.getURI() == RDFS.domain.getURI() ||
-            (this.rootProperty.getURI() == RDFS.range.getURI() &&
-            this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty)
+            (this.rootProperty.getURI() == RDFS.range.getURI() && this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
+            this.rootProperty.getURI() == RDFS.subClassOf.getURI() ||
+            this.rootProperty.getURI() == OWL.equivalentClass.getURI() ||
+            this.rootProperty.getURI() == OWL.complementOf.getURI() ||
+            this.rootProperty.getURI() == OWL.disjointWith.getURI()
         );
     }
 
@@ -129,8 +135,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             return (
                 this.rootProperty.getURI() == RDF.type.getURI() ||
                 this.rootProperty.getURI() == RDFS.domain.getURI() ||
-                (this.rootProperty.getURI() == RDFS.range.getURI() &&
-                this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty)
+                (this.rootProperty.getURI() == RDFS.range.getURI() && this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
+                this.rootProperty.getURI() == RDFS.subClassOf.getURI() ||
+                this.rootProperty.getURI() == OWL.equivalentClass.getURI() ||
+                this.rootProperty.getURI() == OWL.complementOf.getURI() ||
+                this.rootProperty.getURI() == OWL.disjointWith.getURI()
             );
         } else {
             return false;

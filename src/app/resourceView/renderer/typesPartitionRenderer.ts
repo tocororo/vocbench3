@@ -28,14 +28,14 @@ export class TypesPartitionRenderer extends AbstractPredicateObjectListRenderer 
     addBtnImgSrc = require("../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove type";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
-        private owlService: OwlServices, private browsingService: BrowsingServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices,
+        private crService: CustomRangeServices, private owlService: OwlServices, private browsingService: BrowsingServices,
         private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+        super();
     }
 
     add() {
-        this.rvModalService.addPropertyValue("Add a type", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a type", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var typeClass: ARTURIResource = data.value;

@@ -28,13 +28,13 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredicateObjectLis
     addBtnImgSrc = require("../../../assets/images/prop_create.png");
     removeBtnImgTitle = "Remove superproperty";
     
-    constructor(propService: PropertyServices, resourceService: ResourceServices, crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
         private eventHandler: VBEventHandler, private browsingService: BrowsingServices, private rvModalService: ResViewModalServices) {
-        super(propService, resourceService, crService);
+        super();
     }
     
     add() {
-        this.rvModalService.addPropertyValue("Add a superproperty", this.resource, [this.rootProperty]).then(
+        this.rvModalService.addPropertyValue("Add a superproperty", this.resource, this.rootProperty).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var superProp: ARTURIResource = data.value;

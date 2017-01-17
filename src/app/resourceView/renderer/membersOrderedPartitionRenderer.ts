@@ -1,30 +1,38 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum, ResAttribute} from "../../utils/ARTResources";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {SKOS} from "../../utils/Vocabulary";
-import {ResViewModalServices} from "../resViewModals/resViewModalServices";
-import {SkosServices} from "../../services/skosServices";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { ResourceServices } from "../../services/resourceServices";
+import { CustomRangeServices } from "../../services/customRangeServices";
+import { SkosServices } from "../../services/skosServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from "../../utils/ARTResources";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { SKOS } from "../../utils/Vocabulary";
+
 
 @Component({
-	selector: "members-ordered-renderer",
-	templateUrl: "./predicateObjectListRenderer.html",
+    selector: "members-ordered-renderer",
+    templateUrl: "./membersOrderedPartitionRenderer.html",
 })
-export class MembersOrderedPartitionRenderer {
-    
-    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    @Input() resource: ARTResource;
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectListRenderer {
 
-    private label = "Members";
-    private addBtnImgTitle = "Add member";
-    private addBtnImgSrc = require("../../../assets/images/collection_create.png");
-    private removeBtnImgTitle = "Remove member";
+    //inherited from AbstractPredicateObjectListRenderer
+    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    // @Input() resource:ARTURIResource;
+    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    rootProperty = SKOS.member;
+    label = "Members";
+    addBtnImgTitle = "Add member";
+    addBtnImgSrc = require("../../../assets/images/collection_create.png");
+    removeBtnImgTitle = "Remove member";
 
     private selectedMember: ARTResource;
 
-    constructor(private rvModalService: ResViewModalServices, private skosService: SkosServices,
-        private vbCtx: VocbenchCtx) {}
+    constructor(private crService: CustomRangeServices, private resourceService: ResourceServices, private skosService: SkosServices,
+        private rvModalService: ResViewModalServices, private vbCtx: VocbenchCtx) {
+        super();
+    }
 
     selectMember(member: ARTResource) {
         if (this.selectedMember == member) {
@@ -33,96 +41,134 @@ export class MembersOrderedPartitionRenderer {
             this.selectedMember = member;
         }
     }
-    
+
+    //needed to be implemented since this Component extends AbstractPredicateObjectListRenderer, but not used.
+    //Use addFirst addLast addBefore and addAfter instead
+    add() { }
+    enrichProperty(predicate: ARTURIResource) { }
+
     /**
      * Adds a first member to an ordered collection 
      */
-    private addFirst() {
-        this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
-            (selectedMember: any) => {
-                this.skosService.addFirstToOrderedCollection(this.resource, selectedMember, this.vbCtx.getContentLanguage(true)).subscribe(
-                    stResp => this.update.emit(null)
-                );
+    private addFirst(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty, propChangeable).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var member: ARTResource = data.value;
+
+                if (prop.getURI() == this.rootProperty.getURI()) { //it's using skos:member
+                    this.skosService.addFirstToOrderedCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
+                        stResp => this.update.emit(null)
+                    );
+                } else { //it's using a subProperty of skos:member
+                    alert("Enrichment of subProperty of " + this.rootProperty.getShow());
+                }
             },
-            () => {}
+            () => { }
         );
     }
 
     /**
      * Adds a last member to an ordered collection 
      */
-    private addLast() {
-        this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
-            (selectedMember: any) => {
-                this.skosService.addLastToOrderedCollection(this.resource, selectedMember, this.vbCtx.getContentLanguage(true)).subscribe(
-                    stResp => this.update.emit(null)
-                );
+    private addLast(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty, propChangeable).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var member: ARTResource = data.value;
+
+                if (prop.getURI() == this.rootProperty.getURI()) { //it's using skos:member
+                    this.skosService.addLastToOrderedCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
+                        stResp => this.update.emit(null)
+                    );
+                } else { //it's using a subProperty of skos:member
+                    alert("Enrichment of " + prop.getShow() + " not available");
+                }
             },
-            () => {}
+            () => { }
         );
     }
 
     /**
      * Adds a member in a given position to an ordered collection 
      */
-    // private addBefore() {
-    //     var position = this.objectList.indexOf(this.selectedMember) + 1; //indexOf is 0-based, position is 1-based
-    //     this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
-    //         (selectedMember: any) => {
-    //             this.skosService.addInPositionToOrderedCollection(this.resource, selectedMember, position,
-    //                 this.vbCtx.getContentLanguage(true)).subscribe(
-    //                 stResp => this.update.emit(null)
-    //             );
-    //         },
-    //         () => {}
-    //     );
-    // }
+    private addBefore(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty, propChangeable).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var member: ARTResource = data.value;
 
-    // /**
-    //  * Adds a member in a given position to an ordered collection 
-    //  */
-    // private addAfter() {
-    //     var position = this.objectList.indexOf(this.selectedMember) + 2; //indexOf is 0-based, position is 1-based
-    //     this.rvModalService.enrichProperty("Add a skos:member", SKOS.member, [SKOS.collection, SKOS.concept]).then(
-    //         (selectedMember: any) => {
-    //             this.skosService.addInPositionToOrderedCollection(this.resource, selectedMember, position,
-    //                 this.vbCtx.getContentLanguage(true)).subscribe(
-    //                 stResp => this.update.emit(null)
-    //             );
-    //         },
-    //         () => {}
-    //     );
-    // }
-    
-    private remove(member: ARTResource) {
-        this.skosService.removeFromOrderedCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
-            stResp => {
-                this.update.emit(null);
-            }
-        )
-    }
-    
-    private objectDblClick(obj: ARTResource) {
-        this.dblclickObj.emit(obj);//clicked object (type) can be a URIResource or BNode
+                var position: number;
+                for (var i = 0; i < this.predicateObjectList.length; i++) {
+                    if (this.predicateObjectList[i].getPredicate().getURI() == prop.getURI()) {
+                        position = this.predicateObjectList[i].getObjects().indexOf(this.selectedMember) + 1;//indexOf is 0-based, position is 1-based
+                        break;
+                    }
+                }
+
+                if (prop.getURI() == this.rootProperty.getURI()) { //it's using skos:member
+                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position, this.vbCtx.getContentLanguage(true)).subscribe(
+                        stResp => this.update.emit(null)
+                    );
+                } else { //it's using a subProperty of skos:member
+                    alert("Enrichment of " + prop.getShow() + " not available");
+                }
+            },
+            () => { }
+        );
     }
 
     /**
-     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
-     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
-     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
-     * or the predicate has no custom range, the object should be rendered as simple rdfResource
-     * @param object object of the predicate object list to render in view.
+     * Adds a member in a given position to an ordered collection 
      */
-    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
-        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
+    private addAfter(predicate?: ARTURIResource) {
+        var propChangeable: boolean = predicate == null;
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.rootProperty, propChangeable).then(
+            (data: any) => {
+                var prop: ARTURIResource = data.property;
+                var member: ARTResource = data.value;
+
+                var position: number;
+                for (var i = 0; i < this.predicateObjectList.length; i++) {
+                    if (this.predicateObjectList[i].getPredicate().getURI() == prop.getURI()) {
+                        position = this.predicateObjectList[i].getObjects().indexOf(this.selectedMember) + 2;//indexOf is 0-based, position is 1-based
+                        break;
+                    }
+                }
+
+                if (prop.getURI() == this.rootProperty.getURI()) { //it's using skos:member
+                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position, this.vbCtx.getContentLanguage(true)).subscribe(
+                        stResp => this.update.emit(null)
+                    );
+                } else { //it's using a subProperty of skos:member
+                    alert("Enrichment of " + prop.getShow() + " not available");
+                }
+            },
+            () => { }
+        );
     }
 
-    private getAddPropImgTitle(predicate: ARTURIResource) {
-        return "Add a " + predicate.getShow();
+    removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        } else {
+            if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
+                this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>object, this.vbCtx.getContentLanguage(true)).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            } else {//predicate is some subProperty of skos:member
+                this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                    stResp => {
+                        alert("remove of " + predicate.getShow() + " value is not available");
+                    }
+                );
+            }
+        }
     }
-    
-    private getRemovePropImgTitle(predicate: ARTURIResource) {
-        return "Remove " + predicate.getShow();
-    }
-    
+
 }
