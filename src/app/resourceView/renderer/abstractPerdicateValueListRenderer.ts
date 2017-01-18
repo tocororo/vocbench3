@@ -92,8 +92,10 @@ export abstract class AbstractPredicateValueListRenderer {
     /**
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
      */
-    private objectDblClick(obj: ARTResource) {
-        this.dblclickObj.emit(obj);//clicked object (type) can be a URIResource or BNode
+    private objectDblClick(obj: ARTNode) {
+        if (obj.isResource()) {//emit double click only for resources (not for ARTLiteral that cannot be described in a ResView)
+            this.dblclickObj.emit(<ARTResource>obj);
+        }
     }
     /**
      * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
