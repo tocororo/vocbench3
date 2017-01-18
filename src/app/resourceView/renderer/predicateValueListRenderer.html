@@ -1,5 +1,9 @@
 <div class="groupPanel">
     <div class="groupPanel-heading">
+        <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
+            <img *ngIf="partitionCollapsed" src="../../../assets/images/tree_expand.png" (click)="partitionCollapsed = !partitionCollapsed">
+            <img *ngIf="!partitionCollapsed" src="../../../assets/images/tree_collapse.png" (click)="partitionCollapsed = !partitionCollapsed">
+        </div>
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
@@ -10,30 +14,31 @@
     </div>
 
     <div class="groupPanel-body">
-        <template ngFor let-pv [ngForOf]="predicateValueList">
-            <div class="subPanel" *ngFor="let v of pv.getValues()">
-                <div class="subPanel-heading">
-                    <label style="flex: 1">{{v.getPredicate().getShow()}}</label>
-                    <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(v.getPredicate())" (click)="add(v.getPredicate())"
-                        [disabled]="!resource.getAdditionalProperty('explicit')">
-                        <span>+</span>
-                    </button>
-                </div>
-                <div class="subPanel-body">
-                    <div *ngFor="let obj of v.getObjects()" class="listItem">
-                        <reified-resource *ngIf="renderAsReified(pv.getPredicate(), obj)" [resource]="obj" [predicate]="pv.getPredicate()" 
-                            (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
-                        <rdf-resource *ngIf="!renderAsReified(pv.getPredicate(), obj)" [resource]="obj"
-                            (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-                        <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(pv.getPredicate())" (click)="removePredicateObject(pv.getPredicate(), obj)"  
-                            [disabled]="!obj.getAdditionalProperty('explicit')">
-                            <span>-</span>
+        <template [ngIf]="!partitionCollapsed">
+            <template ngFor let-pv [ngForOf]="predicateValueList">
+                <div class="subPanel" *ngFor="let v of pv.getValues()">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">{{v.getPredicate().getShow()}}</label>
+                        <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(v.getPredicate())" (click)="add(v.getPredicate())"
+                            [disabled]="!resource.getAdditionalProperty('explicit')">
+                            <span>+</span>
                         </button>
                     </div>
+                    <div class="subPanel-body">
+                        <div *ngFor="let obj of v.getObjects()" class="listItem">
+                            <reified-resource *ngIf="renderAsReified(pv.getPredicate(), obj)" [resource]="obj" [predicate]="pv.getPredicate()" 
+                                (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                            <rdf-resource *ngIf="!renderAsReified(pv.getPredicate(), obj)" [resource]="obj"
+                                (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
+                            <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(pv.getPredicate())" (click)="removePredicateObject(pv.getPredicate(), obj)"  
+                                [disabled]="!obj.getAdditionalProperty('explicit')">
+                                <span>-</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </template>
         </template>
-
-
     </div>
+
 </div>

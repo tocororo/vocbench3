@@ -20,6 +20,9 @@ export abstract class AbstractPredicateObjectListRenderer {
      * ATTRIBUTES
      */
 
+    //to handle partition collapsed/expanded
+    partitionCollapsed: boolean = false;
+
     /**
      * Root property described in the partition
      */
@@ -63,7 +66,6 @@ export abstract class AbstractPredicateObjectListRenderer {
      * This is fired when the "-" button is clicked (near an object).
      */
     abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
-    
     /**
      * Returns the title of the "+" button placed in a subPanel heading.
      * This is specific of a predicate of a partition, so it depends from a predicate.

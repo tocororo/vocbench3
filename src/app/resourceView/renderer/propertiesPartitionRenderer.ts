@@ -19,6 +19,8 @@ import { ModalServices } from "../../widget/modal/modalServices";
 })
 export class PropertiesPartitionRenderer extends AbstractPredicateObjectListRenderer {
 
+    partitionCollapsed: boolean = true; //override the default value in AbstractPredicateObjectListRenderer
+
     //inherited from AbstractPredicateObjectListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;

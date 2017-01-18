@@ -20,6 +20,9 @@ export abstract class AbstractPredicateValueListRenderer {
      * ATTRIBUTES
      */
 
+    //to handle partition collapsed/expanded
+    partitionCollapsed: boolean = false;
+
     /**
      * Root properties described in the partition
      * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
