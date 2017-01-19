@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
@@ -15,13 +15,11 @@ import { ModalServices } from "../../widget/modal/modalServices";
 
 @Component({
     selector: "properties-renderer",
-    templateUrl: "./predicateObjectListRenderer.html",
+    templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class PropertiesPartitionRenderer extends AbstractPredicateObjectListRenderer {
+export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRenderer {
 
-    partitionCollapsed: boolean = true; //override the default value in AbstractPredicateObjectListRenderer
-
-    //inherited from AbstractPredicateObjectListRenderer
+    //inherited from AbstractPredicateObjectsListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
@@ -37,6 +35,10 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectListRend
         private skosxlService: SkosxlServices, private browsingService: BrowsingServices, private modalService: ModalServices,
         private resViewModalService: ResViewModalServices) {
         super();
+    }
+
+    ngOnInit() {
+        this.partitionCollapsed = (this.predicateObjectList.length > 4);
     }
 
     add(predicate?: ARTURIResource) {

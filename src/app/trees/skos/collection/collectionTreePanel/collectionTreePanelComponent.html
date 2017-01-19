@@ -4,7 +4,7 @@
         <div class="btn-group btn-group-xs" role="group" style="flex: 1;">
             <div class="btn-group btn-group-xs" role="group" title="Create Collection">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <img src="../../../../../assets/images/collection_create.png" />
+                    <img src="../../../../../assets/images/collection_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a (click)="createCollection()">Collection</a></li>
@@ -14,7 +14,7 @@
             <div class="btn-group btn-group-xs" role="group" >
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Create a nested Collection" 
                     [disabled]="!selectedCollection">
-                    <img src="../../../../../assets/images/collection_addNested.png" />
+                    <img src="../../../../../assets/images/collection_addNested.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a (click)="createNestedCollection()">Collection</a></li>
@@ -22,7 +22,7 @@
                 </ul>
             </div>
             <button class="btn btn-default" title="Delete Collection" (click)="deleteCollection()" [disabled]="!selectedCollection">
-                <img src="../../../../../assets/images/collection_delete.png" />
+                <img src="../../../../../assets/images/collection_delete.png" class="panelButtonImg"/>
             </button>
         </div>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">

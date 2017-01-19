@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateValueListRenderer } from "./abstractPerdicateValueListRenderer";
+import { AbstractPredicateValuesListRenderer } from "./abstractPerdicateValuesListRenderer";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { OwlServices } from "../../services/owlServices";
@@ -10,11 +10,11 @@ import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 @Component({
     selector: "class-axiom-renderer",
-    templateUrl: "./predicateValueListRenderer.html",
+    templateUrl: "./predicateValuesListRenderer.html",
 })
-export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValueListRenderer {
+export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValuesListRenderer {
 
-    //inherited from AbstractPredicateValueListRenderer
+    //inherited from AbstractPredicateValuesListRenderer
     // @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

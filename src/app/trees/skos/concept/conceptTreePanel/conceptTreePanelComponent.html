@@ -3,13 +3,13 @@
     <div class="panel-heading">  
         <div class="btn-group btn-group-xs" role="group" style="flex: 1;">
             <button class="btn btn-default" title="Create topConcept" (click)="createTopConcept()" [disabled]="!activeScheme">
-                <img src="../../../../../assets/images/concept_create.png" />
+                <img src="../../../../../assets/images/concept_create.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Add narrower" (click)="createNarrower()" [disabled]="!selectedConcept || !activeScheme">
-                <img src="../../../../../assets/images/concept_addNarrower.png" />
+                <img src="../../../../../assets/images/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Concept" (click)="deleteConcept()" [disabled]="!selectedConcept">
-                <img src="../../../../../assets/images/concept_delete.png" />
+                <img src="../../../../../assets/images/concept_delete.png" class="panelButtonImg"/>
             </button>
         </div>
         <img *ngIf="!activeScheme" style="margin: 0px 5px" src="../../../../../assets/images/warning.png"

@@ -26,6 +26,7 @@ import {SuperPropertiesPartitionRenderer} from '../resourceView/renderer/superPr
 import {TopConceptsPartitionRenderer} from '../resourceView/renderer/topConceptsPartitionRenderer';
 import {TypesPartitionRenderer} from '../resourceView/renderer/typesPartitionRenderer';
 import {LabelRelationsPartitionRenderer} from '../resourceView/renderer/labelRelationsPartitionRenderer';
+import {PredicateObjectsRenderer} from '../resourceView/renderer/predicateObjectsRenderer';
 
 import {ResViewModalServices} from '../resourceView/resViewModals/resViewModalServices';
 import {ClassListCreatorModal} from '../resourceView/resViewModals/classListCreatorModal';
@@ -48,6 +49,7 @@ import {AddPropertyValueModal} from '../resourceView/resViewModals/addPropertyVa
         PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
         TypesPartitionRenderer, LabelRelationsPartitionRenderer,
+        PredicateObjectsRenderer,
         //modals
         ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal
     ],

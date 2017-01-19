@@ -1,5 +1,4 @@
 <div class="groupPanel">
-
     <div class="groupPanel-heading">
         <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
             <img *ngIf="partitionCollapsed" src="../../../assets/images/tree_expand.png" (click)="partitionCollapsed = !partitionCollapsed">
@@ -16,16 +15,12 @@
 
     <div class="groupPanel-body">
         <template [ngIf]="!partitionCollapsed">
-            <div style="display: flex; padding: 8px;">
-                <span *ngFor="let f of facets" style="flex:1; display: inline-flex; align-items: center;">
-                    <input #cb type="checkbox" style="margin: 0px 3px 0px 0px;" value="transitive"
-                        [ngModel]="f.value" [disabled]="!f.explicit" (change)="changeFacet(f.name, cb.checked)">{{f.name}}
-                </span>
-            </div>
-            <pred-obj-renderer *ngFor="let po of predicateObjectList" [pred-obj]="po" [resource]="resource"
-                (dblclickObj)="objectDblClick($event)" (add)="add(po.getPredicate())" (remove)="removePredicateObject(po.getPredicate(), $event)">
-            </pred-obj-renderer>
+            <template ngFor let-pv [ngForOf]="predicateValueList">
+                <pred-obj-renderer *ngFor="let po of pv.getValues()" [pred-obj]="po" [resource]="resource"
+                    (dblclickObj)="objectDblClick($event)" (add)="add(po.getPredicate())" (remove)="removePredicateObject(po.getPredicate(), $event)">
+                </pred-obj-renderer>
+            </template>
         </template>
     </div>
-    
+
 </div>

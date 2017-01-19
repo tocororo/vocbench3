@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
@@ -12,11 +12,11 @@ import { SKOS } from "../../utils/Vocabulary"
 
 @Component({
     selector: "top-concepts-renderer",
-    templateUrl: "./predicateObjectListRenderer.html",
+    templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class TopConceptsPartitionRenderer extends AbstractPredicateObjectListRenderer {
+export class TopConceptsPartitionRenderer extends AbstractPredicateObjectsListRenderer {
 
-    //inherited from AbstractPredicateObjectListRenderer
+    //inherited from AbstractPredicateObjectsListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource: ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

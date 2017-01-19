@@ -5,7 +5,7 @@
             
             <div class="btn-group btn-group-xs" role="group">
                 <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property">
-                    <img src="../../../../assets/images/prop_create.png"/>
+                    <img src="../../../../assets/images/prop_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
@@ -37,11 +37,11 @@
             </div>
 
             <button class="btn btn-default" title="Create SubProperty" (click)="createSubProperty()" [disabled]="!selectedProperty">
-                <img src="../../../../assets/images/prop_addSubProperty.png" />
+                <img src="../../../../assets/images/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Property" (click)="deleteProperty()" 
                     [disabled]="!selectedProperty || !selectedProperty.getAdditionalProperty('explicit')">
-                <img src="../../../../assets/images/prop_delete.png" />
+                <img src="../../../../assets/images/prop_delete.png" class="panelButtonImg"/>
             </button>
         </div>
 

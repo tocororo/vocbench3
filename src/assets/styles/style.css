@@ -307,6 +307,11 @@ img.disabled  {
     padding: 12px 4px 4px;
 }
 
+.panelButtonImg {
+    width: 20px;
+    height: 20px;
+}
+
 input.ng-invalid.submitted {
     border-left: 4px solid #a94442;
 }

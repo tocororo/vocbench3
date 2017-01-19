@@ -481,13 +481,9 @@ export class Deserializer {
         }
         
         //optional properties
-        // var show = literalElement.getAttribute(ResAttribute.SHOW);
-        // if (show != undefined) {
-        //     artLiteralRes.setAdditionalProperty(ResAttribute.SHOW, show);
-        // }
         var explicit = literal[ResAttribute.EXPLICIT];
         if (explicit != undefined) {
-            artLiteralRes.setAdditionalProperty(ResAttribute.EXPLICIT, (explicit == "true"));
+            artLiteralRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
         }
         var graphs = literal[ResAttribute.GRAPHS];//contains comma separated graphs
         if (graphs != undefined) {

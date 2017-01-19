@@ -1,19 +1,19 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateValues, ResAttribute } from "../../utils/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../utils/ARTResources";
 
 @Component({
-    selector: "pred-value-list-renderer",
-    templateUrl: "./predicateValueListRenderer.html",
+    selector: "pred-obj-list-renderer",
+    templateUrl: "./predicateObjectsListRenderer.html",
 })
-export abstract class AbstractPredicateValueListRenderer {
+export abstract class AbstractPredicateObjectsListRenderer {
 
     /**
      * INPUTS / OUTPUTS
      */
 
-    @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
+    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource: ARTResource; //resource described
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     /**
@@ -24,12 +24,11 @@ export abstract class AbstractPredicateValueListRenderer {
     partitionCollapsed: boolean = false;
 
     /**
-     * Root properties described in the partition
-     * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
+     * Root property described in the partition
      */
-    abstract rootProperties: ARTURIResource[];
+    abstract rootProperty: ARTURIResource;
     /**
-     * Label of the partition
+     * Label of the partition (e.g. rdf:type for types partition, skos:inScheme for schemes partition, ...)
      */
     abstract label: string;
     /**
@@ -58,7 +57,7 @@ export abstract class AbstractPredicateValueListRenderer {
      * or hen the "+" button of a specific property panel is clicked (placed in the subPanel heading) with the property provided.
      * If property is provided (add fired from specific property panel) the modal won't allow to change it allowing so
      * to enrich just that property, otherwise, if property is not provided (add fired from the generic partition panel),
-     * a modal will allow to choose the property to enrich.
+     * the modal allow to change property to enrich.
      * @param predicate property to enrich.
      */
     abstract add(predicate?: ARTURIResource): void;
@@ -67,31 +66,6 @@ export abstract class AbstractPredicateValueListRenderer {
      * This is fired when the "-" button is clicked (near an object).
      */
     abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
-    //used in removePredicateObject to know if the removing object is about a root property
-    isRootProperty(predicate: ARTURIResource): boolean {
-        for (var i = 0; i < this.rootProperties.length; i++) {
-            console.log("is root property " + this.rootProperties[i].getURI() + " " + predicate.getURI())
-            if (this.rootProperties[i].getURI() == predicate.getURI()) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Returns the title of the "+" button placed in a subPanel heading.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getAddPropImgTitle(predicate: ARTURIResource): string {
-        return "Add a " + predicate.getShow();
-    }
-    /**
-     * Returns the title of the "-" button placed near an object in a subPanel body.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getRemovePropImgTitle(predicate: ARTURIResource): string {
-        return "Remove " + predicate.getShow();
-    }
     /**
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
      */

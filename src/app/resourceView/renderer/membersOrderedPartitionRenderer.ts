@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { SkosServices } from "../../services/skosServices";
@@ -16,9 +16,9 @@ import { SKOS } from "../../utils/Vocabulary";
     selector: "members-ordered-renderer",
     templateUrl: "./membersOrderedPartitionRenderer.html",
 })
-export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectListRenderer {
+export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectsListRenderer {
 
-    //inherited from AbstractPredicateObjectListRenderer
+    //inherited from AbstractPredicateObjectsListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
@@ -46,7 +46,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectList
         }
     }
 
-    //needed to be implemented since this Component extends AbstractPredicateObjectListRenderer, but not used.
+    //needed to be implemented since this Component extends AbstractPredicateObjectsListRenderer, but not used.
     //Use addFirst addLast addBefore and addAfter instead
     add() { }
 
@@ -163,6 +163,13 @@ export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectList
         this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>member, this.vbCtx.getContentLanguage(true)).subscribe(
             stResp => this.update.emit(null)
         );
+    }
+
+    /**
+     * Returns the title of the "-" button placed near an object in a subPanel body.
+     */
+    private getRemovePropImgTitle(predicate: ARTURIResource): string {
+        return "Remove " + predicate.getShow();
     }
 
 }

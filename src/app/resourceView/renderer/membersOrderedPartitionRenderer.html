@@ -63,8 +63,8 @@
                                 <div *ngFor="let memb of obj.members" (click)="selectMember(memb)"
                                     [ngClass]="{active: memb == selectedMember}" class="listItem">
                                     <rdf-resource [resource]="memb" (dblclick)="objectDblClick(memb)" style="flex:1"></rdf-resource>
-                                    <button class="resViewPartitionBtn" title="Remove member"
-                                        (click)="removeMember(memb)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                                    <button class="resViewPartitionBtn" title="Remove member" (click)="removeMember(memb)"
+                                        [disabled]="!obj.getAdditionalProperty('explicit')">
                                         <span>-</span>
                                     </button>
                                 </div>

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectListRenderer } from "./abstractPredicateObjectListRenderer";
+import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
@@ -10,10 +10,10 @@ import { RDF, OWL } from "../../utils/Vocabulary";
     selector: "property-facets-renderer",
     templateUrl: "./propertyFacetsPartitionRenderer.html",
 })
-export class PropertyFacetsPartitionRenderer extends AbstractPredicateObjectListRenderer {
+export class PropertyFacetsPartitionRenderer extends AbstractPredicateObjectsListRenderer {
 
     @Input('facets') facets: any[]; // array of data structure {name: string, explicit: boolean, value: boolean}
-    //inherited from AbstractPredicateObjectListRenderer
+    //inherited from AbstractPredicateObjectsListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

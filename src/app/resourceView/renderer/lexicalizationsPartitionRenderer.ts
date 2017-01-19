@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateValueListRenderer } from "./abstractPerdicateValueListRenderer";
+import { AbstractPredicateValuesListRenderer } from "./abstractPerdicateValuesListRenderer";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateValues, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -12,11 +12,11 @@ import { ResourceViewServices } from "../../services/resourceViewServices";
 
 @Component({
     selector: "lexicalizations-renderer",
-    templateUrl: "./predicateValueListRenderer.html",
+    templateUrl: "./predicateValuesListRenderer.html",
 })
-export class LexicalizationsPartitionRenderer extends AbstractPredicateValueListRenderer {
+export class LexicalizationsPartitionRenderer extends AbstractPredicateValuesListRenderer {
 
-    //inherited from AbstractPredicateValueListRenderer
+    //inherited from AbstractPredicateValuesListRenderer
     // @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

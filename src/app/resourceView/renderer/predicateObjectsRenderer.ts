@@ -2,49 +2,29 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../utils/ARTResources";
 
 @Component({
-    selector: "pred-obj-list-renderer",
-    templateUrl: "./predicateObjectListRenderer.html",
+    selector: "pred-obj-renderer",
+    templateUrl: "./predicateObjectsRenderer.html",
 })
-export abstract class AbstractPredicateObjectListRenderer {
+export class PredicateObjectsRenderer {
 
     /**
      * INPUTS / OUTPUTS
      */
 
-    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
+    // @Input() panelCollapsed: boolean;
+    @Input('pred-obj') predicateObjects: ARTPredicateObjects;
     @Input() resource: ARTResource; //resource described
-    @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
+    @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
+    @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     /**
      * ATTRIBUTES
      */
 
-    //to handle partition collapsed/expanded
-    partitionCollapsed: boolean = false;
-
-    /**
-     * Root property described in the partition
-     */
-    abstract rootProperty: ARTURIResource;
-    /**
-     * Label of the partition (e.g. rdf:type for types partition, skos:inScheme for schemes partition, ...)
-     */
-    abstract label: string;
-    /**
-     * Src of the "add" icon placed on the groupPanel outline.
-     * This is specific of a partition.
-     */
-    abstract addBtnImgSrc: string;
-    /**
-     * Title show on mouseover on the "add" icon placed on the groupPanel outline.
-     * This is specific of a partition.
-     */
-    abstract addBtnImgTitle: string;
-    /**
-     * Title shown on mouseover on the "-" button placed near an object in a subPanel body when just one property of the partition is enriched
-     */
-    abstract removeBtnImgTitle: string;
+    // ngOnInit() {
+    //     // this.panelCollapsed = this.longObjectsList; //if objects list is long, start with panel collapsed
+    // }
 
     /**
      * METHODS
@@ -60,12 +40,16 @@ export abstract class AbstractPredicateObjectListRenderer {
      * the modal allow to change property to enrich.
      * @param predicate property to enrich.
      */
-    abstract add(predicate?: ARTURIResource): void;
+    private addValue() {
+        this.add.emit();
+    }
     /**
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
      */
-    abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
+    private removeValue(object: ARTNode) {
+        this.remove.emit(object);
+    }
     /**
      * Returns the title of the "+" button placed in a subPanel heading.
      * This is specific of a predicate of a partition, so it depends from a predicate.

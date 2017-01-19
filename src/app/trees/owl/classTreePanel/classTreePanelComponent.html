@@ -3,23 +3,23 @@
     <div class="panel-heading">
         <div class="btn-group btn-group-xs" role="group" style="margin-right: 4px;">
             <button class="btn btn-default" title="Create Class" (click)="createClass()">
-                <img src="../../../../assets/images/class_create.png" />
+                <img src="../../../../assets/images/class_create.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Create SubClass" (click)="createSubClass()" [disabled]="!selectedClass">
-                <img src="../../../../assets/images/class_addSubClass.png" />
+                <img src="../../../../assets/images/class_addSubClass.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Class" (click)="deleteClass()"
                     [disabled]="!selectedClass || !selectedClass.getAdditionalProperty('explicit')">
-                <img src="../../../../assets/images/class_delete.png" />
+                <img src="../../../../assets/images/class_delete.png" class="panelButtonImg"/>
             </button>
         </div>
         <div class="btn-group btn-group-xs" role="group" style="flex: 1">
             <button class="btn btn-default" title="Create Instance" (click)="createInstance()" [disabled]="!selectedClass">
-                <img src="../../../../assets/images/individual_create.png" />
+                <img src="../../../../assets/images/individual_create.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Instance" (click)="deleteInstance()"
                 [disabled]="!selectedClass || !selectedInstance">
-                <img src="../../../../assets/images/individual_delete.png" />
+                <img src="../../../../assets/images/individual_delete.png" class="panelButtonImg"/>
             </button>
         </div>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">

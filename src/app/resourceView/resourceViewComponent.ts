@@ -197,7 +197,6 @@ export class ResourceViewComponent {
         var propertiesPartition: any = this.resViewResponse.properties;
         this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
         this.filterInferredFromPredObjList(this.propertiesColl);
-
     }
     
     /**
