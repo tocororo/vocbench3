@@ -264,7 +264,18 @@ export class HttpManager {
         var urlParams: string = "";
         for (var paramName in params) {
             var paramValue = params[paramName];
-            if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
+            if (Array.isArray(paramValue)) {
+                let arrayAsString: string = "";
+                for (var i = 0; i < paramValue.length; i++) {
+                    if (paramValue[i] instanceof ARTURIResource || paramValue[i] instanceof ARTBNode || paramValue[i] instanceof ARTLiteral) {
+                        arrayAsString += (<ARTNode>paramValue[i]).toNT() + ",";
+                    } else {
+                        arrayAsString += paramValue[i] + ",";
+                    }
+                }
+                arrayAsString = arrayAsString.slice(0, -1); //remove last comma (,)
+                urlParams += paramName + "=" + encodeURIComponent(arrayAsString) + "&";
+            } else if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
                 urlParams += paramName + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()) + "&";
             } else {
                 urlParams += paramName + "=" + encodeURIComponent(paramValue) + "&";

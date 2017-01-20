@@ -3,7 +3,17 @@
     <div class="panel-body vbox">
 
         <div class="scrollableContainer">
-            <property-tree-node *ngFor="let p of propertyTree" [node]="p" (nodeSelected)="onNodeSelected($event)"></property-tree-node>
+            <property-tree-node *ngFor="let p of roots" [node]="p" (nodeSelected)="onNodeSelected($event)"
+                (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+            </property-tree-node>
+        </div>
+
+        <div #blockDivTree class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="../../../../assets/images/loading.gif" />
+                </div>
+            </div>
         </div>
 
     </div>

@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
@@ -9,10 +10,88 @@ import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../utils/Cust
 @Injectable()
 export class PropertyServices {
 
-    private serviceName = "property";
-    private oldTypeService = true;
+    private serviceName = "Properties";
+    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+
+    /**
+     * Returns a list of top properties (properties which have not a superProperty)
+     * @return an array of Properties
+     */
+    getTopProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getTopProperties");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getTopProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var topProperties = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topProperties.length; i++) {
+                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topProperties;
+            }
+        );
+    }
+
+    /**
+     * Returns the subProperty of the given property
+     * @param property
+     * @return an array of subProperties
+     */
+    getSubProperties(property: ARTURIResource): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getSubProperties");
+        var params: any = {
+            superProperty: property
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSubProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var subProps = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < subProps.length; i++) {
+                    subProps[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return subProps;
+            }
+        );
+    }
+
+    /**
+     * takes a list of Properties and return their description as if they were roots for a tree
+	 * (so more, role, explicit etc...)
+     * @param properties
+     */
+    getPropertiesInfo(properties: ARTURIResource[]): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getPropertiesInfo");
+        var params: any = {
+            propList: properties
+        };
+        return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params, this.oldTypeService, true).map(
+            stResp => {
+                var subProps = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < subProps.length; i++) {
+                    subProps[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return subProps;
+            }
+        );
+    }
+
+    /**
+     * Retrieves all types of res, then all properties having their domain on any of the types for res.
+	 * Note that it provides only root properties (e.g. if both rdfs:label and skos:prefLabel,
+	 * which is a subProperty of rdfs:label, have domain = one of the types of res, then only rdfs:label is returned)
+     * @param resource service returns properties that have as domain the type of this resource 
+     */
+    getRelevantPropertiesForResource(resource: ARTResource): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getRelevantPropertiesForResource");
+        var params: any = {
+            res: resource
+        };
+        return this.httpMgr.doGet(this.serviceName, "getRelevantPropertiesForResource", params, this.oldTypeService, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
 
     /**
      * Gets a static property tree
@@ -26,7 +105,7 @@ export class PropertyServices {
         if (resource != undefined) {
             params.instanceQName = resource.getURI();
         }
-        return this.httpMgr.doGet(this.serviceName, "getPropertiesTree", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("property", "getPropertiesTree", params, true).map(
             stResp => {
                 var propertyTree: ARTURIResource[] = new Array()
                 var propertiesXml: NodeListOf<Element> = stResp.querySelectorAll("data > Property");
@@ -76,7 +155,7 @@ export class PropertyServices {
             propertyQName: propertyName,
             propertyType: propertyType,
         };
-        return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("property", "addProperty", params, true).map(
             stResp => {
                 var newProp = Deserializer.createURI(stResp);
                 newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -99,7 +178,7 @@ export class PropertyServices {
             propertyType: superProperty.getRole(),
             superPropertyQName: superProperty.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "addProperty", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("property", "addProperty", params, true).map(
             stResp => {
                 var newProp = Deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
                 newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -120,7 +199,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             superPropertyQName: superProperty.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "addSuperProperty", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("property", "addSuperProperty", params, true).map(
             stResp => {
                 //waiting that the addSuperProperty is refactored (returning subProperty info in response)
                 //create subProperty by duplicating property param
@@ -146,7 +225,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             superPropertyQName: superProperty.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removeSuperProperty", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("property", "removeSuperProperty", params, true).map(
             stResp => {
                 this.eventHandler.superPropertyRemovedEvent.emit({property: property, superProperty: superProperty});
                 return stResp;
@@ -175,7 +254,7 @@ export class PropertyServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removePropValue", params, this.oldTypeService);
+        return this.httpMgr.doGet("property", "removePropValue", params, true);
     }
 
     /**
@@ -199,7 +278,7 @@ export class PropertyServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createAndAddPropValue", params, this.oldTypeService);
+        return this.httpMgr.doGet("property", "createAndAddPropValue", params, true);
     }
 
     /**
@@ -217,7 +296,7 @@ export class PropertyServices {
             value: value,
             type: type,
         };
-        return this.httpMgr.doGet(this.serviceName, "addExistingPropValue", params, this.oldTypeService);
+        return this.httpMgr.doGet("property", "addExistingPropValue", params, true);
     }
 
     /**
@@ -231,7 +310,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             domainPropertyQName: domain.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "addPropertyDomain", params, this.oldTypeService);
+        return this.httpMgr.doGet("property", "addPropertyDomain", params, true);
     }
     
     /**
@@ -245,7 +324,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             domainPropertyQName: domain.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removePropertyDomain", params, this.oldTypeService);
+        return this.httpMgr.doGet("property", "removePropertyDomain", params, true);
     }
     
     /**
@@ -262,7 +341,7 @@ export class PropertyServices {
         var params: any = {
             propertyQName: property.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("property", "getRange", params, true).map(
             stResp => {
                 var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
                 var rngType = rangesElem.getAttribute("rngType");
@@ -305,7 +384,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             rangePropertyQName: range.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "addPropertyRange", params, this.oldTypeService);
+        return this.httpMgr.doGet("property", "addPropertyRange", params, true);
     }
 
     /**
@@ -319,30 +398,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             rangePropertyQName: range.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "removePropertyRange", params, this.oldTypeService);
-    }
-    
-    /**
-     * Returns class tree information for the range of the given property.
-     * (e.g. property P has class C as range, so this method returns the same response of 
-     * getClassesInfoAsRootsForTree in owlService for the class C)
-     * @return
-     */
-    getRangeClassesTree(property: ARTURIResource) {
-        console.log("[PropertyServices] getRangeClassesTree");
-        var params: any = {
-            propertyQName: property.getURI(),
-        };
-        return this.httpMgr.doGet(this.serviceName, "getRangeClassesTree", params, this.oldTypeService).map(
-            stResp => {
-                // var classElemColl: Element[] = stResp.getElementsByTagName("Class");
-                // for (var i = 0; i < classElemColl.length; i++) {
-                //     var cls = new ARTURIResource()
-                //     classElemColl[i].
-                // }
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet("property", "removePropertyRange", params, true);
     }
     
 }
