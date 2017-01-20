@@ -45,7 +45,7 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
         if (predicate != undefined) {
             this.enrichProperty(predicate);
         } else {
-            this.browsingService.browsePropertyTree("Select a property", <ARTURIResource>this.resource).then(
+            this.browsingService.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
                 (selectedProp: any) => {
                     this.enrichProperty(selectedProp);
                 },

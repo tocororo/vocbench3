@@ -90,12 +90,13 @@ export class BrowsingServices {
     /**
      * Opens a modal to browse the property tree
      * @param title the title of the modal
+     * @param rootProperties optional , if provided the tree is build with these properties as roots
      * @param resource optional, if provided the returned propertyTree contains 
      * just the properties that have as domain the type of the resource 
      * @return if the modal closes with ok returns a promise containing the selected property
      */
-    browsePropertyTree(title: string, resource?: ARTURIResource) {
-        var modalData = new PropertyTreeModalData(title, resource);
+    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource) {
+        var modalData = new PropertyTreeModalData(title, rootProperties, resource);
         const builder = new BSModalContextBuilder<PropertyTreeModalData>(
             modalData, undefined, PropertyTreeModalData
         );

@@ -6,6 +6,7 @@ import { OwlServices } from "../../services/owlServices";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../utils/ARTResources";
 import { RDFS, OWL } from "../../utils/Vocabulary";
+import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 @Component({
@@ -21,6 +22,9 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     rootProperties: ARTURIResource[] = [
+        RDFS.subClassOf, OWL.disjointWith, OWL.complementOf,
+        OWL.intersectionOf, OWL.unionOf, OWL.oneOf]; //equivalentClass excluded since is subProperty of subClassOf
+    knownProperties: ARTURIResource[] = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
     label = "Class axioms";
@@ -29,22 +33,24 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
     removeBtnImgTitle = "Remove class axiom";
 
     constructor(private propertyService: PropertyServices, private owlService: OwlServices, private manchService: ManchesterServices,
-        private crService: CustomRangeServices, private resViewModalService: ResViewModalServices) {
+        private crService: CustomRangeServices, private browsingService: BrowsingServices, private resViewModalService: ResViewModalServices) {
         super();
     }
 
     add(predicate?: ARTURIResource) {
         if (predicate == undefined) {
-            alert("open modal to choose a property rooted on " + JSON.stringify(this.rootProperties));
-            //based on the chosen property call enrichProperty
-            // var chosenProp: ARTURIResource;
-            // if (this.isRootProperty(chosenProp)) {
-            //     this.enrichProperty(chosenProp);
-            // } else {
-            //     alert("enrichment of " + chosenProp.getShow() + " not available");
-            // }
+            this.browsingService.browsePropertyTree("Select a property", this.rootProperties).then(
+                (selectedProp: any) => {
+                    if (this.isKnownProperty(selectedProp)) {
+                        this.enrichProperty(selectedProp);
+                    } else {
+                        alert("enrichment of " + selectedProp.getShow() + " not available");
+                    }
+                },
+                () => { }
+            );
         } else {
-            if (this.isRootProperty(predicate)) {
+            if (this.isKnownProperty(predicate)) {
                 this.enrichProperty(predicate);
             } else {
                 alert("enrichment of " + predicate.getShow() + " not available");
@@ -134,7 +140,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
             );
         } else {
             //if it is removing a value about a root property, call the specific method
-            if (this.isRootProperty(predicate)) {
+            if (this.isKnownProperty(predicate)) {
                 this.removeObjectForRootProperty(predicate, object);
             } else {//predicate is some subProperty of a root property
                 alert("remove of value for " + predicate.getShow() + " not available");

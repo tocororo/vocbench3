@@ -24,10 +24,18 @@ export abstract class AbstractPredicateValuesListRenderer {
     partitionCollapsed: boolean = false;
 
     /**
-     * Root properties described in the partition
+     * Root properties described in the partition.
+     * Note that this differs from wellKnownProperties from because this should only contains root properties
+     * (those properties that has no super properties among the known properties) not all the known properties
      * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
      */
     abstract rootProperties: ARTURIResource[];
+    /**
+     * Properties described in the partition for which exists dedicated add/remove services
+     * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
+     */
+    abstract knownProperties: ARTURIResource[];
+
     /**
      * Label of the partition
      */
@@ -67,11 +75,10 @@ export abstract class AbstractPredicateValuesListRenderer {
      * This is fired when the "-" button is clicked (near an object).
      */
     abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
-    //used in removePredicateObject to know if the removing object is about a root property
-    isRootProperty(predicate: ARTURIResource): boolean {
-        for (var i = 0; i < this.rootProperties.length; i++) {
-            console.log("is root property " + this.rootProperties[i].getURI() + " " + predicate.getURI())
-            if (this.rootProperties[i].getURI() == predicate.getURI()) {
+    //used in removePredicateObject to know if the removing object is about a well known property
+    isKnownProperty(predicate: ARTURIResource): boolean {
+        for (var i = 0; i < this.knownProperties.length; i++) {
+            if (this.knownProperties[i].getURI() == predicate.getURI()) {
                 return true;
             }
         }

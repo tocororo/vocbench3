@@ -13,6 +13,8 @@ import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
 })
 export class PropertyTreeComponent {
     @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource
+    @Input('roots') rootProperties: ARTURIResource[]; //in case the roots are provided to the component instead of being retrieved from server
+
     @Input() hideSearch: boolean = false;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
@@ -49,7 +51,6 @@ export class PropertyTreeComponent {
          * - 2nd time here in ngAfterViewInit
          * I cannot resolve by deleting this method since if @Input resource is not provided at all,
          * ngOnChanges is not called, so neither initTree */
-        //TODO check if I can delete this 
         if (this.roots == undefined) {
             this.initTree();
         }
@@ -60,22 +61,34 @@ export class PropertyTreeComponent {
      */
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource']) {
-            this.roots = []; //so ngOnInit will not be called a 2nd time
             this.initTree();
         }
     }
 
     initTree() {
+        this.roots = [];
         this.selectedNode = null;
 
         this.blockDivElement.nativeElement.style.display = "block";
-
-        if (this.resource) {
+        /* 3 cases:
+         * - roots provided as Input: tree is build rootet on these properties
+         * - roots not provided, Input resource provided: tree roots are those properties that has types of this resource as domain
+         * - roots and resource not provided: tree roots retrieved from server
+         */
+        if (this.rootProperties) {
+            this.propertyService.getPropertiesInfo(this.rootProperties).subscribe(
+                props => {
+                    this.roots = props;
+                    this.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            )
+        } else if (this.resource) {
             this.propertyService.getRelevantPropertiesForResource(this.resource).subscribe(
                 relevantProps => {
                     this.propertyService.getPropertiesInfo(relevantProps).subscribe(
-                        topProperties => {
-                            this.roots = topProperties;
+                        props => {
+                            this.roots = props;
                             this.blockDivElement.nativeElement.style.display = "none";
                         },
                         err => { this.blockDivElement.nativeElement.style.display = "none"; }
@@ -85,8 +98,8 @@ export class PropertyTreeComponent {
             );
         } else {
             this.propertyService.getTopProperties().subscribe(
-                topProperties => {
-                    this.roots = topProperties;
+                props => {
+                    this.roots = props;
                     this.blockDivElement.nativeElement.style.display = "none";
                 },
                 err => { this.blockDivElement.nativeElement.style.display = "none"; }

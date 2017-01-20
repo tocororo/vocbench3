@@ -76,7 +76,14 @@ export class ConceptTreeComponent {
      * the view #blockDivTree is initialized
      */
     ngAfterViewInit() {
-        this.initTree();
+        /* Following check needed to avoid to call 2 times the service if the @Input scheme is provided:
+         * - 1st time in ngOnChanges when scheme is binded (so changes value)
+         * - 2nd time here in ngAfterViewInit
+         * I cannot resolve by deleting this method since if @Input scheme is not provided at all,
+         * ngOnChanges is not called, so neither initTree */
+        if (this.roots == undefined) {
+            this.initTree();
+        }
     }
 
     /**
@@ -90,6 +97,7 @@ export class ConceptTreeComponent {
     }
 
     initTree() {
+        this.roots = [];
         this.selectedNode = null;
 
         this.blockDivElement.nativeElement.style.display = "block";

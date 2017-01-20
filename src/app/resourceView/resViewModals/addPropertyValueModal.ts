@@ -1,10 +1,11 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource, ARTResource, RDFResourceRolesEnum} from '../../utils/ARTResources';
-import {VocbenchCtx} from '../../utils/VocbenchCtx';
-import {RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema} from '../../utils/Vocabulary';
-import {ManchesterServices} from "../../services/manchesterServices";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../../utils/ARTResources';
+import { VocbenchCtx } from '../../utils/VocbenchCtx';
+import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../utils/Vocabulary';
+import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
+import { ManchesterServices } from "../../services/manchesterServices";
 
 /**
  * This modal allow the user to create a property-value relation and can be open throght a ResView partition.
@@ -46,29 +47,30 @@ export class AddPropertyValueModalData extends BSModalContext {
 })
 export class AddPropertyValueModal implements ModalComponent<AddPropertyValueModalData> {
     context: AddPropertyValueModalData;
-    
+
     private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
     private selectedProperty: ARTURIResource;
 
     //attribute useful for different Tree/list components
     private scheme: ARTURIResource; //useful if the property that is it going to enrich should allow to select a skos:Concept
-        //so the modal should show a concept tree focused on the current scheme
+    //so the modal should show a concept tree focused on the current scheme
     private classForInstanceList: ARTURIResource;
     private rootsForClsIndList: ARTURIResource[];
-    
+
 
     private manchExprEnabled: boolean = false; //useful to switch between tree selection or manchester expression input field
     private manchExpr: string;
 
     //datatype to show in a list in case the modal allow to add range to a datatype property
     private datatypes: ARTURIResource[] = [XmlSchema.boolean, XmlSchema.date,
-            XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
+    XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
 
-    constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices, private vbCtx: VocbenchCtx) {
+    constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
+        private browsingService: BrowsingServices, private vbCtx: VocbenchCtx) {
         this.context = dialog.context;
     }
-    
+
     ngOnInit() {
         this.rootProperty = this.context.property;
         this.selectedProperty = this.rootProperty;
@@ -109,10 +111,14 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         //     }
         // );
     }
-    
+
     private changeProperty() {
-        alert("opening property tree rooted on " + JSON.stringify(this.context.property) + " to change property");
-        //TODO once chosen another property, update selectedProperty
+        this.browsingService.browsePropertyTree("Select a property", [this.rootProperty]).then(
+            (selectedProp: any) => {
+                this.selectedProperty = selectedProp;
+            },
+            () => { }
+        );
     }
 
     /**
@@ -156,7 +162,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.rootProperty.getURI() == SKOS.topConceptOf.getURI());
     }
     private showDatatypeList(): boolean {
-        return (this.rootProperty.getURI() == RDFS.range.getURI() && 
+        return (this.rootProperty.getURI() == RDFS.range.getURI() &&
             this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty);
     }
     private showInstanceList(): boolean {
@@ -189,11 +195,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         if (this.manchExprEnabled) {
             this.manchService.checkExpression(this.manchExpr).subscribe(
                 stResp => {
-                    this.dialog.close({property: this.selectedProperty, value: this.manchExpr});        
+                    this.dialog.close({ property: this.selectedProperty, value: this.manchExpr });
                 }
             );
         } else {
-            this.dialog.close({property: this.selectedProperty, value: this.selectedResource});
+            this.dialog.close({ property: this.selectedProperty, value: this.selectedResource });
         }
     }
 

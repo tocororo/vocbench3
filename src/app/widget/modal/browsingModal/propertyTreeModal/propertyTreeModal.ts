@@ -5,11 +5,13 @@ import {ARTURIResource} from '../../../../utils/ARTResources';
 
 export class PropertyTreeModalData extends BSModalContext {
     /**
+     * @param rootProperties optional, if provided the tree is build with these properties as roots
      * @param resource optional, if provided the returned propertyTree contains 
      * just the properties that have as domain the type of the resource 
      */
     constructor(
         public title: string = 'Modal Title',
+        public rootProperties: ARTURIResource[],
         public resource: ARTURIResource
     ) {
         super();
