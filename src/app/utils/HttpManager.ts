@@ -23,11 +23,13 @@ export class HttpManager {
     private oldServerpath: string = "resources/stserver/STServer";
 
     constructor(private http: Http, private vbCtx: VocbenchCtx, private router: Router, private modalService: ModalServices) {
-        //init serverhost ip (see /config/webpack.prod.js)
-        if (process.env.SERVERHOST == undefined) {
-            this.serverhost = "127.0.0.1:1979";
+        require('file?name=[name].[ext]!../../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
+        let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
+        let st_port: string = window['st_port'];
+        if (dynamic_st_host_resolution) {
+            this.serverhost = location.hostname + ":" + st_port;
         } else {
-            this.serverhost = process.env.SERVERHOST;
+            this.serverhost = window['st_host'] + ":" + st_port;
         }
     }
 
