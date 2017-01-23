@@ -23,7 +23,7 @@ export class HttpManager {
     private oldServerpath: string = "resources/stserver/STServer";
 
     constructor(private http: Http, private vbCtx: VocbenchCtx, private router: Router, private modalService: ModalServices) {
-        require('file?name=[name].[ext]!../../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
+        require('file?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
         let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
         let st_port: string = window['st_port'];
         if (dynamic_st_host_resolution) {
