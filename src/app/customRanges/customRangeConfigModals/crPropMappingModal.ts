@@ -31,7 +31,7 @@ export class CustomRangePropMappingModal implements ModalComponent<BSModalContex
     
     private selectProperty() {
         this.browsingService.browsePropertyTree("Select a property").then(
-            prop => {
+            (prop: any) => {
                 this.selectedProperty = prop;
             },
             () => {}

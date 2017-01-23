@@ -72,7 +72,7 @@ export class ModalServices {
      * @param checkboxLabel the label of the checkbox in the modal body
      * @param type tells the type of the dialog. Determines the style of the message in the dialog.
      * Available values: info, error, warning (default)
-     * @return if the modal closes with ok returns a promise containing a boolean true
+     * @return if the modal closes with ok returns a promise containing a boolean with the value of the checkbox
      */
     confirmCheck(title: string, message: string, checkboxLabel: string, type?: ModalType) {
         var modalType = type ? type : "warning"; //set default type to warning if not defined

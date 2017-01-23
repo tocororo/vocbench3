@@ -14,7 +14,7 @@ import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./cu
 })
 export class CustomRangeComponent {
     
-    private crConfigurationMap: Array<any>; //{idCustomRange: string, property: string}
+    private crConfigurationMap: Array<{idCustomRange: string, property: string}>;
     private customRangeList: Array<string>;
     private customRangeEntryList: Array<string>;
     
@@ -163,17 +163,39 @@ export class CustomRangeComponent {
     }
     
     private deleteCRE() {
-        this.modalService.confirm("Delete Cutom Range Entry", "You are deleting Custom Range Entry " + this.selectedCRE + 
-            ". Are you sure?", "warning").then(
-            confirm => {
-                this.customRangeService.deleteCustomRangeEntry(this.selectedCRE).subscribe(
-                    stResp => {
-                        this.initCREList();
-                    }
-                )
-            },
-            () => {}
-        );
+        this.customRangeService.isEntryLinkedToCustomRange(this.selectedCRE).subscribe(
+            result => {
+                if (result) { //selectedCRE belong to a CR
+                    this.modalService.confirmCheck("Delete Custom Range Entry", "You are deleting a Custom Range Entry that " +
+                        "belongs to one or more CustomRange(s). Are you sure?", "Delete also Custom Range(s) left empty", "warning").then(
+                        (check: any) => {
+                            this.customRangeService.deleteCustomRangeEntry(this.selectedCRE, check).subscribe(
+                                stResp => {
+                                    if (check) { //if user chooses to delete also empty CRs
+                                        this.initCRConfMap();
+                                        this.initCRList();
+                                    }
+                                    this.initCREList();
+                                }
+                            );
+                        },
+                        () => {}
+                    );
+                } else { //selectedCRE does not belong to any CR
+                    this.modalService.confirm("Delete Custom Range Entry", "You are deleting Custom Range Entry " + this.selectedCRE + 
+                        ". Are you sure?", "warning").then(
+                        confirm => {
+                            this.customRangeService.deleteCustomRangeEntry(this.selectedCRE).subscribe(
+                                stResp => {
+                                    this.initCREList();
+                                }
+                            );
+                        },
+                        () => {}
+                    );
+                }
+            }
+        )
     }
     
 }

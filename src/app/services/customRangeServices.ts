@@ -316,21 +316,21 @@ export class CustomRangeServices {
         );
     }
 
-    /**
-     * Returns the list of CustomRangeEntry for the given property
-     * @param property
-     */
-    getCustomRangeEntries(property: string) {
-        console.log("[CustomRangeServices] getCustomRangeEntries");
-        var params: any = {
-            property: property
-        };
-        return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntries", params, this.oldTypeService).map(
-            stResp => {
+    // /**
+    //  * Returns the list of CustomRangeEntry for the given property
+    //  * @param property
+    //  */
+    // getCustomRangeEntries(property: string) {
+    //     console.log("[CustomRangeServices] getCustomRangeEntries");
+    //     var params: any = {
+    //         property: property
+    //     };
+    //     return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntries", params, this.oldTypeService).map(
+    //         stResp => {
                 
-            }
-        );
-    }
+    //         }
+    //     );
+    // }
 
     /**
      * 
@@ -355,12 +355,31 @@ export class CustomRangeServices {
      * Deletes the CustomRangeEntry with the given ID.
      * @param id the ID of the CustomRangeEntry to delete
      */
-    deleteCustomRangeEntry(id: string) {
+    deleteCustomRangeEntry(id: string, deleteEmptyCr?: boolean) {
         console.log("[CustomRangeServices] deleteCustomRangeEntry");
         var params: any = {
             id: id
         };
+        if (deleteEmptyCr != undefined) {
+            params.deleteEmptyCr = deleteEmptyCr;
+        }
         return this.httpMgr.doGet(this.serviceName, "deleteCustomRangeEntry", params, this.oldTypeService);
+    }
+
+    /**
+     * Given the id of a CustomRangeEntry tells if it belong to a CustomRange
+     * @param id the ID of the CustomRangeEntry to check
+     */
+    isEntryLinkedToCustomRange(id: string): Observable<boolean> {
+        console.log("[CustomRangeServices] isEntryLinkedToCustomRange");
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doGet(this.serviceName, "isEntryLinkedToCustomRange", params, this.oldTypeService).map(
+            stResp => {
+                return stResp.getElementsByTagName("value")[0].textContent == "true";
+            }
+        );
     }
 
     /**
