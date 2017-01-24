@@ -86,8 +86,8 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                 range => {
                     var rngType = range.rngType;
                     var ranges = range.ranges;
-                    var customRanges: CustomRange = range.customRanges;
-                    if (customRanges == undefined) { //just "classic" range
+                    var customRanges: CustomRange[] = range.customRanges;
+                    if (customRanges.length == 0) { //just "classic" range
                         //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                         if (rngType == RDFTypesEnum.resource) {
                             this.enrichWithResource(predicate, ranges);
@@ -129,12 +129,27 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                             this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
                     } else { //both "classic" and custom range
-                        var rangeOptions: any[] = [];//prepare the range options...
-                        var crEntries = customRanges.getEntries();
+                        var rangeOptions: {value: string, description: string}[] = [];//prepare the range options...
+                        console.log("range ", range);
+
                         //...with the custom range entries
-                        for (var i = 0; i < crEntries.length; i++) {
-                            rangeOptions.push({ value: crEntries[i].getName(), description: crEntries[i].getDescription() });
+                        for (var i = 0; i < customRanges.length; i++) {
+                            var crEntries = customRanges[i].getEntries();
+                            for (var j = 0; j < crEntries.length; j++) {
+                                //for every entry check if it's not already added to rangeOptions (possible if a CRE is in multiple CR)
+                                let alreadyIn: boolean = false;
+                                for (var k = 0; k < rangeOptions.length; k++) {
+                                    if (rangeOptions[k].value == crEntries[j].getName()) {
+                                        alreadyIn = true;
+                                        break;
+                                    }
+                                }
+                                if (!alreadyIn) {
+                                    rangeOptions.push({ value: crEntries[j].getName(), description: crEntries[j].getDescription() });
+                                }
+                            }
                         }
+
                         //...and the classic ranges
                         if (rngType == RDFTypesEnum.resource || rngType == RDFTypesEnum.plainLiteral || rngType == RDFTypesEnum.typedLiteral) {
                             rangeOptions.push({ value: rngType, description: rngType });

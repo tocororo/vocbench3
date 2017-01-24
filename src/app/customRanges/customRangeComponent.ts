@@ -18,7 +18,7 @@ export class CustomRangeComponent {
     private customRangeList: Array<string>;
     private customRangeEntryList: Array<string>;
     
-    private selectedCRPropMapping: any;
+    private selectedCRPropMapping: {idCustomRange: string, property: string};
     private selectedCR: string;
     private selectedCRE: string;
     
@@ -81,7 +81,7 @@ export class CustomRangeComponent {
     }
     
     private removePropCRMapping() {
-        this.customRangeService.removeCustomRangeFromProperty(this.selectedCRPropMapping.property).subscribe(
+        this.customRangeService.removeCustomRangeFromProperty(this.selectedCRPropMapping.idCustomRange ,this.selectedCRPropMapping.property).subscribe(
             stResp => {
                 this.initCRConfMap();
             }

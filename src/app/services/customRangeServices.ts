@@ -190,9 +190,10 @@ export class CustomRangeServices {
      * Removes the CustomRange from the given property
      * @param property
      */
-    removeCustomRangeFromProperty(property: string) {
+    removeCustomRangeFromProperty(customRangeId: string, property: string) {
         console.log("[CustomRangeServices] removeCustomRangeFromProperty");
         var params: any = {
+            customRangeId: customRangeId,
             property: property
         };
 	    return this.httpMgr.doGet(this.serviceName, "removeCustomRangeFromProperty", params, this.oldTypeService);

@@ -93,6 +93,10 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                 if (this.type == "graph" && this.showProperty != null && this.showProperty.trim() != "") {
                     showProp = this.showProperty;
                 }
+
+                if (this.description == undefined) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
+                    this.description == "";
+                }
                 
                 if (this.creId != null) { //edit mode
                     this.crService.updateCustomRangeEntry(this.creId, this.name, this.description, this.ref, showProp).subscribe(
