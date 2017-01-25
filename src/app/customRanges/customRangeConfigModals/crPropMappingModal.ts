@@ -43,12 +43,8 @@ export class CustomRangePropMappingModal implements ModalComponent<BSModalContex
     }
     
     ok(event: Event) {
-        this.crService.addCustomRangeToProperty(this.selectedCR, this.selectedProperty).subscribe(
-            stResp => {
-                event.stopPropagation();
-                this.dialog.close();
-            }
-        )
+        event.stopPropagation();
+        this.dialog.close({property: this.selectedProperty, customRange: this.selectedCR});
     }
 
     cancel() {

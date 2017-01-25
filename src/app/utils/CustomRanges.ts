@@ -1,3 +1,29 @@
+export class CustomRangePropertyMapping {
+
+    private propertyUri: string;
+    private customRangeId: string;
+    private replaceRanges: boolean;
+
+    constructor(customRangeId: string, propertyUri: string, replaceRanges: boolean) {
+        this.propertyUri = propertyUri;
+        this.customRangeId = customRangeId;
+        this.replaceRanges = replaceRanges;
+    }
+
+    public getPropertyURI(): string {
+        return this.propertyUri;
+    }
+
+    public getCustomRangeID(): string {
+        return this.customRangeId;
+    }
+
+    public getReplaceRanges(): boolean {
+        return this.replaceRanges;
+    }
+
+}
+
 export class CustomRange {
     
     public static PREFIX = "it.uniroma2.art.semanticturkey.customrange.";

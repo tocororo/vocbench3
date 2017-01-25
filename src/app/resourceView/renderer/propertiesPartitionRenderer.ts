@@ -84,22 +84,23 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
         } else { //other cases: handle based the property range
             this.propService.getRange(predicate).subscribe(
                 range => {
-                    var rngType = range.rngType;
+                    console.log("range", range);
                     var ranges = range.ranges;
-                    var customRanges: CustomRange[] = range.customRanges;
-                    if (customRanges.length == 0) { //just "classic" range
+                    var customRange: CustomRange = range.customRange;
+                    if (ranges != undefined && customRange == undefined) { //just "classic" range
                         //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
-                        if (rngType == RDFTypesEnum.resource) {
-                            this.enrichWithResource(predicate, ranges);
-                        } else if (rngType == RDFTypesEnum.plainLiteral) {
+                        if (ranges.type == RDFTypesEnum.resource) {
+                            this.enrichWithResource(predicate, ranges.rangeColl);
+                        } else if (ranges.type == RDFTypesEnum.plainLiteral) {
                             this.enrichWithPlainLiteral(predicate);
-                        } else if (rngType == RDFTypesEnum.typedLiteral) {
+                        } else if (ranges.type == RDFTypesEnum.typedLiteral) {
                             var datatypes: string[] = [];
-                            for (var i = 0; i < ranges.length; i++) {
-                                datatypes.push(ranges[i].getNominalValue());
+                            //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
+                            for (var i = 0; i < ranges.rangeColl.length; i++) {
+                                datatypes.push(ranges.rangeColl[i].getNominalValue());
                             }
                             this.enrichWithTypedLiteral(predicate, datatypes);
-                        } else if (rngType == RDFTypesEnum.literal) {
+                        } else if (ranges.type == RDFTypesEnum.literal) {
                             var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                             this.modalService.select("Select range type", null, options).then(
                                 (selectedRange: any) => {
@@ -111,7 +112,7 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                                 },
                                 () => { }
                             )
-                        } else if (rngType == RDFTypesEnum.undetermined) {
+                        } else if (ranges.type == RDFTypesEnum.undetermined) {
                             var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                             this.modalService.select("Select range type", null, options).then(
                                 (selectedRange: any) => {
@@ -125,38 +126,25 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                                 },
                                 () => { }
                             )
-                        } else if (rngType == "inconsistent") {
+                        } else if (ranges.type == "inconsistent") {
                             this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
-                    } else { //both "classic" and custom range
+                    } else if (ranges != undefined && customRange != undefined) { //both "classic" and custom range
                         var rangeOptions: {value: string, description: string}[] = [];//prepare the range options...
-                        console.log("range ", range);
 
                         //...with the custom range entries
-                        for (var i = 0; i < customRanges.length; i++) {
-                            var crEntries = customRanges[i].getEntries();
-                            for (var j = 0; j < crEntries.length; j++) {
-                                //for every entry check if it's not already added to rangeOptions (possible if a CRE is in multiple CR)
-                                let alreadyIn: boolean = false;
-                                for (var k = 0; k < rangeOptions.length; k++) {
-                                    if (rangeOptions[k].value == crEntries[j].getName()) {
-                                        alreadyIn = true;
-                                        break;
-                                    }
-                                }
-                                if (!alreadyIn) {
-                                    rangeOptions.push({ value: crEntries[j].getName(), description: crEntries[j].getDescription() });
-                                }
-                            }
+                        var crEntries = customRange.getEntries();
+                        for (var i = 0; i < crEntries.length; i++) {
+                            rangeOptions.push({ value: crEntries[i].getName(), description: crEntries[i].getDescription() });
                         }
 
                         //...and the classic ranges
-                        if (rngType == RDFTypesEnum.resource || rngType == RDFTypesEnum.plainLiteral || rngType == RDFTypesEnum.typedLiteral) {
-                            rangeOptions.push({ value: rngType, description: rngType });
-                        } else if (rngType == RDFTypesEnum.literal) {
+                        if (ranges.type == RDFTypesEnum.resource || ranges.type == RDFTypesEnum.plainLiteral || ranges.type == RDFTypesEnum.typedLiteral) {
+                            rangeOptions.push({ value: ranges.type, description: ranges.type });
+                        } else if (ranges.type == RDFTypesEnum.literal) {
                             rangeOptions.push({ value: RDFTypesEnum.plainLiteral, description: RDFTypesEnum.plainLiteral });
                             rangeOptions.push({ value: RDFTypesEnum.typedLiteral, description: RDFTypesEnum.typedLiteral });
-                        } else if (rngType == RDFTypesEnum.undetermined) {
+                        } else if (ranges.type == RDFTypesEnum.undetermined) {
                             rangeOptions.push({ value: RDFTypesEnum.resource, description: RDFTypesEnum.resource });
                             rangeOptions.push({ value: RDFTypesEnum.plainLiteral, description: RDFTypesEnum.plainLiteral });
                             rangeOptions.push({ value: RDFTypesEnum.typedLiteral, description: RDFTypesEnum.typedLiteral });
@@ -172,7 +160,7 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                                     }
                                 }
                                 if (selectedRange == RDFTypesEnum.resource) {
-                                    this.enrichWithResource(predicate);
+                                    this.enrichWithResource(predicate, ranges.rangeColl);
                                 } else if (selectedRange == RDFTypesEnum.typedLiteral) {
                                     this.enrichWithTypedLiteral(predicate);
                                 } else if (selectedRange == RDFTypesEnum.plainLiteral) {
@@ -181,6 +169,30 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                             },
                             () => { }
                         )
+                    } else if (ranges == undefined && customRange != undefined) {//just custom range
+                        var crEntries = customRange.getEntries();
+                        if (crEntries.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
+                            this.enrichWithCustomRange(predicate, crEntries[0]);
+                        } else if (crEntries.length > 1) { //multiple CREntry => ask which one to use
+                            //prepare the range options with the custom range entries
+                            var rangeOptions: {value: string, description: string}[] = [];
+                            for (var i = 0; i < crEntries.length; i++) {
+                                rangeOptions.push({ value: crEntries[i].getName(), description: crEntries[i].getDescription() });
+                            }
+                            this.modalService.select("Select a Custom Range", null, rangeOptions, true).then(
+                                (selectedRange: any) => {
+                                    for (var i = 0; i < crEntries.length; i++) {
+                                        if (selectedRange == crEntries[i].getName()) {
+                                            this.enrichWithCustomRange(predicate, crEntries[i]);
+                                            return;
+                                        }
+                                    }
+                                }
+                            );
+                        } else { //no CR linked to the property has no Entries => error
+                            this.modalService.alert("Error", "The CustomRange " + customRange.getId() + ", linked to property " +  predicate.getShow() + 
+                                ", doesn't contain any CustomRangeEntry", "error");
+                        }
                     }
                 }
             );

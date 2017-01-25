@@ -6,6 +6,8 @@ import {ModalServices} from "../widget/modal/modalServices";
 import {CustomRangePropMappingModal} from "./customRangeConfigModals/crPropMappingModal"
 import {CustomRangeEditorModal, CustomRangeEditorModalData} from "./customRangeConfigModals/crEditorModal"
 import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./customRangeConfigModals/creEditorModal"
+import {ARTURIResource} from "../utils/ARTResources";
+import {CustomRangePropertyMapping} from "../utils/CustomRanges";
 
 @Component({
 	selector: "custom-range-component",
@@ -14,11 +16,11 @@ import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./cu
 })
 export class CustomRangeComponent {
     
-    private crConfigurationMap: Array<{idCustomRange: string, property: string}>;
+    private crConfigurationMap: Array<CustomRangePropertyMapping>;
     private customRangeList: Array<string>;
     private customRangeEntryList: Array<string>;
     
-    private selectedCRPropMapping: {idCustomRange: string, property: string};
+    private selectedCRPropMapping: CustomRangePropertyMapping;
     private selectedCR: string;
     private selectedCRE: string;
     
@@ -57,16 +59,28 @@ export class CustomRangeComponent {
         );
     }
     
-    private selectCRPropMap(crConf: any) {
-        this.selectedCRPropMapping = crConf;
+    private selectCRPropMap(crConf: CustomRangePropertyMapping) {
+        if (this.selectedCRPropMapping == crConf) {
+            this.selectedCRPropMapping == null;
+        } else {
+            this.selectedCRPropMapping = crConf;
+        }
     }
     
     private selectCR(cr: string) {
-        this.selectedCR = cr;
+        if (this.selectedCR == cr) {
+            this.selectedCR == null;
+        } else {
+            this.selectedCR = cr;
+        }
     }
     
     private selectCRE(cre: string) {
-        this.selectedCRE = cre;
+        if (this.selectedCRE == cre) {
+            this.selectedCRE == null;
+        } else {
+            this.selectedCRE = cre;
+        }
     }
     
     private createPropCRMapping() {
@@ -74,18 +88,41 @@ export class CustomRangeComponent {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(CustomRangePropMappingModal, overlayConfig).then(
             dialog => dialog.result.then(
-                res => this.initCRConfMap(),
+                res => {
+                    var property: ARTURIResource = res.property;
+                    var customRangeId: string = res.customRange;
+                    //check if selected property has not a CustomRange already assigned
+                    for (var i = 0; i < this.crConfigurationMap.length; i++) {
+                        if (this.crConfigurationMap[i].getPropertyURI() == property.getURI()) {
+                            //already in a mapping
+                            this.modalService.alert("Denied", "A CustomRange is already assigned to " + property.getShow() +
+                                ". Please, select another property, or if you want to extend the range of " + property.getShow() +
+                                ", add more CustomRangeEntry to the assigned CustomRange (" + this.crConfigurationMap[i].getCustomRangeID() + ")",
+                                "warning");
+                            return;
+                        }
+                    }
+                    this.customRangeService.addCustomRangeToProperty(customRangeId, property).subscribe(
+                        stResp => {
+                            this.initCRConfMap();
+                        }
+                    )
+                },
                 () => {}                
             )
         );
     }
     
     private removePropCRMapping() {
-        this.customRangeService.removeCustomRangeFromProperty(this.selectedCRPropMapping.idCustomRange ,this.selectedCRPropMapping.property).subscribe(
+        this.customRangeService.removeCustomRangeFromProperty(this.selectedCRPropMapping.getPropertyURI()).subscribe(
             stResp => {
                 this.initCRConfMap();
             }
         );
+    }
+
+    private changeReplaceToPropCRMapping(checked: boolean, crProp: CustomRangePropertyMapping) {
+        this.customRangeService.updateReplaceRanges(crProp.getPropertyURI(), checked).subscribe();
     }
     
     private createCR() {

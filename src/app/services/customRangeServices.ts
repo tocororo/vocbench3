@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
-import {CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../utils/CustomRanges";
+import {CustomRangePropertyMapping, CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../utils/CustomRanges";
 
 @Injectable()
 export class CustomRangeServices {
@@ -149,7 +149,7 @@ export class CustomRangeServices {
      * with {idCustomRange: string, property: string}.
      * At the moment replaceRanges is ignored 
      */
-    getCustomRangeConfigMap() {
+    getCustomRangeConfigMap(): Observable<CustomRangePropertyMapping[]> {
         console.log("[CustomRangeServices] getCustomRangeConfigMap");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getCustomRangeConfigMap", params, this.oldTypeService).map(
@@ -159,8 +159,8 @@ export class CustomRangeServices {
                 for (var i = 0; i < confEntryElemColl.length; i++) {
                     var idCustomRange = confEntryElemColl[i].getAttribute("idCustomRange")
                     var property = confEntryElemColl[i].getAttribute("property")
-                    var replaceRanges = confEntryElemColl[i].getAttribute("replaceRanges");//at the moment don't use this
-                    confEntries.push({idCustomRange: idCustomRange, property: property});
+                    var replaceRanges = confEntryElemColl[i].getAttribute("replaceRanges") == "true";//at the moment don't use this
+                    confEntries.push(new CustomRangePropertyMapping(idCustomRange, property, replaceRanges));
                 }
                 return confEntries;
             }
@@ -190,13 +190,26 @@ export class CustomRangeServices {
      * Removes the CustomRange from the given property
      * @param property
      */
-    removeCustomRangeFromProperty(customRangeId: string, property: string) {
+    removeCustomRangeFromProperty(property: string) {
         console.log("[CustomRangeServices] removeCustomRangeFromProperty");
         var params: any = {
-            customRangeId: customRangeId,
             property: property
         };
 	    return this.httpMgr.doGet(this.serviceName, "removeCustomRangeFromProperty", params, this.oldTypeService);
+    }
+
+    /**
+	 * Update the replaceRanges attribute of a property-CR mapping for the given property
+	 * @param property
+	 * @param replaceRanges
+     */
+    updateReplaceRanges(property: string, replaceRanges: boolean) {
+        console.log("[CustomRangeServices] updateReplaceRanges");
+        var params: any = {
+            property: property,
+            replaceRanges: replaceRanges
+        };
+	    return this.httpMgr.doGet(this.serviceName, "updateReplaceRanges", params, this.oldTypeService);
     }
     
     /**

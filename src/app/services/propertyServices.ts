@@ -331,48 +331,52 @@ export class PropertyServices {
      * Returns the range of a property
      * @param property
      * @return an object with:
-     * rngType (available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent);
-     * ranges, an array of ARTURIResource (available only if rngType is resource, then represent the admitted range classes,
-     * or typedLiteral, then represent the admitted datatypes);
-     * customRanges, an optional collection of CustomRange object only if the property has custom ranges
+     * - ranges: "classic" range of a property omitted if a CustomRange is provided for the given property
+     *      and the "replaceRanges" attribute is true (so, the "classic" range in replaced by the custom one).
+     *      Contains two attributes:
+     *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
+     *          - rangeColl: an array of ARTURIResource 
+     *              (available only if rngType is resource, then represent the admitted range classes,
+     *              or typedLiteral, then represent the admitted datatypes);
+     * - customRange, an optional CustomRange object only if the property has custom ranges
      */
-    getRange(property: ARTURIResource): Observable<{rngType: string, ranges: ARTURIResource[], customRanges: CustomRange[]}> {
+    getRange(property: ARTURIResource): Observable<{ranges: {type: string, rangeColl: ARTURIResource[]}, customRange: CustomRange}> {
         console.log("[PropertyServices] getRange");
         var params: any = {
             propertyQName: property.getURI(),
         };
         return this.httpMgr.doGet("property", "getRange", params, true).map(
             stResp => {
-                var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
-                var rngType = rangesElem.getAttribute("rngType");
-                if (rngType != "undetermined") {
-                    var rangesUriColl = Deserializer.createURIArrayGivenList(rangesElem.children);
+                let ranges: {type: string, rangeColl: ARTURIResource[]};
+                let customRange: CustomRange;
+                if (stResp.getElementsByTagName("ranges").length != 0) {
+                    var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
+                    ranges.type = rangesElem.getAttribute("rngType");
+                    if (ranges.type != "undetermined") {
+                        ranges.rangeColl = Deserializer.createURIArrayGivenList(rangesElem.children);
+                    }
                 }
-                var customRanges: CustomRange[] = [];
-                var crElemColl: HTMLCollection = stResp.getElementsByTagName("customRange");
-
-                for (var i = 0; i < crElemColl.length; i++) {
-                    let crElem: Element = crElemColl[i];
-                    let crId = crElem.getAttribute("id");
-                    let crProp = crElem.getAttribute("property");
-                    let crEntries: CustomRangeEntry[] = [];
-                    let creElemColl: NodeListOf<Element> = crElem.getElementsByTagName("crEntry");
-                    for (var j = 0; j < creElemColl.length; j++) {
-                        let creId = creElemColl[j].getAttribute("id");
-                        let name = creElemColl[j].getAttribute("name");
-                        let type: CustomRangeEntryType = creElemColl[j].getAttribute("type") == "graph" ? "graph" : "node";
-                        let description = creElemColl[j].getElementsByTagName("description")[0].textContent;
+                if (stResp.getElementsByTagName("customRanges").length != 0) {
+                    var cRangesElem: Element = stResp.getElementsByTagName("customRanges")[0];
+                    var crId = cRangesElem.getAttribute("id");
+                    var crProp = cRangesElem.getAttribute("property");
+                    var crEntries: CustomRangeEntry[] = [];
+                    var creElemColl = cRangesElem.getElementsByTagName("crEntry");
+                    for (var i = 0; i < creElemColl.length; i++) {
+                        let creId = creElemColl[i].getAttribute("id");
+                        let name = creElemColl[i].getAttribute("name");
+                        let type: CustomRangeEntryType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
+                        let description = creElemColl[i].getElementsByTagName("description")[0].textContent;
                         let cre: CustomRangeEntry = new CustomRangeEntry(creId);
                         cre.setName(name);
                         cre.setType(type);
                         cre.setDescription(description);
                         crEntries.push(cre);
                     }
-                    var cr = new CustomRange(crId);
-                    cr.setEntries(crEntries);
-                    customRanges.push(cr);
+                    customRange = new CustomRange(crId);
+                    customRange.setEntries(crEntries);
                 }
-                return {rngType: rngType, ranges: rangesUriColl, customRanges: customRanges};
+                return {ranges: ranges, customRange: customRange};
             }
         );
     }
