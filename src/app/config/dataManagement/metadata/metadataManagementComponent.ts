@@ -258,7 +258,7 @@ export class MetadataManagementComponent {
      */
     private addMapping() {
         this.openMappingModal("Add prefix namespace mapping").then(
-            mapping => {
+            (mapping: any) => {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
                         this.metadataService.getNSPrefixMappings().subscribe(
@@ -294,7 +294,7 @@ export class MetadataManagementComponent {
      */
     private changeMapping() {
         this.openMappingModal("Change prefix namespace mapping", this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
-            mapping => {
+            (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
                         this.metadataService.getNSPrefixMappings().subscribe(
@@ -336,7 +336,7 @@ export class MetadataManagementComponent {
      */
     private importFromWeb() {
         this.openImportModal("Import from web", ImportType.fromWeb).then(
-            data => {
+            (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromWeb(data.baseURI, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
@@ -358,7 +358,7 @@ export class MetadataManagementComponent {
      */
     private importFromWebToMirror() {
         this.openImportModal("Import from web to mirror", ImportType.fromWebToMirror).then(
-            data => {
+            (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
@@ -381,7 +381,7 @@ export class MetadataManagementComponent {
      */
     private importFromLocalFile() {
         this.openImportModal("Import from local file", ImportType.fromLocalFile).then(
-            data => {
+            (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile).subscribe(
                     stResp => {
@@ -403,7 +403,7 @@ export class MetadataManagementComponent {
      */
     private importFromOntologyMirror() {
         this.openImportModal("Import from ontology mirror", ImportType.fromOntologyMirror).then(
-            mirror => {
+            (mirror: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.addFromOntologyMirror(mirror.namespace, mirror.file).subscribe(
                     stResp => {
@@ -424,7 +424,7 @@ export class MetadataManagementComponent {
      */
     private mirrorOntology(importedOntology: any) {
         this.modalService.prompt("Mirror ontology", "Mirror file name").then(
-            mirrorFileName => {
+            (mirrorFileName: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.metadataService.mirrorOntology(importedOntology.uri, mirrorFileName).subscribe(
                     stResp => {
@@ -486,7 +486,7 @@ export class MetadataManagementComponent {
      */
     private updateMirrorFromWebWithUri(mirror: any) {
         this.modalService.prompt("Update ontology mirror from web", "BaseURI").then(
-            newNamespace => {
+            (newNamespace: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.ontoMgrService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
                     stResp => {
@@ -506,7 +506,7 @@ export class MetadataManagementComponent {
      */
     private updateMirrorFromWebFromAltUrl(mirror: any) {
         this.modalService.prompt("Update ontology mirror from web", "URL").then(
-            url => {
+            (url: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
                     stResp => {
@@ -526,8 +526,7 @@ export class MetadataManagementComponent {
      */
     private updateMirrorFromLocalFile(mirror: any) {
         this.modalService.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
-            // this.modalService.selectFile("Update mirror from local file").then(
-            file => {
+            (file: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
                     stResp => {

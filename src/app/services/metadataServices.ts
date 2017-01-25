@@ -91,17 +91,26 @@ export class MetadataServices {
      * "uri" the uri of the ontology
      * "localfile" if status is "LOCAL"
      */
-    getImports() {
+    getImports(): Observable<{uri: string, status: string, localFile: string}[]> {
         console.log("[MetadataServices] getImports");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params, this.oldTypeService).map(
             stResp => {
                 var importedOntologies: any[] = [];
                 var ontologyElemColl: Array<Element> = stResp.getElementsByTagName("ontology");
-                for (var i = 0; i < ontologyElemColl.length; i++) {
+                ontoLoop: for (var i = 0; i < ontologyElemColl.length; i++) {
                     var onto: any = {}
-                    onto.status = ontologyElemColl[i].getAttribute("status");
                     onto.uri = ontologyElemColl[i].getAttribute("uri");
+
+                    //check if ontology is already added to the imported ontologies
+                    //(this could happen if an ontology is imported directly and also from another imported ontology)
+                    for (var j = 0; j < importedOntologies.length; j++) {
+                        if (importedOntologies[j].uri == onto.uri) {
+                            continue ontoLoop; //if imported ontology is already added, go to the followin ontology
+                        }
+                    }
+
+                    onto.status = ontologyElemColl[i].getAttribute("status");
                     if (onto.status == "LOCAL") {
                         onto.localfile = ontologyElemColl[i].getAttribute("localfile");
                     }

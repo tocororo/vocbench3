@@ -56,97 +56,41 @@
                 </div>
             </div>
 
-            <div class="subPanel vbox" style="flex: 3">
-                <div class="subPanel-heading">
-                    <label style="flex: 1">Namespace management:</label>
-                    <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" title="Add mapping" (click)="addMapping()">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                        <button class="btn btn-default" title="Remove mapping" (click)="removeMapping()"
-                            [disabled]="!selectedMapping || !selectedMapping.explicit">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
-                        <button class="btn btn-default" title="Change prefix" (click)="changeMapping()"
-                            [disabled]="!selectedMapping || !selectedMapping.explicit">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                    </div>
-                </div>
-                <div class="subPanel-body vbox">
-                    <div class="scrollableContainer">
-                        <table class="table table-condensed table-striped table-hoverable">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Prefix</th>
-                                    <th class="text-center">Namespace</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let m of nsPrefMappingList" (click)="selectMapping(m)" 
-                                    [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
-                                    <td class="text-center">{{m.prefix}}</td>
-                                    <td class="text-center">{{m.namespace}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
 
-            <div class="hbox" style="flex: 2">
 
-                <!--Imports-->
+            <div class="hbox">
+
                 <div class="subPanel vbox">
                     <div class="subPanel-heading">
-                        <label style="flex: 1">Imports:</label>
-                        <div class="dropdown pull-right">
-                            <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
-                                Add import from <span class="caret"></span>
+                        <label style="flex: 1">Namespace management:</label>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <button class="btn btn-default" title="Add mapping" (click)="addMapping()">
+                                <span class="glyphicon glyphicon-plus"></span>
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><a (click)="importFromWeb()">
-                                    <span class="glyphicon glyphicon-globe"></span> Web
-                                </a></li>
-                                <li><a (click)="importFromWebToMirror()">
-                                    <span class="glyphicon glyphicon-import"></span> Web to mirror
-                                </a></li>
-                                <li><a (click)="importFromLocalFile()">
-                                    <span class="glyphicon glyphicon-open"></span> Local file
-                                </a></li>
-                                <li><a (click)="importFromOntologyMirror()">
-                                    <span class="glyphicon glyphicon-export"></span> Ontology mirror
-                                </a></li>
-                            </ul>
+                            <button class="btn btn-default" title="Remove mapping" (click)="removeMapping()"
+                                [disabled]="!selectedMapping || !selectedMapping.explicit">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Change prefix" (click)="changeMapping()"
+                                [disabled]="!selectedMapping || !selectedMapping.explicit">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
                         </div>
                     </div>
                     <div class="subPanel-body vbox">
                         <div class="scrollableContainer">
-                            <table class="table table-condensed table-borderless table-hoverable">
-                                <colgroup>
-                                    <col style="width: 1%">
-                                    <col>
-                                    <col style="width: 1%">
-                                    <col style="width: 1%">
-                                </colgroup>
+                            <table class="table table-condensed table-striped table-hoverable">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Prefix</th>
+                                        <th class="text-center">Namespace</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr *ngFor="let i of importList">
-                                        <td>
-                                            <span *ngIf="i.status == 'WEB'" class="glyphicon glyphicon-globe"></span>
-                                            <span *ngIf="i.status == 'LOCAL'" class="glyphicon glyphicon-hdd" [title]="i.localfile"></span>
-                                        </td>
-                                        <td>{{i.uri}}</td>
-                                        <td>
-                                            <button class="btn btn-default btn-xs" *ngIf="i.status == 'WEB'" (click)="mirrorOntology(i)" title="Mirror ontology">
-                                                <span class="glyphicon glyphicon-duplicate"></span>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-default btn-xs" (click)="removeImport(i)" title="Remove import">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </td>
+                                    <tr *ngFor="let m of nsPrefMappingList" (click)="selectMapping(m)" 
+                                        [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
+                                        <td class="text-center">{{m.prefix}}</td>
+                                        <td class="text-center">{{m.namespace}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -154,49 +98,107 @@
                     </div>
                 </div>
 
-                <!--Ontology mirror management-->
-                <div class="subPanel vbox" style="margin-left: 5px;">
-                    <div class="subPanel-heading">
-                        <label>Ontology Mirror Management:</label>
-                    </div>
-                    <div class="subPanel-body vbox">
-                        <div class="scrollableContainer">
-                            <table class="table table-condensed table-borderless table-hoverable">
-                                <colgroup>
-                                    <col>
-                                    <col>
-                                    <col style="width: 1%">
-                                    <col style="width: 1%">
-                                </colgroup>
-                                <tbody>
-                                    <tr *ngFor="let m of mirrorList">
-                                        <td>{{m.namespace}}</td>
-                                        <td>{{m.file}}</td>
-                                        <td>
-                                            <!--<button class="btn btn-default btn-xs" (click)="updateOntoMirror(m)" title="Update mirror">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>-->
-                                            <div class="dropdown pull-right">
-                                                <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" title="Update mirror from...">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
+                <div class="vbox" style="margin-left: 5px;">
+
+                    <!--Imports-->
+                    <div class="subPanel vbox">
+                        <div class="subPanel-heading">
+                            <label style="flex: 1">Imports:</label>
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+                                    Add import from <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a (click)="importFromWeb()">
+                                        <span class="glyphicon glyphicon-globe"></span> Web
+                                    </a></li>
+                                    <li><a (click)="importFromWebToMirror()">
+                                        <span class="glyphicon glyphicon-import"></span> Web to mirror
+                                    </a></li>
+                                    <li><a (click)="importFromLocalFile()">
+                                        <span class="glyphicon glyphicon-open"></span> Local file
+                                    </a></li>
+                                    <li><a (click)="importFromOntologyMirror()">
+                                        <span class="glyphicon glyphicon-export"></span> Ontology mirror
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="subPanel-body vbox">
+                            <div class="scrollableContainer">
+                                <table class="table table-condensed table-borderless table-hoverable">
+                                    <colgroup>
+                                        <col style="width: 1%">
+                                        <col>
+                                        <col style="width: 1%">
+                                        <col style="width: 1%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr *ngFor="let i of importList">
+                                            <td>
+                                                <span *ngIf="i.status == 'WEB'" class="glyphicon glyphicon-globe"></span>
+                                                <span *ngIf="i.status == 'LOCAL'" class="glyphicon glyphicon-hdd" [title]="i.localfile"></span>
+                                            </td>
+                                            <td>{{i.uri}}</td>
+                                            <td>
+                                                <button class="btn btn-default btn-xs" *ngIf="i.status == 'WEB'" (click)="mirrorOntology(i)" title="Mirror ontology">
+                                                    <span class="glyphicon glyphicon-duplicate"></span>
                                                 </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a (click)="updateMirrorFromWebWithUri(m)">Update from web using baseURI</a></li>
-                                                    <li><a (click)="updateMirrorFromWebFromAltUrl(m)">Update from web from alternative URL</a></li>
-                                                    <li><a (click)="updateMirrorFromLocalFile(m)">Update from local file</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-default btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror">
-                                                <span class="glyphicon glyphicon-trash"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-default btn-xs" (click)="removeImport(i)" title="Remove import">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
+                    <!--Ontology mirror management-->
+                    <div class="subPanel vbox">
+                        <div class="subPanel-heading">
+                            <label>Ontology Mirror Management:</label>
+                        </div>
+                        <div class="subPanel-body vbox">
+                            <div class="scrollableContainer">
+                                <table class="table table-condensed table-borderless table-hoverable">
+                                    <colgroup>
+                                        <col>
+                                        <col>
+                                        <col style="width: 1%">
+                                        <col style="width: 1%">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr *ngFor="let m of mirrorList">
+                                            <td>{{m.namespace}}</td>
+                                            <td>{{m.file}}</td>
+                                            <td>
+                                                <div class="dropdown pull-right">
+                                                    <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" title="Update mirror from...">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a (click)="updateMirrorFromWebWithUri(m)">Update from web using baseURI</a></li>
+                                                        <li><a (click)="updateMirrorFromWebFromAltUrl(m)">Update from web from alternative URL</a></li>
+                                                        <li><a (click)="updateMirrorFromLocalFile(m)">Update from local file</a></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-default btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
