@@ -25,10 +25,12 @@ import {ContentLangModal} from '../widget/modal/contentLangModal/contentLangModa
 
 //browsing modals
 import {ClassTreeModal} from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
+import {ClassIndividualTreeModal} from "../widget/modal/browsingModal/classIndividualTreeModal/classIndividualTreeModal";
 import {ConceptTreeModal} from '../widget/modal/browsingModal/conceptTreeModal/conceptTreeModal';
 import {InstanceListModal} from '../widget/modal/browsingModal/instanceListModal/instanceListModal';
 import {PropertyTreeModal} from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
 import {SchemeListModal} from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
+import {CollectionTreeModal} from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
 
 //metadata modals
 import {ImportOntologyModal} from '../config/dataManagement/metadata/importOntologyModal';
@@ -59,7 +61,8 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal, NewPlainLiteralModal,
         NewResourceModal, NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
-        ClassTreeModal, ConceptTreeModal, InstanceListModal, PropertyTreeModal, SchemeListModal,
+        ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
+        PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
@@ -78,7 +81,8 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
     entryComponents: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal, NewPlainLiteralModal,
         NewResourceModal, NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
-        ClassTreeModal, ConceptTreeModal, InstanceListModal, PropertyTreeModal, SchemeListModal,
+        ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
+        PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,

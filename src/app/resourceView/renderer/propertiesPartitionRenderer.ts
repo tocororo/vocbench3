@@ -84,7 +84,6 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
         } else { //other cases: handle based the property range
             this.propService.getRange(predicate).subscribe(
                 range => {
-                    console.log("range", range);
                     var ranges = range.ranges;
                     var customRange: CustomRange = range.customRange;
                     if (ranges != undefined && customRange == undefined) { //just "classic" range

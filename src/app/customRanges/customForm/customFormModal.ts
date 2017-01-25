@@ -2,6 +2,8 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {FormEntry} from "../../utils/CustomRanges";
+import {RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {CustomRangeServices} from "../../services/customRangeServices";
 
 export class CustomFormModalData extends BSModalContext {
@@ -30,7 +32,7 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     private formEntries: FormEntry[];
     private submittedWithError: boolean = false;
     
-    constructor(public dialog: DialogRef<CustomFormModalData>, public crService: CustomRangeServices) {
+    constructor(public dialog: DialogRef<CustomFormModalData>, public crService: CustomRangeServices, public browsingService: BrowsingServices) {
         this.context = dialog.context;
     }
     
@@ -69,6 +71,52 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
                 this.formEntries[i]['value'] = value;
             }
         }
+    }
+
+    private pickExistingReource(role: RDFResourceRolesEnum, formEntry: FormEntry) {
+        if (role == RDFResourceRolesEnum.cls) {
+            this.browsingService.browseClassTree("Select a Class").then(
+                (selectedResource: any) => {
+                    formEntry['value'] = selectedResource.getNominalValue();
+                },
+                () => {}
+            );
+        } else if (role == RDFResourceRolesEnum.individual) {
+            this.browsingService.browseClassIndividualTree("Select an Instance").then(
+                (selectedResource: any) => {
+                    formEntry['value'] = selectedResource.getNominalValue();
+                },
+                () => {}
+            );
+        } else if (role == RDFResourceRolesEnum.concept) {
+            this.browsingService.browseConceptTree("Select a Concept").then(
+                (selectedResource: any) => {
+                    formEntry['value'] = selectedResource.getNominalValue();
+                },
+                () => {}
+            );
+        } else if (role == RDFResourceRolesEnum.conceptScheme) {
+            this.browsingService.browseSchemeList("Select a ConceptScheme").then(
+                (selectedResource: any) => {
+                    formEntry['value'] = selectedResource.getNominalValue();
+                },
+                () => {}
+            );
+        } else if (role == RDFResourceRolesEnum.skosCollection) {
+            this.browsingService.browseCollectionTree("Select a Collection").then(
+                (selectedResource: any) => {
+                    formEntry['value'] = selectedResource.getNominalValue();
+                },
+                () => {}
+            );
+        } else if (role == RDFResourceRolesEnum.property) {
+            this.browsingService.browsePropertyTree("Select a Property").then(
+                (selectedResource: any) => {
+                    formEntry['value'] = selectedResource.getNominalValue();
+                },
+                () => {}
+            );
+        } 
     }
     
     ok(event: Event) {

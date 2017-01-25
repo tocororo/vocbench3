@@ -2,8 +2,10 @@ import {Injectable} from '@angular/core';
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {ClassTreeModal, ClassTreeModalData} from "../browsingModal/classTreeModal/classTreeModal";
+import {ClassIndividualTreeModal, ClassIndividualTreeModalData} from "../browsingModal/classIndividualTreeModal/classIndividualTreeModal";
 import {InstanceListModal, InstanceListModalData} from "../browsingModal/instanceListModal/instanceListModal";
 import {ConceptTreeModal, ConceptTreeModalData} from "../browsingModal/conceptTreeModal/conceptTreeModal";
+import {CollectionTreeModal, CollectionTreeModalData} from "../browsingModal/collectionTreeModal/collectionTreeModal";
 import {SchemeListModal, SchemeListModalData} from "../browsingModal/schemeListModal/schemeListModal";
 import {PropertyTreeModal, PropertyTreeModalData} from "../browsingModal/propertyTreeModal/propertyTreeModal";
 import {ARTURIResource} from "../../../utils/ARTResources";
@@ -32,6 +34,22 @@ export class BrowsingServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ClassTreeModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to browse the class tree and select an individual of a class
+     * @param title the title of the modal
+     * @return if the modal closes with ok returns a promise containing the selected individual
+     */
+    browseClassIndividualTree(title: string) {
+        var modalData = new ClassIndividualTreeModalData(title);
+        const builder = new BSModalContextBuilder<ClassIndividualTreeModalData>(
+            modalData, undefined, ClassIndividualTreeModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.size("lg").keyboard(null).toJSON() };
+        return this.modal.open(ClassIndividualTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
@@ -67,6 +85,22 @@ export class BrowsingServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ConceptTreeModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to browse the collection tree
+     * @param title the title of the modal
+     * @return if the modal closes with ok returns a promise containing the selected collection
+     */
+    browseCollectionTree(title: string) {
+        var modalData = new CollectionTreeModalData(title);
+        const builder = new BSModalContextBuilder<CollectionTreeModalData>(
+            modalData, undefined, CollectionTreeModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(CollectionTreeModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

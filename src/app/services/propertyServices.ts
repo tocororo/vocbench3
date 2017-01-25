@@ -347,10 +347,11 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet("property", "getRange", params, true).map(
             stResp => {
-                let ranges: {type: string, rangeColl: ARTURIResource[]};
+                let ranges: any;
                 let customRange: CustomRange;
                 if (stResp.getElementsByTagName("ranges").length != 0) {
                     var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
+                    ranges = {}
                     ranges.type = rangesElem.getAttribute("rngType");
                     if (ranges.type != "undetermined") {
                         ranges.rangeColl = Deserializer.createURIArrayGivenList(rangesElem.children);
