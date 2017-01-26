@@ -11,6 +11,7 @@ import {SkosServices} from "../../../../services/skosServices";
 export class ConceptTreeNodeComponent {
     @Input() node: ARTURIResource;
     @Input() scheme: ARTURIResource;
+    @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
     @Output() nodeClicked = new EventEmitter<ARTURIResource>();
     @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node

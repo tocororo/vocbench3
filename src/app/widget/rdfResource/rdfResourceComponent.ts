@@ -8,8 +8,18 @@ import { ResourceUtils } from "../../utils/ResourceUtils";
 })
 export class RdfResourceComponent {
 	@Input() resource: ARTNode;
+	@Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
 
 	constructor() { }
+
+	private getRendering(): string {
+		if (this.rendering) {
+			return this.resource.getShow();	
+		} else {
+			// return this.resource.getAdditionalProperty("qname");
+			return "qname not yet available";
+		}
+	}
 
 	private getImgSrc(): string {
 		return ResourceUtils.getImageSrc(this.resource);

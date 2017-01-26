@@ -16,6 +16,9 @@
             <img *ngIf="!activeScheme" src="../../../../../assets/images/warning.png"
                 title="No skos:ConceptScheme selected, creation operation are disabled">
         </div>
+        <button class="btn btn-default btn-xs" title="Rendering" (click)="switchRendering()" style="margin: 0px 5px;" [ngClass]="{active: rendering}">
+            <span class="glyphicon glyphicon-font"></span>
+        </button>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
@@ -23,7 +26,7 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <concept-tree [scheme]="activeScheme" (nodeSelected)="onNodeSelected($event)"
+        <concept-tree [scheme]="activeScheme" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"
             (nodeCtrlClicked)="onNodeCtrlClicked($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>

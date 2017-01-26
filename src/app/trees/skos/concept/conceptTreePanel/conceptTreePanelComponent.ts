@@ -19,6 +19,8 @@ export class ConceptTreePanelComponent {
 
     private ONTO_TYPE: string;
 
+    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+
     private selectedConcept: ARTURIResource;
     private activeScheme: ARTURIResource;
 
@@ -101,6 +103,10 @@ export class ConceptTreePanelComponent {
 
     private refresh() {
         this.viewChildTree.initTree();
+    }
+
+    private switchRendering() {
+        this.rendering = !this.rendering;
     }
 
     //EVENT LISTENERS

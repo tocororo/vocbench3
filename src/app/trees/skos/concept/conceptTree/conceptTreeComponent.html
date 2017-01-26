@@ -11,7 +11,7 @@
         </div>
 
         <div class="scrollableContainer">
-            <concept-tree-node *ngFor="let r of roots" [node]="r" [scheme]="scheme" 
+            <concept-tree-node *ngFor="let r of roots" [node]="r" [scheme]="scheme" [rendering]="rendering"
                 (nodeClicked)="onNodeClicked($event)" (nodeCtrlClicked)="onNodeCtrlClicked($event)"
                 (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
             </concept-tree-node>

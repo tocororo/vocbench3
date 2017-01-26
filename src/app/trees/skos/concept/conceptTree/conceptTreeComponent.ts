@@ -16,6 +16,7 @@ export class ConceptTreeComponent {
     @Input() scheme: ARTURIResource;
     @Input() hideSearch: boolean = false;
     @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
+    @Input() rendering: boolean; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
