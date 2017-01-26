@@ -357,8 +357,8 @@ export class PropertyServices {
                         ranges.rangeColl = Deserializer.createURIArrayGivenList(rangesElem.children);
                     }
                 }
-                if (stResp.getElementsByTagName("customRanges").length != 0) {
-                    var cRangesElem: Element = stResp.getElementsByTagName("customRanges")[0];
+                if (stResp.getElementsByTagName("customRange").length != 0) {
+                    var cRangesElem: Element = stResp.getElementsByTagName("customRange")[0];
                     var crId = cRangesElem.getAttribute("id");
                     var crProp = cRangesElem.getAttribute("property");
                     var crEntries: CustomRangeEntry[] = [];

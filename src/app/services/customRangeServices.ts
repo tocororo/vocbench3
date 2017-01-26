@@ -257,8 +257,8 @@ export class CustomRangeServices {
     }
 
     /**
-     * 
-     * @param
+     * Creates an empty CustomRange with the given id
+     * @param id
      */
     createCustomRange(id: string) {
         console.log("[CustomRangeServices] createCustomRange");
@@ -299,8 +299,8 @@ export class CustomRangeServices {
     }
     
     /**
-     * 
-     * @param
+     * Retrieves the CustomRangeEntry with the given id
+     * @param id
      */
     getCustomRangeEntry(id: string) {
         console.log("[CustomRangeServices] getCustomRangeEntry");
@@ -330,25 +330,15 @@ export class CustomRangeServices {
         );
     }
 
-    // /**
-    //  * Returns the list of CustomRangeEntry for the given property
-    //  * @param property
-    //  */
-    // getCustomRangeEntries(property: string) {
-    //     console.log("[CustomRangeServices] getCustomRangeEntries");
-    //     var params: any = {
-    //         property: property
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "getCustomRangeEntries", params, this.oldTypeService).map(
-    //         stResp => {
-                
-    //         }
-    //     );
-    // }
-
     /**
-     * 
-     * @param
+     * Creates a CustomRangeEntry
+     * @param type type of the CRE, available values: graph/node
+     * @param id id (comprensive of prefix) of the CRE
+     * @param name
+     * @param description
+     * @param ref a pearl rule in case type is "graph", or a converter in case of type is "node"
+     * @param showProp to provide only if type is "graph", tells the property which value should show in place of the
+     * generated graph by means of this CRE
      */
     createCustomRangeEntry(type: CustomRangeEntryType, id: string, name: string, description: string, ref: string, showProp?: string) {
         console.log("[CustomRangeServices] createCustomRangeEntry");
@@ -363,6 +353,20 @@ export class CustomRangeServices {
             params.showProp = showProp;
         }
         return this.httpMgr.doPost(this.serviceName, "createCustomRangeEntry", params, this.oldTypeService);
+    }
+
+    /**
+     * Creates a new CRE cloning an existing CRE
+     * @param sourceId id of the CRE to clone
+     * @param targetId id of the CRE to create
+     */
+    cloneCustomRangeEntry(sourceId: string, targetId: string) {
+        console.log("[CustomRangeServices] cloneCustomRangeEntry");
+        var params: any = {
+            sourceId: sourceId,
+            targetId: targetId
+        };
+        return this.httpMgr.doGet(this.serviceName, "cloneCustomRangeEntry", params, this.oldTypeService);
     }
 
     /**
@@ -397,8 +401,12 @@ export class CustomRangeServices {
     }
 
     /**
-     * 
-     * @param
+     * Updates attributes of an existing CRE
+     * @param id
+     * @param name
+     * @param description
+     * @param ref
+     * @param showProp
      */
     updateCustomRangeEntry(id: string, name: string, description: string, ref: string, showProp: string) {
         console.log("[CustomRangeServices] updateCustomRangeEntry");
@@ -415,8 +423,9 @@ export class CustomRangeServices {
     }
 
     /**
-     * 
-     * @param
+     * Adds a CustomRangeEntry to the entries of a CustomRange
+     * @param customRangeId
+     * @param customRangeEntryId
      */
     addEntryToCustomRange(customRangeId: string, customRangeEntryId: string) {
         console.log("[CustomRangeServices] addEntryToCustomRange");
@@ -428,8 +437,9 @@ export class CustomRangeServices {
     }
 
     /**
-     * 
-     * @param
+     * Removes a CustomRangeEntry from the entries of a CustomRange
+     * @param customRangeId
+     * @param customRangeEntryId
      */
     removeEntryFromCustomRange(customRangeId: string, customRangeEntryId: string) {
         console.log("[CustomRangeServices] removeEntryFromCustomRange");
@@ -448,7 +458,7 @@ export class CustomRangeServices {
      * Determines also the nature of the pearl parameter
      */
     validatePearl(pearl: string, creType: CustomRangeEntryType) {
-        console.log("[CustomRangeServices] removeEntryFromCustomRange");
+        console.log("[CustomRangeServices] validatePearl");
         var params: any = {
             pearl: pearl,
             creType: creType

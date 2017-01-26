@@ -19,6 +19,7 @@ import {NewPlainLiteralModal} from '../widget/modal/newPlainLiteralModal/newPlai
 import {NewResourceModal} from '../widget/modal/newResourceModal/newResourceModal';
 import {NewTypedLiteralModal} from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
 import {PromptModal} from '../widget/modal/promptModal/promptModal';
+import {PromptPrefixedModal} from '../widget/modal/promptModal/promptPrefixedModal';
 import {SelectionModal} from '../widget/modal/selectionModal/selectionModal';
 import {ResourceSelectionModal} from '../widget/modal/selectionModal/resourceSelectionModal';
 import {ContentLangModal} from '../widget/modal/contentLangModal/contentLangModal';
@@ -59,8 +60,9 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule],
     declarations: [
-        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal, NewPlainLiteralModal,
-        NewResourceModal, NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
+        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
+        NewPlainLiteralModal, NewResourceModal, NewTypedLiteralModal, PromptModal,
+        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
@@ -79,8 +81,9 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
      * There's no harm in exporting them but no benefit either. 
      */
     entryComponents: [
-        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal, NewPlainLiteralModal,
-        NewResourceModal, NewTypedLiteralModal, PromptModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
+        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
+        NewPlainLiteralModal, NewResourceModal, NewTypedLiteralModal, PromptModal,
+        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,

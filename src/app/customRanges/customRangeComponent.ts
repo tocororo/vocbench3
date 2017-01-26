@@ -7,7 +7,7 @@ import {CustomRangePropMappingModal} from "./customRangeConfigModals/crPropMappi
 import {CustomRangeEditorModal, CustomRangeEditorModalData} from "./customRangeConfigModals/crEditorModal"
 import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./customRangeConfigModals/creEditorModal"
 import {ARTURIResource} from "../utils/ARTResources";
-import {CustomRangePropertyMapping} from "../utils/CustomRanges";
+import {CustomRangePropertyMapping, CustomRangeEntry} from "../utils/CustomRanges";
 
 @Component({
 	selector: "custom-range-component",
@@ -198,13 +198,33 @@ export class CustomRangeComponent {
             )
         );
     }
+
+    private cloneCRE() {
+        this.modalService.promptPrefixed("Clone CustomRangeEntry", CustomRangeEntry.PREFIX, "ID", null, false, true).then(
+            (value: any) => {
+                let crId = CustomRangeEntry.PREFIX + value;
+                for (var i = 0; i < this.customRangeEntryList.length; i++) {
+                    if (this.customRangeEntryList[i] == crId) {
+                        this.modalService.alert("Duplicated ID", "A CustomRangeEntry with ID " + crId + " already exists", "error");
+                        return;
+                    }
+                }
+                this.customRangeService.cloneCustomRangeEntry(this.selectedCRE, crId).subscribe(
+                    stResp => {
+                        this.initCREList();
+                    }
+                )
+            },
+            () => {}
+        );
+    }
     
     private deleteCRE() {
         this.customRangeService.isEntryLinkedToCustomRange(this.selectedCRE).subscribe(
             result => {
                 if (result) { //selectedCRE belong to a CR
                     this.modalService.confirmCheck("Delete Custom Range Entry", "You are deleting a Custom Range Entry that " +
-                        "belongs to one or more CustomRange(s). Are you sure?", "Delete also Custom Range(s) left empty", "warning").then(
+                        "belongs to one or more CustomRange(s). Are you sure?", "Delete also Custom Range(s) left empty", "error").then(
                         (check: any) => {
                             this.customRangeService.deleteCustomRangeEntry(this.selectedCRE, check).subscribe(
                                 stResp => {

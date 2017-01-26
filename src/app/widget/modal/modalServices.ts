@@ -3,6 +3,7 @@ import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
 import {PromptModal, PromptModalData} from "./promptModal/promptModal";
+import {PromptPrefixedModal, PromptPrefixedModalData} from "./promptModal/promptPrefixedModal";
 import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
 import {ConfirmCheckModal, ConfirmCheckModalData} from "./confirmModal/confirmCheckModal";
 import {AlertModal, AlertModalData} from "./alertModal/alertModal";
@@ -39,6 +40,28 @@ export class ModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PromptModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal with an input text and two buttons (Ok and Cancel) with the given title and content message.
+     * Returns a Promise with the result.
+     * @param title the title of the modal dialog
+     * @param prefix the prefix to show on the left of the input field
+     * @param label the label of the input field (optional)
+     * @param value the value inserted by default in the input field
+     * @param inputOptional tells if the input field is optional or mandatory
+     * @param inputSanitized tells if the text in the input field should be sanitized
+     * @return if the modal closes with ok returns a promise containing the input text
+     */
+    promptPrefixed(title: string, prefix: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
+        var modalData = new PromptPrefixedModalData(title, prefix, label, value, false, inputOptional, inputSanitized);
+        const builder = new BSModalContextBuilder<PromptPrefixedModalData>(
+            modalData, undefined, PromptPrefixedModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(PromptPrefixedModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
