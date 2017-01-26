@@ -37,18 +37,18 @@
         <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl"
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </superproperties-renderer>
-        <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-value-list]="lexicalizationsColl"
-            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </lexicalizations-renderer>
-        <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
-            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </property-facets-renderer>
         <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl"
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </domains-renderer>
         <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl"
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </ranges-renderer>
+        <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </property-facets-renderer>
+        <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-value-list]="lexicalizationsColl"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </lexicalizations-renderer>
         <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl"
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </members-renderer>
