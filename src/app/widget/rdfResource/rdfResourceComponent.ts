@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { ARTNode, ARTResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../utils/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../utils/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 
 @Component({
@@ -16,8 +16,16 @@ export class RdfResourceComponent {
 		if (this.rendering) {
 			return this.resource.getShow();	
 		} else {
-			// return this.resource.getAdditionalProperty("qname");
-			return "qname not yet available";
+			if (this.resource.isURIResource()) {
+				let qname = this.resource.getAdditionalProperty(ResAttribute.QNAME);
+				if (qname != undefined) {
+					return qname;
+				} else {
+					return (<ARTURIResource>this.resource).getURI();
+				}
+			} else {
+				return this.resource.getShow();
+			}
 		}
 	}
 

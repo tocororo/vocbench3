@@ -387,7 +387,11 @@ export class Deserializer {
         var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>uri[ResAttribute.ROLE];
         var uriRes: ARTURIResource = new ARTURIResource(id, show, role);
 
-        //optional properties
+        //other properties
+        var qname = uri[ResAttribute.QNAME];
+        if (qname != undefined) {
+            uriRes.setAdditionalProperty(ResAttribute.QNAME, qname);
+        }
         var explicit = uri[ResAttribute.EXPLICIT];
         if (explicit != undefined) {
             uriRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
