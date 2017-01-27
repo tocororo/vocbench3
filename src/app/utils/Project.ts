@@ -112,6 +112,12 @@ export class Project {
     }
 }
 
+export class PluginSpecification {
+    factoryId: string;
+    configType: string;
+    properties: any;
+}
+
 export type ProjectTypesEnum = "saveToStore" | "continuosEditing";
     
 export const ProjectTypesEnum = {

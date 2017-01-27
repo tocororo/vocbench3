@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {Project} from '../utils/Project';
-import {VBEventHandler} from '../utils/VBEventHandler';
-import {VocbenchCtx} from '../utils/VocbenchCtx';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { Project, PluginSpecification } from '../utils/Project';
+import { VBEventHandler } from '../utils/VBEventHandler';
+import { VocbenchCtx } from '../utils/VocbenchCtx';
 
 @Injectable()
 export class ProjectServices {
@@ -77,7 +77,7 @@ export class ProjectServices {
             }
         );
     }
-    
+
     /**
      * Accesses to the given project
      * @param project the project to access
@@ -92,7 +92,7 @@ export class ProjectServices {
         };
         return this.httpMgr.doGet(this.serviceName, "accessProject", params, this.oldTypeService);
     }
-    
+
     /**
      * Creates a project
      * @param projectName
@@ -111,8 +111,8 @@ export class ProjectServices {
     createProject(projectName: string, modelType: string, baseURI: string,
         ontManagerFactoryID: string, modelConfigurationClass: string, modelConfigurationArray: Array<any>,
         uriGeneratorFactoryID?: string, uriGenConfigurationClass?: string, uriGenConfigurationArray?: Array<any>,
-		renderingEngineFactoryID?: string, renderingEngineConfigurationClass?: string, renderingEngineConfigurationArray?: Array<any>) {
-            
+        renderingEngineFactoryID?: string, renderingEngineConfigurationClass?: string, renderingEngineConfigurationArray?: Array<any>) {
+
         console.log("[ProjectServices] createProject");
         var params: any = {
             consumer: "SYSTEM",
@@ -123,20 +123,51 @@ export class ProjectServices {
             modelConfigurationClass: modelConfigurationClass,
             modelConfiguration: modelConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n"),
         };
-        
+
         if (uriGeneratorFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
             params.uriGeneratorFactoryID = uriGeneratorFactoryID;
             params.uriGenConfigurationClass = uriGenConfigurationClass;
             params.uriGenConfiguration = uriGenConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
         }
-        
+
         if (renderingEngineFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
             params.renderingEngineFactoryID = renderingEngineFactoryID;
             params.renderingEngineConfigurationClass = renderingEngineConfigurationClass;
             params.renderingEngineConfiguration = renderingEngineConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
         }
-        
+
         return this.httpMgr.doGet(this.serviceName, "createProject", params, this.oldTypeService);
+    }
+
+    /**
+     * @param projectName
+     * @param modelType
+     * @param baseURI
+     * @param historyEnabled
+     * @param validationEnabled
+     * @param uriGeneratorSpecification
+     * @param renderingEngineSpecification
+     */
+    createProjectNEW(projectName: string, modelType: string, baseURI: string,
+        historyEnabled: boolean, validationEnabled: boolean,
+        uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification) {
+        
+        console.log("[ProjectServices] createProject");
+        var params: any = {
+            consumer: "SYSTEM",
+            projectName: projectName,
+            modelType: modelType,
+            baseURI: baseURI,
+            historyEnabled: historyEnabled,
+            validationEnabled: validationEnabled
+        };
+        if (uriGeneratorSpecification != undefined) {
+            params.uriGeneratorSpecification = JSON.stringify(uriGeneratorSpecification);
+        }
+        if (renderingEngineSpecification != undefined) {
+            params.renderingEngineSpecification = JSON.stringify(renderingEngineSpecification);
+        }
+        return this.httpMgr.doGet("Projects2", "createProject", params, this.oldTypeService, true);
     }
 
     /**
@@ -151,7 +182,7 @@ export class ProjectServices {
         };
         return this.httpMgr.doGet(this.serviceName, "deleteProject", params, this.oldTypeService);
     }
-    
+
     /**
      * Imports a project archieve previously exported
      * @param projectName the name of the new project
@@ -165,7 +196,7 @@ export class ProjectServices {
         };
         return this.httpMgr.uploadFile(this.serviceName, "importProject", data, this.oldTypeService);
     }
-    
+
     /**
      * Exports the given project in a zip file
      * @param project the project to export
@@ -177,7 +208,7 @@ export class ProjectServices {
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, this.oldTypeService);
     }
-    
+
     /**
      * Saves the given (not persistent) project
      * @param project the project to save

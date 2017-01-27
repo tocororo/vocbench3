@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { OntoMgrConfigModal, OntoMgrConfigModalData } from "./ontoMgrConfigModal";
+import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal";
 import { Router } from "@angular/router";
 import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
@@ -37,12 +38,12 @@ export class CreateProjectComponent {
     private projectName: string;
     private baseURI: string;
 
-    private ontoTypeList = [
+    private modelTypeList = [
         { value: "it.uniroma2.art.owlart.models.OWLModel", label: "OWL" },
         { value: "it.uniroma2.art.owlart.models.SKOSModel", label: "SKOS" },
         { value: "it.uniroma2.art.owlart.models.SKOSXLModel", label: "SKOSXL" }
     ];
-    private ontoType: string = this.ontoTypeList[0].value;
+    private modelType: string = this.modelTypeList[0].value;
 
     private ontoMgrList: Array<string>;
     private ontoMgrId: string = "it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl";
@@ -59,6 +60,38 @@ export class CreateProjectComponent {
     private extPointPanelOpen: boolean = false;
 
     private submitted: boolean = false;
+
+
+    //NEW
+    private history: boolean = false;
+    private validation: boolean = false;
+
+    private dataStoreList: any[] = [
+        { label: "Create Local", type: "local", action: "create"},
+        { label: "Create Remote", type: "remote", action: "create"},
+        { label: "Access Existing Remote", type: "remote", action: "access"},
+    ]
+    private selectedDataStore: any = this.dataStoreList[0];
+
+    //configuration of remote access (used only in case dataStore is one of the two with type "remote")
+    private remoteAccessConfig: any = [
+        {name: "ServerURL", description:"URL to the server of the rdf repository", required: true},
+        {name: "Username", description:"Identifier for the user connecting to the rdf repository", required: true},
+        {name: "Password", description:"Password for the user connecting to the rdf repository", required: true}
+    ];
+
+    //this should be retrieved from server as for ontManager.getOntManagerParameters() ?
+    private repoConfigurations: any[] = [
+        { value: "NativeStore/Persistent" },
+        { value: "InMemory/Persistent" },
+        { value: "InMemory/Volatile" }
+    ];
+
+    private dataRepoId: string;
+    private dataRepoConf: any = this.repoConfigurations[0]; //chosen configuration for data repository
+    private historyValidationRepoId: string;
+    private historyValidationRepoConf: any = this.repoConfigurations[0]; //chosen configuration for history/validation repository
+
 
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices,
         private pluginService: PluginsServices, private router: Router, private modalService: ModalServices,
@@ -217,7 +250,7 @@ export class CreateProjectComponent {
             }
 
             document.getElementById("blockDivFullScreen").style.display = "block";
-            this.projectService.createProject(this.projectName, this.ontoType, this.baseURI,
+            this.projectService.createProject(this.projectName, this.modelType, this.baseURI,
                 this.ontoMgrId, this.selectedOntoMgrConfig.type, this.selectedOntoMgrConfig.params,
                 uriGenFactoryID, uriGenConfigurationClass, uriGenConfigurationArray,
                 renderingEngineFactoryID, renderingEngineConfigurationClass, renderingEngineConfigurationArray).subscribe(
@@ -245,6 +278,58 @@ export class CreateProjectComponent {
         return this.modal.open(OntoMgrConfigModal, overlayConfig).then(
             dialog => dialog.result
         );
+    }
+
+
+
+
+    /** #####################################
+     * ############## NEW ###################
+     * #################################### */
+
+    private createtNew() {
+        document.getElementById("blockDivFullScreen").style.display = "block";
+        this.projectService.createProjectNEW(this.projectName, this.modelType, this.baseURI, this.history, this.validation).subscribe(
+            stResp => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+                this.modalService.alert("Create project", "Project created successfully").then(
+                    () => this.router.navigate(['/Projects'])
+                );
+            },
+            err => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+            }
+        );
+    }
+
+    /**
+     * If the user is creation a project (not accessing an existing one),
+     * the data and history-validation repositories IDs are determined from project's name
+     */
+    private onProjectNameChange() {
+        if (this.selectedDataStore.action == "create") {
+            this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_data";
+            this.historyValidationRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
+        }
+    }
+
+    private configureRemoteDataStore() {
+        var modalData = new RemoteAccessConfigModalData(this.remoteAccessConfig);
+        const builder = new BSModalContextBuilder<RemoteAccessConfigModalData>(
+            modalData, undefined, RemoteAccessConfigModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(RemoteAccessConfigModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    private configureDataRepo() {
+        alert("what are the parameters?");
+    }
+
+    private configureHistoryValidationRepo() {
+        alert("what are the parameters?");
     }
 
 }

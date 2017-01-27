@@ -7,6 +7,130 @@
         
         <div class="panel-body scrollableContainer">
 
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-1">Project Name:</label>
+                    <div class="col-sm-11">
+                        <input type="text" class="form-control input-sm" name="projectName" [(ngModel)]="projectName" placeholder="Project name" (ngModelChange)="onProjectNameChange()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-1">URI:</label>
+                    <div class="col-sm-11">
+                        <input type="text" class="form-control input-sm" name="baseURI" [(ngModel)]="baseURI" placeholder="BaseURI">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-1">Type:</label>
+                    <div class="col-sm-5">
+                        <select class="form-control input-sm" [(ngModel)]="modelType" name="modelType">
+                            <option *ngFor="let ot of modelTypeList" [value]="ot.value">{{ot.label}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-1">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="history" name="history"> History
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Enable this to keep track of the changes made on the working graph">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="validation" name="validation"> Validation
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!--Triple store configuration-->
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label>Data Store</label>
+                </div>
+                <div class="subPanel-body">
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Repository Access:</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <select class="form-control input-sm" [(ngModel)]="selectedDataStore" name="selectedDataStore">
+                                        <option *ngFor="let ds of dataStoreList" [ngValue]="ds">{{ds.label}}</option>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-sm" (click)="configureRemoteDataStore()" [disabled]="selectedDataStore.type == 'local'">Configure</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Data Repository ID</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control input-sm" name="dataRepoId" [(ngModel)]="dataRepoId" placeholder="Data Repository ID"
+                                     [disabled]="selectedDataStore.action == 'create'">
+                            </div>
+                            <div class="control-label col-sm-2">
+                                <label>Configuration</label>
+                                <span class="glyphicon glyphicon-info-sign" title="???????????????????????????"></span>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group" >
+                                    <select class="form-control input-sm" [(ngModel)]="dataRepoConf" name="dataRepoConf" [disabled]="selectedDataStore.action == 'create'">
+                                        <option *ngFor="let rc of repoConfigurations" [ngValue]="rc" >{{rc.value}}</option>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-sm" (click)="configureDataRepo()" [disabled]="selectedDataStore.action == 'create'">Configure</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">History/Validation Repository ID</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control input-sm" name="historyValidationRepoId" [(ngModel)]="historyValidationRepoId"
+                                    placeholder="History/Validation Repository ID" [disabled]="selectedDataStore.action == 'create' && (history || validation)">
+                            </div>
+                            <div class="control-label col-sm-2">
+                                <label>Configuration</label>
+                                <span class="glyphicon glyphicon-info-sign" title="Is highly recommended not to use inference and to use a native repository"></span>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <select class="form-control input-sm" [(ngModel)]="historyValidationRepoConf" name="historyValidationRepoConf"
+                                        [disabled]="selectedDataStore.action == 'create'">
+                                        <option *ngFor="let rc of repoConfigurations" [ngValue]="rc">{{rc.value}}</option>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-sm" (click)="configureHistoryValidationRepo()"
+                                            [disabled]="selectedDataStore.action == 'create' && (history || validation)">Configure</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    
+                </div>
+            </div>
+
+            <div>
+                <button class="btn btn-sm btn-primary" style="float: right" (click)="createtNew()">Create (NEW)</button>
+            </div>
+
+            <div style="align-self: center; padding: 8px; margin: 5px; font-size: 15px; font-weight: bold; border: 1px solid #ccc; border-radius: 5px;">
+                THE FOLLOWING PANEL IS THE LEGACY PROJECT CREATE FORM
+            </div>
+
             <!--Project basic params-->
             <form role="form">
                 <div class="form-group">
@@ -18,8 +142,8 @@
                 </div>
                 <div class="form-group">
                     <label>Type:</label>
-                        <select class="form-control input-sm" [(ngModel)]="ontoType" name="ontoType">
-                            <option *ngFor="let ot of ontoTypeList" [value]="ot.value">{{ot.label}}</option>
+                        <select class="form-control input-sm" [(ngModel)]="modelType" name="modelType">
+                            <option *ngFor="let ot of modelTypeList" [value]="ot.value">{{ot.label}}</option>
                         </select>
                 </div>
                 <div class="form-group">

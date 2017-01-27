@@ -52,6 +52,7 @@ import {BrowseExternalResourceModal} from '../alignment/resourceAlignment/browse
 
 //project config modal
 import {OntoMgrConfigModal} from "../project/createProject/ontoMgrConfigModal";
+import {RemoteAccessConfigModal} from "../project/createProject/remoteAccessConfigModal";
 import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
 
 //administration modal
@@ -68,7 +69,8 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, ProjectPropertiesModal, UserProjBindingModal
+        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal,
+        UserProjBindingModal
     ],
     exports: [],
     providers: [ModalServices, BrowsingServices],
@@ -89,7 +91,8 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, ProjectPropertiesModal, UserProjBindingModal
+        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, 
+        UserProjBindingModal
     ]
 })
 export class VBModalModule { }

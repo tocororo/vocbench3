@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3 class="modal-title">Configuration for remote data store</h3>
+</div>
+<div class="modal-body">
+
+    <table class="table table-condensed table-borderless table-hoverable">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+            <col style="width: 1%;">
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let param of context.configuration">
+                <td nowrap>{{param.name}}</td>
+                <td><input type="text" class="form-control input-sm" [(ngModel)]="param.value"></td>
+                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" [title]="param.description"></span></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>
