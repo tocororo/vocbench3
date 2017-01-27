@@ -1,59 +1,39 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges} from "@angular/core";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
-import {OWL} from "../../../utils/Vocabulary";
-import {VBEventHandler} from "../../../utils/VBEventHandler";
-import {OwlServices} from "../../../services/owlServices";
-import {SearchServices} from "../../../services/searchServices";
-import {ClassTreeNodeComponent} from "./classTreeNodeComponent";
-import {ModalServices} from "../../../widget/modal/modalServices";
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../utils/ARTResources";
+import { OWL } from "../../../utils/Vocabulary";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { OwlServices } from "../../../services/owlServices";
+import { SearchServices } from "../../../services/searchServices";
+import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { AbstractTree } from "../../abstractTree";
 
 @Component({
-	selector: "class-tree",
-	templateUrl: "./classTreeComponent.html",
+    selector: "class-tree",
+    templateUrl: "./classTreeComponent.html",
     host: { class: "blockingDivHost" }
 })
-export class ClassTreeComponent {
+export class ClassTreeComponent extends AbstractTree {
     @Input('roots') rootClasses: ARTURIResource[];
-    @Input() hideSearch: boolean = false;
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
-    
-    //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
-    
-    private roots:ARTURIResource[] = [];
-    private selectedNode: ARTURIResource;
-    
-    private eventSubscriptions: any[] = [];
-    
+
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
     constructor(private owlService: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
-        private eventHandler: VBEventHandler) {
+        eventHandler: VBEventHandler) {
+        super(eventHandler);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (cls: ARTURIResource) => this.onClassDeleted(cls)));
     }
-    
-    /**
-     * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
-     * the view is initialized because in initTree() there is a reference to 
-     * #blockDivTree in order to change the display property during the tree creation
-     */
-    ngAfterViewInit() {
-        this.viewInitialized = true;
-        this.initTree();
-    }
-    
+
     ngOnChanges(changes: SimpleChanges) {
-        //viewInitialized needed to avoid initializing tree before view is initialized
-        //(ngOnChanges is called before ngOnInit)
-        if (changes['rootClasses'] && this.viewInitialized) {
+        if (changes['rootClasses']) {
             this.initTree();
         }
     }
-    
+
     initTree() {
         this.selectedNode = null;
         if (this.rootClasses == undefined || this.rootClasses.length == 0) {
@@ -72,21 +52,8 @@ export class ClassTreeComponent {
             );
         }
     }
-    
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
 
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);           
-        }
-    }
-
-    private doSearch(searchedText: string) {
+    doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
@@ -102,7 +69,7 @@ export class ClassTreeComponent {
                                 (selectedResource: any) => {
                                     this.openTreeAt(selectedResource);
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
@@ -110,8 +77,8 @@ export class ClassTreeComponent {
             );
         }
     }
-    
-    public openTreeAt(node: ARTURIResource) {
+
+    openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
@@ -135,19 +102,10 @@ export class ClassTreeComponent {
             }
         );
     }
-    
-    
+
+
     //EVENT LISTENERS
-    
-    private onNodeSelected(node:ARTURIResource) {
-        if (this.selectedNode != undefined) {
-            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-        }
-        this.selectedNode = node;
-        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        this.nodeSelected.emit(node);
-    }
-    
+
     private onClassDeleted(cls: ARTURIResource) {
         //check if the class to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
@@ -158,14 +116,6 @@ export class ClassTreeComponent {
         }
         //reset the selected node
         this.nodeSelected.emit(undefined);
-    }
-    
-    //Listeners to node expansion start/end. Simply show/hide the loading div
-    private onNodeExpandStart() {
-        this.blockDivElement.nativeElement.style.display = "block";
-    }
-    private onNodeExpandEnd() {
-        this.blockDivElement.nativeElement.style.display = "none";
     }
 
 }

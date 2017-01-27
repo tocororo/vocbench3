@@ -15,6 +15,8 @@ export class SchemeListPanelComponent {
     
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
+    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+
     private schemeList:ARTURIResource[];
     private activeScheme:ARTURIResource;
     private selectedScheme:ARTURIResource;

@@ -3,8 +3,8 @@
     <div class="panel-body vbox">
 
         <div class="scrollableContainer">
-            <collection-tree-node *ngFor="let r of roots" [node]="r" (nodeSelected)="onNodeSelected($event)"
-                (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+            <collection-tree-node *ngFor="let r of roots" [node]="r" [rendering]="rendering" 
+                (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
             </collection-tree-node>
         </div>
 

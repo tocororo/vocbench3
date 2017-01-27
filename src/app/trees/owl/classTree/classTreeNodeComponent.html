@@ -5,12 +5,13 @@
         <img *ngIf="node.getAdditionalProperty('open')"
             src="../../../../assets/images/tree_collapse.png" (click)="collapseNode()">
 	</div>
-	<rdf-resource [resource]="node" (click)="selectNode()" 
+	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
-	<class-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" (nodeSelected)="onNodeSelected($event)"
+    <class-tree-node *ngFor="let n of node.getAdditionalProperty('children')"
+        [node]="n" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"
         (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
     </class-tree-node>
 </div>

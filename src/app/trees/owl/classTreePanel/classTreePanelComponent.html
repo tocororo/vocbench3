@@ -22,6 +22,10 @@
                 <img src="../../../../assets/images/individual_delete.png" class="panelButtonImg"/>
             </button>
         </div>
+        <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
+            style="margin: 0px 5px;" [ngClass]="{active: rendering}">
+            <span class="glyphicon glyphicon-font"></span>
+        </button>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
@@ -29,12 +33,13 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <class-tree (nodeSelected)="onClassSelected($event)" style="flex: 3" hideSearch="true"></class-tree>
+        <class-tree [rendering]="rendering" (nodeSelected)="onClassSelected($event)" style="flex: 3" hideSearch="true"></class-tree>
         <!--<div style="font-size: 6px; align-self: center;" (mousedown)="onMousedown()" (mouseup)="onMouseup()"
             (mousemove)="onMousemove($event)">
             <span class="glyphicon glyphicon-chevron-up"></span><span class="glyphicon glyphicon-chevron-down"></span>
         </div>-->
-        <instance-list [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" style="margin-top: 4px;" hideSearch="true">
+        <instance-list [cls]="selectedClass" [rendering]="rendering"
+            (nodeSelected)="onInstanceSelected($event)" style="margin-top: 4px;" hideSearch="true">
         </instance-list>
     </div>
     

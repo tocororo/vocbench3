@@ -45,6 +45,10 @@
             </button>
         </div>
 
+        <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
+            style="margin: 0px 5px;" [ngClass]="{active: rendering}">
+            <span class="glyphicon glyphicon-font"></span>
+        </button>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
@@ -53,7 +57,7 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-            <property-tree (nodeSelected)="onNodeSelected($event)"></property-tree>
+        <property-tree [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></property-tree>
     </div>
     
 </div>

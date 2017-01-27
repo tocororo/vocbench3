@@ -9,6 +9,10 @@
                 <img src="../../../../../assets/images/conceptScheme_delete.png" class="panelButtonImg"/>
             </button>
         </div>
+        <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
+            style="margin: 0px 5px;" [ngClass]="{active: rendering}">
+            <span class="glyphicon glyphicon-font"></span>
+        </button>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
@@ -19,7 +23,8 @@
                 <div class="schemeItem">
                     <input style="margin-right: 5px;" type="radio" name="scheme" [value]="s"
                         (click)="activateScheme(s)" [checked]="isActive(s)"/>
-                    <scheme-list-node [node]="s" (nodeSelected)="selectScheme(s)" style="flex:1"></scheme-list-node>
+                    <scheme-list-node [node]="s" [rendering]="rendering" (nodeSelected)="selectScheme(s)" style="flex:1">
+                    </scheme-list-node>
                 </div>
             </div>
         </div>

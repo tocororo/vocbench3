@@ -24,6 +24,8 @@ export class ClassTreePanelComponent {
     
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
     @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
+
+    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     
     private selectedClass:ARTURIResource;
     private selectedInstance:ARTURIResource;

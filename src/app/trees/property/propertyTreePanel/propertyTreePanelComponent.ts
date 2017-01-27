@@ -14,6 +14,8 @@ export class PropertyTreePanelComponent {
 
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
+    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+
     private selectedProperty: ARTURIResource;
 
     constructor(private propService: PropertyServices, private deleteService: DeleteServices,

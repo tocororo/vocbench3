@@ -105,19 +105,10 @@ export class ConceptTreePanelComponent {
         this.viewChildTree.initTree();
     }
 
-    private switchRendering() {
-        this.rendering = !this.rendering;
-    }
-
     //EVENT LISTENERS
     private onNodeSelected(node: ARTURIResource) {
         this.selectedConcept = node;
         this.nodeSelected.emit(node);
-    }
-
-    private onNodeCtrlClicked(node: ARTURIResource) {
-        console.log("[ConceptTreePanelComponent] node ctrl+clicked " + node.getURI());
-        this.nodeCtrlClicked.emit(node);
     }
 
     //when a concept is removed from a scheme, it should be still visible in res view,

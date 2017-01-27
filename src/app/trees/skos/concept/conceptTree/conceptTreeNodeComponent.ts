@@ -1,35 +1,23 @@
-import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef} from "@angular/core";
-import {ARTURIResource, ResAttribute} from "../../../../utils/ARTResources";
-import {VBEventHandler} from "../../../../utils/VBEventHandler";
-import {VocbenchCtx} from "../../../../utils/VocbenchCtx";
-import {SkosServices} from "../../../../services/skosServices";
+import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
+import { ARTURIResource, ResAttribute } from "../../../../utils/ARTResources";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { SkosServices } from "../../../../services/skosServices";
+import { AbstractTreeNode } from "../../../abstractTreeNode";
 
 @Component({
-	selector: "concept-tree-node",
-	templateUrl: "./conceptTreeNodeComponent.html",
+    selector: "concept-tree-node",
+    templateUrl: "./conceptTreeNodeComponent.html",
 })
-export class ConceptTreeNodeComponent {
-    @Input() node: ARTURIResource;
+export class ConceptTreeNodeComponent extends AbstractTreeNode {
+
     @Input() scheme: ARTURIResource;
-    @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
-    @Output() nodeClicked = new EventEmitter<ARTURIResource>();
-    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
-    @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
-    @Output() nodeExpandEnd = new EventEmitter<any>(); //emit an event when the subTree expansion is completed
-    
-    //get an element in the view referenced with #treeNodeElement (useful to apply scrollIntoView in the search function)
-    @ViewChild('treeNodeElement') treeNodeElement: ElementRef;
+
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
-    //structure to support the tree opening
-    private pendingSearch: any = {
-        pending: false, //tells if there is a pending search waiting that children view are initialized 
-        path: [], //remaining path of the tree to open
-    }
-    
-    private eventSubscriptions: any[] = [];
-    
-	constructor(private skosService:SkosServices, private eventHandler:VBEventHandler, private vbCtx: VocbenchCtx) {
+
+    constructor(private skosService: SkosServices, private vbCtx: VocbenchCtx, eventHandler: VBEventHandler) {
+        super(eventHandler);
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             (deletedConcept: ARTURIResource) => this.onConceptDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(
@@ -51,72 +39,16 @@ export class ConceptTreeNodeComponent {
         this.eventSubscriptions.push(eventHandler.skosxlPrefLabelRemovedEvent.subscribe(
             (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
-    
-    ngAfterViewInit() {
-        //when ConceptTreeNodeComponent children are added, looks for a pending search to resume
-        this.viewChildrenNode.changes.subscribe(
-            c => {
-                if (this.pendingSearch.pending) {//there is a pending search
-                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
-                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
-                    window.setTimeout(() =>
-                        this.expandPath(this.pendingSearch.path)
-                    );
-                }
-            });
-    }
-    
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-    
-    /**
-     * Expand recursively the given path untill the final node.
-     * If the given path is empty then the current node is the searched one, otherwise
-     * the current node expands itself (if is closed), looks among its children for the following node of the path,
-     * then call recursively expandPath() for the child node.
-     */
-    public expandPath(path: ARTURIResource[]) {
-        if (path.length == 0) { //this is the last node of the path. Focus it in the tree
-            this.treeNodeElement.nativeElement.scrollIntoView();
-            //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
-            if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
-                this.selectNode();
-            }
-        } else {
-            if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
-                this.expandNode();
-            }
-            var nodeChildren = this.viewChildrenNode.toArray();
-            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
-                //save pending search so it can resume when the children are initialized
-                this.pendingSearch.pending = true;
-                this.pendingSearch.path = path;
-            } else if (this.pendingSearch.pending) {
-                //the tree expansion is resumed, reset the pending search
-                this.pendingSearch.pending = false;
-                this.pendingSearch.path = [];
-            }
-            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
-                if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
-                    //let the child node expand the remaining path
-                    path.splice(0, 1);
-                    nodeChildren[i].expandPath(path);
-                    break;
-                }
-            }
-        }
-    }
-    
+
+
     /**
  	 * Function called when "+" button is clicked.
  	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
  	 * then expands the subtree div.
  	 */
-    public expandNode() {
+    expandNode() {
         this.nodeExpandStart.emit();
-        // this.skosService.getNarrowerConcepts_old(this.node, this.scheme, this.vbCtx.getContentLanguage(true)).subscribe( //old service
-        this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe( //new service
+        this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
             narrower => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
@@ -125,39 +57,7 @@ export class ConceptTreeNodeComponent {
         );
     }
 
-    /**
-   	 * Function called when "-" button is clicked.
-   	 * Collapse the subtree div.
-   	 */
-    private collapseNode() {
-		this.node.setAdditionalProperty(ResAttribute.OPEN, false);
-        this.node.setAdditionalProperty(ResAttribute.CHILDREN, []);
-    }
-    
-    /**
-     * Called when a rdf-resource is clicked. 
-     */
-    private onResourceClicked(event: MouseEvent) {
-        if (event.ctrlKey) { //ctrl + click
-            this.nodeCtrlClicked.emit(this.node);
-        } else {
-            this.selectNode();
-        }
-    }
-
-    private selectNode() {
-        this.nodeClicked.emit(this.node);
-    }
-    
     //EVENT LISTENERS
-    
-    private onNodeClicked(node: ARTURIResource) {
-        this.nodeClicked.emit(node);
-    }
-
-    private onNodeCtrlClicked(node: ARTURIResource) {
-        this.nodeCtrlClicked.emit(node);
-    }
 
     private onConceptDeleted(deletedConcept: ARTURIResource) {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
@@ -165,15 +65,15 @@ export class ConceptTreeNodeComponent {
             if (children[i].getURI() == deletedConcept.getURI()) {
                 children.splice(i, 1);
                 //if node has no more children change info of node so the UI will update
-   				if (children.length == 0) {
-   					this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-   					this.node.setAdditionalProperty(ResAttribute.OPEN, false);
-   				}
+                if (children.length == 0) {
+                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                    this.node.setAdditionalProperty(ResAttribute.OPEN, false);
+                }
                 break;
             }
         }
     }
-    
+
     private onNarrowerCreated(narrower: ARTURIResource, broader: ARTURIResource) {
         //add the new concept as children only if the parent is the current concept
         if (this.node.getURI() == broader.getURI()) {
@@ -187,24 +87,24 @@ export class ConceptTreeNodeComponent {
         if (this.node.getURI() == broader.getURI()) {//if the broader is the current node
             this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
             //if it was open add the narrower to the visible children
-            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) { 
-                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(narrower); 
+            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) {
+                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(narrower);
             }
         }
     }
-    
+
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
             this.onConceptDeleted(concept);
         }
     }
-    
+
     private onBroaderRemoved(concept: ARTURIResource, broader: ARTURIResource) {
         if (broader.getURI() == this.node.getURI()) {
             this.onConceptDeleted(concept);
         }
     }
-    
+
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (oldResource.getURI() == this.node.getURI()) {
             if (this.vbCtx.getHumanReadable()) {
@@ -220,13 +120,13 @@ export class ConceptTreeNodeComponent {
             }
         }
     }
-    
+
     private onPrefLabelSet(resource: ARTURIResource, label: string, lang: string) {
         if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
             this.node['show'] = label;
         }
     }
-    
+
     private onPrefLabelRemoved(resource: ARTURIResource, label: string, lang: string) {
         if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
             this.skosService.getShow(resource, this.vbCtx.getContentLanguage()).subscribe(
@@ -237,12 +137,4 @@ export class ConceptTreeNodeComponent {
         }
     }
 
-    //Listeners to node expansion start/end. Simply forward the event to the parent
-    private onNodeExpandStart() {
-        this.nodeExpandStart.emit();
-    }
-    private onNodeExpandEnd() {
-        this.nodeExpandEnd.emit();
-    }
-    
 }

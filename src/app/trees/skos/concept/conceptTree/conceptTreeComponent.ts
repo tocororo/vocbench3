@@ -1,24 +1,22 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../../utils/ARTResources";
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../utils/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
+import { AbstractTree } from "../../../abstractTree";
 
 @Component({
     selector: "concept-tree",
     templateUrl: "./conceptTreeComponent.html",
     host: { class: "blockingDivHost" }
 })
-export class ConceptTreeComponent {
+export class ConceptTreeComponent extends AbstractTree {
+
     @Input() scheme: ARTURIResource;
-    @Input() hideSearch: boolean = false;
     @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
-    @Input() rendering: boolean; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
     //only when the scheme is the one used in the current concept tree
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
@@ -26,22 +24,17 @@ export class ConceptTreeComponent {
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
-
-    private roots: ARTURIResource[];
-    private selectedNode: ARTURIResource;
-
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
     private workingScheme: ARTURIResource;//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
-    private eventSubscriptions: any[] = [];
-
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
-        private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
+        private vbCtx: VocbenchCtx, eventHandler: VBEventHandler) {
+
+        super(eventHandler);
+        
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: any) => this.onTopConceptCreated(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
@@ -73,21 +66,6 @@ export class ConceptTreeComponent {
     }
 
     /**
-     * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that
-     * the view #blockDivTree is initialized
-     */
-    ngAfterViewInit() {
-        /* Following check needed to avoid to call 2 times the service if the @Input scheme is provided:
-         * - 1st time in ngOnChanges when scheme is binded (so changes value)
-         * - 2nd time here in ngAfterViewInit
-         * I cannot resolve by deleting this method since if @Input scheme is not provided at all,
-         * ngOnChanges is not called, so neither initTree */
-        if (this.roots == undefined) {
-            this.initTree();
-        }
-    }
-
-    /**
      * Listener on changes of @Input scheme. When it changes, update the tree
      */
     ngOnChanges(changes: SimpleChanges) {
@@ -112,11 +90,7 @@ export class ConceptTreeComponent {
         );
     }
 
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-
-    private doSearch(searchedText: string) {
+    doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
@@ -138,20 +112,11 @@ export class ConceptTreeComponent {
                         }
                     }
                 }
-                );
+            );
         }
     }
 
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
-        }
-    }
-
-    private openTreeAt(node: ARTURIResource) {
+    openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.workingScheme).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
@@ -191,28 +156,7 @@ export class ConceptTreeComponent {
         return null; //schemeUri was probably "---", so for no-scheme mode return a null object
     }
 
-    //Listeners to node expansion start/end. Simply show/hide the loading div
-    private onNodeExpandStart() {
-        this.blockDivElement.nativeElement.style.display = "block";
-    }
-    private onNodeExpandEnd() {
-        this.blockDivElement.nativeElement.style.display = "none";
-    }
-
     //EVENT LISTENERS
-
-    private onNodeClicked(node: ARTURIResource) {
-        if (this.selectedNode != undefined) {
-            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-        }
-        this.selectedNode = node;
-        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        this.nodeSelected.emit(node);
-    }
-
-    private onNodeCtrlClicked(node: ARTURIResource) {
-        this.nodeCtrlClicked.emit(node);
-    }
 
     private onTopConceptCreated(concept: ARTURIResource, scheme: ARTURIResource) {
         if (this.scheme == undefined) {//in no-scheme mode add to the root if doesn't already in

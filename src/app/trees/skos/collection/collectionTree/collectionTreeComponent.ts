@@ -1,38 +1,32 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ViewChildren, QueryList, ElementRef} from "@angular/core";
-import {ARTURIResource, ARTResource, ResAttribute, RDFResourceRolesEnum} from "../../../../utils/ARTResources";
-import {VBEventHandler} from "../../../../utils/VBEventHandler";
-import {VocbenchCtx} from "../../../../utils/VocbenchCtx";
-import {SkosServices} from "../../../../services/skosServices";
-import {SearchServices} from "../../../../services/searchServices";
-import {CollectionTreeNodeComponent} from "./collectionTreeNodeComponent";
-import {ModalServices} from "../../../../widget/modal/modalServices";
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../utils/ARTResources";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { SkosServices } from "../../../../services/skosServices";
+import { SearchServices } from "../../../../services/searchServices";
+import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
+import { ModalServices } from "../../../../widget/modal/modalServices";
+import { AbstractTree } from "../../../abstractTree";
 
 @Component({
     selector: "collection-tree",
     templateUrl: "./collectionTreeComponent.html",
     host: { class: "blockingDivHost" }
 })
-export class CollectionTreeComponent {
-    @Output() nodeSelected = new EventEmitter<ARTResource>();
-    @Input() hideSearch: boolean = false;
-    
+export class CollectionTreeComponent extends AbstractTree {
+
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
-    
-    //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
-
-    public roots: ARTResource[];
-    private selectedNode: ARTResource;
-    
-    private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
-        private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
+        private vbCtx: VocbenchCtx, eventHandler: VBEventHandler) {
+
+        super(eventHandler);
+
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
-            (newColl: ARTResource) => this.onRootCollectionCreated(newColl)));
+            (newColl: ARTURIResource) => this.onRootCollectionCreated(newColl)));
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
-            (deletedCollection: ARTResource) => this.onCollectionDeleted(deletedCollection)));
+            (deletedCollection: ARTURIResource) => this.onCollectionDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
@@ -44,15 +38,7 @@ export class CollectionTreeComponent {
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             (newLang: string) => this.onContentLangChanged(newLang)));
     }
-    
-    /**
-     * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
-     * the view #blockDivTree is initialized
-     */
-    ngAfterViewInit() {
-        this.initTree();
-    }
-    
+
     initTree() {
         this.blockDivElement.nativeElement.style.display = "block";
         // this.skosService.getRootCollections(this.vbCtx.getContentLanguage(true)).subscribe( //old service
@@ -64,12 +50,8 @@ export class CollectionTreeComponent {
             err => { this.blockDivElement.nativeElement.style.display = "none"; }
         );
     }
-    
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
 
-    private doSearch(searchedText: string) {
+    doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
@@ -86,25 +68,16 @@ export class CollectionTreeComponent {
                                 (selectedResource: any) => {
                                     this.openTreeAt(selectedResource);
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
                 }
-            );
+                );
         }
     }
-    
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);           
-        }
-    }
-    
-    public openTreeAt(node: ARTURIResource) {
+
+    openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
@@ -120,20 +93,11 @@ export class CollectionTreeComponent {
             }
         );
     }
-    
-    //EVENT LISTENERS
-    
-    private onNodeSelected(node: ARTResource) {
-        if (this.selectedNode != undefined) {
-            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-        }
-        this.selectedNode = node;
-        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        this.nodeSelected.emit(node);
-    }
 
-    private onRootCollectionCreated(collection: ARTResource) {
-        this.roots.push(collection);       
+    //EVENT LISTENERS
+
+    private onRootCollectionCreated(collection: ARTURIResource) {
+        this.roots.push(collection);
     }
 
     private onNestedCollectionAdded(nested: ARTURIResource, container: ARTURIResource) {
@@ -146,7 +110,7 @@ export class CollectionTreeComponent {
         }
     }
 
-    private onCollectionDeleted(deletedCollection: ARTResource) {
+    private onCollectionDeleted(deletedCollection: ARTURIResource) {
         //check if the collection to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getNominalValue() == deletedCollection.getNominalValue()) {
@@ -157,22 +121,12 @@ export class CollectionTreeComponent {
         //reset the selected node
         this.nodeSelected.emit(undefined);
     }
-    
+
     private onContentLangChanged(lang: string) {
         //reset the selected node
         this.nodeSelected.emit(undefined);
         //and reinitialize tree
         this.initTree();
-    }
-
-    //Listeners to node expansion start/end. Simply show/hide the loading div
-    private onNodeExpandStart() {
-        console.log("block");
-        this.blockDivElement.nativeElement.style.display = "block";
-    }
-    private onNodeExpandEnd() {
-        console.log("none");
-        this.blockDivElement.nativeElement.style.display = "none";
     }
 
 }

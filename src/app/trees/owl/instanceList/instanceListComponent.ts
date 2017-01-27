@@ -13,6 +13,7 @@ import {SearchServices} from "../../../services/searchServices";
 export class InstanceListComponent {
     @Input() cls:ARTURIResource;
     @Input() hideSearch: boolean = false;
+    @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     //get the element in the view referenced with #blockDivTree

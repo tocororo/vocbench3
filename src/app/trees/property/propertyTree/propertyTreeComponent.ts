@@ -1,36 +1,29 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChildren, ViewChild, QueryList, SimpleChanges } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../utils/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ModalServices } from "../../../widget/modal/modalServices";
 import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
+import { AbstractTree } from "../../abstractTree";
 
 @Component({
     selector: "property-tree",
     templateUrl: "./propertyTreeComponent.html",
     host: { class: "blockingDivHost" }
 })
-export class PropertyTreeComponent {
+export class PropertyTreeComponent extends AbstractTree {
     @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource
     @Input('roots') rootProperties: ARTURIResource[]; //in case the roots are provided to the component instead of being retrieved from server
-
-    @Input() hideSearch: boolean = false;
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
-    //get the element in the view referenced with #blockDivTree
-    @ViewChild('blockDivTree') public blockDivElement: ElementRef;
-
-    private roots: ARTURIResource[];
-    private selectedNode: ARTURIResource;
-
-    private eventSubscriptions: any[] = [];
-
     constructor(private propertyService: PropertyServices, private searchService: SearchServices,
-        private modalService: ModalServices, private eventHandler: VBEventHandler) {
+        private modalService: ModalServices, eventHandler: VBEventHandler) {
+        
+        super(eventHandler);
+
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(
             (node: ARTURIResource) => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
@@ -39,21 +32,6 @@ export class PropertyTreeComponent {
             (data: any) => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
             (data: any) => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
-    }
-
-    /**
-     * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that
-     * the view #blockDivTree is initialized
-     */
-    ngAfterViewInit() {
-        /* Following check needed to avoid to call 2 times the service if the @Input resource is provided:
-         * - 1st time in ngOnChanges when resource is binded (so changes value)
-         * - 2nd time here in ngAfterViewInit
-         * I cannot resolve by deleting this method since if @Input resource is not provided at all,
-         * ngOnChanges is not called, so neither initTree */
-        if (this.roots == undefined) {
-            this.initTree();
-        }
     }
 
     /**
@@ -107,11 +85,7 @@ export class PropertyTreeComponent {
         }
     }
 
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-
-    private doSearch(searchedText: string) {
+    doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
@@ -136,16 +110,7 @@ export class PropertyTreeComponent {
         }
     }
 
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
-        }
-    }
-
-    public openTreeAt(node: ARTURIResource) {
+    openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
@@ -162,24 +127,7 @@ export class PropertyTreeComponent {
         );
     }
 
-    //Listeners to node expansion start/end. Simply show/hide the loading div
-    private onNodeExpandStart() {
-        this.blockDivElement.nativeElement.style.display = "block";
-    }
-    private onNodeExpandEnd() {
-        this.blockDivElement.nativeElement.style.display = "none";
-    }
-
     //EVENT LISTENERS
-
-    private onNodeSelected(node: ARTURIResource) {
-        if (this.selectedNode != undefined) {
-            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-        }
-        this.selectedNode = node;
-        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        this.nodeSelected.emit(node);
-    }
 
     private onTopPropertyCreated(property: ARTURIResource) {
         this.roots.push(property);

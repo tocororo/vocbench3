@@ -10,6 +10,7 @@ import {SkosServices} from "../../../../services/skosServices";
 })
 export class SchemeListNodeComponent {
     @Input() node: ARTURIResource;
+    @Input() rendering: boolean = true; //if true the nodes in the list should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     
     private eventSubscriptions: any[] = [];
