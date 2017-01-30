@@ -1,7 +1,7 @@
 <div class="panel panel-default vbox">
     <!-- Commands -->
     <div class="panel-heading">  
-        <div class="btn-group btn-group-xs" role="group">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <button class="btn btn-default" title="Create topConcept" (click)="createTopConcept()" [disabled]="!activeScheme">
                 <img src="../../../../../assets/images/concept_create.png" class="panelButtonImg"/>
             </button>
@@ -12,10 +12,11 @@
                 <img src="../../../../../assets/images/concept_delete.png" class="panelButtonImg"/>
             </button>
         </div>
-        <div style="margin: 0px 5px; flex: 1;">
+        <div *ngIf="editable" style="margin: 0px 5px;">
             <img *ngIf="!activeScheme" src="../../../../../assets/images/warning.png"
                 title="No skos:ConceptScheme selected, creation operation are disabled">
         </div>
+        <div style="flex: 1"></div>
         <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
             style="margin: 0px 5px;" [ngClass]="{active: rendering}">
             <span class="glyphicon glyphicon-font"></span>
@@ -27,7 +28,7 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <concept-tree [scheme]="activeScheme" [rendering]="rendering"
+        <concept-tree [scheme]="activeScheme" [rendering]="rendering" [schemeChangeable]="schemeChangeable"
             (nodeSelected)="onNodeSelected($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>

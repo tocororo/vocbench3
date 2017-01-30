@@ -12,8 +12,10 @@ import { VBEventHandler } from "../../../../utils/VBEventHandler";
     templateUrl: "./conceptTreePanelComponent.html",
 })
 export class ConceptTreePanelComponent {
+    @Input() editable: boolean = true; //if true show the buttons to edit the tree
+    @Input() scheme: ARTURIResource; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context
+    @Input() schemeChangeable: boolean = false; //if true, above the tree is shown a menu to select a scheme
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    @Output() nodeCtrlClicked = new EventEmitter<ARTURIResource>();
 
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
@@ -35,7 +37,11 @@ export class ConceptTreePanelComponent {
 
     ngOnInit() {
         this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
-        this.activeScheme = this.vbCtx.getScheme();
+        if (this.scheme != undefined) { //if @Input scheme is provided, initialize the tree with this scheme
+            this.activeScheme = this.scheme;
+        } else { //otherwise get the scheme from VB context
+            this.activeScheme = this.vbCtx.getScheme();
+        }
     }
 
     private createTopConcept() {

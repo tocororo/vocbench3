@@ -12,6 +12,8 @@ import {ModalServices} from "../../../../widget/modal/modalServices";
 export class SchemeListComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Input() hideSearch: boolean = false;
+
+    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     
     private schemeList: ARTURIResource[];
     private selectedScheme: ARTURIResource;

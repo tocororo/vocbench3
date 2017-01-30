@@ -124,7 +124,6 @@ export abstract class AbstractTreeNode {
      * Called when a node in the tree is clicked. This function emit an event 
      */
     private selectNode() {
-        console.log("selectnode")
         this.nodeSelected.emit(this.node);
     }
 

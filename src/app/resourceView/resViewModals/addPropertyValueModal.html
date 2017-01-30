@@ -17,13 +17,23 @@
     </div>
 
     <!--Alternative views-->
-    <class-tree *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)"></class-tree>
-    <concept-tree *ngIf="showConceptTree()" [scheme]="scheme" schemeChangeable="true" (nodeSelected)="onResourceSelected($event)"></concept-tree>
-    <property-tree *ngIf="showPropertyTree()" (nodeSelected)="onResourceSelected($event)"></property-tree>
+    <class-tree-panel *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)"></class-tree-panel>
+
+    <concept-tree-panel *ngIf="showConceptTree()" [editable]="false" [schemeChangeable]="true" [scheme]="scheme"
+        (nodeSelected)="onResourceSelected($event)" >
+    </concept-tree-panel>
+    
+    <property-tree-panel *ngIf="showPropertyTree()" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+    </property-tree-panel>
+    
     <scheme-list *ngIf="showSchemeList()" (nodeSelected)="onResourceSelected($event)"></scheme-list>
+    
     <resource-list *ngIf="showDatatypeList()" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
-    <instance-list *ngIf="showInstanceList()" [cls]="classForInstanceList" (nodeSelected)="onResourceSelected($event)"></instance-list>
+    
+    <instance-list-panel *ngIf="showInstanceList()" [cls]="classForInstanceList" (nodeSelected)="onResourceSelected($event)"></instance-list-panel>
+    
     <class-individual-tree *ngIf="showClsIndList()" [roots]="rootsForClsIndList" (nodeSelected)="onResourceSelected($event)"></class-individual-tree>
+    
     <input *ngIf="manchExprEnabled" type="text" class="form-control input-sm" style="margin-top: 5px;"
         [(ngModel)]="manchExpr" placeholder="Manchester expression">
 

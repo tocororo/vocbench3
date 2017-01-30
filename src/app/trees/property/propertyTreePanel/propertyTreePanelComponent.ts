@@ -10,6 +10,9 @@ import { ModalServices } from "../../../widget/modal/modalServices";
     templateUrl: "./propertyTreePanelComponent.html",
 })
 export class PropertyTreePanelComponent {
+    @Input() editable: boolean = true; //if true show the buttons to edit the tree
+    @Input() resource: ARTURIResource;//provide to show just the properties with domain the type of the resource
+    @Input('roots') rootProperties: ARTURIResource[]; //in case the roots are provided to the component instead of being retrieved from server
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;

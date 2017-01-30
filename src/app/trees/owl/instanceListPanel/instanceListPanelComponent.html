@@ -2,8 +2,8 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div style="flex: 1"></div>
-        <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
-            style="margin: 0px 5px;" [ngClass]="{active: rendering}">
+        <button class="btn btn-default btn-xs" style="margin: 0px 5px;" title="Rendering"
+            (click)="rendering = !rendering" [ngClass]="{active: rendering}">
             <span class="glyphicon glyphicon-font"></span>
         </button>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
@@ -13,7 +13,8 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <class-tree [rendering]="rendering" [roots]="roots" (nodeSelected)="onNodeSelected($event)"></class-tree>
+        <instance-list [cls]="cls" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)">
+        </instance-list>
     </div>
     
 </div>

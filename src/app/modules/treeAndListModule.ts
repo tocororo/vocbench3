@@ -23,11 +23,13 @@ import {PropertyTreePanelComponent} from '../trees/property/propertyTreePanel/pr
 import {PropertyTreeComponent} from '../trees/property/propertyTree/propertyTreeComponent';
 import {PropertyTreeNodeComponent} from '../trees/property/propertyTree/propertyTreeNodeComponent';
 
+import {ClassIndividualTreePanelComponent} from '../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent';
 import {ClassTreePanelComponent} from '../trees/owl/classTreePanel/classTreePanelComponent';
 import {ClassTreeComponent} from '../trees/owl/classTree/classTreeComponent';
 import {ClassTreeNodeComponent} from '../trees/owl/classTree/classTreeNodeComponent';
 
 import {ClassIndividualTreeComponent} from '../trees/owl/classIndividualTree/classIndividualTreeComponent';
+import {InstanceListPanelComponent} from '../trees/owl/instanceListPanel/instanceListPanelComponent'
 import {InstanceListComponent} from '../trees/owl/instanceList/instanceListComponent'
 
 @NgModule({
@@ -37,18 +39,18 @@ import {InstanceListComponent} from '../trees/owl/instanceList/instanceListCompo
         ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent, 
         CollectionTreePanelComponent, CollectionTreeComponent, CollectionTreeNodeComponent,
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
-        ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
+        ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
-        ClassIndividualTreeComponent, InstanceListComponent,
+        ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent,
     ],
     exports: [
         TreePanelComponent,
         ConceptTreePanelComponent, ConceptTreeComponent,
         CollectionTreePanelComponent, CollectionTreeComponent,
         SchemeListPanelComponent, SchemeListComponent,
-        ClassTreePanelComponent, ClassTreeComponent,
+        ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent,
-        ClassIndividualTreeComponent, InstanceListComponent,
+        ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent,
     ]
 })
 export class TreeAndListModule { }

@@ -6,8 +6,9 @@
         Show all properties
         <input type="checkbox" style="margin-left: 3px;" (change)="onCheckboxChange($event.target.checked)">
     </div>
-    <property-tree [roots]="context.rootProperties" [resource]="domainRes" (nodeSelected)="onPropertySelected($event)">
-    </property-tree>
+    <property-tree-panel [editable]="false" [roots]="context.rootProperties" [resource]="domainRes"
+        (nodeSelected)="onPropertySelected($event)">
+    </property-tree-panel>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProperty">Ok</button>

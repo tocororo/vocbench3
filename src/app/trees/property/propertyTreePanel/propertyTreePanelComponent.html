@@ -1,8 +1,7 @@
 <div class="panel panel-default vbox">
     <!-- Commands -->
     <div class="panel-heading">
-        <div class="btn-group btn-group-xs" role="group" style="flex: 1">
-            
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <div class="btn-group btn-group-xs" role="group">
                 <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property">
                     <img src="../../../../assets/images/prop_create.png" class="panelButtonImg"/>
@@ -35,7 +34,6 @@
                     </li>
                 </ul>
             </div>
-
             <button class="btn btn-default" title="Create SubProperty" (click)="createSubProperty()" [disabled]="!selectedProperty">
                 <img src="../../../../assets/images/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
@@ -44,6 +42,8 @@
                 <img src="../../../../assets/images/prop_delete.png" class="panelButtonImg"/>
             </button>
         </div>
+
+        <div style="flex: 1"></div>
 
         <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
             style="margin: 0px 5px;" [ngClass]="{active: rendering}">
@@ -57,7 +57,9 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <property-tree [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></property-tree>
+        <property-tree [rendering]="rendering" [resource]="resource" [roots]="rootProperties"
+            (nodeSelected)="onNodeSelected($event)">
+        </property-tree>
     </div>
     
 </div>

@@ -11,6 +11,7 @@ import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
     templateUrl: "./collectionTreePanelComponent.html",
 })
 export class CollectionTreePanelComponent {
+    @Input() editable: boolean = true; //if true show the buttons to edit the tree
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     @ViewChild(CollectionTreeComponent) viewChildTree: CollectionTreeComponent

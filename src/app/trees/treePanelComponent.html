@@ -34,7 +34,8 @@
     <div class="tab-content">
         <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
             <div class="vbox">
-                <class-tree-panel (nodeSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"></class-tree-panel>
+                <class-individual-tree-panel (nodeSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)">
+                </class-individual-tree-panel>
             </div>
         </div>
         <template [ngIf]="isProjectSKOS()">

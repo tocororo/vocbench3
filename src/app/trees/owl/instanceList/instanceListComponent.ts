@@ -27,7 +27,7 @@ export class InstanceListComponent {
     
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
     
-    private instanceList: ARTURIResource[];
+    private instanceList: ARTURIResource[] = null;
     private selectedInstance: ARTURIResource;
     
     private eventSubscriptions: any[] = [];
