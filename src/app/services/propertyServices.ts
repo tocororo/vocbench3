@@ -94,55 +94,6 @@ export class PropertyServices {
     }
 
     /**
-     * Gets a static property tree
-     * @param resource optional, if provided the returned propertyTree contains 
-     * just the properties that have as domain the type of the resource 
-     * @return a nested array of ARTURIResource representing the properties tree
-     */
-    getPropertiesTree(resource?: ARTURIResource) {
-        console.log("[PropertyServices] getPropertiesTree");
-        var params: any = {}
-        if (resource != undefined) {
-            params.instanceQName = resource.getURI();
-        }
-        return this.httpMgr.doGet("property", "getPropertiesTree", params, true).map(
-            stResp => {
-                var propertyTree: ARTURIResource[] = new Array()
-                var propertiesXml: NodeListOf<Element> = stResp.querySelectorAll("data > Property");
-                for (var i = 0; i < propertiesXml.length; i++) {
-                    var p = this.parseProperty(propertiesXml[i]);
-                    propertyTree.push(p);
-                }
-                return propertyTree;
-            }
-        );
-    }
-    
-    //when property service will be reimplemented with <uri> element this will be not useful anymore
-    private parseProperty(propXml: Element): ARTURIResource {
-        var show = propXml.getAttribute("name");
-        var role = RDFResourceRolesEnum[propXml.getAttribute("type")];
-        var uri = propXml.getAttribute("uri");
-        //properties use deleteForbidden instead of explicit, use explicit in order to standardize the attributes
-        var explicit = propXml.getAttribute("deleteForbidden") != "true";
-        var p = new ARTURIResource(uri, show, role);
-        p.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
-        //recursively parse children
-        var subProperties: ARTURIResource[] = [];
-        var subPropsXml = propXml.querySelectorAll(":scope > SubProperties > Property");
-        for (var i=0; i<subPropsXml.length; i++) {
-            var subP = this.parseProperty(subPropsXml[i]);
-            subProperties.push(subP);
-        }
-        p.setAdditionalProperty(ResAttribute.CHILDREN, subProperties);
-        if (subProperties.length > 0) {
-            p.setAdditionalProperty(ResAttribute.OPEN, true); //to initialize tree all expanded
-            p.setAdditionalProperty(ResAttribute.MORE, 1);
-        }
-        return p;
-    }
-
-    /**
      * Creates a property with the given name of the given type.
      * Emits a topPropertyCreatedEvent with the new property
      * @param propertyName local name of the property

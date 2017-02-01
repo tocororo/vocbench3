@@ -19,13 +19,13 @@ export class CustomRangeServices {
      * @param resource object of a predicate with a custom range.
      * @return 
      */
-    getReifiedResourceDescription(predicate: ARTURIResource, resource: ARTNode) {
-        console.log("[CustomRangeServices] getReifiedResourceDescription");
+    getGraphObjectDescription(predicate: ARTURIResource, resource: ARTNode) {
+        console.log("[CustomRangeServices] getGraphObjectDescription");
         var params: any = {
             predicate: predicate.getURI(),
             resource: resource.getNominalValue()
         };
-        return this.httpMgr.doGet(this.serviceName, "getReifiedResourceDescription", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params, this.oldTypeService);
     }
     
     /**

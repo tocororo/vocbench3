@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Project, PluginSpecification } from '../utils/Project';
-import { VBEventHandler } from '../utils/VBEventHandler';
 import { VocbenchCtx } from '../utils/VocbenchCtx';
 
 @Injectable()
@@ -11,7 +10,7 @@ export class ProjectServices {
     private serviceName = "Projects";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) { }
+    constructor(private httpMgr: HttpManager, private vbCtx: VocbenchCtx) { }
 
     /**
      * Gets the current available projects in ST
@@ -53,7 +52,7 @@ export class ProjectServices {
     }
 
     /**
-     * Disconnects from the given project. Emits a projectClosedEvent
+     * Disconnects from the given project.
      * @param project the project to disconnect
      */
     disconnectFromProject(project: Project) {
@@ -72,7 +71,6 @@ export class ProjectServices {
         };
         return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.projectClosedEvent.emit(project);
                 return stResp;
             }
         );

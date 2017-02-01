@@ -21,7 +21,7 @@ export class ReifiedResourceComponent {
 	constructor(private crService: CustomRangeServices) {}
     
     ngOnInit() {
-        this.crService.getReifiedResourceDescription(this.predicate, this.resource).subscribe(
+        this.crService.getGraphObjectDescription(this.predicate, this.resource).subscribe(
             stResp => {
                 var resourceElement: Element = stResp.getElementsByTagName("resource")[0];
                 this.reifiedResource = Deserializer.createRDFResource(resourceElement.getElementsByTagName("uri")[0]);
