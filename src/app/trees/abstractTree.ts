@@ -31,6 +31,8 @@ export abstract class AbstractTree {
     protected eventHandler: VBEventHandler;
     constructor(eventHandler: VBEventHandler) {
         this.eventHandler = eventHandler;
+
+        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initTree()));
     }
 
     /**

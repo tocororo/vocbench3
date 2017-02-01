@@ -30,6 +30,8 @@ export class SchemeListPanelComponent {
         
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             (newLang: string) => this.onContentLangChanged(newLang)));
+        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(
+            () => this.initList()));
     }
     
     ngOnInit() {

@@ -25,7 +25,9 @@ output: {
 ```
 
 ### Further configuration ###
-If *VocBench3* and the *SemanticTurkey* servers run on two different hosts, be sure to update the server ip that hosts *SemanticTurkey*, by changing in `config/webpack.dev.js` (if you are running VB3 in development mode with `npm start`) or `config/webpack.prod.js` (if you are creating a build with `npm run build`) the following
-```
-const SERVERHOST = '127.0.0.1:1979';
-```
+In *vbconfis.js* (under *src/* of the source package, or under the root folder of the built distribution) is possible to configure the *SemanticTurkey* host resolution.
+By default *VocBench3* resolves the IP address of the *SemanticTurkey* server dynamically using the same IP address of the VocBench host machine.
+This is determined by the configuration property `dynamic_st_host_resolution` (by default set to `true`).
+In case *VocBench3* and *SemanticTurkey* run on two different hosts, is possible to provide the *SemanticTurkey* IP address statically by setting the above property to `false` and modifying the property `st_host`.
+The property `st_host` is ignored if `dynamic_st_host_resolution` is `true`.
+It is also possible to change the port where SemanticTurkey is listening (the default is `1979`) by changing `st_port` property.

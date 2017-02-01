@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {ARTURIResource} from "../utils/ARTResources";
-
+import {VBEventHandler} from "../utils/VBEventHandler";
 
 @Injectable()
 export class MetadataServices {
@@ -10,7 +10,7 @@ export class MetadataServices {
     private serviceName = "metadata";
     private oldTypeService = true;
 
-    constructor(private httpMgr: HttpManager) {}
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) {}
 
     /**
      * Gets prefix mapping of the currently open project.
@@ -130,7 +130,12 @@ export class MetadataServices {
         var params: any = {
             baseuri: baseURI
         };
-        return this.httpMgr.doGet(this.serviceName, "removeImport", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeImport", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
     
     /**
@@ -150,7 +155,12 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat;
         }
-        return this.httpMgr.doGet(this.serviceName, "addFromWeb", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addFromWeb", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
     
     /**
@@ -172,7 +182,12 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat;
         }
-        return this.httpMgr.doGet(this.serviceName, "addFromWebToMirror", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addFromWebToMirror", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
     
     /**
@@ -188,7 +203,12 @@ export class MetadataServices {
             localFile: localFile,
             mirrorFile: mirrorFile
         };
-        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data, this.oldTypeService);
+        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
     
     /**
@@ -202,7 +222,12 @@ export class MetadataServices {
             baseuri: baseuri,
             mirrorFile: mirrorFile
         };
-        return this.httpMgr.doGet(this.serviceName, "addFromOntologyMirror", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addFromOntologyMirror", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
     
     /**

@@ -7,7 +7,6 @@ import {ProjectPropertiesModal, ProjectPropertiesModalData} from "./projectPrope
 import {ProjectServices} from "../services/projectServices";
 import {MetadataServices} from "../services/metadataServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {VBEventHandler} from '../utils/VBEventHandler';
 import {Project, ProjectTypesEnum} from '../utils/Project';
 import {ModalServices} from "../widget/modal/modalServices";
 
@@ -22,13 +21,8 @@ export class ProjectComponent implements OnInit {
 
     public projectChanged: boolean = false;
     
-    private eventSubscriptions: any[] = [];
-    
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private vbCtx: VocbenchCtx, private router: Router, private eventHandler: VBEventHandler, 
-        private modalService: ModalServices, private modal: Modal) {
-        this.eventSubscriptions.push(eventHandler.projectClosedEvent.subscribe(
-            (project: Project) => this.onProjectClosed(project)));
+        private vbCtx: VocbenchCtx, private router: Router, private modalService: ModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -39,10 +33,6 @@ export class ProjectComponent implements OnInit {
         );
     }
     
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-
     private selectProject(project: Project) {
         if (this.selectedProject == project) {
             this.selectedProject = null;
@@ -228,21 +218,6 @@ export class ProjectComponent implements OnInit {
     
     private getProjectObjectFromName(projectName: string): Project {
         return this.projectList.find(proj => proj.getName() == projectName);
-    }
-    
-    
-    //EVENT HANDLER
-    
-    /**
-     * This event handler is useful when project data is cleared from the current page,
-     * then there is need to update the UI
-     */
-    private onProjectClosed(project: Project) {
-        for (var i = 0; i < this.projectList.length; i++) {
-            if (this.projectList[i].getName() == project.getName()) {
-                this.projectList[i].setOpen(false);
-            }
-        }
     }
     
 }

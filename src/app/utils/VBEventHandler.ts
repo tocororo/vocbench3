@@ -64,6 +64,8 @@ export class VBEventHandler {
 
 
     //MISC EVENTS 
+    //data loaded/imported/removed => trees/lists need to be resfreshed
+    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter<any>("refreshDataBroadcastEvent");
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 

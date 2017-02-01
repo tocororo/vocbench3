@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
+import {VBEventHandler} from "../utils/VBEventHandler";
 
 @Injectable()
 export class InputOutputServices {
@@ -7,7 +8,7 @@ export class InputOutputServices {
     private serviceName = "InputOutput";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * Exports the project model in a given serialization format
@@ -36,7 +37,12 @@ export class InputOutputServices {
         if (format != undefined) {
             data.formatName = format;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, this.oldTypeService);
+        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
     
     /**

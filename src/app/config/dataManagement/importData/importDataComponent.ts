@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {InputOutputServices} from "../../../services/inputOutputServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
+import {VBEventHandler} from "../../../utils/VBEventHandler";
 
 @Component({
     selector: "import-data-component",
@@ -21,7 +22,7 @@ export class ImportDataComponent {
         this.fileToUpload = file;
     }
 
-    private import() {
+    private load() {
         this.submitted = true;
         if (this.baseURI && this.baseURI.trim() != "" && this.fileToUpload) {
             document.getElementById("blockDivFullScreen").style.display = "block";
