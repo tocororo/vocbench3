@@ -40,17 +40,15 @@ export class ClassTreeComponent extends AbstractTree {
             this.rootClasses = [OWL.thing];
         }
         this.roots = [];
-        //init info of every root classes (if specified, otherwise just of owl:Thing)
-        for (var i = 0; i < this.rootClasses.length; i++) {
-            this.blockDivElement.nativeElement.style.display = "block";
-            this.owlService.getClassesInfoAsRootsForTree(this.rootClasses[i]).subscribe(
-                roots => {
-                    this.roots = this.roots.concat(roots);
-                    this.blockDivElement.nativeElement.style.display = "none";
-                },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
-            );
-        }
+
+        this.blockDivElement.nativeElement.style.display = "block";
+        this.owlService.getClassesInfo(this.rootClasses).subscribe(
+            roots => {
+                this.roots = this.roots.concat(roots);
+                this.blockDivElement.nativeElement.style.display = "none";
+            },
+            err => { this.blockDivElement.nativeElement.style.display = "none"; }
+        );
     }
 
     doSearch(searchedText: string) {

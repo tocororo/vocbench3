@@ -66,11 +66,11 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params, this.oldTypeService, true).map(
             stResp => {
-                var subProps = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < subProps.length; i++) {
-                    subProps[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                var props = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < props.length; i++) {
+                    props[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
-                return subProps;
+                return props;
             }
         );
     }

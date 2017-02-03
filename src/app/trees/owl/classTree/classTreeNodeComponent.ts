@@ -49,7 +49,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 	 */
     expandNode() {
         this.nodeExpandStart.emit();
-        this.owlService.getSubClasses(this.node, true, true).subscribe(
+        this.owlService.getSubClasses(this.node).subscribe(
             subClasses => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
