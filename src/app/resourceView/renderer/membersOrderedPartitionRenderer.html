@@ -33,8 +33,9 @@
                     <template ngFor let-obj [ngForOf]="po.getObjects()">
                         <!-- Member list -->
                         <div class="listItem">
-                            <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)" [resource]="obj" [predicate]="po.getPredicate()" 
-                                (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                            <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)"
+                                [resource]="obj" [predicate]="po.getPredicate()" 
+                                (dblclick)="objectDblClick($event)" style="flex:1"></reified-resource>
                             <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
                                 (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
                             <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"

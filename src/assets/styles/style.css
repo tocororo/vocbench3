@@ -177,6 +177,7 @@ reified-resource {
     border: 1px solid #ccc;
     border-radius: 2px;
     background-color: #eee;
+    min-height: 16px;
 }
 
 .selectedResource {

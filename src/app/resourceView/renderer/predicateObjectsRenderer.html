@@ -17,7 +17,7 @@
             <div *ngFor="let obj of predicateObjects.getObjects()" class="listItem">
                 <reified-resource *ngIf="renderAsReified(predicateObjects.getPredicate(), obj)"
                     [resource]="obj" [predicate]="predicateObjects.getPredicate()" 
-                    (dblclick)="objectDblClick(obj)" style="flex:1"></reified-resource>
+                    (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
                 <rdf-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" [resource]="obj"
                     (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
                 <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"

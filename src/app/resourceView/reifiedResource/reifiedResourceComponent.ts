@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects} from "../../utils/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {Deserializer} from "../../utils/Deserializer";
@@ -11,7 +11,8 @@ import {CustomRangeServices} from "../../services/customRangeServices";
 export class ReifiedResourceComponent {
     
     @Input() predicate: ARTURIResource;
-    @Input() resource: ARTNode; //BNode or URIResource
+    @Input() resource: ARTResource; //BNode or URIResource
+    @Output() dblClick: EventEmitter<ARTResource> = new EventEmitter();
     
     private reifiedResource: ARTResource;
     private predicateObjectList: ARTPredicateObjects[];
@@ -38,8 +39,14 @@ export class ReifiedResourceComponent {
         this.open = !this.open;
     }
     
-    private resDblClicked() {
-        console.log("double clicked");
+    private resourceDblClick() {
+        this.dblClick.emit(this.resource);
+    }
+
+    private objectDblClick(object: ARTNode) {
+        if (object.isResource()) {
+            this.dblClick.emit(<ARTResource>object);
+        }
     }
 
 }

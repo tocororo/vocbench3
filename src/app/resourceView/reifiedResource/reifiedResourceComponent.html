@@ -1,7 +1,9 @@
 <div class="hbox">
-    <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" style="flex:1"
-        (click)="toggle()">
-    </rdf-resource>
+    <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
+    <div class="expandCollapseBtnContainer" (click)="toggle()" title="Expand/Collapse">
+        <img *ngIf="!open" src="../../../assets/images/tree_expand.png" style="transform: rotate(180)">
+        <img *ngIf="open" src="../../../assets/images/tree_collapse.png">
+    </div>
 </div>
 
 <div *ngIf="open" class="panel panel-default" style="margin: 0px 3px 3px;">
@@ -13,7 +15,8 @@
                     <tr *ngFor="let obj of predObj.getObjects()">
                         <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
                         <td>
-                            <input type="text" class="form-control input-xs" [ngModel]="obj.getNominalValue()" readonly>
+                            <input type="text" class="form-control input-xs" [ngModel]="obj.getNominalValue()"
+                                (dblclick)="objectDblClick(obj)" readonly>
                             <!--Restore when getGraphObjectDescription will contain roles of objects in <predicateObjects>-->
                             <!--<rdf-resource [resource]="obj"></rdf-resource>-->
                         </td>
