@@ -16,7 +16,8 @@ import { NgModel } from '@angular/forms';
     host: {
         '(keypress)': 'onKeypressListener($event)',
         '(paste)': 'onPasteListener($event)'
-    }
+    },
+    providers: [NgModel],
 })
 export class SanitizerDirective {
 
