@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../utils/ARTResources";
 import { OWL } from "../../../utils/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { ClassesServices } from "../../../services/classesServices";
 import { OwlServices } from "../../../services/owlServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
@@ -21,8 +22,8 @@ export class ClassTreeComponent extends AbstractTree {
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
-    constructor(private owlService: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
-        eventHandler: VBEventHandler) {
+    constructor(private owlService: OwlServices, private clsService: ClassesServices, private searchService: SearchServices, 
+        private modalService: ModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (cls: ARTURIResource) => this.onClassDeleted(cls)));
@@ -42,7 +43,7 @@ export class ClassTreeComponent extends AbstractTree {
         this.roots = [];
 
         this.blockDivElement.nativeElement.style.display = "block";
-        this.owlService.getClassesInfo(this.rootClasses).subscribe(
+        this.clsService.getClassesInfo(this.rootClasses).subscribe(
             roots => {
                 this.roots = this.roots.concat(roots);
                 this.blockDivElement.nativeElement.style.display = "none";

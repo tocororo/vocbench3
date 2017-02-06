@@ -2,6 +2,7 @@ import {Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleCha
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
 import {OwlServices} from "../../../services/owlServices";
+import {ClassesServices} from "../../../services/classesServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
 import {SearchServices} from "../../../services/searchServices";
 
@@ -32,8 +33,8 @@ export class InstanceListComponent {
     
     private eventSubscriptions: any[] = [];
     
-    constructor(private owlServices: OwlServices, private searchService: SearchServices, private modalService: ModalServices,
-        private eventHandler: VBEventHandler) {
+    constructor(private owlServices: OwlServices, private clsService: ClassesServices, private searchService: SearchServices, 
+        private modalService: ModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: any) => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
@@ -63,7 +64,8 @@ export class InstanceListComponent {
         this.instanceList = null;
         if (this.cls != undefined) {
             this.blockDivElement.nativeElement.style.display = "block";
-            this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
+            // this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
+            this.clsService.getInstances(this.cls).subscribe(
                 instances => {
                     this.instanceList = instances;
                     //if there is some pending instance search and the searched instance is of the same type of the current class

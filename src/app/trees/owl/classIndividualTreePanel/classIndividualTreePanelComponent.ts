@@ -3,6 +3,7 @@ import {ClassTreeComponent} from "../classTree/classTreeComponent";
 import {InstanceListComponent} from "../instanceList/instanceListComponent";
 import {SearchServices} from "../../../services/searchServices";
 import {OwlServices} from "../../../services/owlServices";
+import {IndividualsServices} from "../../../services/individualsServices";
 import {DeleteServices} from "../../../services/deleteServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
@@ -30,8 +31,8 @@ export class ClassIndividualTreePanelComponent {
     private selectedClass:ARTURIResource;
     private selectedInstance:ARTURIResource;
     
-	constructor(private owlService:OwlServices, private searchService: SearchServices, private deleteService: DeleteServices, 
-        private modalService: ModalServices) {}
+	constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
+        private deleteService: DeleteServices, private modalService: ModalServices) {}
     
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
@@ -144,7 +145,8 @@ export class ClassIndividualTreePanelComponent {
             this.viewChildTree.openTreeAt(resource);
         } else { // resource is an instance
             //get type of instance, then open the tree to that class
-            this.owlService.getDirectNamedTypes(resource).subscribe(
+            // this.owlService.getDirectNamedTypes(resource).subscribe(
+            this.individualService.getNamedTypes(resource).subscribe(
                 types => {
                     this.viewChildTree.openTreeAt(types[0]);
                     //center instanceList to the individual

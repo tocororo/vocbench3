@@ -186,10 +186,11 @@ reified-resource {
 }
 
 .treeNode {
-	min-height: 24px;
-	margin: 2px 0px;
+    min-height: 24px;
+    margin: 2px 0px;
     display: flex;
     align-items: center;
+    position: relative; /* for positioning 'absolute' children (instNum label in classTreeNode) */
 }
 .treeNode .expandCollapseBtnContainer {
     min-width: 16px;

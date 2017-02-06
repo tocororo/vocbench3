@@ -1,9 +1,9 @@
 <div class="hbox">
-    <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
     <div class="expandCollapseBtnContainer" (click)="toggle()" title="Expand/Collapse">
-        <img *ngIf="!open" src="../../../assets/images/tree_expand.png" style="transform: rotate(180)">
+        <img *ngIf="!open" src="../../../assets/images/tree_expand.png">
         <img *ngIf="open" src="../../../assets/images/tree_collapse.png">
     </div>
+    <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
 </div>
 
 <div *ngIf="open" class="panel panel-default" style="margin: 0px 3px 3px;">

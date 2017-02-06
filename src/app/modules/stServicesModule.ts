@@ -5,9 +5,11 @@ import {HttpModule} from '@angular/http';
 import {AdministrationServices} from "../services/administrationServices";
 import {AlignmentServices} from "../services/alignmentServices";
 import {AuthServices} from "../services/authServices";
+import {ClassesServices} from "../services/classesServices";
 import {CustomRangeServices} from "../services/customRangeServices";
 import {DeleteServices} from "../services/deleteServices";
 import {IcvServices} from "../services/icvServices";
+import {IndividualsServices} from "../services/individualsServices";
 import {InputOutputServices} from "../services/inputOutputServices";
 import {ManchesterServices} from "../services/manchesterServices";
 import {MetadataServices} from "../services/metadataServices";
@@ -33,9 +35,11 @@ import {UserServices} from "../services/userServices";
         AdministrationServices,
         AlignmentServices,
         AuthServices,
+        ClassesServices,
         CustomRangeServices,
         DeleteServices,
         IcvServices,
+        IndividualsServices,
         InputOutputServices,
         ManchesterServices,
         MetadataServices,

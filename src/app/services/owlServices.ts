@@ -7,54 +7,10 @@ import {ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute} from "../u
 @Injectable()
 export class OwlServices {
 
-    private serviceName = "Classes";
-    private oldTypeService = false;
+    private serviceName = "cls";
+    private oldTypeService = true;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
-
-    /**
-     * takes a list of classes and return their description as if they were roots for a tree
-	 * (so more, role, explicit etc...)
-     * @param classList
-     */
-    getClassesInfo(classList: ARTURIResource[]) {
-        console.log("[ClassesServices] getClassesInfo");
-        var params: any = {
-            classList: classList
-        };
-        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, this.oldTypeService, true).map(
-            stResp => {
-                var classes = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < classes.length; i++) {
-                    classes[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return classes;
-            }
-        );
-    }
-    
-    /**
-     * Returns a list of ARTURIResource subClasses of the given class
-     * @param superClass class of which retrieve its subClasses
-	 */
-    getSubClasses(superClass: ARTURIResource) {
-        console.log("[ClassesServices] getSubClasses");
-        var params: any = {
-            superClass: superClass
-        };
-        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, this.oldTypeService, true).map(
-            stResp => {
-                var subClasses = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < subClasses.length; i++) {
-                    subClasses[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return subClasses;
-            }
-        );
-    }
-
-
-    //OLD SERVICES
 
     // /**
     //  * @param cls root class of the tree
@@ -112,7 +68,7 @@ export class OwlServices {
         var params: any = {
             clsName: cls.getURI(),
         };
-        return this.httpMgr.doGet("cls", "getClassAndInstancesInfo", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getClassAndInstancesInfo", params, this.oldTypeService).map(
             stResp => {
                 var instancesElem = stResp.getElementsByTagName("Instances")[0];
                 return Deserializer.createURIArray(instancesElem);
@@ -132,7 +88,7 @@ export class OwlServices {
             superClassName: superClass.getURI(),
             newClassName: newClassName,
         };
-        return this.httpMgr.doGet("cls", "createClass", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "createClass", params, this.oldTypeService).map(
             stResp => {
                 var newClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
                 newClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -154,7 +110,7 @@ export class OwlServices {
             clsqname: cls.getURI(),
             superclsqname: superClass.getURI(),
         };
-        return this.httpMgr.doGet("cls", "addSuperCls", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "addSuperCls", params, this.oldTypeService).map(
             stResp => {
                 var subClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
                 subClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -178,7 +134,7 @@ export class OwlServices {
             clsqname: cls.getURI(),
             superclsqname: superClass.getNominalValue(),
         };
-        return this.httpMgr.doGet("cls", "removeSuperCls", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "removeSuperCls", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.subClassRemovedEvent.emit({cls: superClass, subClass: cls});
                 return stResp;
@@ -198,7 +154,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             instanceName: instanceName,
         };
-        return this.httpMgr.doGet("cls", "createInstance", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "createInstance", params, this.oldTypeService).map(
             stResp => {
                 var instance = Deserializer.createURI(stResp.getElementsByTagName("Instance")[0]);
                 this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
@@ -207,22 +163,22 @@ export class OwlServices {
         );
     }
     
-    /**
-     * Returns a collection of direct (not inferred) types for the given instance
-     * @param instance the instance whose types are requested
-     * @return an array of types
-     */
-    getDirectNamedTypes(instance: ARTURIResource) {
-        console.log("[owlServices] getDirectNamedTypes");
-        var params: any = {
-            indqname: instance.getURI(),
-        };
-        return this.httpMgr.doGet("individual", "getDirectNamedTypes", params, true).map(
-            stResp => {
-                return Deserializer.createURIArray(stResp.getElementsByTagName("Types")[0]);
-            }
-        );
-    }
+    // /**
+    //  * Returns a collection of direct (not inferred) types for the given instance
+    //  * @param instance the instance whose types are requested
+    //  * @return an array of types
+    //  */
+    // getDirectNamedTypes(instance: ARTURIResource) {
+    //     console.log("[owlServices] getDirectNamedTypes");
+    //     var params: any = {
+    //         indqname: instance.getURI(),
+    //     };
+    //     return this.httpMgr.doGet("individual", "getDirectNamedTypes", params, this.oldTypeService).map(
+    //         stResp => {
+    //             return Deserializer.createURIArray(stResp.getElementsByTagName("Types")[0]);
+    //         }
+    //     );
+    // }
     
     /**
      * Adds a type to a resource. Emits a typeDeletedEvent with resource and type
@@ -235,7 +191,7 @@ export class OwlServices {
             indqname: resource.getURI(),
             typeqname: type.getURI(),
         };
-        return this.httpMgr.doGet("individual", "addType", params, true).map(
+        return this.httpMgr.doGet("individual", "addType", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.typeAddedEvent.emit({resource: resource, type: type});
                 return stResp;
@@ -255,7 +211,7 @@ export class OwlServices {
             indqname: resource.getURI(),
             typeqname: type.getNominalValue(),
         };
-        return this.httpMgr.doGet("individual", "removeType", params, true).map(
+        return this.httpMgr.doGet("individual", "removeType", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.typeRemovedEvent.emit({resource: resource, type: type});
                 return stResp;      
@@ -285,7 +241,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             clsDescriptions: collNodeArray.join("|_|"),
         };
-        return this.httpMgr.doGet("cls", "addIntersectionOf", params, true);
+        return this.httpMgr.doGet(this.serviceName, "addIntersectionOf", params, this.oldTypeService);
     }
     
     /**
@@ -299,7 +255,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             collectionNode: collectionNode.getNominalValue(),
         };
-        return this.httpMgr.doGet("cls", "removeIntersectionOf", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeIntersectionOf", params, this.oldTypeService);
     }
     
     /**
@@ -324,7 +280,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             clsDescriptions: collNodeArray.join("|_|"),
         };
-        return this.httpMgr.doGet("cls", "addUnionOf", params, true);
+        return this.httpMgr.doGet(this.serviceName, "addUnionOf", params, this.oldTypeService);
     }
 
     /**
@@ -338,7 +294,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             individuals: collectionNode.getNominalValue(),
         };
-        return this.httpMgr.doGet("cls", "removeUnionOf", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeUnionOf", params, this.oldTypeService);
     }
     
     /**
@@ -356,7 +312,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             individuals: collIndividualArray.join("|_|"),
         };
-        return this.httpMgr.doGet("cls", "addOneOf", params, true);
+        return this.httpMgr.doGet(this.serviceName, "addOneOf", params, this.oldTypeService);
     }
 
     /**
@@ -370,7 +326,7 @@ export class OwlServices {
             clsName: cls.getURI(),
             collectionNode: collectionNode.getNominalValue(),
         };
-        return this.httpMgr.doGet("cls", "removeOneOf", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeOneOf", params, this.oldTypeService);
     }
     
 }

@@ -7,6 +7,9 @@
 	</div>
 	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+    <div *ngIf="node.getAdditionalProperty('numInst') > 0" style="position: absolute; margin: 4px; top: 0; right: 0;">
+        <span class="label label-warning">{{node.getAdditionalProperty('numInst')}}</span>
+    </div>
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">

@@ -3,6 +3,7 @@ import { ARTURIResource, ResAttribute } from "../../../utils/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { OWL } from "../../../utils/Vocabulary";
 import { OwlServices } from "../../../services/owlServices";
+import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
 @Component({
@@ -14,7 +15,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
 
-    constructor(private owlService: OwlServices, eventHandler: VBEventHandler) {
+    constructor(private owlService: OwlServices, private clsService: ClassesServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             (data: any) => this.onSubClassCreated(data.subClass, data.superClass)));
@@ -49,7 +50,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 	 */
     expandNode() {
         this.nodeExpandStart.emit();
-        this.owlService.getSubClasses(this.node).subscribe(
+        this.clsService.getSubClasses(this.node).subscribe(
             subClasses => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);

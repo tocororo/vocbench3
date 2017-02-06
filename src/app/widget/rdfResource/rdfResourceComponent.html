@@ -14,8 +14,4 @@
 </div>
 <span [title]="resource.toNT()" style="flex: 1" style="margin-right: 6px;">
     {{getRendering()}}
-    <!-- # of instances (shown only if resource has instance) -->
-    <span *ngIf="hasInstance()">
-        ({{resource.getAdditionalProperty('numInst')}})
-    </span>
 </span>

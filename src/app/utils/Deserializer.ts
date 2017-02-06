@@ -400,10 +400,10 @@ export class Deserializer {
         if (more != undefined) {
             uriRes.setAdditionalProperty(ResAttribute.MORE, more);
         }
-        // var numInst = jsonObj[ResAttribute.NUM_INST];
-        // if (numInst != undefined) {
-        //     artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
-        // }
+        var numInst = uri[ResAttribute.NUM_INST];
+        if (numInst != undefined) {
+            uriRes.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
+        }
         var hasCustomRange = uri[ResAttribute.HAS_CUSTOM_RANGE];
         if (hasCustomRange != undefined) {
             uriRes.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
