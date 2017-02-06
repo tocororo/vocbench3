@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="alert alert-info" *ngIf="context.message">
+        {{context.message}}
+    </div>
+        
+    <div class="scrollableContainer" style="border: 1px solid #ddd; margin-top: 5px; max-height: 60vh;">
+
+        <table class="table table-condensed table-hoverable">
+            <thead>
+                <tr>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Description</th>
+                    <th class="text-center">RDF Capability</th>
+                    <th class="text-center">URI</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{active: c == converterSelected}">
+                    <td>{{c.name}}</td>
+                    <td>{{c.description}}</td>
+                    <td>{{c.rdfCapability}}</td>
+                    <td>{{c.uri}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--<div *ngFor="let c of converters">
+            <div class="listItem" [ngClass]="{selectedResource : converterSelected == c}" (click)="selectConverter(c)">
+                {{c.name}}
+            </div>
+        </div>-->
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!converterSelected">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

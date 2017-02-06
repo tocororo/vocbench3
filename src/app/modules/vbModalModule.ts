@@ -38,12 +38,6 @@ import {ImportOntologyModal} from '../config/dataManagement/metadata/importOntol
 import {PrefixNamespaceModal} from '../config/dataManagement/metadata/prefixNamespaceModal';
 import {ReplaceBaseURIModal} from '../config/dataManagement/metadata/replaceBaseURIModal';
 
-//custom range modals
-import {CustomFormModal} from '../customRanges/customForm/customFormModal';
-import {CustomRangeEditorModal} from '../customRanges/customRangeConfigModals/crEditorModal';
-import {CustomRangeEntryEditorModal} from '../customRanges/customRangeConfigModals/creEditorModal';
-import {CustomRangePropMappingModal} from '../customRanges/customRangeConfigModals/crPropMappingModal';
-
 //alignment modals
 import {ValidationSettingsModal} from '../alignment/alignmentValidation/validationSettingsModal/validationSettingsModal';
 import {ValidationReportModal} from '../alignment/alignmentValidation/validationReportModal/validationReportModal';
@@ -67,7 +61,6 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
-        CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal,
         UserProjBindingModal
@@ -89,7 +82,6 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
-        CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, 
         UserProjBindingModal

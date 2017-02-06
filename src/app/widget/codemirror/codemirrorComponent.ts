@@ -70,4 +70,14 @@ export class CodemirrorComponent {
         cm.toggleComment({ from: start, to: end });
     }
 
+    insertAtCursor(text: string) {
+        // let selection = this.cmEditor.getDoc().getSelection();
+        // if (selection.length > 0) {
+        //     this.cmEditor.getDoc().replaceSelection(text);
+        //     return;
+        // }
+        let cursor = this.cmEditor.getDoc().getCursor();
+        this.cmEditor.getDoc().replaceRange(text, cursor, cursor);
+    }
+
 }

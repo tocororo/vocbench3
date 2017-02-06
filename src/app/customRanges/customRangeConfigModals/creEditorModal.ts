@@ -1,7 +1,9 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import {Component, ViewChild} from "@angular/core";
+import {BSModalContext, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
+import {DialogRef, ModalComponent, Modal, OverlayConfig} from "angular2-modal";
+import {ConverterPickerModal, ConverterPickerModalData} from "./converterPickerModal";
 import {CustomRangeEntry, CustomRangeEntryType} from "../../utils/CustomRanges";
+import {CodemirrorComponent} from "../../widget/codemirror/codemirrorComponent";
 import {CustomRangeServices} from "../../services/customRangeServices";
 
 export class CustomRangeEntryEditorModalData extends BSModalContext {
@@ -21,6 +23,8 @@ export class CustomRangeEntryEditorModalData extends BSModalContext {
 })
 export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEntryEditorModalData> {
     context: CustomRangeEntryEditorModalData;
+
+    @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
     
     private crePrefix: string = CustomRangeEntry.PREFIX;
     private creId: string;
@@ -34,7 +38,7 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
     private submitted: boolean = false;
     private errorMsg: string;
     
-    constructor(public dialog: DialogRef<CustomRangeEntryEditorModalData>, public crService: CustomRangeServices) {
+    constructor(public dialog: DialogRef<CustomRangeEntryEditorModalData>, private modal: Modal, private crService: CustomRangeServices) {
         this.context = dialog.context;
     }
     
@@ -55,7 +59,26 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
             )
         }
     }
-    
+
+    private pickConverter() {
+        var modalData = new ConverterPickerModalData("Pick a converter", null);
+        const builder = new BSModalContextBuilder<ConverterPickerModalData>(
+            modalData, undefined, ConverterPickerModalData
+        );
+        builder.size('lg').keyboard(null);
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ConverterPickerModal, overlayConfig).then(
+            dialog => dialog.result.then(
+                convContract => {
+                    var convUri: string = convContract.uri + "()";
+                    var convQName = convUri.replace("http://art.uniroma2.it/coda/contracts/", "coda:");
+                    this.viewChildCodemirror.insertAtCursor(convQName);
+                },
+                () => {}
+            )
+        );
+    }
+
     private isDataValid() {
         var valid = true;
         //name and ref are mandatory

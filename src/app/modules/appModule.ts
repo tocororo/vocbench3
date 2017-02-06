@@ -8,6 +8,7 @@ import {CustomReuseStrategy} from "../a2Customization/CustomReuseStrategy";
 import {STServicesModule} from "./stServicesModule";
 import {SharedModule} from "./sharedModule";
 import {VBModalModule} from "./vbModalModule";
+import {CustomRangeModule} from "./customRangeModule";
 import {TreeAndListModule} from "./treeAndListModule";
 import {ResourceViewModule} from "./resourceViewModule";
 import {ICVModule} from "./icvModule";
@@ -49,7 +50,7 @@ import {AdministrationComponent} from "../administration/administrationComponent
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
-            UserModule, ICVModule, AdministrationModule,
+            UserModule, ICVModule, AdministrationModule, CustomRangeModule,
 
             STServicesModule,
             appRouting,
