@@ -74,18 +74,6 @@
                             </div>
                         </div>
                         <div *ngIf="fe.getType() == 'uri'">
-                            <!--<input class="form-control input-xs" [(ngModel)]="fe.value" [disabled]="!fe.checked">
-                            <button class="btn btn-xs btn-default" title="Pick a resource">
-                                <img src="../../../assets/images/class.png">
-                            </button>-->
-                            <!--<div class="input-group input-group-xs">
-                                <input type="text" class="form-control">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" title="Pick an existing resource">
-                                        <img src="../../../assets/images/class.png">
-                                    </button>
-                                </span>
-                            </div>-->
                             <div class="input-group input-group-xs">
                                 <input type="text" class="form-control" [(ngModel)]="fe.value" [disabled]="!fe.checked">
                                 <div class="input-group-btn">
@@ -96,9 +84,9 @@
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li><a (click)="pickExistingReource('cls', fe)">Class</a></li>
                                         <li><a (click)="pickExistingReource('individual', fe)">Instance</a></li>
-                                        <li><a (click)="pickExistingReource('concept', fe)">Concept</a></li>
-                                        <li><a (click)="pickExistingReource('conceptScheme', fe)">ConceptScheme</a></li>
-                                        <li><a (click)="pickExistingReource('skosCollection', fe)">Collection</a></li>
+                                        <li><a *ngIf="isProjectSKOS()" (click)="pickExistingReource('concept', fe)">Concept</a></li>
+                                        <li><a *ngIf="isProjectSKOS()" (click)="pickExistingReource('conceptScheme', fe)">ConceptScheme</a></li>
+                                        <li><a *ngIf="isProjectSKOS()" (click)="pickExistingReource('skosCollection', fe)">Collection</a></li>
                                         <li><a (click)="pickExistingReource('property', fe)">Property</a></li>
                                     </ul>
                                 </div>

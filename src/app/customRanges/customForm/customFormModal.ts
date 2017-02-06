@@ -3,6 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {FormEntry} from "../../utils/CustomRanges";
 import {RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {CustomRangeServices} from "../../services/customRangeServices";
 
@@ -28,15 +29,19 @@ export class CustomFormModalData extends BSModalContext {
 })
 export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     context: CustomFormModalData;
+
+    private ontoType: string;
     
     private formEntries: FormEntry[];
     private submittedWithError: boolean = false;
     
-    constructor(public dialog: DialogRef<CustomFormModalData>, public crService: CustomRangeServices, public browsingService: BrowsingServices) {
+    constructor(public dialog: DialogRef<CustomFormModalData>, public crService: CustomRangeServices, public browsingService: BrowsingServices,
+        private vbCtx: VocbenchCtx) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
+        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
         this.crService.getCustomRangeEntryForm(this.context.creId).subscribe(
             form => {
                 this.formEntries = form
@@ -47,6 +52,10 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
                 }
             }
         )
+    }
+
+    private isProjectSKOS() {
+        return this.ontoType.includes('SKOS');
     }
     
     /**
