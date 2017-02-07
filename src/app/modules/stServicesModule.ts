@@ -6,6 +6,7 @@ import {AdministrationServices} from "../services/administrationServices";
 import {AlignmentServices} from "../services/alignmentServices";
 import {AuthServices} from "../services/authServices";
 import {ClassesServices} from "../services/classesServices";
+import {CODAServices} from "../services/codaServices";
 import {CustomRangeServices} from "../services/customRangeServices";
 import {DeleteServices} from "../services/deleteServices";
 import {IcvServices} from "../services/icvServices";
@@ -36,6 +37,7 @@ import {UserServices} from "../services/userServices";
         AlignmentServices,
         AuthServices,
         ClassesServices,
+        CODAServices,
         CustomRangeServices,
         DeleteServices,
         IcvServices,

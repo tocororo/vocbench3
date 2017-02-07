@@ -22,6 +22,7 @@ export class ResourceUtils {
         var collectionImportedImgSrc = require("../../assets/images/collection_imported.png");
         var xLabelImgSrc = require("../../assets/images/xLabel.png");
         var xLabelImportedImgSrc = require("../../assets/images/xLabel_imported.png");
+        var ontologyImgSrc = require("../../assets/images/ontology.png");
         var propImgSrc = require("../../assets/images/prop.png");
         var propImportedImgSrc = require("../../assets/images/prop_imported.png");
         var propObjectImgSrc = require("../../assets/images/propObject.png");
@@ -100,6 +101,8 @@ export class ResourceUtils {
                 } else {
                     imgSrc = propImgSrc;
                 }
+            } else if (role == RDFResourceRolesEnum.ontology.toLowerCase()) {
+                imgSrc = ontologyImgSrc;
             } else if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
                 let lang: string = rdfResource.getAdditionalProperty(ResAttribute.LANG);
                 if (lang != undefined && lang != null) {

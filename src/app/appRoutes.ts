@@ -30,7 +30,7 @@ export const routes: Routes = [
     {path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard]},
     // {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard]},
+    {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},

@@ -7,7 +7,6 @@
     </div>
         
     <div class="scrollableContainer" style="border: 1px solid #ddd; margin-top: 5px; max-height: 60vh;">
-
         <table class="table table-condensed table-hoverable">
             <thead>
                 <tr>
@@ -18,23 +17,45 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-                <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{active: c == converterSelected}">
-                    <td>{{c.name}}</td>
-                    <td>{{c.description}}</td>
-                    <td>{{c.rdfCapability}}</td>
-                    <td>{{c.uri}}</td>
+                <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{active: c == selectedConverter}">
+                    <td>{{c.getName()}}</td>
+                    <td>{{c.getDescription()}}</td>
+                    <td>{{c.getRDFCapability()}}
+                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes"></span>
+                    </td>
+                    <td>{{c.getURI()}}</td>
                 </tr>
             </tbody>
         </table>
-
-        <!--<div *ngFor="let c of converters">
-            <div class="listItem" [ngClass]="{selectedResource : converterSelected == c}" (click)="selectConverter(c)">
-                {{c.name}}
-            </div>
-        </div>-->
     </div>
+
+    <form class="form-horizontal" style="margin-top: 8px;">
+        <div class="form-group" style="margin: 0px;">
+            <label class="control-label col-sm-1">Signature:</label>
+            <div class="col-sm-11">
+                <div class="input-group input-group-sm">
+                    <span *ngIf="selectedConverter?.getRDFCapability() == 'node'" class="input-group-btn">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            {{selectedConverterType}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a (click)="switchConverterType('uri')">Uri</a></li>
+                            <li><a (click)="switchConverterType('literal')">Literal</a></li>
+                        </ul>
+                    </span>
+                    <input type="text" class="form-control" [ngModel]="projectionOperator" name="projectionOperator" readonly>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" (click)="chooseSignature()" title="Change signature" [disabled]="!isSignatureEditable()">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+    
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!converterSelected">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConverter">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

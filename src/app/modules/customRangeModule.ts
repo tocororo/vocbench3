@@ -12,7 +12,7 @@ import {CustomRangeEditorModal} from '../customRanges/customRangeConfigModals/cr
 import {CustomRangeEntryEditorModal} from '../customRanges/customRangeConfigModals/creEditorModal';
 import {CustomRangePropMappingModal} from '../customRanges/customRangeConfigModals/crPropMappingModal';
 import {ConverterPickerModal} from '../customRanges/customRangeConfigModals/converterPickerModal';
-
+import {SignaturePickerModal} from '../customRanges/customRangeConfigModals/signaturePickerModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
@@ -20,12 +20,12 @@ import {ConverterPickerModal} from '../customRanges/customRangeConfigModals/conv
     declarations: [
         //modals
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
-        ConverterPickerModal
+        ConverterPickerModal, SignaturePickerModal
     ],
     exports: [],
     entryComponents: [
         CustomFormModal, CustomRangeEditorModal, CustomRangeEntryEditorModal, CustomRangePropMappingModal,
-        ConverterPickerModal
+        ConverterPickerModal, SignaturePickerModal
     ]
 })
 export class CustomRangeModule { }

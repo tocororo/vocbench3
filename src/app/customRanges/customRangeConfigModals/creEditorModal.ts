@@ -69,10 +69,8 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(ConverterPickerModal, overlayConfig).then(
             dialog => dialog.result.then(
-                convContract => {
-                    var convUri: string = convContract.uri + "()";
-                    var convQName = convUri.replace("http://art.uniroma2.it/coda/contracts/", "coda:");
-                    this.viewChildCodemirror.insertAtCursor(convQName);
+                projOperator => {
+                    this.viewChildCodemirror.insertAtCursor(projOperator);
                 },
                 () => {}
             )

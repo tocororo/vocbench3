@@ -466,34 +466,4 @@ export class CustomRangeServices {
         return this.httpMgr.doPost(this.serviceName, "validatePearl", params, this.oldTypeService);
     }
 
-    /**
-     * Returns a list of ConverterContractDescription
-     */
-    listConverterContracts(): Observable<{description: string, name: string, rdfCapability: string, uri: string}[]> {
-        console.log("[CustomRangeServices] listConverterContracts");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConverterContracts", params, this.oldTypeService).map(
-            stResp => {
-                let converters: any[] = [];
-                let convElementColl = stResp.getElementsByTagName("converterContract");
-                for (var i = 0; i < convElementColl.length; i++) {
-                    let conv: any = {};
-                    conv.description = convElementColl[i].getAttribute("description");
-                    conv.name = convElementColl[i].getAttribute("name");
-                    conv.rdfCapability = convElementColl[i].getAttribute("rdfCapability");
-                    conv.uri = convElementColl[i].getAttribute("uri");
-                    converters.push(conv);
-                }
-                //sort by name
-                converters.sort(function(a, b) {
-                    if (a.name < b.name) return -1;
-                    if (a.name > b.name) return 1;
-                    return 0;
-                    }
-                );
-                return converters;
-            }
-        );
-    }
-    
 }
