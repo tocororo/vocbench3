@@ -127,7 +127,7 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         var signatureParams: ParameterDescription[] = this.selectedSignature.getParameters();
         for (var i = 0; i < signatureParams.length; i++) {
             if (signatureParams[i].getType().startsWith("java.util.Map")) {
-                params += "{}, ";    
+                params += "{ key = \"value\"}, ";    
             } else { //java.lang.String
                 params += "\"" + this.selectedSignature.getParameters()[i].getName() + "\", ";
             }

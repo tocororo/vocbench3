@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../utils/ARTResources";
 import {CustomRangePropertyMapping, CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../utils/CustomRanges";
 
 @Injectable()
@@ -311,19 +311,26 @@ export class CustomRangeServices {
             stResp => {
                 var creElem: Element = stResp.getElementsByTagName("customRangeEntry")[0];
                 var id: string = creElem.getAttribute("id");
+                var cre: CustomRangeEntry = new CustomRangeEntry(id);
                 var name: string = creElem.getAttribute("name");
+                cre.setName(name);
                 var type: CustomRangeEntryType = creElem.getAttribute("type") == "graph" ? "graph" : "node";
+                cre.setType(type);
                 var description: string = creElem.getElementsByTagName("description")[0].textContent;
+                cre.setDescription(description);
                 var refElem: Element = creElem.getElementsByTagName("ref")[0];
                 var ref: string = refElem.textContent;
-                var showProp: string = refElem.getAttribute("showProperty");
-                var cre: CustomRangeEntry = new CustomRangeEntry(id);
-                cre.setName(name);
-                cre.setType(type);
-                cre.setDescription(description);
                 cre.setRef(ref);
                 if (type == "graph") {
-                    cre.setShowProperty(showProp);
+                    var showPropChainAttr: string = refElem.getAttribute("showPropertyChain");
+                    if (showPropChainAttr != null && showPropChainAttr != "") {
+                        var propChain: ARTURIResource[] = [];
+                        var splitted = showPropChainAttr.split(",");
+                        for (var i = 0; i < splitted.length; i++) {
+                            propChain.push(new ARTURIResource(splitted[i], splitted[i], RDFResourceRolesEnum.property));
+                        }
+                        cre.setShowPropertyChain(propChain);
+                    }
                 }
                 return cre;
             }
@@ -337,10 +344,10 @@ export class CustomRangeServices {
      * @param name
      * @param description
      * @param ref a pearl rule in case type is "graph", or a converter in case of type is "node"
-     * @param showProp to provide only if type is "graph", tells the property which value should show in place of the
+     * @param showPropChain to provide only if type is "graph", tells the property chain which value should show in place of the
      * generated graph by means of this CRE
      */
-    createCustomRangeEntry(type: CustomRangeEntryType, id: string, name: string, description: string, ref: string, showProp?: string) {
+    createCustomRangeEntry(type: CustomRangeEntryType, id: string, name: string, description: string, ref: string, showPropChain?: ARTURIResource[]) {
         console.log("[CustomRangeServices] createCustomRangeEntry");
         var params: any = {
             type: type,
@@ -349,8 +356,8 @@ export class CustomRangeServices {
             description: description,
             ref: ref,
         };
-        if (showProp != undefined) {
-            params.showProp = showProp;
+        if (showPropChain != undefined) {
+            params.showPropChain = showPropChain;
         }
         return this.httpMgr.doPost(this.serviceName, "createCustomRangeEntry", params, this.oldTypeService);
     }
@@ -406,9 +413,9 @@ export class CustomRangeServices {
      * @param name
      * @param description
      * @param ref
-     * @param showProp
+     * @param showPropChain
      */
-    updateCustomRangeEntry(id: string, name: string, description: string, ref: string, showProp: string) {
+    updateCustomRangeEntry(id: string, name: string, description: string, ref: string, showPropChain: ARTURIResource[]) {
         console.log("[CustomRangeServices] updateCustomRangeEntry");
         var params: any = {
             id: id,
@@ -416,8 +423,8 @@ export class CustomRangeServices {
             description: description,
             ref: ref,
         };
-        if (showProp != undefined) {
-            params.showProp = showProp;
+        if (showPropChain != undefined) {
+            params.showPropChain = showPropChain;
         }
         return this.httpMgr.doPost(this.serviceName, "updateCustomRangeEntry", params, this.oldTypeService);
     }

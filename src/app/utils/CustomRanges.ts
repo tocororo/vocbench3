@@ -1,3 +1,5 @@
+import {ARTURIResource} from "./ARTResources";
+
 export class CustomRangePropertyMapping {
 
     private propertyUri: string;
@@ -58,7 +60,7 @@ export class CustomRangeEntry {
     private type: CustomRangeEntryType;
     private description: string;
     private ref: string;
-    private showProperty: string;
+    private showPropertyChain: ARTURIResource[];
     // private form: FormEntry[];
     
     constructor(id: string) {
@@ -101,12 +103,12 @@ export class CustomRangeEntry {
         this.ref = ref;
     }
     
-    public getShowProperty(): string {
-        return this.showProperty;
+    public getShowPropertyChain(): ARTURIResource[] {
+        return this.showPropertyChain;
     }
     
-    public setShowProperty(showProperty: string) {
-        this.showProperty = showProperty;
+    public setShowPropertyChain(showPropertyChain: ARTURIResource[]) {
+        this.showPropertyChain = showPropertyChain;
     }
     
 }

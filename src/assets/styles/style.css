@@ -181,8 +181,8 @@ reified-resource {
 }
 
 .selectedResource {
-    background-color: #cde8ff;
-    border: 1px solid #7bc3ff;
+    background-color: #cde8ff !important;
+    border: 1px solid #7bc3ff !important;
 }
 
 .treeNode {

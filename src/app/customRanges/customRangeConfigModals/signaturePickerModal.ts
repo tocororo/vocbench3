@@ -9,6 +9,7 @@ export class SignaturePickerModalData extends BSModalContext {
      * @param message modal message, if null no the message is shwown the modal
      * @param signatures list of signatures of a converter. There are for sure more than one signature since if 
      * there is just one, converterPickerModal doesn't allow to open this modal to choose a signature
+     * @param signature the signature selected as default
      */
     constructor(
         public title: string = 'Modal Title',
@@ -38,12 +39,6 @@ export class SignaturePickerModal implements ModalComponent<SignaturePickerModal
 
     ngOnInit() {
         this.selectedSignature = this.context.selected;
-        //select as default the signature without params
-        // for (var i = 0; i < this.context.signatures.length; i++) {
-        //     if (this.context.signatures[i].getParameters().length == 0) {
-        //         this.selectedSignature = this.context.signatures[i];
-        //     }
-        // }
     }
 
     private selectSignature(signature: SignatureDescription) {
