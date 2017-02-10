@@ -2,6 +2,9 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body">
+    <div *ngIf="context.message" class="alert alert-info" style="margin-bottom: 5px">
+        {{context.message}}
+    </div>
     <div class="hbox" style="align-items: center;">
         <label *ngIf="context.label" style="margin-right: 4px;">{{context.label}}:</label>
         <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="inputTxt"

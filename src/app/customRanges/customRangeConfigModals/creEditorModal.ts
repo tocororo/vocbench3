@@ -1,12 +1,13 @@
-import {Component, ViewChild} from "@angular/core";
-import {BSModalContext, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent, Modal, OverlayConfig} from "angular2-modal";
-import {ConverterPickerModal, ConverterPickerModalData} from "./converterPickerModal";
-import {ARTURIResource} from "../../models/ARTResources";
-import {CustomRangeEntry, CustomRangeEntryType} from "../../models/CustomRanges";
-import {CodemirrorComponent} from "../../widget/codemirror/codemirrorComponent";
-import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {CustomRangeServices} from "../../services/customRangeServices";
+import { Component, ViewChild } from "@angular/core";
+import { BSModalContext, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent, Modal, OverlayConfig } from "angular2-modal";
+import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal";
+import { ARTURIResource } from "../../models/ARTResources";
+import { CustomRangeEntry, CustomRangeEntryType } from "../../models/CustomRanges";
+import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { CustomRangeServices } from "../../services/customRangeServices";
 
 export class CustomRangeEntryEditorModalData extends BSModalContext {
     /**
@@ -27,7 +28,7 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
     context: CustomRangeEntryEditorModalData;
 
     @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
-    
+
     private crePrefix: string = CustomRangeEntry.PREFIX;
     private creId: string;
     private creShortId: string;
@@ -38,15 +39,15 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
     private showPropertyChain: ARTURIResource[];
 
     private selectedPropInChain: ARTURIResource; //used in showPropertyChain field    
-    
+
     private submitted: boolean = false;
     private errorMsg: string;
-    
+
     constructor(public dialog: DialogRef<CustomRangeEntryEditorModalData>, private modal: Modal, private browsingService: BrowsingServices,
-        private crService: CustomRangeServices) {
+        private modalService: ModalServices, private crService: CustomRangeServices) {
         this.context = dialog.context;
     }
-    
+
     ngOnInit() {
         if (this.context.id != undefined) { //CRE id provided, so the modal works in edit mode
             this.crService.getCustomRangeEntry(this.context.id).subscribe(
@@ -60,6 +61,7 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                     if (this.type == "graph") {
                         this.showPropertyChain = cre.getShowPropertyChain();
                     }
+                    console.log("cre", cre);
                 }
             )
         }
@@ -77,11 +79,12 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                 projOperator => {
                     this.viewChildCodemirror.insertAtCursor(projOperator);
                 },
-                () => {}
+                () => { }
             )
         );
     }
 
+    //========= PROPERTY CHAIN HANDLERS ============
     private selectPropInChain(prop: ARTURIResource) {
         if (this.selectedPropInChain == prop) {
             this.selectedPropInChain = null;
@@ -89,21 +92,22 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
             this.selectedPropInChain = prop;
         }
     }
-    private addPropToChain(where?: "before"|"after") {
+    private addPropToChain(where?: "before" | "after") {
         this.browsingService.browsePropertyTree("Add property").then(
             (prop: any) => {
+                console.log("adding " + prop.getURI() + " " + where);
                 if (where == null) {
                     this.showPropertyChain.push(prop);
                 } else if (where == "before") {
                     this.showPropertyChain.splice(this.showPropertyChain.indexOf(this.selectedPropInChain), 0, prop);
                 } else if (where == "after") {
-                    this.showPropertyChain.splice(this.showPropertyChain.indexOf(this.selectedPropInChain)+1, 0, prop);
+                    this.showPropertyChain.splice(this.showPropertyChain.indexOf(this.selectedPropInChain) + 1, 0, prop);
                 }
             },
-            () => {}
+            () => { }
         );
     }
-    private disableMove(where: "before"|"after") {
+    private disableMove(where: "before" | "after") {
         if (this.selectedPropInChain == null || this.showPropertyChain.length == 1) {
             return true;
         }
@@ -115,13 +119,13 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
         }
         return false;
     }
-    private movePropInChain(where: "before"|"after") {
+    private movePropInChain(where: "before" | "after") {
         var prevIndex = this.showPropertyChain.indexOf(this.selectedPropInChain);
         this.showPropertyChain.splice(prevIndex, 1); //remove from current position
         if (where == "before") {
-            this.showPropertyChain.splice(prevIndex-1, 0, this.selectedPropInChain);
+            this.showPropertyChain.splice(prevIndex - 1, 0, this.selectedPropInChain);
         } else { //after
-            this.showPropertyChain.splice(prevIndex+1, 0, this.selectedPropInChain);
+            this.showPropertyChain.splice(prevIndex + 1, 0, this.selectedPropInChain);
         }
     }
     private removePropFromChain(prop: ARTURIResource) {
@@ -130,6 +134,43 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
             this.selectedPropInChain = null;
         }
     }
+    /**
+     * Allow to edit manually the property chain
+     */
+    private editPropChain() {
+        var serializedPropChain: string = "";
+        for (var i = 0; i < this.showPropertyChain.length; i++) {
+            serializedPropChain += this.showPropertyChain[i].getURI() + ",";
+        }
+        if (serializedPropChain.length > 0) {
+            serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
+        }
+        this.modalService.prompt("Edit property chain", null, "Write the chain as sequenze of IRI comma (,) separated", serializedPropChain, true).then(
+            (value: any) => {
+                var chain: string = String(value).trim();
+                if (chain.length != 0) {
+                    //convert the chain from string to ARTURIResource[]
+                    var propChain: ARTURIResource[] = [];
+                    var splitted: string[] = chain.split(",");
+                    for (var i = 0; i< splitted.length; i++) {
+                        propChain.push(new ARTURIResource(splitted[i].trim(), null, null));
+                    }
+                    this.crService.checkShowPropertyChain(propChain).subscribe(
+                        stResp => {
+                            this.showPropertyChain = propChain; //if valid update chain
+                        },
+                        err => {
+                            this.modalService.alert("Error", value + " is not a valid property chain.", "error");
+                        }
+                    )
+                } else {
+                    this.showPropertyChain = [];
+                }
+            },
+            () => {}
+        )
+    }
+    //=======================================
 
     private isDataValid() {
         var valid = true;
@@ -148,10 +189,10 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                 this.errorMsg = "A Custom Range Entry with the same ID already exists";
                 valid = false;
             }
-        } 
+        }
         return valid;
     }
-    
+
     ok(event: Event) {
         this.submitted = true;
         if (!this.isDataValid()) {
@@ -179,10 +220,10 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                             event.stopPropagation();
                             this.dialog.close();
                         }
-                    );
+                        );
                 }
             },
-            err => {}
+            err => { }
         );
     }
 

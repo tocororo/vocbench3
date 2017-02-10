@@ -52,7 +52,7 @@ export class RolesAdministrationComponent {
 
     private createRole() {
         this.modalService.prompt("Create role", "Role name").then(
-            result => {
+            (result: any) => {
                 this.adminService.createRole(result).subscribe(
                     stResp => {
                         this.initRoles();

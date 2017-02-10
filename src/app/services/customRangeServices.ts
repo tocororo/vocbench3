@@ -323,14 +323,14 @@ export class CustomRangeServices {
                 cre.setRef(ref);
                 if (type == "graph") {
                     var showPropChainAttr: string = refElem.getAttribute("showPropertyChain");
+                    var propChain: ARTURIResource[] = [];
                     if (showPropChainAttr != null && showPropChainAttr != "") {
-                        var propChain: ARTURIResource[] = [];
                         var splitted = showPropChainAttr.split(",");
                         for (var i = 0; i < splitted.length; i++) {
                             propChain.push(new ARTURIResource(splitted[i], splitted[i], RDFResourceRolesEnum.property));
                         }
-                        cre.setShowPropertyChain(propChain);
                     }
+                    cre.setShowPropertyChain(propChain);
                 }
                 return cre;
             }
@@ -427,6 +427,20 @@ export class CustomRangeServices {
             params.showPropChain = showPropChain;
         }
         return this.httpMgr.doPost(this.serviceName, "updateCustomRangeEntry", params, this.oldTypeService);
+    }
+
+    /**
+	 * Checks if a property chain (manually created by the user) is correct.
+	 * Returns an exception if it is not a valid IRI list
+	 * @param propertyChain
+	 * @return
+	 */
+    checkShowPropertyChain(propChain: ARTURIResource[]) {
+        console.log("[CustomRangeServices] checkShowPropertyChain");
+        var params: any = {
+            propChain: propChain
+        };
+        return this.httpMgr.doPost(this.serviceName, "checkShowPropertyChain", params, this.oldTypeService, false, true);
     }
 
     /**

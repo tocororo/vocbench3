@@ -95,6 +95,7 @@
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <li><a (click)="addPropToChain()">Add</a></li>
+                                <li><a (click)="editPropChain()">Edit manually</a></li>
                                 <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('before')">Add before</a></li>
                                 <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('after')">Add after</a></li>
                                 <li [ngClass]="{disabled : disableMove('before')}"><a (click)="movePropInChain('before')">Move before</a></li>

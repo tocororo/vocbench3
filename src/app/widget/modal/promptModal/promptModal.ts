@@ -14,6 +14,7 @@ export class PromptModalData extends BSModalContext {
     constructor(
         public title: string = "Modal Title",
         public label: string,
+        public message: string,
         public value: string,
         public hideNo: boolean = false,
         public inputOptional: boolean = false,
