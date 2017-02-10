@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource} from "../utils/ARTResources";
 import {VBEventHandler} from "../utils/VBEventHandler";
+import {ARTURIResource} from "../models/ARTResources";
 
 @Injectable()
 export class MetadataServices {

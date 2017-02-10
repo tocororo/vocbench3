@@ -1,5 +1,5 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
-import { ARTURIResource, ResAttribute } from "../utils/ARTResources";
+import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({

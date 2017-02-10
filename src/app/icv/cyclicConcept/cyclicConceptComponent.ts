@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource} from "../../models/ARTResources";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";
 

@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../utils/ARTResources";
-import {SKOS} from "../utils/Vocabulary";
+import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../models/ARTResources";
+import {SKOS} from "../models/Vocabulary";
 
 @Injectable()
 export class SkosServices {

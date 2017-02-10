@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {InstanceListComponent} from "../instanceList/instanceListComponent";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTURIResource} from "../../../models/ARTResources";
 
 @Component({
 	selector: "instance-list-panel",

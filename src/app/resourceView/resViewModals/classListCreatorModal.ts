@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTResource, ARTURIResource, ARTBNode, ResAttribute, RDFResourceRolesEnum} from '../../utils/ARTResources';
+import {ARTResource, ARTURIResource, ARTBNode, ResAttribute, RDFResourceRolesEnum} from '../../models/ARTResources';
 import {ManchesterServices} from "../../services/manchesterServices";
 
 export class ClassListCreatorModalData extends BSModalContext {

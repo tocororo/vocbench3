@@ -5,8 +5,8 @@ import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../utils/ARTResources";
-import { RDFS, XmlSchema } from "../../utils/Vocabulary";
+import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { RDFS, XmlSchema } from "../../models/Vocabulary";
 
 @Component({
     selector: "ranges-renderer",

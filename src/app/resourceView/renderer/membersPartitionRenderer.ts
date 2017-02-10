@@ -4,10 +4,10 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { SkosServices } from "../../services/skosServices";
-import { ARTResource, ARTURIResource, ARTNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../utils/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler"
 import { VocbenchCtx } from "../../utils/VocbenchCtx";
-import { SKOS } from "../../utils/Vocabulary";
+import { ARTResource, ARTURIResource, ARTNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 

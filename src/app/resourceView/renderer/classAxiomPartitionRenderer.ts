@@ -4,8 +4,8 @@ import { CustomRangeServices } from "../../services/customRangeServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { OwlServices } from "../../services/owlServices";
 import { ManchesterServices } from "../../services/manchesterServices";
-import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../utils/ARTResources";
-import { RDFS, OWL } from "../../utils/Vocabulary";
+import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
+import { RDFS, OWL } from "../../models/Vocabulary";
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 

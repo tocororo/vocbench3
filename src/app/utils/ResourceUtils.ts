@@ -1,5 +1,5 @@
 import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
-    ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum} from "./ARTResources";
+    ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum} from "../models/ARTResources";
 
 export class ResourceUtils {
 

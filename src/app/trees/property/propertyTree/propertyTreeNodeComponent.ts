@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
 import { PropertyServices } from "../../../services/propertyServices";
-import { ARTURIResource, ResAttribute } from "../../../utils/ARTResources";
+import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 

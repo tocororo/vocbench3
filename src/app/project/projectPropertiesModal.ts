@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ProjectServices} from "../services/projectServices";
-import {Project} from '../utils/Project';
+import {Project} from '../models/Project';
 
 export class ProjectPropertiesModalData extends BSModalContext {
     constructor(public project: Project) {

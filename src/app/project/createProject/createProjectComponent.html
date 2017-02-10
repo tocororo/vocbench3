@@ -184,7 +184,7 @@
             </div>
 
             <!--Extention points configuration-->
-            <div class="subPanel">
+            <!--<div class="subPanel">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Optional settings:</label>
                     <button type="button" class="close" (click)="toggleExtPointPanel()">
@@ -204,7 +204,9 @@
                                     <label>Plugin:</label>
                                     <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPluginId" (ngModelChange)="changeExtPointPlugin(xp)">
                                         <option value="---">---</option>
-                                        <option *ngFor="let plugin of xp.plugins" [value]="plugin">{{plugin.substring(plugin.lastIndexOf('.')+1)}}</option>
+                                        <option *ngFor="let plugin of xp.plugins" [value]="plugin">
+                                            {{plugin.factoryID.substring(plugin.factoryID.lastIndexOf('.')+1)}}
+                                        </option>
                                     </select>
                                 </div>
                                 
@@ -229,7 +231,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div>-->
 
         </div>
         

@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {FormEntry} from "../../utils/CustomRanges";
-import {RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {FormEntry} from "../../models/CustomRanges";
+import {RDFResourceRolesEnum} from "../../models/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {CustomRangeServices} from "../../services/customRangeServices";

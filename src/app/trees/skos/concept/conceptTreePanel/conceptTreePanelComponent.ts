@@ -3,9 +3,9 @@ import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../../utils/ARTResources";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 
 @Component({
     selector: "concept-tree-panel",

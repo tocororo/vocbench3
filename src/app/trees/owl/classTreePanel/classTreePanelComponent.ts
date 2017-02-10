@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
 import {ClassTreeComponent} from "../classTree/classTreeComponent";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTURIResource} from "../../../models/ARTResources";
 
 @Component({
 	selector: "class-tree-panel",

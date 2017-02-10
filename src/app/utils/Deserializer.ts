@@ -1,8 +1,8 @@
 import {
     ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ARTPredicateValues,
     ResAttribute, RDFResourceRolesEnum
-} from "./ARTResources";
-import { User } from "./User";
+} from "../models/ARTResources";
+import { User } from "../models/User";
 
 export class Deserializer {
 

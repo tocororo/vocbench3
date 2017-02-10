@@ -4,8 +4,8 @@ import {OverlayConfig} from 'angular2-modal';
 
 import {UserProjBindingModal, UserProjBindingModalData} from "./userProjBindingModal";
 
-import { User, Role, ProjectUserBinding } from "../utils/User";
-import { Project } from "../utils/Project";
+import { User, Role, ProjectUserBinding } from "../models/User";
+import { Project } from "../models/Project";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
 import { AdministrationServices } from "../services/administrationServices";

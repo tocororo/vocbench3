@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
+import {Plugin, PluginConfiguration, PluginConfigParam} from "../models/Plugins";
 
 @Injectable()
 export class PluginsServices {
@@ -15,7 +17,7 @@ export class PluginsServices {
      * and "plugins" (list of the plugin factories ID) 
      * @param extensionPoint the id of the requested extensionPoint
      */
-    getAvailablePlugins(extensionPoint: string) {
+    getAvailablePlugins(extensionPoint: string): Observable<{extPoint: string, plugins: Plugin[]}> {
         console.log("[PluginsServices] getAvailablePlugins");
         var params = {
             extensionPoint: extensionPoint
@@ -23,11 +25,19 @@ export class PluginsServices {
         return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params, this.oldTypeService).map(
             stResp => {
                 var pluginColl = stResp.getElementsByTagName("plugin");
-                var plugins: string[] = [];
+                var plugins: Plugin[] = [];
                 for (var j = 0; j < pluginColl.length; j++) {
-                    var plugin = pluginColl[j].getAttribute("factoryID");
-                    plugins.push(plugin);
+                    var pluginId = pluginColl[j].getAttribute("factoryID");
+                    plugins.push(new Plugin(pluginId));
                 }
+                //sort plugins by factoryID
+                plugins.sort(
+                    function(a: Plugin, b: Plugin) {
+                        if (a.factoryID < b.factoryID) return -1;
+                        if (a.factoryID > b.factoryID) return 1;
+                        return 0;
+                    }
+                );
                 return {extPoint: extensionPoint, plugins: plugins};
             }
         );
@@ -39,33 +49,30 @@ export class PluginsServices {
      * where params is in turn an array of struct {description, name, required, value}
      * @param factoryID the factory class of the plugin
      */
-    getPluginConfigurations(factoryID: string) {
+    getPluginConfigurations(factoryID: string): Observable<PluginConfiguration[]> {
         console.log("[PluginsServices] getPluginConfigurations");
         var params = {
             factoryID: factoryID
         };
         return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params, this.oldTypeService).map(
             stResp => {
-                var configurations: any[] = [];
+                var configurations: PluginConfiguration[] = [];
                 var configColl = stResp.getElementsByTagName("configuration");
                 for (var i = 0; i < configColl.length; i++) {
-                    var config: any = {};
-                    config.shortName = configColl[i].getAttribute("shortName");
-                    config.editRequired = configColl[i].getAttribute("editRequired") == "true";
-                    config.type = configColl[i].getAttribute("type");
+                    let shortName = configColl[i].getAttribute("shortName");
+                    let editRequired = configColl[i].getAttribute("editRequired") == "true";
+                    let type = configColl[i].getAttribute("type");
                     
-                    var params: any[] = [];
+                    var params: PluginConfigParam[] = [];
                     var parColl = configColl[i].getElementsByTagName("par");
                     for (var j = 0; j < parColl.length; j++) {
-                        var param: any = {};
-                        param.description = parColl[j].getAttribute("description");
-                        param.name = parColl[j].getAttribute("name");
-                        param.required = parColl[j].getAttribute("required") == "true";
-                        param.value = parColl[j].textContent;
-                        params.push(param);
+                        let description = parColl[j].getAttribute("description");
+                        let name = parColl[j].getAttribute("name");
+                        let required = parColl[j].getAttribute("required") == "true";
+                        let value = parColl[j].textContent;
+                        params.push(new PluginConfigParam(name, description, required, value));
                     }
-                    config.params = params;
-                    configurations.push(config);
+                    configurations.push(new PluginConfiguration(shortName, type, editRequired, params));
                 }
                 return configurations;
             }

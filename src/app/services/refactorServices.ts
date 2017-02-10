@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTURIResource} from "../utils/ARTResources";
+import {ARTURIResource} from "../models/ARTResources";
 
 @Injectable()
 export class RefactorServices {

@@ -7,10 +7,9 @@ import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import {
     ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
     RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
-} from "../../utils/ARTResources";
+} from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary";
 import { VocbenchCtx } from "../../utils/VocbenchCtx";
-import { SKOS } from "../../utils/Vocabulary";
-
 
 @Component({
     selector: "members-ordered-renderer",

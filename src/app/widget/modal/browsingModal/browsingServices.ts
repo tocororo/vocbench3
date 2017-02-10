@@ -8,7 +8,7 @@ import {ConceptTreeModal, ConceptTreeModalData} from "../browsingModal/conceptTr
 import {CollectionTreeModal, CollectionTreeModalData} from "../browsingModal/collectionTreeModal/collectionTreeModal";
 import {SchemeListModal, SchemeListModalData} from "../browsingModal/schemeListModal/schemeListModal";
 import {PropertyTreeModal, PropertyTreeModalData} from "../browsingModal/propertyTreeModal/propertyTreeModal";
-import {ARTURIResource} from "../../../utils/ARTResources";
+import {ARTURIResource} from "../../../models/ARTResources";
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).

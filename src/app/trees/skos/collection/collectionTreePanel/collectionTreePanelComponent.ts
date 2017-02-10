@@ -3,7 +3,7 @@ import { CollectionTreeComponent } from "../collectionTree/collectionTreeCompone
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
-import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../../../utils/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../../../models/ARTResources";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 
 @Component({

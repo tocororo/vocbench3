@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { ARTURIResource, ARTResource } from './ARTResources';
+import { ARTURIResource, ARTResource } from '../models/ARTResources';
 
 /**
  * This class need to be injected in constructor of every Component that throws or subscribes to an event.

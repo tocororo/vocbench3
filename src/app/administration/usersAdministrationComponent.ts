@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { UserServices } from "../services/userServices";
-import { User, UserStatusEnum } from "../utils/User";
+import { User, UserStatusEnum } from "../models/User";
 import { ModalServices } from "../widget/modal/modalServices";
 
 @Component({

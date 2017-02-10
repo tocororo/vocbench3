@@ -5,9 +5,9 @@ import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { SkosServices } from "../../services/skosServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary"
 import { VBEventHandler } from "../../utils/VBEventHandler"
-import { SKOS } from "../../utils/Vocabulary"
 
 @Component({
     selector: "schemes-renderer",

@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {ModalServices} from "../widget/modal/modalServices";
-import {Countries} from "../utils/LanguagesCountries";
+import {Countries} from "../models/LanguagesCountries";
 import {UserServices} from "../services/userServices";
 
 @Component({

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ResAttribute} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ResAttribute} from "../models/ARTResources";
 
 @Injectable()
 export class ClassesServices {

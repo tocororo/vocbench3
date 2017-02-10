@@ -3,8 +3,8 @@ import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjects
 import { PropertyServices } from "../../services/propertyServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
-import { RDF, OWL } from "../../utils/Vocabulary";
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { RDF, OWL } from "../../models/Vocabulary";
 
 @Component({
     selector: "property-facets-renderer",

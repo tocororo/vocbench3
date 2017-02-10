@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../utils/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
 import { DeleteServices } from "../../../services/deleteServices";
 import { ModalServices } from "../../../widget/modal/modalServices";

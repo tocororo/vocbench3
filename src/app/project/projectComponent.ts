@@ -7,7 +7,7 @@ import {ProjectPropertiesModal, ProjectPropertiesModalData} from "./projectPrope
 import {ProjectServices} from "../services/projectServices";
 import {MetadataServices} from "../services/metadataServices";
 import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {Project, ProjectTypesEnum} from '../utils/Project';
+import {Project, ProjectTypesEnum} from '../models/Project';
 import {ModalServices} from "../widget/modal/modalServices";
 
 @Component({

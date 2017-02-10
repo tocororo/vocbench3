@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { Project, PluginSpecification } from '../utils/Project';
 import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { Project, PluginSpecification } from '../models/Project';
 
 @Injectable()
 export class ProjectServices {

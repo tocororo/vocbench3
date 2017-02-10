@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTResource, ARTURIResource} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource} from "../../models/ARTResources";
+import {SKOSXL} from "../../models/Vocabulary";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {SKOSXL} from "../../utils/Vocabulary";
 import {IcvServices} from "../../services/icvServices";
 import {SkosxlServices} from "../../services/skosxlServices";
 import {DeleteServices} from "../../services/deleteServices";

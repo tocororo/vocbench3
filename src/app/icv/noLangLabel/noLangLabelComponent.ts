@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTResource, ARTURIResource, ARTLiteral} from "../../utils/ARTResources";
-import {SKOS, SKOSXL} from "../../utils/Vocabulary";
+import {ARTResource, ARTURIResource, ARTLiteral} from "../../models/ARTResources";
+import {SKOS, SKOSXL} from "../../models/Vocabulary";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {PropertyServices} from "../../services/propertyServices";

@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import {ResourceUtils} from "../../utils/ResourceUtils";
-import {Languages} from "../../utils/LanguagesCountries";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {Languages} from "../../models/LanguagesCountries";
 
 @Component({
     selector: 'lang-picker',

@@ -3,7 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import { UserServices } from "../services/userServices";
 import { AdministrationServices } from "../services/administrationServices";
-import { User, Role } from "../utils/User";
+import { User, Role } from "../models/User";
 
 export class UserProjBindingModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public usersBound: Array<User>) {

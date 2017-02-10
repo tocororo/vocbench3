@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
-import {ARTNode, ARTURIResource} from "../../utils/ARTResources";
+import {ARTNode, ARTURIResource} from "../../models/ARTResources";
 import {PromptModal, PromptModalData} from "./promptModal/promptModal";
 import {PromptPrefixedModal, PromptPrefixedModalData} from "./promptModal/promptPrefixedModal";
 import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";

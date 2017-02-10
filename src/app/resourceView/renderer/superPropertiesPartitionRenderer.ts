@@ -5,8 +5,8 @@ import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
-import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
-import { RDFS } from "../../utils/Vocabulary";
+import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { RDFS } from "../../models/Vocabulary";
 
 
 @Component({

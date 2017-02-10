@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
-
 import { VocbenchCtx } from "../utils/VocbenchCtx";
-import { Countries } from "../utils/LanguagesCountries";
 import { UserServices } from "../services/userServices";
-import { User } from "../utils/User";
+import { Countries } from "../models/LanguagesCountries";
+import { User } from "../models/User";
 
 @Component({
     selector: "user-profile-component",

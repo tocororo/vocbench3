@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTResource, ARTURIResource, ARTNode} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode} from "../models/ARTResources";
 
 @Injectable()
 export class ResourceServices {

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTResource, ARTURIResource} from "../utils/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
+import {ARTResource, ARTURIResource} from "../models/ARTResources";
 
 
 @Injectable()

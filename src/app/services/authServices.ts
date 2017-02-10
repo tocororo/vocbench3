@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {Deserializer} from "../utils/Deserializer";
 import {HttpManager} from "../utils/HttpManager";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
-import {User} from "../utils/User";
+import {User} from "../models/User";
 
 @Injectable()
 export class AuthServices {

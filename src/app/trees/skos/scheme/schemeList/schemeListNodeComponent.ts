@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList} from "@angular/core";
-import {ARTURIResource, ResAttribute} from "../../../../utils/ARTResources";
+import {ARTURIResource, ResAttribute} from "../../../../models/ARTResources";
 import {VBEventHandler} from "../../../../utils/VBEventHandler";
 import {VocbenchCtx} from "../../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../../services/skosServices";

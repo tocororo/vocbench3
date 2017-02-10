@@ -6,8 +6,8 @@ import { CustomRangeServices } from "../../services/customRangeServices";
 import { OwlServices } from "../../services/owlServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
-import { RDF } from "../../utils/Vocabulary"
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { RDF } from "../../models/Vocabulary"
 
 @Component({
     selector: "types-renderer",

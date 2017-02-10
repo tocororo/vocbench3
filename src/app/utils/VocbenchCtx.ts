@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ARTURIResource, RDFResourceRolesEnum } from './ARTResources';
-import { Project } from './Project';
+import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { Project } from '../models/Project';
+import { User } from '../models/User';
 import { Cookie } from "./Cookie";
-import { User } from './User';
 
 @Injectable()
 export class VocbenchCtx {

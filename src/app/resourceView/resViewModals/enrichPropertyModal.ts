@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource, ResAttribute} from '../../utils/ARTResources';
-import {SKOS} from '../../utils/Vocabulary';
+import {ARTURIResource, ResAttribute} from '../../models/ARTResources';
+import {SKOS} from '../../models/Vocabulary';
 
 export class EnrichPropertyModalData extends BSModalContext {
     /**

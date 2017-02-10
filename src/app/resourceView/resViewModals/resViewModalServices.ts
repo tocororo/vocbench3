@@ -6,7 +6,7 @@ import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instance
 import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
 import {AddPropertyValueModal, AddPropertyValueModalData} from "./addPropertyValueModal";
 import {CustomFormModal, CustomFormModalData} from "../../customRanges/customForm/customFormModal";
-import {ARTResource, ARTURIResource} from '../../utils/ARTResources';
+import {ARTResource, ARTURIResource} from '../../models/ARTResources';
 
 /**
  * Service to open modals that allow to create a classes list or instances list

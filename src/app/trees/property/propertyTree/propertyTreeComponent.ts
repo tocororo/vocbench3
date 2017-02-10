@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../utils/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";

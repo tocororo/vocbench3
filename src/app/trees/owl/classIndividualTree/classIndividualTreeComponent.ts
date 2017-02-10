@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter, SimpleChanges} from "@angular/core";
-import {ARTURIResource} from "../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../utils/VocbenchCtx';
-import {SKOS} from '../../../utils/Vocabulary';
+import {ARTURIResource} from "../../../models/ARTResources";
+import {SKOS} from '../../../models/Vocabulary';
 
 @Component({
     selector: "class-individual-tree",

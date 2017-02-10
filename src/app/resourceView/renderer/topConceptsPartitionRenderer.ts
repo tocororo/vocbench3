@@ -5,9 +5,9 @@ import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { SkosServices } from "../../services/skosServices";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary"
 import { VBEventHandler } from "../../utils/VBEventHandler"
-import { SKOS } from "../../utils/Vocabulary"
 
 
 @Component({

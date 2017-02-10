@@ -4,8 +4,8 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../utils/ARTResources";
-import { SKOSXL } from "../../utils/Vocabulary";
+import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
+import { SKOSXL } from "../../models/Vocabulary";
 
 @Component({
     selector: "label-relations-renderer",

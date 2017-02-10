@@ -3,7 +3,7 @@ import {BSModalContext, BSModalContextBuilder} from 'angular2-modal/plugins/boot
 import {DialogRef, ModalComponent, Modal, OverlayConfig} from "angular2-modal";
 import {SignaturePickerModal, SignaturePickerModalData} from "./signaturePickerModal";
 import {CODAServices} from "../../services/codaServices"
-import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../../utils/Coda";
+import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../../models/Coda";
 
 export class ConverterPickerModalData extends BSModalContext {
     /**

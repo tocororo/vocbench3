@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleCha
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ARTPredicateValues,
-    ResAttribute, RDFTypesEnum} from "../utils/ARTResources";
+    ResAttribute, RDFTypesEnum} from "../models/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {VBEventHandler} from "../utils/VBEventHandler";
@@ -173,6 +173,24 @@ export class ResourceViewComponent {
         var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
         if (lexicalizationsPartition != null) {
             this.lexicalizationsColl = Deserializer.createPredicateValueList(lexicalizationsPartition);
+
+            //sort by language
+            console.log(this.lexicalizationsColl.length);
+            for (var i = 0; i < this.lexicalizationsColl.length; i++) {
+                console.log("index " + i, this.lexicalizationsColl[i]);
+                let values: ARTPredicateObjects[] = this.lexicalizationsColl[i].getValues();
+                for (var j = 0; j < values.length; j++) {
+                    let objects: ARTNode[] = values[j].getObjects();
+                    objects.sort(
+                        function(a: ARTNode, b: ARTNode) {
+                            if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
+                            if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
+                            return 0;
+                        }
+                    );
+                }
+            }
+
             this.filterInferredFromPredValuesList(this.lexicalizationsColl);
         }
 

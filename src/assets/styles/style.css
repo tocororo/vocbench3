@@ -453,7 +453,8 @@ button.resViewPartitionBtn:disabled  {
 	filter: alpha(opacity=90);
 }
 
-create-project-component .form-horizontal .form-group {
+/* To avoid strange style behaviour (e.g. horizontal scrollbar in createProjectComponent)*/
+.form-horizontal .form-group {
     margin-left: -4px;
     margin-right: -4px;
 }

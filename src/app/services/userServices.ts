@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Deserializer} from "../utils/Deserializer";
 import {HttpManager} from "../utils/HttpManager";
-import {User, UserStatusEnum} from "../utils/User";
+import {User, UserStatusEnum} from "../models/User";
 
 @Injectable()
 export class UserServices {

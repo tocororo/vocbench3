@@ -163,39 +163,39 @@ export class CreateProjectComponent {
     /**
      * opens/closes extension point panel
      */
-    private toggleExtPointPanel() {
-        this.extPointPanelOpen = !this.extPointPanelOpen;
-    }
+    // private toggleExtPointPanel() {
+    //     this.extPointPanelOpen = !this.extPointPanelOpen;
+    // }
 
-    /**
-     * Called when change selection of the plugins menu of an extension point
-     */
-    private changeExtPointPlugin(extPointStruct: any) {
-        if (extPointStruct.selectedExtPointPluginId == "---") {
-            extPointStruct.selectedExtPointPlugin.configurations = null;
-            extPointStruct.selectedExtPointPlugin.selectedConfigType = null;
-        } else {
-            this.pluginService.getPluginConfigurations(extPointStruct.selectedExtPointPluginId).subscribe(
-                configurations => {
-                    extPointStruct.selectedExtPointPlugin.configurations = configurations;
-                    extPointStruct.selectedExtPointPlugin.selectedConfigType = configurations[0].type;
-                }
-            );
-        }
-    }
+    // /**
+    //  * Called when change selection of the plugins menu of an extension point
+    //  */
+    // private changeExtPointPlugin(extPointStruct: any) {
+    //     if (extPointStruct.selectedExtPointPluginId == "---") {
+    //         extPointStruct.selectedExtPointPlugin.configurations = null;
+    //         extPointStruct.selectedExtPointPlugin.selectedConfigType = null;
+    //     } else {
+    //         this.pluginService.getPluginConfigurations(extPointStruct.selectedExtPointPluginId).subscribe(
+    //             configurations => {
+    //                 extPointStruct.selectedExtPointPlugin.configurations = configurations;
+    //                 extPointStruct.selectedExtPointPlugin.selectedConfigType = configurations[0].type;
+    //             }
+    //         );
+    //     }
+    // }
 
-    /**
-     * Given the structure of an extension point, opens a modal to change its plugin configuration
-     */
-    private configurePluginConfig(extPointStruct: any) {
-        //search in configurations the one with the given selectedConfigType
-        for (var i = 0; i < extPointStruct.selectedExtPointPlugin.configurations.length; i++) {
-            if (extPointStruct.selectedExtPointPlugin.configurations[i].type == extPointStruct.selectedExtPointPlugin.selectedConfigType) {
-                this.openConfigurationModal(extPointStruct.selectedExtPointPlugin.configurations[i]);
-                break;
-            }
-        }
-    }
+    // /**
+    //  * Given the structure of an extension point, opens a modal to change its plugin configuration
+    //  */
+    // private configurePluginConfig(extPointStruct: any) {
+    //     //search in configurations the one with the given selectedConfigType
+    //     for (var i = 0; i < extPointStruct.selectedExtPointPlugin.configurations.length; i++) {
+    //         if (extPointStruct.selectedExtPointPlugin.configurations[i].type == extPointStruct.selectedExtPointPlugin.selectedConfigType) {
+    //             this.openConfigurationModal(extPointStruct.selectedExtPointPlugin.configurations[i]);
+    //             break;
+    //         }
+    //     }
+    // }
 
     /**
      * retrieves the new project setting and calls the newProject service

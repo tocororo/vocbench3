@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import 'rxjs/Rx'; //for map function
 import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
-import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../utils/ARTResources";
+import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
 import { VocbenchCtx } from './VocbenchCtx';
 import { ModalServices } from "../widget/modal/modalServices";
 

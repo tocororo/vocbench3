@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateValues, ResAttribute } from "../../utils/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateValues, ResAttribute } from "../../models/ARTResources";
 
 @Component({
     selector: "pred-value-list-renderer",

@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../utils/ARTResources";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../models/ARTResources";
 import {VocbenchCtx} from "../../../../utils/VocbenchCtx";
 import {SkosServices} from "../../../../services/skosServices";
 import {SearchServices} from "../../../../services/searchServices";

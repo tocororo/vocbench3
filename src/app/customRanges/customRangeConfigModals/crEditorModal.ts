@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {CustomRangeServices} from "../../services/customRangeServices";
-import {CustomRange, CustomRangeEntry} from "../../utils/CustomRanges";
+import {CustomRange, CustomRangeEntry} from "../../models/CustomRanges";
 import {Observable} from 'rxjs/Observable';
 
 export class CustomRangeEditorModalData extends BSModalContext {

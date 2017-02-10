@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
-import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../utils/Coda";
+import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../models/Coda";
 
 @Injectable()
 export class CODAServices {

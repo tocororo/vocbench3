@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, ARTResource, ARTNode, ARTLiteral} from "../utils/ARTResources";
+import {ARTURIResource, ARTResource, ARTNode, ARTLiteral} from "../models/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 
 @Injectable()

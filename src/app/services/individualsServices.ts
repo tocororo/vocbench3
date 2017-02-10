@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute} from "../models/ARTResources";
 
 @Injectable()
 export class IndividualsServices {

@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 
 import { AdministrationServices } from "../services/administrationServices";
 import { ModalServices } from "../widget/modal/modalServices";
-import { Role } from "../utils/User";
+import { Role } from "../models/User";
 
 @Component({
     selector: "roles-admin-component",

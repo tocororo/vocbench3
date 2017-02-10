@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects} from "../../utils/ARTResources";
+import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects} from "../../models/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {Deserializer} from "../../utils/Deserializer";
 import {CustomRangeServices} from "../../services/customRangeServices";

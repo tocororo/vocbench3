@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {Project} from "../../utils/Project";
+import {ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
+import {Project} from "../../models/Project";
 import {ProjectServices} from "../../services/projectServices";
 
 export class BrowseExternalResourceModalData extends BSModalContext {

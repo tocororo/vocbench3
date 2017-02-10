@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../models/ARTResources";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({

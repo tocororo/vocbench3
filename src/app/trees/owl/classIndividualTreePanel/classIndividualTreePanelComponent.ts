@@ -6,8 +6,8 @@ import {OwlServices} from "../../../services/owlServices";
 import {IndividualsServices} from "../../../services/individualsServices";
 import {DeleteServices} from "../../../services/deleteServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../utils/ARTResources";
-import {RDF, OWL} from "../../../utils/Vocabulary";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../models/ARTResources";
+import {RDF, OWL} from "../../../models/Vocabulary";
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot

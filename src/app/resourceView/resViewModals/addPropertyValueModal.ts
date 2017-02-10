@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../../utils/ARTResources';
+import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../../models/ARTResources';
+import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VocbenchCtx } from '../../utils/VocbenchCtx';
-import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../utils/Vocabulary';
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ManchesterServices } from "../../services/manchesterServices";
 

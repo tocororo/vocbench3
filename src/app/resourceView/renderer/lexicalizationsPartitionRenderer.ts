@@ -5,9 +5,9 @@ import { SkosServices } from "../../services/skosServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateValues, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { RDFS, SKOS, SKOSXL } from "../../utils/Vocabulary";
+import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateValues, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 

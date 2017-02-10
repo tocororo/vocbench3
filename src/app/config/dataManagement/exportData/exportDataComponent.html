@@ -1,20 +1,103 @@
 <div class="vbox">
     
-    <div class="panel panel-default">
+    <div class="panel panel-default vbox">
         <div class="panel-heading">
             <label>Export:</label>
         </div>
        
-        <div class="panel-body">
-            <form role="form">
-                <div class="form-group">
-                    <label>Format:</label>
-                    <select class="form-control input-sm" [(ngModel)]="format" name="format">
-                        <option *ngFor="let f of formatList" [value]="f.format">{{f.format}}</option>
-                    </select>
+        <div class="panel-body vbox">
 
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-1">Export Format:</label>
+                    <div class="col-sm-11">
+                        <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
+                            <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
+                        </select>
+                    </div>
                 </div>
             </form>
+
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">
+                        Graphs to export
+                    </label>
+                    <span *ngIf="areAllGraphDeselected()" class="greyText" style="margin-right: 8px;">
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        If no graph is selected, it will export all the graphs which name is an IRI
+                    </span>
+                    <div class="btn-group btn-group-xs pull-right">
+                        <button class="btn btn-default" style="padding: 1px 5px;" title="Check all" (click)="checkAllGraph()">
+                            <span class="glyphicon glyphicon-check"></span>
+                        </button>
+                        <button class="btn btn-default" style="padding: 1px 5px;" title="Uncheck all" (click)="uncheckAllGraph()">
+                            <span class="glyphicon glyphicon-unchecked"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body scrollableContainer">
+                    <div *ngFor="let g of exportGraphs" class="listItem" style="align-items: center">
+                        <input type="checkbox" [(ngModel)]="g.checked">
+                        <span style="margin-left: 5px;">{{g.graph.getURI()}}</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Export filters:</label>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button class="btn btn-default" style="padding: 1px 5px;" title="Add filter" (click)="appendFilter()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" style="padding: 1px 5px;" title="Remove filter" (click)="removeFilter()"
+                            [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                        <button class="btn btn-default" style="padding: 1px 5px;" title="Move down"  (click)="moveFilterDown()"
+                            [disabled]="isSelectedFilterLast()">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                        <button class="btn btn-default" style="padding: 1px 5px;" title="Move up" (click)="moveFilterUp()"
+                            [disabled]="isSelectedFilterFirst()">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body scrollableContainer">
+                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
+                        Here is possible to create and configure a sequence of filters to be applied during the export process.
+                        Each filter is applied to a subset of the exported graphs. No graph means every exported graph.
+                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    </div>
+                    <table class="table table-condensed table-borderless table-hoverable">
+                        <colgroup>
+                            <col style="width: 5%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr *ngFor="let filterChainEl of filtersChain; let l = last; let f = first; let idx = index" 
+                                [ngClass]="{active: filterChainEl == selectedFilterChainElement}" (click)="selectFilterChainElement(filterChainEl)">
+                                <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
+                                <td>
+                                    <div class="input-group">
+                                        <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedPlugin" (ngModelChange)="onChangeExportFilterPlugin(filterChainEl)">
+                                            <option *ngFor="let efp of availableExporterFilterPlugins" [ngValue]="efp">{{getFactoryIdShortName(efp.factoryID)}}</option>
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-sm" (click)="configureFilter(filterChainEl)">Configure</button>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
         
         <div class="panel-footer">

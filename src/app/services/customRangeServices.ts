@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../utils/ARTResources";
-import {CustomRangePropertyMapping, CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../utils/CustomRanges";
+import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../models/ARTResources";
+import {CustomRangePropertyMapping, CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../models/CustomRanges";
 
 @Injectable()
 export class CustomRangeServices {

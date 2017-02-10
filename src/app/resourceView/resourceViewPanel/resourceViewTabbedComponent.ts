@@ -1,5 +1,5 @@
 import {Component, Input, SimpleChanges} from "@angular/core";
-import {ARTResource} from "../../utils/ARTResources";
+import {ARTResource} from "../../models/ARTResources";
 
 @Component({
     selector: "resource-view-tabbed",

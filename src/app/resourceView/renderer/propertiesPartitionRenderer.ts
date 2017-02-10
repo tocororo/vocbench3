@@ -6,10 +6,10 @@ import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { SkosxlServices } from "../../services/skosxlServices";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
-import { SKOSXL } from "../../utils/Vocabulary";
+import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { SKOSXL } from "../../models/Vocabulary";
+import { CustomRange, CustomRangeEntry } from "../../models/CustomRanges";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { CustomRange, CustomRangeEntry } from "../../utils/CustomRanges";
 import { ModalServices } from "../../widget/modal/modalServices";
 
 

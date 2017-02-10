@@ -3,7 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {CustomRangeServices} from "../../services/customRangeServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource} from "../../models/ARTResources";
 
 @Component({
     selector: "cr-prop-mapping-modal",

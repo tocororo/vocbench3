@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
-
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {ARTURIResource} from "../../utils/ARTResources";
 import {Cookie} from "../../utils/Cookie";
+import {ARTURIResource} from "../../models/ARTResources";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentCell} from "./AlignmentCell";
 import {ValidationSettingsModal} from "./validationSettingsModal/validationSettingsModal"

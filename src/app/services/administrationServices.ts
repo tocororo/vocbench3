@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
-import {ProjectUserBinding, Role} from "../utils/User";
+import {ProjectUserBinding, Role} from "../models/User";
 
 @Injectable()
 export class AdministrationServices {

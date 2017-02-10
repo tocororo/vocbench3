@@ -3,9 +3,9 @@ import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../utils/ARTResources";
-import {RDF, OWL} from "../utils/Vocabulary";
-import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../utils/CustomRanges";
+import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../models/ARTResources";
+import {RDF, OWL} from "../models/Vocabulary";
+import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../models/CustomRanges";
 
 @Injectable()
 export class PropertyServices {

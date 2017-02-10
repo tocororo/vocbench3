@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {Project, ProjectTypesEnum} from "../../utils/Project";
+import {Project, ProjectTypesEnum} from "../../models/Project";
 import {InputOutputServices} from "../../services/inputOutputServices";
 import {ProjectServices} from "../../services/projectServices";
 import {RefactorServices} from "../../services/refactorServices";

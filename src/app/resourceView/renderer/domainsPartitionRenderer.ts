@@ -5,8 +5,8 @@ import { ResourceServices } from "../../services/resourceServices";
 import { CustomRangeServices } from "../../services/customRangeServices";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../utils/ARTResources";
-import { RDFS } from "../../utils/Vocabulary";
+import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { RDFS } from "../../models/Vocabulary";
 
 @Component({
     selector: "domains-renderer",

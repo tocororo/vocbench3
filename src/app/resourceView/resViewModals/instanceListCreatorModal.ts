@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource, ResAttribute} from '../../utils/ARTResources';
+import {ARTURIResource, ResAttribute} from '../../models/ARTResources';
 
 export class InstanceListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {

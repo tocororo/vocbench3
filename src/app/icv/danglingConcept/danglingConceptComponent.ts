@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";

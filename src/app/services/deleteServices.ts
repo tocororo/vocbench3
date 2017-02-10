@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
 import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTResource, ARTURIResource} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource} from "../models/ARTResources";
 
 @Injectable()
 export class DeleteServices {

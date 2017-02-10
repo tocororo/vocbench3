@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {ARTResource, ARTURIResource} from "../utils/ARTResources";
+import {ARTResource, ARTURIResource} from "../models/ARTResources";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 
 @Component({

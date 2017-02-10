@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {ARTResource} from "../../utils/ARTResources";
+import {ARTResource} from "../../models/ARTResources";
 import {Cookie} from "../../utils/Cookie";
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, RDFTypesEnum} from "../../utils/ARTResources";
-import {RDFS} from "../../utils/Vocabulary";
+import {ARTURIResource, RDFTypesEnum} from "../../models/ARTResources";
+import {RDFS} from "../../models/Vocabulary";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {PropertyServices} from "../../services/propertyServices";

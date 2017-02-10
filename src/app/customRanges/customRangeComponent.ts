@@ -6,8 +6,8 @@ import {ModalServices} from "../widget/modal/modalServices";
 import {CustomRangePropMappingModal} from "./customRangeConfigModals/crPropMappingModal"
 import {CustomRangeEditorModal, CustomRangeEditorModalData} from "./customRangeConfigModals/crEditorModal"
 import {CustomRangeEntryEditorModal, CustomRangeEntryEditorModalData} from "./customRangeConfigModals/creEditorModal"
-import {ARTURIResource} from "../utils/ARTResources";
-import {CustomRangePropertyMapping, CustomRangeEntry} from "../utils/CustomRanges";
+import {ARTURIResource} from "../models/ARTResources";
+import {CustomRangePropertyMapping, CustomRangeEntry} from "../models/CustomRanges";
 
 @Component({
 	selector: "custom-range-component",

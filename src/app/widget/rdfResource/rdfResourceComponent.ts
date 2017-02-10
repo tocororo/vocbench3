@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../utils/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 
 @Component({

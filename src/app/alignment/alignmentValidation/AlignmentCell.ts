@@ -1,4 +1,4 @@
-import {ARTURIResource} from "../../utils/ARTResources";
+import {ARTURIResource} from "../../models/ARTResources";
 
 export class AlignmentCell {
     

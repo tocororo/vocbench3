@@ -2,7 +2,7 @@
 
 import {Component, ViewChild, Input, Output, EventEmitter, ElementRef} from '@angular/core';
 import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {ARTURIResource} from '../utils/ARTResources';
+import {ARTURIResource} from '../models/ARTResources';
 import {MetadataServices} from '../services/metadataServices';
 import {SearchServices} from '../services/searchServices';
 

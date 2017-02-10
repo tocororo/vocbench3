@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, ARTResource, ARTLiteral} from "../../utils/ARTResources";
+import {ARTURIResource, ARTResource, ARTLiteral} from "../../models/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {IcvServices} from "../../services/icvServices";
 import {SkosServices} from "../../services/skosServices";

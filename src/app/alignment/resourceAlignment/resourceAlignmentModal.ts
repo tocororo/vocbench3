@@ -3,7 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../utils/ARTResources";
+import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentServices} from "../../services/alignmentServices";

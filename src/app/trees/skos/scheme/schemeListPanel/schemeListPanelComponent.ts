@@ -3,9 +3,9 @@ import {SkosServices} from "../../../../services/skosServices";
 import {SkosxlServices} from "../../../../services/skosxlServices";
 import {SearchServices} from "../../../../services/searchServices";
 import {ModalServices} from "../../../../widget/modal/modalServices";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../utils/ARTResources";
 import {VocbenchCtx} from '../../../../utils/VocbenchCtx';
 import {VBEventHandler} from "../../../../utils/VBEventHandler";
+import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../models/ARTResources";
 
 @Component({
 	selector: "scheme-list-panel",
