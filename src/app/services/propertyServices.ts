@@ -94,6 +94,61 @@ export class PropertyServices {
     }
 
     /**
+     * Returns the range of a property
+     * @param property
+     * @return an object with:
+     * - ranges: "classic" range of a property omitted if a CustomRange is provided for the given property
+     *      and the "replaceRanges" attribute is true (so, the "classic" range in replaced by the custom one).
+     *      Contains two attributes:
+     *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
+     *          - rangeColl: an array of ARTURIResource 
+     *              (available only if rngType is resource, then represent the admitted range classes,
+     *              or typedLiteral, then represent the admitted datatypes);
+     * - customRange, an optional CustomRange object only if the property has custom ranges
+     */
+    getRange(property: ARTURIResource): Observable<{ranges: {type: string, rangeCollection: ARTURIResource[]}, customRange: CustomRange}> {
+        console.log("[PropertyServices] getRange");
+        var params: any = {
+            property: property,
+        };
+        return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService, true).map(
+            stResp => {
+                let ranges: any = {};
+                let customRange: CustomRange;
+                
+                if (stResp.ranges) {
+                    ranges.type = stResp.ranges.type;
+                    if (stResp.ranges.rangeCollection) {
+                        //cannot use Deserializer since rangeCollection contains just the URIs
+                        // ranges.rangeCollection = Deserializer.createURIArray(stResp.ranges.rangeCollection);
+                        var rangeColl: ARTURIResource[] = [];
+                        for (var i = 0; i < stResp.ranges.rangeCollection.length; i++) {
+                            rangeColl.push(new ARTURIResource(stResp.ranges.rangeCollection[i], null, null));
+                        }
+                        ranges.rangeCollection = rangeColl;
+                    }
+                }
+                if (stResp.customRanges) {
+                    customRange = new CustomRange(stResp.customRanges.id);
+                    var crEntries: CustomRangeEntry[] = [];
+                    for (var i = 0; i < stResp.customRanges.crEntries.length; i++) {
+                        let cre: CustomRangeEntry = new CustomRangeEntry(stResp.customRanges.crEntries[i].id);
+                        cre.setName(stResp.customRanges.crEntries[i].name);
+                        cre.setType(stResp.customRanges.crEntries[i].type);
+                        cre.setDescription(stResp.customRanges.crEntries[i].description);
+                        crEntries.push(cre);
+                    }
+                    customRange.setEntries(crEntries);
+                }
+                console.log(ranges, customRange);
+                return {ranges: ranges, customRange: customRange};
+            }
+        );
+    }
+
+    //============= OLD SERVICES =================
+
+    /**
      * Creates a property with the given name of the given type.
      * Emits a topPropertyCreatedEvent with the new property
      * @param propertyName local name of the property
@@ -278,60 +333,60 @@ export class PropertyServices {
         return this.httpMgr.doGet("property", "removePropertyDomain", params, true);
     }
     
-    /**
-     * Returns the range of a property
-     * @param property
-     * @return an object with:
-     * - ranges: "classic" range of a property omitted if a CustomRange is provided for the given property
-     *      and the "replaceRanges" attribute is true (so, the "classic" range in replaced by the custom one).
-     *      Contains two attributes:
-     *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
-     *          - rangeColl: an array of ARTURIResource 
-     *              (available only if rngType is resource, then represent the admitted range classes,
-     *              or typedLiteral, then represent the admitted datatypes);
-     * - customRange, an optional CustomRange object only if the property has custom ranges
-     */
-    getRange(property: ARTURIResource): Observable<{ranges: {type: string, rangeColl: ARTURIResource[]}, customRange: CustomRange}> {
-        console.log("[PropertyServices] getRange");
-        var params: any = {
-            propertyQName: property.getURI(),
-        };
-        return this.httpMgr.doGet("property", "getRange", params, true).map(
-            stResp => {
-                let ranges: any;
-                let customRange: CustomRange;
-                if (stResp.getElementsByTagName("ranges").length != 0) {
-                    var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
-                    ranges = {}
-                    ranges.type = rangesElem.getAttribute("rngType");
-                    if (ranges.type != "undetermined") {
-                        ranges.rangeColl = Deserializer.createURIArrayGivenList(rangesElem.children);
-                    }
-                }
-                if (stResp.getElementsByTagName("customRange").length != 0) {
-                    var cRangesElem: Element = stResp.getElementsByTagName("customRange")[0];
-                    var crId = cRangesElem.getAttribute("id");
-                    var crProp = cRangesElem.getAttribute("property");
-                    var crEntries: CustomRangeEntry[] = [];
-                    var creElemColl = cRangesElem.getElementsByTagName("crEntry");
-                    for (var i = 0; i < creElemColl.length; i++) {
-                        let creId = creElemColl[i].getAttribute("id");
-                        let name = creElemColl[i].getAttribute("name");
-                        let type: CustomRangeEntryType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
-                        let description = creElemColl[i].getElementsByTagName("description")[0].textContent;
-                        let cre: CustomRangeEntry = new CustomRangeEntry(creId);
-                        cre.setName(name);
-                        cre.setType(type);
-                        cre.setDescription(description);
-                        crEntries.push(cre);
-                    }
-                    customRange = new CustomRange(crId);
-                    customRange.setEntries(crEntries);
-                }
-                return {ranges: ranges, customRange: customRange};
-            }
-        );
-    }
+    // /**
+    //  * Returns the range of a property
+    //  * @param property
+    //  * @return an object with:
+    //  * - ranges: "classic" range of a property omitted if a CustomRange is provided for the given property
+    //  *      and the "replaceRanges" attribute is true (so, the "classic" range in replaced by the custom one).
+    //  *      Contains two attributes:
+    //  *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
+    //  *          - rangeColl: an array of ARTURIResource 
+    //  *              (available only if rngType is resource, then represent the admitted range classes,
+    //  *              or typedLiteral, then represent the admitted datatypes);
+    //  * - customRange, an optional CustomRange object only if the property has custom ranges
+    //  */
+    // getRange(property: ARTURIResource): Observable<{ranges: {type: string, rangeColl: ARTURIResource[]}, customRange: CustomRange}> {
+    //     console.log("[PropertyServices] getRange");
+    //     var params: any = {
+    //         propertyQName: property.getURI(),
+    //     };
+    //     return this.httpMgr.doGet("property", "getRange", params, true).map(
+    //         stResp => {
+    //             let ranges: any;
+    //             let customRange: CustomRange;
+    //             if (stResp.getElementsByTagName("ranges").length != 0) {
+    //                 var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
+    //                 ranges = {}
+    //                 ranges.type = rangesElem.getAttribute("rngType");
+    //                 if (ranges.type != "undetermined") {
+    //                     ranges.rangeColl = Deserializer.createURIArrayGivenList(rangesElem.children);
+    //                 }
+    //             }
+    //             if (stResp.getElementsByTagName("customRange").length != 0) {
+    //                 var cRangesElem: Element = stResp.getElementsByTagName("customRange")[0];
+    //                 var crId = cRangesElem.getAttribute("id");
+    //                 var crProp = cRangesElem.getAttribute("property");
+    //                 var crEntries: CustomRangeEntry[] = [];
+    //                 var creElemColl = cRangesElem.getElementsByTagName("crEntry");
+    //                 for (var i = 0; i < creElemColl.length; i++) {
+    //                     let creId = creElemColl[i].getAttribute("id");
+    //                     let name = creElemColl[i].getAttribute("name");
+    //                     let type: CustomRangeEntryType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
+    //                     let description = creElemColl[i].getElementsByTagName("description")[0].textContent;
+    //                     let cre: CustomRangeEntry = new CustomRangeEntry(creId);
+    //                     cre.setName(name);
+    //                     cre.setType(type);
+    //                     cre.setDescription(description);
+    //                     crEntries.push(cre);
+    //                 }
+    //                 customRange = new CustomRange(crId);
+    //                 customRange.setEntries(crEntries);
+    //             }
+    //             return {ranges: ranges, customRange: customRange};
+    //         }
+    //     );
+    // }
     
     /**
      * Adds a class as range of a property

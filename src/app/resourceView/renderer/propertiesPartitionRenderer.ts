@@ -89,14 +89,14 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                     if (ranges != undefined && customRange == undefined) { //just "classic" range
                         //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                         if (ranges.type == RDFTypesEnum.resource) {
-                            this.enrichWithResource(predicate, ranges.rangeColl);
+                            this.enrichWithResource(predicate, ranges.rangeCollection);
                         } else if (ranges.type == RDFTypesEnum.plainLiteral) {
                             this.enrichWithPlainLiteral(predicate);
                         } else if (ranges.type == RDFTypesEnum.typedLiteral) {
                             var datatypes: string[] = [];
                             //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
-                            for (var i = 0; i < ranges.rangeColl.length; i++) {
-                                datatypes.push(ranges.rangeColl[i].getNominalValue());
+                            for (var i = 0; i < ranges.rangeCollection.length; i++) {
+                                datatypes.push(ranges.rangeCollection[i].getNominalValue());
                             }
                             this.enrichWithTypedLiteral(predicate, datatypes);
                         } else if (ranges.type == RDFTypesEnum.literal) {
@@ -159,7 +159,7 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                                     }
                                 }
                                 if (selectedRange == RDFTypesEnum.resource) {
-                                    this.enrichWithResource(predicate, ranges.rangeColl);
+                                    this.enrichWithResource(predicate, ranges.rangeCollection);
                                 } else if (selectedRange == RDFTypesEnum.typedLiteral) {
                                     this.enrichWithTypedLiteral(predicate);
                                 } else if (selectedRange == RDFTypesEnum.plainLiteral) {

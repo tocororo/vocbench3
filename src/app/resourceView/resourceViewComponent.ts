@@ -175,9 +175,7 @@ export class ResourceViewComponent {
             this.lexicalizationsColl = Deserializer.createPredicateValueList(lexicalizationsPartition);
 
             //sort by language
-            console.log(this.lexicalizationsColl.length);
             for (var i = 0; i < this.lexicalizationsColl.length; i++) {
-                console.log("index " + i, this.lexicalizationsColl[i]);
                 let values: ARTPredicateObjects[] = this.lexicalizationsColl[i].getValues();
                 for (var j = 0; j < values.length; j++) {
                     let objects: ARTNode[] = values[j].getObjects();
