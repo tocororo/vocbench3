@@ -93,7 +93,7 @@ export class ResViewModalServices {
      * @param resource resource that is going to enrich with the property-value pair.
      * @param property root property that the modal should allow to enrich
      * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
-     *  If false, the button to change property is hidden
+     *  If false, the button to change property is hidden. Default is true
      */
     addPropertyValue(title: string, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean) {
         var modalData = new AddPropertyValueModalData(title, resource, property, propChangeable);

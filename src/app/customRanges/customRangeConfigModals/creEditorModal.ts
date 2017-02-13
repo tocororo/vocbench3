@@ -61,7 +61,6 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
                     if (this.type == "graph") {
                         this.showPropertyChain = cre.getShowPropertyChain();
                     }
-                    console.log("cre", cre);
                 }
             )
         }

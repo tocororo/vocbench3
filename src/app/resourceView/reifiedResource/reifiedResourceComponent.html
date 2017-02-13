@@ -3,7 +3,7 @@
         <img *ngIf="!open" src="../../../assets/images/tree_expand.png">
         <img *ngIf="open" src="../../../assets/images/tree_collapse.png">
     </div>
-    <rdf-resource *ngIf="reifiedResource" [resource]="reifiedResource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
+    <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
 </div>
 
 <div *ngIf="open" class="panel panel-default" style="margin: 0px 3px 3px;">
@@ -17,8 +17,6 @@
                         <td>
                             <input type="text" class="form-control input-xs" [ngModel]="obj.getNominalValue()"
                                 (dblclick)="objectDblClick(obj)" readonly>
-                            <!--Restore when getGraphObjectDescription will contain roles of objects in <predicateObjects>-->
-                            <!--<rdf-resource [resource]="obj"></rdf-resource>-->
                         </td>
                     </tr>
                 </template>

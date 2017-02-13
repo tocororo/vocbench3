@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum} from "../models/ARTResources";
+import {ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum} from "../models/ARTResources";
 import {CustomRangePropertyMapping, CustomRange, CustomRangeEntry, CustomRangeEntryType, FormEntry, FormEntryType} from "../models/CustomRanges";
 
 @Injectable()
@@ -19,13 +19,22 @@ export class CustomRangeServices {
      * @param resource object of a predicate with a custom range.
      * @return 
      */
-    getGraphObjectDescription(predicate: ARTURIResource, resource: ARTNode) {
+    getGraphObjectDescription(predicate: ARTURIResource, resource: ARTNode): Observable<ARTPredicateObjects[]> {
         console.log("[CustomRangeServices] getGraphObjectDescription");
         var params: any = {
             predicate: predicate.getURI(),
             resource: resource.getNominalValue()
         };
-        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params, this.oldTypeService).map(
+            stResp => {
+                var predicateObjectList: ARTPredicateObjects[];
+                var propElem = stResp.getElementsByTagName("properties")[0];
+                if (propElem != undefined) { //only if resource has a reified description
+                     predicateObjectList = Deserializer.createPredicateObjectsList(propElem.getElementsByTagName("collection")[0]);
+                }
+                return predicateObjectList;
+            }
+        );
     }
     
     /**
