@@ -48,7 +48,6 @@ import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceA
 import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
 
 //project config modal
-import { OntoMgrConfigModal } from "../project/createProject/ontoMgrConfigModal";
 import { RemoteAccessConfigModal } from "../project/createProject/remoteAccessConfigModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 
@@ -69,7 +68,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
         PluginConfigModal, FilterGraphsModal
     ],
     exports: [],
@@ -90,7 +89,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
         PluginConfigModal, FilterGraphsModal
     ]
 })

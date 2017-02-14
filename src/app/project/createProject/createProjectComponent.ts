@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { OntoMgrConfigModal, OntoMgrConfigModalData } from "./ontoMgrConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal";
 import { Router } from "@angular/router";
 import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { ModalServices } from "../../widget/modal/modalServices";
+import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/pluginConfigModal/pluginConfigModal";
 
 /**
  * extPointStructList is a list of structures with info about extension point. Each element is structured as follow:
@@ -99,17 +99,17 @@ export class CreateProjectComponent {
     }
 
     ngOnInit() {
-        // this.ontMgrService.listOntoManager().subscribe(
-        //     ontoMgrs => {
-        //         this.ontoMgrList = ontoMgrs;
-        //         this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
-        //             configList => {
-        //                 this.ontoMgrConfigList = configList;
-        //                 this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
-        //             }
-        //         );
-        //     }
-        // )
+        this.ontMgrService.listOntoManager().subscribe(
+            ontoMgrs => {
+                this.ontoMgrList = ontoMgrs;
+                this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
+                    configList => {
+                        this.ontoMgrConfigList = configList;
+                        this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
+                    }
+                );
+            }
+        );
 
         this.ontoMgrList = ["it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl"];
         this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
@@ -157,7 +157,17 @@ export class CreateProjectComponent {
      * Opens a modal to configure ontology manager triple store
      */
     private configureOntoMgr() {
-        this.openConfigurationModal(this.selectedOntoMgrConfig);
+        this.openConfigurationModal(this.selectedOntoMgrConfig).then(
+            (config: any) => {
+                this.selectedOntoMgrConfig = config;
+                for (var i = 0; i < this.ontoMgrConfigList.length; i++) {
+                    if (this.ontoMgrConfigList[i].shortName == config.shortName) {
+                        this.ontoMgrConfigList[i] = config;
+                    }
+                }
+            },
+            () => {}
+        );
     }
 
     /**
@@ -270,12 +280,12 @@ export class CreateProjectComponent {
      * Opens a modal to change configurations
      */
     private openConfigurationModal(configuration: any) {
-        var modalData = new OntoMgrConfigModalData(configuration);
-        const builder = new BSModalContextBuilder<OntoMgrConfigModalData>(
-            modalData, undefined, OntoMgrConfigModalData
+        var modalData = new PluginConfigModalData(configuration);
+        const builder = new BSModalContextBuilder<PluginConfigModalData>(
+            modalData, undefined, PluginConfigModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(OntoMgrConfigModal, overlayConfig).then(
+        return this.modal.open(PluginConfigModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
