@@ -12,12 +12,10 @@ export class PluginsServices {
     constructor(private httpMgr: HttpManager) { }
     
     /**
-     * Gets the plugin factories available for the given extPoint. Returns a structure with
-     * "extPoint" (the id of the requested extensionPoint)
-     * and "plugins" (list of the plugin factories ID) 
+     * Gets the plugin factories available for the given extPoint
      * @param extensionPoint the id of the requested extensionPoint
      */
-    getAvailablePlugins(extensionPoint: string): Observable<{extPoint: string, plugins: Plugin[]}> {
+    getAvailablePlugins(extensionPoint: string): Observable<Plugin[]> {
         console.log("[PluginsServices] getAvailablePlugins");
         var params = {
             extensionPoint: extensionPoint
@@ -38,7 +36,7 @@ export class PluginsServices {
                         return 0;
                     }
                 );
-                return {extPoint: extensionPoint, plugins: plugins};
+                return plugins;
             }
         );
     }

@@ -14,6 +14,7 @@ import { AbstractTree } from "../../abstractTree";
 })
 export class PropertyTreeComponent extends AbstractTree {
     @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource
+    @Input() type: RDFResourceRolesEnum; //tells the type of the property to show in the tree
     @Input('roots') rootProperties: ARTURIResource[]; //in case the roots are provided to the component instead of being retrieved from server
 
     //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
@@ -48,10 +49,11 @@ export class PropertyTreeComponent extends AbstractTree {
         this.selectedNode = null;
 
         this.blockDivElement.nativeElement.style.display = "block";
-        /* 3 cases:
+        /* different cases:
          * - roots provided as Input: tree is build rootet on these properties
          * - roots not provided, Input resource provided: tree roots are those properties that has types of this resource as domain
-         * - roots and resource not provided: tree roots retrieved from server
+         * - type provided: initialize tree just for the given property type 
+         * - no Input provided: tree roots retrieved from server without restrinction
          */
         if (this.rootProperties) {
             this.propertyService.getPropertiesInfo(this.rootProperties).subscribe(
@@ -71,6 +73,46 @@ export class PropertyTreeComponent extends AbstractTree {
                         },
                         err => { this.blockDivElement.nativeElement.style.display = "none"; }
                     );
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            );
+        } else if (this.type == RDFResourceRolesEnum.objectProperty) {
+            this.propertyService.geTopObjectProperties().subscribe(
+                props => {
+                    this.roots = props;
+                    this.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            );
+        } else if (this.type == RDFResourceRolesEnum.annotationProperty) {
+            this.propertyService.getTopAnnotationProperties().subscribe(
+                props => {
+                    this.roots = props;
+                    this.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            );
+        } else if (this.type == RDFResourceRolesEnum.datatypeProperty) {
+            this.propertyService.getTopDatatypeProperties().subscribe(
+                props => {
+                    this.roots = props;
+                    this.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            );
+        } else if (this.type == RDFResourceRolesEnum.ontologyProperty) {
+            this.propertyService.getTopOntologyProperties().subscribe(
+                props => {
+                    this.roots = props;
+                    this.blockDivElement.nativeElement.style.display = "none";
+                },
+                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            );
+        } else if (this.type == RDFResourceRolesEnum.property) {
+            this.propertyService.getTopRDFProperties().subscribe(
+                props => {
+                    this.roots = props;
+                    this.blockDivElement.nativeElement.style.display = "none";
                 },
                 err => { this.blockDivElement.nativeElement.style.display = "none"; }
             );

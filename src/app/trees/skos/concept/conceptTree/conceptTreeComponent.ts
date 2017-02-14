@@ -51,8 +51,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.workingScheme = this.scheme;
         //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
-            this.skosService.getAllSchemesList().subscribe( //old service
-                // this.skosService.getAllSchemes().subscribe( //new service
+            this.skosService.getAllSchemes().subscribe( //new service
                 schemes => {
                     this.schemeList = schemes;
                     if (this.scheme != undefined) {

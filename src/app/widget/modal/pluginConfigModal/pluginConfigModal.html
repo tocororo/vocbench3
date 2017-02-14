@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Configuration of '{{config.shortName}}'
+    </h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh">
+
+    <table class="table table-condensed table-borderless table-hoverable">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+            <col style="width: 1%;">
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let p of config.params">
+                <td nowrap>
+                    {{p.name}}
+                    <span *ngIf="p.required">*</span>
+                </td>
+                <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
+                <td>
+                    <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <span class="pull-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -325,24 +325,6 @@ export class SkosServices {
     }
     
     //====== Scheme services ======
-    
-    /**
-     * Returns the list of available skos:ConceptScheme (old service)
-     * @param lang
-     * @return an array of schemes
-     */
-    getAllSchemesList(lang?: string) {
-        console.log("[SkosServices] getAllSchemesList");
-        var params: any = {};
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "getAllSchemesList", params, this.oldTypeService).map(
-            stResp => {
-                return Deserializer.createURIArray(stResp);
-            }
-        );
-    }
 
     /**
      * Returns the list of available skos:ConceptScheme (New service)

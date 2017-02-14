@@ -1,56 +1,63 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import {SharedModule} from "./sharedModule";
-import {TreeAndListModule} from "./treeAndListModule";
+import { SharedModule } from "./sharedModule";
+import { TreeAndListModule } from "./treeAndListModule";
 
 //services to open modals
-import {ModalServices} from "../widget/modal/modalServices";
-import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
+import { ModalServices } from "../widget/modal/modalServices";
+import { BrowsingServices } from "../widget/modal/browsingModal/browsingServices";
 
 //basic modals
-import {AlertModal} from '../widget/modal/alertModal/alertModal';
-import {ConfirmModal} from '../widget/modal/confirmModal/confirmModal';
-import {ConfirmCheckModal} from '../widget/modal/confirmModal/confirmCheckModal';
-import {DownloadModal} from '../widget/modal/downloadModal/downloadModal';
-import {FilePickerModal} from '../widget/modal/filePickerModal/filePickerModal';
-import {NewPlainLiteralModal} from '../widget/modal/newPlainLiteralModal/newPlainLiteralModal';
-import {NewResourceModal} from '../widget/modal/newResourceModal/newResourceModal';
-import {NewTypedLiteralModal} from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
-import {PromptModal} from '../widget/modal/promptModal/promptModal';
-import {PromptPrefixedModal} from '../widget/modal/promptModal/promptPrefixedModal';
-import {SelectionModal} from '../widget/modal/selectionModal/selectionModal';
-import {ResourceSelectionModal} from '../widget/modal/selectionModal/resourceSelectionModal';
-import {ContentLangModal} from '../widget/modal/contentLangModal/contentLangModal';
+import { AlertModal } from '../widget/modal/alertModal/alertModal';
+import { ConfirmModal } from '../widget/modal/confirmModal/confirmModal';
+import { ConfirmCheckModal } from '../widget/modal/confirmModal/confirmCheckModal';
+import { DownloadModal } from '../widget/modal/downloadModal/downloadModal';
+import { FilePickerModal } from '../widget/modal/filePickerModal/filePickerModal';
+import { NewPlainLiteralModal } from '../widget/modal/newPlainLiteralModal/newPlainLiteralModal';
+import { NewResourceModal } from '../widget/modal/newResourceModal/newResourceModal';
+import { NewTypedLiteralModal } from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
+import { PromptModal } from '../widget/modal/promptModal/promptModal';
+import { PromptPrefixedModal } from '../widget/modal/promptModal/promptPrefixedModal';
+import { SelectionModal } from '../widget/modal/selectionModal/selectionModal';
+import { ResourceSelectionModal } from '../widget/modal/selectionModal/resourceSelectionModal';
+import { ContentLangModal } from '../widget/modal/contentLangModal/contentLangModal';
+
+//shared modals
+import { PluginConfigModal } from "../widget/modal/pluginConfigModal/pluginConfigModal";
 
 //browsing modals
-import {ClassTreeModal} from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
-import {ClassIndividualTreeModal} from "../widget/modal/browsingModal/classIndividualTreeModal/classIndividualTreeModal";
-import {ConceptTreeModal} from '../widget/modal/browsingModal/conceptTreeModal/conceptTreeModal';
-import {InstanceListModal} from '../widget/modal/browsingModal/instanceListModal/instanceListModal';
-import {PropertyTreeModal} from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
-import {SchemeListModal} from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
-import {CollectionTreeModal} from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
+import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
+import { ClassIndividualTreeModal } from "../widget/modal/browsingModal/classIndividualTreeModal/classIndividualTreeModal";
+import { ConceptTreeModal } from '../widget/modal/browsingModal/conceptTreeModal/conceptTreeModal';
+import { InstanceListModal } from '../widget/modal/browsingModal/instanceListModal/instanceListModal';
+import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
+import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
+import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
 
 //metadata modals
-import {ImportOntologyModal} from '../config/dataManagement/metadata/importOntologyModal';
-import {PrefixNamespaceModal} from '../config/dataManagement/metadata/prefixNamespaceModal';
-import {ReplaceBaseURIModal} from '../config/dataManagement/metadata/replaceBaseURIModal';
+import { ImportOntologyModal } from '../config/dataManagement/metadata/importOntologyModal';
+import { PrefixNamespaceModal } from '../config/dataManagement/metadata/prefixNamespaceModal';
+import { ReplaceBaseURIModal } from '../config/dataManagement/metadata/replaceBaseURIModal';
 
 //alignment modals
-import {ValidationSettingsModal} from '../alignment/alignmentValidation/validationSettingsModal/validationSettingsModal';
-import {ValidationReportModal} from '../alignment/alignmentValidation/validationReportModal/validationReportModal';
-import {ResourceAlignmentModal} from '../alignment/resourceAlignment/resourceAlignmentModal';
-import {BrowseExternalResourceModal} from '../alignment/resourceAlignment/browseExternalResourceModal';
+import { ValidationSettingsModal } from '../alignment/alignmentValidation/validationSettingsModal/validationSettingsModal';
+import { ValidationReportModal } from '../alignment/alignmentValidation/validationReportModal/validationReportModal';
+import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
+import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
 
 //project config modal
-import {OntoMgrConfigModal} from "../project/createProject/ontoMgrConfigModal";
-import {RemoteAccessConfigModal} from "../project/createProject/remoteAccessConfigModal";
-import {ProjectPropertiesModal} from "../project/projectPropertiesModal";
+import { OntoMgrConfigModal } from "../project/createProject/ontoMgrConfigModal";
+import { RemoteAccessConfigModal } from "../project/createProject/remoteAccessConfigModal";
+import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 
 //administration modal
-import {UserProjBindingModal} from "../administration/userProjBindingModal";
+import { UserProjBindingModal } from "../administration/userProjBindingModal";
+
+//export modals
+import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
+
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule],
@@ -62,8 +69,8 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal,
-        UserProjBindingModal
+        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
+        PluginConfigModal, FilterGraphsModal
     ],
     exports: [],
     providers: [ModalServices, BrowsingServices],
@@ -83,8 +90,8 @@ import {UserProjBindingModal} from "../administration/userProjBindingModal";
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, 
-        UserProjBindingModal
+        OntoMgrConfigModal, RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
+        PluginConfigModal, FilterGraphsModal
     ]
 })
 export class VBModalModule { }

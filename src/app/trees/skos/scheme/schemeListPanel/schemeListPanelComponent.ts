@@ -41,7 +41,6 @@ export class SchemeListPanelComponent {
     }
 
     private initList() {
-        // this.skosService.getAllSchemesList(this.vbCtx.getContentLanguage(true)).subscribe( //old service
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 this.schemeList = schemeList;

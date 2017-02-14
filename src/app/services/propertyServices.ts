@@ -34,6 +34,96 @@ export class PropertyServices {
     }
 
     /**
+     * Returns a list of top Rdf Properties (properties which have not a superProperty)
+     * @return an array of Properties
+     */
+    getTopRDFProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getTopRDFProperties");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var topProperties = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topProperties.length; i++) {
+                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topProperties;
+            }
+        );
+    }
+
+    /**
+     * Returns a list of top object properties (properties which have not a superProperty)
+     * @return an array of Properties
+     */
+    geTopObjectProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] geTopObjectProperties");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "geTopObjectProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var topProperties = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topProperties.length; i++) {
+                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topProperties;
+            }
+        );
+    }
+
+    /**
+     * Returns a list of top datatype properties (properties which have not a superProperty)
+     * @return an array of Properties
+     */
+    getTopDatatypeProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getTopDatatypeProperties");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var topProperties = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topProperties.length; i++) {
+                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topProperties;
+            }
+        );
+    }
+
+    /**
+     * Returns a list of top annotation properties (properties which have not a superProperty)
+     * @return an array of Properties
+     */
+    getTopAnnotationProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getTopAnnotationProperties");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var topProperties = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topProperties.length; i++) {
+                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topProperties;
+            }
+        );
+    }
+
+    /**
+     * Returns a list of top ontology properties (properties which have not a superProperty)
+     * @return an array of Properties
+     */
+    getTopOntologyProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getTopOntologyProperties");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params, this.oldTypeService, true).map(
+            stResp => {
+                var topProperties = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < topProperties.length; i++) {
+                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
+                }
+                return topProperties;
+            }
+        );
+    }
+
+    /**
      * Returns the subProperty of the given property
      * @param property
      * @return an array of subProperties
@@ -106,7 +196,7 @@ export class PropertyServices {
      *              or typedLiteral, then represent the admitted datatypes);
      * - customRange, an optional CustomRange object only if the property has custom ranges
      */
-    getRange(property: ARTURIResource): Observable<{ranges: {type: string, rangeCollection: ARTURIResource[]}, customRange: CustomRange}> {
+    getRange(property: ARTURIResource): Observable<{ranges: {type: RangeType, rangeCollection: ARTURIResource[]}, customRange: CustomRange}> {
         console.log("[PropertyServices] getRange");
         var params: any = {
             property: property,
@@ -140,7 +230,6 @@ export class PropertyServices {
                     }
                     customRange.setEntries(crEntries);
                 }
-                console.log(ranges, customRange);
                 return {ranges: ranges, customRange: customRange};
             }
         );
@@ -417,3 +506,5 @@ export class PropertyServices {
     }
     
 }
+
+type RangeType = "resource" | "plainLiteral" | "typedLiteral" | "literal" | "undetermined" | "inconsistent";

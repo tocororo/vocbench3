@@ -61,8 +61,14 @@ export class ExportServices {
     /**
      * decide the format of filteringSteps
      */
-    export(graphs: ARTURIResource[], filteringSteps: any[], outputFormat?: RDFFormat, force?: boolean) {
-
-    }
+    export(graphs: ARTURIResource[], filteringSteps: string, outputFormat?: RDFFormat, force?: boolean) {
+        console.log("[ExportServices] export");
+        var params = {
+            graphs: graphs,
+            filteringSteps: filteringSteps,
+            outputFormat: outputFormat.name
+        };
+        return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params, this.oldTypeService, true);
+    }   
 
 }

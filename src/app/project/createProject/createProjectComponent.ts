@@ -119,26 +119,26 @@ export class CreateProjectComponent {
             }
         );
 
-        for (var i = 0; i < this.extPointList.length; i++) {
-            var extPoint: any = {};
-            this.extPointStructList.push(extPoint);
-            extPoint.id = this.extPointList[i];
-            extPoint.selectedExtPointPluginId = "---";
-            extPoint.selectedExtPointPlugin = { id: null, configurations: null, selectedConfigType: null };
-            //extPoint.plugins
-            this.pluginService.getAvailablePlugins(this.extPointList[i]).subscribe(
-                extPointPlugins => {
-                    var xp = extPointPlugins.extPoint;
-                    var plugins = extPointPlugins.plugins;
-                    for (var j = 0; j < this.extPointStructList.length; j++) {
-                        if (this.extPointStructList[j].id == xp) {
-                            this.extPointStructList[j].plugins = plugins;
-                            break;
-                        }
-                    }
-                }
-            );
-        }
+        // for (var i = 0; i < this.extPointList.length; i++) {
+        //     var extPoint: any = {};
+        //     this.extPointStructList.push(extPoint);
+        //     extPoint.id = this.extPointList[i];
+        //     extPoint.selectedExtPointPluginId = "---";
+        //     extPoint.selectedExtPointPlugin = { id: null, configurations: null, selectedConfigType: null };
+        //     //extPoint.plugins
+        //     this.pluginService.getAvailablePlugins(this.extPointList[i]).subscribe(
+        //         extPointPlugins => {
+        //             var xp = extPointPlugins.extPoint;
+        //             var plugins = extPointPlugins.plugins;
+        //             for (var j = 0; j < this.extPointStructList.length; j++) {
+        //                 if (this.extPointStructList[j].id == xp) {
+        //                     this.extPointStructList[j].plugins = plugins;
+        //                     break;
+        //                 }
+        //             }
+        //         }
+        //     );
+        // }
     }
 
     /**
