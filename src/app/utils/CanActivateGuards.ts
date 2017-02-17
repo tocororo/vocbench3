@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {UserServices} from '../services/userServices';
+import { Injectable } from '@angular/core';
+import { CanActivate, CanDeactivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { VocbenchCtx } from './VocbenchCtx';
+import { ModalServices } from "../widget/modal/modalServices";
+import { UserServices } from '../services/userServices';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -47,4 +48,37 @@ export class ProjectGuard implements CanActivate {
     }
 }
 
-export const GUARD_PROVIDERS = [AuthGuard, ProjectGuard];
+/**
+ * Each component that wants to use a CanDeactivate guard must implements this interface
+ * and its method canDeactivate()
+ */
+export interface CanDeactivateOnChangesComponent {
+    hasUnsavedChanges: () => boolean | Observable<boolean>;
+}
+@Injectable()
+export class UnsavedChangesGuard implements CanDeactivate<CanDeactivateOnChangesComponent> {
+
+    constructor(private modalService: ModalServices) { }
+
+    canDeactivate(component: CanDeactivateOnChangesComponent): boolean | Observable<boolean> {
+        //check if component has hasUnsavedChanges method, in case evaluate it
+        if (component.hasUnsavedChanges) {
+            if (component.hasUnsavedChanges()) {
+                return Observable.fromPromise(
+                    this.modalService.confirm("Warning", "There could be unsaved changes. Do you want to leave this page and discard the changes",
+                            "warning").then(
+                        yes => { return true },
+                        no => { return false }
+                    )
+                );
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+}
+
+export const GUARD_PROVIDERS = [AuthGuard, ProjectGuard, UnsavedChangesGuard];

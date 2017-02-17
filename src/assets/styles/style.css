@@ -140,10 +140,11 @@ rdf-resource > .rdfResourceIcon {
     height: 16px;
     margin-right: 5px;
 }
-rdf-resource .flagIcon {
+
+.flagIcon {
     position: relative;
 }
-rdf-resource .flagIcon > span{
+.flagIcon > span{
     position: absolute;
     top: 1px;
     left: 0px;

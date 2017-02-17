@@ -1,6 +1,6 @@
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuard, ProjectGuard} from "./utils/CanActivateGuards";
+import {AuthGuard, ProjectGuard, UnsavedChangesGuard} from "./utils/CanActivateGuards";
 
 import {HomeComponent} from "./homeComponent";
 import {ProjectComponent} from "./project/projectComponent";
@@ -33,7 +33,7 @@ export const routes: Routes = [
     {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
-    {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard]},
+    {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard], canDeactivate: [UnsavedChangesGuard]},
     // {path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard]}, 
     {path: "Test", component: TestComponent},
     //lazy loading of module with child route

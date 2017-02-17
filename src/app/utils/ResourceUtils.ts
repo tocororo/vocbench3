@@ -1,13 +1,12 @@
-import {ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
-    ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum} from "../models/ARTResources";
+import {
+    ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
+    ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
+} from "../models/ARTResources";
+import { Languages } from "../models/LanguagesCountries"
 
 export class ResourceUtils {
 
-    // private static classImgSrc = require("../../assets/images/class.png");
-    // private static classImportedImgSrc = require("../../assets/images/class_imported.png");
-
-    private static availableFlagLang = ["ar", "cs", "de", "el", "en", "en-US", "en-GB", "es", "fr", "hi", "it", "ja", 
-            "ko", "nl", "pt", "ru", "th", "tr", "uk", "zh"];
+    private static availableFlagLang = Languages.getLanguageTagList();
 
     static getImageSrc(rdfResource: ARTNode): string {
 
@@ -26,7 +25,7 @@ export class ResourceUtils {
         var propImgSrc = require("../../assets/images/prop.png");
         var propImportedImgSrc = require("../../assets/images/prop_imported.png");
         var propObjectImgSrc = require("../../assets/images/propObject.png");
-        var propObjectImportedImgSrc = require("../../assets/images/propObject_imported.png");       
+        var propObjectImportedImgSrc = require("../../assets/images/propObject_imported.png");
         var propDatatypeImgSrc = require("../../assets/images/propDatatype.png");
         var propDatatypeImportedImgSrc = require("../../assets/images/propDatatype_imported.png");
         var propAnnotationImgSrc = require("../../assets/images/propAnnotation.png");
@@ -38,7 +37,7 @@ export class ResourceUtils {
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
-                    rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
+                rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
                 if (!explicit) {
                     imgSrc = classImportedImgSrc;
@@ -63,7 +62,7 @@ export class ResourceUtils {
                 if (!explicit) {
                     imgSrc = propObjectImportedImgSrc;
                 } else {
-                    imgSrc = propObjectImgSrc;       
+                    imgSrc = propObjectImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.skosCollection.toLowerCase()) {
                 if (!explicit) {
@@ -105,12 +104,8 @@ export class ResourceUtils {
                 imgSrc = ontologyImgSrc;
             } else if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
                 let lang: string = rdfResource.getAdditionalProperty(ResAttribute.LANG);
-                if (lang != undefined && lang != null) {
-                    if (this.availableFlagLang.indexOf(lang) != -1) {
-                        imgSrc = require("../../assets/images/flags/flag_" + lang + ".png");    
-                    } else {
-                        imgSrc = require("../../assets/images/flags/flag_unknown.png");    
-                    }
+                if (lang != null) {
+                    imgSrc = this.getFlagImgSrc(lang);
                 } else {
                     if (!explicit) {
                         imgSrc = xLabelImportedImgSrc;
@@ -121,17 +116,13 @@ export class ResourceUtils {
             }
         } else if (rdfResource.isLiteral()) {
             let lang: string = (<ARTLiteral>rdfResource).getLang();
-            if (lang != undefined && lang != null && lang != "") {
-                if (this.availableFlagLang.indexOf(lang) != -1) {
-                    imgSrc = require("../../assets/images/flags/flag_" + lang + ".png");
-                } else {
-                    imgSrc = require("../../assets/images/flags/flag_unknown.png");
-                }
+            if (lang != null) {
+                imgSrc = this.getFlagImgSrc(lang);
             }
         }
         return imgSrc;
     };
-    
+
     /**
      * Available values for action are: "create" and "delete"
      */
@@ -139,7 +130,7 @@ export class ResourceUtils {
         var imgSrc: string;
         var role = rdfResource.getRole().toLowerCase();
         if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
-            imgSrc = require("../../assets/images/class_" + action + ".png");    
+            imgSrc = require("../../assets/images/class_" + action + ".png");
         } else if (role == RDFResourceRolesEnum.concept.toLowerCase()) {
             imgSrc = require("../../assets/images/concept_" + action + ".png");
         } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
@@ -159,9 +150,15 @@ export class ResourceUtils {
         }
         return imgSrc;
     }
-    
+
     static getFlagImgSrc(langTag: string): string {
-        return require("../../assets/images/flags/flag_" + langTag + ".png");
+        var imgSrc: string;
+        if (langTag != null && this.availableFlagLang.indexOf(langTag) != -1) {
+            imgSrc = require("../../assets/images/flags/flag_" + langTag + ".png");
+        } else {
+            imgSrc = require("../../assets/images/flags/flag_unknown.png");
+        }
+        return imgSrc;
     }
 
 }

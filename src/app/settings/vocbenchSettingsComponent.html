@@ -6,42 +6,85 @@
         </div>
        
         <div class="panel-body vbox">
-            <div class="scrollableContainer">
                 
-                <div class="subPanel">
-                    <div class="subPanel-heading">
-                        <label style="flex: 1">Resource view mode:</label>
-                    </div>
-                    <div class="subPanel-body">
-                        <div class="hbox">
-                            <div class="vbox" style="margin-right: 8px;">
-                                <select class="form-control input-sm" style="margin-bottom: 5px;"
-                                    [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChanged()">
-                                    <option value="splitted">Splitted</option>
-                                    <option value="tabbed">Tabbed</option>
-                                </select>
-                                <div *ngIf="resViewMode == 'tabbed'" class="alert alert-info" role="alert">
-                                    The Resource View is shown in a tab and multiple Resource View
-                                    can be open in different tabs. The first tab cannot be closed and is 
-                                    always synched with the resource selected in the tree/list.
-                                </div>
-                                <div *ngIf="resViewMode == 'splitted'" class="alert alert-info" role="alert">
-                                    The Resource View panel is splitted in two: on the left there is a main Resource View
-                                    which describes (and is synched with) the resource selected in the tree/list;
-                                    on the right there is an optional secondary Resource View which describes a resource
-                                    selected (double click) from the main Resource View.
-                                </div>
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Resource view mode:</label>
+                </div>
+                <div class="subPanel-body">
+                    <div class="hbox">
+                        <div class="vbox" style="margin-right: 8px;">
+                            <select class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="resViewMode">
+                                <option value="splitted">Splitted</option>
+                                <option value="tabbed">Tabbed</option>
+                            </select>
+                            <div *ngIf="resViewMode == 'tabbed'" class="alert alert-info" role="alert">
+                                The Resource View is shown in a tab and multiple Resource View can be open in different tabs.
+                                The first tab cannot be closed and is always synched with the resource selected in the tree/list.
                             </div>
-                            <div>
-                                <img *ngIf="resViewMode == 'tabbed'" src="../../assets/images/res_view_tabbed.jpg">
-                                <img *ngIf="resViewMode == 'splitted'" src="../../assets/images/res_view_splitted.jpg">
+                            <div *ngIf="resViewMode == 'splitted'" class="alert alert-info" role="alert">
+                                The Resource View panel is splitted in two: on the left there is a main Resource View which describes
+                                (and is synched with) the resource selected in the tree/list; on the right there is an optional
+                                secondary Resource View which describes a resource selected (double click) from the main Resource View.
                             </div>
                         </div>
+                        <div>
+                            <img *ngIf="resViewMode == 'tabbed'" src="../../assets/images/res_view_tabbed.jpg">
+                            <img *ngIf="resViewMode == 'splitted'" src="../../assets/images/res_view_splitted.jpg">
+                        </div>
+                    </div>
                         
+                </div>
+            </div>
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Languages:</label>
+                    <span *ngIf="areAllLangDeselected()" class="greyText" style="margin-right: 5px;">
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        No language selected implicitly means every language
+                    </span>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
+                            <span class="glyphicon glyphicon-check"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
+                            <span class="glyphicon glyphicon-unchecked"></span>
+                        </button>
                     </div>
                 </div>
-                
+                <div class="subPanel-body scrollableContainer">
+                    
+                    <table class="table table-condensed table-borderless table-hoverable">
+                        <colgroup>
+                            <col style="width: 1%">
+                            <col style="width: 1%">
+                            <col style="width: 1%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr *ngFor="let l of renderingLangs">
+                                <td><input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.checked"></td>
+                                <td nowrap>{{l.lang.tag}}</td>
+                                <td>
+                                    <!--<img [src]="getFlagImgSrc(l.lang.tag)">-->
+                                    <img *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(l.lang.tag)">
+                                    <div *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
+                                        <img [src]="getFlagImgSrc(l.lang.tag)">
+                                        <span>{{l.lang.tag}}</span>
+                                    </div>
+                                </td>
+                                <td>{{l.lang.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            
+        </div>
+
+        <div class="panel panel-footer">
+            <button class="btn btn-default btn-sm pull-right" (click)="save()">Save</button>
         </div>
         
     </div>

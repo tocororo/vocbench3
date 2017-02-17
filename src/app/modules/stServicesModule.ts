@@ -18,6 +18,7 @@ import { MetadataServices } from "../services/metadataServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
 import { OwlServices } from "../services/owlServices";
 import { PluginsServices } from "../services/pluginsServices";
+import { PreferencesServices } from "../services/preferencesServices";
 import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
@@ -50,6 +51,7 @@ import { UserServices } from "../services/userServices";
         OntoManagerServices,
         OwlServices,
         PluginsServices,
+        PreferencesServices,
         ProjectServices,
         PropertyServices,
         RefactorServices,

@@ -35,7 +35,7 @@ export class Countries {
 
 export class Languages {
     
-    static languageList = [
+    static languageList: {name: string, tag: string}[] = [
         { name: "Arabic", tag: "ar" },
         { name: "Czech", tag: "cs" },
         { name: "German", tag: "de" },
@@ -57,5 +57,13 @@ export class Languages {
         { name: "Ukrainian", tag: "uk" },
         { name: "Chinese", tag: "zh" }
     ];
+
+    static getLanguageTagList(): string[] {
+        var langTags: string[] = [];
+        for (var i = 0; i < Languages.languageList.length; i++) {
+            langTags.push(Languages.languageList[i].tag);
+        }
+        return langTags;
+    }
     
 }
