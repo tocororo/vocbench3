@@ -86,12 +86,14 @@ config-bar {
     flex-flow: column;
     flex: 1;
     min-height: 0;
+    min-width: 0;
 }
 
 .hbox {
     display: flex;
     flex-flow: row;
     flex: 1;
+    min-height: 0;
     min-width: 0;
 }
 
