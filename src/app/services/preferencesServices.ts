@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {PropertyLevel, ResourceViewMode} from "../models/Preferences";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { PropertyLevel } from "../models/Preferences";
 
 @Injectable()
 export class PreferencesServices {
@@ -10,7 +10,7 @@ export class PreferencesServices {
     private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
-    
+
     /**
      * Gets the rendering languages preference
      * @param level tells at which level to get the property
@@ -37,35 +37,5 @@ export class PreferencesServices {
         };
         return this.httpMgr.doGet(this.serviceName, "setLanguages", params, this.oldTypeService, true);
     }
-
-    /**
-     * Gets the rendering languages preference
-     * @param level tells at which level to get the property
-     * @return a list of language tag. If the list has just one element "*", it means "all languages"
-     */
-    getResourceViewMode(level: PropertyLevel): Observable<ResourceViewMode> {
-        console.log("[PreferencesServices] getResourceViewMode");
-        var params = {
-            level: level
-        };
-        return this.httpMgr.doGet(this.serviceName, "getResourceViewMode", params, this.oldTypeService, true);
-    }
-
-    /**
-     * Sets the rendering languages preference
-     * @param languages list of languages, list with just one element "*" in order to set "all languages"
-     * @param level tells at which level to set the property
-     */
-    setResourceViewMode(resViewMode: ResourceViewMode, level: PropertyLevel) {
-        console.log("[PreferencesServices] setResourceViewMode");
-        var params = {
-            resViewMode: resViewMode,
-            level: level
-        };
-        return this.httpMgr.doGet(this.serviceName, "setResourceViewMode", params, this.oldTypeService, true);
-    }
-
-
-    
 
 }

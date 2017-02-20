@@ -1,5 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ARTURIResource, ARTResource } from '../models/ARTResources';
+import { ResourceViewMode } from '../models/Preferences';
 
 /**
  * This class need to be injected in constructor of every Component that throws or subscribes to an event.
@@ -66,6 +67,9 @@ export class VBEventHandler {
     //MISC EVENTS 
     //data loaded/imported/removed => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter<any>("refreshDataBroadcastEvent");
+
+    //user changes resourceViewMode preference => resource view panel need to be updated
+    public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter<any>("resViewModeChangedEvent");
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 

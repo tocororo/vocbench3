@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { UnsavedChangesGuard, CanDeactivateOnChangesComponent } from "../utils/CanActivateGuards";
+import { Cookie } from "../utils/Cookie";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { PreferencesServices } from "../services/preferencesServices";
 import { PropertyLevel, ResourceViewMode } from "../models/Preferences";
 import { Languages } from "../models/LanguagesCountries";
@@ -12,15 +14,13 @@ import { Languages } from "../models/LanguagesCountries";
 })
 export class VocbenchSettingsComponent implements CanDeactivateOnChangesComponent {
 
-    //TODO when resViewMode change, emit event and refresh the resource view in Data
-
     private resViewMode: ResourceViewMode;
     private pristineResViewMode: ResourceViewMode;
 
     private pristineRenderingLangs: { lang: { name: string, tag: string }, checked: boolean }[];
     private renderingLangs: { lang: { name: string, tag: string }, checked: boolean }[];
 
-    constructor(private prefService: PreferencesServices) { }
+    constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
         this.prefService.getLanguages(PropertyLevel.USER).subscribe(
@@ -43,12 +43,11 @@ export class VocbenchSettingsComponent implements CanDeactivateOnChangesComponen
                 this.pristineRenderingLangs = JSON.parse(JSON.stringify(this.renderingLangs));
             }
         );
-        this.prefService.getResourceViewMode(PropertyLevel.USER).subscribe(
-            rvMode => {
-                this.resViewMode = rvMode;
-                this.pristineResViewMode = rvMode;
-            }
-        );
+        this.resViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);
+        if (this.resViewMode != "splitted" && this.resViewMode != "tabbed") {
+            this.resViewMode = "tabbed"; //default
+        }
+        this.pristineResViewMode = this.resViewMode;
     }
 
     //res view mode handlers
@@ -91,10 +90,9 @@ export class VocbenchSettingsComponent implements CanDeactivateOnChangesComponen
 
     private save() {
         if (this.isResViewModeChanged()) {
-            this.prefService.setResourceViewMode(this.resViewMode, PropertyLevel.USER).subscribe(
-                //update the pristine value
-                stResp => { this.pristineResViewMode = this.resViewMode; }
-            );
+            Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, this.resViewMode);
+            this.pristineResViewMode = this.resViewMode;
+            this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
         }
         if (this.isRenderingLanguagesChanged()) {
             //collect the checked languages
