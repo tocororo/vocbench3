@@ -6,7 +6,9 @@ import { Languages } from "../models/LanguagesCountries"
 
 export class ResourceUtils {
 
-    private static availableFlagLang = Languages.getLanguageTagList();
+    private static availableFlagLang = ["ar", "cs", "da", "de", "el", "en", "en-GB", "en-US",
+        "es", "fa", "fr", "hi", "hu", "it", "ja", "ko", "nl", "pl", "pt", "ro", "ru", "sk",
+        "sv", "th", "tr", "uk", "zh"];
 
     static getImageSrc(rdfResource: ARTNode): string {
 

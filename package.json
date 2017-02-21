@@ -26,7 +26,7 @@
     "jquery": "2.2.3",
     "angular2-modal": "2.0.2",
     "codemirror": "5.14.2",
-    "yasgui-yasqe": "2.11.2"
+    "yasgui-yasqe": "2.11.7"
   },
   "devDependencies": {
     "@types/node": "^6.0.45",

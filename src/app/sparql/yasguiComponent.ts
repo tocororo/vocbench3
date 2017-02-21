@@ -188,6 +188,11 @@ export class YasguiComponent {
                 return YASQE.Autocompleters.properties.isValidCompletionPosition(yasqe);
             },
             get: function(token: any, callback: any) {
+                //I don't know why, event if isValidCompletionPosition returns false, get is called, so I prevent to call searchResource
+                //by stopping get function if token is a white space or a "error" token
+                if (token.type == "ws" || token.type == "error") {
+                    return;
+                }
                 searchService.searchResource(token.autocompletionString, ["property"], false, true, "start").subscribe(
                     (results: ARTURIResource[]) => {
                         var resArray: string[] = [];
