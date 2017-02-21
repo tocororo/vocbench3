@@ -50,12 +50,7 @@ export class HttpManager {
      *      (e.g. see deleteScheme in skos or skosxl services)
      */
     doGet(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
-        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
-        if (oldType) {
-            url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
-        } else {
-            url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
-        }
+        var url: string = this.getRequestBaseUrl(service, request, oldType);
 
         //add parameters
         url += this.getParametersForUrl(params);
@@ -107,12 +102,7 @@ export class HttpManager {
      *      Is useful to handle the error from the component that invokes the service.
      */
     doPost(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
-        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
-        if (oldType) {
-            url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
-        } else {
-            url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
-        }
+        var url: string = this.getRequestBaseUrl(service, request, oldType);
 
         //add ctx parameters
         url += this.getContextParametersForUrl();
@@ -164,14 +154,11 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
+     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
+     *      Is useful to handle the error from the component that invokes the service.
      */
     uploadFile(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
-        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
-        if (oldType) {
-            url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
-        } else {
-            url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
-        }
+        var url: string = this.getRequestBaseUrl(service, request, oldType);
 
         //add ctx parameters
         url += this.getContextParametersForUrl();
@@ -213,37 +200,110 @@ export class HttpManager {
     }
 
     /**
-     * Execute a GET to download a file as Blob object
+     * Execute a request to download a file as Blob object
+     * @param service the service name
+     * @param request the request name
+     * @param params the parameters to send in the request. This parameter must be an object like:
+     *  { 
+	 * 	   "urlParName1" : "urlParValue1",
+	 * 	   "urlParName2" : "urlParValue2",
+	 * 	   "urlParName3" : "urlParValue3",
+	 *  }
+     * @param oldType tells if the request is for the old services or new ones
+     * @param post tells if the download is done via post-request (e.g. Export.export() service)
+     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
+     *      Is useful to handle the error from the component that invokes the service.
      */
-    downloadFile(service: string, request: string, params: any, oldType: boolean) {
+    downloadFile(service: string, request: string, params: any, oldType: boolean, post?: boolean, skipErrorAlert?: boolean) {
+        var url: string = this.getRequestBaseUrl(service, request, oldType);
+
+        if (post) {
+            //add ctx parameters
+            url += this.getContextParametersForUrl();
+
+            console.log("[POST]: " + url);
+            //prepare POST data
+            var postData: any = this.getPostData(params);
+            var headers = new Headers();
+            headers.append('Content-Type', 'application/x-www-form-urlencoded');
+            var options = new RequestOptions({
+                headers: headers,
+                withCredentials: true,
+                responseType: ResponseContentType.ArrayBuffer
+            });
+
+            return this.http.post(url, postData, options)
+                .map(
+                    res => { return this.arrayBufferRespHanlder(res); }
+                ).catch(
+                    error => { return this.handleError(error, skipErrorAlert) }
+                );
+        } else { //GET
+            //add parameters
+            url += this.getParametersForUrl(params);
+            url += this.getContextParametersForUrl();
+
+            console.log("[GET]: " + url);
+
+            var options = new RequestOptions({
+                headers: new Headers(),
+                withCredentials: true,
+                responseType: ResponseContentType.ArrayBuffer
+            });
+
+            //execute request
+            return this.http.get(url, options)
+                .map(
+                    res => { return this.arrayBufferRespHanlder(res); }
+                ).catch(
+                    error => { return this.handleError(error, skipErrorAlert) }
+                );
+        }
+
+    }
+
+    /**
+     * Handle the response of downloadFile that returns an array buffer.
+     * This method check if the response is xml, in case it could be an xml error response.
+     * In case, throws an error containing the error message in the response.
+     */
+    private arrayBufferRespHanlder(res: Response) {
+        var arrayBuffer = res.arrayBuffer();
+        var respContType = res.headers.get("content-type");
+        if (respContType.includes("application/xml;")) { //could be an error xml response
+            //convert arrayBuffer to xml Document
+            var respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
+            var xmlResp = new DOMParser().parseFromString(respContentAsString, "application/xml");
+            if (STResponseUtils.isErrorResponse(xmlResp)) { //is an error
+                throw new Error(STResponseUtils.getErrorResponseMessage(xmlResp));
+            } else { //not an error => return a blob
+                var blobResp = new Blob([arrayBuffer], { type: respContType });
+                return blobResp;
+            }
+        } else { //not xml => return a blob
+            var blobResp = new Blob([arrayBuffer], { type: respContType });
+            return blobResp;
+        }
+    }
+
+    /**
+     * Composes and returns the base part of the URL of a request.
+     * "http://<serverhost>/<serverpath>/<groupId>/<artifactId>/<service>/<request>?... for new services
+     * "http://<serverhost>/<serverpath>/resources/stserver/STServer?<service>&<request>&... for old services
+     * @param service the service name
+     * @param request the request name
+     * @param oldType tells if the request is for the old services or new ones
+     * 
+     */
+    private getRequestBaseUrl(service: string, request: string, oldType: boolean): string {
         var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {
             url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         }
-
-        //add parameters
-        url += this.getParametersForUrl(params);
-        url += this.getContextParametersForUrl();
-
-        console.log("[GET]: " + url);
-
-        var options = new RequestOptions({
-            headers: new Headers(),
-            withCredentials: true,
-            responseType: ResponseContentType.Blob
-        });
-
-        //execute request
-        return this.http.get(url, options)
-            .map(res => {
-                    return new Blob([res.blob()]);
-            })
-            .catch(error => {
-                return this.handleError(error);
-            });
-    }    
+        return url;
+    }
 
     /**
      * Returns the url parameters to append to the request 

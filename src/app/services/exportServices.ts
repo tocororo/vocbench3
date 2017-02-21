@@ -59,16 +59,28 @@ export class ExportServices {
     }
 
     /**
-     * decide the format of filteringSteps
+     * @param graphs array of named graphs to export. If the array is empty all the graphs are 
+     *  copied to the target dataset to be exported
+     * @param filteringPipeline a JSON string representing an array of FilteringStep.
+     *  Each filter is applied to a subset of the exported graphs. No graph means every exported graph.
+     *  An example is [{"filter": {"factoryId": string, "properties": { <key>: <value>, ...}}}]
+     * @param outputFormat the output format. If it does not support graphs, the exported graph are
+     *  merged into a single graph
+     * @param force if true tells the service to proceed despite the presence of triples in the null
+	 *  context or in graphs named by blank nodes. Otherwise, under this conditions the service
+	 *  would fail, so that available information is not silently ignored
      */
-    export(graphs: ARTURIResource[], filteringSteps: string, outputFormat?: RDFFormat, force?: boolean) {
+    export(graphs: ARTURIResource[], filteringPipeline: string, outputFormat?: RDFFormat, force?: boolean) {
         console.log("[ExportServices] export");
-        var params = {
+        var params: any = {
             graphs: graphs,
-            filteringSteps: filteringSteps,
+            filteringPipeline: filteringPipeline,
             outputFormat: outputFormat.name
         };
-        return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params, this.oldTypeService, true);
+        if (force != null) {
+            params.force = force;
+        }
+        return this.httpMgr.downloadFile(this.serviceName, "export", params, this.oldTypeService, true, true);
     }   
 
 }

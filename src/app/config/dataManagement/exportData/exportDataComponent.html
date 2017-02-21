@@ -50,11 +50,11 @@
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
                         <button class="btn btn-default" style="padding: 1px 5px;" title="Move down"  (click)="moveFilterDown()"
-                            [disabled]="isSelectedFilterLast()">
+                            [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </button>
                         <button class="btn btn-default" style="padding: 1px 5px;" title="Move up" (click)="moveFilterUp()"
-                            [disabled]="isSelectedFilterFirst()">
+                            [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                             <span class="glyphicon glyphicon-chevron-up"></span>
                         </button>
                     </div>
@@ -65,7 +65,7 @@
                         Each filter is applied to a subset of the exported graphs. No graph means every exported graph.
                         <button class="close" data-dismiss="alert"><span>&times;</span></button>
                     </div>
-                    <table class="table table-condensed table-borderless table-hoverable">
+                    <table class="table table-condensed table-hoverable">
                         <colgroup>
                             <col style="width: 5%">
                             <col>

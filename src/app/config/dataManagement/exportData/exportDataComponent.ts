@@ -301,10 +301,10 @@ export class ExportDataComponent {
             }
         }
 
-        var filteringSteps: any[] = [];
+        var filteringPipeline: any[] = [];
         for (var i = 0; i < this.filtersChain.length; i++) {
             var filterStep: {filter: {factoryId: string, properties: any}, graphs?: string[]} = {filter: null};
-            //filter
+            //filter: factoryId and properties
             var filter: {factoryId: string, properties: any} = {
                 factoryId: this.filtersChain[i].selectedPlugin.plugin.factoryID,
                 properties: null
@@ -328,15 +328,34 @@ export class ExportDataComponent {
                 filterStep.graphs = graphs;
             }
 
-            filteringSteps.push(filterStep);
+            filteringPipeline.push(filterStep);
         }
 
-        // console.log(graphsToExport);
-        // console.log(JSON.stringify(filteringSteps));
-        // console.log(this.selectedExportFormat);
-
-        // document.getElementById("blockDivFullScreen").style.display = "block";
-        this.exportService.export(graphsToExport, JSON.stringify(filteringSteps), this.selectedExportFormat);
+        document.getElementById("blockDivFullScreen").style.display = "block";
+        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat).subscribe(
+            blob => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+                var exportLink = window.URL.createObjectURL(blob);
+                this.modalService.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+            },
+            err => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+                this.modalService.confirm("Warning", err + " Do you want to force the export?", "warning").then(
+                    yes => {
+                        document.getElementById("blockDivFullScreen").style.display = "block";
+                        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat, true).subscribe(
+                            blob => {
+                                document.getElementById("blockDivFullScreen").style.display = "none";
+                                var exportLink = window.URL.createObjectURL(blob);
+                                this.modalService.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+                            }
+                        );
+                    },
+                    no => {}
+                );
+                
+            }
+        );
 
     }
 

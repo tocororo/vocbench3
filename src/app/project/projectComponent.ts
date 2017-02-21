@@ -97,9 +97,8 @@ export class ProjectComponent implements OnInit {
             return;
         }
         this.projectService.exportProject(this.selectedProject).subscribe(
-            stResp => {
-                var data = new Blob([stResp], {type: "octet/stream"});
-                var exportLink = window.URL.createObjectURL(data);
+            blob => {
+                var exportLink = window.URL.createObjectURL(blob);
                 this.modalService.downloadLink("Export project", null, exportLink, "export.zip");
             }
         );

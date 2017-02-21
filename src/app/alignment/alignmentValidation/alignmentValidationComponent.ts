@@ -358,9 +358,8 @@ export class AlignmentValidationComponent {
     
     private export() {
         this.alignmentService.exportAlignment().subscribe(
-            stResp => {
-                var data = new Blob([stResp], {type: "octet/stream"});
-                var exportLink = window.URL.createObjectURL(data);
+            blob => {
+                var exportLink = window.URL.createObjectURL(blob);
                 this.modalService.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
             }
         );
