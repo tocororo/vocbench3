@@ -65,7 +65,7 @@ export class VBEventHandler {
 
 
     //MISC EVENTS 
-    //data loaded/imported/removed => trees/lists need to be resfreshed
+    //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter<any>("refreshDataBroadcastEvent");
 
     //user changes resourceViewMode preference => resource view panel need to be updated

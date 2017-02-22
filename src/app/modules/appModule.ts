@@ -39,6 +39,7 @@ import {IcvComponent} from "../icv/icvComponent";
 import {ImportDataComponent} from "../config/dataManagement/importData/importDataComponent";
 import {ExportDataComponent} from "../config/dataManagement/exportData/exportDataComponent";
 import {MetadataManagementComponent} from "../config/dataManagement/metadata/metadataManagementComponent";
+import {RefactorComponent} from "../config/dataManagement/refactor/refactorComponent";
 import {VocbenchSettingsComponent} from "../settings/vocbenchSettingsComponent";
 import {TestComponent} from "../test/testComponent";
 import {ConfigBarComponent} from "../config/configBar/configBarComponent";
@@ -76,6 +77,7 @@ import {AdministrationComponent} from "../administration/administrationComponent
             ImportDataComponent,
             ExportDataComponent,
             MetadataManagementComponent,
+            RefactorComponent,
             VocbenchSettingsComponent,
             AdministrationComponent,
             //remove???

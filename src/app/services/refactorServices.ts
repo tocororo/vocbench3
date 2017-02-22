@@ -13,6 +13,32 @@ export class RefactorServices {
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
+     * Refactors SKOS data (labels and notes) into SKOSXL
+     */
+    SKOStoSKOSXL() {
+        console.log("[RefactorServices] SKOStoSKOSXL");
+        var params: any = {};
+        return this.httpMgr.doGet("Refactor2", "SKOStoSKOSXL", params, this.oldTypeService, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit(null);
+            }
+        );
+    }
+
+    /**
+     * Refactors SKOSXL data (labels and notes) into SKOS
+     */
+    SKOSXLtoSKOS() {
+        console.log("[RefactorServices] SKOSXLtoSKOS");
+        var params: any = {};
+        return this.httpMgr.doGet("Refactor2", "SKOSXLtoSKOS", params, this.oldTypeService, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit(null);
+            }
+        );
+    }
+
+    /**
      * Changes the URI of a resource. Emits a resourceRenamedEvent with the oldResource and the newResource
      * @param oldResource the resource to rename
      * @param newResource the new URI
@@ -48,7 +74,11 @@ export class RefactorServices {
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = sourceBaseURI;
         }
-        return this.httpMgr.doGet(this.serviceName, "replaceBaseURI", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "replaceBaseURI", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit(null);
+            }
+        );
     }
     
     migrateDefaultGraphToBaseURIGraph(clearDestinationGraph?: boolean) {
@@ -57,7 +87,11 @@ export class RefactorServices {
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
-        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit(null);
+            }
+        );
     }
 
 }

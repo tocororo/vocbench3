@@ -78,25 +78,4 @@ export class ConfigBarComponent {
         );
     }
     
-    private migrateData() {
-        this.modalService.confirm("Migrate data", "This operation will move the content of the default " 
-                + "graph to a graph named after the base URI of the current project. It also will clear "
-                + "the default graph and preserve the information already contained in the "
-                + "destination graph. Once the operation is done, you will be redirect to the project page. "
-                + "Are you sure to continue?", "warning").then(
-            confirm => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
-                this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
-                    stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
-                        //then redirect to home page
-                        this.router.navigate(['/Projects']);
-                    },
-                    err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
-                );
-            },
-            () => {}
-        )
-    }
-    
 }

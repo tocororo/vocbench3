@@ -14,6 +14,7 @@ import {CreateProjectComponent} from "./project/createProject/createProjectCompo
 import {ImportDataComponent} from "./config/dataManagement/importData/importDataComponent";
 import {ExportDataComponent} from "./config/dataManagement/exportData/exportDataComponent";
 import {MetadataManagementComponent} from "./config/dataManagement/metadata/metadataManagementComponent";
+import {RefactorComponent} from "./config/dataManagement/refactor/refactorComponent";
 import {VocbenchSettingsComponent} from "./settings/vocbenchSettingsComponent";
 import {UserProfileComponent} from "./user/userProfileComponent";
 import {RegistrationComponent} from "./user/registrationComponent";
@@ -43,6 +44,7 @@ export const routes: Routes = [
     {path: "Config/ImportData", component: ImportDataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Config/ExportData", component: ExportDataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Config/Metadata", component: MetadataManagementComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "Config/Refactor", component: RefactorComponent, canActivate: [AuthGuard, ProjectGuard]},
     // route config for project management
     {path: "Projects/ImportProject", component: ImportProjectComponent, canActivate: [AuthGuard]},
     {path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AuthGuard]},

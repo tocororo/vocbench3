@@ -36,15 +36,19 @@
                     <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
                 </a>
             </li>
+            <!--<li>
+                <a (click)="dump()">
+                    <span class="glyphicon glyphicon-import" style="margin-right: 5px"></span>Dump as a new version
+                </a>
+            </li>-->
             <li>
                 <a (click)="clearData()">
                     <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
                 </a>
             </li>
             <li>
-                <a (click)="migrateData()">
-                    <span class="glyphicon glyphicon-share-alt" style="margin-right: 5px"></span>
-                    Migrate data to baseURI graph
+                <a [routerLink]="['/Config/Refactor']">
+                    <span class="glyphicon glyphicon-retweet" style="margin-right: 5px"></span>Refactor
                 </a>
             </li>
             <li>
