@@ -64,11 +64,11 @@
                             </div>
                         </div>
 
-                        <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
-                            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
+                        <div style="align-self: center; margin: 5px;">
+                            <button class="btn btn-default btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
                                 <span class="glyphicon glyphicon-chevron-left"></span> Add
                             </button>
-                            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeRole()" [disabled]="!selectedUserRole">
+                            <button class="btn btn-default btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
                                 Remove <span class="glyphicon glyphicon-chevron-right"></span>
                             </button>
                         </div>

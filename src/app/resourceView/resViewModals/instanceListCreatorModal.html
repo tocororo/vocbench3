@@ -7,17 +7,17 @@
         <instance-list-panel  style="margin-left: 4px;" [cls]="selectedClass" (nodeSelected)="onSourceListInstanceSelected($event)">
         </instance-list-panel>
         
-        <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
-            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addToList()" [disabled]="!selectedSourceInstance">
+        <div style="align-self: center; margin: 5px;">
+            <button class="btn btn-default btn-sm btn-block" (click)="addToList()" [disabled]="!selectedSourceInstance">
                 Add
                 <span class="glyphicon glyphicon-chevron-right"></span>
             </button>
-            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeFromList()" [disabled]="!selectedTargetInstance">
+            <button class="btn btn-default btn-sm btn-block" (click)="removeFromList()" [disabled]="!selectedTargetInstance">
                 <span class="glyphicon glyphicon-chevron-left"></span>
                 Remove
             </button>
         </div>
-            
+
         <div class="scrollableContainer" style="border: 1px solid #ddd">
             <div *ngFor="let i of instanceList">
                 <rdf-resource [resource]="i" class="listItem" (click)="onTargetListInstanceSelected(i)" 

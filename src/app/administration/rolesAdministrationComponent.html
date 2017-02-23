@@ -44,11 +44,11 @@
                 </div>
             </div>
 
-            <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
-                <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addCapability()" [disabled]="!selectedCapability">
+            <div style="align-self: center; margin: 5px;">
+                <button class="btn btn-default btn-sm btn-block" (click)="addCapability()" [disabled]="!selectedCapability">
                     <span class="glyphicon glyphicon-chevron-left"></span> Add
                 </button>
-                <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeCapability()" [disabled]="!selectedRoleCapability">
+                <button class="btn btn-default btn-sm btn-block" (click)="removeCapability()" [disabled]="!selectedRoleCapability">
                     Remove <span class="glyphicon glyphicon-chevron-right"></span>
                 </button>
             </div>

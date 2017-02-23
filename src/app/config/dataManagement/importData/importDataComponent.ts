@@ -24,7 +24,7 @@ export class ImportDataComponent {
 
     private load() {
         this.submitted = true;
-        if (this.baseURI && this.baseURI.trim() != "" && this.fileToUpload) {
+        if (this.fileToUpload) {
             document.getElementById("blockDivFullScreen").style.display = "block";
             var rdfFormat: string;
             if (this.format != "inferFromFile") {

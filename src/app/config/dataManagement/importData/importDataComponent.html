@@ -20,9 +20,6 @@
                 <div class="form-group">
                     <label>Base URI:</label>
                     <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI" placeholder="baseURI">
-                    <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
-                        <strong>BaseURI</strong> is required
-                    </div>
                 </div>
                 
                 <div class="form-group">
