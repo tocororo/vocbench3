@@ -176,7 +176,7 @@ scheme-list-panel rdf-resource:hover {
     background-color: #e5f3ff;
 }
 
-reified-resource {
+.reifiedResource {
     border: 1px solid #ccc;
     border-radius: 2px;
     background-color: #eee;

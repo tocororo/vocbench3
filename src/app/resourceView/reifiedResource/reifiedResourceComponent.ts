@@ -20,7 +20,6 @@ export class ReifiedResourceComponent {
 	
 	constructor(private crService: CustomRangeServices) {}
     
-    
     private toggle() {
         if (this.predicateObjectList == null) {
             this.crService.getGraphObjectDescription(this.predicate, this.resource).subscribe(
@@ -42,6 +41,16 @@ export class ReifiedResourceComponent {
         if (object.isResource()) {
             this.dblClick.emit(<ARTResource>object);
         }
+    }
+
+    /**
+     * Tells if the resource should be rendered as reified resource (expandable).
+     * The resource should be rendered as reified resource if it is still not open or it has been expanded
+     * and it has a description.
+     * If it has been expanded but it has no description it should be rendered as simple rdf-resource
+     */
+    private isExpandableResource() {
+        return (!this.open || this.open && this.predicateObjectList);
     }
 
 }

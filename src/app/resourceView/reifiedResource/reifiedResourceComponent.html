@@ -1,27 +1,33 @@
-<div class="hbox">
-    <div class="expandCollapseBtnContainer" (click)="toggle()" title="Expand/Collapse">
-        <img *ngIf="!open" src="../../../assets/images/tree_expand.png">
-        <img *ngIf="open" src="../../../assets/images/tree_collapse.png">
+<div *ngIf="isExpandableResource()" class="reifiedResource">
+    <div class="hbox">
+        <div class="expandCollapseBtnContainer" (click)="toggle()" title="Expand/Collapse">
+            <img *ngIf="!open" src="../../../assets/images/tree_expand.png">
+            <img *ngIf="open" src="../../../assets/images/tree_collapse.png">
+        </div>
+        <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
     </div>
-    <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
+
+    <div *ngIf="open" class="panel panel-default" style="margin: 0px 3px 3px;">
+        <div class="panel-body" style="padding: 2px;">
+            <table class="table table-condensed table-borderless table-hoverable">
+                <tbody>
+                    
+                    <template ngFor let-predObj [ngForOf]="predicateObjectList">
+                        <tr *ngFor="let obj of predObj.getObjects()">
+                            <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
+                            <td>
+                                <input type="text" class="form-control input-xs" [ngModel]="obj.getNominalValue()"
+                                    (dblclick)="objectDblClick(obj)" readonly>
+                            </td>
+                        </tr>
+                    </template>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<div *ngIf="open" class="panel panel-default" style="margin: 0px 3px 3px;">
-    <div class="panel-body" style="padding: 2px;">
-        <table class="table table-condensed table-borderless table-hoverable">
-            <tbody>
-                
-                <template ngFor let-predObj [ngForOf]="predicateObjectList">
-                    <tr *ngFor="let obj of predObj.getObjects()">
-                        <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
-                        <td>
-                            <input type="text" class="form-control input-xs" [ngModel]="obj.getNominalValue()"
-                                (dblclick)="objectDblClick(obj)" readonly>
-                        </td>
-                    </tr>
-                </template>
-                
-            </tbody>
-        </table>
-    </div>
-</div>
+<template [ngIf]="!isExpandableResource()">
+    <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
+</template>
