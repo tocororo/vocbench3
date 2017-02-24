@@ -176,11 +176,17 @@ scheme-list-panel rdf-resource:hover {
     background-color: #e5f3ff;
 }
 
-.reifiedResource {
+reified-resource {
+    /* negative margins to remove the 3px padding of listItem (container of reified-resource) */
+    margin: -2px 10px -2px -3px;
+}
+
+.expandableResource {
     border: 1px solid #ccc;
     border-radius: 2px;
     background-color: #eee;
     min-height: 16px;
+    padding: 2px 3px;
 }
 
 .selectedResource {
