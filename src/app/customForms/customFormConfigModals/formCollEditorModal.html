@@ -4,11 +4,11 @@
 <div class="modal-body vbox" style="height: 50vh;">
     
     <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
-        <label style="white-space: nowrap; margin: 0px 3px;">Custom Range ID:</label>
+        <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
         <div class="hbox">
             <div class="input-group input-group-xs">
-                <span class="input-group-addon" style="padding-right: 2px">{{crPrefix}}</span>
-                <input type="text" class="form-control" [(ngModel)]="crShortId" [disabled]="crId">
+                <span class="input-group-addon" style="padding-right: 2px">{{fcPrefix}}</span>
+                <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="fcId">
             </div>
         </div>
     </div>
@@ -16,14 +16,14 @@
     <div class="hbox">
         <div class="panel panel-default vbox">
             <div class="panel-heading">
-                <label style="flex: 1">Custom Range Entries:</label>
+                <label style="flex: 1">Custom Forms:</label>
             </div>
             <div class="panel-body vbox">
                 <div class="scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <tbody>
-                            <tr *ngFor="let cre of crEntries" (click)="selectCRE(cre)" [ngClass]="{active: cre == selectedCRE}">
-                                <td>{{cre}}</td>
+                            <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)" [ngClass]="{active: cForm == selectedForm}">
+                                <td>{{cForm}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -31,26 +31,26 @@
             </div>
         </div>
         
-        <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
-            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addEntry()" [disabled]="!selectedCREAll">
+        <div style="align-self: center; margin: 5px;">
+            <button class="btn btn-default btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAll">
                 <span class="glyphicon glyphicon-chevron-left"></span>Add
             </button>
-            <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="removeEntry()" [disabled]="!selectedCRE">
+            <button class="btn btn-default btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm">
                 Remove<span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
         
         <div class="panel panel-default vbox">
             <div class="panel-heading">
-                <label style="flex: 1">Available Entries:</label>
+                <label style="flex: 1">Available Custom Forms:</label>
             </div>
             <div class="panel-body vbox">
                 <div class="scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <tbody>
-                            <tr *ngFor="let cre of crEntriesAll" (click)="selectCREAll(cre)"
-                                [ngClass]="{active: cre == selectedCREAll, greyText: isCREAlreadyInCR(cre)}">
-                                <td>{{cre}}</td>
+                            <tr *ngFor="let cForm of formsAll" (click)="selectFormAll(cForm)"
+                                [ngClass]="{active: cForm == selectedFormAll, greyText: isFormAlreadyInCollection(cForm)}">
+                                <td>{{cForm}}</td>
                             </tr>
                         </tbody>
                     </table>

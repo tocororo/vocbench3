@@ -7,7 +7,7 @@ import { AlignmentServices } from "../services/alignmentServices";
 import { AuthServices } from "../services/authServices";
 import { ClassesServices } from "../services/classesServices";
 import { CODAServices } from "../services/codaServices";
-import { CustomRangeServices } from "../services/customRangeServices";
+import { CustomFormsServices } from "../services/customFormsServices";
 import { DeleteServices } from "../services/deleteServices";
 import { ExportServices } from "../services/exportServices";
 import { IcvServices } from "../services/icvServices";
@@ -40,7 +40,7 @@ import { UserServices } from "../services/userServices";
         AuthServices,
         ClassesServices,
         CODAServices,
-        CustomRangeServices,
+        CustomFormsServices,
         DeleteServices,
         ExportServices,
         IcvServices,

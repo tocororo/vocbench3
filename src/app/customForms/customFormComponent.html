@@ -1,0 +1,127 @@
+<div class="vbox">
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Custom Forms configuration:</label>
+        </div>
+
+        <div class="panel-body vbox">
+
+            <div class="hbox">
+
+                <div class="subPanel vbox">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">Custom Forms:</label>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <button class="btn btn-default" title="Create Custom Form" (click)="createCustomForm()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Delete Custom Form" (click)="deleteCustomForm()"
+                                [disabled]="!selectedCustomForm">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Change Custom Form" (click)="editCustomForm()"
+                                [disabled]="!selectedCustomForm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button class="btn btn-default" title="Clone Custom Form" (click)="cloneCustomForm()"
+                                [disabled]="!selectedCustomForm">
+                                <span class="glyphicon glyphicon-duplicate"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="subPanel-body vbox">
+                        <div class="scrollableContainer">
+                            <table class="table table-condensed table-borderless table-hoverable">
+                                <tbody>
+                                    <tr *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)"
+                                        [ngClass]="{active: cf == selectedCustomForm}">
+                                        <td>{{cf}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subPanel vbox" style="margin-left: 4px;">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">Form Collections:</label>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <button class="btn btn-default" title="Create Form Collection" (click)="createFormCollection()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Delete Form Collection" (click)="deleteFormCollection()"
+                                [disabled]="!selectedFormColl">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Change Form Collection" (click)="editFormCollection()"
+                                [disabled]="!selectedFormColl">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="subPanel-body vbox">
+                        <div class="scrollableContainer">
+                            <table class="table table-condensed table-borderless table-hoverable">
+                                <tbody>
+                                    <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
+                                        [ngClass]="{active: fc == selectedFormColl}">
+                                        <td>{{fc}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Forms mapping:</label>
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button class="btn btn-default" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" title="Remove Resource - FormCollection mapping" (click)="removeFormCollMapping()"
+                            [disabled]="!selectedFormCollMapping">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox">
+                    
+                    <div class="scrollableContainer">
+                        <table class="table table-condensed table-borderless table-hoverable">
+                            <thead style="border-bottom: 1px solid #ddd;">
+                                <tr>
+                                    <th>Property/Class</th>
+                                    <th>Form Collection</th>
+                                    <th style="width: 1%" nowrap>
+                                        Replace
+                                        <span class="glyphicon glyphicon-info-sign" title="Tells if the CustomForm replaces the 'default' form"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let formCollMap of cfConfigurationMap" (click)="selectFormCollMapping(formCollMap)"
+                                    [ngClass]="{active: formCollMap == selectedFormCollMapping}">
+                                    <td>{{formCollMap.getResource().getURI()}}</td>
+                                    <td>{{formCollMap.getFormCollectionID()}}</td>
+                                    <td class="text-center">
+                                        <input type="checkbox" [ngModel]="formCollMap.getReplace()" (ngModelChange)="changeReplaceToMapping($event, formCollMap)">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>

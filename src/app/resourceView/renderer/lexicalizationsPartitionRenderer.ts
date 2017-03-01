@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateValuesListRenderer } from "./abstractPerdicateValuesListRenderer";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -32,7 +32,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredicateValuesLis
     addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
     removeBtnImgTitle = "Remove lexicalization";
 
-    constructor(private crService: CustomRangeServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
+    constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private propertyService: PropertyServices, private resViewService: ResourceViewServices, private modalService: ModalServices,
         private browsingService: BrowsingServices) {
         super();
@@ -115,7 +115,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredicateValuesLis
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

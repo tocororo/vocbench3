@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { RDF, OWL } from "../../models/Vocabulary";
@@ -25,7 +25,7 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredicateObjectsLis
     addBtnImgSrc = require("../../../assets/images/prop_create.png");
     removeBtnImgTitle = "Remove inverse property";
 
-    constructor(private propService: PropertyServices, private crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private cfService: CustomFormsServices,
         private rvModalService: ResViewModalServices) {
         super();
     }
@@ -46,7 +46,7 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredicateObjectsLis
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
@@ -26,7 +26,7 @@ export class DomainsPartitionRenderer extends AbstractPredicateObjectsListRender
     addBtnImgSrc = require("../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove domain";
 
-    constructor(private crService: CustomRangeServices, private propService: PropertyServices, private resourceService: ResourceServices,
+    constructor(private cfService: CustomFormsServices, private propService: PropertyServices, private resourceService: ResourceServices,
         private manchService: ManchesterServices, private rvModalService: ResViewModalServices) {
         super();
     }
@@ -62,7 +62,7 @@ export class DomainsPartitionRenderer extends AbstractPredicateObjectsListRender
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

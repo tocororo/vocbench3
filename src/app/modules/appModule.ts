@@ -8,7 +8,7 @@ import {CustomReuseStrategy} from "../a2Customization/CustomReuseStrategy";
 import {STServicesModule} from "./stServicesModule";
 import {SharedModule} from "./sharedModule";
 import {VBModalModule} from "./vbModalModule";
-import {CustomRangeModule} from "./customRangeModule";
+import {CustomFormModule} from "./customFormModule";
 import {TreeAndListModule} from "./treeAndListModule";
 import {ResourceViewModule} from "./resourceViewModule";
 import {ICVModule} from "./icvModule";
@@ -32,7 +32,7 @@ import {ProjectComponent} from "../project/projectComponent";
 import {DataComponent} from "../data/dataComponent";
 import {SparqlComponent} from "../sparql/sparqlComponent";
 import {AlignmentValidationComponent} from "../alignment/alignmentValidation/alignmentValidationComponent";
-import {CustomRangeComponent} from "../customRanges/customRangeComponent";
+import {CustomFormComponent} from "../customForms/customFormComponent";
 import {ImportProjectComponent} from "../project/importProject/importProjectComponent";
 import {CreateProjectComponent} from "../project/createProject/createProjectComponent";
 import {IcvComponent} from "../icv/icvComponent";
@@ -51,7 +51,7 @@ import {AdministrationComponent} from "../administration/administrationComponent
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
-            UserModule, ICVModule, AdministrationModule, CustomRangeModule,
+            UserModule, ICVModule, AdministrationModule, CustomFormModule,
 
             STServicesModule,
             appRouting,
@@ -73,7 +73,7 @@ import {AdministrationComponent} from "../administration/administrationComponent
             SparqlComponent,
             IcvComponent,
             AlignmentValidationComponent,
-            CustomRangeComponent,
+            CustomFormComponent,
             ImportDataComponent,
             ExportDataComponent,
             MetadataManagementComponent,

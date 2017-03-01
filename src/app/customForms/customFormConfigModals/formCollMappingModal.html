@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h3 class="modal-title">Create Resource - FormCollection mapping</h3>
+</div>
+<div class="modal-body vbox" style="height: 40vh;">
+    
+    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 2px 4px; margin-bottom: 4px;">
+        <rdf-resource *ngIf="selectedResource" [resource]="selectedResource"></rdf-resource>
+        <div class="dropdown pull-right">
+            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                Select Resource
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a (click)="selectClass()">
+                        <img src="../../../assets/images/class_create.png" /> Select class
+                    </a>
+                </li>
+                <li>
+                    <a (click)="selectProperty()">
+                        <img src="../../../assets/images/prop_create.png" /> Select property
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label style="flex: 1">Form Collection:</label>
+        </div>
+        <div class="panel-body vbox">
+            <div class="scrollableContainer">
+                <table class="table table-condensed table-borderless table-hoverable">
+                    <tbody>
+                        <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)" [ngClass]="{active: fc == selectedFormColl}">
+                            <td>{{fc}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedResource || !selectedFormColl">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

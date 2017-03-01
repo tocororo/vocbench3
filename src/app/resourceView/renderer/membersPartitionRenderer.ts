@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
 import { VocbenchCtx } from "../../utils/VocbenchCtx";
@@ -29,7 +29,7 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectsListRender
     addBtnImgSrc = require("../../../assets/images/collection_create.png");
     removeBtnImgTitle = "Remove member";
 
-    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private cfService: CustomFormsServices,
         private skosService: SkosServices, private rvModalService: ResViewModalServices, private vbCtx: VocbenchCtx,
         private eventHandler: VBEventHandler) {
         super();
@@ -67,7 +67,7 @@ export class MembersPartitionRenderer extends AbstractPredicateObjectsListRender
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

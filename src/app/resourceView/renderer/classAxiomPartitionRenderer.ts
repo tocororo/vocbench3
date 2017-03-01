@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateValuesListRenderer } from "./abstractPerdicateValuesListRenderer";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { OwlServices } from "../../services/owlServices";
 import { ManchesterServices } from "../../services/manchesterServices";
@@ -33,7 +33,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
     removeBtnImgTitle = "Remove class axiom";
 
     constructor(private propertyService: PropertyServices, private owlService: OwlServices, private manchService: ManchesterServices,
-        private crService: CustomRangeServices, private browsingService: BrowsingServices, private resViewModalService: ResViewModalServices) {
+        private cfService: CustomFormsServices, private browsingService: BrowsingServices, private resViewModalService: ResViewModalServices) {
         super();
     }
 
@@ -135,7 +135,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValue
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

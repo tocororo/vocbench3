@@ -1,37 +1,37 @@
 import {ARTURIResource} from "./ARTResources";
 
-export class CustomRangePropertyMapping {
+export class FormCollectionMapping {
 
-    private propertyUri: string;
-    private customRangeId: string;
-    private replaceRanges: boolean;
+    private resource: ARTURIResource;
+    private formCollectionId: string;
+    private replace: boolean;
 
-    constructor(customRangeId: string, propertyUri: string, replaceRanges: boolean) {
-        this.propertyUri = propertyUri;
-        this.customRangeId = customRangeId;
-        this.replaceRanges = replaceRanges;
+    constructor(formCollectionId: string, resource: ARTURIResource, replace: boolean) {
+        this.resource = resource;
+        this.formCollectionId = formCollectionId;
+        this.replace = replace;
     }
 
-    public getPropertyURI(): string {
-        return this.propertyUri;
+    public getResource(): ARTURIResource {
+        return this.resource;
     }
 
-    public getCustomRangeID(): string {
-        return this.customRangeId;
+    public getFormCollectionID(): string {
+        return this.formCollectionId;
     }
 
-    public getReplaceRanges(): boolean {
-        return this.replaceRanges;
+    public getReplace(): boolean {
+        return this.replace;
     }
 
 }
 
-export class CustomRange {
+export class FormCollection {
     
-    public static PREFIX = "it.uniroma2.art.semanticturkey.customrange.";
+    public static PREFIX = "it.uniroma2.art.semanticturkey.forms.";
     
     private id: string;
-    private entries: CustomRangeEntry[];
+    private forms: CustomForm[];
     
     constructor(id: string) {
         this.id = id;
@@ -41,27 +41,26 @@ export class CustomRange {
         return this.id;
     }
     
-    public getEntries(): CustomRangeEntry[] {
-        return this.entries;
+    public getForms(): CustomForm[] {
+        return this.forms;
     }
     
-    public setEntries(entries: CustomRangeEntry[]) {
-        this.entries = entries;
+    public setForms(forms: CustomForm[]) {
+        this.forms = forms;
     }
     
 }
 
-export class CustomRangeEntry {
+export class CustomForm {
     
-    public static PREFIX = "it.uniroma2.art.semanticturkey.entry.";
+    public static PREFIX = "it.uniroma2.art.semanticturkey.form.";
     
     private id: string;
     private name: string;
-    private type: CustomRangeEntryType;
+    private type: CustomFormType;
     private description: string;
     private ref: string;
     private showPropertyChain: ARTURIResource[];
-    // private form: FormEntry[];
     
     constructor(id: string) {
         this.id = id;
@@ -79,11 +78,11 @@ export class CustomRangeEntry {
         this.name = name;
     }
     
-    public getType(): CustomRangeEntryType {
+    public getType(): CustomFormType {
         return this.type;
     }
     
-    public setType(type: CustomRangeEntryType) {
+    public setType(type: CustomFormType) {
         this.type = type;
     }
     
@@ -113,21 +112,21 @@ export class CustomRangeEntry {
     
 }
 
-export class FormEntry {
+export class FormField {
     private mandatory: boolean;
     private placeholderId: string;
-    private type: FormEntryType;
+    private type: FormFieldType;
     private userPrompt: string;
     private converter: string;
     private datatype: string; //provided optionally only if type is literal
     private lang: string; //provided optionally only if type is literal and datatype is null or xsd:string
     private dependency: boolean = false; //tells if the FormEntry is a dependency of another FormEntry 
         //(it determines also if the FormEntry should be shown in the form) 
-    private converterArg: FormEntry; //provided optionally only if the entry has coda:langString converter that requires a language
+    private converterArg: FormField; //provided optionally only if the entry has coda:langString converter that requires a language
         //as argument that is in turn provided by means a userPrompt
     
     
-    constructor(placeholderId: string, type: FormEntryType, mandatory: boolean, userPrompt: string, converter: string) {
+    constructor(placeholderId: string, type: FormFieldType, mandatory: boolean, userPrompt: string, converter: string) {
         this.placeholderId = placeholderId;
         this.type = type;
         this.mandatory = mandatory;
@@ -143,7 +142,7 @@ export class FormEntry {
         return this.placeholderId;
     }
     
-    public getType(): FormEntryType {
+    public getType(): FormFieldType {
         return this.type;
     }
     
@@ -179,15 +178,15 @@ export class FormEntry {
         return this.dependency;
     }
     
-    public setConverterArg(arg: FormEntry) {
+    public setConverterArg(arg: FormField) {
         this.converterArg = arg;
     }
     
-    public getConverterArg(): FormEntry {
+    public getConverterArg(): FormField {
         return this.converterArg;
     }
     
 }
 
-export type CustomRangeEntryType = "node" | "graph";
-export type FormEntryType = "literal" | "uri";
+export type CustomFormType = "node" | "graph";
+export type FormFieldType = "literal" | "uri";

@@ -184,7 +184,7 @@ export class Deserializer {
         if (numInst != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.NUM_INST, Number(numInst));
         }
-        var hasCustomRange = uriElement.getAttribute(ResAttribute.HAS_CUSTOM_RANGE);//indicates if a property has a CustomRange
+        var hasCustomRange = uriElement.getAttribute(ResAttribute.HAS_CUSTOM_RANGE);//indicates if a property has a FormCollection
         if (hasCustomRange != undefined) {
             artURIRes.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, (hasCustomRange == "true"));
         }

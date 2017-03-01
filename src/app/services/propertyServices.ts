@@ -5,7 +5,7 @@ import {VBEventHandler} from "../utils/VBEventHandler";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../models/ARTResources";
 import {RDF, OWL} from "../models/Vocabulary";
-import {CustomRange, CustomRangeEntry, CustomRangeEntryType} from "../models/CustomRanges";
+import {FormCollection, CustomForm, CustomFormType} from "../models/CustomForms";
 
 @Injectable()
 export class PropertyServices {
@@ -187,16 +187,16 @@ export class PropertyServices {
      * Returns the range of a property
      * @param property
      * @return an object with:
-     * - ranges: "classic" range of a property omitted if a CustomRange is provided for the given property
-     *      and the "replaceRanges" attribute is true (so, the "classic" range in replaced by the custom one).
+     * - ranges: "classic" range of a property omitted if a FormCollection is provided for the given property
+     *      and the "replace" attribute is true (so, the "classic" range in replaced by the custom one).
      *      Contains two attributes:
      *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
      *          - rangeColl: an array of ARTURIResource 
      *              (available only if rngType is resource, then represent the admitted range classes,
      *              or typedLiteral, then represent the admitted datatypes);
-     * - customRange, an optional CustomRange object only if the property has custom ranges
+     * - formCollection, an optional FormCollection object only if the property has form collection associated
      */
-    getRange(property: ARTURIResource): Observable<{ranges: {type: RangeType, rangeCollection: ARTURIResource[]}, customRange: CustomRange}> {
+    getRange(property: ARTURIResource): Observable<{ranges: {type: RangeType, rangeCollection: ARTURIResource[]}, formCollection: FormCollection}> {
         console.log("[PropertyServices] getRange");
         var params: any = {
             property: property,
@@ -204,7 +204,7 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService, true).map(
             stResp => {
                 let ranges: any = {};
-                let customRange: CustomRange;
+                let formCollection: FormCollection;
                 
                 if (stResp.ranges) {
                     ranges.type = stResp.ranges.type;
@@ -218,19 +218,26 @@ export class PropertyServices {
                         ranges.rangeCollection = rangeColl;
                     }
                 }
-                if (stResp.customRanges) {
-                    customRange = new CustomRange(stResp.customRanges.id);
-                    var crEntries: CustomRangeEntry[] = [];
-                    for (var i = 0; i < stResp.customRanges.crEntries.length; i++) {
-                        let cre: CustomRangeEntry = new CustomRangeEntry(stResp.customRanges.crEntries[i].id);
-                        cre.setName(stResp.customRanges.crEntries[i].name);
-                        cre.setType(stResp.customRanges.crEntries[i].type);
-                        cre.setDescription(stResp.customRanges.crEntries[i].description);
-                        crEntries.push(cre);
+                if (stResp.formCollection) {
+                    formCollection = new FormCollection(stResp.formCollection.id);
+                    var forms: CustomForm[] = [];
+                    for (var i = 0; i < stResp.formCollection.forms.length; i++) {
+                        let cf: CustomForm = new CustomForm(stResp.formCollection.forms[i].id);
+                        cf.setName(stResp.formCollection.forms[i].name);
+                        cf.setType(stResp.formCollection.forms[i].type);
+                        cf.setDescription(stResp.formCollection.forms[i].description);
+                        forms.push(cf);
                     }
-                    customRange.setEntries(crEntries);
+                    forms.sort(
+                        function(a: CustomForm, b: CustomForm) {
+                            if (a.getName() < b.getName()) return -1;
+                            if (a.getName() > b.getName()) return 1;
+                            return 0;
+                        }
+                    )
+                    formCollection.setForms(forms);
                 }
-                return {ranges: ranges, customRange: customRange};
+                return {ranges: ranges, formCollection: formCollection};
             }
         );
     }
@@ -421,61 +428,6 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet("property", "removePropertyDomain", params, true);
     }
-    
-    // /**
-    //  * Returns the range of a property
-    //  * @param property
-    //  * @return an object with:
-    //  * - ranges: "classic" range of a property omitted if a CustomRange is provided for the given property
-    //  *      and the "replaceRanges" attribute is true (so, the "classic" range in replaced by the custom one).
-    //  *      Contains two attributes:
-    //  *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
-    //  *          - rangeColl: an array of ARTURIResource 
-    //  *              (available only if rngType is resource, then represent the admitted range classes,
-    //  *              or typedLiteral, then represent the admitted datatypes);
-    //  * - customRange, an optional CustomRange object only if the property has custom ranges
-    //  */
-    // getRange(property: ARTURIResource): Observable<{ranges: {type: string, rangeColl: ARTURIResource[]}, customRange: CustomRange}> {
-    //     console.log("[PropertyServices] getRange");
-    //     var params: any = {
-    //         propertyQName: property.getURI(),
-    //     };
-    //     return this.httpMgr.doGet("property", "getRange", params, true).map(
-    //         stResp => {
-    //             let ranges: any;
-    //             let customRange: CustomRange;
-    //             if (stResp.getElementsByTagName("ranges").length != 0) {
-    //                 var rangesElem: Element = stResp.getElementsByTagName("ranges")[0];
-    //                 ranges = {}
-    //                 ranges.type = rangesElem.getAttribute("rngType");
-    //                 if (ranges.type != "undetermined") {
-    //                     ranges.rangeColl = Deserializer.createURIArrayGivenList(rangesElem.children);
-    //                 }
-    //             }
-    //             if (stResp.getElementsByTagName("customRange").length != 0) {
-    //                 var cRangesElem: Element = stResp.getElementsByTagName("customRange")[0];
-    //                 var crId = cRangesElem.getAttribute("id");
-    //                 var crProp = cRangesElem.getAttribute("property");
-    //                 var crEntries: CustomRangeEntry[] = [];
-    //                 var creElemColl = cRangesElem.getElementsByTagName("crEntry");
-    //                 for (var i = 0; i < creElemColl.length; i++) {
-    //                     let creId = creElemColl[i].getAttribute("id");
-    //                     let name = creElemColl[i].getAttribute("name");
-    //                     let type: CustomRangeEntryType = creElemColl[i].getAttribute("type") == "graph" ? "graph" : "node";
-    //                     let description = creElemColl[i].getElementsByTagName("description")[0].textContent;
-    //                     let cre: CustomRangeEntry = new CustomRangeEntry(creId);
-    //                     cre.setName(name);
-    //                     cre.setType(type);
-    //                     cre.setDescription(description);
-    //                     crEntries.push(cre);
-    //                 }
-    //                 customRange = new CustomRange(crId);
-    //                 customRange.setEntries(crEntries);
-    //             }
-    //             return {ranges: ranges, customRange: customRange};
-    //         }
-    //     );
-    // }
     
     /**
      * Adds a class as range of a property

@@ -3,12 +3,12 @@ import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjects
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
-import { CustomRange, CustomRangeEntry } from "../../models/CustomRanges";
+import { FormCollection, CustomForm } from "../../models/CustomForms";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { ModalServices } from "../../widget/modal/modalServices";
 
@@ -31,7 +31,7 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
     addBtnImgTitle = "Add a property value";
     removeBtnImgTitle = "Remove property value";
 
-    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private cfService: CustomFormsServices,
         private skosxlService: SkosxlServices, private browsingService: BrowsingServices, private modalService: ModalServices,
         private resViewModalService: ResViewModalServices) {
         super();
@@ -85,8 +85,8 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
             this.propService.getRange(predicate).subscribe(
                 range => {
                     var ranges = range.ranges;
-                    var customRange: CustomRange = range.customRange;
-                    if (ranges != undefined && customRange == undefined) { //just "classic" range
+                    var formCollection: FormCollection = range.formCollection;
+                    if (ranges != undefined && formCollection == undefined) { //just "classic" range
                         //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                         if (ranges.type == RDFTypesEnum.resource) {
                             this.enrichWithResource(predicate, ranges.rangeCollection);
@@ -128,13 +128,13 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                         } else if (ranges.type == "inconsistent") {
                             this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
-                    } else if (ranges != undefined && customRange != undefined) { //both "classic" and custom range
+                    } else if (ranges != undefined && formCollection != undefined) { //both "classic" and custom range
                         var rangeOptions: {value: string, description: string}[] = [];//prepare the range options...
 
                         //...with the custom range entries
-                        var crEntries = customRange.getEntries();
-                        for (var i = 0; i < crEntries.length; i++) {
-                            rangeOptions.push({ value: crEntries[i].getName(), description: crEntries[i].getDescription() });
+                        var forms = formCollection.getForms();
+                        for (var i = 0; i < forms.length; i++) {
+                            rangeOptions.push({ value: forms[i].getName(), description: forms[i].getDescription() });
                         }
 
                         //...and the classic ranges
@@ -152,9 +152,9 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                         this.modalService.select("Select range type", null, rangeOptions, true).then(
                             (selectedRange: any) => {
                                 //check if selected range is one of the customs
-                                for (var i = 0; i < crEntries.length; i++) {
-                                    if (selectedRange == crEntries[i].getName()) {
-                                        this.enrichWithCustomRange(predicate, crEntries[i]);
+                                for (var i = 0; i < forms.length; i++) {
+                                    if (selectedRange == forms[i].getName()) {
+                                        this.enrichWithCustomForm(predicate, forms[i]);
                                         return;
                                     }
                                 }
@@ -168,29 +168,29 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                             },
                             () => { }
                         )
-                    } else if (ranges == undefined && customRange != undefined) {//just custom range
-                        var crEntries = customRange.getEntries();
-                        if (crEntries.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
-                            this.enrichWithCustomRange(predicate, crEntries[0]);
-                        } else if (crEntries.length > 1) { //multiple CREntry => ask which one to use
+                    } else if (ranges == undefined && formCollection != undefined) {//just custom range
+                        var forms = formCollection.getForms();
+                        if (forms.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
+                            this.enrichWithCustomForm(predicate, forms[0]);
+                        } else if (forms.length > 1) { //multiple CREntry => ask which one to use
                             //prepare the range options with the custom range entries
                             var rangeOptions: {value: string, description: string}[] = [];
-                            for (var i = 0; i < crEntries.length; i++) {
-                                rangeOptions.push({ value: crEntries[i].getName(), description: crEntries[i].getDescription() });
+                            for (var i = 0; i < forms.length; i++) {
+                                rangeOptions.push({ value: forms[i].getName(), description: forms[i].getDescription() });
                             }
-                            this.modalService.select("Select a Custom Range", null, rangeOptions, true).then(
+                            this.modalService.select("Select a Custom Form", null, rangeOptions, true).then(
                                 (selectedRange: any) => {
-                                    for (var i = 0; i < crEntries.length; i++) {
-                                        if (selectedRange == crEntries[i].getName()) {
-                                            this.enrichWithCustomRange(predicate, crEntries[i]);
+                                    for (var i = 0; i < forms.length; i++) {
+                                        if (selectedRange == forms[i].getName()) {
+                                            this.enrichWithCustomForm(predicate, forms[i]);
                                             return;
                                         }
                                     }
                                 }
                             );
                         } else { //no CR linked to the property has no Entries => error
-                            this.modalService.alert("Error", "The CustomRange " + customRange.getId() + ", linked to property " +  predicate.getShow() + 
-                                ", doesn't contain any CustomRangeEntry", "error");
+                            this.modalService.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " +  predicate.getShow() + 
+                                ", doesn't contain any CustomForm", "error");
                         }
                     }
                 }
@@ -198,10 +198,10 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
         }
     }
 
-    private enrichWithCustomRange(predicate: ARTURIResource, crEntry: CustomRangeEntry) {
-        this.resViewModalService.enrichCustomForm("Add " + predicate.getShow(), crEntry.getId()).then(
+    private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
+        this.resViewModalService.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
-                this.crService.runCoda(this.resource, predicate, crEntry.getId(), entryMap).subscribe(
+                this.cfService.executeForm(this.resource, predicate, form.getId(), entryMap).subscribe(
                     (stResp: any) => {
                         this.update.emit(null);
                     }
@@ -255,7 +255,7 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

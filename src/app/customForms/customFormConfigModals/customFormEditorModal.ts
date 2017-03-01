@@ -3,63 +3,64 @@ import { BSModalContext, BSModalContextBuilder } from 'angular2-modal/plugins/bo
 import { DialogRef, ModalComponent, Modal, OverlayConfig } from "angular2-modal";
 import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal";
 import { ARTURIResource } from "../../models/ARTResources";
-import { CustomRangeEntry, CustomRangeEntryType } from "../../models/CustomRanges";
+import { CustomForm, CustomFormType } from "../../models/CustomForms";
 import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ModalServices } from "../../widget/modal/modalServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 
-export class CustomRangeEntryEditorModalData extends BSModalContext {
+export class CustomFormEditorModalData extends BSModalContext {
     /**
-     * @param id identifier of the CustomRangeEntry to edit.
-     * If not provided the modal allows to create a CRE from scratch
-     * @param existingCre list of CRE id that already exist. Useful to avoid cretion of CRE with duplicate id.
+     * @param id identifier of the CustomForm to edit.
+     * If not provided the modal allows to create a CustomForm from scratch
+     * @param existingForms list of CustomForm id that already exist.
+     * Useful to avoid cretion of CustomForm with duplicate id.
      */
-    constructor(public id?: string, public existingCre?: string[]) {
+    constructor(public id?: string, public existingForms?: string[]) {
         super();
     }
 }
 
 @Component({
-    selector: "cre-editor-modal",
-    templateUrl: "./creEditorModal.html",
+    selector: "custom-form-editor-modal",
+    templateUrl: "./customFormEditorModal.html",
 })
-export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEntryEditorModalData> {
-    context: CustomRangeEntryEditorModalData;
+export class CustomFormEditorModal implements ModalComponent<CustomFormEditorModalData> {
+    context: CustomFormEditorModalData;
 
     @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
 
-    private crePrefix: string = CustomRangeEntry.PREFIX;
-    private creId: string;
-    private creShortId: string;
+    private cfPrefix: string = CustomForm.PREFIX;
+    private cfId: string;
+    private cfShortId: string;
     private name: string;
     private description: string;
-    private type: CustomRangeEntryType = "graph";
+    private type: CustomFormType = "graph";
     private ref: string;
-    private showPropertyChain: ARTURIResource[];
+    private showPropertyChain: ARTURIResource[] = [];
 
     private selectedPropInChain: ARTURIResource; //used in showPropertyChain field    
 
     private submitted: boolean = false;
     private errorMsg: string;
 
-    constructor(public dialog: DialogRef<CustomRangeEntryEditorModalData>, private modal: Modal, private browsingService: BrowsingServices,
-        private modalService: ModalServices, private crService: CustomRangeServices) {
+    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private browsingService: BrowsingServices,
+        private modalService: ModalServices, private cfService: CustomFormsServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
         if (this.context.id != undefined) { //CRE id provided, so the modal works in edit mode
-            this.crService.getCustomRangeEntry(this.context.id).subscribe(
-                cre => {
-                    this.creId = cre.getId();
-                    this.creShortId = this.creId.replace(this.crePrefix, "");
-                    this.name = cre.getName();
-                    this.type = cre.getType();
-                    this.description = cre.getDescription();
-                    this.ref = cre.getRef();
+            this.cfService.getCustomForm(this.context.id).subscribe(
+                cf => {
+                    this.cfId = cf.getId();
+                    this.cfShortId = this.cfId.replace(this.cfPrefix, "");
+                    this.name = cf.getName();
+                    this.type = cf.getType();
+                    this.description = cf.getDescription();
+                    this.ref = cf.getRef();
                     if (this.type == "graph") {
-                        this.showPropertyChain = cre.getShowPropertyChain();
+                        this.showPropertyChain = cf.getShowPropertyChain();
                     }
                 }
             )
@@ -148,18 +149,15 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
             (value: any) => {
                 var chain: string = String(value).trim();
                 if (chain.length != 0) {
-                    //convert the chain from string to ARTURIResource[]
-                    var propChain: ARTURIResource[] = [];
-                    var splitted: string[] = chain.split(",");
-                    for (var i = 0; i< splitted.length; i++) {
-                        propChain.push(new ARTURIResource(splitted[i].trim(), null, null));
-                    }
-                    this.crService.checkShowPropertyChain(propChain).subscribe(
+                    this.cfService.validateShowPropertyChain(chain).subscribe(
                         stResp => {
+                            //convert the chain from string to ARTURIResource[]
+                            var propChain: ARTURIResource[] = [];
+                            var splitted: string[] = chain.split(",");
+                            for (var i = 0; i< splitted.length; i++) {
+                                propChain.push(new ARTURIResource(splitted[i].trim(), null, null));
+                            }
                             this.showPropertyChain = propChain; //if valid update chain
-                        },
-                        err => {
-                            this.modalService.alert("Error", value + " is not a valid property chain.", "error");
                         }
                     )
                 } else {
@@ -179,13 +177,13 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
             valid = false;
         }
 
-        if (this.creId == null) { //check only in create mode
-            if (this.creShortId == null || !this.creShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
-                this.errorMsg = "The Custom Range Entry ID is not valid (it may be empty or contain invalid characters). Please fix it."
+        if (this.cfId == null) { //check only in create mode
+            if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
+                this.errorMsg = "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }
-            if (this.context.existingCre.indexOf(this.crePrefix + this.creShortId) != -1) { //CRE with the same id already exists
-                this.errorMsg = "A Custom Range Entry with the same ID already exists";
+            if (this.context.existingForms.indexOf(this.cfPrefix + this.cfShortId) != -1) { //CRE with the same id already exists
+                this.errorMsg = "A CustomForm with the same ID already exists";
                 valid = false;
             }
         }
@@ -199,27 +197,27 @@ export class CustomRangeEntryEditorModal implements ModalComponent<CustomRangeEn
         }
 
         //update CRE only if ref is valid
-        this.crService.validatePearl(this.ref, this.type).subscribe(
+        this.cfService.validatePearl(this.ref, this.type).subscribe(
             valid => {
                 if (this.description == undefined) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
                     this.description == "";
                 }
                 //I don't distinguish between node and graph since if type is node showPropertyChain is ignored server-side
-                if (this.creId != null) { //edit mode
-                    this.crService.updateCustomRangeEntry(this.creId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
+                if (this.cfId != null) { //edit mode
+                    this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
                         stResp => {
                             event.stopPropagation();
                             this.dialog.close();
                         }
                     );
                 } else { //create mode
-                    this.crService.createCustomRangeEntry(
-                        this.type, this.crePrefix + this.creShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
+                    this.cfService.createCustomForm(
+                        this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
                         stResp => {
                             event.stopPropagation();
                             this.dialog.close();
                         }
-                        );
+                    );
                 }
             },
             err => { }

@@ -5,7 +5,7 @@ import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreat
 import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
 import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
 import {AddPropertyValueModal, AddPropertyValueModalData} from "./addPropertyValueModal";
-import {CustomFormModal, CustomFormModalData} from "../../customRanges/customForm/customFormModal";
+import {CustomFormModal, CustomFormModalData} from "../../customForms/customForm/customFormModal";
 import {ARTResource, ARTURIResource} from '../../models/ARTResources';
 
 /**

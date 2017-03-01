@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
@@ -27,7 +27,7 @@ export class SchemesPartitionRenderer extends AbstractPredicateObjectsListRender
     addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
     removeBtnImgTitle = "Remove from ConceptScheme";
 
-    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private crService: CustomRangeServices,
+    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private cfService: CustomFormsServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
         super();
     }
@@ -60,7 +60,7 @@ export class SchemesPartitionRenderer extends AbstractPredicateObjectsListRender
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

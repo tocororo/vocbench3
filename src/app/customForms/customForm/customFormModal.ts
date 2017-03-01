@@ -1,11 +1,12 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {FormEntry} from "../../models/CustomRanges";
+import {FormField} from "../../models/CustomForms";
 import {RDFResourceRolesEnum} from "../../models/ARTResources";
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {CustomRangeServices} from "../../services/customRangeServices";
+import {ModalServices} from "../../widget/modal/modalServices";
+import {CustomFormsServices} from "../../services/customFormsServices";
 
 export class CustomFormModalData extends BSModalContext {
     /**
@@ -14,7 +15,7 @@ export class CustomFormModalData extends BSModalContext {
      */
     constructor(
         public title: string,
-        public creId: string
+        public cfId: string
     ) {
         super();
     }
@@ -32,24 +33,30 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
 
     private ontoType: string;
     
-    private formEntries: FormEntry[];
+    private formFields: FormField[];
     private submittedWithError: boolean = false;
     
-    constructor(public dialog: DialogRef<CustomFormModalData>, public crService: CustomRangeServices, public browsingService: BrowsingServices,
-        private vbCtx: VocbenchCtx) {
+    constructor(public dialog: DialogRef<CustomFormModalData>, public cfService: CustomFormsServices, public browsingService: BrowsingServices,
+        private modalService: ModalServices, private vbCtx: VocbenchCtx) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
         this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
-        this.crService.getCustomRangeEntryForm(this.context.creId).subscribe(
+        this.cfService.getCustomFormRepresentation(this.context.cfId).subscribe(
             form => {
-                this.formEntries = form
+                this.formFields = form
                 /*initialize formEntries in order to adapt it to the view set checked at true to
                 all formEntries. (It wouldn't be necessary for all the entries but just for those optional*/
-                for (var i = 0; i < this.formEntries.length; i++) {
-                    this.formEntries[i]['checked'] = true;
+                for (var i = 0; i < this.formFields.length; i++) {
+                    this.formFields[i]['checked'] = true;
                 }
+            },
+            err => {
+                this.modalService.alert("Error", "Impossible to create the CustomForm (" + this.context.cfId 
+                        + "). Its description may contains error. " + err, "error").then(
+                    res => { this.dialog.dismiss(); }
+                )
             }
         )
     }
@@ -59,69 +66,69 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     }
     
     /**
-     * Listener to change of lang-picker used to set the language argument of a FormEntry that
+     * Listener to change of lang-picker used to set the language argument of a formField that
      * has coda:langString as converter
      */
-    private onConverterLangChange(newLang: string, formEntryConvArgument: FormEntry) {
+    private onConverterLangChange(newLang: string, formFieldConvArgument: FormField) {
         /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
         (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
         window.setTimeout(() =>
-            formEntryConvArgument['value'] = newLang
+            formFieldConvArgument['value'] = newLang
         );
     }
     
     /**
-     * Listener on change of a formEntry input field. Checks if there are some other
+     * Listener on change of a formField input field. Checks if there are some other
      * formEntries with the same userPrompt and eventually updates their value
      */
-    private onEntryValueChange(value: string, formEntry: FormEntry) {
-        for (var i = 0; i < this.formEntries.length; i++) {
-            if (this.formEntries[i] != formEntry && this.formEntries[i].getUserPrompt() == formEntry.getUserPrompt()) {
-                this.formEntries[i]['value'] = value;
+    private onEntryValueChange(value: string, formField: FormField) {
+        for (var i = 0; i < this.formFields.length; i++) {
+            if (this.formFields[i] != formField && this.formFields[i].getUserPrompt() == formField.getUserPrompt()) {
+                this.formFields[i]['value'] = value;
             }
         }
     }
 
-    private pickExistingReource(role: RDFResourceRolesEnum, formEntry: FormEntry) {
+    private pickExistingReource(role: RDFResourceRolesEnum, formField: FormField) {
         if (role == RDFResourceRolesEnum.cls) {
             this.browsingService.browseClassTree("Select a Class").then(
                 (selectedResource: any) => {
-                    formEntry['value'] = selectedResource.getNominalValue();
+                    formField['value'] = selectedResource.getNominalValue();
                 },
                 () => {}
             );
         } else if (role == RDFResourceRolesEnum.individual) {
             this.browsingService.browseClassIndividualTree("Select an Instance").then(
                 (selectedResource: any) => {
-                    formEntry['value'] = selectedResource.getNominalValue();
+                    formField['value'] = selectedResource.getNominalValue();
                 },
                 () => {}
             );
         } else if (role == RDFResourceRolesEnum.concept) {
             this.browsingService.browseConceptTree("Select a Concept").then(
                 (selectedResource: any) => {
-                    formEntry['value'] = selectedResource.getNominalValue();
+                    formField['value'] = selectedResource.getNominalValue();
                 },
                 () => {}
             );
         } else if (role == RDFResourceRolesEnum.conceptScheme) {
             this.browsingService.browseSchemeList("Select a ConceptScheme").then(
                 (selectedResource: any) => {
-                    formEntry['value'] = selectedResource.getNominalValue();
+                    formField['value'] = selectedResource.getNominalValue();
                 },
                 () => {}
             );
         } else if (role == RDFResourceRolesEnum.skosCollection) {
             this.browsingService.browseCollectionTree("Select a Collection").then(
                 (selectedResource: any) => {
-                    formEntry['value'] = selectedResource.getNominalValue();
+                    formField['value'] = selectedResource.getNominalValue();
                 },
                 () => {}
             );
         } else if (role == RDFResourceRolesEnum.property) {
             this.browsingService.browsePropertyTree("Select a Property").then(
                 (selectedResource: any) => {
-                    formEntry['value'] = selectedResource.getNominalValue();
+                    formField['value'] = selectedResource.getNominalValue();
                 },
                 () => {}
             );
@@ -130,8 +137,8 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     
     ok(event: Event) {
         //check if all required field are filled
-        for (var i = 0; i < this.formEntries.length; i++) {
-            var entry = this.formEntries[i];
+        for (var i = 0; i < this.formFields.length; i++) {
+            var entry = this.formFields[i];
             if (entry['checked'] && (entry['value'] == undefined || (entry['value'] instanceof String && entry['value'].trim() == ""))) {
                 this.submittedWithError = true;
                 return;
@@ -139,8 +146,8 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
         }
         
         var entryMap: Array<any> = []; //{userPrompt: string, value: string}
-        for (var i = 0; i < this.formEntries.length; i++) {
-            var entry = this.formEntries[i];
+        for (var i = 0; i < this.formFields.length; i++) {
+            var entry = this.formFields[i];
             if (entry['checked']) {
                 //add the entry only if not already in
                 var alreadyIn: boolean = false;

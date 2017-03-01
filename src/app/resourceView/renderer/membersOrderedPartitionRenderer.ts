@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
 import { ResourceServices } from "../../services/resourceServices";
-import { CustomRangeServices } from "../../services/customRangeServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import {
@@ -32,7 +32,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectsLis
 
     private selectedMember: ARTResource;
 
-    constructor(private crService: CustomRangeServices, private resourceService: ResourceServices, private skosService: SkosServices,
+    constructor(private cfService: CustomFormsServices, private resourceService: ResourceServices, private skosService: SkosServices,
         private rvModalService: ResViewModalServices, private vbCtx: VocbenchCtx) {
         super();
     }
@@ -140,7 +140,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectsLis
     // This is called only when the user remove the whole member list, not single member
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.crService.removeReifiedResource(this.resource, predicate, object).subscribe(
+            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {

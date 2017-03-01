@@ -8,7 +8,7 @@ import {DataComponent} from "./data/dataComponent";
 import {SparqlComponent} from "./sparql/sparqlComponent";
 // import {IcvComponent} from "./icv/icvComponent";
 import {AlignmentValidationComponent} from "./alignment/alignmentValidation/alignmentValidationComponent";
-import {CustomRangeComponent} from "./customRanges/customRangeComponent";
+import {CustomFormComponent} from "./customForms/customFormComponent";
 import {ImportProjectComponent} from "./project/importProject/importProjectComponent";
 import {CreateProjectComponent} from "./project/createProject/createProjectComponent";
 import {ImportDataComponent} from "./config/dataManagement/importData/importDataComponent";
@@ -29,13 +29,11 @@ export const routes: Routes = [
     {path: "Projects", component: ProjectComponent, canActivate: [AuthGuard]},
     {path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard]},
-    // {path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "CustomRange", component: CustomRangeComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "CustomForm", component: CustomFormComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard], canDeactivate: [UnsavedChangesGuard]},
-    // {path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard]}, 
     {path: "Test", component: TestComponent},
     //lazy loading of module with child route
     {path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard]},//TODO guard for admin?

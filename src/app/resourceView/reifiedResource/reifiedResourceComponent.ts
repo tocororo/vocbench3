@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects} from "../../models/ARTResources";
 import {ResourceUtils} from "../../utils/ResourceUtils";
 import {Deserializer} from "../../utils/Deserializer";
-import {CustomRangeServices} from "../../services/customRangeServices";
+import {CustomFormsServices} from "../../services/customFormsServices";
 
 @Component({
 	selector: "reified-resource",
@@ -18,11 +18,11 @@ export class ReifiedResourceComponent {
     
     private open: boolean = false;
 	
-	constructor(private crService: CustomRangeServices) {}
+	constructor(private cfService: CustomFormsServices) {}
     
     private toggle() {
         if (this.predicateObjectList == null) {
-            this.crService.getGraphObjectDescription(this.predicate, this.resource).subscribe(
+            this.cfService.getGraphObjectDescription(this.predicate, this.resource).subscribe(
                 graphDescr => {
                     this.predicateObjectList = graphDescr;
                     this.open = !this.open;
