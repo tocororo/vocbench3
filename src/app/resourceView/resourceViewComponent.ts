@@ -122,11 +122,11 @@ export class ResourceViewComponent {
             this.filterInferredFromPredObjList(this.typesColl);
         }
 
-        var classAxiomsPartition: any = this.resViewResponse.classaxioms;
-        if (classAxiomsPartition != null) {
-            this.classAxiomColl = Deserializer.createPredicateValueList(classAxiomsPartition);
-            this.filterInferredFromPredValuesList(this.classAxiomColl);
-        }
+        // var classAxiomsPartition: any = this.resViewResponse.classaxioms;
+        // if (classAxiomsPartition != null) {
+        //     this.classAxiomColl = Deserializer.createPredicateValueList(classAxiomsPartition);
+        //     this.filterInferredFromPredValuesList(this.classAxiomColl);
+        // }
 
         var topConceptOfPartition: any = this.resViewResponse.topconceptof;
         if (topConceptOfPartition != null) {
@@ -170,27 +170,27 @@ export class ResourceViewComponent {
             this.filterInferredFromPredObjList(this.rangesColl);
         }
 
-        var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
-        if (lexicalizationsPartition != null) {
-            this.lexicalizationsColl = Deserializer.createPredicateValueList(lexicalizationsPartition);
+        // var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
+        // if (lexicalizationsPartition != null) {
+        //     this.lexicalizationsColl = Deserializer.createPredicateValueList(lexicalizationsPartition);
 
-            //sort by language
-            for (var i = 0; i < this.lexicalizationsColl.length; i++) {
-                let values: ARTPredicateObjects[] = this.lexicalizationsColl[i].getValues();
-                for (var j = 0; j < values.length; j++) {
-                    let objects: ARTNode[] = values[j].getObjects();
-                    objects.sort(
-                        function(a: ARTNode, b: ARTNode) {
-                            if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
-                            if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
-                            return 0;
-                        }
-                    );
-                }
-            }
+        //     //sort by language
+        //     for (var i = 0; i < this.lexicalizationsColl.length; i++) {
+        //         let values: ARTPredicateObjects[] = this.lexicalizationsColl[i].getValues();
+        //         for (var j = 0; j < values.length; j++) {
+        //             let objects: ARTNode[] = values[j].getObjects();
+        //             objects.sort(
+        //                 function(a: ARTNode, b: ARTNode) {
+        //                     if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
+        //                     if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
+        //                     return 0;
+        //                 }
+        //             );
+        //         }
+        //     }
 
-            this.filterInferredFromPredValuesList(this.lexicalizationsColl);
-        }
+        //     this.filterInferredFromPredValuesList(this.lexicalizationsColl);
+        // }
 
         var membersPartition: any = this.resViewResponse.members;
         if (membersPartition != null) {
