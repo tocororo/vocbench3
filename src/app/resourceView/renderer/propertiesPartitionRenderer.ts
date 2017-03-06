@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
+import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
@@ -17,9 +17,9 @@ import { ModalServices } from "../../widget/modal/modalServices";
     selector: "properties-renderer",
     templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRenderer {
+export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
 
-    //inherited from AbstractPredicateObjectsListRenderer
+    //inherited from AbstractPredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
@@ -250,7 +250,16 @@ export class PropertiesPartitionRenderer extends AbstractPredicateObjectsListRen
                 )
             },
             () => { }
-        )
+        );
+        // this.resViewModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
+        //     (data: any) => {
+        //         // data.property: this.selectedProperty, value: this.selectedResource }
+        //         this.propService.addExistingPropValue(this.resource, predicate, data.value, RDFTypesEnum.resource).subscribe(
+        //             stResp => { this.update.emit() }
+        //         )
+        //     },
+        //     () => {}
+        // );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

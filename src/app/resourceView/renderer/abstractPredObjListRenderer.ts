@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute
     selector: "pred-obj-list-renderer",
     templateUrl: "./predicateObjectsListRenderer.html",
 })
-export abstract class AbstractPredicateObjectsListRenderer {
+export abstract class AbstractPredObjListRenderer {
 
     /**
      * INPUTS / OUTPUTS

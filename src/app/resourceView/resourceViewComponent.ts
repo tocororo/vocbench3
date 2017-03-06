@@ -1,8 +1,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
-import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ARTPredicateValues,
-    ResAttribute, RDFTypesEnum} from "../models/ARTResources";
+import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../models/ARTResources";
 import {Deserializer} from "../utils/Deserializer";
 import {VocbenchCtx} from "../utils/VocbenchCtx";
 import {VBEventHandler} from "../utils/VBEventHandler";
@@ -27,14 +26,14 @@ export class ResourceViewComponent {
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTPredicateObjects[] = null;
-    private classAxiomColl: ARTPredicateValues[] = null;
+    private classAxiomColl: ARTPredicateObjects[] = null;
     private topconceptofColl: ARTPredicateObjects[] = null;
     private schemesColl: ARTPredicateObjects[] = null;
     private broadersColl: ARTPredicateObjects[] = null;
     private superpropertiesColl: ARTPredicateObjects[] = null;
     private domainsColl: ARTPredicateObjects[] = null;
     private rangesColl: ARTPredicateObjects[] = null;
-    private lexicalizationsColl: ARTPredicateValues[] = null;
+    private lexicalizationsColl: ARTPredicateObjects[] = null;
     private membersColl: ARTPredicateObjects[] = null;
     private membersOrderedColl: ARTPredicateObjects[] = null;
     private propertiesColl: ARTPredicateObjects[] = null;
@@ -122,11 +121,11 @@ export class ResourceViewComponent {
             this.filterInferredFromPredObjList(this.typesColl);
         }
 
-        // var classAxiomsPartition: any = this.resViewResponse.classaxioms;
-        // if (classAxiomsPartition != null) {
-        //     this.classAxiomColl = Deserializer.createPredicateValueList(classAxiomsPartition);
-        //     this.filterInferredFromPredValuesList(this.classAxiomColl);
-        // }
+        var classAxiomsPartition: any = this.resViewResponse.classaxioms;
+        if (classAxiomsPartition != null) {
+            this.classAxiomColl = Deserializer.createPredicateObjectsList(classAxiomsPartition);
+            this.filterInferredFromPredObjList(this.classAxiomColl);
+        }
 
         var topConceptOfPartition: any = this.resViewResponse.topconceptof;
         if (topConceptOfPartition != null) {
@@ -170,27 +169,11 @@ export class ResourceViewComponent {
             this.filterInferredFromPredObjList(this.rangesColl);
         }
 
-        // var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
-        // if (lexicalizationsPartition != null) {
-        //     this.lexicalizationsColl = Deserializer.createPredicateValueList(lexicalizationsPartition);
-
-        //     //sort by language
-        //     for (var i = 0; i < this.lexicalizationsColl.length; i++) {
-        //         let values: ARTPredicateObjects[] = this.lexicalizationsColl[i].getValues();
-        //         for (var j = 0; j < values.length; j++) {
-        //             let objects: ARTNode[] = values[j].getObjects();
-        //             objects.sort(
-        //                 function(a: ARTNode, b: ARTNode) {
-        //                     if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
-        //                     if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
-        //                     return 0;
-        //                 }
-        //             );
-        //         }
-        //     }
-
-        //     this.filterInferredFromPredValuesList(this.lexicalizationsColl);
-        // }
+        var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
+        if (lexicalizationsPartition != null) {
+            this.lexicalizationsColl = Deserializer.createPredicateObjectsList(lexicalizationsPartition);
+            this.filterInferredFromPredObjList(this.lexicalizationsColl);
+        }
 
         var membersPartition: any = this.resViewResponse.members;
         if (membersPartition != null) {
@@ -237,15 +220,6 @@ export class ResourceViewComponent {
         }
     }
 
-    /**
-     * Based on the showInferred param, filter out or let pass inferred information in a predicate-values list
-     */
-    private filterInferredFromPredValuesList(predValueList: ARTPredicateValues[]) {
-        for (var i = 0; i < predValueList.length; i++) {
-            this.filterInferredFromPredObjList(predValueList[i].getValues());
-        }
-    }
-    
     /**
      * Facets partition has a structure different from the other (object list and predicate-object list),
      * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)

@@ -252,27 +252,6 @@ export class ARTPredicateObjects {
     };
 }
 
-export class ARTPredicateValues {
-    private predicate: ARTURIResource;
-    private values: ARTPredicateObjects[];
-
-    constructor(predicate: ARTURIResource, values: ARTPredicateObjects[]) {
-        this.predicate = predicate;
-        this.values = values;
-    }
-
-    getPredicate(): ARTURIResource {
-        return this.predicate;
-    };
-
-    getValues(): ARTPredicateObjects[] {
-        return this.values;
-    };
-    setValues(values: ARTPredicateObjects[]) {
-        this.values = values;
-    }
-}
-
 export class ResAttribute {
     
     public static SHOW = "show";

@@ -1,36 +1,42 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateValuesListRenderer } from "./abstractPerdicateValuesListRenderer";
+import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { AbstractPredObjListMultirootRenderer } from "./abstractPredObjListMultirootRenderer";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateValues, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects } from "../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 
 @Component({
     selector: "lexicalizations-renderer",
-    templateUrl: "./predicateValuesListRenderer.html",
+    templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class LexicalizationsPartitionRenderer extends AbstractPredicateValuesListRenderer {
+export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultirootRenderer {
 
     //inherited from AbstractPredicateValuesListRenderer
-    // @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
+    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     rootProperties: ARTURIResource[] = [];
     knownProperties: ARTURIResource[] = [
-        RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel, 
+        RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
         SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
     label = "Lexicalizations";
     addBtnImgTitle = "Add a lexicalization";
     addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
     removeBtnImgTitle = "Remove lexicalization";
+
+    private predicateOrder: string[] = [
+        SKOSXL.prefLabel.getURI(), SKOSXL.altLabel.getURI(), SKOSXL.hiddenLabel.getURI(),
+        SKOS.prefLabel.getURI(), SKOS.altLabel.getURI(), SKOS.hiddenLabel.getURI(),
+        RDFS.label.getURI()
+    ];
 
     constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private propertyService: PropertyServices, private resViewService: ResourceViewServices, private modalService: ModalServices,
@@ -44,6 +50,35 @@ export class LexicalizationsPartitionRenderer extends AbstractPredicateValuesLis
                 this.rootProperties = props;
             }
         );
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        console.log(changes);
+        if (changes['predicateObjectList'].currentValue) {
+            //sort predicate (SKOSXL pref, alt, hidden Label, SKOS pref, alt, hidden Label, RDFS label)
+            this.predicateObjectList.sort(this.sortPredicates(this.predicateOrder));
+            //sort objects by language
+            for (var i = 0; i < this.predicateObjectList.length; i++) {
+                let objects: ARTNode[] = this.predicateObjectList[i].getObjects();
+                objects.sort(
+                    function (a: ARTNode, b: ARTNode) {
+                        if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
+                        if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
+                        return 0;
+                    }
+                );
+            }
+        }
+    }
+
+    private sortPredicates(order: string[]) {
+        return function (a: ARTPredicateObjects, b: ARTPredicateObjects) {
+            let indexPredA = order.indexOf(a.getPredicate().getURI());
+            let indexPredB = order.indexOf(b.getPredicate().getURI());
+            if (indexPredA == -1) return 1;
+            else if (indexPredB == -1) return -1;
+            else return indexPredA - indexPredB;
+        }
     }
 
     add(predicate?: ARTURIResource) {

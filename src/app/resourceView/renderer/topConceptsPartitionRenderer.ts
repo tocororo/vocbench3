@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
+import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
@@ -14,9 +14,9 @@ import { VBEventHandler } from "../../utils/VBEventHandler"
     selector: "top-concepts-renderer",
     templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class TopConceptsPartitionRenderer extends AbstractPredicateObjectsListRenderer {
+export class TopConceptsPartitionRenderer extends AbstractPredObjListRenderer {
 
-    //inherited from AbstractPredicateObjectsListRenderer
+    //inherited from AbstractPredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource: ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

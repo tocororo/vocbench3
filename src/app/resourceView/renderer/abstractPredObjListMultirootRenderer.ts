@@ -1,17 +1,17 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateValues, ResAttribute } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
 
 @Component({
-    selector: "pred-value-list-renderer",
-    templateUrl: "./predicateValuesListRenderer.html",
+    selector: "pred-obj-list-roots-renderer",
+    templateUrl: "./predicateObjectsListRenderer.html",
 })
-export abstract class AbstractPredicateValuesListRenderer {
+export abstract class AbstractPredObjListMultirootRenderer {
 
     /**
      * INPUTS / OUTPUTS
      */
 
-    @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
+    @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource: ARTResource; //resource described
     @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
+import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
@@ -15,9 +15,9 @@ import { ResViewModalServices } from "../resViewModals/resViewModalServices";
     selector: "members-renderer",
     templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class MembersPartitionRenderer extends AbstractPredicateObjectsListRenderer {
+export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
 
-    //inherited from AbstractPredicateObjectsListRenderer
+    //inherited from AbstractPredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

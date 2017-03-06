@@ -1,6 +1,5 @@
 import {
-    ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ARTPredicateValues,
-    ResAttribute, RDFResourceRolesEnum
+    ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
 } from "../models/ARTResources";
 import { User } from "../models/User";
 
@@ -560,17 +559,4 @@ export class Deserializer {
         return result;
     };
 
-    /**
-     * Returns ARTPredicateValues list 
-     * (this method has only a json implementation)
-     */
-    static createPredicateValueList(pvList: any): ARTPredicateValues[] {
-        var result: ARTPredicateValues[] = [];
-        for (var i = 0; i < pvList.length; i++) {
-            var predicate: ARTURIResource = this.createURIJSON(pvList[i].predicate);
-            var values: ARTPredicateObjects[] = this.createPredicateObjectsListJSON(pvList[i].value);
-            result.push(new ARTPredicateValues(predicate, values));
-        }
-        return result;
-    };
 }

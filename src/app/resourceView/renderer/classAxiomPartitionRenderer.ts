@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateValuesListRenderer } from "./abstractPerdicateValuesListRenderer";
+import { AbstractPredObjListMultirootRenderer } from "./abstractPredObjListMultirootRenderer";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { OwlServices } from "../../services/owlServices";
@@ -11,12 +11,12 @@ import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 @Component({
     selector: "class-axiom-renderer",
-    templateUrl: "./predicateValuesListRenderer.html",
+    templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class ClassAxiomPartitionPartitionRenderer extends AbstractPredicateValuesListRenderer {
+export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMultirootRenderer {
 
     //inherited from AbstractPredicateValuesListRenderer
-    // @Input('pred-value-list') predicateValueList: ARTPredicateValues[];
+    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();

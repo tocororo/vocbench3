@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredicateObjectsListRenderer } from "./abstractPredicateObjectsListRenderer";
+import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
 import { ResourceServices } from "../../services/resourceServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
@@ -15,9 +15,9 @@ import { VocbenchCtx } from "../../utils/VocbenchCtx";
     selector: "members-ordered-renderer",
     templateUrl: "./membersOrderedPartitionRenderer.html",
 })
-export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectsListRenderer {
+export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer {
 
-    //inherited from AbstractPredicateObjectsListRenderer
+    //inherited from AbstractPredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
@@ -45,7 +45,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredicateObjectsLis
         }
     }
 
-    //needed to be implemented since this Component extends AbstractPredicateObjectsListRenderer, but not used.
+    //needed to be implemented since this Component extends abstractPredObjListRenderer, but not used.
     //Use addFirst addLast addBefore and addAfter instead
     add() { }
 
