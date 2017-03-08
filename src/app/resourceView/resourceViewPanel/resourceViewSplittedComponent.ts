@@ -1,6 +1,6 @@
 import {Component, Input, SimpleChanges} from "@angular/core";
 import {ARTResource} from "../../models/ARTResources";
-import {ResourceViewComponent} from "../ResourceViewComponent";
+import {ResourceViewComponent} from "../resourceViewComponent";
 
 @Component({
     selector: "resource-view-splitted",
