@@ -3,7 +3,7 @@ import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
 import {ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum} from "../models/ARTResources";
-import {FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, FormFieldType} from "../models/CustomForms";
+import {FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, FormFieldType, CustomFormLevel} from "../models/CustomForms";
 
 @Injectable()
 export class CustomFormsServices {
@@ -162,9 +162,9 @@ export class CustomFormsServices {
             stResp => {
                 var fcMappings: Array<FormCollectionMapping> = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let mapping = stResp[i];
-                    let resource = new ARTURIResource(mapping.resource, mapping.resource, RDFResourceRolesEnum.individual)
-                    fcMappings.push(new FormCollectionMapping(mapping.formCollection, resource, mapping.replace));
+                    let mappingNode = stResp[i];
+                    let resource = new ARTURIResource(mappingNode.resource, mappingNode.resource, RDFResourceRolesEnum.individual);
+                    fcMappings.push(new FormCollectionMapping(mappingNode.formCollection, resource, mappingNode.replace));
                 }
                 //sort by resource uri
                 fcMappings.sort(
@@ -227,16 +227,24 @@ export class CustomFormsServices {
     /**
      * Returns the IDs of FormCollection available
      */
-    getAllFormCollections(): Observable<string[]> {
+    getAllFormCollections(): Observable<FormCollection[]> {
         console.log("[CustomFormsServices] getAllFormCollections");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAllFormCollections", params, this.oldTypeService, true).map(
             stResp => {
-                var formCollections: Array<string> = [];
+                var formCollections: Array<FormCollection> = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    formCollections.push(stResp[i]);
+                    let fc: FormCollection = new FormCollection(stResp[i].id);
+                    fc.setLevel(stResp[i].level);
+                    formCollections.push(fc);
                 }
-                formCollections.sort();
+                formCollections.sort(
+                    function(a: FormCollection, b: FormCollection) {
+                        if (a.getId() < b.getId()) return -1;
+                        if (a.getId() > b.getId()) return 1;
+                        return 0;
+                    }
+                );
                 return formCollections;
             }
         );
@@ -246,7 +254,7 @@ export class CustomFormsServices {
      * Returns the FormCollection with the given id.
      * @param id
      */
-    getFormCollection(id: string) {
+    getFormCollection(id: string): Observable<FormCollection> {
 	    console.log("[CustomFormsServices] getFormCollection");
         var params: any = {
             id: id
@@ -257,7 +265,9 @@ export class CustomFormsServices {
                 var fcId = stResp.id;
                 var forms: CustomForm[] = [];
                 for (var i = 0; i < stResp.forms.length; i++) {
-                    forms.push(new CustomForm(stResp.forms[i]));
+                    let cf: CustomForm = new CustomForm(stResp.forms[i].id);
+                    cf.setLevel(stResp.forms[i].level);
+                    forms.push(cf);
                 }
                 formColl = new FormCollection(fcId);
                 forms.sort(
@@ -296,21 +306,43 @@ export class CustomFormsServices {
         };
         return this.httpMgr.doGet(this.serviceName, "deleteFormCollection", params, this.oldTypeService, true);
     }
+
+    /**
+     * Creates a new FC cloning an existing FC
+     * @param sourceId id of the FC to clone
+     * @param targetId id of the FC to create
+     */
+    cloneFormCollection(sourceId: string, targetId: string) {
+        console.log("[CustomFormsServices] cloneFormCollection");
+        var params: any = {
+            sourceId: sourceId,
+            targetId: targetId
+        };
+        return this.httpMgr.doGet(this.serviceName, "cloneFormCollection", params, this.oldTypeService, true);
+    }
     
     /**
      * Returns the IDs of all the CustomForm available
      */
-    getAllCustomForms(): Observable<string[]> {
+    getAllCustomForms(): Observable<CustomForm[]> {
         console.log("[CustomFormsServices] getAllCustomForms");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAllCustomForms", params, this.oldTypeService, true).map(
             stResp => {
-                var customForms: Array<string> = [];
+                var customForms: Array<CustomForm> = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    customForms.push(stResp[i]);
+                    let cf: CustomForm = new CustomForm(stResp[i].id);
+                    cf.setLevel(stResp[i].level);
+                    customForms.push(cf);
                 }
                 //sort
-                customForms.sort();
+                customForms.sort(
+                    function(a: CustomForm, b: CustomForm) {
+                        if (a.getId() < b.getId()) return -1;
+                        if (a.getId() > b.getId()) return 1;
+                        return 0;
+                    }
+                );
                 return customForms;
             }
         );
@@ -355,7 +387,7 @@ export class CustomFormsServices {
 
     /**
      * Creates a CustomForm
-     * @param type type of the CRE, available values: graph/node
+     * @param type type of the CF, available values: graph/node
      * @param id id (comprensive of prefix) of the CRE
      * @param name
      * @param description
@@ -379,9 +411,9 @@ export class CustomFormsServices {
     }
 
     /**
-     * Creates a new CRE cloning an existing CRE
-     * @param sourceId id of the CRE to clone
-     * @param targetId id of the CRE to create
+     * Creates a new CF cloning an existing CF
+     * @param sourceId id of the CF to clone
+     * @param targetId id of the CF to create
      */
     cloneCustomForm(sourceId: string, targetId: string) {
         console.log("[CustomFormsServices] cloneCustomForm");

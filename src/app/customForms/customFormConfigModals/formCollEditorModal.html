@@ -22,8 +22,9 @@
                 <div class="scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <tbody>
-                            <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)" [ngClass]="{active: cForm == selectedForm}">
-                                <td>{{cForm}}</td>
+                            <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
+                                [ngClass]="{active: cForm == selectedForm, greyText: cForm.getLevel() == 'system'}">
+                                <td>{{cForm.getId()}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -32,10 +33,10 @@
         </div>
         
         <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-default btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAll">
+            <button class="btn btn-default btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAvailable" [disabled]="context.readOnly">
                 <span class="glyphicon glyphicon-chevron-left"></span>Add
             </button>
-            <button class="btn btn-default btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm">
+            <button class="btn btn-default btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || context.readOnly">
                 Remove<span class="glyphicon glyphicon-chevron-right"></span>
             </button>
         </div>
@@ -48,9 +49,9 @@
                 <div class="scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <tbody>
-                            <tr *ngFor="let cForm of formsAll" (click)="selectFormAll(cForm)"
-                                [ngClass]="{active: cForm == selectedFormAll, greyText: isFormAlreadyInCollection(cForm)}">
-                                <td>{{cForm}}</td>
+                            <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
+                                [ngClass]="{active: cForm == selectedFormAvailable, greyText: cForm.getLevel() == 'system'}">
+                                <td>{{cForm.getId()}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -65,6 +66,6 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="submitted && !isDataValid()">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="submitted && !isDataValid() || context.readOnly">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

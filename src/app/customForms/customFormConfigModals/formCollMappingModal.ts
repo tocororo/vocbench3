@@ -4,6 +4,7 @@ import {DialogRef, ModalComponent} from "angular2-modal";
 import {CustomFormsServices} from "../../services/customFormsServices";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ARTURIResource} from "../../models/ARTResources";
+import {FormCollection} from "../../models/CustomForms";
 
 @Component({
     selector: "form-coll-mapping-modal",
@@ -12,9 +13,9 @@ import {ARTURIResource} from "../../models/ARTResources";
 export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
     
-    private formCollectionList: Array<string>;
+    private formCollectionList: Array<FormCollection>;
     private selectedResource: ARTURIResource;
-    private selectedFormColl: string;
+    private selectedFormColl: FormCollection;
     
     constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices,
         private browsingService: BrowsingServices) {
@@ -23,8 +24,8 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     
     ngOnInit() {
         this.cfService.getAllFormCollections().subscribe(
-            crList => {
-                this.formCollectionList = crList;
+            fcList => {
+                this.formCollectionList = fcList;
             }
         );
     }
@@ -47,13 +48,13 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         )
     }
     
-    private selectFormColl(formColl: string) {
+    private selectFormColl(formColl: FormCollection) {
         this.selectedFormColl = formColl;
     }
     
     ok(event: Event) {
         event.stopPropagation();
-        this.dialog.close({resource: this.selectedResource, formCollection: this.selectedFormColl});
+        this.dialog.close({resource: this.selectedResource, formCollection: this.selectedFormColl.getId()});
     }
 
     cancel() {

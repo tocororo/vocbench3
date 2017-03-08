@@ -9,12 +9,13 @@ var CodeMirror = require('codemirror/lib/codemirror');
     selector: 'codemirror',
     template: `
         <div style="overflow: auto">
-            <textarea #txtarea>{{code}}</textarea>
+            <textarea #txtarea [ngClass]="{disabled: disabled}">{{code}}</textarea>
         </div>
     `,
 })
 export class CodemirrorComponent {
     @Input() code: string;
+    @Input() disabled: boolean;
     @Output() codechange = new EventEmitter<string>();
     
     @ViewChild('txtarea') textareaElement: any;
@@ -35,6 +36,7 @@ export class CodemirrorComponent {
                 matchBrackets: true, //it seems not to work
                 autoCloseBrackets: true,
                 lineWrapping: true,
+                readOnly: this.disabled,
                 viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
                 extraKeys: {

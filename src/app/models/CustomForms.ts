@@ -28,10 +28,11 @@ export class FormCollectionMapping {
 
 export class FormCollection {
     
-    public static PREFIX = "it.uniroma2.art.semanticturkey.forms.";
+    public static PREFIX = "it.uniroma2.art.semanticturkey.customform.collection.";
     
     private id: string;
     private forms: CustomForm[];
+    private level: CustomFormLevel;
     
     constructor(id: string) {
         this.id = id;
@@ -48,12 +49,20 @@ export class FormCollection {
     public setForms(forms: CustomForm[]) {
         this.forms = forms;
     }
+
+    public getLevel(): CustomFormLevel {
+        return this.level;
+    }
+
+    public setLevel(level: CustomFormLevel) {
+        this.level = level;
+    }
     
 }
 
 export class CustomForm {
     
-    public static PREFIX = "it.uniroma2.art.semanticturkey.form.";
+    public static PREFIX = "it.uniroma2.art.semanticturkey.customform.form.";
     
     private id: string;
     private name: string;
@@ -61,6 +70,7 @@ export class CustomForm {
     private description: string;
     private ref: string;
     private showPropertyChain: ARTURIResource[];
+    private level: CustomFormLevel;
     
     constructor(id: string) {
         this.id = id;
@@ -108,6 +118,14 @@ export class CustomForm {
     
     public setShowPropertyChain(showPropertyChain: ARTURIResource[]) {
         this.showPropertyChain = showPropertyChain;
+    }
+
+    public getLevel(): CustomFormLevel {
+        return this.level;
+    }
+
+    public setLevel(level: CustomFormLevel) {
+        this.level = level;
     }
     
 }
@@ -190,3 +208,8 @@ export class FormField {
 
 export type CustomFormType = "node" | "graph";
 export type FormFieldType = "literal" | "uri";
+export type CustomFormLevel = "system" | "project";
+export const CustomFormLevel = {
+    system: "system" as CustomFormLevel,
+    project: "project" as CustomFormLevel
+}

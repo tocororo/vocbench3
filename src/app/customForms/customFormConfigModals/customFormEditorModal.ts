@@ -16,7 +16,7 @@ export class CustomFormEditorModalData extends BSModalContext {
      * @param existingForms list of CustomForm id that already exist.
      * Useful to avoid cretion of CustomForm with duplicate id.
      */
-    constructor(public id?: string, public existingForms?: string[]) {
+    constructor(public id: string, public existingForms: string[] = [], public readOnly: boolean = false) {
         super();
     }
 }
@@ -62,7 +62,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                     if (this.type == "graph") {
                         this.showPropertyChain = cf.getShowPropertyChain();
                     }
-                }
+                },
+                err => { this.dialog.dismiss() }
             )
         }
     }
@@ -86,6 +87,9 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
 
     //========= PROPERTY CHAIN HANDLERS ============
     private selectPropInChain(prop: ARTURIResource) {
+        if (this.context.readOnly) {
+            return;
+        }
         if (this.selectedPropInChain == prop) {
             this.selectedPropInChain = null;
         } else {
@@ -129,6 +133,9 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         }
     }
     private removePropFromChain(prop: ARTURIResource) {
+        if (this.context.readOnly) {
+            return;
+        }
         this.showPropertyChain.splice(this.showPropertyChain.indexOf(prop), 1);
         if (this.selectedPropInChain == prop) {
             this.selectedPropInChain = null;

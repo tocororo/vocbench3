@@ -28,7 +28,7 @@
                     <span class="glyphicon glyphicon-info-sign"
                         title="The name that will be shown to the user to identify this form"></span>
                 </td>
-                <td><input type="text" class="form-control input-xs" [(ngModel)]="name"></td>
+                <td><input type="text" class="form-control input-xs" [(ngModel)]="name" [disabled]="context.readOnly"></td>
                 <td>*</td>
             </tr>
             <tr style="height: 1%; white-space: nowrap">
@@ -37,7 +37,7 @@
                     <span class="glyphicon glyphicon-info-sign"
                         title="A natural language description that briefly explain the purpose of this form"></span>
                 </td>
-                <td><input type="text" class="form-control input-xs" [(ngModel)]="description"></td>
+                <td><input type="text" class="form-control input-xs" [(ngModel)]="description" [disabled]="context.readOnly"></td>
             </tr>
             <tr style="height: 1%; white-space: nowrap">
                 <td>
@@ -61,8 +61,10 @@
                 </td>
                 <td>
                     <div class="hbox">
-                        <codemirror [code]="ref" (codechange)="ref=$event" style="flex: 1; margin-right: 4px;"></codemirror>
-                        <button class="btn btn-default btn-xs" (click)="pickConverter()" style="align-self: flex-start" title="Pick converter">
+                        <codemirror [code]="ref" (codechange)="ref=$event" style="flex: 1; margin-right: 4px;" [disabled]="context.readOnly">
+                        </codemirror>
+                        <button class="btn btn-default btn-xs" (click)="pickConverter()" style="align-self: flex-start" title="Pick converter"
+                            [disabled]="context.readOnly">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                     </div>
@@ -83,14 +85,17 @@
                                 [ngClass]="{selectedResource : selectedPropInChain == prop}"
                                 style="border: 1px solid #ccc; border-radius: 3px; padding: 3px; background: #fff; margin: 2px 1px;">
                                 {{prop.getURI()}}
-                                <span class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
+                                <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
                                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
-                                    onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
+                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                </span>
+                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
+                                    onmouseover="this.style.cursor='not-allowed'">
                                 </span>
                             </span>
                         </div>
                         <div class="btn-group dropup" style="margin-left: 4px;">
-                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="context.readOnly">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             <ul class="dropdown-menu pull-right">
@@ -117,7 +122,7 @@
                 {{errorMsg}}
             </div>
         </div>
-        <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="context.readOnly">Ok</button>
         <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
     </div>
 </div>

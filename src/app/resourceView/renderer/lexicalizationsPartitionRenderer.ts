@@ -53,7 +53,6 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log(changes);
         if (changes['predicateObjectList'].currentValue) {
             //sort predicate (SKOSXL pref, alt, hidden Label, SKOS pref, alt, hidden Label, RDFS label)
             this.predicateObjectList.sort(this.sortPredicates(this.predicateOrder));

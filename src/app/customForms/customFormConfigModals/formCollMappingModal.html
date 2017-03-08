@@ -34,8 +34,9 @@
             <div class="scrollableContainer">
                 <table class="table table-condensed table-borderless table-hoverable">
                     <tbody>
-                        <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)" [ngClass]="{active: fc == selectedFormColl}">
-                            <td>{{fc}}</td>
+                        <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
+                            [ngClass]="{active: fc == selectedFormColl, greyText: fc.getLevel() == 'system'}">
+                            <td>{{fc.getId()}}</td>
                         </tr>
                     </tbody>
                 </table>
