@@ -3,12 +3,12 @@ import {ARTURIResource} from "./ARTResources";
 export class FormCollectionMapping {
 
     private resource: ARTURIResource;
-    private formCollectionId: string;
+    private formCollection: FormCollection;
     private replace: boolean;
 
-    constructor(formCollectionId: string, resource: ARTURIResource, replace: boolean) {
+    constructor(formCollection: FormCollection, resource: ARTURIResource, replace: boolean) {
         this.resource = resource;
-        this.formCollectionId = formCollectionId;
+        this.formCollection = formCollection;
         this.replace = replace;
     }
 
@@ -16,8 +16,8 @@ export class FormCollectionMapping {
         return this.resource;
     }
 
-    public getFormCollectionID(): string {
-        return this.formCollectionId;
+    public getFormCollection(): FormCollection {
+        return this.formCollection;
     }
 
     public getReplace(): boolean {

@@ -127,7 +127,9 @@
                                 <tr *ngFor="let formCollMap of cfConfigurationMap" (click)="selectFormCollMapping(formCollMap)"
                                     [ngClass]="{active: formCollMap == selectedFormCollMapping}">
                                     <td>{{formCollMap.getResource().getURI()}}</td>
-                                    <td>{{formCollMap.getFormCollectionID()}}</td>
+                                    <td [ngClass]="{greyText: formCollMap.getFormCollection().getLevel() == 'system'}">
+                                        {{formCollMap.getFormCollection().getId()}}
+                                    </td>
                                     <td class="text-center">
                                         <input type="checkbox" [ngModel]="formCollMap.getReplace()" (ngModelChange)="changeReplaceToMapping($event, formCollMap)">
                                     </td>

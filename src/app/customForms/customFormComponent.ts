@@ -68,7 +68,7 @@ export class CustomFormComponent {
                             //already in a mapping
                             this.modalService.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
                                 ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
-                                ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollectionID() + ")",
+                                ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
                                 "warning");
                             return;
                         }

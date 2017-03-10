@@ -168,7 +168,9 @@ export class CustomFormsServices {
                 for (var i = 0; i < stResp.length; i++) {
                     let mappingNode = stResp[i];
                     let resource = new ARTURIResource(mappingNode.resource, mappingNode.resource, RDFResourceRolesEnum.individual);
-                    fcMappings.push(new FormCollectionMapping(mappingNode.formCollection, resource, mappingNode.replace));
+                    let formCollection: FormCollection = new FormCollection(mappingNode.formCollection.id);
+                    formCollection.setLevel(mappingNode.formCollection.level);
+                    fcMappings.push(new FormCollectionMapping(formCollection, resource, mappingNode.replace));
                 }
                 //sort by resource uri
                 fcMappings.sort(
