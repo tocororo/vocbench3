@@ -81,16 +81,13 @@ export class CustomFormsServices {
                     var mandatory = stResp[i].mandatory;
                     var userPrompt = stResp[i].userPrompt;
                     var converter = stResp[i].converter.uri;
-                    console.log("b");
                     //coda:langString could have an argument to specify the language through another entry 
                     if (converter == "http://art.uniroma2.it/coda/contracts/langString") {
                         var argUserPrompt = stResp[i].converter.arg.userPrompt;
                         pendingEntryDependencies.push({phIdEntry: placeholderId, userPromptArg: argUserPrompt});
                     }
-                    console.log("a");
                     var entry = new FormField(placeholderId, type, mandatory, userPrompt, converter);
                     if (type == "literal") {
-                        console.log("c");
                         var datatype = stResp[i].datatype;
                         if (datatype != undefined) {
                             entry.setDatatype(datatype);
@@ -100,14 +97,11 @@ export class CustomFormsServices {
                             entry.setLang(lang);
                         }
                     }
-                    console.log("1");
                     form.push(entry);
-                    console.log("form", form);
                 }
                 
                 //iterate over pendingEntryDependencies and set them as argument of other formEntries
                 for (var i = 0; i < pendingEntryDependencies.length; i++) {
-                    console.log("2");
                     var argEntry: FormField; //entry that is used as argument of another
                     //get the FormField to set as argument
                     for (var j = 0; j < form.length; j++) {
@@ -116,7 +110,6 @@ export class CustomFormsServices {
                             argEntry.setDependency(true); //mark the entry as a dependency
                         }
                     }
-                    console.log("3");
                     //look for the entry to which inject the argEntry as argument
                     for (var j = 0; j < form.length; j++) {
                         if (pendingEntryDependencies[i].phIdEntry == form[j].getPlaceholderId()) {

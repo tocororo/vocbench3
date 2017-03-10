@@ -49,6 +49,9 @@
         <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl"
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </lexicalizations-renderer>
+        <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl"
+            [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        </notes-renderer>
         <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl"
             [resource]="resource" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </members-renderer>

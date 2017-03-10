@@ -1,13 +1,16 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
 import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { RDFS } from "../../models/Vocabulary";
 
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosxlServices } from "../../services/skosxlServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "superproperties-renderer",
@@ -27,9 +30,10 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRendere
     addBtnImgSrc = require("../../../assets/images/prop_create.png");
     removeBtnImgTitle = "Remove superproperty";
 
-    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private cfService: CustomFormsServices,
-        private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
-        super();
+    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
+        private eventHandler: VBEventHandler) {
+        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

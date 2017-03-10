@@ -1,12 +1,16 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
 import { ManchesterServices } from "../../services/manchesterServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { RDFS } from "../../models/Vocabulary";
+
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosxlServices } from "../../services/skosxlServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "domains-renderer",
@@ -26,9 +30,9 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgSrc = require("../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove domain";
 
-    constructor(private cfService: CustomFormsServices, private propService: PropertyServices, private resourceService: ResourceServices,
-        private manchService: ManchesterServices, private rvModalService: ResViewModalServices) {
-        super();
+    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices, private manchService: ManchesterServices) {
+        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

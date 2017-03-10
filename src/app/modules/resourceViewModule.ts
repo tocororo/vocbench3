@@ -15,9 +15,11 @@ import {ReifiedResourceComponent} from '../resourceView/reifiedResource/reifiedR
 import {BroadersPartitionRenderer} from '../resourceView/renderer/broadersPartitionRenderer';
 import {ClassAxiomPartitionPartitionRenderer} from '../resourceView/renderer/classAxiomPartitionRenderer';
 import {DomainsPartitionRenderer} from '../resourceView/renderer/domainsPartitionRenderer';
+import {LabelRelationsPartitionRenderer} from '../resourceView/renderer/labelRelationsPartitionRenderer';
 import {LexicalizationsPartitionRenderer} from '../resourceView/renderer/lexicalizationsPartitionRenderer';
 import {MembersOrderedPartitionRenderer} from '../resourceView/renderer/membersOrderedPartitionRenderer';
 import {MembersPartitionRenderer} from '../resourceView/renderer/membersPartitionRenderer';
+import {NotesPartitionRenderer} from '../resourceView/renderer/notesPartitionRenderer';
 import {PropertiesPartitionRenderer} from '../resourceView/renderer/propertiesPartitionRenderer';
 import {PropertyFacetsPartitionRenderer} from '../resourceView/renderer/propertyFacetsPartitionRenderer';
 import {RangesPartitionRenderer} from '../resourceView/renderer/rangesPartitionRenderer';
@@ -25,7 +27,7 @@ import {SchemesPartitionRenderer} from '../resourceView/renderer/schemesPartitio
 import {SuperPropertiesPartitionRenderer} from '../resourceView/renderer/superPropertiesPartitionRenderer';
 import {TopConceptsPartitionRenderer} from '../resourceView/renderer/topConceptsPartitionRenderer';
 import {TypesPartitionRenderer} from '../resourceView/renderer/typesPartitionRenderer';
-import {LabelRelationsPartitionRenderer} from '../resourceView/renderer/labelRelationsPartitionRenderer';
+
 import {PredicateObjectsRenderer} from '../resourceView/renderer/predicateObjectsRenderer';
 
 import {ResViewModalServices} from '../resourceView/resViewModals/resViewModalServices';
@@ -48,7 +50,7 @@ import {AddPropertyValueModal} from '../resourceView/resViewModals/addPropertyVa
         LexicalizationsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,
         PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
-        TypesPartitionRenderer, LabelRelationsPartitionRenderer,
+        TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer,
         PredicateObjectsRenderer,
         //modals
         ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal

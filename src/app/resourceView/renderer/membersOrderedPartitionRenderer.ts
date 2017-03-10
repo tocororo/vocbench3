@@ -1,15 +1,20 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import {
     ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
     RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
 } from "../../models/ARTResources";
 import { SKOS } from "../../models/Vocabulary";
 import { VocbenchCtx } from "../../utils/VocbenchCtx";
+
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosxlServices } from "../../services/skosxlServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "members-ordered-renderer",
@@ -32,9 +37,10 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
 
     private selectedMember: ARTResource;
 
-    constructor(private cfService: CustomFormsServices, private resourceService: ResourceServices, private skosService: SkosServices,
-        private rvModalService: ResViewModalServices, private vbCtx: VocbenchCtx) {
-        super();
+    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
+        private skosService: SkosServices, private vbCtx: VocbenchCtx) {
+        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     private selectMember(member: ARTResource) {

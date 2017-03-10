@@ -1,13 +1,17 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { SKOS } from "../../models/Vocabulary"
-import { VBEventHandler } from "../../utils/VBEventHandler"
+import { SKOS } from "../../models/Vocabulary";
+import { VBEventHandler } from "../../utils/VBEventHandler";
+
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosxlServices } from "../../services/skosxlServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "schemes-renderer",
@@ -27,9 +31,10 @@ export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
     removeBtnImgTitle = "Remove from ConceptScheme";
 
-    constructor(private propService: PropertyServices, private resourceService: ResourceServices, private cfService: CustomFormsServices,
-        private skosService: SkosServices, private eventHandler: VBEventHandler, private rvModalService: ResViewModalServices) {
-        super();
+    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
+        private skosService: SkosServices, private eventHandler: VBEventHandler) {
+        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     //add as top concept

@@ -1,13 +1,17 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
 import { SkosServices } from "../../services/skosServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { SKOS } from "../../models/Vocabulary"
+
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosxlServices } from "../../services/skosxlServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourceServices } from "../../services/resourceServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "broaders-renderer",
@@ -27,10 +31,12 @@ export class BroadersPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgSrc = require("../../../assets/images/concept_create.png");
     removeBtnImgTitle = "Remove broader";
 
-    constructor(private cfService: CustomFormsServices, private propService: PropertyServices, private resourceService: ResourceServices,
-        private skosService: SkosServices, private rvModalService: ResViewModalServices, private eventHandler: VBEventHandler) {
-        super();
+    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+        modalService: ModalServices, browsingService: BrowsingServices, resViewModalService: ResViewModalServices,
+        private skosService: SkosServices, private eventHandler: VBEventHandler) {
+        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, resViewModalService);
     }
+    
 
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;

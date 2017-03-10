@@ -1,51 +1,51 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
-import { SKOSXL } from "../../models/Vocabulary";
-
 import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourceServices } from "../../services/resourceServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { SkosServices } from "../../services/skosServices";
+import { SkosxlServices } from "../../services/skosxlServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { VBEventHandler } from "../../utils/VBEventHandler"
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary"
 
 @Component({
-    selector: "label-relations-renderer",
+    selector: "notes-renderer",
     templateUrl: "./predicateObjectsListRenderer.html",
 })
-export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer {
+export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
 
     //inherited from AbstractPredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+    // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
 
-    rootProperty: ARTURIResource = SKOSXL.labelRelation;
-    label = "Label relations";
-    addBtnImgTitle = "Add a label relation";
-    addBtnImgSrc = require("../../../assets/images/propObject_create.png");
-    removeBtnImgTitle = "Remove label relation";
+    rootProperty: ARTURIResource = SKOS.note;
+    label = "Notes";
+    addBtnImgTitle = "Add a note";
+    addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
+    removeBtnImgTitle = "Remove note";
 
     constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices) {
         super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
-    add(predicate: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a label relation", this.resource, this.rootProperty, propChangeable).then(
-            (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var label: ARTResource = data.value;
-                this.propService.addExistingPropValue(this.resource, prop, label.getNominalValue(), RDFTypesEnum.resource).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            },
-            () => {}
-        )
+    add(predicate?: ARTURIResource) {
+        if (predicate == null) {
+            this.browsingService.browsePropertyTree("Select a property", [this.rootProperty]).then(
+                (selectedProp: any) => {
+                    this.add(selectedProp);
+                },
+                () => { }
+            );
+        } else {
+            this.enrichProperty(predicate);
+        }
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
@@ -55,7 +55,9 @@ export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer
             );
         } else {
             this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
+                stResp => {
+                    this.update.emit(null);
+                }
             );
         }
     }
