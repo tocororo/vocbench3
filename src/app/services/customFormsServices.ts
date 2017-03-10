@@ -151,6 +151,10 @@ export class CustomFormsServices {
         }
         return this.httpMgr.doGet(this.serviceName, "executeForm", params, this.oldTypeService, true);
     }
+
+    /**
+     * FORM MAPPINGS
+     */
     
     /**
      * Returns the mapping between FormCollection and resources.
@@ -223,6 +227,10 @@ export class CustomFormsServices {
         };
 	    return this.httpMgr.doGet(this.serviceName, "updateReplace", params, this.oldTypeService, true);
     }
+
+    /**
+     * FORM COLLECTION
+     */
     
     /**
      * Returns the IDs of FormCollection available
@@ -320,6 +328,66 @@ export class CustomFormsServices {
         };
         return this.httpMgr.doGet(this.serviceName, "cloneFormCollection", params, this.oldTypeService, true);
     }
+
+    /**
+     * Export a FC
+     * @param id id of the FC to export
+     */
+    exportFormCollection(id: string) {
+        console.log("[CustomFormsServices] exportFormCollection");
+        var params = {
+            id: id
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportFormCollection", params, this.oldTypeService);
+    }
+
+    /**
+     * Imports a FC
+     * @param inputFile file of the FC to import 
+     * @param newId ID of the new FC (Optional, if not provided it will have the ID of the input FC)
+     */
+    importFormCollection(inputFile: File, newId?: string) {
+        console.log("[CustomFormsServices] importFormCollection");
+        var data: any = {
+            inputFile: inputFile
+        };
+        if (newId != null) {
+            data.newId = newId;
+        }
+        return this.httpMgr.uploadFile(this.serviceName, "importFormCollection", data, this.oldTypeService, true);
+    }
+
+    /**
+     * Adds a CustomForm to a FormCollection
+     * @param formCollectionId
+     * @param customFormId
+     */
+    addFormToCollection(formCollectionId: string, customFormId: string) {
+        console.log("[CustomFormsServices] addFormToCollection");
+        var params: any = {
+            formCollectionId: formCollectionId,
+            customFormId: customFormId
+        };
+        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Removes a CustomForm from the entries of a FormCollection
+     * @param formCollectionId
+     * @param customFormId
+     */
+    removeFormFromCollection(formCollectionId: string, customFormId: string) {
+        console.log("[CustomFormsServices] removeFormFromCollection");
+        var params: any = {
+            formCollectionId: formCollectionId,
+            customFormId: customFormId
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, this.oldTypeService, true);
+    }
+
+    /**
+     * CUSTOM FORM
+     */
     
     /**
      * Returns the IDs of all the CustomForm available
@@ -425,6 +493,34 @@ export class CustomFormsServices {
     }
 
     /**
+     * Export a CF
+     * @param id id of the CF to export
+     */
+    exportCustomForm(id: string) {
+        console.log("[CustomFormsServices] exportCustomForm");
+        var params = {
+            id: id
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportCustomForm", params, this.oldTypeService);
+    }
+
+    /**
+     * Imports a CF
+     * @param inputFile file of the CF to import 
+     * @param newId ID of the new CF (Optional, if not provided it will have the ID of the input CF)
+     */
+    importCustomForm(inputFile: File, newId?: string) {
+        console.log("[CustomFormsServices] importCustomForm");
+        var data: any = {
+            inputFile: inputFile
+        };
+        if (newId != null) {
+            data.newId = newId;
+        }
+        return this.httpMgr.uploadFile(this.serviceName, "importCustomForm", data, this.oldTypeService, true);
+    }
+
+    /**
      * Deletes the CustomForm with the given ID.
      * @param id the ID of the CustomForm to delete
      */
@@ -485,34 +581,6 @@ export class CustomFormsServices {
             propChain: propChain
         };
         return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params, this.oldTypeService, true);
-    }
-
-    /**
-     * Adds a CustomForm to a FormCollection
-     * @param formCollectionId
-     * @param customFormId
-     */
-    addFormToCollection(formCollectionId: string, customFormId: string) {
-        console.log("[CustomFormsServices] addFormToCollection");
-        var params: any = {
-            formCollectionId: formCollectionId,
-            customFormId: customFormId
-        };
-        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, this.oldTypeService, true);
-    }
-
-    /**
-     * Removes a CustomForm from the entries of a FormCollection
-     * @param formCollectionId
-     * @param customFormId
-     */
-    removeFormFromCollection(formCollectionId: string, customFormId: string) {
-        console.log("[CustomFormsServices] removeFormFromCollection");
-        var params: any = {
-            formCollectionId: formCollectionId,
-            customFormId: customFormId
-        };
-        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, this.oldTypeService, true);
     }
 
     /**

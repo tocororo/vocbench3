@@ -15,15 +15,15 @@
 	</li>
 	<li role="separator" class="divider"></li>
 	<li><a [routerLink]="['/Profile']"><span class="glyphicon glyphicon-user"></span> View profile</a></li>
-	<li><a [routerLink]="['/Settings']"><span class="glyphicon glyphicon-cog"></span> Preferences</a></li>
+	<li *ngIf="isProjectOpen()"><a [routerLink]="['/Settings']"><span class="glyphicon glyphicon-cog"></span> Preferences</a></li>
 	<li><a [routerLink]="['/Administration/Users']"><span class="glyphicon glyphicon-wrench"></span> Administration</a></li>
-	<li *ngIf="isProjectOpen()">
+	<!--<li *ngIf="isProjectOpen()">
 		<a (click)="changeContentLang()">
 			<span class="glyphicon glyphicon-flag"></span> Content language
 			<input type="checkbox" style="vertical-align: middle" [checked]="isHumanReadable()" (click)="switchHumanReadable($event.target.checked, $event)"
 				title="Enable/disable human readable label">
 		</a>
-	</li>
+	</li>-->
 	<li role="separator" class="divider"></li>
 	<li><a (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
 </ul>

@@ -13,18 +13,21 @@ import {SignaturePickerModal} from '../customForms/customFormConfigModals/signat
 import {FormCollMappingModal} from '../customForms/customFormConfigModals/formCollMappingModal';
 import {FormCollEditorModal} from '../customForms/customFormConfigModals/formCollEditorModal';
 import {CustomFormEditorModal} from '../customForms/customFormConfigModals/customFormEditorModal';
+import {ImportCfModal} from '../customForms/customFormConfigModals/importCfModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     providers: [ModalServices, BrowsingServices],
     declarations: [
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
-        CustomFormModal, ConverterPickerModal, SignaturePickerModal
+        CustomFormModal, ConverterPickerModal, SignaturePickerModal,
+        ImportCfModal
     ],
     exports: [],
     entryComponents: [
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
-        CustomFormModal, ConverterPickerModal, SignaturePickerModal
+        CustomFormModal, ConverterPickerModal, SignaturePickerModal,
+        ImportCfModal
     ]
 })
 export class CustomFormModule { }

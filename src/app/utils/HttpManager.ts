@@ -214,7 +214,7 @@ export class HttpManager {
      * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
      *      Is useful to handle the error from the component that invokes the service.
      */
-    downloadFile(service: string, request: string, params: any, oldType: boolean, post?: boolean, skipErrorAlert?: boolean) {
+    downloadFile(service: string, request: string, params: any, oldType: boolean, post?: boolean, skipErrorAlert?: boolean): Observable<Blob> {
         var url: string = this.getRequestBaseUrl(service, request, oldType);
 
         if (post) {

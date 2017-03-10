@@ -33,7 +33,7 @@ export const routes: Routes = [
     {path: "CustomForm", component: CustomFormComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
-    {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard], canDeactivate: [UnsavedChangesGuard]},
+    {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [UnsavedChangesGuard]},
     {path: "Test", component: TestComponent},
     //lazy loading of module with child route
     {path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard]},//TODO guard for admin?

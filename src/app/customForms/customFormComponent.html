@@ -28,6 +28,13 @@
                                 [disabled]="!selectedCustomForm">
                                 <span class="glyphicon glyphicon-duplicate"></span>
                             </button>
+                            <button class="btn btn-default" title="Export Custom Form" (click)="exportCustomForm()"
+                                [disabled]="!selectedCustomForm">
+                                <span class="glyphicon glyphicon-save"></span>
+                            </button>
+                            <button class="btn btn-default" title="Import Custom Form" (click)="importCustomForm()">
+                                <span class="glyphicon glyphicon-open"></span>
+                            </button>
                         </div>
                     </div>
                     <div class="subPanel-body vbox">
@@ -62,6 +69,13 @@
                             <button class="btn btn-default" title="Clone Form Collection" (click)="cloneFormCollection()"
                                 [disabled]="!selectedFormColl">
                                 <span class="glyphicon glyphicon-duplicate"></span>
+                            </button>
+                            <button class="btn btn-default" title="Export Form Collection" (click)="exportFormCollection()"
+                                [disabled]="!selectedCustomForm">
+                                <span class="glyphicon glyphicon-save"></span>
+                            </button>
+                            <button class="btn btn-default" title="Import Form Collection" (click)="importFormCollection()">
+                                <span class="glyphicon glyphicon-open"></span>
                             </button>
                         </div>
                     </div>
