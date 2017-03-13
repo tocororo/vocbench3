@@ -249,20 +249,6 @@ export class MetadataServices {
     }
 
     /**
-     * Makes a mirror copy of an imported ontology.
-     * @param baseURI the baseURI that identifies the imported ontology
-     * @param mirrorFile the name of the mirror file where to copy the ontology
-     */
-    mirrorOntology(baseURI: string, mirrorFile: string) {
-        console.log("[MetadataServices] mirrorOntology");
-        var params: any = {
-            baseuri: baseURI,
-            mirrorFile: mirrorFile
-        };
-        return this.httpMgr.doGet("metadata", "mirrorOntology", params, true);
-    }
-    
-    /**
      * Returns the default namespace of the currently open project
      */
     getDefaultNamespace(): Observable<string> {
