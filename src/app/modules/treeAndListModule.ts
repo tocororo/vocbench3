@@ -32,6 +32,10 @@ import {ClassIndividualTreeComponent} from '../trees/owl/classIndividualTree/cla
 import {InstanceListPanelComponent} from '../trees/owl/instanceListPanel/instanceListPanelComponent'
 import {InstanceListComponent} from '../trees/owl/instanceList/instanceListComponent'
 
+//ontology imports tree (in metadata management)
+import {ImportTreeComponent} from '../config/dataManagement/metadata/importTree/importTreeComponent'
+import {ImportTreeNodeComponent} from '../config/dataManagement/metadata/importTree/importTreeNode'
+
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule],
     declarations: [
@@ -42,6 +46,8 @@ import {InstanceListComponent} from '../trees/owl/instanceList/instanceListCompo
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent,
+
+        ImportTreeComponent, ImportTreeNodeComponent
     ],
     exports: [
         TreePanelComponent,
@@ -51,6 +57,8 @@ import {InstanceListComponent} from '../trees/owl/instanceList/instanceListCompo
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent,
+
+        ImportTreeComponent, ImportTreeNodeComponent
     ]
 })
 export class TreeAndListModule { }

@@ -56,27 +56,30 @@
                 </td>
                 <td>
                     <select class="form-control input-sm" [(ngModel)]="rdfFormat" [disabled]="!forceFormatCheck">
-                        <option value="N3">N3</option>
-                        <option value="NQUADS">NQUADS</option>
-                        <option value="N-TRIPLES">N-TRIPLES</option>
-                        <option value="RDF/XML">RDF/XML</option>
-                        <option value="RDF/XML-ABBREV">RDF/XML-ABBREV</option>
-                        <option value="TRIG">TRIG</option>
-                        <option value="TRIX">TRIX</option>
-                        <option value="TRIX-EXT">TRIX-EXT</option>
-                        <option value="TURTLE">TURTLE</option>
+                        <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
                     </select>
                 </td>
             </tr>
             <tr *ngIf="context.importType == 'fromOntologyMirror'">
-                <td><label>Namespace:</label></td>
+                <td><label>BaseURI:</label></td>
                 <td>
                     <select *ngIf="mirrorList" class="form-control input-sm" [(ngModel)]="selectedMirror">
-                        <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.namespace}}</option>
+                        <option *ngFor="let m of mirrorList" [ngValue]="m">{{m.baseURI}}</option>
                     </select>
                     <select *ngIf="!mirrorList" class="form-control input-sm" disabled>
                         <option>No ontologies mirrored</option>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Resolve transitive imports from:</label></td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance">
+                        <option value="web">Web</option>
+                        <option value="webFallbackToMirror">Web with fallback to Ontology Mirror</option>
+                        <option value="mirror">Ontology Mirror</option>
+                        <option value="mirrorFallbackToWeb">Ontology Mirror with fallback to Web</option>
+                    </select>                    
                 </td>
             </tr>
         </tbody>

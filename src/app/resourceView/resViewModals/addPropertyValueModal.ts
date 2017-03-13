@@ -1,14 +1,18 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../../models/ARTResources';
+import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VocbenchCtx } from '../../utils/VocbenchCtx';
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ManchesterServices } from "../../services/manchesterServices";
+import { PropertyServices } from "../../services/propertyServices";
 
 /**
  * This modal allow the user to create a property-value relation and can be open throght a ResView partition.
+ * (NOTE: this modal allow only to create a property-value relation by picking a resource/value pre-existing, this not
+ * allows to create a value, indeed it is opened only from the partition that "don't create",
+ * e.g. notes and lexicalizations allow to create, not to pick existing label or notes)
  * The property is passed to the modal by the calling partition and tells to the modal that it should allow to enrich
  * that property or its subProperties.
  * The modal is composed mainly by two section:
@@ -20,14 +24,14 @@ import { ManchesterServices } from "../../services/manchesterServices";
  *      - a tree (class, concept,...)
  *      - a list (scheme,...)
  *      - an input field for a manchester expression
- * Depending on the enriching property
+ * Depending on the range of the enriching property
  */
 
 export class AddPropertyValueModalData extends BSModalContext {
     /**
      * @param title title of the dialog
      * @param resource resource that is going to enrich with the property-value pair. 
-     *  Useful in case the modal is used to add a range to a property to know if the property is a datatype
+     *  Useful, in case the modal is used to add a range to a property, to know if the property is a datatype
      * @param property root property that the modal should allow to enrich
      * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
      */
@@ -52,11 +56,15 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
     private selectedProperty: ARTURIResource;
 
+    private viewType: ViewType;
+
+    //restrictions for trees/lists
     //attribute useful for different Tree/list components
     private scheme: ARTURIResource; //useful if the property that is it going to enrich should allow to select a skos:Concept
     //so the modal should show a concept tree focused on the current scheme
-    private classForInstanceList: ARTURIResource;
+    // private classForInstanceList: ARTURIResource;
     private rootsForClsIndList: ARTURIResource[];
+    private propertyType: RDFResourceRolesEnum;
 
 
     private manchExprEnabled: boolean = false; //useful to switch between tree selection or manchester expression input field
@@ -64,10 +72,10 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
     //datatype to show in a list in case the modal allow to add range to a datatype property
     private datatypes: ARTURIResource[] = [XmlSchema.boolean, XmlSchema.date,
-    XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
+        XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
-        private browsingService: BrowsingServices, private vbCtx: VocbenchCtx) {
+        private propService: PropertyServices, private browsingService: BrowsingServices, private vbCtx: VocbenchCtx) {
         this.context = dialog.context;
     }
 
@@ -75,41 +83,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         this.rootProperty = this.context.property;
         this.selectedProperty = this.rootProperty;
 
-        //scheme
-        if (this.showConceptTree()) {
-            this.scheme = this.vbCtx.getScheme();
-        }
-
-        //class for instance-list
-        if (this.rootProperty.getURI() == SKOSXL.labelRelation.getURI()) {
-            this.classForInstanceList = SKOSXL.label;
-        }
-
-        //root classes for class-individual-list
-        if (this.rootProperty.getURI() == SKOS.member.getURI()) {
-            this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
-        }
-
-        /**
-         * I wanted to exploit the range (obtained by a server request) to determine the kind of view in the modal (list, tree, manchester..)
-         * E.g. if range was rdfs:Class the modal would have render a class tree, if range was skos:Concept a concept tree,
-         * if skos:ConceptScheme a scheme list...
-         * The problem is that skos:broader (for example) doesn't have skos:Concept as range, so I'm forced to use the rootProperty
-         * to determine the view.
-         */
-        // this.propService.getRange(this.selectedProperty).subscribe(
-        //     stResp => {
-        //         console.log("stResp", stResp);
-        //         var range: ARTURIResource = stResp.ranges[0];
-        //         if (range.getURI() == RDFS.class.getURI()) {
-        //             this.selectedPropertyRangeType = RDFResourceRolesEnum.cls;
-        //         } else if (range.getURI() == SKOS.concept.getURI()) {
-        //             this.selectedPropertyRangeType = RDFResourceRolesEnum.concept;
-        //         } else if (range.getURI() == SKOS.conceptScheme.getURI()) {
-        //             this.selectedPropertyRangeType = RDFResourceRolesEnum.conceptScheme;
-        //         }
-        //     }
-        // );
+        this.updateRange(this.rootProperty);
     }
 
     private changeProperty() {
@@ -121,57 +95,99 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         );
     }
 
+    private updateRange(property: ARTURIResource) {
+        console.log("updateRange", property);
+        // special hard-coded cases:
+        if (this.rootProperty.getURI() == SKOS.member.getURI()) {
+            /**
+             * getRange of skos:member returns range "resource" without rangeCollection classes.
+             * Here I allow to select only instances of Concept or Collection
+             */
+            this.viewType = "classAndIndividual";
+            this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
+            return;
+        } else if (this.rootProperty.getURI() == RDFS.range.getURI() && 
+                this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
+            /**
+             * getRange of rdfs:range returns rdfs:Class as rangeCollection, but if the resource which it is
+             * going to enrich is a datatype property, the allowed range should be limited to a datatype.
+             * Here I allow to select only a datatype.
+             */
+            this.viewType = "resourceList";
+            return;
+        }
+
+        this.propService.getRange(property).subscribe(
+            range => {
+                var ranges = range.ranges;
+                var formCollection = range.formCollection; //not used, this modal allow just to pick existing resource
+                console.log("range", range);
+
+                /**
+                 * range undefined (the property has a custom range that replace the classic)
+                 * => default view classAndIndividual (same as ranges.type undetermined)
+                 */
+                if (range == undefined) {
+                    this.viewType = "classAndIndividual";
+                } else if (ranges.type == RDFTypesEnum.undetermined) {
+                    this.viewType = "classAndIndividual";
+                } else if (ranges.type == RDFTypesEnum.resource) {
+                    //class, concept, conceptScheme, collection, resourcelist, instance, class individual
+                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection;
+                    if (rangeCollection != null) {
+                        if (rangeCollection.length == 1) {
+                            var rangeClass: ARTURIResource = rangeCollection[0];
+                            if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
+                                this.viewType = "classTree";
+                            } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
+                                this.scheme = this.vbCtx.getScheme();
+                                this.viewType = "conceptTree";
+                            } else if (rangeClass.getURI() == SKOS.conceptScheme.getURI()) {
+                                this.viewType = "schemeList";
+                            } else if (rangeClass.getURI() == OWL.objectProperty.getURI()) {
+                                this.viewType = "propertyTree";
+                                this.propertyType = RDFResourceRolesEnum.objectProperty;
+                            } else if (rangeClass.getURI() == SKOSXL.label.getURI()) {
+                                this.viewType = "classAndIndividual";
+                                this.rootsForClsIndList = rangeCollection;
+                            } else if (rangeClass.getURI() == RDF.list.getURI()) {
+                                //TODO
+                                /**
+                                 * there should be no property belonging to a RV partition which its
+                                 * range is resource and rangeCollection is rdf:List, so at the moment
+                                 * I left this block empty
+                                 */
+                            }
+                        } else { //length > 1
+                            this.viewType = "classAndIndividual";
+                            this.rootsForClsIndList = rangeCollection;
+                        }
+                    }
+                    console.log("viewType", this.viewType);
+                }
+            }
+        )
+    }
+
     /**
      * Tells if the interface should show the selector to switch between class tree or manchester expression input.
      * This depends on the property that should be enriched, if it accept as value a manchester expression.
+     * Considers only the root property of the resource view partitions
      */
     private showClassManchSelector() {
         return (
+            //partition domains
             this.rootProperty.getURI() == RDFS.domain.getURI() ||
-            (this.rootProperty.getURI() == RDFS.range.getURI() && this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
+            //partition ranges
+            (this.rootProperty.getURI() == RDFS.range.getURI() &&
+                this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
+            //partition class axiom
             this.rootProperty.getURI() == RDFS.subClassOf.getURI() ||
             this.rootProperty.getURI() == OWL.equivalentClass.getURI() ||
             this.rootProperty.getURI() == OWL.complementOf.getURI() ||
             this.rootProperty.getURI() == OWL.disjointWith.getURI()
         );
     }
-
-    private showClassTree(): boolean {
-        if (!this.manchExprEnabled) {
-            return (
-                this.rootProperty.getURI() == RDF.type.getURI() ||
-                this.rootProperty.getURI() == RDFS.domain.getURI() ||
-                (this.rootProperty.getURI() == RDFS.range.getURI() && this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
-                this.rootProperty.getURI() == RDFS.subClassOf.getURI() ||
-                this.rootProperty.getURI() == OWL.equivalentClass.getURI() ||
-                this.rootProperty.getURI() == OWL.complementOf.getURI() ||
-                this.rootProperty.getURI() == OWL.disjointWith.getURI()
-            );
-        } else {
-            return false;
-        }
-    }
-    private showPropertyTree(): boolean {
-        return (this.rootProperty.getURI() == OWL.inverseOf.getURI());
-    }
-    private showConceptTree(): boolean {
-        return (this.rootProperty.getURI() == SKOS.broader.getURI());
-    }
-    private showSchemeList(): boolean {
-        return (this.rootProperty.getURI() == SKOS.inScheme.getURI() ||
-            this.rootProperty.getURI() == SKOS.topConceptOf.getURI());
-    }
-    private showDatatypeList(): boolean {
-        return (this.rootProperty.getURI() == RDFS.range.getURI() &&
-            this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty);
-    }
-    private showInstanceList(): boolean {
-        return (this.rootProperty.getURI() == SKOSXL.labelRelation.getURI());
-    }
-    private showClsIndList(): boolean {
-        return (this.rootProperty.getURI() == SKOS.member.getURI());
-    }
-
 
     private onResourceSelected(resource: ARTURIResource) {
         this.selectedResource = resource;
@@ -208,3 +224,10 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
 
 }
+
+type ViewType = "classTree" | 
+    "conceptTree" | 
+    "propertyTree" | 
+    "schemeList" | 
+    "resourceList" | 
+    "classAndIndividual";

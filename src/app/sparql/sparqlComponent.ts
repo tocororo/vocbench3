@@ -17,7 +17,7 @@ export class SparqlComponent {
     constructor(private sparqlService:SparqlServices, private metadataService: MetadataServices, private modalService: ModalServices) {}
     
     ngOnInit() {
-        this.metadataService.getNSPrefixMappings().subscribe(
+        this.metadataService.getNamespaceMappings().subscribe(
             mappings => {
                 //collect the prefix namespace mappings
                 var prefixImports: string = "";

@@ -1,0 +1,61 @@
+<div class="vbox">
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <label>Load Data:</label>
+        </div>
+       
+        <div class="panel-body">
+
+            <form class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1">RDF file:</label>
+                    <div class="col-sm-5">
+                        <file-picker (fileChanged)="fileChangeEvent($event)"
+                            [accept]="'.rdf, .rdfs, .xml, .owl, .nt, .n3, .ttl, .trig, .trix, .trix-ext, .nq'"></file-picker>    
+                    </div>
+
+                    <label class="control-label col-sm-1">Format:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control input-sm" [(ngModel)]="selectedFormat" name="format" [disabled]="inferFormatFromFile">
+                            <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="checkbox">
+                            <label><input type="checkbox" [(ngModel)]="inferFormatFromFile" name="formatCheckbox">Infer Format From File</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1">Base URI:</label>
+                    <div class="col-sm-11">
+                        <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI" placeholder="http://example.baseuri.com/">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1">Resolve transitive imports from:</label>
+                    <div class="col-sm-11">
+                        <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance" name="allowance">
+                            <option value="web">Web</option>
+                            <option value="webFallbackToMirror">Web with fallback to Ontology Mirror</option>
+                            <option value="mirror">Ontology Mirror</option>
+                            <option value="mirrorFallbackToWeb">Ontology Mirror with fallback to Web</option>
+                        </select>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+        
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="load()" [disabled]="isDataValid()">Submit</button>
+            <span class="clearfix"></span>
+        </div>
+    </div>
+    
+</div>

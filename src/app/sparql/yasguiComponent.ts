@@ -121,7 +121,7 @@ export class YasguiComponent {
                 return YASQE.Autocompleters.prefixes.isValidCompletionPosition(yasqe);
             },
             get: function (token: any, callback: any) { //callback is the function to which pass the suggested strings if get is async
-                metadataService.getNSPrefixMappings().subscribe(
+                metadataService.getNamespaceMappings().subscribe(
                     mappings => {
                         var prefixArray: string[] = [];
                         //add the prefixes from the local triplestore

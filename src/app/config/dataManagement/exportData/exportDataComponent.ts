@@ -48,7 +48,7 @@ export class ExportDataComponent {
                 }
             }
         );
-        this.metadataService.getBaseuri().subscribe(
+        this.metadataService.getBaseURI().subscribe(
             baseuri => {
                 this.baseURI = baseuri;
                 //if this response is recieved after getNamedGraphs, set the baseURI graph as checked

@@ -1,0 +1,21 @@
+<div class="treeNode listItem">
+	<div class="expandCollapseBtnContainer">
+		<img *ngIf="import.imports.length > 0 && !open"
+            src="../../../../../assets/images/tree_expand.png" (click)="open = !open">
+        <img *ngIf="import.imports.length > 0 && open"
+            src="../../../../../assets/images/tree_collapse.png" (click)="open = !open">
+	</div>
+    <div style="flex: 1;">
+        {{import.id}}
+    </div>
+    <span *ngIf="import.status == 'LOOP'" class="glyphicon glyphicon-repeat" style="margin-right: 6px;" title="Loop of imports"></span>
+    <span *ngIf="import.status == 'FAILED'" class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;" title="Failed import"></span>
+    <button *ngIf="import.root" class="btn btn-default btn-xs" (click)="removeImport()">
+        <span class="glyphicon glyphicon-trash" title="Remove import"></span>
+    </button>
+</div>
+
+<div class="subTree" *ngIf="import.imports.length > 0 && open">
+    <import-tree-node *ngFor="let i of import.imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)">
+    </import-tree-node>
+</div>

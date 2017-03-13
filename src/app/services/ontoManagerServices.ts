@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
 
 @Injectable()
@@ -73,18 +74,15 @@ export class OntoManagerServices {
      * "file" (the name of the mirror file) and
      * "namespace" (the namespace of the ontology)
      */
-    getOntologyMirror() {
+    getOntologyMirror(): Observable<{file: string, baseURI: string}[]> {
         console.log("[OntoManagerServices] getOntologyMirror");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, this.oldTypeService).map(
             stResp => {
-                var mirrors: any[] = [];
+                var mirrors: {file: string, baseURI: string}[] = [];
                 var mirrorElemColl: Array<Element> = stResp.getElementsByTagName("Mirror");
                 for (var i = 0; i < mirrorElemColl.length; i++) {
-                    var m: any = {};
-                    m.file = mirrorElemColl[i].getAttribute("file");
-                    m.namespace = mirrorElemColl[i].getAttribute("ns");
-                    mirrors.push(m);
+                    mirrors.push({file: mirrorElemColl[i].getAttribute("file"), baseURI: mirrorElemColl[i].getAttribute("ns")});
                 }
                 return mirrors;
             }

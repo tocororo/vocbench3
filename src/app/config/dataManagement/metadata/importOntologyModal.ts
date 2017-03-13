@@ -2,6 +2,8 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {OntoManagerServices} from '../../../services/ontoManagerServices';
+import {ExportServices} from '../../../services/exportServices';
+import {RDFFormat} from '../../../models/RDFFormat';
 
 export class ImportOntologyModalData extends BSModalContext {
     /**
@@ -9,7 +11,7 @@ export class ImportOntologyModalData extends BSModalContext {
      */
     constructor(
         public title: string = "Modal Title",
-        public importType: ImportType
+        public importType: ImportType //'fromWeb' | 'fromWebToMirror' | 'fromLocalFile' | 'fromOntologyMirror'
     ) {
         super();
     }
@@ -23,16 +25,24 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     context: ImportOntologyModalData;
     
     private baseURI: string; //used for type "fromWeb", "fromWebToMirror", "fromLocalFile"
+    
     private localFile: File; //used for type "fromLocalFile"
+    
     private mirrorFile: string; //used for type "fromWebToMirror", "fromLocalFile"
+    
     private altURLCheck: boolean = false; //used for type "fromWeb", "fromWebToMirror"
     private altURL: string; //used for type "fromWeb", "fromWebToMirror"
-    private forceFormatCheck: boolean = false; //used for type "fromWeb", "fromWebToMirror"
-    private rdfFormat: string; //used for type "fromWeb", "fromWebToMirror"
-    private mirrorList: Array<any>; //used for type "fromOntologyMirror"
-    private selectedMirror: any; //used for type "fromOntologyMirror"
     
-    constructor(public dialog: DialogRef<ImportOntologyModalData>, public ontoMgrService: OntoManagerServices) {
+    private forceFormatCheck: boolean = false; //used for type "fromWeb", "fromWebToMirror"
+    private formats: RDFFormat[];
+    private rdfFormat: RDFFormat; //used for type "fromWeb", "fromWebToMirror"
+    
+    private mirrorList: Array<{file: string, baseURI: string}>; //used for type "fromOntologyMirror"
+    private selectedMirror: {file: string, baseURI: string}; //used for type "fromOntologyMirror"
+
+    private selectedImportAllowance: string = "web"; //used for all
+    
+    constructor(public dialog: DialogRef<ImportOntologyModalData>, public ontoMgrService: OntoManagerServices, public exportService: ExportServices) {
         this.context = dialog.context;
     }
     
@@ -43,7 +53,22 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                 mirrors => {
                     this.mirrorList = mirrors;
                 }
-            )
+            );
+        }
+        //init list of rdfFormats if import type is fromWeb or fromWebToMirror
+        if (this.context.importType == ImportType.fromWeb || this.context.importType == ImportType.fromWebToMirror) {
+            this.exportService.getOutputFormats().subscribe(
+                formats => {
+                    this.formats = formats;
+                    //select RDF/XML as default
+                    for (var i = 0; i < this.formats.length; i++) {
+                        if (this.formats[i].name == "RDF/XML") {
+                            this.rdfFormat = this.formats[i];
+                            return;
+                        }
+                    }
+                }
+            );
         }
     }
     
@@ -76,14 +101,25 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
+        let returnedParam: RDFFormat;
+        if (this.forceFormatCheck) {
+            returnedParam = this.rdfFormat;
+        }
+        let returnedAltUrl: string;
+        if (this.altURLCheck) {
+            returnedAltUrl = this.altURL;
+        }
         if (this.context.importType == ImportType.fromWeb) {
-            this.dialog.close({baseURI: this.baseURI, altURL: this.altURL, rdfFormat: this.rdfFormat});
+            this.dialog.close({baseURI: this.baseURI, altURL: returnedAltUrl, rdfFormat: returnedParam, 
+                transitiveImportAllowance: this.selectedImportAllowance});
         } else if (this.context.importType == ImportType.fromWebToMirror) {
-            this.dialog.close({baseURI: this.baseURI, mirrorFile: this.mirrorFile, altURL: this.altURL, rdfFormat: this.rdfFormat});
+            this.dialog.close({baseURI: this.baseURI, mirrorFile: this.mirrorFile, altURL: returnedAltUrl,
+                rdfFormat: returnedParam, transitiveImportAllowance: this.selectedImportAllowance});
         } else if (this.context.importType == ImportType.fromLocalFile) {
-            this.dialog.close({baseURI: this.baseURI, localFile: this.localFile, mirrorFile: this.mirrorFile});
+            this.dialog.close({baseURI: this.baseURI, localFile: this.localFile, mirrorFile: this.mirrorFile,
+                transitiveImportAllowance: this.selectedImportAllowance});
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
-            this.dialog.close(this.selectedMirror);
+            this.dialog.close({mirror: this.selectedMirror, transitiveImportAllowance: this.selectedImportAllowance});
         }
     }
 

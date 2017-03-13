@@ -31,7 +31,7 @@ export class MetadataManagementComponent {
     private selectedMapping: any; //the currently selected mapping {namespace: string, prefix: string}
 
     // Imports params section
-    private importList: Array<any>; //{status:string, uri:string, localfile: string}
+    private importTree: {id: string, status: string, imports: any[]}[]; //{status:string, uri:string, localfile: string}
 
     // Ontology mirror management section
     private mirrorList: Array<any>; //array of {file: string, namespace: string}
@@ -50,7 +50,7 @@ export class MetadataManagementComponent {
 
     //inits or refreshes baseURI
     private refreshBaseURI() {
-        this.metadataService.getBaseuri().subscribe(
+        this.metadataService.getBaseURI().subscribe(
             baseURI => {
                 this.pristineBaseURI = baseURI;
                 this.baseURI = baseURI;
@@ -72,14 +72,14 @@ export class MetadataManagementComponent {
     private refreshImports() {
         this.metadataService.getImports().subscribe(
             importedOntologies => {
-                this.importList = importedOntologies;
+                this.importTree = importedOntologies;
             }
         );
     }
 
     //inits or refreshes namespace prefix mappings
     private refreshNSPrefixMappings() {
-        this.metadataService.getNSPrefixMappings().subscribe(
+        this.metadataService.getNamespaceMappings().subscribe(
             mappings => {
                 this.nsPrefMappingList = mappings;
             }
@@ -261,7 +261,7 @@ export class MetadataManagementComponent {
             (mapping: any) => {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
-                        this.metadataService.getNSPrefixMappings().subscribe(
+                        this.metadataService.getNamespaceMappings().subscribe(
                             mappings => {
                                 this.nsPrefMappingList = mappings;
                             }
@@ -279,7 +279,7 @@ export class MetadataManagementComponent {
     private removeMapping() {
         this.metadataService.removeNSPrefixMapping(this.selectedMapping.namespace).subscribe(
             stResp => {
-                this.metadataService.getNSPrefixMappings().subscribe(
+                this.metadataService.getNamespaceMappings().subscribe(
                     mappings => {
                         this.nsPrefMappingList = mappings;
                         this.selectedMapping = null;
@@ -297,7 +297,7 @@ export class MetadataManagementComponent {
             (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
-                        this.metadataService.getNSPrefixMappings().subscribe(
+                        this.metadataService.getNamespaceMappings().subscribe(
                             mappings => {
                                 this.nsPrefMappingList = mappings;
                             }
@@ -338,7 +338,7 @@ export class MetadataManagementComponent {
         this.openImportModal("Import from web", ImportType.fromWeb).then(
             (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.metadataService.addFromWeb(data.baseURI, data.altURL, data.rdfFormat).subscribe(
+                this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         //Refreshes the imports and the namespace prefix mapping
@@ -360,7 +360,7 @@ export class MetadataManagementComponent {
         this.openImportModal("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.altURL, data.rdfFormat).subscribe(
+                this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         //Refreshes the imports and the namespace prefix mapping
@@ -383,7 +383,7 @@ export class MetadataManagementComponent {
         this.openImportModal("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile).subscribe(
+                this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance,).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         //Refreshes the imports and the namespace prefix mapping
@@ -403,9 +403,9 @@ export class MetadataManagementComponent {
      */
     private importFromOntologyMirror() {
         this.openImportModal("Import from ontology mirror", ImportType.fromOntologyMirror).then(
-            (mirror: any) => {
+            (data: any) => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.metadataService.addFromOntologyMirror(mirror.namespace, mirror.file).subscribe(
+                this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                         //Refreshes the imports and the namespace prefix mapping
@@ -420,32 +420,11 @@ export class MetadataManagementComponent {
     }
 
     /**
-     * Copies the imported ontology in a local mirror file, then updates the imports
-     */
-    private mirrorOntology(importedOntology: any) {
-        this.modalService.prompt("Mirror ontology", "Mirror file name").then(
-            (mirrorFileName: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
-                this.metadataService.mirrorOntology(importedOntology.uri, mirrorFileName).subscribe(
-                    stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
-                        //Refreshes the imports and the namespace prefix mapping
-                        this.refreshImports();
-                        this.refreshNSPrefixMappings();
-                        this.refreshOntoMirror();
-                    }
-                );
-            },
-            () => { }
-        )
-    }
-
-    /**
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
-    private removeImport(importedOntology: any) {
+    private removeImport(importedOntology: {id: string, status: string, imports: any[]}) {
         document.getElementById("blockDivFullScreen").style.display = "block";
-        this.metadataService.removeImport(importedOntology.uri).subscribe(
+        this.metadataService.removeImport(importedOntology.id).subscribe(
             stResp => {
                 document.getElementById("blockDivFullScreen").style.display = "none";
                 //Refreshes the imports and the namespace prefix mapping

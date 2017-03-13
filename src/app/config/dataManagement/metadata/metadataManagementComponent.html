@@ -125,35 +125,7 @@
                             </div>
                         </div>
                         <div class="subPanel-body vbox">
-                            <div class="scrollableContainer">
-                                <table class="table table-condensed table-borderless table-hoverable">
-                                    <colgroup>
-                                        <col style="width: 1%">
-                                        <col>
-                                        <col style="width: 1%">
-                                        <col style="width: 1%">
-                                    </colgroup>
-                                    <tbody>
-                                        <tr *ngFor="let i of importList">
-                                            <td>
-                                                <span *ngIf="i.status == 'WEB'" class="glyphicon glyphicon-globe"></span>
-                                                <span *ngIf="i.status == 'LOCAL'" class="glyphicon glyphicon-hdd" [title]="i.localfile"></span>
-                                            </td>
-                                            <td>{{i.uri}}</td>
-                                            <td>
-                                                <button class="btn btn-default btn-xs" *ngIf="i.status == 'WEB'" (click)="mirrorOntology(i)" title="Mirror ontology">
-                                                    <span class="glyphicon glyphicon-duplicate"></span>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-default btn-xs" (click)="removeImport(i)" title="Remove import">
-                                                    <span class="glyphicon glyphicon-trash"></span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <import-tree [imports]="importTree" (nodeRemoved)="removeImport($event)"></import-tree>
                         </div>
                     </div>
 
@@ -173,7 +145,7 @@
                                     </colgroup>
                                     <tbody>
                                         <tr *ngFor="let m of mirrorList">
-                                            <td>{{m.namespace}}</td>
+                                            <td>{{m.baseURI}}</td>
                                             <td>{{m.file}}</td>
                                             <td>
                                                 <div class="dropdown pull-right">
