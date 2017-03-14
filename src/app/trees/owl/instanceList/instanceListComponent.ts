@@ -1,6 +1,7 @@
 import {Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges} from "@angular/core";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../models/ARTResources";
 import {VBEventHandler} from "../../../utils/VBEventHandler";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
 import {OwlServices} from "../../../services/owlServices";
 import {ClassesServices} from "../../../services/classesServices";
 import {ModalServices} from "../../../widget/modal/modalServices";
@@ -67,6 +68,9 @@ export class InstanceListComponent {
             // this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
             this.clsService.getInstances(this.cls).subscribe(
                 instances => {
+                    //sort by show if rendering is active, uri otherwise
+                    let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                    ResourceUtils.sortURIResources(instances, attribute);
                     this.instanceList = instances;
                     //if there is some pending instance search and the searched instance is of the same type of the current class
                     if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {

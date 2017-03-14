@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryL
 import { ARTURIResource, ARTResource, ResAttribute } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
@@ -51,6 +52,9 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
         this.nodeExpandStart.emit();
         this.skosService.getNestedCollections(this.node).subscribe( //new service
             nestedColl => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(nestedColl, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
                 this.nodeExpandEnd.emit();

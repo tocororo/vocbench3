@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryL
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
@@ -52,6 +53,9 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         this.nodeExpandStart.emit();
         this.clsService.getSubClasses(this.node).subscribe(
             subClasses => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(subClasses, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
                 this.nodeExpandEnd.emit();

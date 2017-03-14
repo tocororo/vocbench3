@@ -163,4 +163,31 @@ export class ResourceUtils {
         return imgSrc;
     }
 
+    /**
+     * Sort an Array of ARTURIResource by the given attribute.
+     * @param list 
+     * @param attribute
+     */
+    static sortURIResources(list: ARTURIResource[], attribute: "uri" | "show") {
+        //sort by show
+        if (attribute == "show") {
+            list.sort(
+                function (c1: ARTURIResource, c2: ARTURIResource) {
+                    if (c1.getShow() > c2.getShow()) return 1;
+                    if (c1.getShow() < c2.getShow()) return -1;
+                    return 0;
+                }
+            );
+        }
+        if (attribute == "uri") {
+            list.sort(
+                function (c1: ARTURIResource, c2: ARTURIResource) {
+                    if (c1.getURI() > c2.getURI()) return 1;
+                    if (c1.getURI() < c2.getURI()) return -1;
+                    return 0;
+                }
+            );
+        }
+    }
+
 }

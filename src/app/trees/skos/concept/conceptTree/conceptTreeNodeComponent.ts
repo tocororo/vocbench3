@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges } from "@angular/core";
 import { ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 
 @Component({
     selector: "concept-tree-node",
@@ -50,7 +51,11 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         this.nodeExpandStart.emit();
         this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
             narrower => {
-                this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower); //append the retrieved node as child of the expanded node
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(narrower, attribute);
+                //append the retrieved node as child of the expanded node
+                this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower);
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
                 this.nodeExpandEnd.emit();
             }

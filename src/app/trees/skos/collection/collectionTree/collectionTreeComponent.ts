@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from 
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
@@ -43,6 +44,9 @@ export class CollectionTreeComponent extends AbstractTree {
         this.blockDivElement.nativeElement.style.display = "block";
         this.skosService.getRootCollections().subscribe( //new service
             rootColl => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(rootColl, attribute);
                 this.roots = rootColl;
                 this.blockDivElement.nativeElement.style.display = "none";
             },

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { ClassesServices } from "../../../services/classesServices";
 import { OwlServices } from "../../../services/owlServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -45,6 +46,9 @@ export class ClassTreeComponent extends AbstractTree {
         this.blockDivElement.nativeElement.style.display = "block";
         this.clsService.getClassesInfo(this.rootClasses).subscribe(
             roots => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(roots, attribute);
                 this.roots = this.roots.concat(roots);
                 this.blockDivElement.nativeElement.style.display = "none";
             },

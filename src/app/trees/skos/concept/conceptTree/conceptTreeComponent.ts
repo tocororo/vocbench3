@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
@@ -81,6 +82,9 @@ export class ConceptTreeComponent extends AbstractTree {
         this.blockDivElement.nativeElement.style.display = "block";
         this.skosService.getTopConcepts(this.workingScheme).subscribe( //new service (whithout lang param)
             topConcepts => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(topConcepts, attribute);
                 this.roots = topConcepts;
                 this.blockDivElement.nativeElement.style.display = "none";
             },

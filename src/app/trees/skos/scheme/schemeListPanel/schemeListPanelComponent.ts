@@ -5,6 +5,7 @@ import {SearchServices} from "../../../../services/searchServices";
 import {ModalServices} from "../../../../widget/modal/modalServices";
 import {VocbenchCtx} from '../../../../utils/VocbenchCtx';
 import {VBEventHandler} from "../../../../utils/VBEventHandler";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../models/ARTResources";
 
 @Component({
@@ -43,6 +44,9 @@ export class SchemeListPanelComponent {
     private initList() {
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(schemeList, attribute);
                 this.schemeList = schemeList;
             }
         );

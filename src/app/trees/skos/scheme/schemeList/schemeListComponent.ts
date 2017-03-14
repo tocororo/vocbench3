@@ -1,38 +1,42 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../models/ARTResources";
-import {VocbenchCtx} from "../../../../utils/VocbenchCtx";
-import {SkosServices} from "../../../../services/skosServices";
-import {SearchServices} from "../../../../services/searchServices";
-import {ModalServices} from "../../../../widget/modal/modalServices";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
+import { SkosServices } from "../../../../services/skosServices";
+import { SearchServices } from "../../../../services/searchServices";
+import { ModalServices } from "../../../../widget/modal/modalServices";
 
 @Component({
-	selector: "scheme-list",
-	templateUrl: "./schemeListComponent.html",
+    selector: "scheme-list",
+    templateUrl: "./schemeListComponent.html",
 })
 export class SchemeListComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Input() hideSearch: boolean = false;
 
     private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-    
+
     private schemeList: ARTURIResource[];
     private selectedScheme: ARTURIResource;
-    
+
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
-    
+        private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+
     ngOnInit() {
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
+                ResourceUtils.sortURIResources(schemeList, attribute);
                 this.schemeList = schemeList;
             }
         );
     }
-    
+
     private selectScheme(scheme: ARTURIResource) {
         if (this.selectedScheme == undefined) {
             this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);    
+            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
         } else if (this.selectedScheme.getURI() != scheme.getURI()) {
             this.selectedScheme.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.selectedScheme = scheme;
@@ -59,21 +63,21 @@ export class SchemeListComponent {
                                 selectedResource => {
                                     this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
                 }
-            );
+                );
         }
     }
-    
+
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
     private searchKeyHandler(key: number, searchedText: string) {
         if (key == 13) {
-            this.doSearch(searchedText);           
+            this.doSearch(searchedText);
         }
     }
 
@@ -89,5 +93,5 @@ export class SchemeListComponent {
             }
         }
     }
-    
+
 }
