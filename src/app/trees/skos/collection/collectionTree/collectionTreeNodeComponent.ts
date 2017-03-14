@@ -49,7 +49,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
  	 */
     expandNode() {
         this.nodeExpandStart.emit();
-        // this.skosService.getNestedCollections(this.node, this.vbCtx.getContentLanguage(true)).subscribe( //old service
         this.skosService.getNestedCollections(this.node).subscribe( //new service
             nestedColl => {
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node

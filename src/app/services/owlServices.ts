@@ -12,52 +12,6 @@ export class OwlServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
-    // /**
-    //  * @param cls root class of the tree
-    //  * @return roots an array of root classes 
-    //  */
-    // getClassesInfoAsRootsForTree(cls: ARTURIResource) {
-    //     console.log("[owlServices] getClassesInfoAsRootsForTree");
-    //     var params: any = {
-    //         clsesqnames: cls.getURI(),
-    //         instNum: true
-    //     };
-    //     return this.httpMgr.doGet("cls", "getClassesInfoAsRootsForTree", params, true).map(
-    //         stResp => {
-    //             var roots = Deserializer.createURIArray(stResp);
-    //             for (var i = 0; i < roots.length; i++) {
-    //                 roots[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-    //             }
-    //             return roots;
-    //         }
-    //     );
-    // }
-	
-	// /**
-    //  * Returns a list of ARTURIResource subClasses of the given class
-    //  * @param cls class of which retrieve its subClasses
-	//  * @param tree boolean that indicates if the response should contains info about tree structure
-	//  * @param instNum boolean that indicates if the response should contains for each classes the number of instances
-    //  * @return subClasses an array of subClasses
-	//  */
-    // getSubClasses_old(cls: ARTURIResource, tree: boolean, instNum: boolean) {
-    //     console.log("[owlServices] getSubClasses");
-    //     var params: any = {
-    //         clsName: cls.getURI(),
-    //         tree: tree,
-    //         instNum: instNum
-    //     };
-    //     return this.httpMgr.doGet("cls", "getSubClasses", params, true).map(
-    //         stResp => {
-    //             var subClasses = Deserializer.createURIArray(stResp);
-    //             for (var i = 0; i < subClasses.length; i++) {
-    //                 subClasses[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-    //             }
-    //             return subClasses;
-    //         }
-    //     );
-    // }
-    
     /**
      * Returns a list of ARTURIResource instances of the given class
      * @param cls class of which retrieve its instances
@@ -162,23 +116,6 @@ export class OwlServices {
             }
         );
     }
-    
-    // /**
-    //  * Returns a collection of direct (not inferred) types for the given instance
-    //  * @param instance the instance whose types are requested
-    //  * @return an array of types
-    //  */
-    // getDirectNamedTypes(instance: ARTURIResource) {
-    //     console.log("[owlServices] getDirectNamedTypes");
-    //     var params: any = {
-    //         indqname: instance.getURI(),
-    //     };
-    //     return this.httpMgr.doGet("individual", "getDirectNamedTypes", params, this.oldTypeService).map(
-    //         stResp => {
-    //             return Deserializer.createURIArray(stResp.getElementsByTagName("Types")[0]);
-    //         }
-    //     );
-    // }
     
     /**
      * Adds a type to a resource. Emits a typeDeletedEvent with resource and type

@@ -79,7 +79,6 @@ export class ConceptTreeComponent extends AbstractTree {
         this.selectedNode = null;
 
         this.blockDivElement.nativeElement.style.display = "block";
-        // this.skosService.getTopConcepts_old(this.workingScheme, this.vbCtx.getContentLanguage(true)).subscribe( //old service
         this.skosService.getTopConcepts(this.workingScheme).subscribe( //new service (whithout lang param)
             topConcepts => {
                 this.roots = topConcepts;

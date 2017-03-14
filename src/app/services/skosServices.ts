@@ -19,32 +19,6 @@ export class SkosServices {
     /**
      * Returns the topConcepts of the given scheme
      * @param scheme
-     * @param lang
-     * @return an array of top concepts
-     */
-    getTopConcepts_old(scheme: ARTURIResource, lang?: string) {
-        console.log("[SkosServices] getTopConcepts");
-        var params: any = {};
-        if (scheme != null) {
-            params.scheme = scheme.getURI();
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "getTopConcepts", params, this.oldTypeService).map(
-            stResp => {
-                var topConcepts = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topConcepts.length; i++) {
-                    topConcepts[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topConcepts;
-            }
-        );
-    }
-
-    /**
-     * Returns the topConcepts of the given scheme
-     * @param scheme
      * @return an array of top concepts
      */
     getTopConcepts(scheme: ARTURIResource) {
@@ -60,36 +34,6 @@ export class SkosServices {
                     topConcepts[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return topConcepts;
-            }
-        );
-    }
-
-    /**
-     * Returns the narrowers of the given concept
-     * @param concept
-     * @param scheme scheme where the narrower should belong
-     * @param lang
-     * @return an array of narrowers
-     */
-    getNarrowerConcepts_old(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
-        console.log("[SkosServices] getNarrowerConcepts");
-        var params: any = {
-            concept: concept.getURI(),
-            treeView: true,
-        };
-        if (scheme != null) {
-            params.scheme = scheme.getURI();
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "getNarrowerConcepts", params, this.oldTypeService).map(
-            stResp => {
-                var narrower = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < narrower.length; i++) {
-                    narrower[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return narrower;
             }
         );
     }
@@ -545,27 +489,6 @@ export class SkosServices {
 
     /**
      * Gets the root collections
-     * @param lang language in which the show attribute should be rendered
-     */
-    getRootCollections_old(lang?: string) {
-        console.log("[SkosServices] getRootCollections");
-        var params: any = {};
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "getRootCollections", params, this.oldTypeService).map(
-            stResp => {
-                var rootColl = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < rootColl.length; i++) {
-                    rootColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return rootColl;
-            }
-        );
-    }
-
-    /**
-     * Gets the root collections
      */
     getRootCollections() {
         console.log("[SkosServices] getRootCollections");
@@ -577,30 +500,6 @@ export class SkosServices {
                     rootColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return rootColl;
-            }
-        );
-    }
-
-    /**
-     * Get the nested collections of a container collection
-     * @param container the URI of the container collection
-     * @param lang language in which the show attribute should be rendered
-     */
-    getNestedCollections_old(container: ARTResource, lang?: string) {
-        console.log("[SkosServices] getNestedCollections");
-        var params: any = {
-            container: container.getNominalValue()
-        };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "getNestedCollections", params, this.oldTypeService).map(
-            stResp => {
-                var nestedColl = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < nestedColl.length; i++) {
-                    nestedColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return nestedColl;
             }
         );
     }
