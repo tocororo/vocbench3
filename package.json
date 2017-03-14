@@ -4,8 +4,7 @@
   "description": "",
   "scripts": {
     "start": "webpack-dev-server --inline --progress --port 8080",
-    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
-    "postinstall": "typings install"
+    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
   },
   "license": "MIT",
   "dependencies": {
@@ -30,6 +29,8 @@
   },
   "devDependencies": {
     "@types/node": "^6.0.45",
+    "@types/jquery": "^2.0.41",
+    "@types/codemirror": "^0.0.38",
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^2.2.4",
     "css-loader": "^0.23.1",

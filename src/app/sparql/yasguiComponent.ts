@@ -1,10 +1,9 @@
-///<reference path="../../../typings/index.d.ts" />
-
 import {Component, ViewChild, Input, Output, EventEmitter, ElementRef} from '@angular/core';
 import {VocbenchCtx} from '../utils/VocbenchCtx';
 import {ARTURIResource} from '../models/ARTResources';
 import {MetadataServices} from '../services/metadataServices';
 import {SearchServices} from '../services/searchServices';
+import * as JQueryStatic from 'jquery';
 
 // var YASQE = require('yasgui-yasqe/dist/yasqe.bundled.min');
 var YASQE = require('yasgui-yasqe/dist/yasqe.bundled');

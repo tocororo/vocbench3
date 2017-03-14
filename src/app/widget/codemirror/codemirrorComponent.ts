@@ -1,9 +1,8 @@
-///<reference path="../../../../typings/index.d.ts"/>
-
 import {Component, ViewChild, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import * as CodeMirror from 'codemirror';
 import "./pearl";
 
-var CodeMirror = require('codemirror/lib/codemirror');
+// var CodeMirror = require('codemirror/lib/codemirror');
 
 @Component({
     selector: 'codemirror',
@@ -33,8 +32,8 @@ export class CodemirrorComponent {
                 mode: "pearl",
                 indentUnit : 4,
                 indentWithTabs: true,
-                matchBrackets: true, //it seems not to work
-                autoCloseBrackets: true,
+                // matchBrackets: true, //it seems not to work
+                // autoCloseBrackets: true,
                 lineWrapping: true,
                 readOnly: this.disabled,
                 viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
