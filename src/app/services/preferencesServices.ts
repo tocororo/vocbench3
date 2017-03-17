@@ -16,11 +16,9 @@ export class PreferencesServices {
      * @param level tells at which level to get the property
      * @return a list of language tag. If the list has just one element "*", it means "all languages"
      */
-    getLanguages(level: PropertyLevel): Observable<string[]> {
+    getLanguages(): Observable<string[]> {
         console.log("[PreferencesServices] getLanguages");
-        var params = {
-            level: level
-        };
+        var params = {};
         return this.httpMgr.doGet(this.serviceName, "getLanguages", params, this.oldTypeService, true);
     }
 
@@ -29,11 +27,10 @@ export class PreferencesServices {
      * @param languages list of languages, list with just one element "*" in order to set "all languages"
      * @param level tells at which level to set the property
      */
-    setLanguages(languages: string[], level: PropertyLevel) {
+    setLanguages(languages: string[]) {
         console.log("[PreferencesServices] setLanguages");
         var params = {
-            languages: languages,
-            level: level
+            languages: languages
         };
         return this.httpMgr.doGet(this.serviceName, "setLanguages", params, this.oldTypeService, true);
     }

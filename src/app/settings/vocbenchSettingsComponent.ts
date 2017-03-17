@@ -23,7 +23,7 @@ export class VocbenchSettingsComponent implements CanDeactivateOnChangesComponen
     constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
-        this.prefService.getLanguages(PropertyLevel.USER).subscribe(
+        this.prefService.getLanguages().subscribe(
             langs => {
                 this.renderingLangs = [];
                 if (langs.length == 1 && langs[0] == "*") { //"*" stands for all languages
@@ -106,7 +106,7 @@ export class VocbenchSettingsComponent implements CanDeactivateOnChangesComponen
             if (checkedLangs.length == 0 || checkedLangs.length == Languages.languageList.length) {
                 checkedLangs = ["*"];
             }
-            this.prefService.setLanguages(checkedLangs, PropertyLevel.USER).subscribe(
+            this.prefService.setLanguages(checkedLangs).subscribe(
                 //update the pristine value
                 stResp => { this.pristineRenderingLangs = JSON.parse(JSON.stringify(this.renderingLangs)); }
             );
