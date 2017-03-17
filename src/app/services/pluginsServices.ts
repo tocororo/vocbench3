@@ -47,7 +47,7 @@ export class PluginsServices {
      * where params is in turn an array of struct {description, name, required, value}
      * @param factoryID the factory class of the plugin
      */
-    getPluginConfigurations(factoryID: string): Observable<PluginConfiguration[]> {
+    getPluginConfigurations(factoryID: string): Observable<{factoryID: string, configurations: PluginConfiguration[]}> {
         console.log("[PluginsServices] getPluginConfigurations");
         var params = {
             factoryID: factoryID
@@ -72,7 +72,7 @@ export class PluginsServices {
                     }
                     configurations.push(new PluginConfiguration(shortName, type, editRequired, params));
                 }
-                return configurations;
+                return {factoryID: factoryID, configurations: configurations};
             }
         );
     }

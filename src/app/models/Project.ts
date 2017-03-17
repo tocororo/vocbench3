@@ -112,15 +112,60 @@ export class Project {
     }
 }
 
-export class PluginSpecification {
-    factoryId: string;
-    configType: string;
-    properties: any;
-}
-
 export type ProjectTypesEnum = "saveToStore" | "continuosEditing";
-    
 export const ProjectTypesEnum = {
     saveToStore: "saveToStore" as ProjectTypesEnum,
     continuosEditing: "continuosEditing" as ProjectTypesEnum
+}
+
+export type AccessLevel = "R" | "RW";
+export const AccessLevel = {
+    R: "R" as AccessLevel,
+    RW: "RW" as AccessLevel
+}
+
+export type LockLevel = "R" | "W" | "NO";
+export const LockLevel = {
+    R: "R" as LockLevel,
+    W: "W" as LockLevel,
+    NO: "NO" as LockLevel,
+}
+
+export type RepositoryAccessType = "CreateLocal" | "CreateRemote" | "AccessExistingRemote";
+export const RepositoryAccessType = {
+    CreateLocal: "CreateLocal" as RepositoryAccessType,
+    CreateRemote: "CreateRemote" as RepositoryAccessType,
+    AccessExistingRemote: "AccessExistingRemote" as RepositoryAccessType,
+}
+
+export class RepositoryAccess {
+    private type: RepositoryAccessType;
+    private configuration: RemoteRepositoryAccessConfig;
+
+    constructor(type: RepositoryAccessType) {
+        this.type = type;
+    }
+
+    public setConfiguration(configuration: RemoteRepositoryAccessConfig) {
+        this.configuration = configuration;
+    }
+
+    public stringify(): string {
+        let repoAccess: any = {
+            "@type": this.type,
+        }
+        //if the repository access is remote, add the configuration
+        if (this.type == RepositoryAccessType.CreateRemote || this.type == RepositoryAccessType.AccessExistingRemote) {
+            repoAccess.serverURL = this.configuration.serverURL;
+            repoAccess.username = this.configuration.username;
+            repoAccess.password = this.configuration.password;
+        }
+        return JSON.stringify(repoAccess);
+    }
+}
+
+export class RemoteRepositoryAccessConfig {
+    public serverURL: string;
+    public username: string;
+    public password: string;
 }

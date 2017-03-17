@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { VocbenchCtx } from '../utils/VocbenchCtx';
-import { Project, PluginSpecification } from '../models/Project';
+import { Project, AccessLevel, LockLevel, RepositoryAccess } from '../models/Project';
+import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
 export class ProjectServices {
@@ -106,36 +107,36 @@ export class ProjectServices {
      * @param renderingEngineConfigurationClass
      * @param renderingEngineConfigurationArray array of param .name-.value pairs
      */
-    createProject(projectName: string, modelType: string, baseURI: string,
-        ontManagerFactoryID: string, modelConfigurationClass: string, modelConfigurationArray: Array<any>,
-        uriGeneratorFactoryID?: string, uriGenConfigurationClass?: string, uriGenConfigurationArray?: Array<any>,
-        renderingEngineFactoryID?: string, renderingEngineConfigurationClass?: string, renderingEngineConfigurationArray?: Array<any>) {
+    // createProject(projectName: string, modelType: string, baseURI: string,
+    //     ontManagerFactoryID: string, modelConfigurationClass: string, modelConfigurationArray: Array<any>,
+    //     uriGeneratorFactoryID?: string, uriGenConfigurationClass?: string, uriGenConfigurationArray?: Array<any>,
+    //     renderingEngineFactoryID?: string, renderingEngineConfigurationClass?: string, renderingEngineConfigurationArray?: Array<any>) {
 
-        console.log("[ProjectServices] createProject");
-        var params: any = {
-            consumer: "SYSTEM",
-            projectName: projectName,
-            modelType: modelType,
-            baseURI: baseURI,
-            ontManagerFactoryID: ontManagerFactoryID,
-            modelConfigurationClass: modelConfigurationClass,
-            modelConfiguration: modelConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n"),
-        };
+    //     console.log("[ProjectServices] createProject");
+    //     var params: any = {
+    //         consumer: "SYSTEM",
+    //         projectName: projectName,
+    //         modelType: modelType,
+    //         baseURI: baseURI,
+    //         ontManagerFactoryID: ontManagerFactoryID,
+    //         modelConfigurationClass: modelConfigurationClass,
+    //         modelConfiguration: modelConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n"),
+    //     };
 
-        if (uriGeneratorFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
-            params.uriGeneratorFactoryID = uriGeneratorFactoryID;
-            params.uriGenConfigurationClass = uriGenConfigurationClass;
-            params.uriGenConfiguration = uriGenConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
-        }
+    //     if (uriGeneratorFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
+    //         params.uriGeneratorFactoryID = uriGeneratorFactoryID;
+    //         params.uriGenConfigurationClass = uriGenConfigurationClass;
+    //         params.uriGenConfiguration = uriGenConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
+    //     }
 
-        if (renderingEngineFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
-            params.renderingEngineFactoryID = renderingEngineFactoryID;
-            params.renderingEngineConfigurationClass = renderingEngineConfigurationClass;
-            params.renderingEngineConfiguration = renderingEngineConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
-        }
+    //     if (renderingEngineFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
+    //         params.renderingEngineFactoryID = renderingEngineFactoryID;
+    //         params.renderingEngineConfigurationClass = renderingEngineConfigurationClass;
+    //         params.renderingEngineConfiguration = renderingEngineConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
+    //     }
 
-        return this.httpMgr.doGet(this.serviceName, "createProject", params, this.oldTypeService);
-    }
+    //     return this.httpMgr.doGet(this.serviceName, "createProject", params, this.oldTypeService);
+    // }
 
     /**
      * @param projectName
@@ -146,8 +147,10 @@ export class ProjectServices {
      * @param uriGeneratorSpecification
      * @param renderingEngineSpecification
      */
-    createProjectNEW(projectName: string, modelType: string, baseURI: string,
-        historyEnabled: boolean, validationEnabled: boolean,
+    createProject(projectName: string, modelType: string, baseURI: string,
+        historyEnabled: boolean, validationEnabled: boolean, repositoryAccess: RepositoryAccess,
+        coreRepoID: string, supportRepoID: string,
+        coreRepoSailConfigurerSpecification?: PluginSpecification, supportRepoSailConfigurerSpecification?: PluginSpecification,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification) {
         
         console.log("[ProjectServices] createProject");
@@ -157,15 +160,24 @@ export class ProjectServices {
             modelType: modelType,
             baseURI: baseURI,
             historyEnabled: historyEnabled,
-            validationEnabled: validationEnabled
+            validationEnabled: validationEnabled,
+            repositoryAccess: repositoryAccess.stringify(),
+            coreRepoID: coreRepoID,
+            supportRepoID: supportRepoID
         };
+        if (coreRepoSailConfigurerSpecification != undefined) {
+            params.coreRepoSailConfigurerSpecification = JSON.stringify(coreRepoSailConfigurerSpecification);
+        }
+        if (supportRepoSailConfigurerSpecification != undefined) {
+            params.supportRepoSailConfigurerSpecification = JSON.stringify(supportRepoSailConfigurerSpecification);
+        }
         if (uriGeneratorSpecification != undefined) {
             params.uriGeneratorSpecification = JSON.stringify(uriGeneratorSpecification);
         }
         if (renderingEngineSpecification != undefined) {
             params.renderingEngineSpecification = JSON.stringify(renderingEngineSpecification);
         }
-        return this.httpMgr.doGet("Projects2", "createProject", params, this.oldTypeService, true);
+        return this.httpMgr.doPost("Projects2", "createProject", params, this.oldTypeService, true);
     }
 
     /**
@@ -241,6 +253,86 @@ export class ProjectServices {
                 return propertyList;
             }
         );
+    }
+
+    /**
+     * 
+     */
+    getAccessStatusMap() {
+        console.log("[ProjectServices] getAccessStatusMap");
+        var params = { };
+        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params, this.oldTypeService).map(
+            stResp => {
+                var aclMap: {name: string, consumers: any[], lock: any}[] = [];
+
+                var projectElemColl: NodeListOf<Element> = stResp.getElementsByTagName("project");
+                for (var i = 0; i < projectElemColl.length; i++) {
+
+                    let name = projectElemColl[i].getAttribute("name");
+                    
+                    //<consumer> elements
+                    let consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[] = [];
+
+                    let consumerElemColl: NodeListOf<Element> = projectElemColl[i].getElementsByTagName("consumer");
+                    for (var j = 0; j < consumerElemColl.length; j++) {
+                        let consumer: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel};
+                        consumer = {
+                            name: consumerElemColl[j].getAttribute("name"),
+                            availableACLLevel: <AccessLevel> consumerElemColl[j].getAttribute("availableACLLevel"),
+                            acquiredACLLevel: <AccessLevel> consumerElemColl[j].getAttribute("acquiredACLLevel")
+                        }
+                        consumers.push(consumer);
+                    }
+                    //<lock> element
+                    let projectLock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
+
+                    let lockElem: Element = projectElemColl[i].getElementsByTagName("lock")[0];
+                    projectLock = {
+                        availableLockLevel: <LockLevel> lockElem.getAttribute("availableLockLevel"),
+                        lockingConsumer: lockElem.getAttribute("lockingConsumer"),
+                        acquiredLockLevel: <LockLevel> lockElem.getAttribute("acquiredLockLevel")
+                    };
+
+                    aclMap.push({
+                        name: name,
+                        consumers: consumers,
+                        lock: projectLock
+                    });
+                }
+
+                return aclMap;
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param project 
+     * @param consumer 
+     * @param accessLevel 
+     */
+    updateAccessLevel(project: Project, consumer: Project, accessLevel: AccessLevel) {
+        console.log("[ProjectServices] updateAccessLevel");
+        var params = {
+            projectName: project.getName(),
+            consumerName: consumer.getName(),
+            accessLevel: accessLevel
+        };
+        return this.httpMgr.doGet(this.serviceName, "updateAccessLevel", params, this.oldTypeService);
+    }
+
+    /**
+     * 
+     * @param project 
+     * @param accessLevel 
+     */
+    updateLockLevel(project: Project, lockLevel: LockLevel) {
+        console.log("[ProjectServices] updateLockLevel");
+        var params = {
+            projectName: project.getName(),
+            accessLevel: lockLevel,
+        };
+        return this.httpMgr.doGet(this.serviceName, "updateLockLevel", params, this.oldTypeService);
     }
 
 }

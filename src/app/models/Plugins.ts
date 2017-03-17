@@ -19,6 +19,15 @@ export class PluginConfiguration {
         this.type = type;
         this.params = params;
     }
+
+    public clone(): PluginConfiguration {
+        var params: PluginConfigParam[] = [];
+        for (var i = 0; i < this.params.length; i++) {
+            let p: PluginConfigParam = this.params[i];
+            params.push(new PluginConfigParam(p.name, p.description, p.required, p.value));
+        }
+        return new PluginConfiguration(this.shortName, this.type, this.editRequired, params);
+    }
 }
 
 export class PluginConfigParam {
@@ -32,4 +41,10 @@ export class PluginConfigParam {
         this.required = required;
         this.value = value;
     }
+}
+
+export class PluginSpecification {
+    factoryId: string;
+    configType: string;
+    properties: any; //object {"key1": "value", "key2": "value2", ...}
 }

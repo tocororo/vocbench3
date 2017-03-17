@@ -62,11 +62,11 @@
                             <label class="control-label col-sm-2">Repository Access:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedDataStore" name="selectedDataStore">
-                                        <option *ngFor="let ds of dataStoreList" [ngValue]="ds">{{ds.label}}</option>
+                                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
+                                        <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
                                     </select>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default btn-sm" (click)="configureRemoteDataStore()" [disabled]="selectedDataStore.type == 'local'">Configure</button>
+                                        <button class="btn btn-default btn-sm" (click)="configureRemoteRepositoryAccess()" [disabled]="!isSelectedRepoAccessRemote()">Remote Access Config</button>
                                     </span>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                             <label class="control-label col-sm-2">Data Repository ID</label>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control input-sm" name="dataRepoId" [(ngModel)]="dataRepoId" placeholder="Data Repository ID"
-                                     [disabled]="selectedDataStore.action == 'create'">
+                                     [disabled]="isSelectedRepoAccessCreateMode()">
                             </div>
                             <div class="control-label col-sm-2">
                                 <label>Configuration</label>
@@ -84,11 +84,12 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="input-group" >
-                                    <select class="form-control input-sm" [(ngModel)]="dataRepoConf" name="dataRepoConf" [disabled]="selectedDataStore.action == 'create'">
-                                        <option *ngFor="let rc of repoConfigurations" [ngValue]="rc" >{{rc.value}}</option>
+                                    <select class="form-control input-sm" [(ngModel)]="selectedDataRepoConf" name="selectedDataRepoConf"
+                                        [disabled]="!isSelectedRepoAccessCreateMode()">
+                                        <option *ngFor="let rc of dataRepoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
                                     </select>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default btn-sm" (click)="configureDataRepo()" [disabled]="selectedDataStore.action == 'create'">Configure</button>
+                                        <button class="btn btn-default btn-sm" (click)="configureDataRepo()" [disabled]="!isSelectedRepoAccessCreateMode()">Configure</button>
                                     </span>
                                 </div>
                             </div>
@@ -97,8 +98,8 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2">History/Validation Repository ID</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm" name="historyValidationRepoId" [(ngModel)]="historyValidationRepoId"
-                                    placeholder="History/Validation Repository ID" [disabled]="selectedDataStore.action == 'create' || !(history || validation)">
+                                <input type="text" class="form-control input-sm" name="supportRepoId" [(ngModel)]="supportRepoId"
+                                    placeholder="History/Validation Repository ID" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
                             </div>
                             <div class="control-label col-sm-2">
                                 <label>Configuration</label>
@@ -106,13 +107,15 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="input-group">
-                                    <select class="form-control input-sm" [(ngModel)]="historyValidationRepoConf" name="historyValidationRepoConf"
-                                        [disabled]="selectedDataStore.action == 'create'">
-                                        <option *ngFor="let rc of repoConfigurations" [ngValue]="rc">{{rc.value}}</option>
+                                    <select class="form-control input-sm" [(ngModel)]="selectedSupportRepoConf" name="selectedSupportRepoConf"
+                                        [disabled]="!isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                        <option *ngFor="let rc of supportRepoConfList" [ngValue]="rc">{{rc.configuration.shortName}}</option>
                                     </select>
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default btn-sm" (click)="configureHistoryValidationRepo()"
-                                            [disabled]="selectedDataStore.action == 'create' && (history || validation)">Configure</button>
+                                        <button class="btn btn-default btn-sm" (click)="configureSupportRepo()"
+                                            [disabled]="!isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                            Configure
+                                        </button>
                                     </span>
                                 </div>
                             </div>
@@ -123,120 +126,108 @@
                 </div>
             </div>
 
-            <div>
-                <button class="btn btn-sm btn-primary" style="float: right" (click)="createtNew()">Create (NEW)</button>
-            </div>
-
-            <div style="align-self: center; padding: 8px; margin: 5px; font-size: 15px; font-weight: bold; border: 1px solid #ccc; border-radius: 5px;">
-                THE FOLLOWING PANEL IS THE LEGACY PROJECT CREATION FORM
-            </div>
-
-            <!--Project basic params-->
-            <form role="form">
-                <div class="form-group">
-                    <label>Project name:</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="projectName" name="projectName" placeholder="Name">
-                    <div *ngIf="(!projectName || projectName.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
-                        A <strong>project name</strong> is required
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Type:</label>
-                        <select class="form-control input-sm" [(ngModel)]="modelType" name="modelType">
-                            <option *ngFor="let ot of modelTypeList" [value]="ot.value">{{ot.label}}</option>
-                        </select>
-                </div>
-                <div class="form-group">
-                    <label>URI:</label>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI" placeholder="BaseURI">
-                    <div *ngIf="(!baseURI || baseURI.trim() =='') && submitted" class="alert alert-danger" style="margin-top: 2px">
-                        A <strong>base URI</strong> is required
-                    </div>
-                </div>
-            </form>
-
-            <!--Triple store configuration-->
+            <!--Extention points configuration-->
             <div class="subPanel">
                 <div class="subPanel-heading">
-                    <label>Triple Store</label>
-                </div>
-                <div class="subPanel-body">
-                    
-                    <div class="form-group">
-                        <label>OntoManager:</label>
-                        <select class="form-control input-sm" [(ngModel)]="ontoMgrId" (ngModelChange)="onOntMgrChanged()">
-                            <option *ngFor="let om of ontoMgrList" [value]="om">{{om}}</option>
-                        </select>
+                    <div class="expandCollapseBtnContainer">
+                        <img *ngIf="!extPointPanelOpen" src="../../../assets/images/tree_expand.png" (click)="extPointPanelOpen = !extPointPanelOpen">
+                        <img *ngIf="extPointPanelOpen" src="../../../assets/images/tree_collapse.png" (click)="extPointPanelOpen = !extPointPanelOpen">
                     </div>
-
-                    <div class="form-group">
-                        <label>Configuration:</label>
-                        <div class="input-group">
-                            <select class="form-control input-sm" [(ngModel)]="selectedOntoMgrConfig">
-                                <option *ngFor="let conf of ontoMgrConfigList" [ngValue]="conf">{{conf.shortName}}</option>
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-sm" (click)="configureOntoMgr()">Configure</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--Extention points configuration-->
-            <!--<div class="subPanel">
-                <div class="subPanel-heading">
                     <label style="flex: 1">Optional settings:</label>
-                    <button type="button" class="close" (click)="toggleExtPointPanel()">
-                        <span>{{extPointPanelOpen ? '-' : '+'}}</span>
-                    </button>
                 </div>
                 <div class="subPanel-body" *ngIf="extPointPanelOpen">
 
-                    <div *ngFor="let xp of extPointStructList">
-                        <div class="subPanel">
-                            <div class="subPanel-heading" style="background: #f5f5f5">
-                                <label>{{xp.id.substring(xp.id.lastIndexOf('.')+1)}}:</label>
+                    <div class="subPanel">
+                        <div class="subPanel-heading">
+                            <label style="flex: 1;">URI Generator</label>
+                            <div class="checkbox" style="margin: 0px">
+                                <label style="min-height: initial;">
+                                    <input type="checkbox" [(ngModel)]="uriGenUseDefaultSetting"> Use default settings
+                                </label>
                             </div>
-                            <div class="subPanel-body">
-                                
+                        </div>
+                        <div class="subPanel-body">
+                            <form class="form-horizontal">
                                 <div class="form-group">
-                                    <label>Plugin:</label>
-                                    <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPluginId" (ngModelChange)="changeExtPointPlugin(xp)">
-                                        <option value="---">---</option>
-                                        <option *ngFor="let plugin of xp.plugins" [value]="plugin">
-                                            {{plugin.factoryID.substring(plugin.factoryID.lastIndexOf('.')+1)}}
-                                        </option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Configuration:</label>
-                                    <div class="input-group">
-                                        <select class="form-control input-sm" [(ngModel)]="xp.selectedExtPointPlugin.selectedConfigType" 
-                                            [disabled]="!xp.selectedExtPointPlugin.configurations">
-                                            <option *ngFor="let conf of xp.selectedExtPointPlugin.configurations" [value]="conf.type">
-                                                {{conf.shortName}}
+                                    <label class="control-label col-sm-1">Plugin:</label>
+                                    <div class="col-sm-11">
+                                        <select class="form-control input-sm" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGenPluginChanged()"
+                                            name="selectedUriGenPlugin" [disabled]="uriGenUseDefaultSetting">
+                                            <option *ngFor="let ugp of uriGenPluginList" [ngValue]="ugp">
+                                                {{ugp.factoryID.substring(ugp.factoryID.lastIndexOf('.')+1)}}
                                             </option>
                                         </select>
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default btn-sm" (click)="configurePluginConfig(xp)"
-                                                [disabled]="!xp.selectedExtPointPlugin.selectedConfigType">Configure</button>
-                                        </span>
                                     </div>
                                 </div>
-                                
+                                <div class="form-group">
+                                    <label class="control-label col-sm-1">Configuration:</label>
+                                    <div class="col-sm-11">
+                                        <div class="input-group">
+                                            <select class="form-control input-sm" [(ngModel)]="selectedUriGenPluginConf" name="selectedUriGenPluginConf"
+                                                [disabled]="uriGenUseDefaultSetting">
+                                                <option *ngFor="let ugpConf of selectedUriGenPluginConfList" [ngValue]="ugpConf">
+                                                    {{ugpConf.shortName}}
+                                                </option>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-sm" (click)="configureUriGenConf()" [disabled]="uriGenUseDefaultSetting">Configure</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="subPanel">
+                        <div class="subPanel-heading">
+                            <label style="flex: 1;">Rendering Engine</label>
+                            <div class="checkbox" style="margin: 0px">
+                                <label style="min-height: initial;">
+                                    <input type="checkbox" [(ngModel)]="rendEngUseDefaultSetting"> Use default settings
+                                </label>
                             </div>
+                        </div>
+                        <div class="subPanel-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-1">Plugin:</label>
+                                    <div class="col-sm-11">
+                                        <select class="form-control input-sm" [(ngModel)]="selectedRendEngPlugin" (ngModelChange)="onRendEnginePluginChanged()"
+                                            name="selectedRendEngPlugin" [disabled]="rendEngUseDefaultSetting">
+                                            <option *ngFor="let rep of rendEngPluginList" [ngValue]="rep">
+                                                {{rep.factoryID.substring(rep.factoryID.lastIndexOf('.')+1)}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-1">Configuration:</label>
+                                    <div class="col-sm-11">
+                                        <div class="input-group">
+                                            <select class="form-control input-sm" [(ngModel)]="selectedRendEngPluginConf" name="selectedRendEngPluginConf"
+                                                [disabled]="rendEngUseDefaultSetting">
+                                                <option *ngFor="let repConf of selectedRendEngPluginConfList" [ngValue]="repConf">
+                                                    {{repConf.shortName}}
+                                                </option>
+                                            </select>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-sm" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">Configure</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
                 </div>
-            </div>-->
+            </div>
 
         </div>
         
         <div class="panel-footer">
-            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="create()">Create</button>
+            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="createtNew()">Create</button>
             <span class="clearfix"></span> <!--To fix UI bug-->
         </div>
     </div>

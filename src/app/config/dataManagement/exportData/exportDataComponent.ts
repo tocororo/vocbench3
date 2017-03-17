@@ -155,7 +155,8 @@ export class ExportDataComponent {
 
     private appendFilter() {
         this.pluginService.getPluginConfigurations(this.availableExporterFilterPlugins[0].factoryID).subscribe(
-            configurations => {
+            configs => {
+                var configurations: PluginConfiguration[] = configs.configurations;
                 let pluginStructs: PluginStructure[] = [];
                 for (var i = 0; i < this.availableExporterFilterPlugins.length; i++) {
                     //initialize configuration only for the first (i = 0) plugin that is the selected by default
@@ -195,8 +196,8 @@ export class ExportDataComponent {
         if (configurations == null) { //not yet initialized
             this.pluginService.getPluginConfigurations(selectedPlugin.plugin.factoryID).subscribe(
                 configs => {
-                    selectedPlugin.configurations = configs;
-                    filterChainEl.selectedPlugin.selectedConfiguration = configs[0]; //set the first as selected
+                    selectedPlugin.configurations = configs.configurations;
+                    filterChainEl.selectedPlugin.selectedConfiguration = configs.configurations[0]; //set the first as selected
                 }
             )
         }
@@ -220,21 +221,7 @@ export class ExportDataComponent {
         );
     }
 
-    private openConfigurationModal(configuration: any) {
-        //collect all the graphs checked
-        var graphs: ARTURIResource[] = [];
-        if (this.areAllGraphDeselected()) { //collect all graphs
-            for (var i = 0; i < this.exportGraphs.length; i++) {
-                graphs.push(this.exportGraphs[i].graph);
-            }
-        } else { //collect only the checked
-            for (var i = 0; i < this.exportGraphs.length; i++) {
-                if (this.exportGraphs[i].checked) {
-                    graphs.push(this.exportGraphs[i].graph);
-                }
-            }
-        }
-
+    private openConfigurationModal(configuration: PluginConfiguration) {
         var modalData = new PluginConfigModalData(configuration);
         const builder = new BSModalContextBuilder<PluginConfigModalData>(
             modalData, undefined, PluginConfigModalData
@@ -287,9 +274,9 @@ export class ExportDataComponent {
         //check if every filter has been configured
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
-                this.modalService.alert("Missing filter configuration", "An export filter need to be configured", "warning").then(
-                    res => { return; }
-                );
+                this.modalService.alert("Missing filter configuration", "An export filter ("
+                    + this.filtersChain[i].selectedPlugin.plugin.factoryID + ") need to be configured", "warning");
+                return;
             }
         }
 

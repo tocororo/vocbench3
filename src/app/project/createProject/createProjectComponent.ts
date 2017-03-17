@@ -6,27 +6,10 @@ import { Router } from "@angular/router";
 import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
+import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig } from "../../models/Project";
+import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/pluginConfigModal/pluginConfigModal";
-
-/**
- * extPointStructList is a list of structures with info about extension point. Each element is structured as follow:
- * 
- * id: "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator", //id of the extension point
- * plugins: ["NativeTemplateBasedURIGeneratorFactory", "CODAURIGeneratorFactory"], //available plugins of the extPoint
- * selectedExtPointPluginId: "NativeTemplateBasedURIGeneratorFactory", //id of the selected plugin
- * selectedExtPointPlugin: {    //structure describing the selected plugin for the selected extPoint
- *  	id: "NativeTemplateBasedURIGeneratorFactory",
- * 		configurations: [{      //array of available configuration for the selected plugin
- * 			editRequired: true/false,
- * 			shortName: "...",
- * 			type: "...",
- * 			params: [{description: "", name: "", required: "", value: ""},
- * 					{description: "", name: "", required: "", value: ""}]
- * 		}, {}, {}...],
- *  	selectedConfigType: , //id of the current selected configuration
- * }
- */
 
 @Component({
     selector: "create-project-component",
@@ -35,6 +18,9 @@ import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/plu
 })
 export class CreateProjectComponent {
 
+    /**
+     * BASIC PROJECT SETTINGS
+     */
     private projectName: string;
     private baseURI: string;
 
@@ -45,53 +31,50 @@ export class CreateProjectComponent {
     ];
     private modelType: string = this.modelTypeList[0].value;
 
-    private ontoMgrList: Array<string>;
-    private ontoMgrId: string = "it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl";
-    private ontoMgrConfigList: Array<any>;
-    private selectedOntoMgrConfig: any = {};
-    //config represents the configuration of the ontology manager (shortName, type, params, ...)
-    //open tells if the panel is open or close 
-
-    private extPointList = [
-        "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator",
-        "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine"
-    ];
-    private extPointStructList: Array<any> = [];
-    private extPointPanelOpen: boolean = false;
-
-    private submitted: boolean = false;
-
-
-    //NEW
     private history: boolean = false;
     private validation: boolean = false;
 
-    private dataStoreList: any[] = [
-        { label: "Create Local", type: "local", action: "create"},
-        { label: "Create Remote", type: "remote", action: "create"},
-        { label: "Access Existing Remote", type: "remote", action: "access"},
+    private repositoryAccessList: RepositoryAccessType[] = [
+        RepositoryAccessType.CreateLocal, RepositoryAccessType.CreateRemote, RepositoryAccessType.AccessExistingRemote
     ]
-    private selectedDataStore: any = this.dataStoreList[0];
+    private selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
-    //configuration of remote access (used only in case dataStore is one of the two with type "remote")
-    private remoteAccessConfig: any = [
-        {name: "ServerURL", description:"URL to the server of the rdf repository", required: true},
-        {name: "Username", description:"Identifier for the user connecting to the rdf repository", required: true},
-        {name: "Password", description:"Password for the user connecting to the rdf repository", required: true}
-    ];
+    //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
+    private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    //this should be retrieved from server as for ontManager.getOntManagerParameters() ?
-    private repoConfigurations: any[] = [
-        { value: "NativeStore/Persistent" },
-        { value: "InMemory/Persistent" },
-        { value: "InMemory/Volatile" }
-    ];
-
+    private sailConfigurerPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.SailConfigurer";
+    //core repository containing data
     private dataRepoId: string;
-    private dataRepoConf: any = this.repoConfigurations[0]; //chosen configuration for data repository
-    private historyValidationRepoId: string;
-    private historyValidationRepoConf: any = this.repoConfigurations[0]; //chosen configuration for history/validation repository
+    private dataRepoConfList: {factoryID: string, configuration: PluginConfiguration}[]; 
+    private selectedDataRepoConf: {factoryID: string, configuration: PluginConfiguration}; //chosen configuration for data repository
+    //support repository for history and validation
+    private supportRepoId: string;
+    private supportRepoConfList: {factoryID: string, configuration: PluginConfiguration}[];
+    private selectedSupportRepoConf: {factoryID: string, configuration: PluginConfiguration}; //chosen configuration for history/validation repository
 
+    /**
+     * OPTIONAL PROJECT SETTINGS
+     */
+
+    private extPointPanelOpen: boolean = false;
+
+    //URI GENERATOR PLUGIN
+    private uriGenUseDefaultSetting: boolean = true;
+    private uriGeneratorPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
+    private uriGenPluginList: Plugin[]; //available plugins for uri generator (retrieved through getAvailablePlugins)
+    private selectedUriGenPlugin: Plugin; //chosen plugin for uri generator (the one selected through a <select> element)
+    private uriGenPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> used to store the configurations for the plugins
+    private selectedUriGenPluginConfList: PluginConfiguration[]; //plugin configurations for the selected plugin (represent the choices of the <select> element of configurations)
+    private selectedUriGenPluginConf: PluginConfiguration; //chosen configuration for the chosen uri generator plugin (selected through a <select> element)
+
+    //RENDERING GENERATOR PLUGIN
+    private rendEngUseDefaultSetting: boolean = true;
+    private renderingEnginePluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
+    private rendEngPluginList: Plugin[]; //available plugins for rendering engine
+    private selectedRendEngPlugin: Plugin; //chosen plugin for rendering engine
+    private rendEngPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> (plugin - available configs)
+    private selectedRendEngPluginConfList: PluginConfiguration[]; //plugin configurations for the selected plugin
+    private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
 
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices,
         private pluginService: PluginsServices, private router: Router, private modalService: ModalServices,
@@ -99,217 +82,45 @@ export class CreateProjectComponent {
     }
 
     ngOnInit() {
-        this.ontMgrService.listOntoManager().subscribe(
-            ontoMgrs => {
-                this.ontoMgrList = ontoMgrs;
-                this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
-                    configList => {
-                        this.ontoMgrConfigList = configList;
-                        this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
-                    }
-                );
-            }
-        );
-
-        this.ontoMgrList = ["it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl"];
-        this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
-            configList => {
-                this.ontoMgrConfigList = configList;
-                this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
-            }
-        );
-
-        // for (var i = 0; i < this.extPointList.length; i++) {
-        //     var extPoint: any = {};
-        //     this.extPointStructList.push(extPoint);
-        //     extPoint.id = this.extPointList[i];
-        //     extPoint.selectedExtPointPluginId = "---";
-        //     extPoint.selectedExtPointPlugin = { id: null, configurations: null, selectedConfigType: null };
-        //     //extPoint.plugins
-        //     this.pluginService.getAvailablePlugins(this.extPointList[i]).subscribe(
-        //         extPointPlugins => {
-        //             var xp = extPointPlugins.extPoint;
-        //             var plugins = extPointPlugins.plugins;
-        //             for (var j = 0; j < this.extPointStructList.length; j++) {
-        //                 if (this.extPointStructList[j].id == xp) {
-        //                     this.extPointStructList[j].plugins = plugins;
-        //                     break;
-        //                 }
-        //             }
-        //         }
-        //     );
-        // }
-    }
-
-    /**
-     * Called when user change the onto manager. Updates the configuration list of the onto manager.
-     */
-    onOntMgrChanged() {
-        this.ontMgrService.getOntManagerParameters(this.ontoMgrId).subscribe(
-            configList => {
-                this.ontoMgrConfigList = configList;
-                this.selectedOntoMgrConfig = this.ontoMgrConfigList[0];
-            }
-        );
-    }
-
-    /**
-     * Opens a modal to configure ontology manager triple store
-     */
-    private configureOntoMgr() {
-        this.openConfigurationModal(this.selectedOntoMgrConfig).then(
-            (config: any) => {
-                this.selectedOntoMgrConfig = config;
-                for (var i = 0; i < this.ontoMgrConfigList.length; i++) {
-                    if (this.ontoMgrConfigList[i].shortName == config.shortName) {
-                        this.ontoMgrConfigList[i] = config;
-                    }
-                }
-            },
-            () => {}
-        );
-    }
-
-    /**
-     * opens/closes extension point panel
-     */
-    // private toggleExtPointPanel() {
-    //     this.extPointPanelOpen = !this.extPointPanelOpen;
-    // }
-
-    // /**
-    //  * Called when change selection of the plugins menu of an extension point
-    //  */
-    // private changeExtPointPlugin(extPointStruct: any) {
-    //     if (extPointStruct.selectedExtPointPluginId == "---") {
-    //         extPointStruct.selectedExtPointPlugin.configurations = null;
-    //         extPointStruct.selectedExtPointPlugin.selectedConfigType = null;
-    //     } else {
-    //         this.pluginService.getPluginConfigurations(extPointStruct.selectedExtPointPluginId).subscribe(
-    //             configurations => {
-    //                 extPointStruct.selectedExtPointPlugin.configurations = configurations;
-    //                 extPointStruct.selectedExtPointPlugin.selectedConfigType = configurations[0].type;
-    //             }
-    //         );
-    //     }
-    // }
-
-    // /**
-    //  * Given the structure of an extension point, opens a modal to change its plugin configuration
-    //  */
-    // private configurePluginConfig(extPointStruct: any) {
-    //     //search in configurations the one with the given selectedConfigType
-    //     for (var i = 0; i < extPointStruct.selectedExtPointPlugin.configurations.length; i++) {
-    //         if (extPointStruct.selectedExtPointPlugin.configurations[i].type == extPointStruct.selectedExtPointPlugin.selectedConfigType) {
-    //             this.openConfigurationModal(extPointStruct.selectedExtPointPlugin.configurations[i]);
-    //             break;
-    //         }
-    //     }
-    // }
-
-    /**
-     * retrieves the new project setting and calls the newProject service
-     */
-    private create() {
-
-        this.submitted = true;
-
-        if (!this.projectName || this.projectName.trim() == "" || !this.baseURI || this.baseURI.trim() == "") {
-            return; //project name or baseURI not valid
-        }
-
-        if (this.projectName && this.projectName.trim() != "" && this.baseURI && this.baseURI.trim() != "") {
-
-            var uriGenFactoryID: string;
-            var uriGenConfigurationClass: string;
-            var uriGenConfigurationArray: any[];
-            var renderingEngineFactoryID: string;
-            var renderingEngineConfigurationClass: string;
-            var renderingEngineConfigurationArray: any[];
-
-            /* NOTE: currently I need to prepare the above parameters in a not-general way because 
-             the newProject method gets precise parameters so they must be distinguished.
-        	 We should generalize the request and then this operations will be generalized too.
-             Otherwise we should change the service newProject so that it gets just the basic parameters,
-             creates a project with basic plugin configurations and then we should allow to change them after the
-             project creation. */
-            for (var i = 0; i < this.extPointStructList.length; i++) {
-                if (this.extPointStructList[i].id == "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator") {
-                    if (this.extPointStructList[i].selectedExtPointPluginId != "---") {
-                        uriGenFactoryID = this.extPointStructList[i].selectedExtPointPluginId;
-                        uriGenConfigurationClass = this.extPointStructList[i].selectedExtPointPlugin.selectedConfigType;
-                        for (var j = 0; j < this.extPointStructList[i].selectedExtPointPlugin.configurations.length; j++) {
-                            if (this.extPointStructList[i].selectedExtPointPlugin.configurations[j].type == uriGenConfigurationClass) {
-                                uriGenConfigurationArray = this.extPointStructList[i].selectedExtPointPlugin.configurations[j].params;
-                                break;
+        //init sail repository plugin
+        this.pluginService.getAvailablePlugins(this.sailConfigurerPluginID).subscribe(
+            (plugins: Plugin[]) => {
+                for (var i = 0; i < plugins.length; i++) {
+                    this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
+                        (configs: {factoryID: string, configurations: PluginConfiguration[]}) => {
+                            this.dataRepoConfList = [];
+                            this.supportRepoConfList = [];
+                            //clone the configurations, so changes on data repo configuration don't affect support repo configuration
+                            for (var i = 0; i < configs.configurations.length; i++) {
+                                this.dataRepoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
+                                this.supportRepoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
                             }
+                            this.selectedDataRepoConf = this.dataRepoConfList[0];
+                            this.selectedSupportRepoConf = this.supportRepoConfList[0];
                         }
-                    }
-                } else if (this.extPointStructList[i].id == "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine") {
-                    if (this.extPointStructList[i].selectedExtPointPluginId != "---") {
-                        renderingEngineFactoryID = this.extPointStructList[i].selectedExtPointPluginId;
-                        renderingEngineConfigurationClass = this.extPointStructList[i].selectedExtPointPlugin.selectedConfigType;
-                        for (var j = 0; j < this.extPointStructList[i].selectedExtPointPlugin.configurations.length; j++) {
-                            if (this.extPointStructList[i].selectedExtPointPlugin.configurations[j].type == renderingEngineConfigurationClass) {
-                                renderingEngineConfigurationArray = this.extPointStructList[i].selectedExtPointPlugin.configurations[j].params;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            document.getElementById("blockDivFullScreen").style.display = "block";
-            this.projectService.createProject(this.projectName, this.modelType, this.baseURI,
-                this.ontoMgrId, this.selectedOntoMgrConfig.type, this.selectedOntoMgrConfig.params,
-                uriGenFactoryID, uriGenConfigurationClass, uriGenConfigurationArray,
-                renderingEngineFactoryID, renderingEngineConfigurationClass, renderingEngineConfigurationArray).subscribe(
-                stResp => {
-                    document.getElementById("blockDivFullScreen").style.display = "none";
-                    this.modalService.alert("Create project", "Project created successfully").then(
-                        () => this.router.navigate(['/Projects'])
                     );
-                },
-                err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
-                );
-
-        }
-    }
-
-    /**
-     * Opens a modal to change configurations
-     */
-    private openConfigurationModal(configuration: any) {
-        var modalData = new PluginConfigModalData(configuration);
-        const builder = new BSModalContextBuilder<PluginConfigModalData>(
-            modalData, undefined, PluginConfigModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PluginConfigModal, overlayConfig).then(
-            dialog => dialog.result
-        );
-    }
-
-
-
-
-    /** #####################################
-     * ############## NEW ###################
-     * #################################### */
-
-    private createtNew() {
-        document.getElementById("blockDivFullScreen").style.display = "block";
-        this.projectService.createProjectNEW(this.projectName, this.modelType, this.baseURI, this.history, this.validation).subscribe(
-            stResp => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
-                this.modalService.alert("Create project", "Project created successfully").then(
-                    () => this.router.navigate(['/Projects'])
-                );
-            },
-            err => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                }
             }
         );
+
+        //init uri generator plugin
+        this.pluginService.getAvailablePlugins(this.uriGeneratorPluginID).subscribe(
+            (plugins: Plugin[]) => {
+                this.uriGenPluginList = plugins;
+                this.selectedUriGenPlugin = this.uriGenPluginList[0];
+                this.onUriGenPluginChanged(); //init configuration for the default selected uri generator plugin
+            }
+        );
+
+        //init rendering engine plugin
+        this.pluginService.getAvailablePlugins(this.renderingEnginePluginID).subscribe(
+            (plugins: Plugin[]) => {
+                this.rendEngPluginList = plugins;
+                this.selectedRendEngPlugin = this.rendEngPluginList[0];
+                this.onRendEnginePluginChanged(); //init configuration for the default selected rendering engine plugin
+            }
+        );
+
     }
 
     /**
@@ -317,13 +128,36 @@ export class CreateProjectComponent {
      * the data and history-validation repositories IDs are determined from project's name
      */
     private onProjectNameChange() {
-        if (this.selectedDataStore.action == "create") {
+        if (this.isSelectedRepoAccessCreateMode()) {
             this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_data";
-            this.historyValidationRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
+            this.supportRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
         }
     }
 
-    private configureRemoteDataStore() {
+    /**
+     * DATA STORE MANAGEMENT (REPOSITORY ACCESS)
+     */
+
+    /**
+     * Tells if the selected RepositoryAccess is remote.
+     */
+    private isSelectedRepoAccessRemote(): boolean {
+        return (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote ||
+            this.selectedRepositoryAccess == RepositoryAccessType.AccessExistingRemote);
+    }
+
+    /**
+     * Tells if the selected RepositoryAccess is in create mode.
+     */
+    private isSelectedRepoAccessCreateMode(): boolean {
+        return (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal || 
+            this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote);
+    }
+
+    /**
+     * Configure the selected repository access in case it is remote.
+     */
+    private configureRemoteRepositoryAccess() {
         var modalData = new RemoteAccessConfigModalData(this.remoteAccessConfig);
         const builder = new BSModalContextBuilder<RemoteAccessConfigModalData>(
             modalData, undefined, RemoteAccessConfigModalData
@@ -335,11 +169,269 @@ export class CreateProjectComponent {
     }
 
     private configureDataRepo() {
-        alert("what are the parameters?");
+        this.openConfigurePluginModal(this.selectedDataRepoConf.configuration).then(
+            (config: any) => {
+                this.selectedDataRepoConf.configuration.params = (<PluginConfiguration>config).params;
+            },
+            () => {}
+        );
     }
 
-    private configureHistoryValidationRepo() {
-        alert("what are the parameters?");
+    private configureSupportRepo() {
+        this.openConfigurePluginModal(this.selectedSupportRepoConf.configuration).then(
+            (config: any) => {
+                this.selectedSupportRepoConf.configuration.params = (<PluginConfiguration>config).params;
+            },
+            () => {}
+        );
+    }
+
+    /**
+     * URI GENERATOR PLUGIN
+     */
+
+    private onUriGenPluginChanged() {
+        //check if the selected plugin configuration has already the configuration list
+        var uriGenConfs: PluginConfiguration[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
+        if (uriGenConfs != null) {
+            this.selectedUriGenPluginConfList = uriGenConfs;
+            this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
+            return; //selected plugin is already in uriGenPluginConfMap, so there's no need to get the configurations
+        }
+        //configurations for selected plugin doesn't found => get the configurations
+        this.pluginService.getPluginConfigurations(this.selectedUriGenPlugin.factoryID).subscribe(
+            configs => {
+                this.uriGenPluginConfMap.set(configs.factoryID, configs.configurations);
+                this.selectedUriGenPluginConfList = configs.configurations;
+                //set the first configuration as default
+                this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
+            }
+        )
+    }
+
+    private configureUriGenConf() {
+        this.openConfigurePluginModal(this.selectedUriGenPluginConf).then(
+            (config: any) => {
+                this.selectedUriGenPluginConf.params = (<PluginConfiguration>config).params;
+            },
+            () => {}
+        )
+    }
+
+    /**
+     * RENDERING ENGINE PLUGIN
+     */
+
+    private onRendEnginePluginChanged() {
+        //check if the selected plugin configuration has already the configuration list
+        var rendEngConfs: PluginConfiguration[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
+        if (rendEngConfs != null) {
+            this.selectedRendEngPluginConfList = rendEngConfs;
+            this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
+            return; //selected plugin is already in rendEngPluginConfMap, so there's no need to get the configurations
+        }
+        //configurations for selected plugin doesn't found => get the configurations
+        this.pluginService.getPluginConfigurations(this.selectedRendEngPlugin.factoryID).subscribe(
+            configs => {
+                this.rendEngPluginConfMap.set(configs.factoryID, configs.configurations);
+                this.selectedRendEngPluginConfList = configs.configurations;
+                //set the first configuration as default
+                this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
+            }
+        )
+    }
+
+    private configureRendEngConf() {
+        this.openConfigurePluginModal(this.selectedRendEngPluginConf).then(
+            (config: any) => {
+                this.selectedRendEngPluginConf.params = (<PluginConfiguration>config).params;
+            },
+            () => {}
+        )
+    }
+
+    /**
+     * Opens a modal to change configurations
+     */
+    private openConfigurePluginModal(configuration: PluginConfiguration) {
+        var modalData = new PluginConfigModalData(configuration);
+        const builder = new BSModalContextBuilder<PluginConfigModalData>(
+            modalData, undefined, PluginConfigModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(PluginConfigModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    private createtNew() {
+
+        //check project name
+        if (!this.projectName || this.projectName.trim() == "") {
+            this.modalService.alert("Create project", "Project name is missing or not valid", "warning");
+            return;
+        }
+        //check baseURI
+        if (!this.baseURI || this.baseURI.trim() == "") {
+            this.modalService.alert("Create project", "BaseURI is missing or not valid", "warning");
+            return;
+        }
+
+        /**
+         * Prepare repositoryAccess parameter
+         */
+        var repositoryAccess: RepositoryAccess = new RepositoryAccess(this.selectedRepositoryAccess);
+        //if the selected repo access is remote, add the configuration 
+        if (this.isSelectedRepoAccessRemote()) {
+            //check if configuration is set
+            if ((!this.remoteAccessConfig.serverURL || this.remoteAccessConfig.serverURL.trim() == "")) {
+                this.modalService.alert("Create project",
+                    "Remote repository access/creation requires a configuration. Please check serverURL, username and password in 'Remote Access Config'.", "warning");
+                return;
+            }
+            repositoryAccess.setConfiguration(this.remoteAccessConfig);
+        }
+
+        /**
+         * Prepare coreRepoSailConfigurerSpecification parameter
+         */
+        var coreRepoSailConfigurerSpecification: PluginSpecification
+        //prepare config of core repo only if it is in creation mode
+        if (this.isSelectedRepoAccessCreateMode()) { 
+            //check if data repository configuration need to be configured
+            var coreRepoConfigParams: PluginConfigParam[] = this.selectedDataRepoConf.configuration.params;
+            if (this.selectedDataRepoConf.configuration.editRequired) {
+                //...and in case if every required configuration parameters are not null
+                for (var i = 0; i < coreRepoConfigParams.length; i++) {
+                    if (coreRepoConfigParams[i].required && coreRepoConfigParams[i].value != null) {
+                        this.modalService.alert("Create project",
+                            "Data Repository (" + this.selectedDataRepoConf.configuration.shortName + ") requires to be configured", "warning");
+                        return;
+                    }
+                }
+            }
+
+            var coreRepoProps: any = {};
+            for (var i = 0; i < coreRepoConfigParams.length; i++) {
+                coreRepoProps[coreRepoConfigParams[i].name] = coreRepoConfigParams[i].value;
+            }
+            coreRepoSailConfigurerSpecification = {
+                factoryId: this.selectedDataRepoConf.factoryID,
+                configType: this.selectedDataRepoConf.configuration.type,
+                properties: coreRepoProps
+            }
+            console.log("coreRepoSailConfigurerSpecification", coreRepoSailConfigurerSpecification);
+        }
+
+        /**
+         * Prepare supportRepoSailConfigurerSpecification parameter
+         */
+        var supportRepoSailConfigurerSpecification: PluginSpecification
+        //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
+        if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
+            //check if support repository configuration need to be configured
+            var supportRepoConfigParams: PluginConfigParam[] = this.selectedSupportRepoConf.configuration.params;
+            if (this.selectedSupportRepoConf.configuration.editRequired) {
+                //...and in case if every required configuration parameters are not null
+                for (var i = 0; i < supportRepoConfigParams.length; i++) {
+                    if (supportRepoConfigParams[i].required && supportRepoConfigParams[i].value != null) {
+                        this.modalService.alert("Create project",
+                            "History/Validation Repository (" + this.selectedSupportRepoConf.configuration.shortName + ") requires to be configured", "warning");
+                        return;
+                    }
+                }
+            }
+            
+            var supportRepoProps: any = {};
+            for (var i = 0; i < supportRepoConfigParams.length; i++) {
+                supportRepoProps[supportRepoConfigParams[i].name] = supportRepoConfigParams[i].value;
+            }
+            supportRepoSailConfigurerSpecification = {
+                factoryId: this.selectedSupportRepoConf.factoryID,
+                configType: this.selectedSupportRepoConf.configuration.type,
+                properties: supportRepoProps
+            }
+            console.log("supportRepoSailConfigurerSpecification", supportRepoSailConfigurerSpecification);
+        }
+        
+        /**
+         * Prepare uriGeneratorSpecification parameter
+         */
+        var uriGeneratorSpecification: PluginSpecification;
+        if (!this.uriGenUseDefaultSetting) {
+            //check if uriGenerator plugin need to be configured
+            if (this.selectedUriGenPluginConf.editRequired) {
+                //...and in case if every required configuration parameters are not null
+                for (var i = 0; i < this.selectedUriGenPluginConf.params.length; i++) {
+                    if (this.selectedUriGenPluginConf.params[i].required && this.selectedUriGenPluginConf.params[i].value != null) {
+                        this.modalService.alert("Create project",
+                            "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName + ") requires configuration", "warning");
+                        return;
+                    }
+                }
+            }
+
+            var uriGenPluginProps: any = {};
+            for (var i = 0; i < this.selectedUriGenPluginConf.params.length; i++) {
+                uriGenPluginProps[this.selectedUriGenPluginConf.params[i].name] = this.selectedUriGenPluginConf.params[i].value;
+            }
+            
+            uriGeneratorSpecification = {
+                factoryId: this.selectedUriGenPlugin.factoryID,
+                configType: this.selectedUriGenPluginConf.type,
+                properties: uriGenPluginProps
+            }
+            console.log("uriGeneratorSpecification", uriGeneratorSpecification);
+        }
+
+        /**
+         * Prepare renderingEngineSpecification parameter
+         */
+        var renderingEngineSpecification: PluginSpecification;
+        if (!this.rendEngUseDefaultSetting) {
+            //check if uriGenerator plugin need to be configured
+            if (this.selectedRendEngPluginConf.editRequired) {
+                //...and in case if every required configuration parameters are not null
+                for (var i = 0; i < this.selectedRendEngPluginConf.params.length; i++) {
+                    if (this.selectedRendEngPluginConf.params[i].required && this.selectedRendEngPluginConf.params[i].value != null) {
+                        this.modalService.alert("Create project",
+                            "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName + ") requires configuration", "warning");
+                        return;
+                    }
+                }
+            }
+
+            var rendEngPluginProps: any = {};
+            for (var i = 0; i < this.selectedRendEngPluginConf.params.length; i++) {
+                rendEngPluginProps[this.selectedRendEngPluginConf.params[i].name] = this.selectedRendEngPluginConf.params[i].value;
+            }
+
+            var renderingEngineSpecification: PluginSpecification = {
+                factoryId: this.selectedRendEngPlugin.factoryID,
+                configType: this.selectedRendEngPluginConf.type,
+                properties: rendEngPluginProps
+            }
+            console.log("renderingEngineSpecification", renderingEngineSpecification);
+        }
+
+        /**
+         * Execute request
+         */
+        document.getElementById("blockDivFullScreen").style.display = "block";
+        this.projectService.createProject(this.projectName, this.modelType, this.baseURI, this.history, this.validation,
+            repositoryAccess, this.dataRepoId, this.supportRepoId,
+            coreRepoSailConfigurerSpecification, supportRepoSailConfigurerSpecification,
+            uriGeneratorSpecification, renderingEngineSpecification).subscribe(
+            stResp => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+                this.modalService.alert("Create project", "Project created successfully").then(
+                    () => this.router.navigate(['/Projects'])
+                );
+            },
+            err => {
+                document.getElementById("blockDivFullScreen").style.display = "none";
+            }
+        );
     }
 
 }

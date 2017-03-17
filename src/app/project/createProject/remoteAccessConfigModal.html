@@ -10,10 +10,20 @@
             <col style="width: 1%;">
         </colgroup>
         <tbody>
-            <tr *ngFor="let param of context.configuration">
-                <td nowrap>{{param.name}}</td>
-                <td><input type="text" class="form-control input-sm" [(ngModel)]="param.value"></td>
-                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" [title]="param.description"></span></td>
+            <tr>
+                <td nowrap>Server URL</td>
+                <td><input type="text" class="form-control input-sm" [(ngModel)]="context.remoteConfig.serverURL" placeholder="http://serverurl"></td>
+                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="URL to the server of the rdf repository"></span></td>
+            </tr>
+            <tr>
+                <td nowrap>Username</td>
+                <td><input type="text" class="form-control input-sm" [(ngModel)]="context.remoteConfig.username" placeholder="username"></td>
+                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Identifier for the user connecting to the rdf repository"></span></td>
+            </tr>
+            <tr>
+                <td nowrap>Password</td>
+                <td><input type="text" class="form-control input-sm" [(ngModel)]="context.remoteConfig.password" placeholder="password"></td>
+                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Password for the user connecting to the rdf repository"></span></td>
             </tr>
         </tbody>
     </table>

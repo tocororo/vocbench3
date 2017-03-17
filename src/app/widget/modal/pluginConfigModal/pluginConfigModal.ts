@@ -28,7 +28,9 @@ export class PluginConfigModal implements ModalComponent<PluginConfigModalData> 
 
     ngOnInit() {
         //copy the context configuration (so changes of params don't affect original configuration params)
-        this.config = JSON.parse(JSON.stringify((this.context.configuration)));
+        // this.config = JSON.parse(JSON.stringify((this.context.configuration)));
+        this.config = Object.assign({}, this.context.configuration);
+        // JSON.parse(JSON.stringify((this.context.configuration)));
     }
 
     private isOkClickable(): boolean {
