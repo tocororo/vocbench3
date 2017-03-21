@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h3 class="modal-title">Project ACL</h3>
+</div>
+<div class="modal-body vbox" style="max-height:70vh;">
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Access Control List of project: {{context.acl.name}}</label>
+        </div>
+
+        <div class="panel-body scrollableContainer">
+            <table class="table table-condensed table-borderless">
+                <tbody>
+                    <tr *ngFor="let c of consumers">
+                        <td style="width: 1%" nowrap><label>{{c.name}}:</label></td>
+                        <td>
+                            <select class="form-control input-xs" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
+                                <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="panel-footer">
+            <div class="form-group">
+                <label class="control-label col-sm-5">Lockable:</label>
+                <div class="col-sm-7">
+                    <select class="form-control input-xs" (ngModelChange)="onLockLevelChange($event)" [(ngModel)]="lock.availableLockLevel">
+                        <option *ngFor="let ll of lockLevels" [value]="ll">{{ll}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

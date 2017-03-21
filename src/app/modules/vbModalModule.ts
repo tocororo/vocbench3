@@ -50,6 +50,8 @@ import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/brow
 //project config modal
 import { RemoteAccessConfigModal } from "../project/createProject/remoteAccessConfigModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
+import { ProjectACLModal } from "../project/projectACL/projectACLModal";
+import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
 
 //administration modal
 import { UserProjBindingModal } from "../administration/userProjBindingModal";
@@ -68,7 +70,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, UserProjBindingModal,
         PluginConfigModal, FilterGraphsModal
     ],
     exports: [],
@@ -89,7 +91,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, UserProjBindingModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, UserProjBindingModal,
         PluginConfigModal, FilterGraphsModal
     ]
 })

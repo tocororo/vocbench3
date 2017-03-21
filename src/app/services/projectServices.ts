@@ -258,7 +258,7 @@ export class ProjectServices {
     /**
      * 
      */
-    getAccessStatusMap() {
+    getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
         console.log("[ProjectServices] getAccessStatusMap");
         var params = { };
         return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params, this.oldTypeService).map(
@@ -330,7 +330,7 @@ export class ProjectServices {
         console.log("[ProjectServices] updateLockLevel");
         var params = {
             projectName: project.getName(),
-            accessLevel: lockLevel,
+            lockLevel: lockLevel,
         };
         return this.httpMgr.doGet(this.serviceName, "updateLockLevel", params, this.oldTypeService);
     }

@@ -11,11 +11,14 @@
         </div>
 
         <div class="btn-group btn-group-sm pull-right">
-            <button type="button" class="btn btn-default" (click)="openPropertyModal()"
-                title="Show project properties" [disabled]="!selectedProject">
+            <button type="button" class="btn btn-default" (click)="openPropertyModal()" title="Show project properties" [disabled]="!selectedProject">
                 <span class="glyphicon glyphicon-info-sign" style="line-height: 1;"></span>
             </button>
+            <button type="button" class="btn btn-default" (click)="openACLModal()" title="Show project Access Control List map">
+                ACL
+            </button>
         </div>
+
     </div>
 
     <div class="scrollableContainer">
