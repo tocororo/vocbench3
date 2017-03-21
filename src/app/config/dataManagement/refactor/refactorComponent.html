@@ -17,6 +17,9 @@
                         Note: this is <strong>not</strong> a loss-less operation,
                         all the information related to the SKOS labels and notes will be lost.
                     </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" [(ngModel)]="reifyNotes">Reify SKOS notes</label>
+                    </div>
                 </div>
                 <div class="subPanel-footer">
                     <button class="btn btn-sm btn-default pull-right" (click)="skosToSkosxl()">Refactor</button>

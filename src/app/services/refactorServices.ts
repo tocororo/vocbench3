@@ -15,9 +15,11 @@ export class RefactorServices {
     /**
      * Refactors SKOS data (labels and notes) into SKOSXL
      */
-    SKOStoSKOSXL() {
+    SKOStoSKOSXL(reifyNotes: boolean) {
         console.log("[RefactorServices] SKOStoSKOSXL");
-        var params: any = {};
+        var params: any = {
+            reifyNotes: reifyNotes
+        };
         return this.httpMgr.doGet("Refactor2", "SKOStoSKOSXL", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);

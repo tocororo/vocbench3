@@ -11,6 +11,8 @@ import { ModalServices } from "../../../widget/modal/modalServices";
 export class RefactorComponent {
 
     private ontoType: string; //OWL, SKOS, SKOS-XL
+    
+    private reifyNotes: boolean = false; //used in skos->skoxl
 
     constructor(private refactorService: RefactorServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
 
@@ -30,7 +32,7 @@ export class RefactorComponent {
         this.modalService.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
                 document.getElementById("blockDivFullScreen").style.display = "block";
-                this.refactorService.SKOStoSKOSXL().subscribe(
+                this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
                     stResp => {
                         document.getElementById("blockDivFullScreen").style.display = "none";
                     },
