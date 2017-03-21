@@ -129,7 +129,7 @@ export class CreateProjectComponent {
      */
     private onProjectNameChange() {
         if (this.isSelectedRepoAccessCreateMode()) {
-            this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_data";
+            this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_core";
             this.supportRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
         }
     }
