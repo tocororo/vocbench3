@@ -7,6 +7,7 @@ import { MetadataServices } from "../../../services/metadataServices";
 import { Plugin, PluginConfiguration } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
+import { UIUtils } from "../../../utils/UIUtils";
 import { ModalServices } from "../../../widget/modal/modalServices";
 import { PluginConfigModal, PluginConfigModalData } from "../../../widget/modal/pluginConfigModal/pluginConfigModal";
 import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/filterGraphsModal";
@@ -318,21 +319,21 @@ export class ExportDataComponent {
             filteringPipeline.push(filterStep);
         }
 
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat).subscribe(
             blob => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 var exportLink = window.URL.createObjectURL(blob);
                 this.modalService.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
             },
             err => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.modalService.confirm("Warning", err + " Do you want to force the export?", "warning").then(
                     yes => {
-                        document.getElementById("blockDivFullScreen").style.display = "block";
+                        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat, true).subscribe(
                             blob => {
-                                document.getElementById("blockDivFullScreen").style.display = "none";
+                                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                                 var exportLink = window.URL.createObjectURL(blob);
                                 this.modalService.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
                             }

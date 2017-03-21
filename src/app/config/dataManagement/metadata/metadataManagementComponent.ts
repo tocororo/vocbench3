@@ -6,6 +6,7 @@ import { MetadataServices } from "../../../services/metadataServices";
 import { RefactorServices } from "../../../services/refactorServices";
 import { OntoManagerServices } from '../../../services/ontoManagerServices';
 import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { UIUtils } from "../../../utils/UIUtils";
 import { ModalServices } from "../../../widget/modal/modalServices";
 import { ReplaceBaseURIModal, ReplaceBaseURIModalData } from "./replaceBaseURIModal";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
@@ -161,12 +162,12 @@ export class MetadataManagementComponent {
                 message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
                 this.modalService.confirm("Refactor", message, "warning").then(
                     confirm => {
-                        document.getElementById("blockDivFullScreen").style.display = "block";
+                        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
                                 this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                                     stResp => {
-                                        document.getElementById("blockDivFullScreen").style.display = "none";
+                                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                                         this.modalService.alert("Refactor", "BaseURI and namespace have been updated successfully");
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
@@ -188,10 +189,10 @@ export class MetadataManagementComponent {
                 message += "baseURI? (Attention, baseURI refactoring could be a long process)";
                 this.modalService.confirm("Refactor", message, "warning").then(
                     confirm => {
-                        document.getElementById("blockDivFullScreen").style.display = "block";
+                        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                             stResp => {
-                                document.getElementById("blockDivFullScreen").style.display = "none";
+                                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                                 this.modalService.alert("Refactor", "BaseURI has been updated successfully and refactor complete.");
                                 this.refreshBaseURI();
                                 this.nsBaseURISubmitted = true;
@@ -337,15 +338,15 @@ export class MetadataManagementComponent {
     private importFromWeb() {
         this.openImportModal("Import from web", ImportType.fromWeb).then(
             (data: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 )
             },
             () => { }
@@ -359,16 +360,16 @@ export class MetadataManagementComponent {
     private importFromWebToMirror() {
         this.openImportModal("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
                         this.refreshOntoMirror();
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 )
             },
             () => { }
@@ -382,15 +383,15 @@ export class MetadataManagementComponent {
     private importFromLocalFile() {
         this.openImportModal("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance,).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 )
             },
             () => { }
@@ -404,15 +405,15 @@ export class MetadataManagementComponent {
     private importFromOntologyMirror() {
         this.openImportModal("Import from ontology mirror", ImportType.fromOntologyMirror).then(
             (data: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 )
             },
             () => { }
@@ -423,10 +424,10 @@ export class MetadataManagementComponent {
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
     private removeImport(importedOntology: {id: string, status: string, imports: any[]}) {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.metadataService.removeImport(importedOntology.id).subscribe(
             stResp => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 //Refreshes the imports and the namespace prefix mapping
                 this.refreshImports();
                 this.refreshNSPrefixMappings();
@@ -466,13 +467,13 @@ export class MetadataManagementComponent {
     private updateMirrorFromWebWithUri(mirror: any) {
         this.modalService.prompt("Update ontology mirror from web", "BaseURI").then(
             (newNamespace: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.ontoMgrService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.refreshOntoMirror();
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 );
             },
             () => { }
@@ -486,13 +487,13 @@ export class MetadataManagementComponent {
     private updateMirrorFromWebFromAltUrl(mirror: any) {
         this.modalService.prompt("Update ontology mirror from web", "URL").then(
             (url: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.refreshOntoMirror();
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 );
             },
             () => { }
@@ -506,12 +507,12 @@ export class MetadataManagementComponent {
     private updateMirrorFromLocalFile(mirror: any) {
         this.modalService.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
             (file: any) => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     },
-                    () => document.getElementById("blockDivFullScreen").style.display = "none"
+                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 )
             },
             () => { }

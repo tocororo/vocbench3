@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
+import { UIUtils } from "../../../utils/UIUtils";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ModalServices } from "../../../widget/modal/modalServices";
@@ -49,7 +50,7 @@ export class PropertyTreeComponent extends AbstractTree {
         this.roots = [];
         this.selectedNode = null;
 
-        this.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
 
         //sort by show if rendering is active, uri otherwise
         let orderAttribute: "show" | "uri" = this.rendering ? "show" : "uri";
@@ -65,9 +66,9 @@ export class PropertyTreeComponent extends AbstractTree {
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             )
         } else if (this.resource) {
             this.propertyService.getRelevantPropertiesForResource(this.resource).subscribe(
@@ -76,66 +77,66 @@ export class PropertyTreeComponent extends AbstractTree {
                         props => {
                             ResourceUtils.sortURIResources(props, orderAttribute);
                             this.roots = props;
-                            this.blockDivElement.nativeElement.style.display = "none";
+                            UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                         },
-                        err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                        err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
                     );
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.objectProperty) {
             this.propertyService.geTopObjectProperties().subscribe(
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.annotationProperty) {
             this.propertyService.getTopAnnotationProperties().subscribe(
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.datatypeProperty) {
             this.propertyService.getTopDatatypeProperties().subscribe(
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.ontologyProperty) {
             this.propertyService.getTopOntologyProperties().subscribe(
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.property) {
             this.propertyService.getTopRDFProperties().subscribe(
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else {
             this.propertyService.getTopProperties().subscribe(
                 props => {
                     ResourceUtils.sortURIResources(props, orderAttribute);
                     this.roots = props;
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         }
     }

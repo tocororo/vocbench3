@@ -1,9 +1,10 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
-import {RefactorServices} from "../../../services/refactorServices";
-import {VocbenchCtx} from "../../../utils/VocbenchCtx";
-import {ModalServices} from "../../../widget/modal/modalServices";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { RefactorServices } from "../../../services/refactorServices";
+import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { UIUtils } from "../../../utils/UIUtils";
+import { ModalServices } from "../../../widget/modal/modalServices";
 
 export class ReplaceBaseURIModalData extends BSModalContext {
     /**
@@ -22,19 +23,19 @@ export class ReplaceBaseURIModalData extends BSModalContext {
 })
 export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalData> {
     context: ReplaceBaseURIModalData;
-    
+
     private useDefaultBaseURI: boolean = false;
     private oldBaseURI: string;
     private newBaseURI: string;
-    
+
     private submittedWithError: boolean = false;
     private errorMsg: string;
-    
+
     constructor(public dialog: DialogRef<ReplaceBaseURIModalData>, public refactorService: RefactorServices,
         private modalService: ModalServices, private vbCtx: VocbenchCtx) {
         this.context = dialog.context;
     }
-    
+
     private onCheckChange() {
         if (this.useDefaultBaseURI) {
             this.oldBaseURI = this.context.baseURI;
@@ -42,7 +43,7 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
             this.oldBaseURI = "";
         }
     }
-    
+
     ok(event: Event) {
         if (!this.oldBaseURI.startsWith("http://")) {
             this.errorMsg = "Invalid Old baseURI";
@@ -54,13 +55,13 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
             this.submittedWithError = true;
             return;
         }
-        
+
         this.modalService.confirm("Replace baseURI", "This operation could be a long process. Are you sure to proceed?", "warning").then(
             confirm => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.replaceBaseURI(this.newBaseURI, this.oldBaseURI).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         //remove scheme if defaultBaseURI was replaced
                         if (this.vbCtx.getScheme() && this.vbCtx.getScheme().getURI().startsWith(this.oldBaseURI)) {
                             this.vbCtx.removeScheme(this.vbCtx.getWorkingProject());
@@ -69,10 +70,10 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
                         event.preventDefault();
                         this.dialog.close();
                     },
-                    err => document.getElementById("blockDivFullScreen").style.display = "none"
+                    err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
                 );
             },
-            () => {}
+            () => { }
         )
     }
 

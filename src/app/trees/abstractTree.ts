@@ -1,6 +1,7 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
 import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { UIUtils } from "../utils/UIUtils";
 
 @Component({
     selector: "tree",
@@ -75,10 +76,10 @@ export abstract class AbstractTree {
 
     //Listeners to node expansion start/end. Simply show/hide the loading div
     private onNodeExpandStart() {
-        this.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
     }
     private onNodeExpandEnd() {
-        this.blockDivElement.nativeElement.style.display = "none";
+        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
     private onNodeSelected(node: ARTURIResource) {
         if (this.selectedNode != undefined) {

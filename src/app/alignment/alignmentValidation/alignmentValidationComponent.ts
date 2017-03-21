@@ -3,6 +3,7 @@ import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {VocbenchCtx} from "../../utils/VocbenchCtx";
 import {Cookie} from "../../utils/Cookie";
+import {UIUtils} from "../../utils/UIUtils";
 import {ARTURIResource} from "../../models/ARTResources";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentCell} from "./AlignmentCell";
@@ -257,38 +258,38 @@ export class AlignmentValidationComponent {
     }
     
     private doQuickAction() {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         if (this.chosenQuickAction == this.qaAcceptAll) {
             this.alignmentService.acceptAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
             )
         } else if (this.chosenQuickAction == this.qaAcceptAllAbove) {
             this.alignmentService.acceptAllAbove(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
             )
         } else if (this.chosenQuickAction == this.qaRejectAll) {
             this.alignmentService.rejectAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
             )
         } else if (this.chosenQuickAction == this.qaRejectAllUnder) {
             this.alignmentService.rejectAllUnder(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 },
-                () => document.getElementById("blockDivFullScreen").style.display = "none"
+                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
             )
         }
     }
@@ -325,7 +326,7 @@ export class AlignmentValidationComponent {
         } else if (this.rejectedAlignmentAction == "ask") {
             this.modalService.confirmCheck("Apply valdiation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments. Are you sure to continue?", "Delete triples of rejected alignments", "warning").then(
-                confirm => {
+                (confirm: any) => {
                     this.applyValidation(confirm);
                 },
                 () => {}
@@ -337,10 +338,10 @@ export class AlignmentValidationComponent {
      * calls the service to apply the validation and shows the report dialog.
      */
     private applyValidation(deleteReject: boolean) {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.alignmentService.applyValidation(deleteReject).subscribe(
             report => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 //open report modal
                 var modalData = new ValidationReportModalData(report);
                 const builder = new BSModalContextBuilder<ValidationReportModalData>(
@@ -352,7 +353,7 @@ export class AlignmentValidationComponent {
                     dialog => dialog.result
                 );
             },
-            () => { document.getElementById("blockDivFullScreen").style.display = "none"; }
+            () => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
         )
     }
     

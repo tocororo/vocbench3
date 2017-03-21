@@ -1,7 +1,8 @@
-import {Component} from "@angular/core";
-import {SparqlServices} from "../services/sparqlServices";
-import {MetadataServices} from "../services/metadataServices";
-import {ModalServices} from '../widget/modal/modalServices';
+import { Component } from "@angular/core";
+import { SparqlServices } from "../services/sparqlServices";
+import { MetadataServices } from "../services/metadataServices";
+import { ModalServices } from '../widget/modal/modalServices';
+import { UIUtils } from "../utils/UIUtils";
 
 @Component({
     selector: "sparql-component",
@@ -9,13 +10,13 @@ import {ModalServices} from '../widget/modal/modalServices';
     host: { class: "pageComponent" }
 })
 export class SparqlComponent {
-    
+
     private sampleQuery: string = "SELECT * WHERE {\n    ?s ?p ?o .\n} LIMIT 10";
     private tabs: Array<any> = [];
     private activeTab: any;
-    
-    constructor(private sparqlService:SparqlServices, private metadataService: MetadataServices, private modalService: ModalServices) {}
-    
+
+    constructor(private sparqlService: SparqlServices, private metadataService: MetadataServices, private modalService: ModalServices) { }
+
     ngOnInit() {
         this.metadataService.getNamespaceMappings().subscribe(
             mappings => {
@@ -45,11 +46,11 @@ export class SparqlComponent {
             }
         )
     }
-    
+
     private doQuery(tab: any) {
         var initTime = new Date().getTime();
         tab.queryResult = null;
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
             data => {
                 tab.respSparqlJSON = data.sparql;
@@ -62,14 +63,14 @@ export class SparqlComponent {
                 if (data.resulttype == "tuple" || data.resulttype == "graph") {
                     tab.headers = data.sparql.head.vars;
                     tab.queryResult = data.sparql.results.bindings;
-                } else if (data.resulttype ==  "boolean") {
+                } else if (data.resulttype == "boolean") {
                     tab.headers = ["boolean"];
                     tab.queryResult = Boolean(data.sparql.boolean);
                 }
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             },
             err => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             }
         );
     }
@@ -93,7 +94,7 @@ export class SparqlComponent {
         tab.queryResult = null;
         tab.queryTime = null;
     }
-    
+
     private exportAsJSON(tab: any) {
         this.downloadSavedResult(JSON.stringify(tab.respSparqlJSON), "json");
     }
@@ -207,7 +208,7 @@ export class SparqlComponent {
             value = value.replace(/\r/g, "\\r");
             value = "\"" + value + "\"";
             if (field["xml:lang"] != undefined) {
-                value += "@" + field["xml:lang"]; 
+                value += "@" + field["xml:lang"];
             }
             if (field["datatype"] != undefined) {
                 value += "^^" + field["^^"];
@@ -215,20 +216,20 @@ export class SparqlComponent {
         }
         return value;
     }
-    
+
     /**
      * Prepares a json or text file containing the given content and shows a modal to download it.
      */
     private downloadSavedResult(fileContent: string, type: "csv" | "tsv" | "json") {
-        var data = new Blob([fileContent], {type: 'text/plain'});
+        var data = new Blob([fileContent], { type: 'text/plain' });
         var textFile = window.URL.createObjectURL(data);
         var fileName = "result." + type;
         this.modalService.downloadLink("Save SPARQL results", null, textFile, fileName).then(
             done => { window.URL.revokeObjectURL(textFile); },
-            () => {}
+            () => { }
         );
     }
-    
+
     private getPrettyPrintTime(time: number) {
         if (time < 1000) {
             return time + " millisec";
@@ -243,9 +244,9 @@ export class SparqlComponent {
             return sec + "," + millisec + " sec";
         }
     }
-    
+
     //TAB HANDLER
-    
+
     addTab() {
         this.activeTab.active = false;
         this.tabs.push({
@@ -260,25 +261,25 @@ export class SparqlComponent {
             removable: true,
             active: true
         });
-        this.activeTab = this.tabs[this.tabs.length-1];
+        this.activeTab = this.tabs[this.tabs.length - 1];
     }
-    
+
     selectTab(t: any) {
         this.activeTab.active = false;
         t.active = true;
         this.activeTab = t;
     }
-    
+
     closeTab(t: any) {
         var tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active, change the active tab
         if (t.active) {
-            if (tabIdx == this.tabs.length-1) { //if the closed tab was the last one, active the previous
-                this.tabs[tabIdx-1].active = true;
-                this.activeTab = this.tabs[tabIdx-1];
+            if (tabIdx == this.tabs.length - 1) { //if the closed tab was the last one, active the previous
+                this.tabs[tabIdx - 1].active = true;
+                this.activeTab = this.tabs[tabIdx - 1];
             } else { //otherwise active the next
-                this.tabs[tabIdx+1].active = true;
-                this.activeTab = this.tabs[tabIdx+1];
+                this.tabs[tabIdx + 1].active = true;
+                this.activeTab = this.tabs[tabIdx + 1];
             }
         }
         this.tabs.splice(tabIdx, 1);

@@ -3,6 +3,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTReso
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
@@ -79,16 +80,16 @@ export class ConceptTreeComponent extends AbstractTree {
         this.roots = [];
         this.selectedNode = null;
 
-        this.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.skosService.getTopConcepts(this.workingScheme).subscribe( //new service (whithout lang param)
             topConcepts => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
                 ResourceUtils.sortURIResources(topConcepts, attribute);
                 this.roots = topConcepts;
-                this.blockDivElement.nativeElement.style.display = "none";
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },
-            err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
         );
     }
 

@@ -1,13 +1,15 @@
-import {Component, Input, Output, EventEmitter, ViewChild} from "@angular/core";
-import {ClassTreeComponent} from "../classTree/classTreeComponent";
-import {InstanceListComponent} from "../instanceList/instanceListComponent";
-import {SearchServices} from "../../../services/searchServices";
-import {OwlServices} from "../../../services/owlServices";
-import {IndividualsServices} from "../../../services/individualsServices";
-import {DeleteServices} from "../../../services/deleteServices";
-import {ModalServices} from "../../../widget/modal/modalServices";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../models/ARTResources";
-import {RDF, OWL} from "../../../models/Vocabulary";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { ClassTreeComponent } from "../classTree/classTreeComponent";
+import { InstanceListComponent } from "../instanceList/instanceListComponent";
+import { SearchServices } from "../../../services/searchServices";
+import { OwlServices } from "../../../services/owlServices";
+import { IndividualsServices } from "../../../services/individualsServices";
+import { DeleteServices } from "../../../services/deleteServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { RDF, OWL } from "../../../models/Vocabulary";
+import { UIUtils } from "../../../utils/UIUtils";
+
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot
@@ -16,86 +18,86 @@ import {RDF, OWL} from "../../../models/Vocabulary";
  */
 
 @Component({
-	selector: "class-individual-tree-panel",
-	templateUrl: "./classIndividualTreePanelComponent.html",
+    selector: "class-individual-tree-panel",
+    templateUrl: "./classIndividualTreePanelComponent.html",
 })
 export class ClassIndividualTreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
-    
+
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
     @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
 
     private rendering: boolean = false; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-    
-    private selectedClass:ARTURIResource;
-    private selectedInstance:ARTURIResource;
-    
-	constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
-        private deleteService: DeleteServices, private modalService: ModalServices) {}
-    
+
+    private selectedClass: ARTURIResource;
+    private selectedInstance: ARTURIResource;
+
+    constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
+        private deleteService: DeleteServices, private modalService: ModalServices) { }
+
     private createClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", null, null, false, true).then(
             (result: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 this.owlService.createClass(OWL.thing, result).subscribe(
-                    stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                    err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                    stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                    err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                 );
             },
-            () => {}
+            () => { }
         );
-        
+
     }
-    
+
     private createSubClass() {
         //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
         this.modalService.prompt("Create new owl:Class", "Name", null, null, false, true).then(
             (result: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
                 this.owlService.createClass(this.selectedClass, result).subscribe(
-                    stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                    err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                    stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                    err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                 );
             },
-            () => {}
+            () => { }
         );
     }
-    
+
     private deleteClass() {
         if (this.selectedClass.getAdditionalProperty(ResAttribute.NUM_INST) != 0) {
-            this.modalService.alert("Operation denied", "Cannot delete " + this.selectedClass.getURI() + 
+            this.modalService.alert("Operation denied", "Cannot delete " + this.selectedClass.getURI() +
                 " since it has instance(s). Please delete the instance(s) and retry.", "warning");
             return;
         }
-        this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
         this.deleteService.removeClass(this.selectedClass).subscribe(
             stResp => {
                 this.selectedClass = null;
                 this.nodeSelected.emit(undefined);
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             },
-            err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
+            err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
         );
     }
-    
+
     private createInstance() {
         //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
         this.modalService.prompt("Create new instance", "Name", null, null, false, true).then(
             (result: any) => {
-                this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
                 this.owlService.createInstance(this.selectedClass, result).subscribe(
-                    stResp => this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none",
-                    err => this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none"
+                    stResp => UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement),
+                    err => UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement)
                 );
             },
-            () => {}
+            () => { }
         );
     }
-    
+
     private deleteInstance() {
-        this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
         this.deleteService.removeInstance(this.selectedInstance, this.selectedClass).subscribe(
             stResp => {
                 this.selectedInstance = null;
@@ -104,12 +106,12 @@ export class ClassIndividualTreePanelComponent {
                 if (this.selectedClass != null) {
                     this.nodeSelected.emit(this.selectedClass);
                 }
-                this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none";
+                UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
             },
-            err => { this.viewChildInstanceList.blockDivElement.nativeElement.style.display = "none"; }
+            err => { UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement); }
         )
     }
-    
+
     private doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
@@ -126,7 +128,7 @@ export class ClassIndividualTreePanelComponent {
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
@@ -134,7 +136,7 @@ export class ClassIndividualTreePanelComponent {
             );
         }
     }
-    
+
     /**
      * If resource is a class expands the class tree and select the resource,
      * otherwise (resource is an instance) expands the class tree to the class of the instance and
@@ -155,13 +157,13 @@ export class ClassIndividualTreePanelComponent {
             )
         }
     }
-    
+
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
     private searchKeyHandler(key: number, searchedText: string) {
         if (key == 13) {
-            this.doSearch(searchedText);           
+            this.doSearch(searchedText);
         }
     }
 
@@ -181,18 +183,18 @@ export class ClassIndividualTreePanelComponent {
     //     console.log(event.clientY);
     //     //TODO change dimension of classtree and instancetree
     // }
-    
+
     //EVENT LISTENERS
-    private onClassSelected(cls:ARTURIResource) {
+    private onClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;
         if (this.selectedInstance != null) {
             this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, false);
-            this.selectedInstance = null;    
+            this.selectedInstance = null;
         }
         this.nodeSelected.emit(cls);
     }
-    
-    private onInstanceSelected(instance:ARTURIResource) {
+
+    private onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
         this.instanceSelected.emit(instance);
     }

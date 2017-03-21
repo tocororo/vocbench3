@@ -8,6 +8,7 @@ import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectServices } from "../services/projectServices";
 import { MetadataServices } from "../services/metadataServices";
 import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
 import { ModalServices } from "../widget/modal/modalServices";
 
@@ -114,13 +115,13 @@ export class ProjectComponent implements OnInit {
     }
 
     private openProject(project: Project) {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.projectService.accessProject(project).subscribe(
             stResp => {
                 this.vbCtx.setWorkingProject(project);
                 this.projectChanged = true;
                 project.setOpen(true);
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 //get default namespace of the project and set it to the vbContext
                 this.metadataService.getDefaultNamespace().subscribe(
                     ns => {
@@ -128,7 +129,7 @@ export class ProjectComponent implements OnInit {
                     }
                 )
             },
-            err => document.getElementById("blockDivFullScreen").style.display = "none"
+            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
         );
     }
 
@@ -158,24 +159,24 @@ export class ProjectComponent implements OnInit {
      * Returns an observable so I can disconnect and connect to a new project in synchronous way
      */
     private disconnectFromProject(project: Project) {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.projectService.disconnectFromProject(project).subscribe(
             stResp => {
                 project.setOpen(false);
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             },
-            err => document.getElementById("blockDivFullScreen").style.display = "none"
+            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
         );
     }
 
     private saveProject(project: Project) {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.projectService.saveProject(project).subscribe(
             stResp => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.modalService.alert("Save project", "Project " + project.getName() + " saved successfully");
             },
-            err => document.getElementById("blockDivFullScreen").style.display = "none"
+            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
         );
     }
 
@@ -199,7 +200,7 @@ export class ProjectComponent implements OnInit {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
         return this.modal.open(ProjectACLModal, overlayConfig);
     }
-    
+
     /**
      * Useful to set as selected the radio button of the working project
      */

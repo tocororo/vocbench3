@@ -1,36 +1,37 @@
-import {Component} from "@angular/core";
-import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTResource, ARTURIResource} from "../../models/ARTResources";
-import {SKOSXL} from "../../models/Vocabulary";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {IcvServices} from "../../services/icvServices";
-import {SkosxlServices} from "../../services/skosxlServices";
-import {DeleteServices} from "../../services/deleteServices";
+import { Component } from "@angular/core";
+import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { SKOSXL } from "../../models/Vocabulary";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { UIUtils } from "../../utils/UIUtils";
+import { IcvServices } from "../../services/icvServices";
+import { SkosxlServices } from "../../services/skosxlServices";
+import { DeleteServices } from "../../services/deleteServices";
 
 @Component({
     selector: "dangling-label-component",
     templateUrl: "./danglingXLabelComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class DanglingXLabelComponent {
-    
+
     private brokenLabelList: Array<ARTResource>;
-    
+
     constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private deleteService: DeleteServices,
-        private browsingService: BrowsingServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
-    
+        private browsingService: BrowsingServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+
     /**
      * Run the check
      */
     private runIcv() {
-        document.getElementById("blockDivIcv").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listDanglingXLabels().subscribe(
             labels => {
                 this.brokenLabelList = labels;
-                document.getElementById("blockDivIcv").style.display = "none"
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
             },
-            err => { document.getElementById("blockDivIcv").style.display = "none"; }
+            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
         );
     }
 
@@ -53,9 +54,9 @@ export class DanglingXLabelComponent {
         //as pref alt or hidden?
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
         this.modalService.selectResource("Set skosxl:Label as", null, predOpts).then(
-            selectedPred => {
+            (selectedPred: any) => {
                 this.browsingService.browseConceptTree("Assign xLabel to concept", this.vbCtx.getScheme(), true).then(
-                    concept => {
+                    (concept: any) => {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(
                             stResp => {
@@ -63,13 +64,13 @@ export class DanglingXLabelComponent {
                             }
                         )
                     },
-                    () => {}
+                    () => { }
                 )
             },
-            () => {}
+            () => { }
         )
     }
-    
+
     /**
      * Quick fix. Deletes all dangling xLabel.
      */

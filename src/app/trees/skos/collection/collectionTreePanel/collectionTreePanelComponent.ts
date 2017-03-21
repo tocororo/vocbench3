@@ -5,6 +5,7 @@ import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../../../models/ARTResources";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { UIUtils } from "../../../../utils/UIUtils";
 
 @Component({
     selector: "collection-tree-panel",
@@ -33,16 +34,16 @@ export class CollectionTreePanelComponent {
     private createCollection() {
         this.modalService.newResource("Create new skos:Collection", this.vbCtx.getContentLanguage()).then(
             (res: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createRootCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
                     this.skosxlService.createRootCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
@@ -53,16 +54,16 @@ export class CollectionTreePanelComponent {
     private createOrderedCollection() {
         this.modalService.newResource("Create new skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
             (res: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createRootOrderedCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
                     this.skosxlService.createRootOrderedCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
@@ -73,16 +74,16 @@ export class CollectionTreePanelComponent {
     private createNestedCollection() {
         this.modalService.newResource("Create a nested skos:Collection", this.vbCtx.getContentLanguage()).then(
             (res: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
                     this.skosxlService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
@@ -93,16 +94,16 @@ export class CollectionTreePanelComponent {
     private createNestedOrderedCollection() {
         this.modalService.newResource("Create a nested skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
             (res: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
                     this.skosxlService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
@@ -111,24 +112,24 @@ export class CollectionTreePanelComponent {
     }
 
     private deleteCollection() {
-        this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         if (this.selectedCollection.getRole() == RDFResourceRolesEnum.skosCollection) {
             this.skosService.deleteCollection(this.selectedCollection).subscribe(
                 stResp => {
                     this.selectedCollection = null;
                     this.nodeSelected.emit(undefined);
-                    this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 },
-                err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
             );
         } else { //skosOrderedCollection
             this.skosService.deleteOrderedCollection(this.selectedCollection).subscribe(
                 stResp => {
                     this.selectedCollection = null;
                     this.nodeSelected.emit(undefined);
-                    this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 },
-                err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
             );
         }
     }

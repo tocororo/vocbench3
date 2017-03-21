@@ -3,6 +3,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResourc
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
+import { UIUtils } from "../../../utils/UIUtils";
 import { ClassesServices } from "../../../services/classesServices";
 import { OwlServices } from "../../../services/owlServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -43,16 +44,16 @@ export class ClassTreeComponent extends AbstractTree {
         }
         this.roots = [];
 
-        this.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement)
         this.clsService.getClassesInfo(this.rootClasses).subscribe(
             roots => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
                 ResourceUtils.sortURIResources(roots, attribute);
                 this.roots = this.roots.concat(roots);
-                this.blockDivElement.nativeElement.style.display = "none";
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },
-            err => { this.blockDivElement.nativeElement.style.display = "none"; }
+            err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
         );
     }
 

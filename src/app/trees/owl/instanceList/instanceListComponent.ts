@@ -1,40 +1,41 @@
-import {Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges} from "@angular/core";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../models/ARTResources";
-import {VBEventHandler} from "../../../utils/VBEventHandler";
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges } from "@angular/core";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
-import {OwlServices} from "../../../services/owlServices";
-import {ClassesServices} from "../../../services/classesServices";
-import {ModalServices} from "../../../widget/modal/modalServices";
-import {SearchServices} from "../../../services/searchServices";
+import { UIUtils } from "../../../utils/UIUtils";
+import { OwlServices } from "../../../services/owlServices";
+import { ClassesServices } from "../../../services/classesServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { SearchServices } from "../../../services/searchServices";
 
 @Component({
-	selector: "instance-list",
-	templateUrl: "./instanceListComponent.html",
+    selector: "instance-list",
+    templateUrl: "./instanceListComponent.html",
     host: { class: "blockingDivHost" }
 })
 export class InstanceListComponent {
-    @Input() cls:ARTURIResource;
+    @Input() cls: ARTURIResource;
     @Input() hideSearch: boolean = false;
     @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    
+
     //get the element in the view referenced with #blockDivTree
     @ViewChild('blockDivInstanceList') public blockDivElement: ElementRef;
-    
+
     private pendingSearch: any = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         instance: null, //searched instance
         cls: null //class of the searched instance
     }
-    
+
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
-    
+
     private instanceList: ARTURIResource[] = null;
     private selectedInstance: ARTURIResource;
-    
+
     private eventSubscriptions: any[] = [];
-    
-    constructor(private owlServices: OwlServices, private clsService: ClassesServices, private searchService: SearchServices, 
+
+    constructor(private owlServices: OwlServices, private clsService: ClassesServices, private searchService: SearchServices,
         private modalService: ModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: any) => this.onInstanceDeleted(data.instance, data.cls)));
@@ -45,7 +46,7 @@ export class InstanceListComponent {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
-    
+
     ngOnChanges(changes: SimpleChanges) {
         this.selectedInstance = null;
         //viewInitialized needed to prevent the initialization of the list before view is initialized
@@ -55,16 +56,16 @@ export class InstanceListComponent {
             }
         }
     }
-    
+
     ngAfterViewInit() {
         this.viewInitialized = true;
         this.initList();
     }
-    
+
     initList() {
         this.instanceList = null;
         if (this.cls != undefined) {
-            this.blockDivElement.nativeElement.style.display = "block";
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             // this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
             this.clsService.getInstances(this.cls).subscribe(
                 instances => {
@@ -85,13 +86,13 @@ export class InstanceListComponent {
                             }
                         }
                     }
-                    this.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
-                err => { this.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         }
     }
-    
+
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
@@ -101,7 +102,7 @@ export class InstanceListComponent {
      */
     private searchKeyHandler(key: number, searchedText: string) {
         if (key == 13) {
-            this.doSearch(searchedText);           
+            this.doSearch(searchedText);
         }
     }
 
@@ -121,7 +122,7 @@ export class InstanceListComponent {
                                 (selectedResource: any) => {
                                     this.selectSearchedInstance(this.cls, selectedResource);
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
@@ -129,11 +130,11 @@ export class InstanceListComponent {
             );
         }
     }
-    
+
     private selectInstance(instance: ARTURIResource) {
         if (this.selectedInstance == undefined) {
             this.selectedInstance = instance;
-            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);    
+            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);
         } else if (this.selectedInstance.getURI() != instance.getURI()) {
             this.selectedInstance.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.selectedInstance = instance;
@@ -142,7 +143,7 @@ export class InstanceListComponent {
         this.selectedInstance = instance;
         this.nodeSelected.emit(instance);
     }
-    
+
     /**
      * cls is useful when the instance list is inside the classTreePanel and so this component need to 
      * be in sync with the class selected in the tree
@@ -166,7 +167,7 @@ export class InstanceListComponent {
             }
         }
     }
-    
+
     //EVENT LISTENERS
     private onInstanceDeleted(instance: ARTURIResource, cls: ARTURIResource) {
         if (this.cls.getURI() == cls.getURI()) {
@@ -178,20 +179,20 @@ export class InstanceListComponent {
             }
         }
     }
-    
+
     private onInstanceCreated(instance: ARTURIResource, cls: ARTURIResource) {
         if (this.cls.getURI() == cls.getURI()) {
             this.instanceList.push(instance);
         }
     }
-    
+
     private onTypeRemoved(instance: ARTURIResource, cls: ARTURIResource) {
         //check of cls not undefined is required if instance list has never been initialized with an @Input class
         if (this.cls && this.cls.getURI() == cls.getURI()) {
-            for (var i=0; i < this.instanceList.length; i++) {
+            for (var i = 0; i < this.instanceList.length; i++) {
                 if (this.instanceList[i].getURI() == instance.getURI()) {
                     this.instanceList.splice(i, 1);
-                    break;       
+                    break;
                 }
             }
         }

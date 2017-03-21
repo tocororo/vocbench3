@@ -1,40 +1,41 @@
-import {Component} from "@angular/core";
-import {ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
-import {IcvServices} from "../../services/icvServices";
-import {SkosServices} from "../../services/skosServices";
+import { Component } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { IcvServices } from "../../services/icvServices";
+import { SkosServices } from "../../services/skosServices";
+import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
     selector: "hierarchical-redundancy-component",
     templateUrl: "./hierarchicalRedundancyComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class HierarchicalRedundancyComponent {
-    
+
     private brokenRecordList: Array<any>;
-    
-    constructor(private icvService: IcvServices, private skosService: SkosServices) {}
-    
+
+    constructor(private icvService: IcvServices, private skosService: SkosServices) { }
+
     /**
      * Run the check
      */
     runIcv() {
         //TODO check when service will be refactored
-        document.getElementById("blockDivIcv").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listHierarchicallyRedundantConcepts().subscribe(
             stResp => {
                 this.brokenRecordList = new Array();
                 var recordColl = stResp.getElementsByTagName("record");
                 for (var i = 0; i < recordColl.length; i++) {
                     var b = new ARTURIResource(recordColl[i].getAttribute("broader"), recordColl[i].getAttribute("broader"), RDFResourceRolesEnum.concept);
-                    var n = new ARTURIResource(recordColl[i].getAttribute("narrower"), recordColl[i].getAttribute("narrower"), RDFResourceRolesEnum.concept); 
-                    this.brokenRecordList.push({broader: b, narrower: n});
+                    var n = new ARTURIResource(recordColl[i].getAttribute("narrower"), recordColl[i].getAttribute("narrower"), RDFResourceRolesEnum.concept);
+                    this.brokenRecordList.push({ broader: b, narrower: n });
                 }
-                document.getElementById("blockDivIcv").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
             },
-            err => { document.getElementById("blockDivIcv").style.display = "none"; }
+            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
         );
     }
-    
+
     /**
      * Fixes redundancies by removing the redundant relation between broader and narrower
      */
@@ -47,7 +48,7 @@ export class HierarchicalRedundancyComponent {
             }
         );
     }
-    
+
     /**
      * Fixes all record by removing redundant relations (server side with just one request)
      */
@@ -58,5 +59,5 @@ export class HierarchicalRedundancyComponent {
             }
         )
     }
-    
+
 }

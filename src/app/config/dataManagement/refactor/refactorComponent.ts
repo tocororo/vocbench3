@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { UIUtils } from "../../../utils/UIUtils";
 import { ModalServices } from "../../../widget/modal/modalServices";
 
 @Component({
@@ -31,12 +32,12 @@ export class RefactorComponent {
     private skosToSkosxl() {
         this.modalService.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     },
-                    err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
+                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
                 );
             },
             () => {}
@@ -46,12 +47,12 @@ export class RefactorComponent {
     private skosxlToSkos() {
         this.modalService.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.SKOSXLtoSKOS().subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     },
-                    err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
+                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
                 );
             },
             () => {}
@@ -62,12 +63,12 @@ export class RefactorComponent {
     private migrateData() {
         this.modalService.confirm("Migrate data", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
-                document.getElementById("blockDivFullScreen").style.display = "block";
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
                     stResp => {
-                        document.getElementById("blockDivFullScreen").style.display = "none";
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     },
-                    err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
+                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
                 );
             },
             () => {}

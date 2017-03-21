@@ -1,53 +1,54 @@
-import {Component} from "@angular/core";
-import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, ARTResource, ARTLiteral} from "../../models/ARTResources";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {IcvServices} from "../../services/icvServices";
-import {SkosServices} from "../../services/skosServices";
-import {SkosxlServices} from "../../services/skosxlServices";
+import { Component } from "@angular/core";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { ARTURIResource, ARTResource, ARTLiteral } from "../../models/ARTResources";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { UIUtils } from "../../utils/UIUtils";
+import { IcvServices } from "../../services/icvServices";
+import { SkosServices } from "../../services/skosServices";
+import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "overlapped-label-component",
     templateUrl: "./overlappedLabelComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class OverlappedLabelComponent {
-    
+
     private brokenRecordList: Array<any>; //{resource: ARTURIResource, label: ARTLiteral}
     private ontoType: string;
-    
+
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
-    
+        private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
+
     ngOnInit() {
         this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
     }
-    
+
     /**
      * Run the check
      */
     runIcv() {
         if (this.ontoType == "SKOS") {
-            document.getElementById("blockDivIcv").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithOverlappedSKOSLabel().subscribe(
                 brokenRecords => {
                     this.brokenRecordList = brokenRecords;
-                    document.getElementById("blockDivIcv").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 },
-                err => { document.getElementById("blockDivIcv").style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
             );
         } else if (this.ontoType == "SKOS-XL") {
-            document.getElementById("blockDivIcv").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithOverlappedSKOSXLLabel().subscribe(
                 brokenRecords => {
                     this.brokenRecordList = brokenRecords;
-                    document.getElementById("blockDivIcv").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 },
-                err => { document.getElementById("blockDivIcv").style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
             );
         }
     }
-    
+
     /**
      * Fixes by changing prefLabel
      */
@@ -81,10 +82,10 @@ export class OverlappedLabelComponent {
                     );
                 }
             },
-            () => {}
-        )
+            () => { }
+            )
     }
-    
+
     /**
      * Fixes by removing prefLabel
      */
@@ -103,7 +104,7 @@ export class OverlappedLabelComponent {
             );
         }
     }
-    
+
     /**
      * Fixes by changing altLabel
      */
@@ -142,10 +143,10 @@ export class OverlappedLabelComponent {
                     );
                 }
             },
-            () => {}
-        );
+            () => { }
+            );
     }
-    
+
     /**
      * Fixes by removing altLabel
      */
@@ -164,5 +165,5 @@ export class OverlappedLabelComponent {
             );
         }
     }
-    
+
 }

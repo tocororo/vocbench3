@@ -1,22 +1,23 @@
-import {Component} from "@angular/core";
-import {Router} from "@angular/router";
-import {ModalServices} from "../widget/modal/modalServices";
-import {Countries} from "../models/LanguagesCountries";
-import {UserServices} from "../services/userServices";
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { ModalServices } from "../widget/modal/modalServices";
+import { Countries } from "../models/LanguagesCountries";
+import { UserServices } from "../services/userServices";
+import { UIUtils } from "../utils/UIUtils";
 
 @Component({
     selector: "registration-component",
     templateUrl: "./registrationComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class RegistrationComponent {
-    
+
     private countries = Countries.countryList;
-       
-    private genders = ["Male", "Female"]; 
-    
+
+    private genders = ["Male", "Female"];
+
     private submitted: boolean = false;
-        
+
     private email: string;
     private username: string;
     private password: string;
@@ -30,29 +31,29 @@ export class RegistrationComponent {
     private affiliation: string;
     private url: string;
     private phone: string;
-    
+
     private EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
-    
-    constructor(private userService: UserServices, private router: Router, private modalService: ModalServices) {}
-    
+
+    constructor(private userService: UserServices, private router: Router, private modalService: ModalServices) { }
+
     private submit() {
         this.submitted = true;
         if (this.isDataValid()) {
-            document.getElementById("blockDivFullScreen").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
             this.userService.registerUser(this.email, this.password, this.firstName, this.lastName,
                 this.birthday, this.gender, this.country, this.address, this.affiliation, this.url, this.phone).subscribe(
                 stResp => {
-                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     this.modalService.alert("Registration complete",
                         "User " + this.firstName + " " + this.lastName + " registered succesfully." +
                         " You can now login with your email (" + this.email + ") and the password you provided").then(
-                            result => {
-                                this.router.navigate(['/Home']);
-                            }
+                        result => {
+                            this.router.navigate(['/Home']);
+                        }
                         );
                 },
-                () => { document.getElementById("blockDivFullScreen").style.display = "none"; }
-            )
+                () => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                )
         } else {
             this.modalService.alert("Registration error", "Please, check the inserted data.", "warning");
         }
@@ -72,6 +73,6 @@ export class RegistrationComponent {
     private isConfirmPwdOk() {
         return this.password == this.confirmedPassword;
     }
-    
-    
+
+
 }

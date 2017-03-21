@@ -1,52 +1,53 @@
-import {Component} from "@angular/core";
-import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTResource, ARTURIResource, ARTLiteral} from "../../models/ARTResources";
-import {SKOS, SKOSXL} from "../../models/Vocabulary";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {IcvServices} from "../../services/icvServices";
-import {PropertyServices} from "../../services/propertyServices";
-import {SkosServices} from "../../services/skosServices";
-import {SkosxlServices} from "../../services/skosxlServices";
+import { Component } from "@angular/core";
+import { ModalServices } from "../../widget/modal/modalServices";
+import { ARTResource, ARTURIResource, ARTLiteral } from "../../models/ARTResources";
+import { SKOS, SKOSXL } from "../../models/Vocabulary";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { UIUtils } from "../../utils/UIUtils";
+import { IcvServices } from "../../services/icvServices";
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosServices } from "../../services/skosServices";
+import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "no-lang-label-component",
     templateUrl: "./noLangLabelComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class NoLangLabelComponent {
-    
+
     private brokenRecordList: Array<any>; //{resource: ARTURIResource, predicate: ARTURIResource, label: ARTLiteral(SKOS)/ARTResource(XL)}
     private ontoType: string;
-    
+
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
-    
+        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
+
     ngOnInit() {
         this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
     }
-    
+
     /**
      * Run the check
      */
     runIcv() {
         //TODO check when service will be refactored
         if (this.ontoType == "SKOS") {
-            document.getElementById("blockDivIcv").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithNoLanguageTagSKOSLabel().subscribe(
                 records => {
                     this.brokenRecordList = records;
-                    document.getElementById("blockDivIcv").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 },
-                err => { document.getElementById("blockDivIcv").style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
             );
         } else if (this.ontoType == "SKOS-XL") {
-            document.getElementById("blockDivIcv").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithNoLanguageTagSKOSXLLabel().subscribe(
                 records => {
                     this.brokenRecordList = records;
-                    document.getElementById("blockDivIcv").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 },
-                err => { document.getElementById("blockDivIcv").style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
             );
         } else { //OWL 
             //TODO listResourcesWithNoLanguageRDFSLabel and should look for classes and individuals
@@ -54,7 +55,7 @@ export class NoLangLabelComponent {
             //what should I do?
         }
     }
-    
+
     /**
      * Fixes resource by setting a language tag to the label. In order to do that, first removes the current
      * label, then adds a new one with language.
@@ -97,7 +98,7 @@ export class NoLangLabelComponent {
                         );
                     }
                 },
-                () => {}
+                () => { }
             );
         } else if (this.ontoType == "SKOS-XL") {
             let label: ARTResource = <ARTResource>record.label;
@@ -110,7 +111,7 @@ export class NoLangLabelComponent {
                         }
                     );
                 },
-                () => {}
+                () => { }
             );
         }
     }
@@ -161,5 +162,5 @@ export class NoLangLabelComponent {
             }
         }
     }
-    
+
 }

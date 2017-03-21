@@ -1,17 +1,18 @@
-import {Component} from "@angular/core";
-import {InputOutputServices} from "../../../services/inputOutputServices";
-import {ExportServices} from "../../../services/exportServices";
-import {ModalServices} from "../../../widget/modal/modalServices";
-import {VBEventHandler} from "../../../utils/VBEventHandler";
-import {RDFFormat} from "../../../models/RDFFormat";
+import { Component } from "@angular/core";
+import { InputOutputServices } from "../../../services/inputOutputServices";
+import { ExportServices } from "../../../services/exportServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { UIUtils } from "../../../utils/UIUtils";
+import { RDFFormat } from "../../../models/RDFFormat";
 
 @Component({
     selector: "load-data-component",
     templateUrl: "./loadDataComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class LoadDataComponent {
-    
+
     private baseURI: string;
 
     private fileToUpload: File;
@@ -21,7 +22,7 @@ export class LoadDataComponent {
     private selectedFormat: RDFFormat;
 
     private selectedImportAllowance: string;
-    
+
     constructor(private inOutService: InputOutputServices, private exportService: ExportServices, private modalService: ModalServices) { }
 
     private ngOnInit() {
@@ -39,7 +40,7 @@ export class LoadDataComponent {
         );
         this.selectedImportAllowance = "web";
     }
-    
+
     private fileChangeEvent(file: File) {
         this.fileToUpload = file;
     }
@@ -58,19 +59,19 @@ export class LoadDataComponent {
         } else if (this.baseURI == null || this.baseURI.trim() == "") {
             this.modalService.alert("Load Data", "BaseURI required", "warning");
         } else {
-            document.getElementById("blockDivFullScreen").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
             var formatParam: RDFFormat = null;
             if (!this.inferFormatFromFile) {
                 formatParam = this.selectedFormat;
             }
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.selectedImportAllowance, this.selectedFormat).subscribe(
                 stResp => {
-                    document.getElementById("blockDivFullScreen").style.display = "none";
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     this.modalService.alert("Import data", "Data imported successfully");
                 },
-                err => { document.getElementById("blockDivFullScreen").style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
             );
         }
     }
-    
+
 }

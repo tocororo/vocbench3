@@ -10,6 +10,7 @@ import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig } 
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/pluginConfigModal/pluginConfigModal";
+import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
     selector: "create-project-component",
@@ -417,19 +418,19 @@ export class CreateProjectComponent {
         /**
          * Execute request
          */
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.projectService.createProject(this.projectName, this.modelType, this.baseURI, this.history, this.validation,
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, supportRepoSailConfigurerSpecification,
             uriGeneratorSpecification, renderingEngineSpecification).subscribe(
             stResp => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.modalService.alert("Create project", "Project created successfully").then(
                     () => this.router.navigate(['/Projects'])
                 );
             },
             err => {
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             }
         );
     }

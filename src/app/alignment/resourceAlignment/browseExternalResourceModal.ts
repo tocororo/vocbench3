@@ -1,10 +1,11 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
-import {Project} from "../../models/Project";
-import {ProjectServices} from "../../services/projectServices";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { UIUtils } from "../../utils/UIUtils";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { Project } from "../../models/Project";
+import { ProjectServices } from "../../services/projectServices";
 
 export class BrowseExternalResourceModalData extends BSModalContext {
     /**
@@ -22,18 +23,18 @@ export class BrowseExternalResourceModalData extends BSModalContext {
 })
 export class BrowseExternalResourceModal implements ModalComponent<BrowseExternalResourceModalData> {
     context: BrowseExternalResourceModalData;
-    
+
     private projectList: Array<Project> = [];
     private project: Project;
     private alignedObject: ARTURIResource;
-    
-    
-    constructor(public dialog: DialogRef<BrowseExternalResourceModalData>, 
+
+
+    constructor(public dialog: DialogRef<BrowseExternalResourceModalData>,
         public vbCtx: VocbenchCtx, public projService: ProjectServices) {
-            
+
         this.context = dialog.context;
     }
-    
+
     ngOnInit() {
         this.projService.listProjects().subscribe(
             projects => {
@@ -57,34 +58,34 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
             }
         );
     }
-    
+
     private onProjectChange() {
-        document.getElementById("blockDivFullScreen").style.display = "block";
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"))
         this.vbCtx.removeContextProject();
         this.projService.accessProject(this.project).subscribe(
             stResp => {
                 this.vbCtx.setContextProject(this.project);
-                document.getElementById("blockDivFullScreen").style.display = "none";
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             },
-            () => document.getElementById("blockDivFullScreen").style.display = "none"
+            () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
         );
         this.alignedObject = null;
     }
-    
+
     /**
      * Listener called when a resource of a tree is selected
      */
     private onResourceSelected(resource: ARTURIResource) {
         this.alignedObject = resource;
     }
-    
+
     /**
      * Listener called when it's aligning concept and the scheme in the concept tree is changed
      */
     private onSchemeChanged() {
         this.alignedObject = null;
     }
-    
+
     private showClassTree(): boolean {
         return (this.context.resRole == RDFResourceRolesEnum.cls && this.vbCtx.getContextProject() != undefined);
     }
@@ -100,17 +101,17 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
     private showClassIndividualTree(): boolean {
         return (this.context.resRole == RDFResourceRolesEnum.individual && this.vbCtx.getContextProject() != undefined);
     }
-    
+
     private isOkClickable(): boolean {
         return this.alignedObject != undefined;
     }
-    
+
     ok(event: Event) {
         this.vbCtx.removeContextProject();
         event.stopPropagation();
         this.dialog.close(this.alignedObject);
     }
-    
+
     cancel() {
         this.vbCtx.removeContextProject();
         this.dialog.dismiss();

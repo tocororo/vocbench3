@@ -1,28 +1,29 @@
-import {Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
-import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum} from "../models/ARTResources";
-import {Deserializer} from "../utils/Deserializer";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
-import {VBEventHandler} from "../utils/VBEventHandler";
-import {ResourceViewServices} from "../services/resourceViewServices";
-import {AlignmentServices} from "../services/alignmentServices";
-import {ResourceAlignmentModal, ResourceAlignmentModalData} from "../alignment/resourceAlignment/resourceAlignmentModal"
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../models/ARTResources";
+import { Deserializer } from "../utils/Deserializer";
+import { UIUtils } from "../utils/UIUtils";
+import { VocbenchCtx } from "../utils/VocbenchCtx";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { ResourceViewServices } from "../services/resourceViewServices";
+import { AlignmentServices } from "../services/alignmentServices";
+import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal"
 
 @Component({
     selector: "resource-view",
     templateUrl: "./resourceViewComponent.html",
 })
 export class ResourceViewComponent {
-    
+
     @Input() resource: ARTResource;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-    
-    @ViewChild('blockDiv') blockingDivElement: ElementRef;
+
+    @ViewChild('blockDiv') blockDivElement: ElementRef;
     private viewInitialized: boolean = false;
-    
+
     private showInferred = false;
-    
+
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTPredicateObjects[] = null;
@@ -41,16 +42,16 @@ export class ResourceViewComponent {
     private propertyFacets: any[] = null;
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
-    
+
     private eventSubscriptions: any[] = [];
-    
-	constructor(private resViewService:ResourceViewServices, private alignServices: AlignmentServices, private vbCtx: VocbenchCtx, 
+
+    constructor(private resViewService: ResourceViewServices, private alignServices: AlignmentServices, private vbCtx: VocbenchCtx,
         private eventHandler: VBEventHandler, private modal: Modal) {
-            
+
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.buildResourceView(data.newResource)));
     }
-    
+
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.vbCtx.getInferenceInResourceView();
         if (changes['resource'].currentValue) {
@@ -59,16 +60,16 @@ export class ResourceViewComponent {
             }
         }
     }
-    
+
     ngAfterViewInit() {
         this.viewInitialized = true;
         this.buildResourceView(this.resource);
     }
-    
+
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
-    
+
     /**
      * Perform the getResourceView request and build the resource view.
      * Called when
@@ -79,15 +80,15 @@ export class ResourceViewComponent {
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
     private buildResourceView(res: ARTResource) {
-        this.blockingDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.resViewService.getResourceView(res).subscribe(
             stResp => {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
-                this.blockingDivElement.nativeElement.style.display = "none";
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },
             err => {
-                this.blockingDivElement.nativeElement.style.display = "none";
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
         );
     }
@@ -112,7 +113,7 @@ export class ResourceViewComponent {
         this.propertyFacets = null;
         this.inverseofColl = null;
         this.labelRelationsColl = null;
-        
+
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
 
@@ -204,7 +205,7 @@ export class ResourceViewComponent {
         this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
         this.filterInferredFromPredObjList(this.propertiesColl);
     }
-    
+
     /**
      * Based on the showInferred param, filter out or let pass inferred information in a predicate-objects list
      */
@@ -236,13 +237,13 @@ export class ResourceViewComponent {
         //init default facets
         this.propertyFacets = [];
         for (var i = 0; i < facetsName.length; i++) {
-            this.propertyFacets.push({name: facetsName[i], explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false});
+            this.propertyFacets.push({ name: facetsName[i], explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false });
         }
         //look for facets in resource view
         for (var i = 0; i < facetsName.length; i++) {
             var specificFacetPartition = facetsPartition[facetsName[i]];
             if (specificFacetPartition != undefined) {
-                var facet = {name: facetsName[i], explicit: specificFacetPartition.explicit, value: specificFacetPartition.value};
+                var facet = { name: facetsName[i], explicit: specificFacetPartition.explicit, value: specificFacetPartition.value };
                 //replace the default facets
                 for (var j = 0; j < this.propertyFacets.length; j++) {
                     if (this.propertyFacets[j].name == facetsName[i]) {
@@ -255,7 +256,7 @@ export class ResourceViewComponent {
         //parse inverseOf partition in facets
         this.inverseofColl = Deserializer.createPredicateObjectsList(facetsPartition.inverseOf);
     }
-    
+
     private alignResource() {
         this.openAlignmentModal().then(
             (data: any) => {
@@ -263,10 +264,10 @@ export class ResourceViewComponent {
                     stResp => { this.buildResourceView(this.resource); }
                 );
             },
-            () => {}
+            () => { }
         );
     }
-    
+
     /**
      * Opens a modal to create an alignment.
      * @return an object containing "property" and "object", namely the mapping property and the 
@@ -282,15 +283,15 @@ export class ResourceViewComponent {
             dialog => dialog.result
         );
     }
-    
+
     private showHideInferred() {
         this.showInferred = !this.showInferred;
         this.vbCtx.setInferenceInResourceView(this.showInferred);
         this.fillPartitions();
     }
-    
+
     private objectDblClick(object: ARTResource) {
         this.dblclickObj.emit(object);
     }
-    
+
 }

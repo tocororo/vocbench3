@@ -1,55 +1,56 @@
-import {Component} from "@angular/core";
-import {Observable} from 'rxjs/Observable';
-import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum} from "../../models/ARTResources";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
-import {IcvServices} from "../../services/icvServices";
-import {SkosServices} from "../../services/skosServices";
-import {SkosxlServices} from "../../services/skosxlServices";
+import { Component } from "@angular/core";
+import { Observable } from 'rxjs/Observable';
+import { ModalServices } from "../../widget/modal/modalServices";
+import { ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum } from "../../models/ARTResources";
+import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { UIUtils } from "../../utils/UIUtils";
+import { IcvServices } from "../../services/icvServices";
+import { SkosServices } from "../../services/skosServices";
+import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "only-alt-label-resource-component",
     templateUrl: "./onlyAltLabelResourceComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class OnlyAltLabelResourceComponent {
-    
+
     private brokenRecordList: Array<any>; //{resource: ARTURIResource, lang: ARTLiteral}
-        //lang is an ARTLiteral just to render it with the rdfResource widget
+    //lang is an ARTLiteral just to render it with the rdfResource widget
     private ontoType: string;
-    
+
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
-    
+        private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
+
     ngOnInit() {
         this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
     }
-    
+
     /**
      * Run the check
      */
     runIcv() {
         if (this.ontoType == "SKOS") {
-            document.getElementById("blockDivIcv").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithOnlySKOSAltLabel().subscribe(
                 records => {
                     this.brokenRecordList = records;
                 },
                 err => { },
-                () => document.getElementById("blockDivIcv").style.display = "none"
+                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
             )
         } else if (this.ontoType == "SKOS-XL") {
-            document.getElementById("blockDivIcv").style.display = "block";
+            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithOnlySKOSXLAltLabel().subscribe(
                 records => {
                     this.brokenRecordList = records;
                 },
                 err => { },
-                () => document.getElementById("blockDivIcv").style.display = "none"
+                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
             )
         }
     }
-    
+
     /**
      * Fixes resource by setting the alternative label as preferred
      */
@@ -65,7 +66,7 @@ export class OnlyAltLabelResourceComponent {
                                 }
                             );
                         },
-                        () => {}
+                        () => { }
                     );
                 }
             );
@@ -80,13 +81,13 @@ export class OnlyAltLabelResourceComponent {
                                 }
                             );
                         },
-                        () => {}
+                        () => { }
                     );
                 }
             );
         }
     }
-    
+
     /**
      * Removes an alt label and set it as pref label. Returns an observable so that
      * in setAltAsPrefLabel it can be subscribed and execute operations once it's done
@@ -114,7 +115,7 @@ export class OnlyAltLabelResourceComponent {
             }
         });
     }
-    
+
     /**
      * Fixes resource by adding a preferred label
      */
@@ -128,7 +129,7 @@ export class OnlyAltLabelResourceComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             )
         } else if (this.ontoType == "SKOS-XL") {
             this.modalService.newPlainLiteral("Add skosxl:prefLabel").then(
@@ -139,9 +140,9 @@ export class OnlyAltLabelResourceComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             )
         }
     }
-    
+
 }

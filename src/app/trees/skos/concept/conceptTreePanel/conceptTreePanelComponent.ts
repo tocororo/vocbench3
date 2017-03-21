@@ -4,6 +4,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 
@@ -47,16 +48,16 @@ export class ConceptTreePanelComponent {
     private createTopConcept() {
         this.modalService.newResource("Create new skos:Concept", this.vbCtx.getContentLanguage()).then(
             (res: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
                     this.skosxlService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
@@ -67,16 +68,16 @@ export class ConceptTreePanelComponent {
     private createNarrower() {
         this.modalService.newResource("Create a skos:narrower", this.vbCtx.getContentLanguage()).then(
             (res: any) => {
-                this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
                     this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
                     this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
-                        stResp => this.viewChildTree.blockDivElement.nativeElement.style.display = "none",
-                        err => this.viewChildTree.blockDivElement.nativeElement.style.display = "none"
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
@@ -85,24 +86,24 @@ export class ConceptTreePanelComponent {
     }
 
     private deleteConcept() {
-        this.viewChildTree.blockDivElement.nativeElement.style.display = "block";
+        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         if (this.ONTO_TYPE == "SKOS") {
             this.skosService.deleteConcept(this.selectedConcept).subscribe(
                 stResp => {
                     this.selectedConcept = null;
                     this.nodeSelected.emit(undefined);
-                    this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 },
-                err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
             );
         } else { //SKOSXL
             this.skosxlService.deleteConcept(this.selectedConcept).subscribe(
                 stResp => {
                     this.selectedConcept = null;
                     this.nodeSelected.emit(undefined);
-                    this.viewChildTree.blockDivElement.nativeElement.style.display = "none";
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 },
-                err => { this.viewChildTree.blockDivElement.nativeElement.style.display = "none"; }
+                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
             );
         }
     }
