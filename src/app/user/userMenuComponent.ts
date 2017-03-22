@@ -55,34 +55,4 @@ export class UserMenuComponent {
         );
     }
      
-    /**
-     * When user selects "content language" menu item. Opens the modal to change the content language.
-     */
-    private changeContentLang() {
-        this.modalService.changeContentLang().then( confirmed => {}, canceled => {} );
-    }
-    
-    /**
-     * Determines the status of the checkbox in the "content language" menu item.
-     */
-    private isHumanReadable(): boolean {
-        return this.vbCtx.getHumanReadable();
-    }
-    
-    /**
-     * Listener to click event of the human readable checkbox in the "content language" menu item.
-     * Updates the humanReadable setting and emits a contentLangChangedEvent.
-     * N.B. this method listens the click event, and NOT the change, because it needs to intercept the click on the menu item 
-     * and stop the propagation to prevent to open ContentLangModal  
-     */
-    private switchHumanReadable(humanReadable: boolean, event: Event) {
-        event.stopPropagation();
-        this.vbCtx.setHumanReadable(humanReadable);
-        if (humanReadable) {
-            this.evtHandler.contentLangChangedEvent.emit(this.vbCtx.getContentLanguage());
-        } else {
-            this.evtHandler.contentLangChangedEvent.emit(null);
-        }
-    }
-    
 }

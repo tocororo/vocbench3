@@ -78,7 +78,7 @@ export class TestComponent {
     private newResourceResult: any;
     private newResourceTitle = "NewResource title";
     newResource() {
-        this.modalService.newResource(this.newResourceTitle, this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource(this.newResourceTitle).then(
             result => {
                 this.newResourceResult = result;
             },

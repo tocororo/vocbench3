@@ -8,6 +8,7 @@ import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectServices } from "../services/projectServices";
 import { MetadataServices } from "../services/metadataServices";
 import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { VBPreferences } from '../utils/VBPreferences';
 import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
 import { ModalServices } from "../widget/modal/modalServices";
@@ -24,7 +25,8 @@ export class ProjectComponent implements OnInit {
     public projectChanged: boolean = false;
 
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private vbCtx: VocbenchCtx, private router: Router, private modalService: ModalServices, private modal: Modal) {
+        private vbCtx: VocbenchCtx, private preferences: VBPreferences, 
+        private router: Router, private modalService: ModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -122,6 +124,8 @@ export class ProjectComponent implements OnInit {
                 this.projectChanged = true;
                 project.setOpen(true);
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                //init the project preferences for the project
+                this.preferences.initUserProjectPreferences();
                 //get default namespace of the project and set it to the vbContext
                 this.metadataService.getDefaultNamespace().subscribe(
                     ns => {

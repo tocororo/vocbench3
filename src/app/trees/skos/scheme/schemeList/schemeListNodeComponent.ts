@@ -43,34 +43,32 @@ export class SchemeListNodeComponent {
     
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (oldResource.getURI() == this.node.getURI()) {
-            if (this.vbCtx.getHumanReadable()) {
-                this.skosService.getShow(newResource, this.vbCtx.getContentLanguage()).subscribe(
-                    show => {
-                        this.node['show'] = show;
-                        this.node['uri'] = newResource.getURI();
-                    }
-                )
-            } else {//human readable disabled, just replace the show (localName)
-                this.node['show'] = newResource.getShow();
-                this.node['uri'] = newResource.getURI();
-            }
+            this.node['uri'] = newResource.getURI();
         }
     }
     
     private onPrefLabelSet(resource: ARTURIResource, label: string, lang: string) {
-        if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
-            this.node['show'] = label;
-        }
+        /**
+         * the following code is commented since the show of a resource is computed by the server according to the languages preference
+         * and there is no way update the show after a pref label is set
+         */
+        // if (this.rendering && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
+        //     this.node['show'] = label;
+        // }
     }
     
     private onPrefLabelRemoved(resource: ARTURIResource, label: string, lang: string) {
-        if (this.vbCtx.getHumanReadable() && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
-            this.skosService.getShow(resource, this.vbCtx.getContentLanguage()).subscribe(
-                show => {
-                    this.node['show'] = show;
-                }
-            )
-        }
+        /**
+         * the following code is commented since the getShow() service, that is used to update the show of the concept,
+         * gets as parameter just one language instead of an array of lang representing all the language that are used currently
+         */
+        // if (this.rendering && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
+        //     this.skosService.getShow(resource, this.vbCtx.getContentLanguage()).subscribe(
+        //         show => {
+        //             this.node['show'] = show;
+        //         }
+        //     )
+        // }
     }
     
 }

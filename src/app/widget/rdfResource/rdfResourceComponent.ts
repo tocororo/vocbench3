@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { VBPreferences } from "../../utils/VBPreferences";
 
 @Component({
 	selector: "rdf-resource",
@@ -10,7 +11,7 @@ export class RdfResourceComponent {
 	@Input() resource: ARTNode;
 	@Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
 
-	constructor() { }
+	constructor(private preferences: VBPreferences) { }
 
 	private getRendering(): string {
 		if (this.rendering) {
@@ -33,6 +34,11 @@ export class RdfResourceComponent {
 		return ResourceUtils.getImageSrc(this.resource);
 	}
 
+	private getUnknownFlagImgSrc(): string {
+		//pass an invalid langTag so the method returns the empty flag image source
+		return ResourceUtils.getFlagImgSrc("unknown");
+	}
+
 	/**
 	 * Returns true if the current resource has language: it could be a literal with language or
 	 * a skosxl:Label with language
@@ -51,12 +57,16 @@ export class RdfResourceComponent {
 	}
 
 	/**
-	 * Returns true if the current resource langTag has a flag image available.
+	 * Returns true if the current resource langTag has a flag image available and the show_flag is true.
 	 * This method should be called only for resource with lang, so it should depend from isResourceWithLang
 	 */
 	private isLangFlagAvailable(): boolean {
-		//just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
-		return !this.getImgSrc().includes("unknown");
+		if (this.preferences.getShowFlags()) {
+			//just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
+			return !this.getImgSrc().includes("unknown");
+		} else {
+			return false; //if the show_flag preference is false, show always the langTag
+		}
 	}
 
 	/**

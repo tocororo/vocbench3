@@ -6,7 +6,6 @@ import {
     RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
 } from "../../models/ARTResources";
 import { SKOS } from "../../models/Vocabulary";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
 
 import { PropertyServices } from "../../services/propertyServices";
 import { SkosxlServices } from "../../services/skosxlServices";
@@ -39,7 +38,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
 
     constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
-        private skosService: SkosServices, private vbCtx: VocbenchCtx) {
+        private skosService: SkosServices) {
         super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
@@ -66,7 +65,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
                 var member: ARTResource = data.value;
 
                 if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addFirstToOrderedCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
+                    this.skosService.addFirstToOrderedCollection(this.resource, member).subscribe(
                         stResp => this.update.emit(null)
                     );
                 } else { //it's using a subProperty of skos:member
@@ -88,7 +87,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
                 var member: ARTResource = data.value;
 
                 if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addLastToOrderedCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
+                    this.skosService.addLastToOrderedCollection(this.resource, member).subscribe(
                         stResp => this.update.emit(null)
                     );
                 } else { //it's using a subProperty of skos:member
@@ -110,7 +109,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
                 var member: ARTResource = data.value;
                 var position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
                 if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position, this.vbCtx.getContentLanguage(true)).subscribe(
+                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
                         stResp => this.update.emit(null)
                     );
                 } else { //it's using a subProperty of skos:member
@@ -132,7 +131,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
                 var member: ARTResource = data.value;
                 var position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
                 if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position, this.vbCtx.getContentLanguage(true)).subscribe(
+                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
                         stResp => this.update.emit(null)
                     );
                 } else { //it's using a subProperty of skos:member
@@ -151,7 +150,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
             );
         } else {
             if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
-                this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>object, this.vbCtx.getContentLanguage(true)).subscribe(
+                this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>object).subscribe(
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of skos:member
@@ -165,7 +164,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
     }
 
     private removeMember(member: ARTResource) {
-        this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>member, this.vbCtx.getContentLanguage(true)).subscribe(
+        this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>member).subscribe(
             stResp => this.update.emit(null)
         );
     }

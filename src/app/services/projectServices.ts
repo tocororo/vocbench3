@@ -93,52 +93,6 @@ export class ProjectServices {
     }
 
     /**
-     * Creates a project
-     * @param projectName
-     * @param modelType
-     * @param baseURI
-     * @param ontManagerFactoryID
-     * @param modelConfigurationClass
-     * @param modelConfigurationArray array of param .name-.value pairs
-     * @param uriGeneratorFactoryID
-     * @param uriGenConfigurationClass
-     * @param uriGenConfigurationArray array of param .name-.value pairs
-     * @param renderingEngineFactoryID
-     * @param renderingEngineConfigurationClass
-     * @param renderingEngineConfigurationArray array of param .name-.value pairs
-     */
-    // createProject(projectName: string, modelType: string, baseURI: string,
-    //     ontManagerFactoryID: string, modelConfigurationClass: string, modelConfigurationArray: Array<any>,
-    //     uriGeneratorFactoryID?: string, uriGenConfigurationClass?: string, uriGenConfigurationArray?: Array<any>,
-    //     renderingEngineFactoryID?: string, renderingEngineConfigurationClass?: string, renderingEngineConfigurationArray?: Array<any>) {
-
-    //     console.log("[ProjectServices] createProject");
-    //     var params: any = {
-    //         consumer: "SYSTEM",
-    //         projectName: projectName,
-    //         modelType: modelType,
-    //         baseURI: baseURI,
-    //         ontManagerFactoryID: ontManagerFactoryID,
-    //         modelConfigurationClass: modelConfigurationClass,
-    //         modelConfiguration: modelConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n"),
-    //     };
-
-    //     if (uriGeneratorFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
-    //         params.uriGeneratorFactoryID = uriGeneratorFactoryID;
-    //         params.uriGenConfigurationClass = uriGenConfigurationClass;
-    //         params.uriGenConfiguration = uriGenConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
-    //     }
-
-    //     if (renderingEngineFactoryID != undefined && uriGenConfigurationClass != undefined && uriGenConfigurationArray != undefined) {
-    //         params.renderingEngineFactoryID = renderingEngineFactoryID;
-    //         params.renderingEngineConfigurationClass = renderingEngineConfigurationClass;
-    //         params.renderingEngineConfiguration = renderingEngineConfigurationArray.map(arrElem => arrElem.name + "=" + arrElem.value).join("\n");
-    //     }
-
-    //     return this.httpMgr.doGet(this.serviceName, "createProject", params, this.oldTypeService);
-    // }
-
-    /**
      * @param projectName
      * @param modelType
      * @param baseURI

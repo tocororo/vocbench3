@@ -97,8 +97,7 @@ export class ConceptTreeComponent extends AbstractTree {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain",
-                this.vbCtx.getContentLanguage(true), this.workingScheme).subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", null, this.workingScheme).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");

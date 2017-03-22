@@ -14,7 +14,7 @@
                 <div class="subPanel-body">
                     <div class="hbox">
                         <div class="vbox" style="margin-right: 8px;">
-                            <select class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="resViewMode">
+                            <select class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChanged()">
                                 <option value="splitted">Splitted</option>
                                 <option value="tabbed">Tabbed</option>
                             </select>
@@ -37,56 +37,90 @@
                 </div>
             </div>
 
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
-                    <label style="flex: 1">Languages:</label>
-                    <span *ngIf="areAllLangDeselected()" class="greyText" style="margin-right: 5px;">
-                        <span class="glyphicon glyphicon-warning-sign"></span>
-                        No language selected implicitly means every language
-                    </span>
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
-                            <span class="glyphicon glyphicon-check"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
-                            <span class="glyphicon glyphicon-unchecked"></span>
-                        </button>
+            <div class="hbox">
+
+                <div class="subPanel vbox">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">Languages:</label>
+                        <span *ngIf="getActiveLanguageItems().length == 0" class="greyText" style="margin-right: 5px;">
+                            <span class="glyphicon glyphicon-warning-sign"></span>
+                            No language selected implicitly means all languages (and "en" as default)
+                        </span>
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
+                                <span class="glyphicon glyphicon-check"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
+                                <span class="glyphicon glyphicon-unchecked"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="subPanel-body scrollableContainer">
+                        
+                        <table class="table table-condensed table-borderless table-hoverable">
+                            <colgroup>
+                                <col style="width: 1%">
+                                <col style="width: 1%">
+                                <col style="width: 1%">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="padding: 0px 8px;">Default</th>
+                                    <th class="text-center" style="padding: 0px 8px;">Active</th>
+                                    <th class="text-center"  style="padding: 0px 8px;" nowrap>ISO code</th>
+                                    <th class="text-center" style="padding: 0px 8px;">Language</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let l of renderingLangs">
+                                    <td class="text-center">
+                                        <input type="radio" style="vertical-align: middle" name="defaultLang" [value]="l.lang.tag"
+                                            (change)="onDefaultLangChanged(l)" [checked]="l.default" [disabled]="!l.active"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="onActiveLangChanged(l)">
+                                    </td>
+                                    <td class="text-center" nowrap>{{l.lang.tag}}</td>
+                                    <td>
+                                        <!--<img [src]="getFlagImgSrc(l.lang.tag)">-->
+                                        <img *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(l.lang.tag)">
+                                        <div *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
+                                            <img [src]="getFlagImgSrc(l.lang.tag)">
+                                            <span>{{l.lang.tag}}</span>
+                                        </div>
+                                        {{l.lang.name}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="subPanel-body scrollableContainer">
+
+                <div class="subPanel vbox" style="margin-left: 5px;">
                     
-                    <table class="table table-condensed table-borderless table-hoverable">
-                        <colgroup>
-                            <col style="width: 1%">
-                            <col style="width: 1%">
-                            <col style="width: 1%">
-                            <col>
-                        </colgroup>
-                        <tbody>
-                            <tr *ngFor="let l of renderingLangs">
-                                <td><input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.checked"></td>
-                                <td nowrap>{{l.lang.tag}}</td>
-                                <td>
-                                    <!--<img [src]="getFlagImgSrc(l.lang.tag)">-->
-                                    <img *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(l.lang.tag)">
-                                    <div *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
-                                        <img [src]="getFlagImgSrc(l.lang.tag)">
-                                        <span>{{l.lang.tag}}</span>
-                                    </div>
-                                </td>
-                                <td>{{l.lang.name}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="subPanel-heading">
+                        <label style="flex: 1">Other preferences:</label>
+                    </div>
+
+                    <div class="subPanel-body scrollableContainer">
+
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Determines if the flags icon are shown in place of the language ISO code">
+                            </span>
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
-            
+
         </div>
 
-        <div class="panel panel-footer">
-            <button class="btn btn-default btn-sm pull-right" (click)="save()">Save</button>
-        </div>
-        
     </div>
     
 </div>

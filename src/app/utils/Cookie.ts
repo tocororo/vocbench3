@@ -2,8 +2,6 @@
 export class Cookie {
 	
 	public static VB_ACTIVE_SKOS_SCHEME = "active_skos_scheme";
-	public static VB_CONTENT_LANG = "content_language"; //remove???
-	public static VB_HUMAN_READABLE = "human_readable"; //remove???
 	public static VB_INFERENCE_IN_RES_VIEW = "inference_in_resource_view";
 	public static VB_RESOURCE_VIEW_MODE = "resource_view_mode";
 

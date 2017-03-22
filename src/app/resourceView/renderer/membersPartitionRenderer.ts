@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
 import { SkosServices } from "../../services/skosServices";
 import { VBEventHandler } from "../../utils/VBEventHandler"
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
 import { ARTResource, ARTURIResource, ARTNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SKOS } from "../../models/Vocabulary";
 
@@ -34,7 +33,7 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
 
     constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
-        private skosService: SkosServices, private vbCtx: VocbenchCtx, private eventHandler: VBEventHandler) {
+        private skosService: SkosServices, private eventHandler: VBEventHandler) {
         super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
@@ -49,7 +48,7 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
                 var member: ARTResource = data.value;
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's using skos:member
-                    this.skosService.addToCollection(this.resource, member, this.vbCtx.getContentLanguage(true)).subscribe(
+                    this.skosService.addToCollection(this.resource, member).subscribe(
                         stResp => this.update.emit(null)
                     );
                 } else { //it's using a subProperty of skos:member
@@ -75,7 +74,7 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
             );
         } else {
             if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
-                this.skosService.removeFromCollection(this.resource, <ARTResource>object, this.vbCtx.getContentLanguage(true)).subscribe(
+                this.skosService.removeFromCollection(this.resource, <ARTResource>object).subscribe(
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of rdf:type

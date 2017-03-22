@@ -14,7 +14,7 @@ export class NewPlainLiteralModalData extends BSModalContext {
         public title: string = 'Create new label',
         public value: string,
         public valueReadonly: boolean = false,
-        public lang: string = 'en',
+        public lang: string,
         public langReadonly: boolean = false
     ) {
         super();

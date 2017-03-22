@@ -22,7 +22,6 @@ import { PromptModal } from '../widget/modal/promptModal/promptModal';
 import { PromptPrefixedModal } from '../widget/modal/promptModal/promptPrefixedModal';
 import { SelectionModal } from '../widget/modal/selectionModal/selectionModal';
 import { ResourceSelectionModal } from '../widget/modal/selectionModal/resourceSelectionModal';
-import { ContentLangModal } from '../widget/modal/contentLangModal/contentLangModal';
 
 //shared modals
 import { PluginConfigModal } from "../widget/modal/pluginConfigModal/pluginConfigModal";
@@ -65,7 +64,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewTypedLiteralModal, PromptModal,
-        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
+        PromptPrefixedModal, SelectionModal, ResourceSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
@@ -86,7 +85,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
     entryComponents: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewTypedLiteralModal, PromptModal,
-        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, ContentLangModal,
+        PromptPrefixedModal, SelectionModal, ResourceSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,

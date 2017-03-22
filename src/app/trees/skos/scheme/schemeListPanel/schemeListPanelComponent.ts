@@ -53,16 +53,16 @@ export class SchemeListPanelComponent {
     }
     
     private createScheme() {
-        this.modalService.newResource("Create new skos:ConceptScheme", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create new skos:ConceptScheme").then(
             (result: any) => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createScheme(result.label, result.lang, result.name, this.vbCtx.getContentLanguage()).subscribe(
+                    this.skosService.createScheme(result.label, result.lang, result.name).subscribe(
                         newScheme => {
                             this.schemeList.push(newScheme);
                         }
                     );
                 } else {//SKOSXL
-                    this.skosxlService.createScheme(result.label, result.lang, result.name, this.vbCtx.getContentLanguage()).subscribe(
+                    this.skosxlService.createScheme(result.label, result.lang, result.name).subscribe(
                         newScheme => {
                             this.schemeList.push(newScheme);
                         }
@@ -174,8 +174,7 @@ export class SchemeListPanelComponent {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain",
-                this.vbCtx.getContentLanguage(true)).subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");

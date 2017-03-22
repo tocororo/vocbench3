@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
@@ -21,7 +20,7 @@ export class CollectionTreeComponent extends AbstractTree {
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
-        private vbCtx: VocbenchCtx, eventHandler: VBEventHandler) {
+        eventHandler: VBEventHandler) {
 
         super(eventHandler);
 
@@ -59,8 +58,7 @@ export class CollectionTreeComponent extends AbstractTree {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain",
-                this.vbCtx.getContentLanguage(true)).subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");

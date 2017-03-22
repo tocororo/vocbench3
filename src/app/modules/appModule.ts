@@ -23,6 +23,7 @@ import { appRouting } from '../appRoutes';
 
 import { HttpManager } from "../utils/HttpManager";
 import { VocbenchCtx } from "../utils/VocbenchCtx";
+import { VBPreferences } from "../utils/VBPreferences";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
 
@@ -59,7 +60,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
       ],
       //services with application scope
       providers: [
-            HttpManager, VocbenchCtx, VBEventHandler, GUARD_PROVIDERS,
+            HttpManager, VocbenchCtx, VBEventHandler, VBPreferences, GUARD_PROVIDERS,
             { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
       ],
       declarations: [

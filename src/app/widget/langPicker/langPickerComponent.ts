@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import {ResourceUtils} from "../../utils/ResourceUtils";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {VBPreferences} from "../../utils/VBPreferences";
 import {Languages} from "../../models/LanguagesCountries";
 
 @Component({
@@ -18,7 +18,7 @@ export class LangPickerComponent implements OnInit {
     private languageList = Languages.languageList;
     private language: string;
     
-    constructor(private vbCtx: VocbenchCtx) { }
+    constructor(private pref: VBPreferences) { }
 
     ngOnInit() {
         if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
@@ -27,7 +27,7 @@ export class LangPickerComponent implements OnInit {
             this.selectClass += "sm";
         }
         if (this.lang == undefined) {
-            this.language = this.vbCtx.getContentLanguage();//if lang is not provided set the content language
+            this.language = this.pref.getDefaultLanguage();//if lang is not provided set the default language
             this.langChange.emit(this.language);//and emit langChange event
         } else {
             this.language = this.lang;

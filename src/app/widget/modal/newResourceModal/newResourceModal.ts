@@ -6,7 +6,7 @@ import {VocbenchCtx} from "../../../utils/VocbenchCtx"
 export class NewResourceModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
-        public lang: string = "en"
+        public lang: string
     ) {
         super();
     }

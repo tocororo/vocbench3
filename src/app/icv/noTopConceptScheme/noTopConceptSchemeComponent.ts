@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import { ModalServices } from "../../widget/modal/modalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -17,7 +16,7 @@ export class NoTopConceptSchemeComponent {
 
     private brokenSchemeList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private vbCtx: VocbenchCtx,
+    constructor(private icvService: IcvServices, private skosService: SkosServices,
         private modalService: ModalServices, private browsingService: BrowsingServices) { }
 
     /**
@@ -60,7 +59,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.modalService.newResource("Create top Concept", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create top Concept").then(
             (data: any) => {
                 this.skosService.createTopConcept(data.label, data.lang, scheme, data.name).subscribe(
                     stResp => {

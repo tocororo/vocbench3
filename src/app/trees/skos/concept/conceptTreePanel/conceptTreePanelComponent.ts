@@ -4,6 +4,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
@@ -30,7 +31,7 @@ export class ConceptTreePanelComponent {
     private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private modalService: ModalServices, private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx) {
+        private modalService: ModalServices, private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx, private preferences: VBPreferences) {
         
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (newScheme: ARTURIResource) => this.onSchemeChanged(newScheme)));
@@ -46,16 +47,16 @@ export class ConceptTreePanelComponent {
     }
 
     private createTopConcept() {
-        this.modalService.newResource("Create new skos:Concept", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create new skos:Concept").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                    this.skosService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                    this.skosxlService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -66,16 +67,16 @@ export class ConceptTreePanelComponent {
     }
 
     private createNarrower() {
-        this.modalService.newResource("Create a skos:narrower", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create a skos:narrower").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name, this.vbCtx.getContentLanguage()).subscribe(
+                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );

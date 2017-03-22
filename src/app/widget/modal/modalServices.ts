@@ -14,7 +14,6 @@ import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralM
 import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
 import {SelectionModal, SelectionModalData} from "./selectionModal/selectionModal";
 import {ResourceSelectionModal, ResourceSelectionModalData} from "./selectionModal/resourceSelectionModal";
-import {ContentLangModal} from "./contentLangModal/contentLangModal";
 
 export type ModalType = "info" | "error" | "warning";
 
@@ -208,7 +207,7 @@ export class ModalServices {
     /**
      * Opens a modal to create a new resource with name, label and language tag
      * @param title the title of the modal dialog
-     * @param lang the language of the new resource
+     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
      * @return if the modal closes with ok returns a promise containing an object with name, label and lang
      */
     newResource(title: string, lang?: string) {
@@ -259,16 +258,4 @@ export class ModalServices {
         );
     }
 
-    /**
-     * Opens a modal to change the content language.
-     * @return
-     */
-    changeContentLang() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ContentLangModal, overlayConfig).then(
-            dialog => dialog.result
-        );
-    }
-    
 }

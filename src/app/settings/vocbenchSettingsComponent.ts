@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
 import { ResourceUtils } from "../utils/ResourceUtils";
-import { UnsavedChangesGuard, CanDeactivateOnChangesComponent } from "../utils/CanActivateGuards";
 import { Cookie } from "../utils/Cookie";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { PreferencesServices } from "../services/preferencesServices";
-import { PropertyLevel, ResourceViewMode } from "../models/Preferences";
+import { VBPreferences } from "../utils/VBPreferences";
+import { ResourceViewMode } from "../models/Preferences";
 import { Languages } from "../models/LanguagesCountries";
 
 @Component({
@@ -12,109 +11,158 @@ import { Languages } from "../models/LanguagesCountries";
     templateUrl: "./vocbenchSettingsComponent.html",
     host: { class: "pageComponent" }
 })
-export class VocbenchSettingsComponent implements CanDeactivateOnChangesComponent {
+export class VocbenchSettingsComponent {
 
     private resViewMode: ResourceViewMode;
-    private pristineResViewMode: ResourceViewMode;
 
-    private pristineRenderingLangs: { lang: { name: string, tag: string }, checked: boolean }[];
-    private renderingLangs: { lang: { name: string, tag: string }, checked: boolean }[];
+    private showFlags: boolean;
 
-    constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) { }
+    private renderingLangs: LanguageItem[] = [];
+
+    constructor(private preferences: VBPreferences, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
-        this.prefService.getLanguages().subscribe(
-            langs => {
-                this.renderingLangs = [];
-                if (langs.length == 1 && langs[0] == "*") { //"*" stands for all languages
-                    //set as selected renderingLangs all the available langs
-                    for (var i = 0; i < Languages.languageList.length; i++) {
-                        this.renderingLangs.push({ lang: Languages.languageList[i], checked: true });
-                    }
-                } else {
-                    //set as selected renderingLangs only the listed by the preference
-                    for (var i = 0; i < Languages.languageList.length; i++) {
-                        this.renderingLangs.push({
-                            lang: Languages.languageList[i],
-                            checked: (langs.indexOf(Languages.languageList[i].tag) != -1)
-                        });
-                    }
-                }
-                this.pristineRenderingLangs = JSON.parse(JSON.stringify(this.renderingLangs));
-            }
-        );
+        this.preferences.initUserProjectPreferences();
+        //res view mode
         this.resViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);
         if (this.resViewMode != "splitted" && this.resViewMode != "tabbed") {
             this.resViewMode = "tabbed"; //default
         }
-        this.pristineResViewMode = this.resViewMode;
+
+        //languages
+        var langs = this.preferences.getLanguages();
+        this.renderingLangs = [];
+        if (langs.length == 1 && langs[0] == "*") { //"*" stands for all languages
+            //set as selected renderingLangs all the available langs
+            for (var i = 0; i < Languages.languageList.length; i++) {
+                this.renderingLangs.push({
+                    lang: Languages.languageList[i],
+                    active: false,
+                    default: (Languages.languageList[i].tag == "en") //set english (en) as default
+                });
+            }
+        } else {
+            //set as selected renderingLangs only the listed by the preference
+            for (var i = 0; i < Languages.languageList.length; i++) {
+                this.renderingLangs.push({
+                    lang: Languages.languageList[i],
+                    active: (langs.indexOf(Languages.languageList[i].tag) != -1),
+                    default: (langs.indexOf(Languages.languageList[i].tag) == 0) //set as default the first language of the preferences
+                });
+            }
+        }
+
+        //show_flags
+        this.showFlags = this.preferences.getShowFlags();
     }
 
-    //res view mode handlers
+    //res view mode handler
 
-    private isResViewModeChanged(): boolean {
-        return this.pristineResViewMode != this.resViewMode;
+    private onResViewModeChanged() {
+        Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, this.resViewMode);
+        this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
     }
 
     //languages handlers
 
     private changeAllLangStatus(checked: boolean) {
         for (var i = 0; i < this.renderingLangs.length; i++) {
-            this.renderingLangs[i].checked = checked;
+            this.renderingLangs[i].active = checked;
+        }
+        if (!checked) { //if it is deselecting all set en as default
+            this.setDefaultLang("en");
+        }
+        this.updateLanguagesPref();
+    }
+
+    /**
+     * Listener of "default" language radio button
+     * @param changedItem
+     */
+    private onDefaultLangChanged(changedItem: LanguageItem) {
+        //set the default to true only to the selected lang
+        this.setDefaultLang(changedItem.lang.tag);
+        this.updateLanguagesPref();
+    }
+
+    /**
+     * Listener of "active" language checkbox state change
+     * @param changedItem
+     */
+    private onActiveLangChanged(changedItem: LanguageItem) {
+        var activeLangs: LanguageItem[] = this.getActiveLanguageItems();
+        if (activeLangs.length == 0) { //if now all language are not-active set "en" as default
+            this.setDefaultLang("en");
+        } else if (activeLangs.length == 1) { //if now only one language is active set it as default
+            this.setDefaultLang(activeLangs[0].lang.tag);
+        } else { //if now more languages are active...
+            if (!changedItem.active && changedItem.default) { //...and the changed lang is now not-active and is the default
+                this.setDefaultLang(activeLangs[0].lang.tag); //set as the default the first available lang
+            }
+        }
+        this.updateLanguagesPref();
+    }
+
+    private getActiveLanguageItems(): LanguageItem[] {
+        var activeLangs: LanguageItem[] = [];
+        for (var i = 0; i < this.renderingLangs.length; i++) {
+            if (this.renderingLangs[i].active) {
+                activeLangs.push(this.renderingLangs[i]);
+            }
+        }
+        return activeLangs;
+    }
+
+    /**
+     * Set the given language tag as default
+     * @param langTag
+     */
+    private setDefaultLang(langTag: string) {
+        for (var i = 0; i < this.renderingLangs.length; i++) {
+            if (this.renderingLangs[i].lang.tag == langTag) {
+                this.renderingLangs[i].default = true;
+            } else {
+                this.renderingLangs[i].default = false;
+            }
         }
     }
 
-    private areAllLangDeselected(): boolean {
-        if (this.renderingLangs != null) {
-            for (var i = 0; i < this.renderingLangs.length; i++) {
-                if (this.renderingLangs[i].checked) {
-                    return false;
-                }
+    private updateLanguagesPref() {
+        //collect the active languages to set in the preference
+        var preferenceLangs: string[] = [];
+        var activeLangs: LanguageItem[] = this.getActiveLanguageItems();
+        for (var i = 0; i <activeLangs.length; i++) {
+            if (activeLangs[i].default) { //if default add it at first position
+                preferenceLangs.unshift(activeLangs[i].lang.tag);
+            } else {
+                preferenceLangs.push(activeLangs[i].lang.tag);
             }
         }
-        return true;
+        //no language checked
+        if (preferenceLangs.length == 0) {
+            preferenceLangs = ["*"];
+        }
+        this.preferences.setLanguages(preferenceLangs);
     }
 
     private getFlagImgSrc(langTag: string): string {
         return ResourceUtils.getFlagImgSrc(langTag);
     }
 
-    private isRenderingLanguagesChanged(): boolean {
-        for (var i = 0; i < this.renderingLangs.length; i++) {
-            if (this.renderingLangs[i].checked != this.pristineRenderingLangs[i].checked) {
-                return true;
-            }
-        }
+    //show flags handlers
+
+    private onShowFlagChange() {
+        console.log("update show flags to ", this.showFlags);
+        this.preferences.setShowFlags(this.showFlags);
     }
 
+}
 
-    private save() {
-        if (this.isResViewModeChanged()) {
-            Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, this.resViewMode);
-            this.pristineResViewMode = this.resViewMode;
-            this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
-        }
-        if (this.isRenderingLanguagesChanged()) {
-            //collect the checked languages
-            var checkedLangs: string[] = [];
-            for (var i = 0; i < this.renderingLangs.length; i++) {
-                if (this.renderingLangs[i].checked) {
-                    checkedLangs.push(this.renderingLangs[i].lang.tag);
-                }
-            }
-            //no language checked or all languages checked
-            if (checkedLangs.length == 0 || checkedLangs.length == Languages.languageList.length) {
-                checkedLangs = ["*"];
-            }
-            this.prefService.setLanguages(checkedLangs).subscribe(
-                //update the pristine value
-                stResp => { this.pristineRenderingLangs = JSON.parse(JSON.stringify(this.renderingLangs)); }
-            );
-        }
-    }
-
-    hasUnsavedChanges(): boolean {
-        return (this.isResViewModeChanged() || this.isRenderingLanguagesChanged());
-    }
-
+/**
+ * Support class that represent a list item of the languages preference
+ */
+class LanguageItem {
+    public lang: { name: string, tag: string };
+    public active: boolean;
+    public default: boolean;
 }

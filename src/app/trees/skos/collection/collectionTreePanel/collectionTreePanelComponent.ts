@@ -32,16 +32,16 @@ export class CollectionTreePanelComponent {
     }
 
     private createCollection() {
-        this.modalService.newResource("Create new skos:Collection", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create new skos:Collection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createRootCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosService.createRootCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createRootCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createRootCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -52,16 +52,16 @@ export class CollectionTreePanelComponent {
     }
 
     private createOrderedCollection() {
-        this.modalService.newResource("Create new skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create new skos:OrderedCollection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createRootOrderedCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosService.createRootOrderedCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createRootOrderedCollection(res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createRootOrderedCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -72,16 +72,16 @@ export class CollectionTreePanelComponent {
     }
 
     private createNestedCollection() {
-        this.modalService.newResource("Create a nested skos:Collection", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create a nested skos:Collection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -92,16 +92,16 @@ export class CollectionTreePanelComponent {
     }
 
     private createNestedOrderedCollection() {
-        this.modalService.newResource("Create a nested skos:OrderedCollection", this.vbCtx.getContentLanguage()).then(
+        this.modalService.newResource("Create a nested skos:OrderedCollection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, this.vbCtx.getContentLanguage(true), RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
