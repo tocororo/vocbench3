@@ -211,12 +211,21 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                 }
                 //I don't distinguish between node and graph since if type is node showPropertyChain is ignored server-side
                 if (this.cfId != null) { //edit mode
-                    this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
-                        stResp => {
-                            event.stopPropagation();
-                            this.dialog.close();
-                        }
-                    );
+                    if (this.type == "node") {
+                        this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref).subscribe(
+                            stResp => {
+                                event.stopPropagation();
+                                this.dialog.close();
+                            }
+                        );
+                    } else { //graph
+                        this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
+                            stResp => {
+                                event.stopPropagation();
+                                this.dialog.close();
+                            }
+                        );
+                    }
                 } else { //create mode
                     this.cfService.createCustomForm(
                         this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(

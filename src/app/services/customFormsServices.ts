@@ -550,7 +550,7 @@ export class CustomFormsServices {
      * @param ref
      * @param showPropChain
      */
-    updateCustomForm(id: string, name: string, description: string, ref: string, showPropChain: ARTURIResource[]) {
+    updateCustomForm(id: string, name: string, description: string, ref: string, showPropChain?: ARTURIResource[]) {
         console.log("[CustomFormsServices] updateCustomForm");
         var params: any = {
             id: id,
