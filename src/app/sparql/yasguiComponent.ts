@@ -1,8 +1,9 @@
-import {Component, ViewChild, Input, Output, EventEmitter, ElementRef} from '@angular/core';
-import {VocbenchCtx} from '../utils/VocbenchCtx';
-import {ARTURIResource} from '../models/ARTResources';
-import {MetadataServices} from '../services/metadataServices';
-import {SearchServices} from '../services/searchServices';
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { ARTURIResource } from '../models/ARTResources';
+import { PrefixMapping } from '../models/PrefixMapping';
+import { MetadataServices } from '../services/metadataServices';
+import { SearchServices } from '../services/searchServices';
 import * as JQueryStatic from 'jquery';
 
 // var YASQE = require('yasgui-yasqe/dist/yasqe.bundled.min');
@@ -34,7 +35,7 @@ export class YasguiComponent {
 
     private yasqe: any;
 
-    constructor(private vbCtx: VocbenchCtx, private metadataService: MetadataServices, private searchService: SearchServices) {}
+    constructor(private vbCtx: VocbenchCtx, private metadataService: MetadataServices, private searchService: SearchServices) { }
 
     ngAfterViewInit() {
         YASQE.defaults.indentUnit = 4;
@@ -45,7 +46,7 @@ export class YasguiComponent {
         if (YASQE.defaults.autocompleters.indexOf(this.PREFIX_COMPLETER_NAME) == -1) {
             YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
                 (yasqe: any) => {
-                    return this.customPrefixCompleter(yasqe, this.metadataService, this.fetchFromPrefixCheck);
+                    return this.customPrefixCompleter(yasqe, this.vbCtx.getPrefixMappings(), this.fetchFromPrefixCheck);
                 }
             );
         }
@@ -74,11 +75,11 @@ export class YasguiComponent {
                 extraKeys: { "Ctrl-7": YASQE.commentLines }
             }
         );
-        
+
         //called on changes in yasqe editor
         this.yasqe.on('change', (yasqe: any) => {
             //update query in parent component
-            this.querychange.emit({query: yasqe.getValue(), valid: yasqe.queryValid, mode: yasqe.getQueryMode()});
+            this.querychange.emit({ query: yasqe.getValue(), valid: yasqe.queryValid, mode: yasqe.getQueryMode() });
             //Check whether typed prefix is declared. If not, automatically add declaration using list from prefix.cc
             //taken from prefixes.js, since I don't use prefixes autocompleter I nees to register this listener
             YASQE.Autocompleters.prefixes.appendPrefixIfNeeded(yasqe, this.PREFIX_COMPLETER_NAME);
@@ -114,41 +115,37 @@ export class YasguiComponent {
      * Override the default "prefixes" autocompleter. This autocompleter looks for prefixes in the local triple store
      * and on prefix.cc if the fetchFromPrefixCC parameter is true
      */
-    private customPrefixCompleter(yasqe: any, metadataService: MetadataServices, fetchFromPrefixCC: boolean): any {
+    private customPrefixCompleter(yasqe: any, prefixMappings: PrefixMapping[], fetchFromPrefixCC: boolean): any {
         return {
             isValidCompletionPosition: function () {
                 return YASQE.Autocompleters.prefixes.isValidCompletionPosition(yasqe);
             },
             get: function (token: any, callback: any) { //callback is the function to which pass the suggested strings if get is async
-                metadataService.getNamespaceMappings().subscribe(
-                    mappings => {
-                        var prefixArray: string[] = [];
-                        //add the prefixes from the local triplestore
-                        for (var i = 0; i < mappings.length; i++) {
-                            var prNs = mappings[i].prefix + ": <" + mappings[i].namespace + ">";
-                            prefixArray.push(prNs);
+                var prefixArray: string[] = [];
+                //add the prefixes from the local triplestore
+                for (var i = 0; i < prefixMappings.length; i++) {
+                    var prNs = prefixMappings[i].prefix + ": <" + prefixMappings[i].namespace + ">";
+                    prefixArray.push(prNs);
+                }
+                prefixArray.sort();
+                if (fetchFromPrefixCC) {
+                    //-----------copied from prefixes.js of yasgui-yasqe-----------
+                    $.get(YASQE.Autocompleters.prefixes.fetchFrom, function (data) {
+                        for (var prefix in data) {
+                            if (prefix == "bif")
+                                continue; // skip this one! see #231
+                            var completeString = prefix + ": <" + data[prefix] + ">";
+                            prefixArray.push(completeString); // the array we want to store in localstorage
                         }
-                        prefixArray.sort();
-                        if (fetchFromPrefixCC) {
-                            //-----------copied from prefixes.js of yasgui-yasqe-----------
-                            $.get(YASQE.Autocompleters.prefixes.fetchFrom, function(data) {
-                                for (var prefix in data) {
-                                    if (prefix == "bif")
-                                        continue; // skip this one! see #231
-                                    var completeString = prefix + ": <" + data[prefix] + ">";
-                                    prefixArray.push(completeString); // the array we want to store in localstorage
-                                }
 
-                                callback(prefixArray);
-                            });
-                            //-------------------------------------------------------
-                        } else {
-                            callback(prefixArray);
-                        }
-                    }
-                );
+                        callback(prefixArray);
+                    });
+                    //-------------------------------------------------------
+                } else {
+                    callback(prefixArray);
+                }
             },
-            preProcessToken: function(token: any) {
+            preProcessToken: function (token: any) {
                 return YASQE.Autocompleters.prefixes.preprocessPrefixTokenForCompletion(yasqe, token)
             },
             async: true,
@@ -156,7 +153,7 @@ export class YasguiComponent {
             autoShow: true,
             persistent: null,
             callbacks: {
-                pick: function() {
+                pick: function () {
                     yasqe.collapsePrefixes(false);
                 }
             }
@@ -171,7 +168,7 @@ export class YasguiComponent {
         this.yasqe.disableCompleter(this.PREFIX_COMPLETER_NAME);
         YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
             (yasqe: any) => {
-                return this.customPrefixCompleter(yasqe, this.metadataService, checked);
+                return this.customPrefixCompleter(yasqe, this.vbCtx.getPrefixMappings(), checked);
             }
         );
         // YASQE.defaults.autocompleters = ["customPrefixCompleter", "properties", "classes", "variables"];
@@ -183,10 +180,10 @@ export class YasguiComponent {
      */
     private customPropertyCompleter(yasqe: any, searchService: SearchServices): any {
         return {
-            isValidCompletionPosition: function() {
+            isValidCompletionPosition: function () {
                 return YASQE.Autocompleters.properties.isValidCompletionPosition(yasqe);
             },
-            get: function(token: any, callback: any) {
+            get: function (token: any, callback: any) {
                 //I don't know why, event if isValidCompletionPosition returns false, get is called, so I prevent to call searchResource
                 //by stopping get function if token is a white space or a "error" token
                 if (token.type == "ws" || token.type == "error") {
@@ -206,10 +203,10 @@ export class YasguiComponent {
                     }
                 );
             },
-            preProcessToken: function(token: any) {
+            preProcessToken: function (token: any) {
                 return YASQE.Autocompleters.properties.preProcessToken(yasqe, token)
             },
-            postProcessToken: function(token: any, suggestedString: string) {
+            postProcessToken: function (token: any, suggestedString: string) {
                 return YASQE.Autocompleters.properties.postProcessToken(yasqe, token, suggestedString);
             },
             async: true,
@@ -228,10 +225,10 @@ export class YasguiComponent {
      */
     private customClassCompleter(yasqe: any, searchService: SearchServices): any {
         return {
-            isValidCompletionPosition: function() {
+            isValidCompletionPosition: function () {
                 return YASQE.Autocompleters.classes.isValidCompletionPosition(yasqe);
             },
-            get: function(token: any, callback: any) {
+            get: function (token: any, callback: any) {
                 if (token.autocompletionString.trim() != "") {
                     searchService.searchResource(token.autocompletionString, ["cls"], false, true, "start").subscribe(
                         (results: ARTURIResource[]) => {
@@ -244,10 +241,10 @@ export class YasguiComponent {
                     );
                 }
             },
-            preProcessToken: function(token: any) {
+            preProcessToken: function (token: any) {
                 return YASQE.Autocompleters.classes.preProcessToken(yasqe, token)
             },
-            postProcessToken: function(token: any, suggestedString: string) {
+            postProcessToken: function (token: any, suggestedString: string) {
                 return YASQE.Autocompleters.classes.postProcessToken(yasqe, token, suggestedString);
             },
             async: true,

@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTNode, ARTResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { ARTNode } from "../../models/ARTResources";
 
 @Component({
 	selector: "resource-list",

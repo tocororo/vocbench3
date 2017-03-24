@@ -132,6 +132,11 @@ export class ProjectComponent implements OnInit {
                         this.vbCtx.setDefaultNamespace(ns);
                     }
                 )
+                this.metadataService.getNamespaceMappings().subscribe(
+                    mappings => {
+                        this.vbCtx.setPrefixMappings(mappings);
+                    }
+                )
             },
             err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
         );

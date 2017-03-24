@@ -1,10 +1,9 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
-import { ResourceUtils } from "../../../../utils/ResourceUtils";
 
 @Component({
     selector: "concept-tree-node",

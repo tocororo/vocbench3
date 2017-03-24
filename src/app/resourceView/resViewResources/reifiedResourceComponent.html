@@ -2,8 +2,7 @@
     <div class="hbox">
         <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
         <div class="expandCollapseBtnContainer" (click)="toggle()" title="Expand/Collapse" style="margin-right: 10px">
-            <img *ngIf="!open" src="../../../assets/images/tree_expand.png" style="transform: scale(-1);">
-            <img *ngIf="open" src="../../../assets/images/tree_collapse.png">
+            <img src="../../../assets/images/arrow.png" [ngClass]="{'arrow-left': !open}">
         </div>
     </div>
 

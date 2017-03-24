@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
 import { SparqlServices } from "../services/sparqlServices";
-import { MetadataServices } from "../services/metadataServices";
 import { ModalServices } from '../widget/modal/modalServices';
 import { UIUtils } from "../utils/UIUtils";
+import { VocbenchCtx } from "../utils/VocbenchCtx";
+import { PrefixMapping } from "../models/PrefixMapping";
 
 @Component({
     selector: "sparql-component",
@@ -15,36 +16,33 @@ export class SparqlComponent {
     private tabs: Array<any> = [];
     private activeTab: any;
 
-    constructor(private sparqlService: SparqlServices, private metadataService: MetadataServices, private modalService: ModalServices) { }
+    constructor(private sparqlService: SparqlServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
 
     ngOnInit() {
-        this.metadataService.getNamespaceMappings().subscribe(
-            mappings => {
-                //collect the prefix namespace mappings
-                var prefixImports: string = "";
-                for (var i = 0; i < mappings.length; i++) {
-                    prefixImports += "PREFIX " + mappings[i].prefix + ": <" + mappings[i].namespace + ">\n";
-                }
-                //set them as suffix of sampleQuery
-                this.sampleQuery = prefixImports + "\n" + this.sampleQuery;
-                //initialize the first tab
-                this.tabs.push({
-                    query: this.sampleQuery,
-                    queryMode: "query",
-                    respSparqlJSON: null, //keep the "sparql" JSON object contained in the response
-                    resultType: null, //graph / tuple / boolean
-                    headers: null,
-                    queryResult: null,
-                    queryInProgress: false,
-                    queryValid: true,
-                    queryTime: null,
-                    inferred: false,
-                    removable: false,
-                    active: true
-                });
-                this.activeTab = this.tabs[0];
-            }
-        )
+        //collect the prefix namespace mappings
+        var mappings: PrefixMapping[] = this.vbCtx.getPrefixMappings();
+        var prefixImports: string = "";
+        for (var i = 0; i < mappings.length; i++) {
+            prefixImports += "PREFIX " + mappings[i].prefix + ": <" + mappings[i].namespace + ">\n";
+        }
+        //set them as suffix of sampleQuery
+        this.sampleQuery = prefixImports + "\n" + this.sampleQuery;
+        //initialize the first tab
+        this.tabs.push({
+            query: this.sampleQuery,
+            queryMode: "query",
+            respSparqlJSON: null, //keep the "sparql" JSON object contained in the response
+            resultType: null, //graph / tuple / boolean
+            headers: null,
+            queryResult: null,
+            queryInProgress: false,
+            queryValid: true,
+            queryTime: null,
+            inferred: false,
+            removable: false,
+            active: true
+        });
+        this.activeTab = this.tabs[0];
     }
 
     private doQuery(tab: any) {

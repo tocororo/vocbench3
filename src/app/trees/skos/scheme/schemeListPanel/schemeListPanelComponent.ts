@@ -1,40 +1,39 @@
-import {Component, Output, EventEmitter} from "@angular/core";
-import {SkosServices} from "../../../../services/skosServices";
-import {SkosxlServices} from "../../../../services/skosxlServices";
-import {SearchServices} from "../../../../services/searchServices";
-import {ModalServices} from "../../../../widget/modal/modalServices";
-import {VocbenchCtx} from '../../../../utils/VocbenchCtx';
-import {VBEventHandler} from "../../../../utils/VBEventHandler";
-import { ResourceUtils } from "../../../../utils/ResourceUtils";
-import {ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../../../../models/ARTResources";
+import { Component, Output, EventEmitter } from "@angular/core";
+import { SkosServices } from "../../../../services/skosServices";
+import { SkosxlServices } from "../../../../services/skosxlServices";
+import { SearchServices } from "../../../../services/searchServices";
+import { ModalServices } from "../../../../widget/modal/modalServices";
+import { VocbenchCtx } from '../../../../utils/VocbenchCtx';
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 
 @Component({
-	selector: "scheme-list-panel",
-	templateUrl: "./schemeListPanelComponent.html",
+    selector: "scheme-list-panel",
+    templateUrl: "./schemeListPanelComponent.html",
 })
 export class SchemeListPanelComponent {
-    
+
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
 
-    private schemeList:ARTURIResource[];
-    private activeScheme:ARTURIResource;
-    private selectedScheme:ARTURIResource;
-    
+    private schemeList: ARTURIResource[];
+    private activeScheme: ARTURIResource;
+    private selectedScheme: ARTURIResource;
+
     private ONTO_TYPE: string;
-    
+
     private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx, private modalService: ModalServices) {
-        
+
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             (newLang: string) => this.onContentLangChanged(newLang)));
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(
             () => this.initList()));
     }
-    
+
     ngOnInit() {
         this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
         this.activeScheme = this.vbCtx.getScheme();
@@ -51,7 +50,7 @@ export class SchemeListPanelComponent {
             }
         );
     }
-    
+
     private createScheme() {
         this.modalService.newResource("Create new skos:ConceptScheme").then(
             (result: any) => {
@@ -69,10 +68,10 @@ export class SchemeListPanelComponent {
                     );
                 }
             },
-            () => {}
+            () => { }
         );
     }
-    
+
     private deleteScheme() {
         if (this.ONTO_TYPE == "SKOS") {
             this.skosService.deleteScheme(this.selectedScheme).subscribe(
@@ -86,11 +85,11 @@ export class SchemeListPanelComponent {
             );
         }
     }
-    
+
     private deleteNotEmptySchemeHandler() {
         var retainOpt = "Retain dangling concepts";
         var deleteOpt = "Delete dangling concepts";
-        this.modalService.select("Delete scheme", "The operation will produce dangling concepts" 
+        this.modalService.select("Delete scheme", "The operation will produce dangling concepts"
             + " because the scheme is not empty. What do you want to do?", [retainOpt, deleteOpt]).then(
             (selection: any) => {
                 var deleteDanglingConc = selection == deleteOpt;
@@ -104,10 +103,10 @@ export class SchemeListPanelComponent {
                     );
                 }
             },
-            () => {}
-        );
+            () => { }
+            );
     }
-    
+
     /**
      * Handles the scheme deletion
      */
@@ -126,7 +125,7 @@ export class SchemeListPanelComponent {
         this.selectedScheme = null;
         this.nodeSelected.emit(undefined);
     }
-    
+
     private activateScheme(scheme: ARTURIResource) {
         //if the scheme that is trying to activate it was already active, pass to no-scheme mode
         if (this.activeScheme != undefined && this.activeScheme.getURI() == scheme.getURI()) {
@@ -139,11 +138,11 @@ export class SchemeListPanelComponent {
             this.eventHandler.schemeChangedEvent.emit(this.activeScheme);
         }
     }
-    
+
     private isActive(scheme: ARTURIResource) {
         return (this.activeScheme && scheme.getURI() == this.activeScheme.getURI());
     }
-    
+
     /**
      * Called when a scheme is clicked. Set the clicked scheme as selected
      */
@@ -187,7 +186,7 @@ export class SchemeListPanelComponent {
                                 (selectedResource: any) => {
                                     this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
                                 },
-                                () => {}
+                                () => { }
                             );
                         }
                     }
@@ -195,13 +194,13 @@ export class SchemeListPanelComponent {
             );
         }
     }
-    
+
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */
     private searchKeyHandler(key: number, searchedText: string) {
         if (key == 13) {
-            this.doSearch(searchedText);           
+            this.doSearch(searchedText);
         }
     }
 
@@ -221,5 +220,5 @@ export class SchemeListPanelComponent {
     private refresh() {
         this.initList();
     }
-    
+
 }

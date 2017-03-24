@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTURIResource} from "../models/ARTResources";
-import {RDFFormat} from "../models/RDFFormat";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { ARTURIResource } from "../models/ARTResources";
+import { PrefixMapping } from "../models/PrefixMapping";
+import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
 export class MetadataServices {
@@ -11,7 +12,7 @@ export class MetadataServices {
     private serviceName = "Metadata";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) {}
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * Gets prefix mapping of the currently open project.
@@ -20,24 +21,25 @@ export class MetadataServices {
      * "namespace" the namespace uri
      * "prefix" the prefix
      */
-    getNamespaceMappings(): Observable<{prefix: string, namespace: string, explicit: boolean}[]> {
+    getNamespaceMappings(): Observable<PrefixMapping[]> {
         console.log("[MetadataServices] getNamespaceMappings");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params, this.oldTypeService, true).map(
             stResp => {
-                var mappings: {prefix: string, namespace: string, explicit: boolean}[] = [];
+                var mappings: PrefixMapping[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    var m: any = {};
-                    m.explicit = stResp[i].explicit;
-                    m.namespace = stResp[i].namespace;
-                    m.prefix = stResp[i].prefix;
+                    var m: PrefixMapping = {
+                        prefix: stResp[i].prefix,
+                        namespace: stResp[i].namespace,
+                        explicit: stResp[i].explicit
+                    };
                     mappings.push(m);
                 }
                 return mappings;
             }
         );
     }
-    
+
     /**
      * Adds a prefix namespace mapping
      * @param prefix
@@ -46,12 +48,12 @@ export class MetadataServices {
     setNSPrefixMapping(prefix: string, namespace: string) {
         console.log("[MetadataServices] setNSPrefixMapping");
         var params = {
-            prefix : prefix,
+            prefix: prefix,
             namespace: namespace
         };
         return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Removes a prefix namespace mapping
      * @param namespace
@@ -63,7 +65,7 @@ export class MetadataServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removeNSPrefixMapping", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Changes the prefix of a prefix namespace mapping
      * @param prefix
@@ -77,7 +79,7 @@ export class MetadataServices {
         };
         return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Get imported ontology.
      * Returns an array of imports, object with:
@@ -85,7 +87,7 @@ export class MetadataServices {
      * "@id": the uri of the ontology
      * "imports": array of recursive imports
      */
-    getImports(): Observable<{id: string, status: string, imports: any[]}[]> {
+    getImports(): Observable<{ id: string, status: string, imports: any[] }[]> {
         console.log("[MetadataServices] getImports");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params, this.oldTypeService, true).map(
@@ -100,7 +102,7 @@ export class MetadataServices {
         );
     }
 
-    private parseImport(importNode: any): {id: string, status: string, imports: any[]} {
+    private parseImport(importNode: any): { id: string, status: string, imports: any[] } {
         var id = importNode['@id'];
         var status = importNode.status;
         var imports: any[] = [];
@@ -109,9 +111,9 @@ export class MetadataServices {
                 imports.push(this.parseImport(importNode.imports[i]));
             }
         }
-        return {id: id, status: status, imports: imports};
+        return { id: id, status: status, imports: imports };
     }
-    
+
     /**
      * Removes an imported ontology
      * @param baseURI the baseURI that identifies the imported ontology
@@ -128,7 +130,7 @@ export class MetadataServices {
             }
         );
     }
-    
+
     /**
      * Adds ontology importing it from web. Every time the project is open, the ontology is reimported from web.
      * @param baseURI baseURI of the ontology to import (url of the rdf file works as well)
@@ -154,7 +156,7 @@ export class MetadataServices {
             }
         );
     }
-    
+
     /**
      * Adds ontology importing it from web and keep a copy of that in a mirror file.
      * @param baseURI baseURI of the ontology to import (url of the rdf file works as well)
@@ -182,35 +184,14 @@ export class MetadataServices {
             }
         );
     }
-    
-    // /**
-    //  * Adds ontology importing it from a local file and keep a copy of that in a mirror file.
-    //  * @param baseURI baseURI of the ontology to import
-    //  * @param localFile the file from the local filesystem to import
-    //  * @param mirrorFile the name of the mirror file
-    //  */
-    // addFromLocalFile(baseuri: string, localFile: File, mirrorFile: string) {
-    //     console.log("[MetadataServices] addFromLocalFile");
-    //     var data = {
-    //         baseuri: baseuri,
-    //         localFile: localFile,
-    //         mirrorFile: mirrorFile
-    //     };
-    //     return this.httpMgr.uploadFile("metadata", "addFromLocalFile", data, true).map(
-    //         stResp => {
-    //             this.eventHandler.refreshDataBroadcastEvent.emit();
-    //             return stResp;
-    //         }
-    //     );
-    // }
 
-     /**
-     * Adds ontology importing it from a local file and keep a copy of that in a mirror file.
-     * @param baseURI baseURI of the ontology to import
-     * @param localFile the file from the local filesystem to import
-     * @param mirrorFile the name of the mirror file
-     * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
-     */
+    /**
+    * Adds ontology importing it from a local file and keep a copy of that in a mirror file.
+    * @param baseURI baseURI of the ontology to import
+    * @param localFile the file from the local filesystem to import
+    * @param mirrorFile the name of the mirror file
+    * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
+    */
     addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: string) {
         console.log("[MetadataServices] addFromLocalFile");
         var data = {
@@ -226,7 +207,7 @@ export class MetadataServices {
             }
         );
     }
-    
+
     /**
      * Adds ontology importing it from a mirror file.
      * @param baseURI baseURI of the ontology to import
@@ -256,7 +237,7 @@ export class MetadataServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Sets default namespace
      * @param namespace
@@ -264,11 +245,11 @@ export class MetadataServices {
     setDefaultNamespace(namespace: string) {
         console.log("[MetadataServices] setDefaultNamespace");
         var params = {
-            namespace : namespace
+            namespace: namespace
         };
         return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Returns the baseURI of the currently open project
      */
@@ -288,5 +269,5 @@ export class MetadataServices {
         };
         return this.httpMgr.doGet(this.serviceName, "expandQName", params, this.oldTypeService, true);
     }
-    
+
 }

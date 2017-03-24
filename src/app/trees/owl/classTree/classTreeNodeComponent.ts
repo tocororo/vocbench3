@@ -1,8 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
-import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";

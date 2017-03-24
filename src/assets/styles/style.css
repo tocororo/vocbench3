@@ -411,8 +411,8 @@ sparql-component .CodeMirror { height: 35vh !important }
 	filter: alpha(opacity=90);
 }
 button.resViewPartitionBtn {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     float: right;
     font-size: 16.5px;
 	font-weight: bold;
@@ -469,6 +469,17 @@ button.resViewPartitionBtn:disabled  {
 .form-horizontal .form-group {
     margin-left: -4px;
     margin-right: -4px;
+}
+
+/* To apply to the arrow.png image (that points down) in order to change orientation*/
+.arrow-left {
+    transform: rotate(90deg);
+}
+.arrow-up {
+    transform: rotate(180deg);
+}
+.arrow-right {
+    transform: rotate(270deg);
 }
 
 /* ####################################

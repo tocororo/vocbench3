@@ -7,6 +7,7 @@ import { RefactorServices } from "../../../services/refactorServices";
 import { OntoManagerServices } from '../../../services/ontoManagerServices';
 import { VocbenchCtx } from "../../../utils/VocbenchCtx";
 import { UIUtils } from "../../../utils/UIUtils";
+import { PrefixMapping } from "../../../models/PrefixMapping";
 import { ModalServices } from "../../../widget/modal/modalServices";
 import { ReplaceBaseURIModal, ReplaceBaseURIModalData } from "./replaceBaseURIModal";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
@@ -28,7 +29,7 @@ export class MetadataManagementComponent {
     private nsBaseURISubmitted: boolean = false; //tells if changes on namespace or baseURI have been submitted
 
     // namespace prefix section
-    private nsPrefMappingList: Array<any>;
+    private nsPrefMappingList: PrefixMapping[];
     private selectedMapping: any; //the currently selected mapping {namespace: string, prefix: string}
 
     // Imports params section
@@ -65,6 +66,7 @@ export class MetadataManagementComponent {
             ns => {
                 this.pristineNamespace = ns;
                 this.namespace = ns;
+                this.vbCtx.setDefaultNamespace(ns);
             }
         );
     }
@@ -83,6 +85,8 @@ export class MetadataManagementComponent {
         this.metadataService.getNamespaceMappings().subscribe(
             mappings => {
                 this.nsPrefMappingList = mappings;
+                this.selectedMapping = null;
+                this.vbCtx.setPrefixMappings(mappings);
             }
         );
     }
@@ -262,11 +266,7 @@ export class MetadataManagementComponent {
             (mapping: any) => {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
-                        this.metadataService.getNamespaceMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                            }
-                        )
+                        this.refreshNSPrefixMappings();
                     }
                 )
             },
@@ -280,12 +280,7 @@ export class MetadataManagementComponent {
     private removeMapping() {
         this.metadataService.removeNSPrefixMapping(this.selectedMapping.namespace).subscribe(
             stResp => {
-                this.metadataService.getNamespaceMappings().subscribe(
-                    mappings => {
-                        this.nsPrefMappingList = mappings;
-                        this.selectedMapping = null;
-                    }
-                )
+                this.refreshNSPrefixMappings();
             }
         )
     }
@@ -298,11 +293,7 @@ export class MetadataManagementComponent {
             (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
-                        this.metadataService.getNamespaceMappings().subscribe(
-                            mappings => {
-                                this.nsPrefMappingList = mappings;
-                            }
-                        )
+                        this.refreshNSPrefixMappings();
                     }
                 );
             },

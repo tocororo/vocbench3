@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
-import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";

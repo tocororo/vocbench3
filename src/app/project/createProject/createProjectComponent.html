@@ -130,8 +130,8 @@
             <div class="subPanel">
                 <div class="subPanel-heading">
                     <div class="expandCollapseBtnContainer">
-                        <img *ngIf="!extPointPanelOpen" src="../../../assets/images/tree_expand.png" (click)="extPointPanelOpen = !extPointPanelOpen">
-                        <img *ngIf="extPointPanelOpen" src="../../../assets/images/tree_collapse.png" (click)="extPointPanelOpen = !extPointPanelOpen">
+                        <img src="../../../assets/images/arrow.png" (click)="extPointPanelOpen = !extPointPanelOpen"
+                            [ngClass]="{'arrow-right' : !extPointPanelOpen}">
                     </div>
                     <label style="flex: 1">Optional settings:</label>
                 </div>

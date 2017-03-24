@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBPreferences } from "../../utils/VBPreferences";
 
 @Component({
@@ -31,12 +31,12 @@ export class RdfResourceComponent {
 	}
 
 	private getImgSrc(): string {
-		return ResourceUtils.getImageSrc(this.resource);
+		return UIUtils.getImageSrc(this.resource);
 	}
 
 	private getUnknownFlagImgSrc(): string {
 		//pass an invalid langTag so the method returns the empty flag image source
-		return ResourceUtils.getFlagImgSrc("unknown");
+		return UIUtils.getFlagImgSrc("unknown");
 	}
 
 	/**

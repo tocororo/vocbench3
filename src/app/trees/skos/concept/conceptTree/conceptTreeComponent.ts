@@ -1,8 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
-import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";

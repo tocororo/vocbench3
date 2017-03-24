@@ -3,7 +3,6 @@ import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../models/CustomForms";
-import { ResourceUtils } from "../../utils/ResourceUtils";
 
 import { PropertyServices } from "../../services/propertyServices";
 import { SkosxlServices } from "../../services/skosxlServices";

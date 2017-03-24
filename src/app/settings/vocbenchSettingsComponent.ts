@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { UIUtils } from "../utils/UIUtils";
 import { Cookie } from "../utils/Cookie";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBPreferences } from "../utils/VBPreferences";
@@ -146,13 +146,12 @@ export class VocbenchSettingsComponent {
     }
 
     private getFlagImgSrc(langTag: string): string {
-        return ResourceUtils.getFlagImgSrc(langTag);
+        return UIUtils.getFlagImgSrc(langTag);
     }
 
     //show flags handlers
 
     private onShowFlagChange() {
-        console.log("update show flags to ", this.showFlags);
         this.preferences.setShowFlags(this.showFlags);
     }
 

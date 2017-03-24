@@ -15,7 +15,7 @@ export class VBPreferences {
     initUserProjectPreferences() {
         this.prefService.getProjectPreferences().subscribe(
             prefs => {
-                this.showFlags = prefs.showFlags;
+                this.showFlags = prefs.show_flags;
                 this.languages = prefs.languages;
             }
         )

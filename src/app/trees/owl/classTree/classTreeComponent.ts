@@ -1,8 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { ClassesServices } from "../../../services/classesServices";
 import { OwlServices } from "../../../services/owlServices";

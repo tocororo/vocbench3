@@ -1,3 +1,5 @@
+import { PrefixMapping } from "./PrefixMapping";
+
 export interface ARTNode {
     isResource(): boolean;
     isURIResource(): boolean;
@@ -9,6 +11,7 @@ export interface ARTNode {
     setAdditionalProperty(propName: string, propValue: any): void;
     deleteAdditionalProperty(propName: string): void;
     getAdditionalProperty(propName: string): any;
+    clone(): ARTNode;
 }
 
 export interface ARTResource extends ARTNode {
@@ -18,18 +21,24 @@ export interface ARTResource extends ARTNode {
 export class ARTURIResource implements ARTResource {
     private uri: string;
     private show: string;
-    private role: RDFResourceRolesEnum;
+    private role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
 
-    constructor(uri: string, show: string, role: RDFResourceRolesEnum) {
+    constructor(uri: string, show?: string, role?: RDFResourceRolesEnum) {
         this.uri = uri;
         this.show = show;
-        this.role = role;
+        if (role != null) { this.role = role; }
     }
 
+    setURI(uri: string) {
+        this.uri = uri;
+    }
     getURI(): string {
         return this.uri;
     }
 
+    setRole(role: RDFResourceRolesEnum) {
+        this.role = role;
+    }
     getRole(): RDFResourceRolesEnum {
         return this.role;
     }
@@ -66,8 +75,15 @@ export class ARTURIResource implements ARTResource {
         }
     }
 
+    setShow(show: string) {
+        this.show = show;
+    }
     getShow(): string {
-        return this.show;
+        if (this.show != null) {
+            return this.show;
+        } else {
+            return this.getNominalValue();
+        }
     }
 
     getNominalValue(): string {
@@ -90,23 +106,38 @@ export class ARTURIResource implements ARTResource {
         return this[propName];
     }
 
+    clone(): ARTURIResource {
+        let cloneRes = new ARTURIResource(this.uri, this.show, this.role);
+        let props: string[] = Object.getOwnPropertyNames(this);
+        for (var i = 0; i < props.length; i++) {
+            cloneRes[props[i]] = this[props[i]];
+        }
+        return cloneRes;
+    }
+
 }
 
 export class ARTBNode implements ARTResource {
     private id: string;
     private show: string;
-    private role: RDFResourceRolesEnum;
+    private role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
 
-    constructor(id: string, show: string, role: RDFResourceRolesEnum) {
+    constructor(id: string, show?: string, role?: RDFResourceRolesEnum) {
         this.id = id;
         this.show = show;
-        this.role = role;
+        if (role != null) { this.role = role; }
     }
 
+    setId(id: string) {
+        this.id = id;
+    }
     getId(): string {
         return this.id;
     }
 
+    setRole(role: RDFResourceRolesEnum) {
+        this.role = role;
+    }
     getRole(): RDFResourceRolesEnum {
         return this.role;
     }
@@ -127,8 +158,15 @@ export class ARTBNode implements ARTResource {
         return true;
     };
 
+    setShow(show: string) {
+        this.show = show;
+    }
     getShow(): string {
-        return this.show;
+        if (this.show != null) {
+            return this.show;
+        } else {
+            return this.getNominalValue();
+        }
     }
 
     getNominalValue(): string {
@@ -151,6 +189,15 @@ export class ARTBNode implements ARTResource {
         return this[propName];
     }
 
+    clone(): ARTBNode {
+        let cloneRes = new ARTBNode(this.id, this.show, this.role);
+        let props: string[] = Object.getOwnPropertyNames(this);
+        for (var i = 0; i < props.length; i++) {
+            cloneRes[props[i]] = this[props[i]];
+        }
+        return cloneRes;
+    }
+
 }
 
 export class ARTLiteral implements ARTNode {
@@ -158,10 +205,15 @@ export class ARTLiteral implements ARTNode {
     private datatype: string;
     private lang: string;
 
-    constructor(value: string) {
+    constructor(value: string, datatype?: string, lang?: string) {
         this.value = value;
+        this.datatype = datatype;
+        this.lang = lang;
     }
 
+    setValue(value: string) {
+        this.value = value;
+    }
     getValue(): string {
         return this.value;
     };
@@ -230,6 +282,15 @@ export class ARTLiteral implements ARTNode {
 
     getAdditionalProperty(propName: string): any {
         return this[propName];
+    }
+
+    clone(): ARTLiteral {
+        let cloneRes = new ARTLiteral(this.value);
+        let props: string[] = Object.getOwnPropertyNames(this);
+        for (var i = 0; i < props.length; i++) {
+            cloneRes[props[i]] = this[props[i]];
+        }
+        return cloneRes;
     }
 
 }
@@ -333,4 +394,154 @@ export const RDFTypesEnum = {
     typedLiteral: "typedLiteral" as RDFTypesEnum,
     undetermined: "undetermined" as RDFTypesEnum,
     uri: "uri" as RDFTypesEnum
+}
+
+
+
+export class ResourceUtils {
+
+    /**
+     * Sort an Array of ARTURIResource by the given attribute.
+     * @param list 
+     * @param attribute
+     */
+    static sortURIResources(list: ARTURIResource[], attribute: "uri" | "show") {
+        //sort by show
+        if (attribute == "show") {
+            list.sort(
+                function (c1: ARTURIResource, c2: ARTURIResource) {
+                    if (c1.getShow() > c2.getShow()) return 1;
+                    if (c1.getShow() < c2.getShow()) return -1;
+                    return 0;
+                }
+            );
+        }
+        if (attribute == "uri") {
+            list.sort(
+                function (c1: ARTURIResource, c2: ARTURIResource) {
+                    if (c1.getURI() > c2.getURI()) return 1;
+                    if (c1.getURI() < c2.getURI()) return -1;
+                    return 0;
+                }
+            );
+        }
+    }
+
+    static parseURI(nTriplesURI: string): ARTURIResource {
+        if (nTriplesURI.startsWith("<") && nTriplesURI.endsWith(">")) {
+			let uri: string = nTriplesURI.substring(1, nTriplesURI.length - 1);
+			uri = decodeURI(uri);
+            return new ARTURIResource(uri);
+		}
+		else {
+            throw new Error("Not a legal N-Triples URI: " + nTriplesURI);
+		}
+    }
+
+    /**
+     * Given an NT serialization of a literal, creates and returns an ARTLiteral object
+     * Code inspired by org.eclipse.rdf4j.rio.ntriples.NTripleUtils#parseLiteral()
+     * @param nTriplesLiteral
+     */
+    static parseLiteral(nTriplesLiteral: string): ARTLiteral {
+        if (nTriplesLiteral.startsWith("\"")) {
+			// Find string separation points
+			let endLabelIdx: number = this.findEndOfLabel(nTriplesLiteral);
+
+			if (endLabelIdx != -1) {
+				let startLangIdx: number = nTriplesLiteral.indexOf("@", endLabelIdx);
+				let startDtIdx: number = nTriplesLiteral.indexOf("^^", endLabelIdx);
+
+				if (startLangIdx != -1 && startDtIdx != -1) {
+                    throw new Error("Literals can not have both a language and a datatype");
+				}
+
+				// Get label
+				let label: string = nTriplesLiteral.substring(1, endLabelIdx);
+                label = label.replace(/\\"/g, '"');
+
+				if (startLangIdx != -1) {
+					// Get language
+					let language: string = nTriplesLiteral.substring(startLangIdx + 1);
+					return new ARTLiteral(label, null, language);
+				}
+				else if (startDtIdx != -1) {
+					// Get datatype
+					let datatype: string = nTriplesLiteral.substring(startDtIdx + 2);
+                    let dtURI: ARTURIResource = this.parseURI(datatype);
+                    return new ARTLiteral(label, datatype);
+				}
+				else {
+					return new ARTLiteral(label);
+				}
+			}
+		}
+        throw new Error("Not a legal N-Triples literal: " + nTriplesLiteral);
+    }
+
+    /**
+	 * Finds the end of the label in a literal string. This method takes into account that characters can be
+	 * escaped using backslashes.
+     * Code inspired by org.eclipse.rdf4j.rio.ntriples.NTripleUtils#parseLiteral()
+     * 
+	 * @return The index of the double quote ending the label, or <tt>-1</tt> if it could not be found.
+	 */
+	private static findEndOfLabel(nTriplesLiteral: string): number {
+		// First character of literal is guaranteed to be a double
+		// quote, start search at second character.
+		let previousWasBackslash: boolean = false;
+		for (var i = 1; i < nTriplesLiteral.length; i++) {
+			let c: string = nTriplesLiteral.charAt(i);
+			if (c == '"' && !previousWasBackslash) {
+				return i;
+			}
+			else if (c == '\\' && !previousWasBackslash) { 
+				previousWasBackslash = true; // start of escape
+			}
+			else if (previousWasBackslash) { 
+				previousWasBackslash = false; // c was escaped
+			}
+		}
+		return -1;
+	}
+
+    static parseBNode(nTriplesBNode: string): ARTBNode {
+        if (nTriplesBNode.startsWith("_:")) {
+			return new ARTBNode(nTriplesBNode);
+		} else {
+			 throw new Error("Not a legal N-Triples Blank Node: " + nTriplesBNode);
+		}
+    }
+
+    static isQName(nTripleQName: string, prefixMapping: PrefixMapping[]): boolean {
+        console.log("prefMap", prefixMapping);
+        let colonIdx: number = nTripleQName.indexOf(":");
+        if (colonIdx != -1) {
+            let prefix: string = nTripleQName.substring(0, colonIdx);
+            for (var i = 0; i < prefixMapping.length; i++) {
+                if (prefixMapping[i].prefix == prefix) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    static parseQName(nTripleQName: string, prefixMapping: PrefixMapping[]): ARTURIResource {
+        let colonIdx: number = nTripleQName.indexOf(":");
+        if (colonIdx != -1) {
+            let prefix: string = nTripleQName.substring(0, colonIdx);
+            let localName: string = nTripleQName.substring(colonIdx+1);
+            //resolve prefix
+            let namespace: string;
+            for (var i = 0; i < prefixMapping.length; i++) {
+                if (prefixMapping[i].prefix == prefix) {
+                    return new ARTURIResource(prefixMapping[i].namespace + localName);
+                }
+            }
+        } else {
+            throw new Error("Not a legal N-Triples QName: " + nTripleQName);
+        }
+    }
+
 }
