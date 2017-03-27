@@ -1,7 +1,7 @@
 import {Component, ViewContainerRef} from "@angular/core";
 import {Overlay} from "angular2-modal";
 
-import {VocbenchCtx} from "./utils/VocbenchCtx";
+import {VBContext} from "./utils/VBContext";
 
 import '../assets/styles/style.css';
 
@@ -12,7 +12,7 @@ import '../assets/styles/style.css';
 
 export class AppComponent {
     
-    constructor(private vbCtx: VocbenchCtx, viewContainer: ViewContainerRef, overlay: Overlay) {
+    constructor(viewContainer: ViewContainerRef, overlay: Overlay) {
         /* A Default view container ref, usually the app root container ref.
          * Has to be set manually until we can find a way to get it automatically. */
         overlay.defaultViewContainer = viewContainer;
@@ -23,14 +23,14 @@ export class AppComponent {
      * Useful to show/hide menubar link
      */
     private isUserLogged(): boolean {
-        return this.vbCtx.isLoggedIn();
+        return VBContext.isLoggedIn();
     }
 
     /**
      * returns true if a project is open. Useful to show/hide menubar links
      */ 
     private isProjectOpen(): boolean {
-        return this.vbCtx.getWorkingProject() != undefined;
+        return VBContext.getWorkingProject() != undefined;
     }
     
 }

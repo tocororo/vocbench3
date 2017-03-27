@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
+import {VBContext} from "../utils/VBContext";
 
 @Component({
     selector: "icv-list",
@@ -77,10 +77,10 @@ export class IcvListComponent {
         ]
     };
     
-    constructor(private vbCtx: VocbenchCtx, private router: Router) {}
+    constructor(private router: Router) {}
 
     ngOnInit() {
-        this.ontotype = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ontotype = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
 
     /**

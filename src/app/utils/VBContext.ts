@@ -1,106 +1,118 @@
-import { Injectable } from '@angular/core';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Project } from '../models/Project';
 import { PrefixMapping } from '../models/PrefixMapping';
 import { User } from '../models/User';
 import { Cookie } from "./Cookie";
 
-@Injectable()
-export class VocbenchCtx {
-
-    private workingProject: Project; //working project
-    private defaultNamespace: string; //namespace of the current working project
+class ProjectContext {
+    private project: Project;
+    private defaultNamespace: string;
     private prefixMappings: PrefixMapping[];
-   
-    private ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
-    private sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
-    private loggedUser: User;
 
-    constructor() { }
+    setProject(project: Project) { this.project = project; }
+    getProject(): Project { return this.project; }
+
+    setDefaultNamespace(namespace: string) { this.defaultNamespace = namespace; }
+    getDefaultNamespace(): string { return this.defaultNamespace; }
+
+    setPrefixMappings(mappings: PrefixMapping[]) { this.prefixMappings = mappings; }
+    getPrefixMappings(): PrefixMapping[] { return this.prefixMappings; }
+
+    reset() {
+        this.project = null;
+        this.defaultNamespace = null;
+        this.prefixMappings = null;
+    }
+}
+
+export class VBContext {
+
+    private static workingProjectCtx: ProjectContext = new ProjectContext();
+    private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
+    private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
+    private static loggedUser: User;
 
     /**
      * Sets the working project (the one set as ctx_project requests parameter)
      */
-    setWorkingProject(project: Project) {
-        this.workingProject = project;
+    static setWorkingProject(project: Project) {
+        this.workingProjectCtx.setProject(project);
     }
     /**
      * Gets the working project (the one set as ctx_project requests parameter)
      */
-    getWorkingProject(): Project {
-        return this.workingProject;
+    static getWorkingProject(): Project {
+        return this.workingProjectCtx.getProject()
     }
     /**
      * Removes the working project (the one set as ctx_project requests parameter)
      */
-    removeWorkingProject() {
-        this.workingProject = null;
-        this.defaultNamespace = null;
-        this.prefixMappings = null;
+    static removeWorkingProject() {
+        this.workingProjectCtx.reset();
     }
 
     //there is no removeDefaultNamespace since it is remove with the working project (see removeWorkingProject)
-    setDefaultNamespace(ns: string) {
-        this.defaultNamespace = ns;
+    static setDefaultNamespace(ns: string) {
+        this.workingProjectCtx.setDefaultNamespace(ns);
     }
-    getDefaultNamespace(): string {
-        return this.defaultNamespace;
+    static getDefaultNamespace(): string {
+        return this.workingProjectCtx.getDefaultNamespace();
     }
 
-    setPrefixMappings(prefixMappings: PrefixMapping[]) {
-        this.prefixMappings = prefixMappings;
+    static setPrefixMappings(prefixMappings: PrefixMapping[]) {
+        this.workingProjectCtx.setPrefixMappings(prefixMappings);
     }
-    getPrefixMappings(): PrefixMapping[] {
-        return this.prefixMappings;
+    static getPrefixMappings(): PrefixMapping[] {
+        return this.workingProjectCtx.getPrefixMappings();
     }
 
     /**
      * Sets a contextual project (project temporarly used in some scenarios)
      */
-    setContextProject(project: Project) {
+    static setContextProject(project: Project) {
         this.ctxProject = project;
     }
     /**
      * Gets a contextual project (project temporarly used in some scenarios)
      */
-    getContextProject(): Project {
+    static getContextProject(): Project {
         return this.ctxProject;
     }
 
     /**
      * Removes a contextual project (project temporarly used in some scenarios)
      */
-    removeContextProject() {
+    static removeContextProject() {
         this.ctxProject = undefined;
     }
 
-    setLoggedUser(user: User) {
+    static setLoggedUser(user: User) {
         this.loggedUser = user;
     }
-    getLoggedUser(): User {
+    static getLoggedUser(): User {
         return this.loggedUser;
     }
-    removeLoggedUser() {
+    static removeLoggedUser() {
         this.loggedUser = undefined;
     }
     /**
      * Returns true if a user is logged in
      */
-    isLoggedIn(): boolean {
+    static isLoggedIn(): boolean {
         return this.loggedUser != undefined;
     }
 
     /**
      * Saves the given scheme for the project in use as cookie
      */
-    setScheme(scheme: ARTURIResource) {
+    static setScheme(scheme: ARTURIResource) {
         Cookie.setCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName(), scheme.getURI(), 365 * 10);
     }
     /**
      * Returns the scheme saved for the project in use as cookie.
      * Note: returns an ARTURIResource with show null
      */
-    getScheme(): ARTURIResource {
+    static getScheme(): ARTURIResource {
         var schemeCookie = Cookie.getCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName());
         if (schemeCookie != null) {
             return new ARTURIResource(schemeCookie, null, RDFResourceRolesEnum.conceptScheme);
@@ -111,59 +123,46 @@ export class VocbenchCtx {
     /**
      * Removes the scheme saved for the given project
      */
-    removeScheme(project: Project) {
+    static removeScheme(project: Project) {
         Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
     }
 
     /**
      * Sets a sessione token (to keep track of session in some tools/scenarios)
      */
-    setSessionToken(token: string) {
+    static setSessionToken(token: string) {
         this.sessionToken = token
     }
     /**
      * Gets a sessione token (to keep track of session in some tools/scenarios)
      */
-    getSessionToken(): string {
+    static getSessionToken(): string {
         return this.sessionToken;
     }
     /**
      * Removes a sessione token (to keep track of session in some tools/scenarios)
      */
-    removeSessionToken() {
+    static removeSessionToken() {
         this.sessionToken = undefined;
-    }
-
-    /**
-     * Sets the preference to show or hide the inferred information in resource view
-     */
-    setInferenceInResourceView(showInferred: boolean) {
-        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365 * 10);
-    }
-    /**
-     * Gets the preference to show or hide the inferred information in resource view
-     */
-    getInferenceInResourceView() {
-        return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
     }
 
     /**
      * Removes the settings saved as cookie for the given project
      */
-    removeProjectSetting(project: Project) {
+    static removeProjectSetting(project: Project) {
         Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
     }
 
     /**
      * Reset to null all the variable of the context
      */
-    resetContext() {
-        this.workingProject = null;
-        this.defaultNamespace = null;
-        this.prefixMappings = null;
+    static resetContext() {
+        this.workingProjectCtx.reset();
         this.ctxProject = null;
         this.sessionToken = null;
         this.loggedUser = null;
     }
 
 }
+
+

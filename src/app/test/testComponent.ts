@@ -1,19 +1,19 @@
-import {Component, ViewChild} from "@angular/core";
-import {ModalServices, ModalType} from "../widget/modal/modalServices";
-import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
+import { Component, ViewChild } from "@angular/core";
+import { ModalServices, ModalType } from "../widget/modal/modalServices";
+import { BrowsingServices } from "../widget/modal/browsingModal/browsingServices";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "test-component",
     templateUrl: "./testComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class TestComponent {
-    
+
     private typeList = ["info", "error", "warning"];
-    
-    constructor(public modalService: ModalServices, private browsingService: BrowsingServices, private vbCtx: VocbenchCtx) {}
-    
+
+    constructor(public modalService: ModalServices, private browsingService: BrowsingServices) { }
+
     private confirmResult: string;
     private confirmTitle = "Confirm title";
     private confirmMessage = "Confirm message";
@@ -42,7 +42,7 @@ export class TestComponent {
             () => this.confirmCheckResult = "No"
         );
     }
-    
+
     private promptResult: any;
     private promptTitle: string = "Prompt title";
     private promptLabel: string = "Field label";
@@ -55,14 +55,14 @@ export class TestComponent {
             () => this.promptResult = null
         );
     }
-    
+
     private alertTitle: string = "Alert title";
     private alertMessage: string = "Alert message";
     private alertType: ModalType = "info";
     alert() {
         this.modalService.alert(this.alertTitle, this.alertMessage, this.alertType);
     }
-    
+
     private selectionResult: any;
     private selectionTitle: string = "Selection title";
     private selectionMessage: string = "Selection message";
@@ -74,7 +74,7 @@ export class TestComponent {
             () => this.selectionResult = null
         );
     }
-    
+
     private newResourceResult: any;
     private newResourceTitle = "NewResource title";
     newResource() {
@@ -85,7 +85,7 @@ export class TestComponent {
             () => this.newResourceResult = null
         );
     }
-    
+
     private newLiteralLangResult: any;
     private newLiteralLangTitle: string = "NewLiteralLang title";
     private newLiteralLangValue: string = "input"
@@ -100,7 +100,7 @@ export class TestComponent {
             () => this.newLiteralLangResult = null
         );
     }
-    
+
     private newTypedLiteralResult: any;
     private newTypedLiteralTitle: string = "NewTypedLiteral title";
     newTypedLiteral() {
@@ -112,7 +112,7 @@ export class TestComponent {
         );
     }
 
-    private filePickerResult : File;
+    private filePickerResult: File;
     private filePickerTitle: string = "Select a file";
     private filePickerAccept: string = "application/rdf+xml";
     private filePickerMessage: string = "Select a file from your filesystem";
@@ -121,13 +121,13 @@ export class TestComponent {
     selectFile() {
         this.modalService.selectFile(this.filePickerTitle, this.filePickerMessage, this.filePickerLabel,
             this.filePickerPlaceholder, this.filePickerAccept).then(
-            result => {
+            (result: any) => {
                 this.filePickerResult = result;
             },
             () => this.filePickerResult = null
-        );
+            );
     }
-    
+
     private browseClassTreeResult: any;
     browseClassTree() {
         this.browsingService.browseClassTree("Select a class").then(
@@ -137,7 +137,7 @@ export class TestComponent {
             () => this.browseClassTreeResult = null
         )
     }
-    
+
     private browseInstanceListResult: any;
     browseInstanceList() {
         this.browsingService.browseInstanceList("Select an instance", this.browseClassTreeResult).then(
@@ -147,7 +147,7 @@ export class TestComponent {
             () => this.browseInstanceListResult = null
         )
     }
-    
+
     private browseSchemeListResult: any;
     browseSchemeList() {
         this.browsingService.browseSchemeList("Select a scheme").then(
@@ -157,7 +157,7 @@ export class TestComponent {
             () => this.browseSchemeListResult = null
         )
     }
-    
+
     private browseConceptTreeResult: any;
     browseConceptTree() {
         this.browsingService.browseConceptTree("Select a concept", this.browseSchemeListResult).then(
@@ -167,7 +167,7 @@ export class TestComponent {
             () => this.browseConceptTreeResult = null
         )
     }
-    
+
     private browsePropertyTreeResult: any;
     browsePropertyTree() {
         this.browsingService.browsePropertyTree("Select a property").then(
@@ -177,5 +177,5 @@ export class TestComponent {
             () => this.browsePropertyTreeResult = null
         )
     }
-    
+
 }

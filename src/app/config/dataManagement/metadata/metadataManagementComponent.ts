@@ -5,7 +5,7 @@ import { OverlayConfig } from 'angular2-modal';
 import { MetadataServices } from "../../../services/metadataServices";
 import { RefactorServices } from "../../../services/refactorServices";
 import { OntoManagerServices } from '../../../services/ontoManagerServices';
-import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
 import { PrefixMapping } from "../../../models/PrefixMapping";
 import { ModalServices } from "../../../widget/modal/modalServices";
@@ -39,7 +39,7 @@ export class MetadataManagementComponent {
     private mirrorList: Array<any>; //array of {file: string, namespace: string}
 
     constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
-        private refactorService: RefactorServices, private vbCtx: VocbenchCtx, private modalService: ModalServices,
+        private refactorService: RefactorServices, private modalService: ModalServices,
         private modal: Modal) { }
 
     ngOnInit() {
@@ -66,7 +66,7 @@ export class MetadataManagementComponent {
             ns => {
                 this.pristineNamespace = ns;
                 this.namespace = ns;
-                this.vbCtx.setDefaultNamespace(ns);
+                VBContext.setDefaultNamespace(ns);
             }
         );
     }
@@ -86,7 +86,7 @@ export class MetadataManagementComponent {
             mappings => {
                 this.nsPrefMappingList = mappings;
                 this.selectedMapping = null;
-                this.vbCtx.setPrefixMappings(mappings);
+                VBContext.setPrefixMappings(mappings);
             }
         );
     }
@@ -176,7 +176,7 @@ export class MetadataManagementComponent {
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
-                                        this.vbCtx.removeScheme(this.vbCtx.getWorkingProject());
+                                        VBContext.removeScheme(VBContext.getWorkingProject());
                                     }
                                 )
                             }

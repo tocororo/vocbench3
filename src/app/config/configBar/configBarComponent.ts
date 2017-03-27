@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { Project, ProjectTypesEnum } from "../../models/Project";
 import { InputOutputServices } from "../../services/inputOutputServices";
@@ -17,22 +17,21 @@ export class ConfigBarComponent {
     private currentProject: Project;
 
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices,
-        private refactorService: RefactorServices, private vbCtx: VocbenchCtx,
-        private modalService: ModalServices, private router: Router) { }
+        private refactorService: RefactorServices, private modalService: ModalServices, private router: Router) { }
 
     /**
      * returns true if a project is open. Useful to enable/disable navbar links
      */
     private isProjectOpen(): boolean {
-        this.currentProject = this.vbCtx.getWorkingProject();
-        return this.vbCtx.getWorkingProject() != undefined;
+        this.currentProject = VBContext.getWorkingProject();
+        return VBContext.getWorkingProject() != undefined;
     }
 
     /**
      * Returns true if the user is logged (an authentication token is stored).
      */
     private isUserLogged(): boolean {
-        return this.vbCtx.isLoggedIn();
+        return VBContext.isLoggedIn();
     }
 
     private clearData() {
@@ -45,11 +44,11 @@ export class ConfigBarComponent {
                     stResp => {
                         this.modalService.alert("Clear data", "All data cleared successfully!");
                         //if project is not-persistent save it before closing
-                        if (this.vbCtx.getWorkingProject().getType() == ProjectTypesEnum.saveToStore) {
-                            this.projectService.saveProject(this.vbCtx.getWorkingProject()).subscribe(
+                        if (VBContext.getWorkingProject().getType() == ProjectTypesEnum.saveToStore) {
+                            this.projectService.saveProject(VBContext.getWorkingProject()).subscribe(
                                 stResp => {
                                     //then close project
-                                    this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
+                                    this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
                                         stResp => {
                                             UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                                             //then redirect to home page
@@ -62,7 +61,7 @@ export class ConfigBarComponent {
                             )
                         } else {
                             //project is presistent, it doesn't need to be saved, just close the project
-                            this.projectService.disconnectFromProject(this.vbCtx.getWorkingProject()).subscribe(
+                            this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
                                 stResp => {
                                     UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                                     //then redirect to home page

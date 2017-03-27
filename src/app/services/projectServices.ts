@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { VBContext } from '../utils/VBContext';
 import { Project, AccessLevel, LockLevel, RepositoryAccess } from '../models/Project';
 import { PluginSpecification } from '../models/Plugins';
 
@@ -11,7 +11,7 @@ export class ProjectServices {
     private serviceName = "Projects";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private vbCtx: VocbenchCtx) { }
+    constructor(private httpMgr: HttpManager) { }
 
     /**
      * Gets the current available projects in ST
@@ -62,8 +62,8 @@ export class ProjectServices {
         //if the closing project is the working, remove it from context
         //this could be a temporary warkaround to avoid the problem described here https://art-uniroma2.atlassian.net/browse/ST-289
         //but is not a "perfect" solution, since it remove the working project from the ctx before it is effectively closed
-        if (this.vbCtx.getWorkingProject() != undefined && this.vbCtx.getWorkingProject().getName() == project.getName()) {
-            this.vbCtx.removeWorkingProject();
+        if (VBContext.getWorkingProject() != undefined && VBContext.getWorkingProject().getName() == project.getName()) {
+            VBContext.removeWorkingProject();
         }
 
         var params = {

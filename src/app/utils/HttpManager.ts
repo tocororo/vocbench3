@@ -5,7 +5,7 @@ import 'rxjs/Rx'; //for map function
 import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
-import { VocbenchCtx } from './VocbenchCtx';
+import { VBContext } from './VBContext';
 import { ModalServices } from "../widget/modal/modalServices";
 
 @Injectable()
@@ -22,7 +22,7 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private vbCtx: VocbenchCtx, private router: Router, private modalService: ModalServices) {
+    constructor(private http: Http, private router: Router, private modalService: ModalServices) {
         require('file?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
         let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
         let st_port: string = window['st_port'];
@@ -346,14 +346,14 @@ export class HttpManager {
         var params: string = "";
 
         //if a (temp) context project is set, use it
-        if (this.vbCtx.getContextProject() != undefined) {
-            params += "ctx_project=" + encodeURIComponent(this.vbCtx.getContextProject().getName()) + "&";
-        } else if (this.vbCtx.getWorkingProject() != undefined) { //use the working project otherwise
-            params += "ctx_project=" + encodeURIComponent(this.vbCtx.getWorkingProject().getName()) + "&";
+        if (VBContext.getContextProject() != undefined) {
+            params += "ctx_project=" + encodeURIComponent(VBContext.getContextProject().getName()) + "&";
+        } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
+            params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
 
-        if (this.vbCtx.getSessionToken() != undefined) {
-            params += "ctx_token=" + encodeURIComponent(this.vbCtx.getSessionToken()) + "&";
+        if (VBContext.getSessionToken() != undefined) {
+            params += "ctx_token=" + encodeURIComponent(VBContext.getSessionToken()) + "&";
         }
         return params;
     }
@@ -409,7 +409,7 @@ export class HttpManager {
                 result => {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
-                        this.vbCtx.resetContext();
+                        VBContext.resetContext();
                         this.router.navigate(['/Home']);
                     }
                 }

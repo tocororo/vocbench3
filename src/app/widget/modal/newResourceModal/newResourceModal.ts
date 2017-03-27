@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {VocbenchCtx} from "../../../utils/VocbenchCtx"
+import {VBContext} from "../../../utils/VBContext"
 
 export class NewResourceModalData extends BSModalContext {
     constructor(
@@ -26,7 +26,7 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     private namespace: string = "";
     private localName: string;
 
-    constructor(public dialog: DialogRef<NewResourceModalData>, private vbCtx: VocbenchCtx) {
+    constructor(public dialog: DialogRef<NewResourceModalData>) {
         this.context = dialog.context;
     }
     
@@ -34,7 +34,7 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
         this.lang = this.context.lang;
         document.getElementById("toFocus").focus();
 
-        this.namespace = this.vbCtx.getDefaultNamespace();
+        this.namespace = VBContext.getDefaultNamespace();
     }
     
     private onKeydown(event: KeyboardEvent) {

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges } from "@angular/core";
 import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { VBContext } from "../../../../utils/VBContext";
 import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
@@ -16,7 +16,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private vbCtx: VocbenchCtx, eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             (deletedConcept: ARTURIResource) => this.onConceptDeleted(deletedConcept)));
@@ -120,7 +120,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
          * the following code is commented since the show of a resource is computed by the server according to the languages preference
          * and there is no way update the show after a pref label is set
          */
-        // if (this.rendering && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
+        // if (this.rendering && VBContext.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
         //     this.node['show'] = label;
         // }
     }
@@ -130,8 +130,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
          * the following code is commented since the getShow() service, that is used to update the show of the concept,
          * gets as parameter just one language instead of an array of lang representing all the language that are used currently
          */
-        // if (this.rendering && this.vbCtx.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
-        //     this.skosService.getShow(resource, this.vbCtx.getContentLanguage()).subscribe(
+        // if (this.rendering && VBContext.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
+        //     this.skosService.getShow(resource, VBContext.getContentLanguage()).subscribe(
         //         show => {
         //             this.node['show'] = show;
         //         }

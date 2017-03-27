@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
-import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { VBContext } from '../utils/VBContext';
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/PrefixMapping';
 import { MetadataServices } from '../services/metadataServices';
@@ -35,7 +35,7 @@ export class YasguiComponent {
 
     private yasqe: any;
 
-    constructor(private vbCtx: VocbenchCtx, private metadataService: MetadataServices, private searchService: SearchServices) { }
+    constructor(private metadataService: MetadataServices, private searchService: SearchServices) { }
 
     ngAfterViewInit() {
         YASQE.defaults.indentUnit = 4;
@@ -46,7 +46,7 @@ export class YasguiComponent {
         if (YASQE.defaults.autocompleters.indexOf(this.PREFIX_COMPLETER_NAME) == -1) {
             YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
                 (yasqe: any) => {
-                    return this.customPrefixCompleter(yasqe, this.vbCtx.getPrefixMappings(), this.fetchFromPrefixCheck);
+                    return this.customPrefixCompleter(yasqe, VBContext.getPrefixMappings(), this.fetchFromPrefixCheck);
                 }
             );
         }
@@ -168,7 +168,7 @@ export class YasguiComponent {
         this.yasqe.disableCompleter(this.PREFIX_COMPLETER_NAME);
         YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
             (yasqe: any) => {
-                return this.customPrefixCompleter(yasqe, this.vbCtx.getPrefixMappings(), checked);
+                return this.customPrefixCompleter(yasqe, VBContext.getPrefixMappings(), checked);
             }
         );
         // YASQE.defaults.autocompleters = ["customPrefixCompleter", "properties", "classes", "variables"];

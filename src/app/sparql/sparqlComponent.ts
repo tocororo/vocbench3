@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { SparqlServices } from "../services/sparqlServices";
 import { ModalServices } from '../widget/modal/modalServices';
 import { UIUtils } from "../utils/UIUtils";
-import { VocbenchCtx } from "../utils/VocbenchCtx";
+import { VBContext } from "../utils/VBContext";
 import { PrefixMapping } from "../models/PrefixMapping";
 
 @Component({
@@ -16,11 +16,11 @@ export class SparqlComponent {
     private tabs: Array<any> = [];
     private activeTab: any;
 
-    constructor(private sparqlService: SparqlServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+    constructor(private sparqlService: SparqlServices, private modalService: ModalServices) { }
 
     ngOnInit() {
         //collect the prefix namespace mappings
-        var mappings: PrefixMapping[] = this.vbCtx.getPrefixMappings();
+        var mappings: PrefixMapping[] = VBContext.getPrefixMappings();
         var prefixImports: string = "";
         for (var i = 0; i < mappings.length; i++) {
             prefixImports += "PREFIX " + mappings[i].prefix + ": <" + mappings[i].namespace + ">\n";

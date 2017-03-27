@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {Router} from '@angular/router';
 import {AuthServices} from "../services/authServices";
 import {ModalServices} from "../widget/modal/modalServices";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
+import {VBContext} from "../utils/VBContext";
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {User} from "../models/User";
 
@@ -15,11 +15,11 @@ export class UserMenuComponent {
 
     private currentUser: User;
     
-    constructor(private router: Router, private vbCtx: VocbenchCtx, private evtHandler: VBEventHandler,
+    constructor(private router: Router, private evtHandler: VBEventHandler,
         private authService: AuthServices, private modalService: ModalServices) {}
 
     ngOnInit() {
-        this.currentUser = this.vbCtx.getLoggedUser();
+        this.currentUser = VBContext.getLoggedUser();
     }
 
     /**
@@ -27,21 +27,21 @@ export class UserMenuComponent {
      * This is needed because the user in the context could have been changed from user profile page.
      */
     private onMenuOpen() {
-        this.currentUser = this.vbCtx.getLoggedUser();
+        this.currentUser = VBContext.getLoggedUser();
     }
 
     /**
      * returns true if a project is open. Useful to enable/disable navbar links
      */ 
     private isProjectOpen(): boolean {
-        return this.vbCtx.getWorkingProject() != undefined;
+        return VBContext.getWorkingProject() != undefined;
     }
 
     /**
      * Returns true if the user is logged (an authentication token is stored)
      */
     private isUserLogged(): boolean {
-        return this.vbCtx.isLoggedIn();
+        return VBContext.isLoggedIn();
     }
 
     /**

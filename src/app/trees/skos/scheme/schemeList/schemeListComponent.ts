@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
-import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
@@ -19,7 +18,7 @@ export class SchemeListComponent {
     private selectedScheme: ARTURIResource;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+        private modalService: ModalServices) { }
 
     ngOnInit() {
         this.skosService.getAllSchemes().subscribe( //new service

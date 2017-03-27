@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import {AuthServices} from "../services/authServices";
 import {UserServices} from "../services/userServices";
 import {ModalServices} from "../widget/modal/modalServices";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
+import {VBContext} from "../utils/VBContext";
 
 @Component({
     selector: "login",
@@ -16,13 +16,13 @@ export class LoginComponent {
     private password: string = "admin";
     
     constructor(private router: Router, private authService: AuthServices, private userService: UserServices,
-        private modalService: ModalServices, private vbCtx: VocbenchCtx) {}
+        private modalService: ModalServices) {}
 
     ngOnInit() {
         this.userService.getUser().subscribe(
             user => {
                 if (user) {
-                    this.vbCtx.setLoggedUser(user);
+                    VBContext.setLoggedUser(user);
                 }
             }
         )
@@ -38,7 +38,7 @@ export class LoginComponent {
         //here I should do an authentication request to server. In case of success, store the returned token and redirect to project
         this.authService.login(this.email, this.password, this.rememberMe).subscribe(
             res => {
-                if (this.vbCtx.isLoggedIn()) {
+                if (VBContext.isLoggedIn()) {
                     this.router.navigate(['/Projects']);
                 }
             }

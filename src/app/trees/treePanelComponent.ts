@@ -1,6 +1,6 @@
 import {Component, Output, EventEmitter} from "@angular/core";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../models/ARTResources";
-import {VocbenchCtx} from "../utils/VocbenchCtx";
+import {VBContext} from "../utils/VBContext";
 
 @Component({
     selector: "tree-panel",
@@ -22,10 +22,10 @@ export class TreePanelComponent {
     ];
     private activeTab: string;
     
-    constructor(private vbCtx: VocbenchCtx) {}
+    constructor() {}
 
     ngOnInit() {
-        this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
         if (this.ONTO_TYPE.includes("SKOS")) {
             this.activeTab = RDFResourceRolesEnum.concept;
         } else {

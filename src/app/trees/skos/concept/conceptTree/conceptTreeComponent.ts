@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
@@ -32,7 +31,7 @@ export class ConceptTreeComponent extends AbstractTree {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
-        private vbCtx: VocbenchCtx, eventHandler: VBEventHandler) {
+        eventHandler: VBEventHandler) {
 
         super(eventHandler);
         

@@ -3,7 +3,7 @@ import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
-import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -31,18 +31,18 @@ export class ConceptTreePanelComponent {
     private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private modalService: ModalServices, private eventHandler: VBEventHandler, private vbCtx: VocbenchCtx, private preferences: VBPreferences) {
+        private modalService: ModalServices, private eventHandler: VBEventHandler, private preferences: VBPreferences) {
         
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (newScheme: ARTURIResource) => this.onSchemeChanged(newScheme)));
     }
 
     ngOnInit() {
-        this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
         if (this.scheme != undefined) { //if @Input scheme is provided, initialize the tree with this scheme
             this.activeScheme = this.scheme;
         } else { //otherwise get the scheme from VB context
-            this.activeScheme = this.vbCtx.getScheme();
+            this.activeScheme = VBContext.getScheme();
         }
     }
 
@@ -51,12 +51,12 @@ export class ConceptTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name).subscribe(
+                    this.skosService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept(res.label, res.lang, this.vbCtx.getScheme(), res.name).subscribe(
+                    this.skosxlService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -71,12 +71,12 @@ export class ConceptTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name).subscribe(
+                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, this.vbCtx.getScheme(), res.name).subscribe(
+                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.name).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );

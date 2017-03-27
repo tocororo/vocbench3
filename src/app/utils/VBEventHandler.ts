@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ARTURIResource, ARTResource } from '../models/ARTResources';
-import { ResourceViewMode } from '../models/Preferences';
+import { ResourceViewMode } from '../utils/VBPreferences';
 
 /**
  * This class need to be injected in constructor of every Component that throws or subscribes to an event.

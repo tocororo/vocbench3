@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {ARTURIResource, RDFTypesEnum} from "../../models/ARTResources";
 import {RDFS} from "../../models/Vocabulary";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {VBContext} from "../../utils/VBContext";
 import {IcvServices} from "../../services/icvServices";
 import {PropertyServices} from "../../services/propertyServices";
 import {SkosServices} from "../../services/skosServices";
@@ -19,10 +19,10 @@ export class NoLabelResourceComponent {
     private ontoType: string;
     
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) {}
+        private propService: PropertyServices, private modalService: ModalServices) {}
     
     ngOnInit() {
-        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
     
     /**
@@ -52,7 +52,7 @@ export class NoLabelResourceComponent {
     fix(resource: ARTURIResource) {
         if (this.ontoType == "SKOS") {
             this.modalService.newPlainLiteral("Add skos:prefLabel").then(
-                data => {
+                (data: any) => {
                     this.skosService.setPrefLabel(resource, data.value, data.lang).subscribe(
                         stResp => {
                             this.runIcv();
@@ -63,7 +63,7 @@ export class NoLabelResourceComponent {
             );
         } else if (this.ontoType == "SKOS-XL") {
             this.modalService.newPlainLiteral("Add skosxl:prefLabel").then(
-                data => {
+                (data: any) => {
                     this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.runIcv();
@@ -74,7 +74,7 @@ export class NoLabelResourceComponent {
             );
         } else { //OWL 
             this.modalService.newPlainLiteral("Add rdfs:label").then(
-                data => {
+                (data: any) => {
                     this.propService.createAndAddPropValue(resource, RDFS.label, data.value, null, RDFTypesEnum.plainLiteral, data.lang).subscribe(
                         stResp => {
                             this.runIcv();

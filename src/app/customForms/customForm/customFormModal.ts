@@ -3,7 +3,7 @@ import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {FormField} from "../../models/CustomForms";
 import {RDFResourceRolesEnum} from "../../models/ARTResources";
-import {VocbenchCtx} from "../../utils/VocbenchCtx";
+import {VBContext} from "../../utils/VBContext";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {CustomFormsServices} from "../../services/customFormsServices";
@@ -37,12 +37,12 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     private submittedWithError: boolean = false;
     
     constructor(public dialog: DialogRef<CustomFormModalData>, public cfService: CustomFormsServices, public browsingService: BrowsingServices,
-        private modalService: ModalServices, private vbCtx: VocbenchCtx) {
+        private modalService: ModalServices) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
-        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
         this.cfService.getCustomFormRepresentation(this.context.cfId).subscribe(
             form => {
                 this.formFields = form

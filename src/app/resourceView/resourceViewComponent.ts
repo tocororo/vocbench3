@@ -4,8 +4,8 @@ import { OverlayConfig } from 'angular2-modal';
 import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
-import { VocbenchCtx } from "../utils/VocbenchCtx";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBPreferences } from "../utils/VBPreferences";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { AlignmentServices } from "../services/alignmentServices";
 import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal"
@@ -45,15 +45,15 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private alignServices: AlignmentServices, private vbCtx: VocbenchCtx,
-        private eventHandler: VBEventHandler, private modal: Modal) {
+    constructor(private resViewService: ResourceViewServices, private alignServices: AlignmentServices,
+        private eventHandler: VBEventHandler, private preferences: VBPreferences, private modal: Modal) {
 
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.buildResourceView(data.newResource)));
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.showInferred = this.vbCtx.getInferenceInResourceView();
+        this.showInferred = this.preferences.getInferenceInResourceView();
         if (changes['resource'].currentValue) {
             if (this.viewInitialized) {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
@@ -286,7 +286,7 @@ export class ResourceViewComponent {
 
     private showHideInferred() {
         this.showInferred = !this.showInferred;
-        this.vbCtx.setInferenceInResourceView(this.showInferred);
+        this.preferences.setInferenceInResourceView(this.showInferred);
         this.fillPartitions();
     }
 

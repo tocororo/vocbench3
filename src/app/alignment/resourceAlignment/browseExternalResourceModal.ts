@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
@@ -29,8 +29,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
     private alignedObject: ARTURIResource;
 
 
-    constructor(public dialog: DialogRef<BrowseExternalResourceModalData>,
-        public vbCtx: VocbenchCtx, public projService: ProjectServices) {
+    constructor(public dialog: DialogRef<BrowseExternalResourceModalData>, public projService: ProjectServices) {
 
         this.context = dialog.context;
     }
@@ -40,7 +39,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
             projects => {
                 //keep only the projects (different from the current) compliant with the resource role to align
                 for (var i = 0; i < projects.length; i++) {
-                    if (projects[i].getName() != this.vbCtx.getWorkingProject().getName()) {
+                    if (projects[i].getName() != VBContext.getWorkingProject().getName()) {
                         var ontoType: string = projects[i].getPrettyPrintOntoType()
                         if (this.context.resRole == RDFResourceRolesEnum.concept && ontoType.includes("SKOS")) {
                             this.projectList.push(projects[i]);
@@ -61,10 +60,10 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
 
     private onProjectChange() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"))
-        this.vbCtx.removeContextProject();
+        VBContext.removeContextProject();
         this.projService.accessProject(this.project).subscribe(
             stResp => {
-                this.vbCtx.setContextProject(this.project);
+                VBContext.setContextProject(this.project);
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             },
             () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
@@ -87,19 +86,19 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
     }
 
     private showClassTree(): boolean {
-        return (this.context.resRole == RDFResourceRolesEnum.cls && this.vbCtx.getContextProject() != undefined);
+        return (this.context.resRole == RDFResourceRolesEnum.cls && VBContext.getContextProject() != undefined);
     }
     private showConceptTree(): boolean {
-        return (this.context.resRole == RDFResourceRolesEnum.concept && this.vbCtx.getContextProject() != undefined);
+        return (this.context.resRole == RDFResourceRolesEnum.concept && VBContext.getContextProject() != undefined);
     }
     private showPropertyTree(): boolean {
-        return (this.context.resRole == RDFResourceRolesEnum.property && this.vbCtx.getContextProject() != undefined);
+        return (this.context.resRole == RDFResourceRolesEnum.property && VBContext.getContextProject() != undefined);
     }
     private showSchemeList(): boolean {
-        return (this.context.resRole == RDFResourceRolesEnum.conceptScheme && this.vbCtx.getContextProject() != undefined);
+        return (this.context.resRole == RDFResourceRolesEnum.conceptScheme && VBContext.getContextProject() != undefined);
     }
     private showClassIndividualTree(): boolean {
-        return (this.context.resRole == RDFResourceRolesEnum.individual && this.vbCtx.getContextProject() != undefined);
+        return (this.context.resRole == RDFResourceRolesEnum.individual && VBContext.getContextProject() != undefined);
     }
 
     private isOkClickable(): boolean {
@@ -107,13 +106,13 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
     }
 
     ok(event: Event) {
-        this.vbCtx.removeContextProject();
+        VBContext.removeContextProject();
         event.stopPropagation();
         this.dialog.close(this.alignedObject);
     }
 
     cancel() {
-        this.vbCtx.removeContextProject();
+        VBContext.removeContextProject();
         this.dialog.dismiss();
     }
 

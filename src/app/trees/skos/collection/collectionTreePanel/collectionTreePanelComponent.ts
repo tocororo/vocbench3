@@ -4,7 +4,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../../../models/ARTResources";
-import { VocbenchCtx } from "../../../../utils/VocbenchCtx";
+import { VBContext } from "../../../../utils/VBContext";
 import { UIUtils } from "../../../../utils/UIUtils";
 
 @Component({
@@ -25,10 +25,10 @@ export class CollectionTreePanelComponent {
     private ONTO_TYPE: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+        private modalService: ModalServices) { }
 
     ngOnInit() {
-        this.ONTO_TYPE = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
 
     private createCollection() {

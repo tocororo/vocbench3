@@ -4,7 +4,7 @@ import { SKOSXL } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ModalServices } from "../../widget/modal/modalServices";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { VBContext } from "../../utils/VBContext";
 
 @Component({
 	selector: "editable-resource",
@@ -28,7 +28,7 @@ export class EditableResourceComponent {
 	private resourceStringValue: string; //editable representation of the resource
 
 	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
-		private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+		private modalService: ModalServices) { }
 
 	ngOnInit() {
 		console.log(this.resource);
@@ -59,8 +59,8 @@ export class EditableResourceComponent {
 					newValue = ResourceUtils.parseBNode(this.resourceStringValue);
 				} else if (this.resourceStringValue.startsWith("\"")) { //literal
 					newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
-				} else if (ResourceUtils.isQName(this.resourceStringValue, this.vbCtx.getPrefixMappings())) { //qname
-					newValue = ResourceUtils.parseQName(this.resourceStringValue, this.vbCtx.getPrefixMappings());
+				} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
+					newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
 				} else {
 					throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
 				}

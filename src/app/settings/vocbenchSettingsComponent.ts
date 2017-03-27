@@ -1,9 +1,7 @@
 import { Component } from "@angular/core";
 import { UIUtils } from "../utils/UIUtils";
-import { Cookie } from "../utils/Cookie";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBPreferences } from "../utils/VBPreferences";
-import { ResourceViewMode } from "../models/Preferences";
+import { VBPreferences, ResourceViewMode } from "../utils/VBPreferences";
 import { Languages } from "../models/LanguagesCountries";
 
 @Component({
@@ -24,10 +22,7 @@ export class VocbenchSettingsComponent {
     ngOnInit() {
         this.preferences.initUserProjectPreferences();
         //res view mode
-        this.resViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);
-        if (this.resViewMode != "splitted" && this.resViewMode != "tabbed") {
-            this.resViewMode = "tabbed"; //default
-        }
+        this.resViewMode = this.preferences.getResourceViewMode();
 
         //languages
         var langs = this.preferences.getLanguages();
@@ -59,7 +54,7 @@ export class VocbenchSettingsComponent {
     //res view mode handler
 
     private onResViewModeChanged() {
-        Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, this.resViewMode);
+        this.preferences.setResourceViewMode(this.resViewMode);
         this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
     }
 

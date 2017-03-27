@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { ARTResource, ARTURIResource, ARTLiteral } from "../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../models/Vocabulary";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -20,10 +20,10 @@ export class NoLangLabelComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
+        private propService: PropertyServices, private modalService: ModalServices) { }
 
     ngOnInit() {
-        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
 
     /**

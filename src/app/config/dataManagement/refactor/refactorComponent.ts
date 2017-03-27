@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { RefactorServices } from "../../../services/refactorServices";
-import { VocbenchCtx } from "../../../utils/VocbenchCtx";
+import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
 import { ModalServices } from "../../../widget/modal/modalServices";
 
@@ -15,10 +15,10 @@ export class RefactorComponent {
     
     private reifyNotes: boolean = false; //used in skos->skoxl
 
-    constructor(private refactorService: RefactorServices, private modalService: ModalServices, private vbCtx: VocbenchCtx) { }
+    constructor(private refactorService: RefactorServices, private modalService: ModalServices) { }
 
     ngOnInit() {
-        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
 
     private isSkosProject(): boolean {

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { ARTURIResource, ARTResource, ARTLiteral } from "../../models/ARTResources";
-import { VocbenchCtx } from "../../utils/VocbenchCtx";
+import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -18,10 +18,10 @@ export class OverlappedLabelComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private vbCtx: VocbenchCtx, private modalService: ModalServices) { }
+        private modalService: ModalServices) { }
 
     ngOnInit() {
-        this.ontoType = this.vbCtx.getWorkingProject().getPrettyPrintOntoType();
+        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
 
     /**

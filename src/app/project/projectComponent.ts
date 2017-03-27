@@ -7,7 +7,7 @@ import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPro
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectServices } from "../services/projectServices";
 import { MetadataServices } from "../services/metadataServices";
-import { VocbenchCtx } from '../utils/VocbenchCtx';
+import { VBContext } from '../utils/VBContext';
 import { VBPreferences } from '../utils/VBPreferences';
 import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
@@ -25,8 +25,7 @@ export class ProjectComponent implements OnInit {
     public projectChanged: boolean = false;
 
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private vbCtx: VocbenchCtx, private preferences: VBPreferences, 
-        private router: Router, private modalService: ModalServices, private modal: Modal) {
+        private preferences: VBPreferences, private router: Router, private modalService: ModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -46,7 +45,7 @@ export class ProjectComponent implements OnInit {
     }
 
     private accessProject(projectName: string) {
-        var workingProj = this.vbCtx.getWorkingProject();
+        var workingProj = VBContext.getWorkingProject();
         if (workingProj == undefined || workingProj.getName() != projectName) {
             this.openProject(this.getProjectObjectFromName(projectName));
         }
@@ -68,7 +67,7 @@ export class ProjectComponent implements OnInit {
             this.modalService.confirm("Delete project", "Attention, this operation will delete the project " +
                 this.selectedProject.getName() + ". Are you sure to proceed?", "warning").then(
                 result => {
-                    this.vbCtx.removeProjectSetting(this.selectedProject);
+                    VBContext.removeProjectSetting(this.selectedProject);
                     this.projectService.deleteProject(this.selectedProject).subscribe(
                         stResp => {
                             for (var i = 0; i < this.projectList.length; i++) { //remove project from list
@@ -120,7 +119,7 @@ export class ProjectComponent implements OnInit {
         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.projectService.accessProject(project).subscribe(
             stResp => {
-                this.vbCtx.setWorkingProject(project);
+                VBContext.setWorkingProject(project);
                 this.projectChanged = true;
                 project.setOpen(true);
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
@@ -129,12 +128,12 @@ export class ProjectComponent implements OnInit {
                 //get default namespace of the project and set it to the vbContext
                 this.metadataService.getDefaultNamespace().subscribe(
                     ns => {
-                        this.vbCtx.setDefaultNamespace(ns);
+                        VBContext.setDefaultNamespace(ns);
                     }
                 )
                 this.metadataService.getNamespaceMappings().subscribe(
                     mappings => {
-                        this.vbCtx.setPrefixMappings(mappings);
+                        VBContext.setPrefixMappings(mappings);
                     }
                 )
             },
@@ -214,7 +213,7 @@ export class ProjectComponent implements OnInit {
      * Useful to set as selected the radio button of the working project
      */
     private isWorkingProject(projectName: string): boolean {
-        var workingProj = this.vbCtx.getWorkingProject();
+        var workingProj = VBContext.getWorkingProject();
         return (workingProj != undefined && workingProj.getName() == projectName);
     }
 

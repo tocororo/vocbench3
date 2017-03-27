@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { VocbenchCtx } from "../utils/VocbenchCtx";
+import { VBContext } from "../utils/VBContext";
 import { UserServices } from "../services/userServices";
 import { Countries } from "../models/LanguagesCountries";
 import { User } from "../models/User";
@@ -16,16 +16,16 @@ export class UserProfileComponent {
     private genders = ["Male", "Female"];
     private countries = Countries.countryList;
 
-    constructor(private vbCtx: VocbenchCtx, private userService: UserServices) { }
+    constructor(private userService: UserServices) { }
 
     ngOnInit() {
-        this.user = this.vbCtx.getLoggedUser();
+        this.user = VBContext.getLoggedUser();
     }
 
     private updateFirstName(newFirstName: string) {
         this.userService.updateUserFirstName(this.user.getEmail(), newFirstName).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -33,7 +33,7 @@ export class UserProfileComponent {
     private updateLastName(newLastName: string) {
         this.userService.updateUserLastName(this.user.getEmail(), newLastName).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -41,7 +41,7 @@ export class UserProfileComponent {
     private updatePhone(newPhone: string) {
         this.userService.updateUserPhone(this.user.getEmail(), newPhone).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -49,7 +49,7 @@ export class UserProfileComponent {
     private updateBirthday(newBirthday: Date) {
         this.userService.updateUserBirthday(this.user.getEmail(), newBirthday).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -57,7 +57,7 @@ export class UserProfileComponent {
     private updateGender(newGender: string) {
         this.userService.updateUserGender(this.user.getEmail(), newGender).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -65,7 +65,7 @@ export class UserProfileComponent {
     private updateCountry(newCountry: string) {
         this.userService.updateUserCountry(this.user.getEmail(), newCountry).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -73,7 +73,7 @@ export class UserProfileComponent {
     private updateAddress(newAddress: string) {
         this.userService.updateUserAddress(this.user.getEmail(), newAddress).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -81,7 +81,7 @@ export class UserProfileComponent {
     private updateAffiliation(newAffiliation: string) {
         this.userService.updateUserAffiliation(this.user.getEmail(), newAffiliation).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
@@ -89,7 +89,7 @@ export class UserProfileComponent {
     private updateUrl(newUrl: string) {
         this.userService.updateUserUrl(this.user.getEmail(), newUrl).subscribe(
             user => {
-                this.vbCtx.setLoggedUser(user);
+                VBContext.setLoggedUser(user);
             }
         )
     }
