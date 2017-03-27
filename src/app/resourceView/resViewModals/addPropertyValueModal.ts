@@ -96,7 +96,6 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
 
     private updateRange(property: ARTURIResource) {
-        console.log("updateRange", property);
         // special hard-coded cases:
         if (this.rootProperty.getURI() == SKOS.member.getURI()) {
             /**
@@ -121,7 +120,6 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             range => {
                 var ranges = range.ranges;
                 var formCollection = range.formCollection; //not used, this modal allow just to pick existing resource
-                console.log("range", range);
 
                 /**
                  * range undefined (the property has a custom range that replace the classic)
@@ -163,7 +161,6 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             this.rootsForClsIndList = rangeCollection;
                         }
                     }
-                    console.log("viewType", this.viewType);
                 }
             }
         )

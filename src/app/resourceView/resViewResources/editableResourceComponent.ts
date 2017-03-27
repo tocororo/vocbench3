@@ -4,6 +4,7 @@ import { SKOSXL } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ModalServices } from "../../widget/modal/modalServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
 
 @Component({
@@ -28,11 +29,7 @@ export class EditableResourceComponent {
 	private resourceStringValue: string; //editable representation of the resource
 
 	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
-		private modalService: ModalServices) { }
-
-	ngOnInit() {
-		console.log(this.resource);
-	}
+		private modalService: ModalServices, private rvModalService: ResViewModalServices) { }
 
 	private edit() {
 		this.propService.getRange(this.property).subscribe(
@@ -64,10 +61,6 @@ export class EditableResourceComponent {
 				} else {
 					throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
 				}
-				newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-
-				console.log("oldValue", this.resource);
-				console.log("newValue", newValue);
 
 				// let newValue: ARTNode = this.resource.clone(); //clone so the newValue maintain additional attributes of the old value
 				// if (this.resource.isURIResource()) {
@@ -121,6 +114,10 @@ export class EditableResourceComponent {
 	private applyManualEdit(newValue: ARTNode) {
 		this.resourcesService.updateTriple(this.subject, this.property, this.resource, newValue).subscribe(
 			stResp => {
+				/** In case of replace, resource picked from trees doesn't have explicit attribute
+				 * In case of manual edit, parse resource doesn't have explicit attribute 
+				 * In both case set it to avoid uneditable value in ResView. */
+				newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
 				this.resource = newValue;
 				this.editInProgress = false;
 				/** I'm not sure whether emit an event (here toward the parent or broadcasting in updateTriple()?)
@@ -136,7 +133,12 @@ export class EditableResourceComponent {
 	}
 
 	private replace() {
-		alert("Not yet available");
+		this.rvModalService.addPropertyValue("Replace", this.subject, this.property, false).then(
+			(data: any) => {
+				this.applyManualEdit(data.value);
+			},
+			() => {}
+		)
 	}
 
 	private delete() {
