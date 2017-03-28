@@ -1,10 +1,6 @@
 <div class="subPanel">
     
     <div class="subPanel-heading">
-        <!--<div class="expandCollapseBtnContainer">
-            <img src="../../../assets/images/arrow.png" (click)="panelCollapsed = !panelCollapsed"
-                 [ngClass]="{'arrow-right': panelCollapsed}">
-        </div>-->
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
         <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(predicateObjects.getPredicate())" 
             (click)="addValue()" [disabled]="!resource.getAdditionalProperty('explicit')">
@@ -13,33 +9,19 @@
     </div>
     
     <div class="subPanel-body">
-        <!--<template [ngIf]="!panelCollapsed">-->
-            <div *ngFor="let obj of predicateObjects.getObjects()" class="listItem">
-
-                <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1"
-                    [resource]="obj" [subject]="resource" [property]="predicateObjects.getPredicate()"
-                    (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)"></editable-resource>
-
-                <template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
-                    <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()" 
-                        (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
-                    <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
-                        (click)="removeValue(obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
-                        <span>-</span>
-                    </button>
-                </template>
-
-                <!--<reified-resource *ngIf="renderAsReified(predicateObjects.getPredicate(), obj)"
-                    [resource]="obj" [predicate]="predicateObjects.getPredicate()" 
+        <div *ngFor="let obj of predicateObjects.getObjects()" class="listItem">
+            <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1"
+                [resource]="obj" [subject]="resource" [predicate]="predicateObjects.getPredicate()"
+                (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"></editable-resource>
+            <template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
+                <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()" 
                     (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
-                <rdf-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" [resource]="obj"
-                    (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
                 <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
                     (click)="removeValue(obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
                     <span>-</span>
-                </button>-->
-            </div>
-        <!--</template>-->
+                </button>
+            </template>
+        </div>
     </div>
 
 </div>

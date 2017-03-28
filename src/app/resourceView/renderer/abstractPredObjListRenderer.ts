@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute
 import { PropertyServices } from "../../services/propertyServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
+import { ResourcesServices } from "../../services/resourcesServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
@@ -30,21 +30,21 @@ export abstract class AbstractPredObjListRenderer {
 
 
     protected propService: PropertyServices;
-    protected resourceService: ResourceServices;
+    protected resourcesService: ResourcesServices;
     protected cfService: CustomFormsServices;
     protected skosxlService: SkosxlServices;
     protected modalService: ModalServices;
     protected browsingService: BrowsingServices;
     protected rvModalService: ResViewModalServices;
     
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, resViewModalService: ResViewModalServices) {
         this.propService = propService;
         this.cfService = cfService;
         this.skosxlService = skosxlService;
         this.modalService = modalService;
         this.rvModalService = resViewModalService;
-        this.resourceService = resourceService;
+        this.resourcesService = resourcesService;
         this.browsingService = browsingService;
     }
 
@@ -98,6 +98,13 @@ export abstract class AbstractPredObjListRenderer {
      * This is fired when the "-" button is clicked (near an object).
      */
     abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
+    
+    /**
+     * When the object is edited or replaced requires update of res view
+     */
+    private onObjectUpdate() {
+        this.update.emit();
+    }
     /**
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
      */

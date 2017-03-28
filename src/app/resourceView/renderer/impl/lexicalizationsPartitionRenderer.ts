@@ -1,18 +1,18 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { AbstractPredObjListMultirootRenderer } from "./abstractPredObjListMultirootRenderer";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { SkosServices } from "../../services/skosServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceViewServices } from "../../services/resourceViewServices";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../models/ARTResources";
-import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
+import { AbstractPredObjListMultirootRenderer } from "../abstractPredObjListMultirootRenderer";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { SkosServices } from "../../../services/skosServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { ResourceViewServices } from "../../../services/resourceViewServices";
+import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
+import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from '../../../widget/modal/browsingModal/browsingServices';
 
 @Component({
     selector: "lexicalizations-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultirootRenderer {
 
@@ -28,7 +28,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
         SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
     label = "Lexicalizations";
     addBtnImgTitle = "Add a lexicalization";
-    addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
+    addBtnImgSrc = require("../../../../assets/images/propAnnotation_create.png");
     removeBtnImgTitle = "Remove lexicalization";
 
     private predicateOrder: string[] = [

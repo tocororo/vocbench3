@@ -86,6 +86,13 @@ export abstract class AbstractPredObjListMultirootRenderer {
     }
     
     /**
+     * When the object is edited or replaced requires update of res view
+     */
+    private onObjectUpdate() {
+        this.update.emit();
+    }
+    
+    /**
      * Returns the title of the "+" button placed in a subPanel heading.
      * This is specific of a predicate of a partition, so it depends from a predicate.
      */

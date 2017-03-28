@@ -16,7 +16,8 @@
     <div class="groupPanel-body">
         <template [ngIf]="!partitionCollapsed">
             <pred-obj-renderer *ngFor="let po of predicateObjectList" [pred-obj]="po" [resource]="resource"
-                (dblclickObj)="objectDblClick($event)" (add)="add(po.getPredicate())" (remove)="removePredicateObject(po.getPredicate(), $event)">
+                (dblclickObj)="objectDblClick($event)" (add)="add(po.getPredicate())"
+                (remove)="removePredicateObject(po.getPredicate(), $event)" (update)="onObjectUpdate()">
             </pred-obj-renderer>
         </template>
     </div>

@@ -1,5 +1,8 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, ResourceUtils } from "../../models/ARTResources";
+import {
+	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
+	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
+} from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -14,16 +17,16 @@ import { VBContext } from "../../utils/VBContext";
 export class EditableResourceComponent {
 
 	@Input() subject: ARTResource; //subject of the triple which the "resource" represents the object
-	@Input() property: ARTURIResource; //property of the triple which the "resource" represents the object
+	@Input() predicate: ARTURIResource; //property of the triple which the "resource" represents the object
 	@Input() resource: ARTNode; //resource shown in the component. Represents the object of a triple shown in a ResourceView partition
 	@Output('delete') deleteOutput = new EventEmitter();
+	@Output() update = new EventEmitter();
 	@Output() dblClick = new EventEmitter();
 
 	//useful to perform a check on the type of the edited value.
 	//The check isn't too deep, it just distinguishes between resource, literal or any (undetermined)
-	private rangeType: RDFTypesEnum = RDFTypesEnum.undetermined;
-
-	// @Output() edited = new EventEmitter();
+	private rangeType: RDFTypesEnum;
+	private ranges: { type: string, rangeCollection: ARTURIResource[] }; //stores response.ranges of getRange service
 
 	private editInProgress: boolean = false;
 	private resourceStringValue: string; //editable representation of the resource
@@ -32,16 +35,36 @@ export class EditableResourceComponent {
 		private modalService: ModalServices, private rvModalService: ResViewModalServices) { }
 
 	private edit() {
-		this.propService.getRange(this.property).subscribe(
-			range => {
-				if (range.ranges.type == "resource") {
-					this.rangeType = RDFTypesEnum.resource;
-				} else if (range.ranges.type.toLowerCase().includes("literal")) {
-					this.rangeType = RDFTypesEnum.literal;
+		console.log(this.resource);
+		if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
+			this.propService.getRange(this.predicate).subscribe(
+				range => {
+					this.ranges = range.ranges;
+					if (this.ranges != null) { //check to void error in case the property has custom ranges that replace the "classic" range
+						let type: string = this.ranges.type;
+						if (type == "resource") {
+							this.rangeType = RDFTypesEnum.resource;
+							// special case: if user is editing an xLabel, the widget should allow to edit the literal form, not the uri
+							if (this.resource.getAdditionalProperty(ResAttribute.ROLE) == RDFResourceRolesEnum.xLabel) {
+								let literalForm: ARTLiteral = new ARTLiteral(
+									this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+								this.resourceStringValue = literalForm.toNT();
+							} else {
+								this.resourceStringValue = this.resource.toNT();
+							}
+						} else if (type.toLowerCase().includes("literal")) {
+							this.rangeType = RDFTypesEnum.literal;
+							this.resourceStringValue = this.resource.toNT();
+						} else {
+							this.rangeType = RDFTypesEnum.undetermined; //default
+							this.resourceStringValue = this.resource.toNT();
+						}
+					}
 				}
-			}
-		)
-		this.resourceStringValue = this.resource.toNT();
+			);
+		} else {
+			this.resourceStringValue = this.resource.toNT();
+		}
 		this.editInProgress = true;
 	}
 
@@ -90,17 +113,21 @@ export class EditableResourceComponent {
 				// }
 				// newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
 
-				let warningMsg = ""
-				if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
+				//special case: update of literal form of a skosxl label (role of value is xLabel && new value is a literal)
+				if (this.resource.getAdditionalProperty(ResAttribute.ROLE) == RDFResourceRolesEnum.xLabel && newValue.isLiteral()) {
+					let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+					this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
+					//case new value has a nature not compliant with the range type
+				} else if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
 					this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
-					warningMsg = "The type of the new value is not compliant with the range of the property " + this.property.getShow()
+					let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
 						+ ". The change may cause an inconsistency. Do you want to apply the change? ";
 					this.modalService.confirm("Warning", warningMsg, "warning").then(
-						confirm => { this.applyManualEdit(newValue); },
+						confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
 						reject => { this.editInProgress = false; }
 					);
 				} else {
-					this.applyManualEdit(newValue)
+					this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
 				}
 			} catch (err) {
 				this.modalService.alert("Edit", err, "error");
@@ -111,19 +138,14 @@ export class EditableResourceComponent {
 		}
 	}
 
-	private applyManualEdit(newValue: ARTNode) {
-		this.resourcesService.updateTriple(this.subject, this.property, this.resource, newValue).subscribe(
+	private applyUpdate(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
+		this.resourcesService.updateTriple(subject, predicate, oldValue, newValue).subscribe(
 			stResp => {
-				/** In case of replace, resource picked from trees doesn't have explicit attribute
-				 * In case of manual edit, parse resource doesn't have explicit attribute 
-				 * In both case set it to avoid uneditable value in ResView. */
-				newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-				this.resource = newValue;
 				this.editInProgress = false;
-				/** I'm not sure whether emit an event (here toward the parent or broadcasting in updateTriple()?)
-				 * in order to refresh the ResourceView or let the user decide to refresh.
-				 * Note that refreshing the resource view programmatically could be heavy since getResourceView()
-				 * for big resources takes a lot of time (~40s for agrovoc concepts */
+				/** Event propagated to the resView that refreshes.
+				 * I cannot simply update the rdf-resource since the URI of the resource
+				 * in the predicate objects list stored in the partition render is still the same */
+				this.update.emit(); 
 			}
 		);
 	}
@@ -133,11 +155,11 @@ export class EditableResourceComponent {
 	}
 
 	private replace() {
-		this.rvModalService.addPropertyValue("Replace", this.subject, this.property, false).then(
+		this.rvModalService.addPropertyValue("Replace", this.subject, this.predicate, false).then(
 			(data: any) => {
-				this.applyManualEdit(data.value);
+				this.applyUpdate(this.subject, this.predicate, this.resource, data.value);
 			},
-			() => {}
+			() => { }
 		)
 	}
 

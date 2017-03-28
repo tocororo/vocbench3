@@ -82,8 +82,8 @@ export class ConceptTreeComponent extends AbstractTree {
         this.skosService.getTopConcepts(this.workingScheme).subscribe( //new service (whithout lang param)
             topConcepts => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                ResourceUtils.sortURIResources(topConcepts, attribute);
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(topConcepts, attribute);
                 this.roots = topConcepts;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

@@ -1,21 +1,21 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { SKOSXL } from "../../models/Vocabulary";
-import { FormCollection, CustomForm } from "../../models/CustomForms";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { SKOSXL } from "../../../models/Vocabulary";
+import { FormCollection, CustomForm } from "../../../models/CustomForms";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 
 @Component({
     selector: "properties-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
 
@@ -27,13 +27,13 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
 
     rootProperty: ARTURIResource = null; //there is no root property for this partition
     label = "Properties";
-    addBtnImgSrc = require("../../../assets/images/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/prop_create.png");
     addBtnImgTitle = "Add a property value";
     removeBtnImgTitle = "Remove property value";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     ngOnInit() {
@@ -59,7 +59,7 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         } else {
-            this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+            this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         }

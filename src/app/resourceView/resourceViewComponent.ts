@@ -192,6 +192,18 @@ export class ResourceViewComponent {
         var membersOrderedPartition: any = this.resViewResponse.membersOrdered;
         if (membersOrderedPartition != null) {
             this.membersOrderedColl = Deserializer.createPredicateObjectsList(membersOrderedPartition);
+            //response doesn't declare the "explicit" for the collection members, set the attribute based on the explicit of the collection
+            for (var i = 0; i < this.membersOrderedColl.length; i++) { //for each pred-obj-list
+                let collections = this.membersOrderedColl[i].getObjects();
+                for (var j = 0; j < collections.length; j++) { //for each collection (member list, should be just 1)
+                    if (collections[j].getAdditionalProperty(ResAttribute.EXPLICIT)) { //set member explicit only if collection is explicit
+                        let members: ARTResource[] = collections[j].getAdditionalProperty(ResAttribute.MEMBERS);
+                        for (var k = 0; k < members.length; k++) {
+                            members[k].setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                        }
+                    }
+                }
+            }
             this.filterInferredFromPredObjList(this.membersOrderedColl);
         }
 

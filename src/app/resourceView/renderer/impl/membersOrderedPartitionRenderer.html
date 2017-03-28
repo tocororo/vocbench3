@@ -2,7 +2,7 @@
     
     <div class="groupPanel-heading">
         <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
-            <img src="../../../assets/images/arrow.png" (click)="partitionCollapsed = !partitionCollapsed"
+            <img src="../../../../assets/images/arrow.png" (click)="partitionCollapsed = !partitionCollapsed"
                 [ngClass]="{'arrow-right': partitionCollapsed}">
         </div>
         <span style="flex: 1">
@@ -33,15 +33,20 @@
                     <template ngFor let-obj [ngForOf]="po.getObjects()">
                         <!-- Member list -->
                         <div class="listItem">
-                            <reified-resource *ngIf="renderAsReified(po.getPredicate(), obj)"
-                                [resource]="obj" [predicate]="po.getPredicate()" 
-                                (dblclick)="objectDblClick($event)" style="flex:1"></reified-resource>
-                            <rdf-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" [resource]="obj"
-                                (dblclick)="objectDblClick(obj)" style="flex:1"></rdf-resource>
-                            <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
-                                (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
-                                <span>-</span>
-                            </button>
+                            
+                            <editable-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" style="flex: 1"
+                                [resource]="obj" [subject]="resource" [predicate]="po.getPredicate()"
+                                (dblClick)="objectDblClick($event)" (delete)="removePredicateObject(po.getPredicate(), obj)"
+                                (update)="onObjectUpdate()"></editable-resource>
+                            <template [ngIf]="renderAsReified(po.getPredicate(), obj)">
+                                <reified-resource [resource]="obj" [predicate]="po.getPredicate()" 
+                                    (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
+                                <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
+                                    (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                                    <span>-</span>
+                                </button>
+                            </template>
+
                         </div>
                         <!-- Members -->
                         <div class="subPanel" style="margin-top: 4px">
@@ -61,13 +66,11 @@
                                 </div>
                             </div>
                             <div class="subPanel-body">
-                                <div *ngFor="let memb of obj.members" (click)="selectMember(memb)"
-                                    [ngClass]="{active: memb == selectedMember}" class="listItem">
-                                    <rdf-resource [resource]="memb" (dblclick)="objectDblClick(memb)" style="flex:1"></rdf-resource>
-                                    <button class="resViewPartitionBtn" title="Remove member" (click)="removeMember(memb)"
-                                        [disabled]="!obj.getAdditionalProperty('explicit')">
-                                        <span>-</span>
-                                    </button>
+                                <div *ngFor="let memb of obj.members" class="listItem"(click)="selectMember(memb)"
+                                    [ngClass]="{active: memb == selectedMember}">
+                                    <editable-resource style="flex: 1" [resource]="memb" [subject]="obj" [predicate]="membersProperty"
+                                        (dblClick)="objectDblClick(memb)" (delete)="removeMember(memb)" (update)="onObjectUpdate()">
+                                    </editable-resource>
                                 </div>
                             </div>
                         </div>

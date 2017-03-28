@@ -22,7 +22,6 @@ import { PreferencesServices } from "../services/preferencesServices";
 import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
-import { ResourceServices } from "../services/resourceServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { SearchServices } from "../services/searchServices";
@@ -56,7 +55,6 @@ import { UserServices } from "../services/userServices";
         ProjectServices,
         PropertyServices,
         RefactorServices,
-        ResourceServices,
         ResourcesServices,
         ResourceViewServices,
         SearchServices,

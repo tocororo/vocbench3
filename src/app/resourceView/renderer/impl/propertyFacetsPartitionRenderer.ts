@@ -1,15 +1,15 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { RDF, OWL } from "../../models/Vocabulary";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { RDF, OWL } from "../../../models/Vocabulary";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "property-facets-renderer",
@@ -27,12 +27,12 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
     rootProperty: ARTURIResource = OWL.inverseOf;
     label = "Property facets";
     addBtnImgTitle = "Add a inverse property";
-    addBtnImgSrc = require("../../../assets/images/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/prop_create.png");
     removeBtnImgTitle = "Remove inverse property";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

@@ -1,19 +1,19 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
-import { SKOSXL } from "../../models/Vocabulary";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
+import { SKOSXL } from "../../../models/Vocabulary";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "label-relations-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer {
 
@@ -26,12 +26,12 @@ export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer
     rootProperty: ARTURIResource = SKOSXL.labelRelation;
     label = "Label relations";
     addBtnImgTitle = "Add a label relation";
-    addBtnImgSrc = require("../../../assets/images/propObject_create.png");
+    addBtnImgSrc = require("../../../../assets/images/propObject_create.png");
     removeBtnImgTitle = "Remove label relation";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate: ARTURIResource) {
@@ -54,7 +54,7 @@ export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer
                 stResp => this.update.emit(null)
             );
         } else {
-            this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+            this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         }

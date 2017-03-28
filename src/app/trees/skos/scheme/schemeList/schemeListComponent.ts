@@ -24,8 +24,8 @@ export class SchemeListComponent {
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                ResourceUtils.sortURIResources(schemeList, attribute);
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(schemeList, attribute);
                 this.schemeList = schemeList;
             }
         );

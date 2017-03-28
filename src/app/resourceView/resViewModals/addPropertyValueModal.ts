@@ -149,12 +149,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                                 this.viewType = "classAndIndividual";
                                 this.rootsForClsIndList = rangeCollection;
                             } else if (rangeClass.getURI() == RDF.list.getURI()) {
-                                //TODO
-                                /**
-                                 * there should be no property belonging to a RV partition which its
-                                 * range is resource and rangeCollection is rdf:List, so at the moment
-                                 * I left this block empty
-                                 */
+                                this.viewType = "classAndIndividual";
+                                this.rootsForClsIndList = rangeCollection;
                             }
                         } else { //length > 1
                             this.viewType = "classAndIndividual";

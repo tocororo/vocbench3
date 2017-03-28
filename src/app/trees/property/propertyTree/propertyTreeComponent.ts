@@ -52,7 +52,7 @@ export class PropertyTreeComponent extends AbstractTree {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
 
         //sort by show if rendering is active, uri otherwise
-        let orderAttribute: "show" | "uri" = this.rendering ? "show" : "uri";
+        let orderAttribute: "show" | "value" = this.rendering ? "show" : "value";
 
         /* different cases:
          * - roots provided as Input: tree is build rootet on these properties
@@ -63,7 +63,7 @@ export class PropertyTreeComponent extends AbstractTree {
         if (this.rootProperties) {
             this.propertyService.getPropertiesInfo(this.rootProperties).subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
@@ -74,7 +74,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 relevantProps => {
                     this.propertyService.getPropertiesInfo(relevantProps).subscribe(
                         props => {
-                            ResourceUtils.sortURIResources(props, orderAttribute);
+                            ResourceUtils.sortResources(props, orderAttribute);
                             this.roots = props;
                             UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                         },
@@ -86,7 +86,7 @@ export class PropertyTreeComponent extends AbstractTree {
         } else if (this.type == RDFResourceRolesEnum.objectProperty) {
             this.propertyService.geTopObjectProperties().subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
@@ -95,7 +95,7 @@ export class PropertyTreeComponent extends AbstractTree {
         } else if (this.type == RDFResourceRolesEnum.annotationProperty) {
             this.propertyService.getTopAnnotationProperties().subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
@@ -104,7 +104,7 @@ export class PropertyTreeComponent extends AbstractTree {
         } else if (this.type == RDFResourceRolesEnum.datatypeProperty) {
             this.propertyService.getTopDatatypeProperties().subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
@@ -113,7 +113,7 @@ export class PropertyTreeComponent extends AbstractTree {
         } else if (this.type == RDFResourceRolesEnum.ontologyProperty) {
             this.propertyService.getTopOntologyProperties().subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
@@ -122,7 +122,7 @@ export class PropertyTreeComponent extends AbstractTree {
         } else if (this.type == RDFResourceRolesEnum.property) {
             this.propertyService.getTopRDFProperties().subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },
@@ -131,7 +131,7 @@ export class PropertyTreeComponent extends AbstractTree {
         } else {
             this.propertyService.getTopProperties().subscribe(
                 props => {
-                    ResourceUtils.sortURIResources(props, orderAttribute);
+                    ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 },

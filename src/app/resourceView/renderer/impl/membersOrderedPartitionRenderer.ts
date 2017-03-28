@@ -1,19 +1,19 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { SkosServices } from "../../services/skosServices";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { SkosServices } from "../../../services/skosServices";
 import {
     ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
     RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
-} from "../../models/ARTResources";
-import { SKOS } from "../../models/Vocabulary";
+} from "../../../models/ARTResources";
+import { SKOS } from "../../../models/Vocabulary";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "members-ordered-renderer",
@@ -31,15 +31,15 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
     membersProperty = SKOS.member;
     label = "Members";
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../assets/images/collection_create.png");
+    addBtnImgSrc = require("../../../../assets/images/collection_create.png");
     removeBtnImgTitle = "Remove member";
 
     private selectedMember: ARTResource;
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
         private skosService: SkosServices) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     private selectMember(member: ARTResource) {
@@ -149,17 +149,9 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
                 stResp => this.update.emit(null)
             );
         } else {
-            if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
-                this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            } else {//predicate is some subProperty of skos:member
-                this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
-                    stResp => {
-                        alert("remove of " + predicate.getShow() + " value is not available");
-                    }
-                );
-            }
+            this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
         }
     }
 

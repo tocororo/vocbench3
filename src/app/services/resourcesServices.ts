@@ -24,4 +24,17 @@ export class ResourcesServices {
         return this.httpMgr.doGet(this.serviceName, "updateTriple", params, this.oldTypeService, true);
     }
 
+    /**
+     * Remove a triple
+     */
+    removeTriple(resource: ARTResource, property: ARTURIResource, value: ARTNode) {
+        console.log("[ResourcesServices] removeTriple");
+        var params: any = {
+            resource : resource,
+            property : property,
+            value : value
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeTriple", params, this.oldTypeService, true);
+    }
+
 }

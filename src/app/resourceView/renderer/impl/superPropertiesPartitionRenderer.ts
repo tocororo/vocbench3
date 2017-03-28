@@ -1,20 +1,20 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { VBEventHandler } from "../../utils/VBEventHandler"
-import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { RDFS } from "../../models/Vocabulary";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { VBEventHandler } from "../../../utils/VBEventHandler"
+import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { RDFS } from "../../../models/Vocabulary";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "superproperties-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRenderer {
 
@@ -27,13 +27,13 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRendere
     rootProperty: ARTURIResource = RDFS.subPropertyOf;
     label = "Superproperties";
     addBtnImgTitle = "Add a superproperty";
-    addBtnImgSrc = require("../../../assets/images/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/prop_create.png");
     removeBtnImgTitle = "Remove superproperty";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
         private eventHandler: VBEventHandler) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {
@@ -71,7 +71,7 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRendere
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of rdfs:subPropertyOf
-                this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
                     stResp => {
                         this.eventHandler.superPropertyRemovedEvent.emit({ property: <ARTURIResource>this.resource, superProperty: <ARTURIResource>object });
                         this.update.emit(null);

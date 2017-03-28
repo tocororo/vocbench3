@@ -1,20 +1,20 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { ManchesterServices } from "../../services/manchesterServices";
-import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { RDFS } from "../../models/Vocabulary";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { ManchesterServices } from "../../../services/manchesterServices";
+import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { RDFS } from "../../../models/Vocabulary";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "domains-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
 
@@ -27,12 +27,12 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = RDFS.domain;
     label = "Domains";
     addBtnImgTitle = "Add a domain";
-    addBtnImgSrc = require("../../../assets/images/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove domain";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices, private manchService: ManchesterServices) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {
@@ -80,7 +80,7 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
                         stResp => this.update.emit(null)
                     );
                 } else { //removing subProperty of rdfs:domain
-                    this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                    this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
                         stResp => this.update.emit(null)
                     );
                 }

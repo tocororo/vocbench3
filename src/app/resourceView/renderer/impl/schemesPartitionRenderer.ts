@@ -1,21 +1,21 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { SkosServices } from "../../services/skosServices";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { SKOS } from "../../models/Vocabulary";
-import { VBEventHandler } from "../../utils/VBEventHandler";
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { SkosServices } from "../../../services/skosServices";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { SKOS } from "../../../models/Vocabulary";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
 
 @Component({
     selector: "schemes-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
 
@@ -28,13 +28,13 @@ export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = SKOS.inScheme;
     label = "Schemes";
     addBtnImgTitle = "Add to a ConceptScheme";
-    addBtnImgSrc = require("../../../assets/images/conceptScheme_create.png");
+    addBtnImgSrc = require("../../../../assets/images/conceptScheme_create.png");
     removeBtnImgTitle = "Remove from ConceptScheme";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     //add as top concept
@@ -74,7 +74,7 @@ export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
                     data => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of skos:inScheme
-                this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
                     stResp => {
                         this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object });
                         this.update.emit(null);

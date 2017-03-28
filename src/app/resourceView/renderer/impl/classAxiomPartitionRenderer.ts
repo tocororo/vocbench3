@@ -1,17 +1,17 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListMultirootRenderer } from "./abstractPredObjListMultirootRenderer";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { PropertyServices } from "../../services/propertyServices";
-import { OwlServices } from "../../services/owlServices";
-import { ManchesterServices } from "../../services/manchesterServices";
-import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
-import { RDFS, OWL } from "../../models/Vocabulary";
-import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { AbstractPredObjListMultirootRenderer } from "../abstractPredObjListMultirootRenderer";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { OwlServices } from "../../../services/owlServices";
+import { ManchesterServices } from "../../../services/manchesterServices";
+import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
+import { RDFS, OWL } from "../../../models/Vocabulary";
+import { BrowsingServices } from '../../../widget/modal/browsingModal/browsingServices';
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 
 @Component({
     selector: "class-axiom-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMultirootRenderer {
 
@@ -29,7 +29,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
     label = "Class axioms";
     addBtnImgTitle = "Add a class axiom";
-    addBtnImgSrc = require("../../../assets/images/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/class_create.png");
     removeBtnImgTitle = "Remove class axiom";
 
     constructor(private propertyService: PropertyServices, private owlService: OwlServices, private manchService: ManchesterServices,

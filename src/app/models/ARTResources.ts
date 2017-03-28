@@ -401,26 +401,26 @@ export const RDFTypesEnum = {
 export class ResourceUtils {
 
     /**
-     * Sort an Array of ARTURIResource by the given attribute.
+     * Sort an Array of ARTResource by the given attribute.
      * @param list 
      * @param attribute
      */
-    static sortURIResources(list: ARTURIResource[], attribute: "uri" | "show") {
+    static sortResources(list: ARTResource[], attribute: "value" | "show") {
         //sort by show
         if (attribute == "show") {
             list.sort(
-                function (c1: ARTURIResource, c2: ARTURIResource) {
-                    if (c1.getShow() > c2.getShow()) return 1;
-                    if (c1.getShow() < c2.getShow()) return -1;
+                function (r1: ARTResource, r2: ARTResource) {
+                    if (r1.getShow() > r2.getShow()) return 1;
+                    if (r1.getShow() < r2.getShow()) return -1;
                     return 0;
                 }
             );
         }
-        if (attribute == "uri") {
+        if (attribute == "value") {
             list.sort(
-                function (c1: ARTURIResource, c2: ARTURIResource) {
-                    if (c1.getURI() > c2.getURI()) return 1;
-                    if (c1.getURI() < c2.getURI()) return -1;
+                function (r1: ARTResource, r2: ARTResource) {
+                    if (r1.getNominalValue() > r2.getNominalValue()) return 1;
+                    if (r1.getNominalValue() < r2.getNominalValue()) return -1;
                     return 0;
                 }
             );

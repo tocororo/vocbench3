@@ -53,8 +53,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         this.clsService.getSubClasses(this.node).subscribe(
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                ResourceUtils.sortURIResources(subClasses, attribute);
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(subClasses, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
                 this.nodeExpandEnd.emit();

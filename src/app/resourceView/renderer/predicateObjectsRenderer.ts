@@ -11,20 +11,16 @@ export class PredicateObjectsRenderer {
      * INPUTS / OUTPUTS
      */
 
-    // @Input() panelCollapsed: boolean;
     @Input('pred-obj') predicateObjects: ARTPredicateObjects;
     @Input() resource: ARTResource; //resource described
     @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>();
+    @Output() update = new EventEmitter();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     /**
      * ATTRIBUTES
      */
-
-    // ngOnInit() {
-    //     // this.panelCollapsed = this.longObjectsList; //if objects list is long, start with panel collapsed
-    // }
 
     /**
      * METHODS
@@ -63,6 +59,12 @@ export class PredicateObjectsRenderer {
      */
     private getRemovePropImgTitle(predicate: ARTURIResource): string {
         return "Remove " + predicate.getShow();
+    }
+    /**
+     * Fired when the object is updated
+     */
+    private onObjectUpdate() {
+        this.update.emit();
     }
     /**
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.

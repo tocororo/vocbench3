@@ -44,8 +44,8 @@ export class CollectionTreeComponent extends AbstractTree {
         this.skosService.getRootCollections().subscribe( //new service
             rootColl => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                ResourceUtils.sortURIResources(rootColl, attribute);
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(rootColl, attribute);
                 this.roots = rootColl;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

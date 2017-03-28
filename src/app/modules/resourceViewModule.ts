@@ -13,21 +13,21 @@ import { ResourceViewTabbedComponent } from '../resourceView/resourceViewPanel/r
 import { ReifiedResourceComponent } from '../resourceView/resViewResources/reifiedResourceComponent';
 import { EditableResourceComponent } from '../resourceView/resViewResources/editableResourceComponent';
 
-import { BroadersPartitionRenderer } from '../resourceView/renderer/broadersPartitionRenderer';
-import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/classAxiomPartitionRenderer';
-import { DomainsPartitionRenderer } from '../resourceView/renderer/domainsPartitionRenderer';
-import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/labelRelationsPartitionRenderer';
-import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/lexicalizationsPartitionRenderer';
-import { MembersOrderedPartitionRenderer } from '../resourceView/renderer/membersOrderedPartitionRenderer';
-import { MembersPartitionRenderer } from '../resourceView/renderer/membersPartitionRenderer';
-import { NotesPartitionRenderer } from '../resourceView/renderer/notesPartitionRenderer';
-import { PropertiesPartitionRenderer } from '../resourceView/renderer/propertiesPartitionRenderer';
-import { PropertyFacetsPartitionRenderer } from '../resourceView/renderer/propertyFacetsPartitionRenderer';
-import { RangesPartitionRenderer } from '../resourceView/renderer/rangesPartitionRenderer';
-import { SchemesPartitionRenderer } from '../resourceView/renderer/schemesPartitionRenderer';
-import { SuperPropertiesPartitionRenderer } from '../resourceView/renderer/superPropertiesPartitionRenderer';
-import { TopConceptsPartitionRenderer } from '../resourceView/renderer/topConceptsPartitionRenderer';
-import { TypesPartitionRenderer } from '../resourceView/renderer/typesPartitionRenderer';
+import { BroadersPartitionRenderer } from '../resourceView/renderer/impl/broadersPartitionRenderer';
+import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/impl/classAxiomPartitionRenderer';
+import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
+import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/impl/labelRelationsPartitionRenderer';
+import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/impl/lexicalizationsPartitionRenderer';
+import { MembersOrderedPartitionRenderer } from '../resourceView/renderer/impl/membersOrderedPartitionRenderer';
+import { MembersPartitionRenderer } from '../resourceView/renderer/impl/membersPartitionRenderer';
+import { NotesPartitionRenderer } from '../resourceView/renderer/impl/notesPartitionRenderer';
+import { PropertiesPartitionRenderer } from '../resourceView/renderer/impl/propertiesPartitionRenderer';
+import { PropertyFacetsPartitionRenderer } from '../resourceView/renderer/impl/propertyFacetsPartitionRenderer';
+import { RangesPartitionRenderer } from '../resourceView/renderer/impl/rangesPartitionRenderer';
+import { SchemesPartitionRenderer } from '../resourceView/renderer/impl/schemesPartitionRenderer';
+import { SuperPropertiesPartitionRenderer } from '../resourceView/renderer/impl/superPropertiesPartitionRenderer';
+import { TopConceptsPartitionRenderer } from '../resourceView/renderer/impl/topConceptsPartitionRenderer';
+import { TypesPartitionRenderer } from '../resourceView/renderer/impl/typesPartitionRenderer';
 
 import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
 

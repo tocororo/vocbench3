@@ -47,8 +47,8 @@ export class ClassTreeComponent extends AbstractTree {
         this.clsService.getClassesInfo(this.rootClasses).subscribe(
             roots => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                ResourceUtils.sortURIResources(roots, attribute);
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(roots, attribute);
                 this.roots = this.roots.concat(roots);
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

@@ -69,8 +69,8 @@ export class InstanceListComponent {
             this.clsService.getInstances(this.cls).subscribe(
                 instances => {
                     //sort by show if rendering is active, uri otherwise
-                    let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                    ResourceUtils.sortURIResources(instances, attribute);
+                    let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                    ResourceUtils.sortResources(instances, attribute);
                     this.instanceList = instances;
                     //if there is some pending instance search and the searched instance is of the same type of the current class
                     if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {

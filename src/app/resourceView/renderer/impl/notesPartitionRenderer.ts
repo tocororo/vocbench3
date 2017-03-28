@@ -1,20 +1,20 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "./abstractPredObjListRenderer";
-import { PropertyServices } from "../../services/propertyServices";
-import { ResourceServices } from "../../services/resourceServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { SkosServices } from "../../services/skosServices";
-import { SkosxlServices } from "../../services/skosxlServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../widget/modal/modalServices";
-import { VBEventHandler } from "../../utils/VBEventHandler"
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { SKOS } from "../../models/Vocabulary"
+import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { PropertyServices } from "../../../services/propertyServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { SkosServices } from "../../../services/skosServices";
+import { SkosxlServices } from "../../../services/skosxlServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
+import { ModalServices } from "../../../widget/modal/modalServices";
+import { VBEventHandler } from "../../../utils/VBEventHandler"
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { SKOS } from "../../../models/Vocabulary"
 
 @Component({
     selector: "notes-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    templateUrl: "../predicateObjectsListRenderer.html",
 })
 export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
 
@@ -27,12 +27,12 @@ export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = SKOS.note;
     label = "Notes";
     addBtnImgTitle = "Add a note";
-    addBtnImgSrc = require("../../../assets/images/propAnnotation_create.png");
+    addBtnImgSrc = require("../../../../assets/images/propAnnotation_create.png");
     removeBtnImgTitle = "Remove note";
 
-    constructor(propService: PropertyServices, resourceService: ResourceServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {
@@ -54,7 +54,7 @@ export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         } else {
-            this.resourceService.removePropertyValue(this.resource, predicate, object).subscribe(
+            this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
                 stResp => {
                     this.update.emit(null);
                 }

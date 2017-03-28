@@ -51,8 +51,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "uri" = this.rendering ? "show" : "uri";
-                ResourceUtils.sortURIResources(narrower, attribute);
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(narrower, attribute);
                 //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower);
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
