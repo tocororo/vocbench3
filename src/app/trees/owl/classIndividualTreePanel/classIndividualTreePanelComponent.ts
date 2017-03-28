@@ -147,7 +147,6 @@ export class ClassIndividualTreePanelComponent {
             this.viewChildTree.openTreeAt(resource);
         } else { // resource is an instance
             //get type of instance, then open the tree to that class
-            // this.owlService.getDirectNamedTypes(resource).subscribe(
             this.individualService.getNamedTypes(resource).subscribe(
                 types => {
                     this.viewChildTree.openTreeAt(types[0]);

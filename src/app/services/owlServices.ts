@@ -13,24 +13,6 @@ export class OwlServices {
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
-     * Returns a list of ARTURIResource instances of the given class
-     * @param cls class of which retrieve its instances
-     * @return an array of instances
-     */
-    getClassAndInstancesInfo(cls: ARTURIResource) {
-        console.log("[owlServices] getClassAndInstancesInfo");
-        var params: any = {
-            clsName: cls.getURI(),
-        };
-        return this.httpMgr.doGet(this.serviceName, "getClassAndInstancesInfo", params, this.oldTypeService).map(
-            stResp => {
-                var instancesElem = stResp.getElementsByTagName("Instances")[0];
-                return Deserializer.createURIArray(instancesElem);
-            }
-        );
-    }
-
-    /**
      * Creates a class (subClass of the given superClass) with the given name.
      * Emits subClassCreatedEvent containing the subClass and the superClass
      * @param superClass the superClass of the new created class

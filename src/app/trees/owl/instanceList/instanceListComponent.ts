@@ -65,7 +65,6 @@ export class InstanceListComponent {
         this.instanceList = null;
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            // this.owlServices.getClassAndInstancesInfo(this.cls).subscribe(
             this.clsService.getInstances(this.cls).subscribe(
                 instances => {
                     //sort by show if rendering is active, uri otherwise
