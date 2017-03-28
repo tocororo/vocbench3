@@ -31,12 +31,12 @@
                     <button class="btn btn-xs btn-primary" type="button" (click)="doQuery(t)" [disabled]="t.queryInProgress || !t.queryValid">
                         Submit
                     </button>
-                    <button class="btn btn-xs btn-info" type="button" (click)="clear(t)" [disabled]="!t.queryResult">Clear</button>
+                    <button class="btn btn-xs btn-info" type="button" (click)="clear(t)" [disabled]="t.queryResult == null">Clear</button>
                     <div class="hbox" style="align-items: center; display: inline-flex;">
                         <label style="margin-right: 5px;">Include inferred statement:</label>
                         <input #inferredcb type="checkbox" (change)="t.inferred=inferredcb.checked">
                     </div>
-                    <div *ngIf="t.queryResult" class="hbox pull-right" style="align-items: center">
+                    <div *ngIf="t.queryResult != null" class="hbox pull-right" style="align-items: center">
                         <span style="display: inline; margin-left: 5px;">
                             <template [ngIf]="t.resultType != 'boolean'">Results count: {{t.queryResult.length}}</template>
                             (Done in {{t.queryTime}})
@@ -55,7 +55,7 @@
                 </div>
                 
                 <!--Query result-->
-                <div *ngIf="t.queryResult" class="vbox">
+                <div *ngIf="t.queryResult != null" class="vbox">
                     <div class="scrollableContainer" style="border: 1px solid #ddd">
                         <table class="table table-striped table-condensed table-hoverable" style="flex: 1">
                             <thead>

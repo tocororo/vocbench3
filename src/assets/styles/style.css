@@ -181,6 +181,10 @@ reified-resource {
     margin: -2px 10px -2px -3px;
 }
 
+editable-resource {
+    display: flex;
+}
+
 .expandableResource {
     border: 1px solid #ccc;
     border-radius: 2px;
