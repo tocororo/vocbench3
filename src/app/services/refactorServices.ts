@@ -88,7 +88,7 @@ export class RefactorServices {
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
-        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService true).map(
+        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
