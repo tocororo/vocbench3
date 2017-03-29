@@ -100,45 +100,6 @@ export class OwlServices {
     }
     
     /**
-     * Adds a type to a resource. Emits a typeDeletedEvent with resource and type
-     * @param resource the resource to which add a type
-     * @param type the type to add to the individual
-     */
-    addType(resource: ARTURIResource, type: ARTURIResource) {
-        console.log("[owlServices] addType");
-        var params: any = {
-            indqname: resource.getURI(),
-            typeqname: type.getURI(),
-        };
-        return this.httpMgr.doGet("individual", "addType", params, this.oldTypeService).map(
-            stResp => {
-                this.eventHandler.typeAddedEvent.emit({resource: resource, type: type});
-                return stResp;
-            }
-        );
-    }
-
-    /**
-     * Removes the type of a resource. Emits a typeDeletedEvent with resource (the resource to which the type is removed)
-     * and type (the removed type)
-     * @param resource the resource whose the type need to be removed
-     * @param type type to remove 
-     */
-    removeType(resource: ARTURIResource, type: ARTResource) {
-        console.log("[owlServices] removeType");
-        var params: any = {
-            indqname: resource.getURI(),
-            typeqname: type.getNominalValue(),
-        };
-        return this.httpMgr.doGet("individual", "removeType", params, this.oldTypeService).map(
-            stResp => {
-                this.eventHandler.typeRemovedEvent.emit({resource: resource, type: type});
-                return stResp;      
-            }
-        );
-    }
-    
-    /**
      * Adds a collection of class as intersectionOf a class.
      * @param cls the resource whose the enriching the intersectionOf
      * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)

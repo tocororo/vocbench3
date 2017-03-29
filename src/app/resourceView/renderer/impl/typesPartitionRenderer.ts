@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
-import { OwlServices } from "../../../services/owlServices";
+import { IndividualsServices } from "../../../services/individualsServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDF } from "../../../models/Vocabulary"
@@ -33,7 +33,7 @@ export class TypesPartitionRenderer extends AbstractPredObjListRenderer {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
         modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
-        private owlService: OwlServices, private eventHandler: VBEventHandler) {
+        private individualService: IndividualsServices, private eventHandler: VBEventHandler) {
         super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
     }
 
@@ -44,7 +44,7 @@ export class TypesPartitionRenderer extends AbstractPredObjListRenderer {
                 var prop: ARTURIResource = data.property;
                 var typeClass: ARTURIResource = data.value;
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding an rdf:type
-                    this.owlService.addType(<ARTURIResource>this.resource, typeClass).subscribe(
+                    this.individualService.addType(<ARTURIResource>this.resource, typeClass).subscribe(
                         stResp => this.update.emit(null)
                     ) ;
                 } else { //it's adding a subProperty of rdf:type
@@ -67,7 +67,7 @@ export class TypesPartitionRenderer extends AbstractPredObjListRenderer {
             );
         } else {
             if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdf:type relation
-                this.owlService.removeType(<ARTURIResource>this.resource, <ARTResource>object).subscribe(
+                this.individualService.removeType(<ARTURIResource>this.resource, <ARTResource>object).subscribe(
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of rdf:type
