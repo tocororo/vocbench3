@@ -138,6 +138,18 @@ export abstract class AbstractTreeNode {
     //     }
     // }
 
+    /**
+     * Called when a resource is renamed in resource view.
+     * This function replace the uri of the resource contained in the node if it is the resource
+     * affected by the renaming.
+     */
+    onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
+        if (oldResource.getURI() == this.node.getURI()) {
+            // this.node[ResAttribute.SHOW] = newResource.getShow();
+            this.node.setURI(newResource.getURI());
+        }
+    }
+
     private onNodeSelected(node: ARTURIResource) {
         this.nodeSelected.emit(node);
     }

@@ -105,13 +105,6 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         }
     }
 
-    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        if (oldResource.getURI() == this.node.getURI()) {
-            this.node[ResAttribute.SHOW] = newResource.getShow();
-            this.node['uri'] = newResource.getURI();
-        }
-    }
-
     //decrease numInst property when an instance of the current class is deleted
     private onInstanceDeleted(cls: ARTURIResource) {
         if (this.node.getURI() == cls.getURI()) {

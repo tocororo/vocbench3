@@ -49,7 +49,8 @@ export class ResourceViewComponent {
         private eventHandler: VBEventHandler, private preferences: VBPreferences, private modal: Modal) {
 
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            (data: any) => this.buildResourceView(data.newResource)));
+            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
+        ));
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -304,6 +305,16 @@ export class ResourceViewComponent {
 
     private objectDblClick(object: ARTResource) {
         this.dblclickObj.emit(object);
+    }
+
+    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
+        if (this.resource.isURIResource()) { //rename affect only URIResource
+            if ((<ARTURIResource>this.resource).getURI() == oldResource.getURI()) {
+                //replace uri
+                (<ARTURIResource>this.resource).setURI(newResource.getURI());
+                // this.buildResourceView(this.resource); //need to refresh the resource view?
+            }
+        }
     }
 
 }

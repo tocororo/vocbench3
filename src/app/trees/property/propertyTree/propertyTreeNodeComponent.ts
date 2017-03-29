@@ -85,11 +85,4 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
         }
     }
 
-    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        if (oldResource.getURI() == this.node.getURI()) {
-            this.node[ResAttribute.SHOW] = newResource.getShow();
-            this.node['uri'] = newResource.getURI();
-        }
-    }
-
 }

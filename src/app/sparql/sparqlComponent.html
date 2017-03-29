@@ -36,13 +36,16 @@
                         <label style="margin-right: 5px;">Include inferred statement:</label>
                         <input #inferredcb type="checkbox" (change)="t.inferred=inferredcb.checked">
                     </div>
-                    <div *ngIf="t.queryResult != null" class="hbox pull-right" style="align-items: center">
+                    <div class="hbox pull-right" style="align-items: center">
                         <span style="display: inline; margin-left: 5px;">
-                            <template [ngIf]="t.resultType != 'boolean'">Results count: {{t.queryResult.length}}</template>
-                            (Done in {{t.queryTime}})
+                            <span *ngIf="t.queryResult != null && t.resultType != 'boolean'">
+                                Results count: {{t.queryResult.length}}
+                            </span>
+                            <span *ngIf="t.queryTime">(Done in {{t.queryTime}})</span>
                         </span>
                         <div class="dropdown pull-right" style="margin-left: 5px;">
-                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"
+                                [disabled]="t.queryResult == null">
                                 Save results as... <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">

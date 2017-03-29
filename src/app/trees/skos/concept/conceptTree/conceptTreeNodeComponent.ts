@@ -40,7 +40,6 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
 
-
     /**
  	 * Function called when "+" button is clicked.
  	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
@@ -106,12 +105,6 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     private onBroaderRemoved(concept: ARTURIResource, broader: ARTURIResource) {
         if (broader.getURI() == this.node.getURI()) {
             this.onConceptDeleted(concept);
-        }
-    }
-
-    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        if (oldResource.getURI() == this.node.getURI()) {
-            this.node['uri'] = newResource.getURI();
         }
     }
 

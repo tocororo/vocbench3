@@ -120,12 +120,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
         }
     }
 
-    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        if (oldResource.getURI() == this.node.getURI()) {
-            this.node['uri'] = newResource.getURI();
-        }
-    }
-
     private onPrefLabelSet(resource: ARTURIResource, label: string, lang: string) {
         /**
          * the following code is commented since the show of a resource is computed by the server according to the languages preference

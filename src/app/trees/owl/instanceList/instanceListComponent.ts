@@ -29,7 +29,7 @@ export class InstanceListComponent {
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
 
-    private instanceList: ARTURIResource[] = null;
+    private instanceList: ARTURIResource[] = [];
     private selectedInstance: ARTURIResource;
 
     private eventSubscriptions: any[] = [];
@@ -62,7 +62,7 @@ export class InstanceListComponent {
     }
 
     initList() {
-        this.instanceList = null;
+        this.instanceList = [];
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.clsService.getInstances(this.cls).subscribe(
