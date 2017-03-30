@@ -168,6 +168,7 @@ export class ClassIndividualTreePanelComponent {
 
     private refresh() {
         this.selectedClass = null; //instance list refresh automatically after this since it listen for changes on cls
+        this.selectedInstance = null;
         this.viewChildTree.initTree();
     }
 

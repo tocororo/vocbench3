@@ -61,7 +61,7 @@ export class NoTopConceptSchemeComponent {
     createTopConcept(scheme: ARTURIResource) {
         this.modalService.newResource("Create top Concept").then(
             (data: any) => {
-                this.skosService.createTopConcept(data.label, data.lang, scheme, data.name).subscribe(
+                this.skosService.createTopConcept(data.label, data.lang, scheme, data.uri).subscribe(
                     stResp => {
                         this.runIcv();
                     }

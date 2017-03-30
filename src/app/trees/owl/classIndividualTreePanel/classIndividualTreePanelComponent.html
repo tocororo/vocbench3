@@ -18,7 +18,7 @@
                 <img src="../../../../assets/images/individual_create.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Instance" (click)="deleteInstance()"
-                [disabled]="!selectedClass || !selectedInstance">
+                [disabled]="!selectedClass || !selectedInstance || !selectedInstance.getAdditionalProperty('explicit')">
                 <img src="../../../../assets/images/individual_delete.png" class="panelButtonImg"/>
             </button>
         </div>

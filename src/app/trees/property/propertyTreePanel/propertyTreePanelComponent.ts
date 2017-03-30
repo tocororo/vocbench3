@@ -75,6 +75,7 @@ export class PropertyTreePanelComponent {
     }
 
     private refresh() {
+        this.selectedProperty = null;
         this.viewChildTree.initTree();
     }
 

@@ -208,7 +208,7 @@ export class ModalServices {
      * Opens a modal to create a new resource with name, label and language tag
      * @param title the title of the modal dialog
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
-     * @return if the modal closes with ok returns a promise containing an object with name, label and lang
+     * @return if the modal closes with ok returns a promise containing an object with uri, label and lang
      */
     newResource(title: string, lang?: string) {
         var modalData = new NewResourceModalData(title, lang);

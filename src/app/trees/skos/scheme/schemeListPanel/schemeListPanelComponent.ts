@@ -41,6 +41,7 @@ export class SchemeListPanelComponent {
     }
 
     private initList() {
+        this.selectedScheme = null;
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 //sort by show if rendering is active, uri otherwise
@@ -55,13 +56,13 @@ export class SchemeListPanelComponent {
         this.modalService.newResource("Create new skos:ConceptScheme").then(
             (result: any) => {
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createScheme(result.label, result.lang, result.name).subscribe(
+                    this.skosService.createScheme(result.label, result.lang, result.uri).subscribe(
                         newScheme => {
                             this.schemeList.push(newScheme);
                         }
                     );
                 } else {//SKOSXL
-                    this.skosxlService.createScheme(result.label, result.lang, result.name).subscribe(
+                    this.skosxlService.createScheme(result.label, result.lang, result.uri).subscribe(
                         newScheme => {
                             this.schemeList.push(newScheme);
                         }

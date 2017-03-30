@@ -36,12 +36,12 @@ export class CollectionTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createRootCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosService.createRootCollection(res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createRootCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createRootCollection(res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -56,12 +56,12 @@ export class CollectionTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createRootOrderedCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosService.createRootOrderedCollection(res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createRootOrderedCollection(res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createRootOrderedCollection(res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -76,12 +76,12 @@ export class CollectionTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createNestedCollection(this.selectedCollection, res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -96,12 +96,12 @@ export class CollectionTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.name, null, RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.createNestedOrderedCollection(this.selectedCollection, res.label, res.lang, res.uri, null, RDFTypesEnum.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -135,6 +135,7 @@ export class CollectionTreePanelComponent {
     }
 
     private refresh() {
+        this.selectedCollection = null;
         this.viewChildTree.initTree();
     }
 

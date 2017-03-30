@@ -51,12 +51,12 @@ export class ConceptTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.name).subscribe(
+                    this.skosService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.name).subscribe(
+                    this.skosxlService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -71,12 +71,12 @@ export class ConceptTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.name).subscribe(
+                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.name).subscribe(
+                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -110,6 +110,7 @@ export class ConceptTreePanelComponent {
     }
 
     private refresh() {
+        this.selectedConcept = null;
         this.viewChildTree.initTree();
     }
 
