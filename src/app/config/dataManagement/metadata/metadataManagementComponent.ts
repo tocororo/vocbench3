@@ -116,7 +116,10 @@ export class MetadataManagementComponent {
     private onBaseURIChanged(newBaseURI: string) {
         this.baseURI = newBaseURI;
         if (this.bind) {
-            this.namespace = this.baseURI + "#";
+            this.namespace = this.baseURI;
+            if (!(this.baseURI.endsWith("/") || this.baseURI.endsWith("#"))) {
+                this.namespace = this.namespace + "#";
+            }
         }
     }
 

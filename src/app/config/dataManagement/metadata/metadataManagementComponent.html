@@ -36,7 +36,7 @@
                                             <span class="glyphicon glyphicon-link"></span>
                                         </button>
                                         <button class="btn btn-default" title="Apply namespace baseURI changes"
-                                            [ngClass]="{'btn-primary' : areNamespaceBaseURIChanged()}" 
+                                            [ngClass]="{'btn-primary': areNamespaceBaseURIChanged(), 'btn-default': !areNamespaceBaseURIChanged()}" 
                                             (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged()">
                                             <span class="glyphicon glyphicon-ok"></span>
                                         </button>
