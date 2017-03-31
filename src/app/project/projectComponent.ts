@@ -67,7 +67,6 @@ export class ProjectComponent implements OnInit {
             this.modalService.confirm("Delete project", "Attention, this operation will delete the project " +
                 this.selectedProject.getName() + ". Are you sure to proceed?", "warning").then(
                 result => {
-                    VBContext.removeProjectSetting(this.selectedProject);
                     this.projectService.deleteProject(this.selectedProject).subscribe(
                         stResp => {
                             for (var i = 0; i < this.projectList.length; i++) { //remove project from list

@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { PreferencesServices } from '../services/preferencesServices';
+import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Cookie } from '../utils/Cookie';
+import { VBEventHandler } from '../utils/VBEventHandler';
 
 @Injectable()
 export class VBPreferences {
 
     private showFlags: boolean = true;
     private languages: string[] = []; //contains langTag or a single element "*" that means all languages
+    private activeScheme: ARTURIResource;
 
-    constructor(private prefService: PreferencesServices) {}
+    constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) {}
 
     /**
      * To call each time the user change project
@@ -18,8 +21,26 @@ export class VBPreferences {
             prefs => {
                 this.showFlags = prefs.show_flags;
                 this.languages = prefs.languages;
+                let activeSchemePref = prefs.active_scheme;
+                if (activeSchemePref != null) {
+                    this.activeScheme = new ARTURIResource(prefs.active_scheme, null, RDFResourceRolesEnum.conceptScheme);
+                } else {
+                    this.activeScheme = null;
+                }
             }
         )
+    }
+
+    getActiveScheme(): ARTURIResource {
+        return this.activeScheme;
+    }
+    setActiveScheme(scheme: ARTURIResource) {
+        this.activeScheme = scheme;
+        this.prefService.setActiveScheme(scheme).subscribe(
+            stResp => {
+                this.eventHandler.schemeChangedEvent.emit(scheme);
+            }
+        );
     }
 
     getShowFlags(): boolean {
@@ -83,13 +104,6 @@ export class VBPreferences {
         return mode;
     }
 
-}
-
-export type PropertyLevel = "USER" | "PROJECT" | "SYSTEM";
-export const PropertyLevel = {
-    USER: "USER" as PropertyLevel,
-    PROJECT: "PROJECT" as PropertyLevel,
-    SYSTEM: "SYSTEM" as PropertyLevel
 }
 
 export type ResourceViewMode = "tabbed" | "splitted";

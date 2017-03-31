@@ -6,6 +6,7 @@ import { MetadataServices } from "../../../services/metadataServices";
 import { RefactorServices } from "../../../services/refactorServices";
 import { OntoManagerServices } from '../../../services/ontoManagerServices';
 import { VBContext } from "../../../utils/VBContext";
+import { VBPreferences } from "../../../utils/VBPreferences";
 import { UIUtils } from "../../../utils/UIUtils";
 import { PrefixMapping } from "../../../models/PrefixMapping";
 import { ModalServices } from "../../../widget/modal/modalServices";
@@ -39,7 +40,7 @@ export class MetadataManagementComponent {
     private mirrorList: Array<any>; //array of {file: string, namespace: string}
 
     constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
-        private refactorService: RefactorServices, private modalService: ModalServices,
+        private refactorService: RefactorServices, private modalService: ModalServices, private preferences: VBPreferences,
         private modal: Modal) { }
 
     ngOnInit() {
@@ -179,7 +180,7 @@ export class MetadataManagementComponent {
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
-                                        VBContext.removeScheme(VBContext.getWorkingProject());
+                                        this.preferences.setActiveScheme(null);
                                     }
                                 )
                             }

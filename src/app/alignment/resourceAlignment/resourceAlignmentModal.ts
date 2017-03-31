@@ -4,7 +4,6 @@ import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
-import {VBContext} from "../../utils/VBContext";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
 import {BrowseExternalResourceModal, BrowseExternalResourceModalData} from "./browseExternalResourceModal"
@@ -56,27 +55,27 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     private browse() {
         if (this.context.resource.getRole() == RDFResourceRolesEnum.concept) {
             this.openBrowseExternalResModal("Select concept", RDFResourceRolesEnum.concept).then(
-                res => { this.alignedObject = res; },
+                (res: any) => { this.alignedObject = res; },
                 () => { this.alignedObject = null; }
             );
         } else if (this.context.resource.getRole() == RDFResourceRolesEnum.cls) {
             this.openBrowseExternalResModal("Select class", RDFResourceRolesEnum.cls).then(
-                res => { this.alignedObject = res; },
+                (res: any) => { this.alignedObject = res; },
                 () => { this.alignedObject = null; }
             );
         } else if (this.context.resource.getRole().toLowerCase().indexOf(RDFResourceRolesEnum.property) != -1) {
             this.openBrowseExternalResModal("Select property", RDFResourceRolesEnum.property).then(
-                res => { this.alignedObject = res; },
+                (res: any) => { this.alignedObject = res; },
                 () => { this.alignedObject = null; }
             );
         } else if (this.context.resource.getRole() == RDFResourceRolesEnum.individual) {
             this.openBrowseExternalResModal("Select instance", RDFResourceRolesEnum.individual).then(
-                res => { this.alignedObject = res; },
+                (res: any) => { this.alignedObject = res; },
                 () => { this.alignedObject = null; }
             );
         } else if (this.context.resource.getRole() == RDFResourceRolesEnum.conceptScheme) {
             this.openBrowseExternalResModal("Select concept scheme", RDFResourceRolesEnum.conceptScheme).then(
-                res => { this.alignedObject = res; },
+                (res: any) => { this.alignedObject = res; },
                 () => { this.alignedObject = null; }
             );
         } else {

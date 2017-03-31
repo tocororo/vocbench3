@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { VBContext } from '../../../utils/VBContext';
+import { VBPreferences } from '../../../utils/VBPreferences';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { SKOS } from '../../../models/Vocabulary';
 
@@ -18,10 +18,10 @@ export class ClassIndividualTreeComponent {
     private currentScheme: ARTURIResource;//the scheme selecte in the concept tree (only if selected class is skos:Concept)
     private selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
 
-    constructor() { }
+    constructor(private preferences: VBPreferences) { }
 
     ngOnInit() {
-        this.currentScheme = VBContext.getScheme();
+        this.currentScheme = this.preferences.getActiveScheme();
     }
 
     ngOnChanges(changes: SimpleChanges) {

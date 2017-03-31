@@ -3,7 +3,7 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
-import { VBContext } from '../../utils/VBContext';
+import { VBPreferences } from '../../utils/VBPreferences';
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -75,7 +75,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
-        private propService: PropertyServices, private browsingService: BrowsingServices) {
+        private propService: PropertyServices, private browsingService: BrowsingServices, private preferences: VBPreferences) {
         this.context = dialog.context;
     }
 
@@ -138,7 +138,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
                                 this.viewType = "classTree";
                             } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
-                                this.scheme = VBContext.getScheme();
+                                this.scheme = this.preferences.getActiveScheme();
                                 this.viewType = "conceptTree";
                             } else if (rangeClass.getURI() == SKOS.conceptScheme.getURI()) {
                                 this.viewType = "schemeList";

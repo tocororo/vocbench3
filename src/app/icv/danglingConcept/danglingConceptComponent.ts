@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VBContext } from "../../utils/VBContext";
+import { VBPreferences } from "../../utils/VBPreferences";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -18,14 +18,14 @@ export class DanglingConceptComponent {
     private selectedScheme: ARTURIResource;
     private brokenConceptList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices,
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBPreferences,
         private modalService: ModalServices, private browsingService: BrowsingServices) { }
 
     ngOnInit() {
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 this.schemeList = schemeList;
-                var currentScheme = VBContext.getScheme();
+                var currentScheme = this.preferences.getActiveScheme();
                 if (currentScheme != null) {
                     for (var i = 0; i < this.schemeList.length; i++) {
                         if (this.schemeList[i].getURI() == currentScheme.getURI()) {

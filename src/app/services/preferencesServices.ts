@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -9,16 +10,6 @@ export class PreferencesServices {
     private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
-
-    /**
-     * Gets the rendering languages preference
-     * @return a list of language tag. If the list has just one element "*", it means "all languages"
-     */
-    // getLanguages(): Observable<string[]> {
-    //     console.log("[PreferencesServices] getLanguages");
-    //     var params = {};
-    //     return this.httpMgr.doGet(this.serviceName, "getLanguages", params, this.oldTypeService, true);
-    // }
 
     /**
      * Sets the rendering languages preference
@@ -34,17 +25,8 @@ export class PreferencesServices {
     }
 
     /**
-     * Gets the show_flag preference
-     */
-    // getShowFlags(): Observable<boolean> {
-    //     console.log("[PreferencesServices] getShowFlags");
-    //     var params = {};
-    //     return this.httpMgr.doGet(this.serviceName, "getShowFlags", params, this.oldTypeService, true);
-    // }
-
-    /**
-     * 
-     * @param show Sets the show_flag preference
+     * Sets the show_flag preference
+     * @param show 
      */
     setShowFlags(show: boolean) {
         console.log("[PreferencesServices] setShowFlags");
@@ -52,6 +34,19 @@ export class PreferencesServices {
             show: show
         };
         return this.httpMgr.doGet(this.serviceName, "setShowFlags", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Sets the default active skos concept scheme
+     * @param scheme 
+     */
+    setActiveScheme(scheme?: ARTURIResource) {
+        console.log("[PreferencesServices] setActiveScheme");
+        var params: any = {}
+        if (scheme != null) {
+            params.scheme = scheme;
+        }
+        return this.httpMgr.doGet(this.serviceName, "setActiveScheme", params, this.oldTypeService, true);
     }
 
     /**

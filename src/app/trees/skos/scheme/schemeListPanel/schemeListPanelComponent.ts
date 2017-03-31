@@ -4,6 +4,7 @@ import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { VBContext } from '../../../../utils/VBContext';
+import { VBPreferences } from '../../../../utils/VBPreferences';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 
@@ -26,7 +27,7 @@ export class SchemeListPanelComponent {
     private eventSubscriptions: any[] = [];
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private modalService: ModalServices) {
+        private eventHandler: VBEventHandler, private modalService: ModalServices, private preferences: VBPreferences) {
 
         this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
             (newLang: string) => this.onContentLangChanged(newLang)));
@@ -36,7 +37,7 @@ export class SchemeListPanelComponent {
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
-        this.activeScheme = VBContext.getScheme();
+        this.activeScheme = this.preferences.getActiveScheme();
         this.initList();
     }
 
@@ -120,8 +121,8 @@ export class SchemeListPanelComponent {
         }
         //reset the activeScheme if the deleted was the active one
         if (this.activeScheme != undefined && (this.selectedScheme.getURI() == this.activeScheme.getURI())) {
-            VBContext.removeScheme(VBContext.getWorkingProject());
             this.activeScheme = null;
+            this.preferences.setActiveScheme(this.activeScheme);
         }
         this.selectedScheme = null;
         this.nodeSelected.emit(undefined);
@@ -131,12 +132,10 @@ export class SchemeListPanelComponent {
         //if the scheme that is trying to activate it was already active, pass to no-scheme mode
         if (this.activeScheme != undefined && this.activeScheme.getURI() == scheme.getURI()) {
             this.activeScheme = null;
-            VBContext.removeScheme(VBContext.getWorkingProject());
-            this.eventHandler.schemeChangedEvent.emit(null);
+            this.preferences.setActiveScheme(this.activeScheme);
         } else {
             this.activeScheme = scheme;
-            VBContext.setScheme(this.activeScheme);
-            this.eventHandler.schemeChangedEvent.emit(this.activeScheme);
+            this.preferences.setActiveScheme(this.activeScheme);
         }
     }
 

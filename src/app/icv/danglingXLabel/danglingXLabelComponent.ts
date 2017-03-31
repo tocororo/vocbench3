@@ -3,7 +3,7 @@ import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServi
 import { ModalServices } from "../../widget/modal/modalServices";
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
-import { VBContext } from "../../utils/VBContext";
+import { VBPreferences } from "../../utils/VBPreferences";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosxlServices } from "../../services/skosxlServices";
@@ -19,7 +19,7 @@ export class DanglingXLabelComponent {
     private brokenLabelList: Array<ARTResource>;
 
     constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private deleteService: DeleteServices,
-        private browsingService: BrowsingServices, private modalService: ModalServices) { }
+        private browsingService: BrowsingServices, private modalService: ModalServices, private preferences: VBPreferences) { }
 
     /**
      * Run the check
@@ -55,7 +55,7 @@ export class DanglingXLabelComponent {
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
         this.modalService.selectResource("Set skosxl:Label as", null, predOpts).then(
             (selectedPred: any) => {
-                this.browsingService.browseConceptTree("Assign xLabel to concept", VBContext.getScheme(), true).then(
+                this.browsingService.browseConceptTree("Assign xLabel to concept", this.preferences.getActiveScheme(), true).then(
                     (concept: any) => {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(

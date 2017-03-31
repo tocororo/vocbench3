@@ -103,31 +103,6 @@ export class VBContext {
     }
 
     /**
-     * Saves the given scheme for the project in use as cookie
-     */
-    static setScheme(scheme: ARTURIResource) {
-        Cookie.setCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName(), scheme.getURI(), 365 * 10);
-    }
-    /**
-     * Returns the scheme saved for the project in use as cookie.
-     * Note: returns an ARTURIResource with show null
-     */
-    static getScheme(): ARTURIResource {
-        var schemeCookie = Cookie.getCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + this.getWorkingProject().getName());
-        if (schemeCookie != null) {
-            return new ARTURIResource(schemeCookie, null, RDFResourceRolesEnum.conceptScheme);
-        } else {
-            return null;
-        }
-    }
-    /**
-     * Removes the scheme saved for the given project
-     */
-    static removeScheme(project: Project) {
-        Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
-    }
-
-    /**
      * Sets a sessione token (to keep track of session in some tools/scenarios)
      */
     static setSessionToken(token: string) {
@@ -144,13 +119,6 @@ export class VBContext {
      */
     static removeSessionToken() {
         this.sessionToken = undefined;
-    }
-
-    /**
-     * Removes the settings saved as cookie for the given project
-     */
-    static removeProjectSetting(project: Project) {
-        Cookie.deleteCookie(Cookie.VB_ACTIVE_SKOS_SCHEME + "_" + project.getName());
     }
 
     /**

@@ -41,8 +41,8 @@ export class ConceptTreePanelComponent {
         this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
         if (this.scheme != undefined) { //if @Input scheme is provided, initialize the tree with this scheme
             this.activeScheme = this.scheme;
-        } else { //otherwise get the scheme from VB context
-            this.activeScheme = VBContext.getScheme();
+        } else { //otherwise get the scheme from the preferences
+            this.activeScheme = this.preferences.getActiveScheme();
         }
     }
 
@@ -51,12 +51,12 @@ export class ConceptTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.uri).subscribe(
+                    this.skosService.createTopConcept(res.label, res.lang, this.activeScheme, res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept(res.label, res.lang, VBContext.getScheme(), res.uri).subscribe(
+                    this.skosxlService.createTopConcept(res.label, res.lang, this.activeScheme, res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -71,12 +71,12 @@ export class ConceptTreePanelComponent {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.uri).subscribe(
+                    this.skosService.createNarrower(res.label, res.lang, this.selectedConcept, this.activeScheme, res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, VBContext.getScheme(), res.uri).subscribe(
+                    this.skosxlService.createNarrower(res.label, res.lang, this.selectedConcept, this.activeScheme, res.uri).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );

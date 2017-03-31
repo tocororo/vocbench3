@@ -1,7 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { ModalServices, ModalType } from "../widget/modal/modalServices";
 import { BrowsingServices } from "../widget/modal/browsingModal/browsingServices";
-import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "test-component",
