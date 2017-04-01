@@ -22,8 +22,8 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     rootProperties: ARTURIResource[] = [
-        RDFS.subClassOf, OWL.disjointWith, OWL.complementOf,
-        OWL.intersectionOf, OWL.unionOf, OWL.oneOf]; //equivalentClass excluded since is subProperty of subClassOf
+        RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
+        OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
     knownProperties: ARTURIResource[] = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
