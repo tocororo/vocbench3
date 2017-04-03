@@ -100,7 +100,6 @@ export class ClassIndividualTreePanelComponent {
     }
 
     private reduceClassTree() {
-        console.log("BEFORE", this.classTreeFlex, this.classTreeStyle, this.instanceListStyle);
         if (this.classTreeFlex > 1) {
             this.classTreeFlex--;
             this.refreshTreeListStyles()
@@ -108,7 +107,6 @@ export class ClassIndividualTreePanelComponent {
     }
 
     private expandClassTree() {
-        console.log("BEFORE", this.classTreeFlex, this.classTreeStyle, this.instanceListStyle);
         if (this.classTreeFlex < 3) {
             this.classTreeFlex++;
             this.refreshTreeListStyles()
@@ -118,9 +116,6 @@ export class ClassIndividualTreePanelComponent {
     private refreshTreeListStyles() {
         this.classTreeStyle = this.sanitizer.bypassSecurityTrustStyle("flex: " + this.classTreeFlex);
         this.instanceListStyle = this.sanitizer.bypassSecurityTrustStyle("flex: " + (4 - this.classTreeFlex));
-        console.log("AFTER", this.classTreeFlex, this.classTreeStyle, this.instanceListStyle);
-
-        //Check style="unsafe" I think I should sanitize the styles
     }
 
     // private onMousedown() {

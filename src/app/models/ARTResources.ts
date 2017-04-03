@@ -427,6 +427,31 @@ export class ResourceUtils {
         }
     }
 
+    /**
+     * Returns the rendering of a resource.
+     * If rendering is true, returns the show of the resource.
+     * If rendering is false, if the resource is a URI resource, reuturns its qname (if not available, the whole uri), if the
+     * resource isn't a URI resource, returns the show.
+     * @param resource 
+     * @param rendering 
+     */
+    static getRendering(resource: ARTNode, rendering: boolean) {
+        if (rendering) {
+			return resource.getShow();	
+		} else {
+			if (resource.isURIResource()) {
+				let qname = resource.getAdditionalProperty(ResAttribute.QNAME);
+				if (qname != undefined) {
+					return qname;
+				} else {
+					return (<ARTURIResource>resource).getURI();
+				}
+			} else {
+				return resource.getShow();
+			}
+		}
+    }
+
     static parseURI(nTriplesURI: string): ARTURIResource {
         if (nTriplesURI.startsWith("<") && nTriplesURI.endsWith(">")) {
 			let uri: string = nTriplesURI.substring(1, nTriplesURI.length - 1);

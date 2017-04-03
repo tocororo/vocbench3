@@ -6,7 +6,7 @@ import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
 import {ModalServices} from "../../widget/modal/modalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
-import {BrowseExternalResourceModal, BrowseExternalResourceModalData} from "./browseExternalResourceModal"
+import {BrowseExternalResourceModal} from "./browseExternalResourceModal"
 
 export class ResourceAlignmentModalData extends BSModalContext {
     /**
@@ -91,10 +91,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
      * @param resRole role of the resource to explore.
      */
     private openBrowseExternalResModal(title: string, resRole: RDFResourceRolesEnum) {
-        var modalData = new BrowseExternalResourceModalData(title, resRole);
-        const builder = new BSModalContextBuilder<BrowseExternalResourceModalData>(
-            modalData, undefined, BrowseExternalResourceModalData
-        );
+        const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(BrowseExternalResourceModal, overlayConfig).then(
             dialog => dialog.result

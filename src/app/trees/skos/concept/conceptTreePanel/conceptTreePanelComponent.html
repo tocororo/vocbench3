@@ -29,11 +29,11 @@
     <!-- Tree -->
     <div class="panel-body vbox">
 
-        <div *ngIf="schemeChangeable" style="padding: 3px; border-bottom: 1px solid #ddd; display: flex; align-items: center">
+        <div *ngIf="schemeChangeable" style="padding-bottom: 3px; display: flex; align-items: center">
             <span style="white-space: nowrap; margin: 0px 3px;">Concept Scheme:</span>
             <select class="form-control input-xs" [(ngModel)]="selectedSchemeUri" (ngModelChange)="onSchemeSelectionChange()">
                 <option value="---">no-scheme</option>
-                <option *ngFor="let s of schemeList" [value]="s.getURI()">{{s.getURI()}}</option>
+                <option *ngFor="let s of schemeList" [value]="s.getURI()">{{getSchemeRendering(s)}}</option>
             </select>
         </div>
 

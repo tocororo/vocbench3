@@ -8,7 +8,7 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 
 @Component({
     selector: "concept-tree-panel",
@@ -46,12 +46,11 @@ export class ConceptTreePanelComponent {
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
-        if (this.scheme != undefined) { //if @Input scheme is provided, initialize the tree with this scheme
-            this.workingScheme = this.scheme;
-        } else { //otherwise get the scheme from the preferences
+        if (this.scheme === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingScheme = this.preferences.getActiveScheme();
+        } else { //if @Input scheme is provided (it could be null => no scheme-mode), initialize the tree with this scheme
+            this.workingScheme = this.scheme;
         }
-
         //init the scheme list if the concept tree allows dynamic change of scheme
         if (this.schemeChangeable) {
             this.skosService.getAllSchemes().subscribe( //new service
@@ -160,6 +159,10 @@ export class ConceptTreePanelComponent {
             }
         }
         return null; //schemeUri was probably "---", so for no-scheme mode return a null object
+    }
+
+    private getSchemeRendering(scheme: ARTURIResource) {
+        return ResourceUtils.getRendering(scheme, this.rendering);
     }
 
     //search handlers

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">Select aligned resource</h3>
 </div>
 <div class="modal-body vbox" style="height:70vh;">
     
@@ -9,24 +9,42 @@
             <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
         </select>
     </div>
-    
-    <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
-     or individuals, and they are rendered based on the resource role -->
-    <class-tree-panel *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)" [editable]="false">
-    </class-tree-panel>
+
+    <div *ngIf="project" class="vbox">
+        <div style="padding: 3px; display: flex; align-items: center">
+            <span style="white-space: nowrap; margin: 0px 3px;">Align with:</span>
+            <select class="form-control input-xs" [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
+                <option value="cls">Class</option>
+                <option value="individual">Individual</option>
+                <option value="property">Property</option>
+                <option *ngIf="isProjectSKOS()" value="concept">Concept</option>
+                <option *ngIf="isProjectSKOS()" value="conceptScheme">ConceptScheme</option>
+                <option *ngIf="isProjectSKOS()" value="skosCollection">Collection</option>
+            </select>
+        </div>
+
+        <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
+        or individuals, and they are rendered based on the resource role -->
+        <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false">
+        </class-tree-panel>
+                
+        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [scheme]="scheme" [editable]="false"
+            (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
+        </concept-tree-panel>
+                
+        <property-tree-panel *ngIf="activeView=='property'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </property-tree-panel>
             
-    <concept-tree-panel *ngIf="showConceptTree()" [schemeChangeable]="true" [scheme]="currentScheme" [editable]="false"
-        (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
-    </concept-tree-panel>
-            
-    <property-tree-panel *ngIf="showPropertyTree()" [editable]="false" (nodeSelected)="onResourceSelected($event)">
-    </property-tree-panel>
+        <scheme-list *ngIf="activeView=='conceptScheme'" (nodeSelected)="onResourceSelected($event)">
+        </scheme-list>
+
+        <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </collection-tree-panel>
         
-    <scheme-list *ngIf="showSchemeList()" (nodeSelected)="onResourceSelected($event)">
-    </scheme-list>
-    
-    <class-individual-tree *ngIf="showClassIndividualTree()" (nodeSelected)="onResourceSelected($event)">
-    </class-individual-tree>
+        <class-individual-tree *ngIf="activeView=='individual'" [scheme]="scheme" (nodeSelected)="onResourceSelected($event)">
+        </class-individual-tree>
+
+    </div>
     
 </div>
 <div class="modal-footer">

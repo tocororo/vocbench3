@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBPreferences } from "../../utils/VBPreferences";
 
@@ -14,20 +14,7 @@ export class RdfResourceComponent {
 	constructor(private preferences: VBPreferences) { }
 
 	private getRendering(): string {
-		if (this.rendering) {
-			return this.resource.getShow();	
-		} else {
-			if (this.resource.isURIResource()) {
-				let qname = this.resource.getAdditionalProperty(ResAttribute.QNAME);
-				if (qname != undefined) {
-					return qname;
-				} else {
-					return (<ARTURIResource>this.resource).getURI();
-				}
-			} else {
-				return this.resource.getShow();
-			}
-		}
+		return ResourceUtils.getRendering(this.resource, this.rendering);
 	}
 
 	private getImgSrc(): string {

@@ -9,7 +9,8 @@ import { SKOS } from '../../../models/Vocabulary';
 })
 export class ClassIndividualTreeComponent {
 
-    @Input() roots: ARTURIResource[];//roots of the class three
+    @Input() roots: ARTURIResource[]; //roots of the class three
+    @Input() scheme: ARTURIResource; //scheme to use in case the class selected is skos:Concept
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();//when an instance or a concept is selected
     /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
     create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/
@@ -21,7 +22,11 @@ export class ClassIndividualTreeComponent {
     constructor(private preferences: VBPreferences) { }
 
     ngOnInit() {
-        this.currentScheme = this.preferences.getActiveScheme();
+        if (this.scheme === undefined) { //if @Input scheme is not provided at all, get it from project preference
+            this.currentScheme = this.preferences.getActiveScheme();
+        } else { //if @Input scheme is provided (it could be null => no scheme-mode), initialize the tree with this scheme
+            this.currentScheme = this.scheme;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {

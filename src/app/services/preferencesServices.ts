@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
 
 @Injectable()
 export class PreferencesServices {
@@ -47,6 +48,26 @@ export class PreferencesServices {
             params.scheme = scheme;
         }
         return this.httpMgr.doGet(this.serviceName, "setActiveScheme", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Returns the active scheme for the given project
+     * @param projectName 
+     */
+    getActiveScheme(projectName: string): Observable<ARTURIResource> {
+        console.log("[PreferencesServices] getActiveScheme");
+        var params: any = {
+            projectName: projectName
+        }
+        return this.httpMgr.doGet(this.serviceName, "getActiveScheme", params, this.oldTypeService, true).map(
+            stResp => {
+                if (stResp == null) {
+                    return null;
+                } else {
+                    return Deserializer.createURI(stResp);
+                }
+            }
+        );
     }
 
     /**

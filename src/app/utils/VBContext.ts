@@ -83,7 +83,7 @@ export class VBContext {
      * Removes a contextual project (project temporarly used in some scenarios)
      */
     static removeContextProject() {
-        this.ctxProject = undefined;
+        this.ctxProject = null;
     }
 
     static setLoggedUser(user: User) {
