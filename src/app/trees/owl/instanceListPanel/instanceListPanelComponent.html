@@ -1,6 +1,15 @@
 <div class="panel panel-default vbox">
     <!-- Commands -->
     <div class="panel-heading">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group" style="flex: 1">
+            <button class="btn btn-default" title="Create Instance" (click)="createInstance()" [disabled]="!cls">
+                <img src="../../../../assets/images/individual_create.png" class="panelButtonImg"/>
+            </button>
+            <button class="btn btn-default" title="Delete Instance" (click)="deleteInstance()"
+                [disabled]="!cls || !selectedInstance || !selectedInstance.getAdditionalProperty('explicit')">
+                <img src="../../../../assets/images/individual_delete.png" class="panelButtonImg"/>
+            </button>
+        </div>
         <div style="flex: 1"></div>
         <button class="btn btn-default btn-xs" style="margin: 0px 5px;" title="Rendering"
             (click)="rendering = !rendering" [ngClass]="{active: rendering}">
@@ -15,6 +24,19 @@
     <div class="panel-body vbox">
         <instance-list [cls]="cls" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)">
         </instance-list>
+    </div>
+
+    <!-- Search -->
+    <div *ngIf="!hideSearch" class="panel-footer">
+        <div class="input-group input-group-xs">
+            <input #searchinput type="text" class="form-control" placeholder="Search..." 
+                (keydown)="searchKeyHandler($event.which, searchinput.value)" [disabled]="!cls">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)" [disabled]="!cls">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
     </div>
     
 </div>

@@ -16,25 +16,18 @@ import { AbstractTree } from "../../../abstractTree";
 export class ConceptTreeComponent extends AbstractTree {
 
     @Input() scheme: ARTURIResource;
-    @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
+    // @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
     //only when the scheme is the one used in the current concept tree
-    @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
-
-    private schemeList: Array<ARTURIResource>;
-    private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
-    //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
-    private workingScheme: ARTURIResource;//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
-    //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
         eventHandler: VBEventHandler) {
 
         super(eventHandler);
-        
+
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: any) => this.onTopConceptCreated(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
@@ -47,29 +40,11 @@ export class ConceptTreeComponent extends AbstractTree {
             (newLang: string) => this.onContentLangChanged(newLang)));
     }
 
-    ngOnInit() {
-        this.workingScheme = this.scheme;
-        //init the scheme list if the concept tree allows dynamic change of scheme
-        if (this.schemeChangeable) {
-            this.skosService.getAllSchemes().subscribe( //new service
-                schemes => {
-                    this.schemeList = schemes;
-                    if (this.scheme != undefined) {
-                        this.selectedSchemeUri = this.scheme.getURI();
-                    } else {
-                        this.selectedSchemeUri = "---";
-                    }
-                }
-            );
-        }
-    }
-
     /**
      * Listener on changes of @Input scheme. When it changes, update the tree
      */
     ngOnChanges(changes: SimpleChanges) {
         if (changes['scheme']) {
-            this.workingScheme = changes['scheme'].currentValue;
             this.initTree();
         }
     }
@@ -79,7 +54,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.selectedNode = null;
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.skosService.getTopConcepts(this.workingScheme).subscribe( //new service (whithout lang param)
+        this.skosService.getTopConcepts(this.scheme).subscribe( //new service (whithout lang param)
             topConcepts => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
@@ -91,33 +66,8 @@ export class ConceptTreeComponent extends AbstractTree {
         );
     }
 
-    doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", null, this.workingScheme).subscribe(
-                searchResult => {
-                    if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.openTreeAt(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                (selectedResource: any) => {
-                                    this.openTreeAt(selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
-                    }
-                }
-            );
-        }
-    }
-
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.workingScheme).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.scheme).subscribe(
             path => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node
@@ -131,29 +81,6 @@ export class ConceptTreeComponent extends AbstractTree {
                 }
             }
         );
-    }
-
-    /**
-     * Listener to <select> element that allows to change dynamically the scheme of the
-     * concept tree (visible only if @Input schemeChangeable is true).
-     */
-    private onSchemeSelectionChange() {
-        this.workingScheme = this.getSchemeResourceFromUri(this.selectedSchemeUri);
-        this.initTree();
-        this.schemeChanged.emit(this.workingScheme);
-    }
-
-    /**
-     * Retrieves the ARTURIResource of a scheme URI from the available scheme. Returns null
-     * if the URI doesn't represent a scheme in the list.
-     */
-    private getSchemeResourceFromUri(schemeUri: string): ARTURIResource {
-        for (var i = 0; i < this.schemeList.length; i++) {
-            if (this.schemeList[i].getURI() == schemeUri) {
-                return this.schemeList[i];
-            }
-        }
-        return null; //schemeUri was probably "---", so for no-scheme mode return a null object
     }
 
     //EVENT LISTENERS
@@ -186,7 +113,7 @@ export class ConceptTreeComponent extends AbstractTree {
 
     //data contains "concept" and "scheme"
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        if (this.workingScheme != undefined && this.workingScheme.getURI() == scheme.getURI()) {
+        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
             for (var i = 0; i < this.roots.length; i++) {
                 if (this.roots[i].getURI() == concept.getURI()) {
                     this.roots.splice(i, 1);

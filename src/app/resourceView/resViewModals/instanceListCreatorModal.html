@@ -3,8 +3,9 @@
 </div>
 <div class="modal-body vbox" style="height:70vh;">
     <div class="hbox">
-        <class-tree-panel (nodeSelected)="onTreeClassSelected($event)"></class-tree-panel>
-        <instance-list-panel  style="margin-left: 4px;" [cls]="selectedClass" (nodeSelected)="onSourceListInstanceSelected($event)">
+        <class-tree-panel (nodeSelected)="onTreeClassSelected($event)" [editable]="false"></class-tree-panel>
+        <instance-list-panel  style="margin-left: 4px;" [cls]="selectedClass" (nodeSelected)="onSourceListInstanceSelected($event)"
+            [editable]="false">
         </instance-list-panel>
         
         <div style="align-self: center; margin: 5px;">

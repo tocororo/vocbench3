@@ -453,7 +453,7 @@ button.resViewPartitionBtn:disabled  {
 }
 
 .splitter {
-    font-size: 8px; align-self: center; margin: 2px;
+    font-size: 8px; align-self: center;
 }
 
 .splitter span {

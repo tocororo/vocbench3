@@ -14,7 +14,6 @@ import { SearchServices } from "../../../services/searchServices";
 })
 export class InstanceListComponent {
     @Input() cls: ARTURIResource;
-    @Input() hideSearch: boolean = false;
     @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
@@ -93,40 +92,6 @@ export class InstanceListComponent {
 
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
-        }
-    }
-
-    private doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            this.searchService.searchInstancesOfClass(this.cls, searchedText, true, true, "contain").subscribe(
-                searchResult => {
-                    if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.selectSearchedInstance(this.cls, searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                (selectedResource: any) => {
-                                    this.selectSearchedInstance(this.cls, selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
-                    }
-                }
-            );
-        }
     }
 
     private selectInstance(instance: ARTURIResource) {

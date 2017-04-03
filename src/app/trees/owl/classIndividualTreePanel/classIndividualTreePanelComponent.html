@@ -1,58 +1,26 @@
-<div class="panel panel-default vbox">
-    <!-- Commands -->
-    <div class="panel-heading">
-        <div class="btn-group btn-group-xs" role="group" style="margin-right: 4px;">
-            <button class="btn btn-default" title="Create Class" (click)="createClass()">
-                <img src="../../../../assets/images/class_create.png" class="panelButtonImg"/>
+<class-tree-panel [style]="classTreeStyle" (nodeSelected)="onClassSelected($event)" [hideSearch]="true"></class-tree-panel>
+
+<!-- Splitter -->
+<div class="splitter">
+    <span *ngIf="classTreeFlex > 1" class="glyphicon glyphicon-chevron-up" (click)="reduceClassTree()"></span>
+    <span *ngIf="classTreeFlex < 3" class="glyphicon glyphicon-chevron-down" (click)="expandClassTree()"></span>
+</div>
+
+<instance-list-panel [style]="instanceListStyle" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" [hideSearch]="true"></instance-list-panel>
+
+<div class="panel panel-default" style="margin-top: 4px;">
+    <div class="input-group input-group-xs">
+        <input #searchinput type="text" class="form-control" placeholder="Search..." 
+            (keydown)="searchKeyHandler($event.which, searchinput.value)">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
+                <span class="glyphicon glyphicon-search"></span>
             </button>
-            <button class="btn btn-default" title="Create SubClass" (click)="createSubClass()" [disabled]="!selectedClass">
-                <img src="../../../../assets/images/class_addSubClass.png" class="panelButtonImg"/>
-            </button>
-            <button class="btn btn-default" title="Delete Class" (click)="deleteClass()"
-                    [disabled]="!selectedClass || !selectedClass.getAdditionalProperty('explicit')">
-                <img src="../../../../assets/images/class_delete.png" class="panelButtonImg"/>
-            </button>
-        </div>
-        <div class="btn-group btn-group-xs" role="group" style="flex: 1">
-            <button class="btn btn-default" title="Create Instance" (click)="createInstance()" [disabled]="!selectedClass">
-                <img src="../../../../assets/images/individual_create.png" class="panelButtonImg"/>
-            </button>
-            <button class="btn btn-default" title="Delete Instance" (click)="deleteInstance()"
-                [disabled]="!selectedClass || !selectedInstance || !selectedInstance.getAdditionalProperty('explicit')">
-                <img src="../../../../assets/images/individual_delete.png" class="panelButtonImg"/>
-            </button>
-        </div>
-        <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
-            style="margin: 0px 5px;" [ngClass]="{active: rendering}">
-            <span class="glyphicon glyphicon-font"></span>
-        </button>
-        <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span>
-        </button>
+        </span>
     </div>
-    
-    <!-- Tree -->
-    <div class="panel-body vbox">
-        <class-tree [rendering]="rendering" (nodeSelected)="onClassSelected($event)" style="flex: 3" hideSearch="true"></class-tree>
-        <!--<div style="font-size: 6px; align-self: center;" (mousedown)="onMousedown()" (mouseup)="onMouseup()"
+</div>
+
+<!--<div style="font-size: 6px; align-self: center;" (mousedown)="onMousedown()" (mouseup)="onMouseup()"
             (mousemove)="onMousemove($event)">
             <span class="glyphicon glyphicon-chevron-up"></span><span class="glyphicon glyphicon-chevron-down"></span>
         </div>-->
-        <instance-list [cls]="selectedClass" [rendering]="rendering"
-            (nodeSelected)="onInstanceSelected($event)" style="margin-top: 4px;" hideSearch="true">
-        </instance-list>
-    </div>
-    
-    <!-- Search -->
-    <div class="panel-footer">
-        <div class="input-group input-group-xs">
-            <input #searchinput type="text" class="form-control" placeholder="Search..." 
-                (keydown)="searchKeyHandler($event.which, searchinput.value)">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </span>
-        </div>
-    </div>
-</div>

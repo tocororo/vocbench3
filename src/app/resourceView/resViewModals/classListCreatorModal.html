@@ -4,7 +4,7 @@
 <div class="modal-body vbox" style="height:70vh;">
 
     <div class="hbox">
-        <class-tree-panel (nodeSelected)="onTreeClassSelected($event)"></class-tree-panel>
+        <class-tree-panel (nodeSelected)="onTreeClassSelected($event)" [editable]="false"></class-tree-panel>
 
         <div class="vbox" style="flex: 0; justify-content: center; margin: 5px;">
             <button class="btn btn-default btn-sm" style="margin-bottom: 5px;" (click)="addClassToList()"

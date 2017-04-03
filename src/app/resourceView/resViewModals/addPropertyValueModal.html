@@ -18,7 +18,7 @@
 
     <!--Alternative views-->
     <div *ngIf="!manchExprEnabled" class="vbox">
-        <class-tree-panel *ngIf="viewType == 'classTree'" (nodeSelected)="onResourceSelected($event)"></class-tree-panel>
+        <class-tree-panel *ngIf="viewType == 'classTree'" (nodeSelected)="onResourceSelected($event)" [editable]="false"></class-tree-panel>
 
         <concept-tree-panel *ngIf="viewType == 'conceptTree'" [editable]="false" [schemeChangeable]="true" [scheme]="scheme"
             (nodeSelected)="onResourceSelected($event)" >

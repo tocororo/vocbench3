@@ -6,7 +6,7 @@
     </div>
 
     <!-- Splitter -->
-    <div *ngIf="selectedResource" class="splitter">
+    <div *ngIf="selectedResource" class="splitter" style="margin: 2px;">
         <span *ngIf="sidebarStatus > 0" class="glyphicon glyphicon-chevron-left" style="display: block"
             (click)="reduceSidebar()"></span>
         <span *ngIf="sidebarStatus < 2" class="glyphicon glyphicon-chevron-right" (click)="expandSidebar()"></span>

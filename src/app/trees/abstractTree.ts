@@ -15,7 +15,6 @@ export abstract class AbstractTree {
 
     @ViewChild('blockDivTree') public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
     @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-    @Input() hideSearch: boolean = false; //if true hide the search bar at the bottom of the tree
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     /**
@@ -32,7 +31,6 @@ export abstract class AbstractTree {
     protected eventHandler: VBEventHandler;
     constructor(eventHandler: VBEventHandler) {
         this.eventHandler = eventHandler;
-
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initTree()));
     }
 
@@ -61,18 +59,7 @@ export abstract class AbstractTree {
 
     abstract initTree(): void;
 
-    abstract doSearch(searchedText: string): void;
-
     abstract openTreeAt(node: ARTURIResource): void;
-
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
-        }
-    }
 
     //Listeners to node expansion start/end. Simply show/hide the loading div
     private onNodeExpandStart() {

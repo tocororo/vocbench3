@@ -3,6 +3,7 @@ import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
 import { DeleteServices } from "../../../services/deleteServices";
+import { SearchServices } from "../../../services/searchServices";
 import { ModalServices } from "../../../widget/modal/modalServices";
 
 @Component({
@@ -22,7 +23,7 @@ export class PropertyTreePanelComponent {
 
     private selectedProperty: ARTURIResource;
 
-    constructor(private propService: PropertyServices, private deleteService: DeleteServices,
+    constructor(private propService: PropertyServices, private deleteService: DeleteServices, private searchService: SearchServices,
         private modalService: ModalServices) { }
 
     private createProperty() {
@@ -77,6 +78,42 @@ export class PropertyTreePanelComponent {
     private refresh() {
         this.selectedProperty = null;
         this.viewChildTree.initTree();
+    }
+
+    //search handlers
+
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
+            this.doSearch(searchedText);
+        }
+    }
+
+    doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], true, true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.viewChildTree.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                (selectedResource: any) => {
+                                    this.viewChildTree.openTreeAt(selectedResource);
+                                },
+                                () => { }
+                            );
+                        }
+                    }
+                }
+            );
+        }
     }
 
     //EVENT LISTENERS

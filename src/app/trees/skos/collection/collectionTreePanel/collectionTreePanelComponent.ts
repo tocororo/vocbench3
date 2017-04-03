@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core
 import { CollectionTreeComponent } from "../collectionTree/collectionTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
+import { SearchServices } from "../../../../services/searchServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../../../models/ARTResources";
 import { VBContext } from "../../../../utils/VBContext";
@@ -24,7 +25,7 @@ export class CollectionTreePanelComponent {
 
     private ONTO_TYPE: string;
 
-    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices,
+    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private modalService: ModalServices) { }
 
     ngOnInit() {
@@ -137,6 +138,42 @@ export class CollectionTreePanelComponent {
     private refresh() {
         this.selectedCollection = null;
         this.viewChildTree.initTree();
+    }
+
+    //search handlers
+
+    /**
+     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     */
+    private searchKeyHandler(key: number, searchedText: string) {
+        if (key == 13) {
+            this.doSearch(searchedText);
+        }
+    }
+
+    private doSearch(searchedText: string) {
+        if (searchedText.trim() == "") {
+            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+        } else {
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain").subscribe(
+                searchResult => {
+                    if (searchResult.length == 0) {
+                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.viewChildTree.openTreeAt(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                                (selectedResource: any) => {
+                                    this.viewChildTree.openTreeAt(selectedResource);
+                                },
+                                () => { }
+                            );
+                        }
+                    }
+                }
+            );
+        }
     }
 
     //EVENT LISTENERS

@@ -53,31 +53,6 @@ export class CollectionTreeComponent extends AbstractTree {
         );
     }
 
-    doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain").subscribe(
-                searchResult => {
-                    if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.openTreeAt(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                                (selectedResource: any) => {
-                                    this.openTreeAt(selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
-                    }
-                }
-                );
-        }
-    }
-
     openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
             path => {

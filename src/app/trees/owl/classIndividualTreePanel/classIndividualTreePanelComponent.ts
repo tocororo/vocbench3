@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { ClassTreeComponent } from "../classTree/classTreeComponent";
-import { InstanceListComponent } from "../instanceList/instanceListComponent";
+import { DomSanitizer, SafeStyle } from "@angular/platform-browser"
+import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
+import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
 import { SearchServices } from "../../../services/searchServices";
 import { OwlServices } from "../../../services/owlServices";
 import { IndividualsServices } from "../../../services/individualsServices";
@@ -22,94 +23,26 @@ import { UIUtils } from "../../../utils/UIUtils";
     templateUrl: "./classIndividualTreePanelComponent.html",
 })
 export class ClassIndividualTreePanelComponent {
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
 
-    @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
-    @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
+    @ViewChild(ClassTreePanelComponent) viewChildTree: ClassTreePanelComponent;
+    @ViewChild(InstanceListPanelComponent) viewChildInstanceList: InstanceListPanelComponent;
 
     private rendering: boolean = false; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+
+    private classTreeFlex = 3;
+    private classTreeStyle: SafeStyle;
+    private instanceListStyle: SafeStyle;
 
     private selectedClass: ARTURIResource;
     private selectedInstance: ARTURIResource;
 
     constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
-        private deleteService: DeleteServices, private modalService: ModalServices) { }
+        private deleteService: DeleteServices, private modalService: ModalServices, private sanitizer: DomSanitizer) { }
 
-    private createClass() {
-        //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
-        this.modalService.prompt("Create new owl:Class", "Name", null, null, false, true).then(
-            (result: any) => {
-                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                this.owlService.createClass(OWL.thing, result).subscribe(
-                    stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                    err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                );
-            },
-            () => { }
-        );
-
-    }
-
-    private createSubClass() {
-        //currently uses prompt instead of newResource since createClass service doesn't allow to provide a label
-        this.modalService.prompt("Create new owl:Class", "Name", null, null, false, true).then(
-            (result: any) => {
-                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
-                this.owlService.createClass(this.selectedClass, result).subscribe(
-                    stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                    err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                );
-            },
-            () => { }
-        );
-    }
-
-    private deleteClass() {
-        if (this.selectedClass.getAdditionalProperty(ResAttribute.NUM_INST) != 0) {
-            this.modalService.alert("Operation denied", "Cannot delete " + this.selectedClass.getURI() +
-                " since it has instance(s). Please delete the instance(s) and retry.", "warning");
-            return;
-        }
-        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
-        this.deleteService.removeClass(this.selectedClass).subscribe(
-            stResp => {
-                this.selectedClass = null;
-                this.nodeSelected.emit(undefined);
-                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            },
-            err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
-        );
-    }
-
-    private createInstance() {
-        //currently uses prompt instead of newResource since createInstance service doesn't allow to provide a label
-        this.modalService.prompt("Create new instance", "Name", null, null, false, true).then(
-            (result: any) => {
-                UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-                this.owlService.createInstance(this.selectedClass, result).subscribe(
-                    stResp => UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement),
-                    err => UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement)
-                );
-            },
-            () => { }
-        );
-    }
-
-    private deleteInstance() {
-        UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-        this.deleteService.removeInstance(this.selectedInstance, this.selectedClass).subscribe(
-            stResp => {
-                this.selectedInstance = null;
-                this.instanceSelected.emit(undefined);
-                //no more selected instance => select the class, so the resource view show the description of this class
-                if (this.selectedClass != null) {
-                    this.nodeSelected.emit(this.selectedClass);
-                }
-                UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-            },
-            err => { UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement); }
-        )
+    ngOnInit() {
+        this.refreshTreeListStyles();
     }
 
     private doSearch(searchedText: string) {
@@ -166,10 +99,28 @@ export class ClassIndividualTreePanelComponent {
         }
     }
 
-    private refresh() {
-        this.selectedClass = null; //instance list refresh automatically after this since it listen for changes on cls
-        this.selectedInstance = null;
-        this.viewChildTree.initTree();
+    private reduceClassTree() {
+        console.log("BEFORE", this.classTreeFlex, this.classTreeStyle, this.instanceListStyle);
+        if (this.classTreeFlex > 1) {
+            this.classTreeFlex--;
+            this.refreshTreeListStyles()
+        }
+    }
+
+    private expandClassTree() {
+        console.log("BEFORE", this.classTreeFlex, this.classTreeStyle, this.instanceListStyle);
+        if (this.classTreeFlex < 3) {
+            this.classTreeFlex++;
+            this.refreshTreeListStyles()
+        }
+    }
+
+    private refreshTreeListStyles() {
+        this.classTreeStyle = this.sanitizer.bypassSecurityTrustStyle("flex: " + this.classTreeFlex);
+        this.instanceListStyle = this.sanitizer.bypassSecurityTrustStyle("flex: " + (4 - this.classTreeFlex));
+        console.log("AFTER", this.classTreeFlex, this.classTreeStyle, this.instanceListStyle);
+
+        //Check style="unsafe" I think I should sanitize the styles
     }
 
     // private onMousedown() {
@@ -191,7 +142,7 @@ export class ClassIndividualTreePanelComponent {
             this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, false);
             this.selectedInstance = null;
         }
-        this.nodeSelected.emit(cls);
+        this.classSelected.emit(cls);
     }
 
     private onInstanceSelected(instance: ARTURIResource) {

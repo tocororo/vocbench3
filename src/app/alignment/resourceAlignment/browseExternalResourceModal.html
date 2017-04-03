@@ -12,7 +12,7 @@
     
     <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
      or individuals, and they are rendered based on the resource role -->
-    <class-tree-panel *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)">
+    <class-tree-panel *ngIf="showClassTree()" (nodeSelected)="onResourceSelected($event)" [editable]="false">
     </class-tree-panel>
             
     <concept-tree-panel *ngIf="showConceptTree()" [schemeChangeable]="true" [scheme]="currentScheme" [editable]="false"

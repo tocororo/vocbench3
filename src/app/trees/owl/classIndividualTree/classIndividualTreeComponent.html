@@ -1,8 +1,8 @@
 <div class="hbox">
-    <class-tree-panel [roots]="roots" (nodeSelected)="onTreeClassSelected($event)"></class-tree-panel>
+    <class-tree-panel [roots]="roots" (nodeSelected)="onTreeClassSelected($event)" [editable]="false"></class-tree-panel>
 
     <!-- Show instance-list or concept-tree depending on the selected class in class-tree -->
-    <instance-list-panel *ngIf="!isRangeConcept()" style="margin-left: 4px;" [cls]="selectedClass"
+    <instance-list-panel *ngIf="!isRangeConcept()" style="margin-left: 4px;" [cls]="selectedClass" [editable]="false"
         (nodeSelected)="onInstanceSelected($event)">
     </instance-list-panel>
     <concept-tree-panel *ngIf="isRangeConcept()" style="margin-left: 4px;" [scheme]="currentScheme" [editable]="false" 
