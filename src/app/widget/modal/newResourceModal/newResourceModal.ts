@@ -57,7 +57,7 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        if (this.localName && this.localName.trim() == "") {//if localName has no content return null localName
+        if (this.localName == null || (this.localName != null && this.localName.trim() == "")) {//if localName has no content return null uri
             this.dialog.close({uri: null, label: this.label, lang: this.lang});    
         } else {
             this.dialog.close({uri: this.namespace + this.localName, label: this.label, lang: this.lang});
