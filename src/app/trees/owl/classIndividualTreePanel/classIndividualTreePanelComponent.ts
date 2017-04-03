@@ -147,7 +147,10 @@ export class ClassIndividualTreePanelComponent {
 
     private onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
-        this.instanceSelected.emit(instance);
+        //event could be fired after a refresh on the list, in that case, instance is null
+        if (instance != null) { //forward the event only if instance is not null
+            this.instanceSelected.emit(instance);
+        }
     }
 
 }

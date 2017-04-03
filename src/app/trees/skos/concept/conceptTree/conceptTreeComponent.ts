@@ -36,8 +36,6 @@ export class ConceptTreeComponent extends AbstractTree {
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
-        this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
-            (newLang: string) => this.onContentLangChanged(newLang)));
     }
 
     /**
@@ -122,13 +120,6 @@ export class ConceptTreeComponent extends AbstractTree {
                 }
             }
         }
-    }
-
-    private onContentLangChanged(lang: string) {
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
-        //and reinitialize tree
-        this.initTree();
     }
 
 }

@@ -35,8 +35,6 @@ export class CollectionTreeComponent extends AbstractTree {
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
-        this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
-            (newLang: string) => this.onContentLangChanged(newLang)));
     }
 
     initTree() {
@@ -96,13 +94,6 @@ export class CollectionTreeComponent extends AbstractTree {
         }
         //reset the selected node
         this.nodeSelected.emit(undefined);
-    }
-
-    private onContentLangChanged(lang: string) {
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
-        //and reinitialize tree
-        this.initTree();
     }
 
 }

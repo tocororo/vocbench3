@@ -28,9 +28,6 @@ export class SchemeListPanelComponent {
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private modalService: ModalServices, private preferences: VBPreferences) {
-
-        this.eventSubscriptions.push(eventHandler.contentLangChangedEvent.subscribe(
-            (newLang: string) => this.onContentLangChanged(newLang)));
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(
             () => this.initList()));
     }
@@ -157,17 +154,6 @@ export class SchemeListPanelComponent {
         }
         this.nodeSelected.emit(scheme);
     }
-
-    /**
-     * Called when user switches on/off the human readable labels or changes the content language
-     */
-    private onContentLangChanged(lang: string) {
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
-        //and reinitialize tree
-        this.initList();
-    }
-
 
     private doSearch(searchedText: string) {
         if (searchedText.trim() == "") {

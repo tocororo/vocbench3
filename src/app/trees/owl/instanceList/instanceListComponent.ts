@@ -61,6 +61,7 @@ export class InstanceListComponent {
     }
 
     initList() {
+        this.selectedInstance = null;
         this.instanceList = [];
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

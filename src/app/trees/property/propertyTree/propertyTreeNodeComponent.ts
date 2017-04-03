@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
 import { PropertyServices } from "../../../services/propertyServices";
-import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
@@ -36,6 +36,9 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
         this.nodeExpandStart.emit();
         this.propService.getSubProperties(this.node).subscribe(
             subProps => {
+                //sort by show if rendering is active, uri otherwise
+                let attribute: "show" | "value" = this.rendering ? "show" : "value";
+                ResourceUtils.sortResources(subProps, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subProps); //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.OPEN, true);
                 this.nodeExpandEnd.emit();

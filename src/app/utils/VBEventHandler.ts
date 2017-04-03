@@ -73,8 +73,6 @@ export class VBEventHandler {
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 
-    public contentLangChangedEvent: EventEmitter<string> = new VBEventEmitter<string>("contentLangChangedEvent");
-
     constructor() { }
 
     /**
