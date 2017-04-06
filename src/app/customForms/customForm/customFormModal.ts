@@ -145,20 +145,20 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
             }
         }
         
-        var entryMap: Array<any> = []; //{userPrompt: string, value: string}
+        var entryMap: any = {}; //{key: svalue, key: value,...}
         for (var i = 0; i < this.formFields.length; i++) {
             var entry = this.formFields[i];
             if (entry['checked']) {
                 //add the entry only if not already in
                 var alreadyIn: boolean = false;
-                for (var j = 0; j < entryMap.length; j++) {
-                    if (entryMap[j].userPrompt == entry.getUserPrompt()) {
+                for (var key in entryMap) {
+                    if (key == entry.getUserPrompt()) {
                         alreadyIn = true;
                         break;
                     }
                 }
                 if (!alreadyIn) {
-                    entryMap.push({userPrompt: entry.getUserPrompt(), value: entry['value']});
+                    entryMap[entry.getUserPrompt()] = entry['value'];
                 }
             }
         }
