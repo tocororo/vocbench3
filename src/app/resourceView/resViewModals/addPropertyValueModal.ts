@@ -4,6 +4,7 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VBPreferences } from '../../utils/VBPreferences';
+import { ModalServices } from '../../widget/modal/modalServices';
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -75,7 +76,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
-        private propService: PropertyServices, private browsingService: BrowsingServices, private preferences: VBPreferences) {
+        private propService: PropertyServices, private browsingService: BrowsingServices, private modalService: ModalServices,
+        private preferences: VBPreferences) {
         this.context = dialog.context;
     }
 
@@ -203,8 +205,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         event.preventDefault();
         if (this.manchExprEnabled) {
             this.manchService.checkExpression(this.manchExpr).subscribe(
-                stResp => {
-                    this.dialog.close({ property: this.selectedProperty, value: this.manchExpr });
+                valid => {
+                    if (valid) {
+                        this.dialog.close({ property: this.selectedProperty, value: this.manchExpr });
+                    } else {
+                        this.modalService.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
+                    }
                 }
             );
         } else {

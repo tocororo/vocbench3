@@ -11,11 +11,11 @@ import {ARTURIResource} from "../models/ARTResources";
 import {FormCollectionMapping, CustomForm, CustomFormLevel, FormCollection} from "../models/CustomForms";
 
 @Component({
-	selector: "custom-form-component",
-	templateUrl: "./customFormComponent.html",
+	selector: "custom-form-conf-component",
+	templateUrl: "./customFormConfComponent.html",
     host: { class : "pageComponent" }
 })
-export class CustomFormComponent {
+export class CustomFormConfigComponent {
     
     private cfConfigurationMap: Array<FormCollectionMapping>;
     private formCollectionList: Array<FormCollection>;

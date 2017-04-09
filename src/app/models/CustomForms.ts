@@ -72,10 +72,16 @@ export class CustomForm {
     private showPropertyChain: ARTURIResource[];
     private level: CustomFormLevel;
     
-    constructor(id: string) {
+    constructor(id: string, name?: string, description?: string) {
         this.id = id;
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
     }
-    
+
     public getId(): string {
         return this.id;
     }

@@ -2,10 +2,10 @@
     <!-- Commands -->
     <div class="panel-heading">  
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create topConcept" (click)="createTopConcept()" [disabled]="!workingScheme">
+            <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="!workingScheme">
                 <img src="../../../../../assets/images/concept_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Add narrower" (click)="createNarrower()" [disabled]="!selectedConcept || !workingScheme">
+            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedConcept || !workingScheme">
                 <img src="../../../../../assets/images/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Concept" (click)="deleteConcept()" [disabled]="!selectedConcept">

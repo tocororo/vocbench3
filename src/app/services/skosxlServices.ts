@@ -2,13 +2,17 @@ import {Injectable} from '@angular/core';
 import {VBEventHandler} from "../utils/VBEventHandler";
 import {HttpManager} from "../utils/HttpManager";
 import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum} from "../models/ARTResources";
+import {ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum} from "../models/ARTResources";
 
 @Injectable()
 export class SkosxlServices {
 
-    private serviceName = "skosxl";
-    private oldTypeService = true;
+    private serviceName_old = "skosxl";
+    private oldTypeService_old = true;
+
+    private serviceName = "SKOSXL";
+    private oldTypeService = false;
+    
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
     
@@ -37,7 +41,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService_old).map(
             stResp => {
                 //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
                 //parse return and insert in the event just the new concept
@@ -54,6 +58,40 @@ export class SkosxlServices {
                 this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: scheme});
                 return {concept: newConc, scheme: scheme};
             });
+    }
+
+    /**
+     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme.
+     * NB: although the service server-side has both label and newConcept optional, here only newConcept is optional,
+     * so the user is forced to write at least the label.
+     * @param label preferred label of the concept (comprehensive of the lang)
+     * @param conceptScheme scheme where new concept should belong
+     * @param newConcept URI concept
+     * @param customFormId id of the custom form that set additional info to the concept
+     * @param userPromptMap json map object of key - value of the custom form
+     * @return 
+     */
+    createTopConcept_NEW(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        console.log("[SkosxlServices] createConcept");
+        var params: any = {
+            label: label,
+            conceptScheme: conceptScheme,
+        };
+        if (newConcept != null) {
+            params.newConcept = newConcept
+        }
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
+        }
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, this.oldTypeService, true).map(
+            stResp => {
+                var newConc = Deserializer.createURI(stResp);
+                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: conceptScheme});
+                return {concept: newConc, scheme: conceptScheme};
+            }
+        );
     }
     
     /**
@@ -81,7 +119,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "createConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService_old).map(
             stResp => {
                 //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
                 //parse return and insert in the event just the new concept
@@ -99,6 +137,42 @@ export class SkosxlServices {
                 return newConc;
             });
     }
+
+    /**
+     * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
+     * @param prefLabel preferred label of the concept
+     * @param prefLabelLang language of the preferred label
+     * @param broader concept to which add the narrower
+     * @param scheme scheme where new concept should belong
+     * @param concept local name of the narrower
+     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
+     * in the response)
+     * @return the new concept
+     */
+    createNarrower_NEW(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
+            customFormId?: string, userPromptMap?: any) {
+        console.log("[SkosxlServices] createConcept");
+        var params: any = {
+            label: label,
+            conceptScheme: conceptScheme,
+            broaderConcept: broaderConcept
+        };
+        if (newConcept != null) {
+            params.newConcept = newConcept
+        }
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
+        }
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, this.oldTypeService, true).map(
+            stResp => {
+                var newConc = Deserializer.createURI(stResp);
+                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broaderConcept});
+                return newConc;
+            }
+        );
+    }
     
     /**
      * Deletes the given concept. Emits a conceptDeletedEvent with the deleted concept
@@ -109,7 +183,7 @@ export class SkosxlServices {
         var params: any = {
             concept: concept.getURI(),
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteConcept", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "deleteConcept", params, this.oldTypeService_old).map(
             stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
@@ -141,7 +215,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         };
-        return this.httpMgr.doGet(this.serviceName, "createScheme", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createScheme", params, this.oldTypeService_old).map(
             stResp => {
                 var newScheme = Deserializer.createURI(stResp);
                 return newScheme;
@@ -163,7 +237,7 @@ export class SkosxlServices {
             params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
         }
         //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component
-        return this.httpMgr.doGet(this.serviceName, "deleteScheme", params, this.oldTypeService, false, true);
+        return this.httpMgr.doGet(this.serviceName_old, "deleteScheme", params, this.oldTypeService_old, false, true);
     }
     
     //====== Label services ======
@@ -179,7 +253,7 @@ export class SkosxlServices {
             concept: concept.getURI(),
             lang: lang
         };
-        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getPrefLabel", params, this.oldTypeService_old).map(
             stResp => {
                 return Deserializer.createRDFResource(stResp.children[0]);
             }
@@ -202,7 +276,7 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName, "setPrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService_old).map(
             stResp => {
                 this.eventHandler.skosxlPrefLabelSetEvent.emit({resource: concept, label: label, lang: lang});
                 return stResp;
@@ -226,7 +300,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removePrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService_old).map(
             stResp => {
                 this.eventHandler.skosxlPrefLabelRemovedEvent.emit({resource: concept, label: label, lang: lang});
                 return stResp;
@@ -245,7 +319,7 @@ export class SkosxlServices {
             concept: concept.getURI(),
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "getAltLabels", params, this.oldTypeService_old).map(
             stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
             }
@@ -267,7 +341,7 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName, "addAltLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "addAltLabel", params, this.oldTypeService_old);
     }
     
     /**
@@ -285,7 +359,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removeAltLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "removeAltLabel", params, this.oldTypeService_old);
 	}
     
     /**
@@ -303,7 +377,7 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName, "addHiddenLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "addHiddenLabel", params, this.oldTypeService_old);
     }
     
     /**
@@ -321,7 +395,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "removeHiddenLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "removeHiddenLabel", params, this.oldTypeService_old);
 	}
 
     /**
@@ -339,7 +413,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "changeLabelInfo", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "changeLabelInfo", params, this.oldTypeService_old);
     }
 
     /**
@@ -353,7 +427,7 @@ export class SkosxlServices {
             concept: concept.getURI(),
             xlabelURI: xLabel.getNominalValue()
         };
-        return this.httpMgr.doGet(this.serviceName, "prefToAtlLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "prefToAtlLabel", params, this.oldTypeService_old);
     }
 
     /**
@@ -367,7 +441,7 @@ export class SkosxlServices {
             concept: concept.getURI(),
             xlabelURI: xLabel.getNominalValue()
         };
-        return this.httpMgr.doGet(this.serviceName, "altToPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName_old, "altToPrefLabel", params, this.oldTypeService_old);
     }
 
     //====== Collection services ======
@@ -395,7 +469,7 @@ export class SkosxlServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createCollection", params, this.oldTypeService_old).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -432,7 +506,7 @@ export class SkosxlServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createCollection", params, this.oldTypeService_old).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -465,7 +539,7 @@ export class SkosxlServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createOrderedCollection", params, this.oldTypeService_old).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -502,7 +576,7 @@ export class SkosxlServices {
         if (mode != undefined) {
             params.mode = mode;
         }
-        return this.httpMgr.doGet(this.serviceName, "createOrderedCollection", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName_old, "createOrderedCollection", params, this.oldTypeService_old).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);

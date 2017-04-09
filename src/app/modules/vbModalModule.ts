@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
+import { CustomFormModule } from "./customFormModule";
 
 //services to open modals
 import { ModalServices } from "../widget/modal/modalServices";
@@ -17,11 +18,13 @@ import { DownloadModal } from '../widget/modal/downloadModal/downloadModal';
 import { FilePickerModal } from '../widget/modal/filePickerModal/filePickerModal';
 import { NewPlainLiteralModal } from '../widget/modal/newPlainLiteralModal/newPlainLiteralModal';
 import { NewResourceModal } from '../widget/modal/newResourceModal/newResourceModal';
+import { NewResourceCfModal } from '../widget/modal/newResourceModal/newResourceCfModal';
 import { NewTypedLiteralModal } from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
 import { PromptModal } from '../widget/modal/promptModal/promptModal';
 import { PromptPrefixedModal } from '../widget/modal/promptModal/promptPrefixedModal';
 import { SelectionModal } from '../widget/modal/selectionModal/selectionModal';
 import { ResourceSelectionModal } from '../widget/modal/selectionModal/resourceSelectionModal';
+import { CustomFormSelectionModal } from '../widget/modal/selectionModal/customFormSelectionModal';
 
 //shared modals
 import { PluginConfigModal } from "../widget/modal/pluginConfigModal/pluginConfigModal";
@@ -60,11 +63,11 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
 
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule],
+    imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule],
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewTypedLiteralModal, PromptModal,
-        PromptPrefixedModal, SelectionModal, ResourceSelectionModal,
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewTypedLiteralModal, PromptModal,
+        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
@@ -84,8 +87,8 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
      */
     entryComponents: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewTypedLiteralModal, PromptModal,
-        PromptPrefixedModal, SelectionModal, ResourceSelectionModal,
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewTypedLiteralModal, PromptModal,
+        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,

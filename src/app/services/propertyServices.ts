@@ -203,10 +203,11 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService, true).map(
             stResp => {
-                let ranges: any = {};
+                let ranges: any;
                 let formCollection: FormCollection;
                 
                 if (stResp.ranges) {
+                    ranges = {};
                     ranges.type = stResp.ranges.type;
                     if (stResp.ranges.rangeCollection) {
                         //cannot use Deserializer since rangeCollection contains just the URIs

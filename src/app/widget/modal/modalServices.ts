@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {ARTNode, ARTURIResource} from "../../models/ARTResources";
+import {CustomForm} from "../../models/CustomForms";
 import {PromptModal, PromptModalData} from "./promptModal/promptModal";
 import {PromptPrefixedModal, PromptPrefixedModalData} from "./promptModal/promptPrefixedModal";
 import {ConfirmModal, ConfirmModalData} from "./confirmModal/confirmModal";
@@ -10,10 +11,12 @@ import {AlertModal, AlertModalData} from "./alertModal/alertModal";
 import {DownloadModal, DownloadModalData} from "./downloadModal/downloadModal";
 import {FilePickerModal, FilePickerModalData} from "./filePickerModal/filePickerModal";
 import {NewResourceModal, NewResourceModalData} from "./newResourceModal/newResourceModal";
+import {NewResourceCfModal, NewResourceCfModalData} from "./newResourceModal/newResourceCfModal";
 import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralModal/newPlainLiteralModal";
 import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
 import {SelectionModal, SelectionModalData} from "./selectionModal/selectionModal";
 import {ResourceSelectionModal, ResourceSelectionModalData} from "./selectionModal/resourceSelectionModal";
+import {CustomFormSelectionModal, CustomFormSelectionModalData} from "./selectionModal/customFormSelectionModal";
 
 export type ModalType = "info" | "error" | "warning";
 
@@ -203,6 +206,23 @@ export class ModalServices {
             dialog => dialog.result
         );
     }
+
+    /**
+     * Opens a modal for selecting a CustomForm to use.
+     * @param title the title of the modal dialog
+     * @param cfList list of custom forms
+     * @return a promise containing the selected CF
+     */
+    selectCustomForm(title: string, cfList: CustomForm[]) {
+        var modalData = new CustomFormSelectionModalData(title, cfList);
+        const builder = new BSModalContextBuilder<CustomFormSelectionModalData>(
+            modalData, undefined, CustomFormSelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(CustomFormSelectionModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
     
     /**
      * Opens a modal to create a new resource with name, label and language tag
@@ -217,6 +237,24 @@ export class ModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewResourceModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to create a new resource with name, label and language tag, plus custom form supplement fields
+     * @param title the title of the modal dialog
+     * @param cfId the custom form id
+     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
+     * @return if the modal closes with ok returns a promise containing an object {uri:ARTURIResource, label:ARTLiteral, cfValueMap:any}
+     */
+    newResourceCf(title: string, cfId?: string, lang?: string) {
+        var modalData = new NewResourceCfModalData(title, cfId, lang);
+        const builder = new BSModalContextBuilder<NewResourceCfModalData>(
+            modalData, undefined, NewResourceCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewResourceCfModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

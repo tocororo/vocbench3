@@ -8,7 +8,7 @@ import {DataComponent} from "./data/dataComponent";
 import {SparqlComponent} from "./sparql/sparqlComponent";
 // import {IcvComponent} from "./icv/icvComponent";
 import {AlignmentValidationComponent} from "./alignment/alignmentValidation/alignmentValidationComponent";
-import {CustomFormComponent} from "./customForms/customFormComponent";
+import {CustomFormConfigComponent} from "./customForms/customFormConfComponent";
 import {ImportProjectComponent} from "./project/importProject/importProjectComponent";
 import {CreateProjectComponent} from "./project/createProject/createProjectComponent";
 import {LoadDataComponent} from "./config/dataManagement/loadData/loadDataComponent";
@@ -30,7 +30,7 @@ export const routes: Routes = [
     {path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
-    {path: "CustomForm", component: CustomFormComponent, canActivate: [AuthGuard, ProjectGuard]},
+    {path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [UnsavedChangesGuard]},

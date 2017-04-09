@@ -3,6 +3,7 @@ import {
     ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
 } from "../models/ARTResources";
 import { Languages } from "../models/LanguagesCountries"
+import { XmlSchema } from "../models/Vocabulary"
 
 
 export class UIUtils {
@@ -154,8 +155,11 @@ export class UIUtils {
             }
         } else if (rdfResource.isLiteral()) {
             let lang: string = (<ARTLiteral>rdfResource).getLang();
+            let datatype: string = (<ARTLiteral>rdfResource).getDatatype();
             if (lang != null) {
                 imgSrc = this.getFlagImgSrc(lang);
+            } else if (datatype != null) {
+                imgSrc = this.getDatatypeImgSrc(datatype);
             }
         }
         return imgSrc;
@@ -195,6 +199,18 @@ export class UIUtils {
             imgSrc = require("../../assets/images/flags/flag_" + langTag + ".png");
         } else {
             imgSrc = require("../../assets/images/flags/flag_unknown.png");
+        }
+        return imgSrc;
+    }
+
+    static getDatatypeImgSrc(datatype: string): string {
+        var imgSrc: string;
+        if (datatype == XmlSchema.dateTime.getURI()) {
+            imgSrc = require("../../assets/images/datetime.png");
+        } else if (datatype == XmlSchema.date.getURI()) {
+            imgSrc = require("../../assets/images/date.png");
+        } else if (datatype == XmlSchema.time.getURI()) {
+            imgSrc = require("../../assets/images/time.png");
         }
         return imgSrc;
     }

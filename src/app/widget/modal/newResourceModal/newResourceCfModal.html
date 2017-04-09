@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="vbox" (keydown)="onKeydown($event)">
+
+        <!--<form class="form-horizontal" (keydown)="onKeydown($event)">
+            <div class="form-group">
+                <label class="control-label col-sm-1">Label:</label>
+                <div class="col-sm-11">
+                    <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                        <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                        <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-1">URI:</label>
+                <div class="col-sm-11">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon" style="padding-right: 5px;">
+                            {{namespace}}
+                        </span>
+                        <input type="text" class="form-control" name="localName" [(ngModel)]="localName"
+                            placeholder="Leave empty in order to autogenerate a random URI" sanitized>
+                    </div>
+                </div>
+            </div>
+        </form>-->
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>Label:</label></td>
+                    <td>
+                        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                            <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>URI:</label></td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" style="padding-right: 5px;">
+                                {{namespace}}
+                            </span>
+                            <input type="text" class="form-control" name="localName" [(ngModel)]="localName"
+                                placeholder="Leave empty in order to autogenerate a random URI" sanitized>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <template [ngIf]="context.cfId">
+            <div style="height:1px; border-bottom:1px solid #ddd; margin: 5px;"></div>
+            <custom-form [cfId]="context.cfId" [(ngModel)]="formFields"></custom-form>
+        </template>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

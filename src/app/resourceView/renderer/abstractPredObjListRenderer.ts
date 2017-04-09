@@ -203,65 +203,55 @@ export abstract class AbstractPredObjListRenderer {
                             this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
                     } else if (ranges != undefined && formCollection != undefined) { //both "classic" and custom range
-                        var rangeOptions: {value: string, description: string}[] = [];//prepare the range options...
-
-                        //...with the custom range entries
-                        var forms = formCollection.getForms();
-                        for (var i = 0; i < forms.length; i++) {
-                            rangeOptions.push({ value: forms[i].getName(), description: forms[i].getDescription() });
-                        }
-
-                        //...and the classic ranges
+                        var rangeOptions: CustomForm[] = [];
+                        //classic ranges (this is a workaround to use selection CF modal with classic range as well)
                         if (ranges.type == RDFTypesEnum.resource || ranges.type == RDFTypesEnum.plainLiteral || ranges.type == RDFTypesEnum.typedLiteral) {
-                            rangeOptions.push({ value: ranges.type, description: ranges.type });
+                            rangeOptions.push(new CustomForm(ranges.type, ranges.type, ranges.type));
                         } else if (ranges.type == RDFTypesEnum.literal) {
-                            rangeOptions.push({ value: RDFTypesEnum.plainLiteral, description: RDFTypesEnum.plainLiteral });
-                            rangeOptions.push({ value: RDFTypesEnum.typedLiteral, description: RDFTypesEnum.typedLiteral });
-                        } else if (ranges.type == RDFTypesEnum.undetermined) {
-                            rangeOptions.push({ value: RDFTypesEnum.resource, description: RDFTypesEnum.resource });
-                            rangeOptions.push({ value: RDFTypesEnum.plainLiteral, description: RDFTypesEnum.plainLiteral });
-                            rangeOptions.push({ value: RDFTypesEnum.typedLiteral, description: RDFTypesEnum.typedLiteral });
+                            rangeOptions.push(new CustomForm(RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral));
+                            rangeOptions.push(new CustomForm(RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral));
+                        } else if (ranges.type == RDFTypesEnum.undetermined) { //undetermined => range could be resource and any kind of literal
+                            rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource, RDFTypesEnum.resource));
+                            rangeOptions.push(new CustomForm(RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral));
+                            rangeOptions.push(new CustomForm(RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral));
                         }
+                        //and custom ranges
+                        var customForms = formCollection.getForms();
+                        rangeOptions = rangeOptions.concat(customForms);
+
                         //ask the user to choose
-                        this.modalService.select("Select range type", null, rangeOptions, true).then(
-                            (selectedRange: any) => {
+                        this.modalService.selectCustomForm("Select a range type", rangeOptions).then(
+                            (selectedCF: any) => {
                                 //check if selected range is one of the customs
-                                for (var i = 0; i < forms.length; i++) {
-                                    if (selectedRange == forms[i].getName()) {
-                                        this.enrichWithCustomForm(predicate, forms[i]);
+                                for (var i = 0; i < customForms.length; i++) {
+                                    if ((<CustomForm>selectedCF).getId() == customForms[i].getId()) {
+                                        this.enrichWithCustomForm(predicate, customForms[i]);
                                         return;
                                     }
                                 }
-                                if (selectedRange == RDFTypesEnum.resource) {
+                                if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.resource) {
                                     this.enrichWithResource(predicate, ranges.rangeCollection);
-                                } else if (selectedRange == RDFTypesEnum.typedLiteral) {
+                                } else if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.typedLiteral) {
                                     this.enrichWithTypedLiteral(predicate);
-                                } else if (selectedRange == RDFTypesEnum.plainLiteral) {
+                                } else if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.plainLiteral) {
                                     this.enrichWithPlainLiteral(predicate);
                                 }
                             },
-                            () => { }
-                        )
+                            () => {}
+                        );
                     } else if (ranges == undefined && formCollection != undefined) {//just custom range
                         var forms = formCollection.getForms();
                         if (forms.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
                             this.enrichWithCustomForm(predicate, forms[0]);
                         } else if (forms.length > 1) { //multiple CREntry => ask which one to use
                             //prepare the range options with the custom range entries
-                            var rangeOptions: {value: string, description: string}[] = [];
-                            for (var i = 0; i < forms.length; i++) {
-                                rangeOptions.push({ value: forms[i].getName(), description: forms[i].getDescription() });
-                            }
-                            this.modalService.select("Select a Custom Form", null, rangeOptions, true).then(
-                                (selectedRange: any) => {
-                                    for (var i = 0; i < forms.length; i++) {
-                                        if (selectedRange == forms[i].getName()) {
-                                            this.enrichWithCustomForm(predicate, forms[i]);
-                                            return;
-                                        }
-                                    }
-                                }
-                            );
+                            this.modalService.selectCustomForm("Select a Custom Range", forms).then(
+                                (selectedCF: any) => {
+                                    this.enrichWithCustomForm(predicate, (<CustomForm>selectedCF));
+                                    return;
+                                },
+                                () => {}
+                            )
                         } else { //no CR linked to the property has no Entries => error
                             this.modalService.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " +  predicate.getShow() + 
                                 ", doesn't contain any CustomForm", "error");

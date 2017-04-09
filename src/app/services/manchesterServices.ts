@@ -19,7 +19,7 @@ export class ManchesterServices {
         var params = {
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "checkExpression", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "checkExpression", params, this.oldTypeService, true);
     }
 
     /**
@@ -31,11 +31,11 @@ export class ManchesterServices {
     createRestriction(cls: ARTURIResource, predicate: ARTURIResource, manchExpr: string) {
         console.log("[ManchesterServices] createRestriction");
         var params = {
-            classUri: cls.getURI(),
-            exprType: predicate.getURI(),
+            classIri: cls,
+            exprType: predicate,
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "createRestriction", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "createRestriction", params, this.oldTypeService, true);
     }
     
     /**
@@ -47,11 +47,11 @@ export class ManchesterServices {
     removeExpression(cls: ARTURIResource, predicate: ARTURIResource, artNode: ARTNode) {
         console.log("[ManchesterServices] removeExpression");
         var params = {
-            classUri: cls.getURI(),
-            exprType: predicate.getURI(),
-            artNode: artNode.getNominalValue()
+            classIri: cls,
+            exprType: predicate,
+            artNode: artNode
         };
-        return this.httpMgr.doGet(this.serviceName, "removeExpression", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeExpression", params, this.oldTypeService, true);
     }
     
 

@@ -32,7 +32,7 @@ import { ProjectComponent } from "../project/projectComponent";
 import { DataComponent } from "../data/dataComponent";
 import { SparqlComponent } from "../sparql/sparqlComponent";
 import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
-import { CustomFormComponent } from "../customForms/customFormComponent";
+import { CustomFormConfigComponent } from "../customForms/customFormConfComponent";
 import { ImportProjectComponent } from "../project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 import { IcvComponent } from "../icv/icvComponent";
@@ -73,7 +73,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
             SparqlComponent,
             IcvComponent,
             AlignmentValidationComponent,
-            CustomFormComponent,
+            CustomFormConfigComponent,
             LoadDataComponent,
             ExportDataComponent,
             MetadataManagementComponent,
