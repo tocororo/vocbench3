@@ -1,35 +1,33 @@
 import { Component, Output, EventEmitter } from "@angular/core";
+import { AbstractPanel } from "../../../abstractPanel"
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
+import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ModalServices } from "../../../../widget/modal/modalServices";
 import { VBContext } from '../../../../utils/VBContext';
 import { VBPreferences } from '../../../../utils/VBPreferences';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { SKOS } from "../../../../models/Vocabulary";
 
 @Component({
     selector: "scheme-list-panel",
     templateUrl: "./schemeListPanelComponent.html",
 })
-export class SchemeListPanelComponent {
-
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-
-    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+export class SchemeListPanelComponent extends AbstractPanel {
 
     private schemeList: ARTURIResource[];
     private activeScheme: ARTURIResource;
-    private selectedScheme: ARTURIResource;
 
     private ONTO_TYPE: string;
 
-    private eventSubscriptions: any[] = [];
-
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private modalService: ModalServices, private preferences: VBPreferences) {
-        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(
-            () => this.initList()));
+        private cfService: CustomFormsServices, private eventHandler: VBEventHandler, private preferences: VBPreferences,
+        modalService: ModalServices) {
+        super(modalService);
+        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
+        this.eventSubscriptions.push(eventHandler.customFormUpdatedEvent.subscribe(() => this.initCustomConstructors()));
     }
 
     ngOnInit() {
@@ -39,7 +37,7 @@ export class SchemeListPanelComponent {
     }
 
     private initList() {
-        this.selectedScheme = null;
+        this.selectedNode = null;
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 //sort by show if rendering is active, uri otherwise
@@ -48,22 +46,44 @@ export class SchemeListPanelComponent {
                 this.schemeList = schemeList;
             }
         );
+        this.initCustomConstructors();
     }
 
-    private createScheme() {
-        this.modalService.newResource("Create new skos:ConceptScheme").then(
-            (result: any) => {
+    /**
+     * init the custom forms for skos:Concept
+     */
+    initCustomConstructors() {
+        this.cfService.getCustomConstructors(SKOS.conceptScheme).subscribe(
+            formColl => {
+                if (formColl != null) {
+                    this.customForms = formColl.getForms();
+                }
+            }
+        );
+    }
+
+    private create() {
+        this.selectCustomForm().subscribe(
+            cfId => {
+                console.log("cfid ", cfId);
+                this.createScheme(cfId);
+            }
+        );
+    }
+
+    private createScheme(cfId?: string) {
+        this.modalService.newResourceCf("Create new skos:ConceptScheme", cfId).then(
+            (res: any) => {
+                console.log("returned data ", res);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createScheme(result.label, result.lang, result.uri).subscribe(
-                        newScheme => {
-                            this.schemeList.push(newScheme);
-                        }
+                    this.skosService.createConceptScheme(res.label, res.uri, cfId, res.cfValueMap).subscribe(
+                        newScheme => { this.schemeList.push(newScheme); },
+                        err => {}
                     );
-                } else {//SKOSXL
-                    this.skosxlService.createScheme(result.label, result.lang, result.uri).subscribe(
-                        newScheme => {
-                            this.schemeList.push(newScheme);
-                        }
+                } else { //SKOSXL
+                    this.skosxlService.createConceptScheme(res.label, res.uri, cfId, res.cfValueMap).subscribe(
+                        newScheme => { this.schemeList.push(newScheme); },
+                        err => {}
                     );
                 }
             },
@@ -73,12 +93,12 @@ export class SchemeListPanelComponent {
 
     private deleteScheme() {
         if (this.ONTO_TYPE == "SKOS") {
-            this.skosService.deleteScheme(this.selectedScheme).subscribe(
+            this.skosService.deleteScheme(this.selectedNode).subscribe(
                 stResp => this.deleteSchemeRespHandler(stResp),
                 err => this.deleteNotEmptySchemeHandler()
             );
         } else { //SKOSXL
-            this.skosxlService.deleteScheme(this.selectedScheme).subscribe(
+            this.skosxlService.deleteScheme(this.selectedNode).subscribe(
                 stResp => this.deleteSchemeRespHandler(stResp),
                 err => this.deleteNotEmptySchemeHandler()
             );
@@ -93,11 +113,11 @@ export class SchemeListPanelComponent {
             (selection: any) => {
                 var deleteDanglingConc = selection == deleteOpt;
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.deleteScheme(this.selectedScheme, deleteDanglingConc).subscribe(
+                    this.skosService.deleteScheme(this.selectedNode, deleteDanglingConc).subscribe(
                         stResp => this.deleteSchemeRespHandler(stResp)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.deleteScheme(this.selectedScheme, deleteDanglingConc).subscribe(
+                    this.skosxlService.deleteScheme(this.selectedNode, deleteDanglingConc).subscribe(
                         stResp => this.deleteSchemeRespHandler(stResp)
                     );
                 }
@@ -111,17 +131,17 @@ export class SchemeListPanelComponent {
      */
     private deleteSchemeRespHandler(stResp: any) {
         for (var i = 0; i < this.schemeList.length; i++) {//Update the schemeList
-            if (this.schemeList[i].getURI() == this.selectedScheme.getURI()) {
+            if (this.schemeList[i].getURI() == this.selectedNode.getURI()) {
                 this.schemeList.splice(i, 1);
                 break;
             }
         }
         //reset the activeScheme if the deleted was the active one
-        if (this.activeScheme != undefined && (this.selectedScheme.getURI() == this.activeScheme.getURI())) {
+        if (this.activeScheme != undefined && (this.selectedNode.getURI() == this.activeScheme.getURI())) {
             this.activeScheme = null;
             this.preferences.setActiveScheme(this.activeScheme);
         }
-        this.selectedScheme = null;
+        this.selectedNode = null;
         this.nodeSelected.emit(undefined);
     }
 
@@ -144,18 +164,18 @@ export class SchemeListPanelComponent {
      * Called when a scheme is clicked. Set the clicked scheme as selected
      */
     private selectScheme(scheme: ARTURIResource) {
-        if (this.selectedScheme == undefined) {
-            this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
+        if (this.selectedNode == undefined) {
+            this.selectedNode = scheme;
+            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         } else {
-            this.selectedScheme.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
+            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
+            this.selectedNode = scheme;
+            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.nodeSelected.emit(scheme);
     }
 
-    private doSearch(searchedText: string) {
+    doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
             this.modalService.alert("Search", "Please enter a valid string to search", "error");
         } else {
@@ -182,15 +202,6 @@ export class SchemeListPanelComponent {
     }
 
     /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
-        }
-    }
-
-    /**
      * Retrieves from the schemeList the scheme to select. This method is necessary because searchResource service
      * returns a new ARTURIResource that has the same attribute of the one in the schemeList but is not the same object,
      * so I need to invoke selectScheme to the one in the list, not to the one returned from service
@@ -203,7 +214,7 @@ export class SchemeListPanelComponent {
         }
     }
 
-    private refresh() {
+    refresh() {
         this.initList();
     }
 

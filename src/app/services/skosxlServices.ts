@@ -140,13 +140,12 @@ export class SkosxlServices {
 
     /**
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
-     * @param prefLabel preferred label of the concept
-     * @param prefLabelLang language of the preferred label
-     * @param broader concept to which add the narrower
-     * @param scheme scheme where new concept should belong
-     * @param concept local name of the narrower
-     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
-     * in the response)
+     * @param label preferred label of the concept (comprehensive of the lang)
+     * @param broaderConcept broader of the new created concept
+     * @param conceptScheme scheme where new concept should belong
+     * @param newConcept URI concept
+     * @param customFormId id of the custom form that set additional info to the concept
+     * @param userPromptMap json map object of key - value of the custom form
      * @return the new concept
      */
     createNarrower_NEW(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
@@ -196,30 +195,30 @@ export class SkosxlServices {
     
     /**
      * Creates a new scheme
-     * @param prefLabel
-     * @param prefLabelLang
-     * @param local name of the scheme. Optional, if not provided a localName is generated randomically
-     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
-     * in the response)
+     * @param label the lexical form of the pref label
+     * @param newScheme the (optional) uri of the scheme
+     * @param customFormId id of the custom form that set additional info to the concept
+     * @param userPromptMap json map object of key - value of the custom form
      * @return the new scheme
      */
-    createScheme(prefLabel: string, prefLabelLang: string, scheme: string, lang?: string) {
-        console.log("[SkosxlServices] createScheme");
+    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        console.log("[SkosxlServices] createConceptScheme");
         var params: any = {
-            prefLabel: prefLabel,
-            prefLabelLang: prefLabelLang
+            label: label
         };
-        if (scheme != undefined) {
-            params.scheme = scheme;
+        if (newScheme != undefined) {
+            params.newScheme = newScheme;
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        };
-        return this.httpMgr.doGet(this.serviceName_old, "createScheme", params, this.oldTypeService_old).map(
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
+        }
+        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, this.oldTypeService, true).map(
             stResp => {
                 var newScheme = Deserializer.createURI(stResp);
                 return newScheme;
-            });
+            }
+        );
     }
     
     /**
