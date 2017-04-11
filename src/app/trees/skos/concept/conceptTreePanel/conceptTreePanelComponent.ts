@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { AbstractPanel } from "../../../abstractPanel"
+import { AbstractTreePanel } from "../../../abstractTreePanel"
 import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
@@ -11,13 +11,14 @@ import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { CustomForm } from "../../../../models/CustomForms";
 import { SKOS } from "../../../../models/Vocabulary";
 
 @Component({
     selector: "concept-tree-panel",
     templateUrl: "./conceptTreePanelComponent.html",
 })
-export class ConceptTreePanelComponent extends AbstractPanel {
+export class ConceptTreePanelComponent extends AbstractTreePanel {
     @Input() scheme: ARTURIResource; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context
     @Input() schemeChangeable: boolean = false; //if true, above the tree is shown a menu to select a scheme
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
@@ -34,14 +35,12 @@ export class ConceptTreePanelComponent extends AbstractPanel {
 
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private cfService: CustomFormsServices, private eventHandler: VBEventHandler, private preferences: VBPreferences,
-        modalService: ModalServices) {
-        super(modalService);
+        private eventHandler: VBEventHandler, private preferences: VBPreferences,
+        cfService: CustomFormsServices, modalService: ModalServices) {
+        super(cfService, modalService);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (newScheme: ARTURIResource) => this.onSchemeChanged(newScheme)));
-        this.eventSubscriptions.push(eventHandler.customFormUpdatedEvent.subscribe(
-            () => this.initCustomConstructors()));
     }
 
     ngOnInit() {
@@ -64,72 +63,53 @@ export class ConceptTreePanelComponent extends AbstractPanel {
                 }
             );
         }
-        this.initCustomConstructors();
-    }
-
-    /**
-     * init the custom forms for skos:Concept
-     */
-    initCustomConstructors() {
-        this.cfService.getCustomConstructors(SKOS.concept).subscribe(
-            formColl => {
-                if (formColl != null) {
-                    this.customForms = formColl.getForms();
-                }
-            }
-        );
     }
 
     //top bar commands handlers
 
-    private createRoot() {
-        this.selectCustomForm().subscribe(
-            cfId => {
-                this.createTopConcept(cfId);
-            }
+    createRoot() {
+        this.selectCustomForm(SKOS.concept).then(
+            cfId => { this.createTopConcept(cfId); }
+        );
+    }
+
+    createChild() {
+        this.selectCustomForm(SKOS.concept).then(
+            cfId => { this.createNarrower(cfId); }
         );
     }
 
     private createTopConcept(cfId?: string) {
-        this.modalService.newResourceCf("Create new skos:Concept", cfId).then(
+        this.modalService.newSkosResourceCf("Create new skos:Concept", cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept_NEW(res.label, this.workingScheme, res.uri, cfId, res.cfValueMap).subscribe(
+                    this.skosService.createTopConcept_NEW(res.label, this.workingScheme, res.uriResource, cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept_NEW(res.label, this.workingScheme, res.uri, cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createTopConcept_NEW(res.label, this.workingScheme, res.uriResource, cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
             },
             () => { }
-        );
-    }
-
-    private createChild() {
-        this.selectCustomForm().subscribe(
-            cfId => {
-                console.log("cfid ", cfId);
-                this.createNarrower(cfId);
-            }
         );
     }
 
     private createNarrower(cfId?: string) {
-        this.modalService.newResourceCf("Create a skos:narrower", cfId).then(
+        this.modalService.newSkosResourceCf("Create a skos:narrower", cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower_NEW(res.label, this.selectedNode, this.workingScheme, res.uri, cfId, res.cfValueMap).subscribe(
+                    this.skosService.createNarrower(res.label, this.selectedNode, this.workingScheme, res.uriResource, cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower_NEW(res.label, this.selectedNode, this.workingScheme, res.uri, cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createNarrower(res.label, this.selectedNode, this.workingScheme, res.uriResource, cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -139,7 +119,7 @@ export class ConceptTreePanelComponent extends AbstractPanel {
         );
     }
 
-    private deleteConcept() {
+    delete() {
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         if (this.ONTO_TYPE == "SKOS") {
             this.skosService.deleteConcept(this.selectedNode).subscribe(
@@ -226,10 +206,6 @@ export class ConceptTreePanelComponent extends AbstractPanel {
     }
 
     //EVENT LISTENERS
-    private onNodeSelected(node: ARTURIResource) {
-        this.selectedNode = node;
-        this.nodeSelected.emit(node);
-    }
 
     //when a concept is removed from a scheme, it should be still visible in res view,
     //but no more selected in the tree if it was in the current scheme 

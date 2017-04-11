@@ -8,37 +8,37 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a (click)="createProperty()">
+                        <a (click)="createRoot('property')">
                             <img src="../../../../assets/images/prop.png"/>rdf:Property
                         </a>
                     </li>
                     <li>
-                        <a (click)="createObjectProperty()">
+                        <a (click)="createRoot('objectProperty')">
                             <img src="../../../../assets/images/propObject.png"/>owl:ObjectProperty
                         </a>
                     </li>
                     <li>
-                        <a (click)="createDatatypeProperty()">
+                        <a (click)="createRoot('datatypeProperty')">
                             <img src="../../../../assets/images/propDatatype.png"/>owl:DatatypeProperty
                         </a>
                     </li>
                     <li>
-                        <a (click)="createAnnotationProperty()">
+                        <a (click)="createRoot('annotationProperty')">
                             <img src="../../../../assets/images/propAnnotation.png"/>owl:AnnotationProperty
                         </a>
                     </li>
                     <li>
-                        <a (click)="createOntologyProperty()">
+                        <a (click)="createRoot('ontologyProperty')">
                             <img src="../../../../assets/images/propOntology.png"/>owl:OntologyProperty
                         </a>
                     </li>
                 </ul>
             </div>
-            <button class="btn btn-default" title="Create SubProperty" (click)="createSubProperty()" [disabled]="!selectedProperty">
+            <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="!selectedNode">
                 <img src="../../../../assets/images/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Property" (click)="deleteProperty()" 
-                    [disabled]="!selectedProperty || !selectedProperty.getAdditionalProperty('explicit')">
+            <button class="btn btn-default" title="Delete Property" (click)="delete()" 
+                    [disabled]="!selectedNode || !selectedNode.getAdditionalProperty('explicit')">
                 <img src="../../../../assets/images/prop_delete.png" class="panelButtonImg"/>
             </button>
         </div>

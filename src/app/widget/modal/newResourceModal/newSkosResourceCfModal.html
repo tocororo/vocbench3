@@ -11,13 +11,23 @@
             </colgroup>
             <tbody>
                 <tr>
+                    <td><label>Label:</label></td>
+                    <td>
+                        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                            <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td><label>URI:</label></td>
                     <td>
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon" style="padding-right: 5px;">
                                 {{namespace}}
                             </span>
-                            <input id="toFocus" type="text" class="form-control" name="localName" [(ngModel)]="localName" sanitized>
+                            <input type="text" class="form-control" name="localName" [(ngModel)]="localName"
+                                placeholder="Leave empty in order to autogenerate a random URI" sanitized>
                         </div>
                     </td>
                 </tr>

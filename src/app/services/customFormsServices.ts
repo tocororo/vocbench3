@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum } from "../models/ARTResources";
 import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, FormFieldType, CustomFormLevel } from "../models/CustomForms";
 
@@ -12,7 +11,7 @@ export class CustomFormsServices {
     private serviceName = "CustomForms";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager) { }
 
     /**
      * Returns the description of a reified resource, object of a predicate with custom range
@@ -192,12 +191,7 @@ export class CustomFormsServices {
         if (replace != undefined) {
             params.replace = replace;
         }
-        return this.httpMgr.doGet(this.serviceName, "addFormsMapping", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "addFormsMapping", params, this.oldTypeService, true);
     }
 
     /**
@@ -209,12 +203,7 @@ export class CustomFormsServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "removeFormCollectionOfResource", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "removeFormCollectionOfResource", params, this.oldTypeService, true);
     }
 
     /**
@@ -315,12 +304,7 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteFormCollection", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "deleteFormCollection", params, this.oldTypeService, true);
     }
 
     /**
@@ -376,12 +360,7 @@ export class CustomFormsServices {
             formCollectionId: formCollectionId,
             customFormId: customFormId
         };
-        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, this.oldTypeService, true);
     }
 
     /**
@@ -395,12 +374,7 @@ export class CustomFormsServices {
             formCollectionId: formCollectionId,
             customFormId: customFormId
         };
-        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, this.oldTypeService, true);
     }
 
     /**
@@ -437,17 +411,15 @@ export class CustomFormsServices {
     /**
      * Returns the FormCollection linked with the given  available CustomForm to use as constructor for the given resource
      */
-    getCustomConstructors(resource: ARTURIResource): Observable<FormCollection> {
+    getCustomConstructors(resource: ARTURIResource): Observable<CustomForm[]> {
         console.log("[CustomFormsServices] getCustomConstructors");
         var params: any = {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomConstructors", params, this.oldTypeService, true).map(
             stResp => {
-                var formCollection: FormCollection;
-                if (stResp.id) {
-                    formCollection = new FormCollection(stResp.id);
-                    var forms: CustomForm[] = [];
+                var forms: CustomForm[] = [];
+                if (stResp.forms) {
                     for (var i = 0; i < stResp.forms.length; i++) {
                         let cf: CustomForm = new CustomForm(stResp.forms[i].id);
                         cf.setName(stResp.forms[i].name);
@@ -462,9 +434,8 @@ export class CustomFormsServices {
                             return 0;
                         }
                     )
-                    formCollection.setForms(forms);
                 }
-                return formCollection
+                return forms;
             }
         );
     }
@@ -585,12 +556,7 @@ export class CustomFormsServices {
         if (deleteEmptyColl != undefined) {
             params.deleteEmptyColl = deleteEmptyColl;
         }
-        return this.httpMgr.doGet(this.serviceName, "deleteCustomForm", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "deleteCustomForm", params, this.oldTypeService, true);
     }
 
     /**
@@ -624,12 +590,7 @@ export class CustomFormsServices {
         if (showPropChain != undefined) {
             params.showPropChain = showPropChain;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateCustomForm", params, this.oldTypeService, true).map(
-            stResp => {
-                this.eventHandler.customFormUpdatedEvent.emit(null);
-                return stResp;
-            }
-        );
+        return this.httpMgr.doPost(this.serviceName, "updateCustomForm", params, this.oldTypeService, true);
     }
 
     /**

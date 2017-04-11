@@ -190,40 +190,6 @@ export class SkosServices {
 
     /**
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
-     * @param prefLabel preferred label of the concept
-     * @param prefLabelLang language of the preferred label
-     * @param broader concept to which add the narrower
-     * @param scheme scheme where new concept should belong
-     * @param concept local name of the narrower
-     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
-     * in the response)
-     * @return the new concept
-     */
-    createNarrower(prefLabel: string, prefLabelLang: string, broader: ARTURIResource, scheme: ARTURIResource, concept?: string, lang?: string) {
-        console.log("[SkosServices] createNarrower");
-        var params: any = {
-            prefLabel: prefLabel,
-            prefLabelLang: prefLabelLang,
-            broaderConcept: broader.getURI(),
-            scheme: scheme.getURI(),
-        };
-        if (concept != undefined) {
-            params.concept = concept;
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService_old).map(
-            stResp => {
-                var newConc = Deserializer.createURI(stResp);
-                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broader});
-                return newConc;
-            });
-    }
-
-    /**
-     * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
      * @param label preferred label of the concept (comprehensive of the lang)
      * @param broaderConcept broader of the new created concept
      * @param conceptScheme scheme where new concept should belong
@@ -232,7 +198,7 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new concept
      */
-    createNarrower_NEW(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
+    createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
             customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {

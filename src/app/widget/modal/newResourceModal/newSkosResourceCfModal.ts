@@ -5,34 +5,38 @@ import { FormField } from "../../../models/CustomForms"
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources"
 import { VBContext } from "../../../utils/VBContext"
 
-export class NewResourceCfModalData extends BSModalContext {
+export class NewSkosResourceCfModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
         public cfId: string,
+        public lang: string
     ) {
         super();
     }
 }
 
 @Component({
-    selector: "new-resource-cf-modal",
-    templateUrl: "./newResourceCfModal.html",
+    selector: "new-skos-resource-cf-modal",
+    templateUrl: "./newSkosResourceCfModal.html",
 })
-export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData> {
-    context: NewResourceCfModalData;
+export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfModalData> {
+    context: NewSkosResourceCfModalData;
 
     //standard form
+    private label: string;
+    private lang: string;
     private namespace: string = "";
     private localName: string;
 
     //custom form
     private formFields: FormField[] = [];
 
-    constructor(public dialog: DialogRef<NewResourceCfModalData>) {
+    constructor(public dialog: DialogRef<NewSkosResourceCfModalData>) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
+        this.lang = this.context.lang;
         this.namespace = VBContext.getDefaultNamespace();
         document.getElementById("toFocus").focus();
     }
@@ -45,8 +49,12 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
         }
     }
 
+    private onLangChange(newLang: string) {
+        this.lang = newLang;
+    }
+
     private isInputValid(): boolean {
-        var standardFormValid: boolean = (this.localName != null && this.localName != "");
+        var standardFormValid: boolean = (this.label != undefined && this.label.trim() != "");
         var customFormValid: boolean = true;
         for (var i = 0; i < this.formFields.length; i++) {
             var entry = this.formFields[i];
@@ -81,9 +89,14 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
             }
         }
 
-        var returnedData: { uriResource: ARTURIResource, cfValueMap: any} = {
-            uriResource: new ARTURIResource(this.namespace + this.localName),
+        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cfValueMap: any} = {
+            uriResource: null,
+            label: new ARTLiteral(this.label, null, this.lang),
             cfValueMap: entryMap
+        }
+        //Set URI only if localName is not empty
+        if (this.localName != null && this.localName != "") {
+            returnedData.uriResource = new ARTURIResource(this.namespace + this.localName);
         }
         this.dialog.close(returnedData);
     }

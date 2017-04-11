@@ -12,6 +12,7 @@ import {DownloadModal, DownloadModalData} from "./downloadModal/downloadModal";
 import {FilePickerModal, FilePickerModalData} from "./filePickerModal/filePickerModal";
 import {NewResourceModal, NewResourceModalData} from "./newResourceModal/newResourceModal";
 import {NewResourceCfModal, NewResourceCfModalData} from "./newResourceModal/newResourceCfModal";
+import {NewSkosResourceCfModal, NewSkosResourceCfModalData} from "./newResourceModal/newSkosResourceCfModal";
 import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralModal/newPlainLiteralModal";
 import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
 import {SelectionModal, SelectionModalData} from "./selectionModal/selectionModal";
@@ -242,19 +243,36 @@ export class ModalServices {
     }
 
     /**
-     * Opens a modal to create a new resource with name, label and language tag, plus custom form supplement fields
+     * Opens a modal to create a new resource with uri plus custom form supplement fields
      * @param title the title of the modal dialog
      * @param cfId the custom form id
-     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
-     * @return if the modal closes with ok returns a promise containing an object {uri:ARTURIResource, label:ARTLiteral, cfValueMap:any}
+     * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, cfValueMap:any}
      */
-    newResourceCf(title: string, cfId?: string, lang?: string) {
-        var modalData = new NewResourceCfModalData(title, cfId, lang);
+    newResourceCf(title: string, cfId?: string) {
+        var modalData = new NewResourceCfModalData(title, cfId);
         const builder = new BSModalContextBuilder<NewResourceCfModalData>(
             modalData, undefined, NewResourceCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewResourceCfModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to create a new skos resource with label, language and uri (optional), plus custom form supplement fields
+     * @param title the title of the modal dialog
+     * @param cfId the custom form id
+     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
+     * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, label:ARTLiteral, cfValueMap:any}
+     */
+    newSkosResourceCf(title: string, cfId?: string, lang?: string) {
+        var modalData = new NewSkosResourceCfModalData(title, cfId, lang);
+        const builder = new BSModalContextBuilder<NewSkosResourceCfModalData>(
+            modalData, undefined, NewSkosResourceCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewSkosResourceCfModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

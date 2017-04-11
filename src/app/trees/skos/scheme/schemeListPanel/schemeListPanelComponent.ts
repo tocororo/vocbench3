@@ -23,11 +23,10 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private ONTO_TYPE: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private cfService: CustomFormsServices, private eventHandler: VBEventHandler, private preferences: VBPreferences,
-        modalService: ModalServices) {
-        super(modalService);
+        private eventHandler: VBEventHandler, private preferences: VBPreferences,
+        cfService: CustomFormsServices, modalService: ModalServices) {
+        super(cfService, modalService);
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
-        this.eventSubscriptions.push(eventHandler.customFormUpdatedEvent.subscribe(() => this.initCustomConstructors()));
     }
 
     ngOnInit() {
@@ -46,44 +45,27 @@ export class SchemeListPanelComponent extends AbstractPanel {
                 this.schemeList = schemeList;
             }
         );
-        this.initCustomConstructors();
-    }
-
-    /**
-     * init the custom forms for skos:Concept
-     */
-    initCustomConstructors() {
-        this.cfService.getCustomConstructors(SKOS.conceptScheme).subscribe(
-            formColl => {
-                if (formColl != null) {
-                    this.customForms = formColl.getForms();
-                }
-            }
-        );
     }
 
     private create() {
-        this.selectCustomForm().subscribe(
-            cfId => {
-                console.log("cfid ", cfId);
-                this.createScheme(cfId);
-            }
+        this.selectCustomForm(SKOS.conceptScheme).then(
+            cfId => { this.createScheme(cfId); }
         );
     }
 
     private createScheme(cfId?: string) {
-        this.modalService.newResourceCf("Create new skos:ConceptScheme", cfId).then(
+        this.modalService.newSkosResourceCf("Create new skos:ConceptScheme", cfId).then(
             (res: any) => {
                 console.log("returned data ", res);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createConceptScheme(res.label, res.uri, cfId, res.cfValueMap).subscribe(
+                    this.skosService.createConceptScheme(res.label, res.uriResource, cfId, res.cfValueMap).subscribe(
                         newScheme => { this.schemeList.push(newScheme); },
-                        err => {}
+                        err => { }
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createConceptScheme(res.label, res.uri, cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createConceptScheme(res.label, res.uriResource, cfId, res.cfValueMap).subscribe(
                         newScheme => { this.schemeList.push(newScheme); },
-                        err => {}
+                        err => { }
                     );
                 }
             },
@@ -91,7 +73,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
         );
     }
 
-    private deleteScheme() {
+    delete() {
         if (this.ONTO_TYPE == "SKOS") {
             this.skosService.deleteScheme(this.selectedNode).subscribe(
                 stResp => this.deleteSchemeRespHandler(stResp),

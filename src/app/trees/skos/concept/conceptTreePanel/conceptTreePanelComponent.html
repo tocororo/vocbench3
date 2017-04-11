@@ -5,10 +5,10 @@
             <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="!workingScheme">
                 <img src="../../../../../assets/images/concept_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedConcept || !workingScheme">
+            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedNode || !workingScheme">
                 <img src="../../../../../assets/images/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Concept" (click)="deleteConcept()" [disabled]="!selectedConcept">
+            <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="!selectedNode">
                 <img src="../../../../../assets/images/concept_delete.png" class="panelButtonImg"/>
             </button>
         </div>

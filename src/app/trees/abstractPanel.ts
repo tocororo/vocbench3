@@ -1,6 +1,7 @@
-import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { CustomFormsServices } from "../services/customFormsServices";
+import { ARTURIResource } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { ModalServices } from "../widget/modal/modalServices";
 
@@ -25,13 +26,13 @@ export abstract class AbstractPanel {
     eventSubscriptions: any[] = [];
     selectedNode: ARTURIResource;
 
-    customForms: CustomForm[] = []; //custom forms for skos:Concept
-
     /**
      * CONSTRUCTOR
      */
+    protected cfService: CustomFormsServices;
     protected modalService: ModalServices;
-    constructor(modalService: ModalServices) {
+    constructor(cfService: CustomFormsServices, modalService: ModalServices) {
+        this.cfService = cfService;
         this.modalService = modalService;
     }
 
@@ -39,25 +40,30 @@ export abstract class AbstractPanel {
      * METHODS
      */
 
-    abstract initCustomConstructors(): void;
-
     abstract refresh(): void;
 
-    selectCustomForm(): Observable<string> {
-        if (this.customForms.length == 0) { //empty form collection
-            return Observable.of(null);
-        } else if (this.customForms.length == 1) {
-            return Observable.of(this.customForms[0].getId());
-        } else { //(forms.length > 1) //let user choose
-            return Observable.fromPromise(
-                this.modalService.selectCustomForm("Select constructor form", this.customForms).then(
-                    (selectedCF: any) => {
-                        return (<CustomForm>selectedCF).getId();
-                    },
-                    () => {}
-                )
+    abstract delete(): void;
+
+    selectCustomForm(cls: ARTURIResource): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.cfService.getCustomConstructors(cls).subscribe(
+                customForms => {
+                    console.log("available CF", customForms);
+                    if (customForms.length == 0) { //empty form collection
+                        resolve(null);
+                    } else if (customForms.length == 1) {
+                        resolve(customForms[0].getId()); 
+                    } else { //(forms.length > 1) //let user choose
+                        return this.modalService.selectCustomForm("Select constructor form", customForms).then(
+                            (selectedCF: any) => {
+                                resolve((<CustomForm>selectedCF).getId());
+                            },
+                            () => {}
+                        );
+                    }
+                }
             );
-        }
+        });
     }
 
     /**

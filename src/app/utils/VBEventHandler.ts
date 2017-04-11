@@ -73,9 +73,6 @@ export class VBEventHandler {
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 
-    //something is changed in custom form mechanism => panels that stored the CF of a resource need to be refresh
-    public customFormUpdatedEvent: EventEmitter<any> = new VBEventEmitter<any>("customFormUpdatedEvent");
-
     constructor() { }
 
     /**

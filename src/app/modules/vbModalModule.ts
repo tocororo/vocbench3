@@ -19,6 +19,7 @@ import { FilePickerModal } from '../widget/modal/filePickerModal/filePickerModal
 import { NewPlainLiteralModal } from '../widget/modal/newPlainLiteralModal/newPlainLiteralModal';
 import { NewResourceModal } from '../widget/modal/newResourceModal/newResourceModal';
 import { NewResourceCfModal } from '../widget/modal/newResourceModal/newResourceCfModal';
+import { NewSkosResourceCfModal } from '../widget/modal/newResourceModal/newSkosResourceCfModal';
 import { NewTypedLiteralModal } from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
 import { PromptModal } from '../widget/modal/promptModal/promptModal';
 import { PromptPrefixedModal } from '../widget/modal/promptModal/promptPrefixedModal';
@@ -66,8 +67,8 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule],
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewTypedLiteralModal, PromptModal,
-        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewSkosResourceCfModal, NewTypedLiteralModal,
+        PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
@@ -87,8 +88,8 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
      */
     entryComponents: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewTypedLiteralModal, PromptModal,
-        PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewSkosResourceCfModal, NewTypedLiteralModal,
+        PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,

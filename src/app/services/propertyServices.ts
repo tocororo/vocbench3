@@ -243,6 +243,70 @@ export class PropertyServices {
         );
     }
 
+    /**
+     * Creates a property of the given type.
+     * Emits a topPropertyCreatedEvent with the new property
+     * @param propertyType uri of a property class
+     * @param newProperty uri of the new property
+     * @param customFormId id of the custom form that set additional info to the property
+     * @param userPromptMap json map object of key - value of the custom form
+     * @return the new property
+     */
+    createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        console.log("[PropertyServices] createProperty");
+        var params: any = {
+            propertyType: propertyType,
+            newProperty: newProperty
+        };
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
+        }
+        return this.httpMgr.doPost(this.serviceName, "createProperty", params, this.oldTypeService, true).map(
+            stResp => {
+                var newProp = Deserializer.createURI(stResp);
+                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.topPropertyCreatedEvent.emit(newProp);
+                return newProp;
+            }
+        );
+    }
+
+    /**
+     * Creates a property (subPropertyOf the superProperty) of the given type.
+     * Emits a topPropertyCreatedEvent with the new property
+     * @param propertyType uri of a property class
+     * @param newProperty uri of the new property
+     * @param superProperty uri of the super property
+     * @param customFormId id of the custom form that set additional info to the property
+     * @param userPromptMap json map object of key - value of the custom form
+     * @return the new property
+     */
+    createSubProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty: ARTURIResource,
+            customFormId?: string, userPromptMap?: any) {
+        console.log("[PropertyServices] createProperty");
+        var params: any = {
+            propertyType: propertyType,
+            newProperty: newProperty
+        };
+        if (superProperty != null) {
+            params.superProperty = superProperty
+        }
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
+        }
+        return this.httpMgr.doPost(this.serviceName, "createProperty", params, this.oldTypeService, true).map(
+            stResp => {
+                var newProp = Deserializer.createURI(stResp);
+                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                this.eventHandler.subPropertyCreatedEvent.emit({subProperty: newProp, superProperty: superProperty});
+                return newProp;
+            }
+        );
+    }
+
+
     //============= OLD SERVICES =================
 
     /**
