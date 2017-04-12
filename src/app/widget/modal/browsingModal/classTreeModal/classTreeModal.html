@@ -2,7 +2,7 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body vbox" style="height:70vh;">
-    <class-tree-panel (nodeSelected)="onClassSelected($event)" [editable]="false"></class-tree-panel>
+    <class-tree-panel (nodeSelected)="onClassSelected($event)" [editable]="false" [roots]="context.roots"></class-tree-panel>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedClass">Ok</button>

@@ -96,15 +96,11 @@ export class InstanceListComponent {
     }
 
     private selectInstance(instance: ARTURIResource) {
-        if (this.selectedInstance == undefined) {
-            this.selectedInstance = instance;
-            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);
-        } else if (this.selectedInstance.getURI() != instance.getURI()) {
+        if (this.selectedInstance != undefined) {
             this.selectedInstance.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedInstance = instance;
-            this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
         this.selectedInstance = instance;
+        this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(instance);
     }
 

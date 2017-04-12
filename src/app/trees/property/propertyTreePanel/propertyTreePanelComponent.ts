@@ -31,7 +31,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
             cfId => { 
                 this.modalService.newResourceCf("Create a new " + propertyType.getShow(), cfId).then(
                     (data: any) => {
-                        this.propService.createProperty(propertyType, data.uri, cfId, data.cfValueMap).subscribe();
+                        this.propService.createProperty(propertyType, data.uriResource, cfId, data.cfValueMap).subscribe();
                     },
                     () => {}
                 )
@@ -46,7 +46,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
             cfId => {
                 this.modalService.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), cfId).then(
                     (data: any) => {
-                        this.propService.createSubProperty(propertyType, data.uri, this.selectedNode, cfId, data.cfValueMap).subscribe();
+                        this.propService.createSubProperty(propertyType, data.uriResource, this.selectedNode, cfId, data.cfValueMap).subscribe();
                     },
                     () => {}
                 )

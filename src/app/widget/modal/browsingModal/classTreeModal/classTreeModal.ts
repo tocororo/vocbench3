@@ -4,7 +4,7 @@ import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTURIResource} from '../../../../models/ARTResources';
 
 export class ClassTreeModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title') {
+    constructor(public title: string = 'Modal Title', public roots: ARTURIResource[] = null) {
         super();
     }
 }

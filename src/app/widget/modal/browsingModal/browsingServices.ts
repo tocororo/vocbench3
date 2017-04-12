@@ -27,8 +27,8 @@ export class BrowsingServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected class
      */
-    browseClassTree(title: string) {
-        var modalData = new ClassTreeModalData(title);
+    browseClassTree(title: string, roots?: ARTURIResource[]) {
+        var modalData = new ClassTreeModalData(title, roots);
         const builder = new BSModalContextBuilder<ClassTreeModalData>(
             modalData, undefined, ClassTreeModalData
         );

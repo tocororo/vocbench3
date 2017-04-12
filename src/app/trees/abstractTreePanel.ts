@@ -9,7 +9,7 @@ import { ModalServices } from "../widget/modal/modalServices";
     selector: "panel",
     templateUrl: "./owl/classTreePanel/classTreePanelComponent.html", //placeholder template
 })
-export abstract class AbstractTreePanel extends AbstractPanel{
+export abstract class AbstractTreePanel extends AbstractPanel {
 
     /**
      * VIEWCHILD, INPUTS / OUTPUTS

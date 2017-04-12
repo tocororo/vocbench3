@@ -2,11 +2,11 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group" style="flex: 1">
-            <button class="btn btn-default" title="Create Instance" (click)="createInstance()" [disabled]="!cls">
+            <button class="btn btn-default" title="Create Instance" (click)="create()" [disabled]="!cls">
                 <img src="../../../../assets/images/individual_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Instance" (click)="deleteInstance()"
-                [disabled]="!cls || !selectedInstance || !selectedInstance.getAdditionalProperty('explicit')">
+            <button class="btn btn-default" title="Delete Instance" (click)="delete()"
+                [disabled]="!cls || !selectedNode || !selectedNode.getAdditionalProperty('explicit')">
                 <img src="../../../../assets/images/individual_delete.png" class="panelButtonImg"/>
             </button>
         </div>

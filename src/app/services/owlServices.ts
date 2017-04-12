@@ -12,27 +12,6 @@ export class OwlServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
-    /**
-     * Creates a class (subClass of the given superClass) with the given name.
-     * Emits subClassCreatedEvent containing the subClass and the superClass
-     * @param superClass the superClass of the new created class
-     * @param newClassName local name of the new class
-     */
-    createClass(superClass: ARTURIResource, newClassName: string) {
-        console.log("[owlServices] createClass");
-        var params: any = {
-            superClassName: superClass.getURI(),
-            newClassName: newClassName,
-        };
-        return this.httpMgr.doGet(this.serviceName, "createClass", params, this.oldTypeService).map(
-            stResp => {
-                var newClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                newClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.subClassCreatedEvent.emit({subClass: newClass, superClass: superClass});
-                return stResp;
-            }
-        );
-    }
 
     /**
      * Adds a superClass to a class
@@ -73,27 +52,6 @@ export class OwlServices {
         return this.httpMgr.doGet(this.serviceName, "removeSuperCls", params, this.oldTypeService).map(
             stResp => {
                 this.eventHandler.subClassRemovedEvent.emit({cls: superClass, subClass: cls});
-                return stResp;
-            }
-        );
-    }
-    
-    /**
-     * Creates an instance for the given class. Emits a instanceCreatedEvent with cls (the class of the created instance)
-     * and instance (the new created instance)
-     * @param cls the class of the new instance
-     * @param instanceName localName of the new instance
-     */
-    createInstance(cls: ARTURIResource, instanceName: string) {
-        console.log("[owlServices] createInstance");
-        var params: any = {
-            clsName: cls.getURI(),
-            instanceName: instanceName,
-        };
-        return this.httpMgr.doGet(this.serviceName, "createInstance", params, this.oldTypeService).map(
-            stResp => {
-                var instance = Deserializer.createURI(stResp.getElementsByTagName("Instance")[0]);
-                this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
                 return stResp;
             }
         );

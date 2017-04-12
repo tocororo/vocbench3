@@ -146,14 +146,11 @@ export class SchemeListPanelComponent extends AbstractPanel {
      * Called when a scheme is clicked. Set the clicked scheme as selected
      */
     private selectScheme(scheme: ARTURIResource) {
-        if (this.selectedNode == undefined) {
-            this.selectedNode = scheme;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        } else {
+        if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedNode = scheme;
-            this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         }
+        this.selectedNode = scheme;
+        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(scheme);
     }
 
