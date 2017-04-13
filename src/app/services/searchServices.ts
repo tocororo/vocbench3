@@ -37,9 +37,9 @@ export class SearchServices {
             params.lang = lang;
         }
         if (scheme != undefined) {
-            params.scheme = scheme.getURI();
+            params.scheme = scheme;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
