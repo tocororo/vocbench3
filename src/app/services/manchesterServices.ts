@@ -44,12 +44,12 @@ export class ManchesterServices {
      * @param predicate
      * @param manchExpr manchester expression to check
      */
-    removeExpression(cls: ARTURIResource, predicate: ARTURIResource, artNode: ARTNode) {
+    removeExpression(cls: ARTURIResource, predicate: ARTURIResource, bnode: ARTNode) {
         console.log("[ManchesterServices] removeExpression");
         var params = {
             classIri: cls,
             exprType: predicate,
-            artNode: artNode
+            bnode: bnode
         };
         return this.httpMgr.doGet(this.serviceName, "removeExpression", params, this.oldTypeService, true);
     }
