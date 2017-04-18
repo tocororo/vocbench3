@@ -165,15 +165,11 @@ export class ProjectUserBinding {
 export class Role {
 
     private name: string;
-    private capabilities: string[]; //TODO later this should be an array of enum in sync with the UserCapabilitiesEnum in ST
+    private level: RoleLevel;
 
-    constructor(name: string, capabilities?: string[]) {
+    constructor(name: string, level: RoleLevel) {
         this.name = name;
-        if (capabilities != undefined) {
-            this.capabilities = capabilities;
-        } else {
-            this.capabilities = [];
-        }
+        this.level = level;
     }
 
     public setName(name: string) {
@@ -184,33 +180,25 @@ export class Role {
         return this.name;
     }
 
-    public setCapabilities(capabilities: string[]) {
-        this.capabilities = capabilities;
+    public setLevel(level: RoleLevel) {
+        this.level = level;
     }
 
-    public getCapabilities(): string[] {
-        return this.capabilities;
-    }
-
-    public addCapability(capability: string) {
-        if (this.capabilities.indexOf(capability) == -1) {
-            this.capabilities.push(capability);
-        }
-    }
-
-    public removeCapability(capability: string) {
-        var idx = this.capabilities.indexOf(capability);
-        if (idx != -1) {
-            this.capabilities.splice(idx, 1);
-        }
+    public getLevel(): RoleLevel {
+        return this.level;
     }
 
 }
 
 export type UserStatusEnum = "REGISTERED" | "DISABLED" | "ENABLED";
-
 export const UserStatusEnum = {
     REGISTERED: "REGISTERED" as UserStatusEnum,
     DISABLED: "DISABLED" as UserStatusEnum,
     ENABLED: "ENABLED" as UserStatusEnum
+}
+
+export type RoleLevel = "system" | "project";
+export const RoleLevel = {
+    system: "system" as RoleLevel,
+    project: "project" as RoleLevel
 }

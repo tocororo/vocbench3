@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+
+    <file-picker (fileChanged)="fileChangeEvent($event)" size="sm" [accept]="'.pl'"></file-picker>
+
+    <div class="hbox" style="align-items: center; margin-top: 4px">
+        <label style="margin-right: 4px; white-space: nowrap">Role name:</label>
+        <input type="text" class="form-control input-sm" [(ngModel)]="roleName" sanitized>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

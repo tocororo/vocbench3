@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body vbox" style="max-height:70vh;">
+
+    <div class="panel panel-default" style="margin-bottom: 4px;">
+        <div class="panel-heading">
+            <label>Topic</label>
+        </div>
+        <div class="panel-body vbox">
+
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Area:</label>
+                    <div class="col-sm-9">
+                        <div class="hbox">
+                            <div *ngFor="let a of areaStruct" style="flex: 1">
+                                <div class="radio" [title]="a.description">
+                                    <label>
+                                        <input type="radio" name="area_radio" [value]="a.value" [checked]="a.value == area"
+                                            (change)="updateArea(a.value)">{{a.label}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3">Subject and scope:</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control input-sm" [(ngModel)]="subjectScope"
+                            (ngModelChange)="updateExtendedCapability()" name="subj_scope">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default" style="margin-bottom: 4px;">
+        <div class="panel-heading">
+            <label style="flex: 1">CRUDV</label>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="changeAllCrudvStatus(true)" title="Check all">
+                    <span class="glyphicon glyphicon-check"></span>
+                </button>
+                <button class="btn btn-default" (click)="changeAllCrudvStatus(false)" title="Uncheck all">
+                    <span class="glyphicon glyphicon-unchecked"></span>
+                </button>
+            </div>
+        </div>
+        <div class="panel-body hbox">
+            <div *ngFor="let cs of crudvStruct"  style="flex: 1">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="updateExtendedCapability()">{{cs.label}}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="text" class="form-control input-sm" [ngModel]="extendedCapability" readonly>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isDataValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {ProjectUserBinding, Role} from "../models/User";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { ProjectUserBinding, Role } from "../models/User";
+import { Project } from "../models/Project";
 
 @Injectable()
 export class AdministrationServices {
@@ -18,11 +19,7 @@ export class AdministrationServices {
      */
     getAdministrationConfig() {
         console.log("[AdministrationServices] getAdministrationConfig");
-        return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", null, this.oldTypeService, true).map(
-            stResp => {
-                return stResp.config;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", null, this.oldTypeService, true);
     }
 
     /**
@@ -65,7 +62,7 @@ export class AdministrationServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params, this.oldTypeService, true).map(
             stResp => {
-                return new ProjectUserBinding(stResp.binding.projectName, stResp.binding.userEmail, stResp.binding.roles);
+                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles);
             }
         );
     }
@@ -121,21 +118,21 @@ export class AdministrationServices {
     //ROLES
 
     /**
-     * Returns all the available roles
+     * Returns all the available roles for the given project
+     * @param projectName if not provided returns the roles at system level
      */
-    listRoles(): Observable<Role[]> {
+    listRoles(project?: Project): Observable<Role[]> {
         console.log("[AdministrationServices] listRoles");
         var params: any = {};
+        if (project != null) {
+            params.projectName = project.getName();
+        }
         return this.httpMgr.doGet(this.serviceName, "listRoles", params, this.oldTypeService, true).map(
             stResp => {
                 var roles: Role[] = [];
-                var roleList: any[] = stResp.roles;
-                for (var i = 0; i < roleList.length; i++) {
-                    var role = new Role(roleList[i].name);
-                    var capabilityList: any[] = roleList[i].capabilities;
-                    for (var j = 0; j < capabilityList.length; j++) {
-                        role.addCapability(capabilityList[j]);
-                    }
+                for (var i = 0; i < stResp.length; i++) {
+                    let roleJson = stResp[i];
+                    var role = new Role(roleJson.name, roleJson.level);
                     roles.push(role);
                 }
                 return roles;
@@ -168,21 +165,46 @@ export class AdministrationServices {
     }
 
     /**
-     * Returns all the available capabilities
+     * Exports the role with the given name
+     * @param roleName 
      */
-    listCapabilities(): Observable<string[]> {
+    exportRole(roleName: string) {
+        console.log("[AdministrationServices] exportRole");
+        var params: any = {
+            roleName: roleName
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportRole", params, this.oldTypeService);
+    }
+
+    /**
+     * Imports a role
+     * @param inputFile file of the role to import 
+     * @param newRoleName name of the new role (Optional, if not provided the name will be inferred from the input file)
+     */
+    importRole(inputFile: File, newRoleName?: string) {
+        console.log("[AdministrationServices] importCustomForm");
+        var data: any = {
+            inputFile: inputFile
+        };
+        if (newRoleName != null) {
+            data.newRoleName = newRoleName;
+        }
+        return this.httpMgr.uploadFile(this.serviceName, "importRole", data, this.oldTypeService, true);
+    }
+
+    /**
+     * Returns all the capabilities of the given role in the given project
+     * @param projectName if not provided returns the roles at system level
+     */
+    listCapabilities(role: Role, project?: Project): Observable<string[]> {
         console.log("[AdministrationServices] listCapabilities");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listCapabilities", params, this.oldTypeService, true).map(
-            stResp => {
-                var capabilities: string[] = [];
-                var capabilityList: any[] = stResp.capabilities;
-                for (var i = 0; i < capabilityList.length; i++) {
-                    capabilities.push(capabilityList[i]);
-                }
-                return capabilities;
-            }
-        );
+        var params: any = {
+            role: role.getName()
+        };
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        return this.httpMgr.doGet(this.serviceName, "listCapabilities", params, this.oldTypeService, true);
     }
 
     /**
@@ -196,7 +218,7 @@ export class AdministrationServices {
             role: role,
             capability: capability
         };
-        return this.httpMgr.doGet(this.serviceName, "addCapabilityToRole", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addCapabilityToRole", params, this.oldTypeService, true);
     }
 
     /**
@@ -211,6 +233,21 @@ export class AdministrationServices {
             capability: capability
         };
         return this.httpMgr.doGet(this.serviceName, "removeCapabilityFromRole", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Removes a capability from the given role
+     * @param role name of the role
+     * @param capability
+     */
+    updateCapabilityForRole(role: string, oldCapability: string, newCapability: string) {
+        console.log("[AdministrationServices] updateCapabilityForRole");
+        var params: any = {
+            role: role,
+            oldCapability: oldCapability,
+            newCapability: newCapability
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateCapabilityForRole", params, this.oldTypeService, true);
     }
 
 }

@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
 
-import {UserProjBindingModal, UserProjBindingModalData} from "./userProjBindingModal";
+import { UserProjBindingModal, UserProjBindingModalData } from "./administrationModals/userProjBindingModal";
 
 import { User, Role, ProjectUserBinding } from "../models/User";
 import { Project } from "../models/Project";
@@ -29,20 +29,15 @@ export class ProjectsAdministrationComponent {
 
     private roleList: Role[]; //all available roles
     private selectedRole: Role; //role selected in roleList
-    
 
-    constructor(private projectService: ProjectServices, private userService: UserServices, private adminService: AdministrationServices, 
+
+    constructor(private projectService: ProjectServices, private userService: UserServices, private adminService: AdministrationServices,
         private modal: Modal) { }
 
     ngOnInit() {
         this.projectService.listProjects().subscribe(
             projects => {
                 this.projectList = projects;
-            }
-        );
-        this.adminService.listRoles().subscribe(
-            roles => {
-                this.roleList = roles;
             }
         );
     }
@@ -59,7 +54,12 @@ export class ProjectsAdministrationComponent {
                     this.puBinding = null;
                     this.selectedUserRole = null;
                 }
-            )
+            );
+            this.adminService.listRoles(this.selectedProject).subscribe(
+                roles => {
+                    this.roleList = roles;
+                }
+            );
         }
     }
 
@@ -92,7 +92,7 @@ export class ProjectsAdministrationComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             )
         );
     }

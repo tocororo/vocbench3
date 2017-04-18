@@ -321,7 +321,6 @@ export class CreateProjectComponent {
                 configType: this.selectedDataRepoConf.configuration.type,
                 properties: coreRepoProps
             }
-            console.log("coreRepoSailConfigurerSpecification", coreRepoSailConfigurerSpecification);
         }
 
         /**

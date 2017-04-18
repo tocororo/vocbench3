@@ -57,7 +57,9 @@ import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
 
 //administration modal
-import { UserProjBindingModal } from "../administration/userProjBindingModal";
+import { UserProjBindingModal } from "../administration/administrationModals/userProjBindingModal";
+import { CapabilityEditorModal } from "../administration/administrationModals/capabilityEditorModal";
+import { ImportRoleModal } from "../administration/administrationModals/importRoleModal";
 
 //export modals
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
@@ -73,7 +75,8 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, UserProjBindingModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, 
+        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
         PluginConfigModal, FilterGraphsModal
     ],
     exports: [],
@@ -94,7 +97,8 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, UserProjBindingModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal,
+        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
         PluginConfigModal, FilterGraphsModal
     ]
 })

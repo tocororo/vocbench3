@@ -336,17 +336,14 @@ export class CustomFormConfigComponent {
     }
 
     private importCustomForm() {
-        console.log("import CF");
         var modalData = new ImportCfModalData("Import CustomForm", "CustomForm");
         const builder = new BSModalContextBuilder<ImportCfModalData>(
             modalData, undefined, ImportCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        console.log("open import CF");
         this.modal.open(ImportCfModal, overlayConfig).then(
             dialog => dialog.result.then(
                 (data: any) => {
-                    console.log("data", data);
                     this.customFormsService.importCustomForm(data.file, data.id).subscribe(
                         stResp => {
                             this.initCustomFormList();
