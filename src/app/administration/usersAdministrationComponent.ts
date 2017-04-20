@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-
 import { UserServices } from "../services/userServices";
 import { User, UserStatusEnum } from "../models/User";
+import { VBContext } from "../utils/VBContext";
 import { ModalServices } from "../widget/modal/modalServices";
 
 @Component({
@@ -36,6 +36,11 @@ export class UsersAdministrationComponent {
         return ((user.getStatus() == UserStatusEnum.ENABLED && this.showEnabled) ||
             (user.getStatus() == UserStatusEnum.DISABLED && this.showDisabled) ||
             (user.getStatus() == UserStatusEnum.REGISTERED && this.showNew));
+    }
+
+    private isEnableButtonDisabled() {
+        //user cannot disable himself
+        return VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail();
     }
 
     private enableDisableUser() {

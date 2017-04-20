@@ -113,7 +113,7 @@
                 </div>
                 <div class="subPanel-footer" *ngIf="selectedUser">
                     <button class="btn btn-default btn-xs" [ngClass]="{active: selectedUser.getStatus() == 'ENABLED'}"
-                        (click)="enableDisableUser()">
+                        (click)="enableDisableUser()" [disabled]="isEnableButtonDisabled()">
                         <span *ngIf="selectedUser.getStatus() == 'ENABLED'">Enabled</span>
                         <span *ngIf="selectedUser.getStatus() != 'ENABLED'">Disabled</span>
                     </button>
