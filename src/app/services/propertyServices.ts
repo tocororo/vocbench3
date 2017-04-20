@@ -55,10 +55,10 @@ export class PropertyServices {
      * Returns a list of top object properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    geTopObjectProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] geTopObjectProperties");
+    getTopObjectProperties(): Observable<ARTURIResource[]> {
+        console.log("[PropertyServices] getTopObjectProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "geTopObjectProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params, this.oldTypeService, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {

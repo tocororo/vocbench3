@@ -17,7 +17,7 @@ export class UserServices {
      */
     getUser(): Observable<User> {
         console.log("[UserServices] getUser");
-        return this.httpMgr.doGet(this.serviceName, "getUser", null, this.oldTypeService, true, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getUser", null, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -29,7 +29,7 @@ export class UserServices {
      */
     listUsers(): Observable<User[]> {
         console.log("[UserServices] listUsers");
-        return this.httpMgr.doGet(this.serviceName, "listUsers", null, this.oldTypeService, true, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listUsers", null, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUsersArray(stResp);
             }
@@ -45,7 +45,7 @@ export class UserServices {
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params, this.oldTypeService, true, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUsersArray(stResp);
             }

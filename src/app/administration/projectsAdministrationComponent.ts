@@ -115,7 +115,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private addRole() {
-        this.adminService.addRoleToUserInProject(this.selectedProject.getName(), this.selectedUser.getEmail(), this.selectedRole.getName()).subscribe(
+        this.adminService.addRoleToUser(this.selectedProject.getName(), this.selectedUser.getEmail(), this.selectedRole.getName()).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
                 this.selectedRole = null;
@@ -124,7 +124,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private removeRole() {
-        this.adminService.removeRoleToUserInProject(this.selectedProject.getName(), this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
+        this.adminService.removeRoleFromUser(this.selectedProject.getName(), this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
             stResp => {
                 this.puBinding.removeRole(this.selectedUserRole);
                 this.selectedUserRole = null;

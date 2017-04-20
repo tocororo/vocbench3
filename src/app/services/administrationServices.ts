@@ -89,14 +89,14 @@ export class AdministrationServices {
      * @param email
      * @param role
      */
-    addRoleToUserInProject(projectName: string, email: string, role: string) {
-        console.log("[AdministrationServices] addRoleToUserInProject");
+    addRoleToUser(projectName: string, email: string, role: string) {
+        console.log("[AdministrationServices] addRoleToUser");
         var params: any = {
             projectName: projectName,
             email: email,
             role: role
         };
-        return this.httpMgr.doGet(this.serviceName, "addRoleToUserInProject", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "addRoleToUser", params, this.oldTypeService, true);
     }
 
     /**
@@ -105,14 +105,14 @@ export class AdministrationServices {
      * @param email
      * @param role
      */
-    removeRoleToUserInProject(projectName: string, email: string, role: string) {
-        console.log("[AdministrationServices] removeRoleToUserInProject");
+    removeRoleFromUser(projectName: string, email: string, role: string) {
+        console.log("[AdministrationServices] removeRoleFromUser");
         var params: any = {
             projectName: projectName,
             email: email,
             role: role
         };
-        return this.httpMgr.doGet(this.serviceName, "removeRoleToUserInProject", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeRoleFromUser", params, this.oldTypeService, true);
     }
 
     //ROLES
