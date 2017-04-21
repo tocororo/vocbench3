@@ -114,6 +114,15 @@
                             </span>
                         </div>
 
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="showInstNumb" (ngModelChange)="onShowInstNumbChange()"> Show instances number
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Determines if the amount of instances of a class are shown in the class tree">
+                            </span>
+                        </div>
+
                     </div>
                 </div>
 

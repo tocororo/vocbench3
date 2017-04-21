@@ -38,6 +38,18 @@ export class PreferencesServices {
     }
 
     /**
+     * Sets the show_instances_number preference
+     * @param show 
+     */
+    setShowInstancesNumb(show: boolean) {
+        console.log("[PreferencesServices] setShowInstancesNumb");
+        var params = {
+            show: show
+        };
+        return this.httpMgr.doGet(this.serviceName, "setShowInstancesNumb", params, this.oldTypeService, true);
+    }
+
+    /**
      * Sets the default active skos concept scheme
      * @param scheme 
      */

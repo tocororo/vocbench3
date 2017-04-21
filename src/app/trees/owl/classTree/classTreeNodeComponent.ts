@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryL
 import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBPreferences } from "../../../utils/VBPreferences";
 import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
@@ -15,7 +16,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
 
-    constructor(private owlService: OwlServices, private clsService: ClassesServices, eventHandler: VBEventHandler) {
+    constructor(private owlService: OwlServices, private clsService: ClassesServices, private pref: VBPreferences, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             (data: any) => this.onSubClassCreated(data.subClass, data.superClass)));
@@ -62,6 +63,9 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         );
     }
 
+    private showInstNumber(): boolean {
+        return this.pref.getShowInstancesNumber();
+    }
 
     //EVENT LISTENERS
 

@@ -7,9 +7,10 @@ import { VBEventHandler } from '../utils/VBEventHandler';
 @Injectable()
 export class VBPreferences {
 
-    private showFlags: boolean = true;
     private languages: string[] = []; //contains langTag or a single element "*" that means all languages
     private activeScheme: ARTURIResource;
+    private showFlags: boolean = true;
+    private showInstancesNumber: boolean = true;
 
     constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) {}
 
@@ -19,7 +20,6 @@ export class VBPreferences {
     initUserProjectPreferences() {
         this.prefService.getProjectPreferences().subscribe(
             prefs => {
-                this.showFlags = prefs.show_flags;
                 this.languages = prefs.languages;
                 let activeSchemePref = prefs.active_scheme;
                 if (activeSchemePref != null) {
@@ -27,6 +27,8 @@ export class VBPreferences {
                 } else {
                     this.activeScheme = null;
                 }
+                this.showFlags = prefs.show_flags;
+                this.showInstancesNumber = prefs.show_instances_number;
             }
         )
     }
@@ -49,6 +51,14 @@ export class VBPreferences {
     setShowFlags(show: boolean) {
         this.showFlags = show;
         this.prefService.setShowFlags(show).subscribe();
+    }
+
+    getShowInstancesNumber(): boolean {
+        return this.showInstancesNumber;
+    }
+    setShowInstancesNumber(show: boolean) {
+        this.showInstancesNumber = show;
+        this.prefService.setShowInstancesNumb(show).subscribe();
     }
 
     getLanguages(): string[] {

@@ -12,10 +12,9 @@ import { Languages } from "../models/LanguagesCountries";
 export class VocbenchSettingsComponent {
 
     private resViewMode: ResourceViewMode;
-
-    private showFlags: boolean;
-
     private renderingLangs: LanguageItem[] = [];
+    private showFlags: boolean;
+    private showInstNumb: boolean;
 
     constructor(private preferences: VBPreferences, private eventHandler: VBEventHandler) { }
 
@@ -49,6 +48,9 @@ export class VocbenchSettingsComponent {
 
         //show_flags
         this.showFlags = this.preferences.getShowFlags();
+
+        //show_instances_number
+        this.showInstNumb = this.preferences.getShowInstancesNumber();
     }
 
     //res view mode handler
@@ -148,6 +150,12 @@ export class VocbenchSettingsComponent {
 
     private onShowFlagChange() {
         this.preferences.setShowFlags(this.showFlags);
+    }
+
+    //show flags handlers
+
+    private onShowInstNumbChange() {
+        this.preferences.setShowInstancesNumber(this.showInstNumb);
     }
 
 }
