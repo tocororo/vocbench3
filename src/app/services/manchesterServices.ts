@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, ARTNode} from "../models/ARTResources";
+import {ARTURIResource, ARTNode, ARTBNode} from "../models/ARTResources";
 
 @Injectable()
 export class ManchesterServices {
@@ -52,6 +52,20 @@ export class ManchesterServices {
             bnode: bnode
         };
         return this.httpMgr.doGet(this.serviceName, "removeExpression", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Updates a restrinction expressed by a manchester expression
+     * @param newManchExpr 
+     * @param bnode bnode that represents the restriction
+     */
+    updateExpression(newManchExpr: string, bnode: ARTBNode) {
+        console.log("[ManchesterServices] updateExpression");
+        var params = {
+            newManchExpr: newManchExpr,
+            bnode: bnode
+        };
+        return this.httpMgr.doGet(this.serviceName, "updateExpression", params, this.oldTypeService, true);
     }
     
 

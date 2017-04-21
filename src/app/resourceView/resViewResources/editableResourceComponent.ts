@@ -6,6 +6,7 @@ import {
 import { SKOSXL } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
+import { ManchesterServices } from "../../services/manchesterServices";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
@@ -29,47 +30,57 @@ export class EditableResourceComponent {
 	private ranges: { type: string, rangeCollection: ARTURIResource[] }; //stores response.ranges of getRange service
 
 	private editInProgress: boolean = false;
+	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
 
-	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
+	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices, private manchesterService: ManchesterServices,
 		private modalService: ModalServices, private rvModalService: ResViewModalServices) { }
 
 	private edit() {
-		console.log(this.resource);
 		if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
 			this.propService.getRange(this.predicate).subscribe(
 				range => {
 					this.ranges = range.ranges;
-					if (this.ranges != null) { //check to void error in case the property has custom ranges that replace the "classic" range
-						let type: string = this.ranges.type;
-						if (type == "resource") {
-							this.rangeType = RDFTypesEnum.resource;
-							// special case: if user is editing an xLabel, the widget should allow to edit the literal form, not the uri
-							if (this.resource.getAdditionalProperty(ResAttribute.ROLE) == RDFResourceRolesEnum.xLabel) {
-								let literalForm: ARTLiteral = new ARTLiteral(
-									this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-								this.resourceStringValue = literalForm.toNT();
-							} else {
-								this.resourceStringValue = this.resource.toNT();
-							}
-						} else if (type.toLowerCase().includes("literal")) {
-							this.rangeType = RDFTypesEnum.literal;
-							this.resourceStringValue = this.resource.toNT();
-						} else {
-							this.rangeType = RDFTypesEnum.undetermined; //default
-							this.resourceStringValue = this.resource.toNT();
-						}
-					}
+					this.computeResourceStringValue();
 				}
 			);
 		} else {
-			this.resourceStringValue = this.resource.toNT();
+			this.computeResourceStringValue();
 		}
 		this.editInProgress = true;
 	}
 
+	private computeResourceStringValue() {
+		if (this.ranges != null) { //check to void error in case the property has custom ranges that replace the "classic" range
+			let type: string = this.ranges.type;
+			if (type == "resource") {
+				this.rangeType = RDFTypesEnum.resource;
+				// special case: if user is editing an xLabel, the widget should allow to edit the literal form, not the uri
+				if (this.resource.getAdditionalProperty(ResAttribute.ROLE) == RDFResourceRolesEnum.xLabel) {
+					let literalForm: ARTLiteral = new ARTLiteral(
+						this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+					this.resourceStringValue = literalForm.toNT();
+				}
+				//special case: if user is editing a class restriction, the widget should allow to edit the manchester expression
+				else if (this.resource.isBNode() && this.resource.getShow().startsWith("(") && this.resource.getShow().endsWith(")")) {
+					this.resourceStringValue = this.resource.getShow();
+				} else {
+					this.resourceStringValue = this.resource.toNT();
+				}
+			} else if (type.toLowerCase().includes("literal")) {
+				this.rangeType = RDFTypesEnum.literal;
+				this.resourceStringValue = this.resource.toNT();
+			} else {
+				this.rangeType = RDFTypesEnum.undetermined; //default
+				this.resourceStringValue = this.resource.toNT();
+			}
+		}
+		this.resourceStringValuePristine = this.resourceStringValue;
+	}
+
 	private confirmEdit() {
-		if (this.resourceStringValue != this.resource.toNT()) {
+		console.log(this.resourceStringValue, this.resourceStringValuePristine);
+		if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
 			try {
 				let newValue: ARTNode;
 				//parse the string typed by the user
@@ -81,6 +92,9 @@ export class EditableResourceComponent {
 					newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
 				} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
 					newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
+				} else if (this.resource.isBNode() && this.resourceStringValue.startsWith("(") && this.resourceStringValue.endsWith(")")) {
+					this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
+					return;
 				} else {
 					throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
 				}
@@ -145,6 +159,15 @@ export class EditableResourceComponent {
 				/** Event propagated to the resView that refreshes.
 				 * I cannot simply update the rdf-resource since the URI of the resource
 				 * in the predicate objects list stored in the partition render is still the same */
+				this.update.emit(); 
+			}
+		);
+	}
+
+	private applyManchesterUpdate(node: ARTBNode, expression: string) {
+		this.manchesterService.updateExpression(this.resourceStringValue, <ARTBNode>this.resource).subscribe(
+			stResp => {
+				this.editInProgress = false;
 				this.update.emit(); 
 			}
 		);

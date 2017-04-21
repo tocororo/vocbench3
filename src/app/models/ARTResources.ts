@@ -539,7 +539,6 @@ export class ResourceUtils {
     }
 
     static isQName(nTripleQName: string, prefixMapping: PrefixMapping[]): boolean {
-        console.log("prefMap", prefixMapping);
         let colonIdx: number = nTripleQName.indexOf(":");
         if (colonIdx != -1) {
             let prefix: string = nTripleQName.substring(0, colonIdx);
