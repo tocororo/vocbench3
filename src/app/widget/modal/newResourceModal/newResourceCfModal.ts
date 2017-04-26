@@ -3,7 +3,6 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { FormField } from "../../../models/CustomForms"
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources"
-import { VBContext } from "../../../utils/VBContext"
 
 export class NewResourceCfModalData extends BSModalContext {
     constructor(
@@ -22,8 +21,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
     context: NewResourceCfModalData;
 
     //standard form
-    private namespace: string = "";
-    private localName: string;
+    private uri: string;
 
     //custom form
     private formFields: FormField[] = [];
@@ -32,10 +30,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
         this.context = dialog.context;
     }
 
-    ngOnInit() {
-        this.namespace = VBContext.getDefaultNamespace();
-        document.getElementById("toFocus").focus();
-    }
+    ngOnInit() { }
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
@@ -46,7 +41,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
     }
 
     private isInputValid(): boolean {
-        var standardFormValid: boolean = (this.localName != null && this.localName != "");
+        var standardFormValid: boolean = (this.uri != null && this.uri.trim() != "");
         var customFormValid: boolean = true;
         for (var i = 0; i < this.formFields.length; i++) {
             var entry = this.formFields[i];
@@ -82,7 +77,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
         }
 
         var returnedData: { uriResource: ARTURIResource, cfValueMap: any} = {
-            uriResource: new ARTURIResource(this.namespace + this.localName),
+            uriResource: new ARTURIResource(this.uri),
             cfValueMap: entryMap
         }
         this.dialog.close(returnedData);

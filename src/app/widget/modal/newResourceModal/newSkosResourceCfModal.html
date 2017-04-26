@@ -14,7 +14,7 @@
                     <td><label>Label:</label></td>
                     <td>
                         <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                            <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                            <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
                             <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
                         </div>
                     </td>
@@ -22,13 +22,8 @@
                 <tr>
                     <td><label>URI:</label></td>
                     <td>
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" style="padding-right: 5px;">
-                                {{namespace}}
-                            </span>
-                            <input type="text" class="form-control" name="localName" [(ngModel)]="localName"
-                                placeholder="Leave empty in order to autogenerate a random URI" sanitized>
-                        </div>
+                        <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                        </editable-ns-input>
                     </td>
                 </tr>
             </tbody>

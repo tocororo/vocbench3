@@ -64,6 +64,8 @@ import { ImportRoleModal } from "../administration/administrationModals/importRo
 //export modals
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 
+//this is used only in newResource modals, if it will be useful elsewhere, it can be moved in sharedModule
+import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInput';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule],
@@ -77,7 +79,8 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, 
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
-        PluginConfigModal, FilterGraphsModal
+        PluginConfigModal, FilterGraphsModal,
+        EditableNsInput
     ],
     exports: [],
     providers: [ModalServices, BrowsingServices],

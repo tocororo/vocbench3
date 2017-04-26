@@ -13,12 +13,8 @@
                 <tr>
                     <td><label>URI:</label></td>
                     <td>
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" style="padding-right: 5px;">
-                                {{namespace}}
-                            </span>
-                            <input id="toFocus" type="text" class="form-control" name="localName" [(ngModel)]="localName" sanitized>
-                        </div>
+                        <editable-ns-input [(ngModel)]="uri"  [toFocus]="true">
+                        </editable-ns-input>
                     </td>
                 </tr>
             </tbody>

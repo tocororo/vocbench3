@@ -1,0 +1,26 @@
+<div class="input-group input-group-sm">
+
+    <template [ngIf]="namespaceLocked">
+        <span class="input-group-addon" style="padding-right: 5px;">
+            {{namespace}}
+        </span>
+        <input #lnWithPH *ngIf="placeholder" type="text" class="form-control" [(ngModel)]="localName"
+            (ngModelChange)="onModelChanged()" [placeholder]="placeholder" sanitized>
+        <input #lnWithoutPH *ngIf="!placeholder" type="text" class="form-control" [(ngModel)]="localName"
+            (ngModelChange)="onModelChanged()" sanitized>
+    </template>
+    
+    <template [ngIf]="!namespaceLocked">
+        <input *ngIf="placeholder" type="text" class="form-control" [(ngModel)]="uri" (ngModelChange)="onModelChanged()"
+            [placeholder]="placeholder" sanitized>
+        <input *ngIf="!placeholder" type="text" class="form-control" [(ngModel)]="uri" (ngModelChange)="onModelChanged()"
+            sanitized>
+    </template>
+    
+    <div class="input-group-btn">
+        <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+            title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}">
+            <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+        </button>
+    </div>
+</div>

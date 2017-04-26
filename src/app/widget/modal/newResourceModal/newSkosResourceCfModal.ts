@@ -1,9 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { FormField } from "../../../models/CustomForms"
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources"
-import { VBContext } from "../../../utils/VBContext"
 
 export class NewSkosResourceCfModalData extends BSModalContext {
     constructor(
@@ -22,11 +21,12 @@ export class NewSkosResourceCfModalData extends BSModalContext {
 export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfModalData> {
     context: NewSkosResourceCfModalData;
 
+    @ViewChild("toFocus") inputToFocus: ElementRef;
+
     //standard form
     private label: string;
     private lang: string;
-    private namespace: string = "";
-    private localName: string;
+    private uri: string;
 
     //custom form
     private formFields: FormField[] = [];
@@ -37,8 +37,10 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
 
     ngOnInit() {
         this.lang = this.context.lang;
-        this.namespace = VBContext.getDefaultNamespace();
-        document.getElementById("toFocus").focus();
+    }
+
+    ngAfterViewInit() {
+        this.inputToFocus.nativeElement.focus();
     }
 
     private onKeydown(event: KeyboardEvent) {
@@ -95,8 +97,8 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
             cfValueMap: entryMap
         }
         //Set URI only if localName is not empty
-        if (this.localName != null && this.localName != "") {
-            returnedData.uriResource = new ARTURIResource(this.namespace + this.localName);
+        if (this.uri != null && this.uri.trim() != "") {
+            returnedData.uriResource = new ARTURIResource(this.uri);
         }
         this.dialog.close(returnedData);
     }

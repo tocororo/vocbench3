@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
-import {VBContext} from "../../../utils/VBContext"
+import { Component, ViewChild, ElementRef } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { VBContext } from "../../../utils/VBContext"
 
 export class NewResourceModalData extends BSModalContext {
     constructor(
@@ -18,25 +18,27 @@ export class NewResourceModalData extends BSModalContext {
 })
 export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     context: NewResourceModalData;
-    
+
+    @ViewChild("toFocus") inputToFocus: ElementRef;
+
     private submitted: boolean = false;
-    
+
     private label: string;
     private lang: string;
-    private namespace: string = "";
-    private localName: string;
+    private uri: string;
 
     constructor(public dialog: DialogRef<NewResourceModalData>) {
         this.context = dialog.context;
     }
-    
+
     ngOnInit() {
         this.lang = this.context.lang;
-        document.getElementById("toFocus").focus();
-
-        this.namespace = VBContext.getDefaultNamespace();
     }
-    
+
+    ngAfterViewInit() {
+        this.inputToFocus.nativeElement.focus();
+    }
+
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
             this.submitted = true;
@@ -45,11 +47,11 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
             }
         }
     }
-    
+
     private onLangChange(newLang: string) {
         this.lang = newLang;
     }
-    
+
     private isInputValid(): boolean {
         return (this.label != undefined && this.label.trim() != "");
     }
@@ -57,15 +59,17 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        if (this.localName == null || (this.localName != null && this.localName.trim() == "")) {//if localName has no content return null uri
-            this.dialog.close({uri: null, label: this.label, lang: this.lang});    
-        } else {
-            this.dialog.close({uri: this.namespace + this.localName, label: this.label, lang: this.lang});
+        var returnedData: { uri: string, label: string, lang: string } = {
+            uri: null, label: this.label, lang: this.lang
         }
+        if (this.uri != null && this.uri.trim() == "") {
+            returnedData.uri = this.uri;
+        }
+        this.dialog.close(returnedData);
     }
 
     cancel() {
         this.dialog.dismiss();
     }
-    
+
 }
