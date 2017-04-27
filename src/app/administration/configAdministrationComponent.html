@@ -15,31 +15,64 @@
                     <table class="table table-condensed table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
+                            <col style="width: 1%;">
                             <col>
                         </colgroup>
                         <tbody>
                             <tr>
-                                <td nowrap><label>Email admin address:</label></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign"
+                                        title="Email address used to identify the system administrator. The system notifications will be also send to the same address.">
+                                    </span>
+                                </td>
+                                <td nowrap>
+                                    <label>Email admin address:</label>
+                                </td>
                                 <td><input class="form-control input-sm" type="email" [(ngModel)]="config.emailAdminAddress"></td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Email from address:</label></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" title="Email address used to send administration emails"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>Email from address:</label>
+                                </td>
                                 <td><input class="form-control input-sm" type="email" [(ngModel)]="config.emailFromAddress"></td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Email from password:</label></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" title="Password of the above email address"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>Email from password:</label>
+                                </td>
                                 <td><input class="form-control input-sm" [(ngModel)]="config.emailFromPassword"></td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Email from alias:</label></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" title="Alias shown in the administration emails"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>Email from alias:</label>
+                                </td>
                                 <td><input class="form-control input-sm" [(ngModel)]="config.emailFromAlias"></td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Email from host:</label></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" title="SMTP Mail Server IP/URL"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>Email from host:</label>
+                                </td>
                                 <td><input class="form-control input-sm" [(ngModel)]="config.emailFromHost"></td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Email from port:</label></td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" title="Mail Server Port"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>Email from port:</label>
+                                </td>
                                 <td><input class="form-control input-sm" [(ngModel)]="config.emailFromPort"></td>
                             </tr>
                         </tbody>
@@ -47,7 +80,6 @@
                 </div>
                 <div class="subPanel-footer">
                     <button type="submit" class="btn btn-default btn-sm pull-right" (click)="submitChange()" [disabled]="!isConfigChanged()">Submit</button>
-                    <!--<button type="submit" class="btn btn-default btn-sm pull-right" (click)="submitChange()">Submit</button>-->
                 </div>
             </div>
 
