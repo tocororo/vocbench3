@@ -22,8 +22,6 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
 
-    public projectChanged: boolean = false;
-
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
         private preferences: VBPreferences, private router: Router, private modalService: ModalServices, private modal: Modal) {
     }
@@ -79,7 +77,7 @@ export class ProjectComponent implements OnInit {
                     );
                 },
                 () => { }
-                );
+            );
         }
     }
 
@@ -119,11 +117,11 @@ export class ProjectComponent implements OnInit {
         this.projectService.accessProject(project).subscribe(
             stResp => {
                 VBContext.setWorkingProject(project);
-                this.projectChanged = true;
+                VBContext.notifyProjectChanged();
                 project.setOpen(true);
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 //init the project preferences for the project
-                this.preferences.initUserProjectPreferences();
+                this.preferences.initUserProjectPreferences().subscribe();
                 //get default namespace of the project and set it to the vbContext
                 this.metadataService.getDefaultNamespace().subscribe(
                     ns => {

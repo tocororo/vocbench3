@@ -9,7 +9,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li *ngIf="isUserLogged()" routerLinkActive="active">
+                <li *ngIf="isUserLogged() && isUserAdmin()" routerLinkActive="active">
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
@@ -28,9 +28,6 @@
                         <li><a [routerLink]="['/CustomForm']">Custom Form configuration</a></li>
                     </ul>
                 </li>
-				<!--<li [ngClass]="{active: isActive('/Test')}">
-                    <a [routerLink]="['Test']">Test</a>
-                </li>-->
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <!-- See userMenuComponent to understand user-menu attribute (to avoid css style breaking) -->

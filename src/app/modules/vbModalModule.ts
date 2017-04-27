@@ -55,6 +55,7 @@ import { RemoteAccessConfigModal } from "../project/createProject/remoteAccessCo
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
+import { ProjectListModal } from "../project/projectListModal";
 
 //administration modal
 import { UserProjBindingModal } from "../administration/administrationModals/userProjBindingModal";
@@ -77,7 +78,7 @@ import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInpu
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, 
+        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
         PluginConfigModal, FilterGraphsModal,
         EditableNsInput
@@ -100,7 +101,7 @@ import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInpu
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal,
+        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
         PluginConfigModal, FilterGraphsModal
     ]

@@ -26,6 +26,10 @@ export class AppComponent {
         return VBContext.isLoggedIn();
     }
 
+    private isUserAdmin(): boolean {
+        return VBContext.getLoggedUser().isAdmin();
+    }
+
     /**
      * returns true if a project is open. Useful to show/hide menubar links
      */ 

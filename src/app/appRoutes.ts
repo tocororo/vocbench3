@@ -1,6 +1,6 @@
 import {RouterModule, Routes} from '@angular/router';
 
-import {AuthGuard, ProjectGuard, UnsavedChangesGuard} from "./utils/CanActivateGuards";
+import {AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard} from "./utils/CanActivateGuards";
 
 import {HomeComponent} from "./homeComponent";
 import {ProjectComponent} from "./project/projectComponent";
@@ -26,7 +26,7 @@ export const routes: Routes = [
     {path: "", redirectTo: "/Home", pathMatch: "full"},
     {path: "Home", component: HomeComponent},
     // route config of navigation bar
-    {path: "Projects", component: ProjectComponent, canActivate: [AuthGuard]},
+    {path: "Projects", component: ProjectComponent, canActivate: [AdminGuard]},
     {path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard]},
     {path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard]},
@@ -36,7 +36,7 @@ export const routes: Routes = [
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [UnsavedChangesGuard]},
     {path: "Test", component: TestComponent},
     //lazy loading of module with child route
-    {path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard]},//TODO guard for admin?
+    {path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AdminGuard]},
     {path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard]},
     // route config of config bar
     {path: "Config/LoadData", component: LoadDataComponent, canActivate: [AuthGuard, ProjectGuard]},

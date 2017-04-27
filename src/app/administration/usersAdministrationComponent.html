@@ -117,11 +117,9 @@
                         <span *ngIf="selectedUser.getStatus() == 'ENABLED'">Enabled</span>
                         <span *ngIf="selectedUser.getStatus() != 'ENABLED'">Disabled</span>
                     </button>
-                    <!--<div style="display: flex; align-items: center" title="Enable/Disable user">
-                        <span>Enabled:</span>
-                        <input type="checkbox" style="margin-left: 3px;" [checked]="allPropCheck" 
-                            (change)="onAllPropCheckChange($event.target.checked)">
-                    </div>-->
+                    <button class="btn btn-default btn-xs pull-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
+                        Delete
+                    </button>
                 </div>
             </div>
 

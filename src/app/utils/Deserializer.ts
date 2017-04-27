@@ -129,6 +129,7 @@ export class Deserializer {
         var user = new User(userJson.email, userJson.firstName, userJson.lastName);
         user.setRegistrationDate(userJson.registrationDate);
         user.setStatus(userJson.status);
+        user.setAdmin(userJson.admin);
         if (userJson.birthday != undefined) {
             user.setBirthday(userJson.birthday);
         }

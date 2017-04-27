@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
-import {ClassTreeModal, ClassTreeModalData} from "../browsingModal/classTreeModal/classTreeModal";
-import {ClassIndividualTreeModal, ClassIndividualTreeModalData} from "../browsingModal/classIndividualTreeModal/classIndividualTreeModal";
-import {InstanceListModal, InstanceListModalData} from "../browsingModal/instanceListModal/instanceListModal";
-import {ConceptTreeModal, ConceptTreeModalData} from "../browsingModal/conceptTreeModal/conceptTreeModal";
-import {CollectionTreeModal, CollectionTreeModalData} from "../browsingModal/collectionTreeModal/collectionTreeModal";
-import {SchemeListModal, SchemeListModalData} from "../browsingModal/schemeListModal/schemeListModal";
-import {PropertyTreeModal, PropertyTreeModalData} from "../browsingModal/propertyTreeModal/propertyTreeModal";
-import {ARTURIResource} from "../../../models/ARTResources";
+import { Injectable } from '@angular/core';
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { ClassTreeModal, ClassTreeModalData } from "../browsingModal/classTreeModal/classTreeModal";
+import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "../browsingModal/classIndividualTreeModal/classIndividualTreeModal";
+import { InstanceListModal, InstanceListModalData } from "../browsingModal/instanceListModal/instanceListModal";
+import { ConceptTreeModal, ConceptTreeModalData } from "../browsingModal/conceptTreeModal/conceptTreeModal";
+import { CollectionTreeModal, CollectionTreeModalData } from "../browsingModal/collectionTreeModal/collectionTreeModal";
+import { SchemeListModal, SchemeListModalData } from "../browsingModal/schemeListModal/schemeListModal";
+import { PropertyTreeModal, PropertyTreeModalData } from "../browsingModal/propertyTreeModal/propertyTreeModal";
+import { ARTURIResource } from "../../../models/ARTResources";
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
@@ -19,9 +19,9 @@ import {ARTURIResource} from "../../../models/ARTResources";
  */
 @Injectable()
 export class BrowsingServices {
-    
-    constructor(private modal: Modal) {}
-    
+
+    constructor(private modal: Modal) { }
+
     /**
      * Opens a modal to browse the class tree
      * @param title the title of the modal
@@ -53,7 +53,7 @@ export class BrowsingServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal to browse the concept tree
      * @param title the title of the modal
@@ -70,7 +70,7 @@ export class BrowsingServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal to browse the concept tree
      * @param title the title of the modal
@@ -104,7 +104,7 @@ export class BrowsingServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal to browse the scheme list
      * @param title the title of the modal
@@ -120,7 +120,7 @@ export class BrowsingServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal to browse the property tree
      * @param title the title of the modal
@@ -139,5 +139,5 @@ export class BrowsingServices {
             dialog => dialog.result
         );
     }
-    
+
 }

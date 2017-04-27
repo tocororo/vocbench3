@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
-
+import { Router } from "@angular/router";
 import { AdministrationServices } from "../services/administrationServices";
+import { AuthServices } from "../services/authServices";
+import { ModalServices } from "../widget/modal/modalServices";
 
 @Component({
     selector: "config-admin-component",
@@ -10,9 +12,11 @@ import { AdministrationServices } from "../services/administrationServices";
 export class ConfigAdministrationComponent {
 
     private pristineConfig: any = {};
+    private pristineAdminMail: string;
     private config: any = {};
 
-    constructor(private adminService: AdministrationServices) {}
+    constructor(private adminService: AdministrationServices, private authService: AuthServices, 
+        private modalService: ModalServices, private router: Router) {}
 
     ngOnInit() {
         this.adminService.getAdministrationConfig().subscribe(
@@ -24,20 +28,34 @@ export class ConfigAdministrationComponent {
     }
 
     private submitChange() {
-        console.log("submitting config with values:\n"
-        +  "emailAdminAddress: " + this.config.emailAdminAddress + "\n"
-        +  "emailFromAddress: " + this.config.emailFromAddress + "\n"
-        +  "emailFromPassword: " + this.config.emailFromPassword + "\n"
-        +  "emailFromAlias: " + this.config.emailFromAlias + "\n"
-        +  "emailFromHost: " + this.config.emailFromHost + "\n"
-        +  "emailFromPort: " + this.config.emailFromPort + "\n"
-        )
-        this.adminService.updateAdministrationConfig(this.config.emailAdminAddress, this.config.emailFromAddress,
-            this.config.emailFromPassword, this.config.emailFromAlias, this.config.emailFromHost, this.config.emailFromPort).subscribe(
+        if (this.pristineConfig.emailAdminAddress != this.config.emailAdminAddress) {
+            this.modalService.confirm("Update configuration", "The administrator email address has changed. " + 
+                "If you confirm you'll be logged out. Are you sure to continue?", "warning").then(
+                result => {
+                    this.updateAdminConfig().subscribe(
+                        stResp => {
+                            this.authService.logout().subscribe(
+                                stResp => {
+                                    this.router.navigate(["/Home"]);
+                                }
+                            );
+                        }
+                    );
+                },
+                () => {}
+            );
+        } else {
+            this.updateAdminConfig().subscribe(
                 stResp => {
                     this.pristineConfig = Object.assign({}, this.config); //changes done => update the pristine config
                 }
             );
+        }
+    }
+
+    private updateAdminConfig() {
+        return this.adminService.updateAdministrationConfig(this.config.emailAdminAddress, this.config.emailFromAddress,
+            this.config.emailFromPassword, this.config.emailFromAlias, this.config.emailFromHost, this.config.emailFromPort);
     }
 
     private isConfigChanged(): boolean {

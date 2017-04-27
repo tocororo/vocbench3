@@ -18,45 +18,61 @@
         </ul>
     </div>
     
-    <!--Configuration of project data, not available when there is no project open-->
-    <div *ngIf="isUserLogged() && isProjectOpen()" class="dropdown pull-right">
-        <span style="margin-right: 5px;">Current project: <strong>{{currentProject.getName()}}</strong></span>
-        <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
-            Global Data Management
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li>
-                <a [routerLink]="['/Config/LoadData']">
-                    <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load data
+    <!--Configuration of project data, not available when there is no project accessed-->
+    <div *ngIf="isUserLogged() && isProjectAccessed()" class="pull-right">
+        <div class="dropdown pull-right">
+            <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+                Global Data Management
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a [routerLink]="['/Config/LoadData']">
+                        <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load data
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/Config/ExportData']">
+                        <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
+                    </a>
+                </li>
+                <li>
+                    <a (click)="clearData()">
+                        <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/Config/Refactor']">
+                        <span class="glyphicon glyphicon-retweet" style="margin-right: 5px"></span>Refactor
+                    </a>
+                </li>
+                <li>
+                    <a [routerLink]="['/Config/Metadata']">
+                        <span class="glyphicon glyphicon-console" style="margin-right: 5px"></span>Metadata management
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div *ngIf="isUserLogged()" class="pull-right">
+        <div class="pull-right hbox" style="margin-right: 8px; align-items: center">
+            <label style="margin-right: 3px;">Current project:</label>
+
+            <div class="btn-group btn-group-xs" role="group">
+                <a href="#" class="btn btn-default disabled" style="pointer-events: none" role="button">
+                    <template [ngIf]="isProjectAccessed()">
+                        {{currentProject.getName()}}
+                    </template>
+                    <template [ngIf]="!isProjectAccessed()">
+                        ------
+                    </template>
                 </a>
-            </li>
-            <li>
-                <a [routerLink]="['/Config/ExportData']">
-                    <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
-                </a>
-            </li>
-            <!--<li>
-                <a (click)="dump()">
-                    <span class="glyphicon glyphicon-import" style="margin-right: 5px"></span>Dump as a new version
-                </a>
-            </li>-->
-            <li>
-                <a (click)="clearData()">
-                    <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
-                </a>
-            </li>
-            <li>
-                <a [routerLink]="['/Config/Refactor']">
-                    <span class="glyphicon glyphicon-retweet" style="margin-right: 5px"></span>Refactor
-                </a>
-            </li>
-            <li>
-                <a [routerLink]="['/Config/Metadata']">
-                    <span class="glyphicon glyphicon-console" style="margin-right: 5px"></span>Metadata management
-                </a>
-            </li>
-        </ul>
+                <button class="btn btn-default" style="padding-left: 3px;" (click)="changeProject()" title="Change project">
+                    <span class="glyphicon glyphicon-list-alt" style="line-height: 1"></span>
+                </button>
+            </div>
+        </div>
     </div>
     
 </div>

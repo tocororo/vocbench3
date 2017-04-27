@@ -66,10 +66,10 @@ export class VBEventHandler {
 
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
-    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter<any>("refreshDataBroadcastEvent");
+    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent");
 
     //user changes resourceViewMode preference => resource view panel need to be updated
-    public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter<any>("resViewModeChangedEvent");
+    public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter("resViewModeChangedEvent");
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 

@@ -1,18 +1,19 @@
 //https://www.softwarearchitekt.at/post/2016/12/02/sticky-routes-in-angular-2-3-with-routereusestrategy.aspx
 //Nice explanation of RouteReuseStrategy: http://stackoverflow.com/a/41515648/5805661
 
-import {RouteReuseStrategy, DetachedRouteHandle, ActivatedRouteSnapshot} from "@angular/router";
-import {ComponentRef} from "@angular/core";
-import {ProjectComponent} from "../project/projectComponent";
-import {SparqlComponent} from "../sparql/sparqlComponent";
-import {DataComponent} from "../data/dataComponent";
+import { RouteReuseStrategy, DetachedRouteHandle, ActivatedRouteSnapshot } from "@angular/router";
+import { ComponentRef } from "@angular/core";
+import { ProjectComponent } from "../project/projectComponent";
+import { SparqlComponent } from "../sparql/sparqlComponent";
+import { DataComponent } from "../data/dataComponent";
+import { VBContext } from "../utils/VBContext";
 
 // This impl. bases upon one that can be found in the router's test cases.
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
     private pathWithState: string[] = ["Data", "Sparql"];
 
-    private projectChanged: boolean;
+    // private projectChanged: boolean;
 
     /**
      * map containing key-value pair that chaches routes, where
@@ -29,8 +30,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      */
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
         // console.debug('CustomReuseStrategy:shouldDetach ', route);
-        //Projects doesn't need to be stored but I detach it temporarly, so store() is fired and I can keep the state of projectChanged
-        if (this.pathWithState.indexOf(route.routeConfig.path) != -1 || route.routeConfig.path == "Projects") {
+        if (this.pathWithState.indexOf(route.routeConfig.path) != -1) {
             return true;
         }
         return false;
@@ -43,12 +43,6 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
      */
     store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle): void {
         // console.debug('CustomReuseStrategy:store', route, handle);
-        //If it tries to store Projects, just get the projectChanged attribute and skip the store
-        if (route.routeConfig.path == "Projects") {
-            var projComponent: ProjectComponent = handle['componentRef']._component;
-            this.projectChanged = projComponent.projectChanged;
-            return;
-        }
         this.handlers[route.routeConfig.path] = handle;
     }
 
@@ -59,10 +53,8 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         // console.debug('CustomReuseStrategy:shouldAttach', route);
         // Return false (that means "don't attach the cached route") if it's going to "Data" route and project was changed in the meantime
-        if (route.routeConfig.path == "Data" || route.routeConfig.path == "Sparql") {
-            if (this.projectChanged) {
-                //reset projectChanged flag
-                this.projectChanged = false;
+        if (this.pathWithState.indexOf(route.routeConfig.path) != -1) {
+            if (VBContext.isProjectChanged()) {
                 // destroy the previous stored DataComponent and SparqlComponent and remove them from the handlers map
                 if (this.handlers["Data"]) {
                     let detachedRouteHandle = this.handlers["Data"];

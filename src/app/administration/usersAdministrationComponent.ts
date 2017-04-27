@@ -21,6 +21,11 @@ export class UsersAdministrationComponent {
     constructor(private userService: UserServices, private modalService: ModalServices) { }
 
     ngOnInit() {
+        this.initUserList();
+    }
+
+    private initUserList() {
+        this.selectedUser = null;
         this.userService.listUsers().subscribe(
             users => {
                 this.users = users;
@@ -32,6 +37,9 @@ export class UsersAdministrationComponent {
         this.selectedUser = user;
     }
 
+    /**
+     * Based on filters "enabled" "disabled" "new" tells whether the user should be visible.
+     */
     private isUserVisible(user: User): boolean {
         return ((user.getStatus() == UserStatusEnum.ENABLED && this.showEnabled) ||
             (user.getStatus() == UserStatusEnum.DISABLED && this.showDisabled) ||
@@ -59,7 +67,7 @@ export class UsersAdministrationComponent {
             );
         } else {
             this.modalService.confirm("Enable user", "You are enabling user "
-                + this.selectedUser.getFirstName() + " " + this.selectedUser.getLastName() + ". Are you sure?").then(
+                + this.selectedUser.getFirstName() + " " + this.selectedUser.getLastName() + ". Are you sure?", "warning").then(
                 result => {
                     this.userService.enableUser(this.selectedUser.getEmail(), true).subscribe(
                         user => {
@@ -70,6 +78,25 @@ export class UsersAdministrationComponent {
                 () => {}
             );
         }
+    }
+
+    private isDeleteButtonDisabled() {
+        //user cannot delete himself
+        return VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail();
+    }
+
+    private deleteUser() {
+        this.modalService.confirm("Delete user", "You are deleting user "
+            + this.selectedUser.getFirstName() + " " + this.selectedUser.getLastName() + ". Are you sure?", "warning").then(
+            result => {
+                this.userService.deleteUser(this.selectedUser.getEmail()).subscribe(
+                    stResp => {
+                        this.initUserList();
+                    }
+                );
+            },
+            () => {}
+        );
     }
 
 }

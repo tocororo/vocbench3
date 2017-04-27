@@ -2,7 +2,6 @@ export class User {
     private email: string;
     private firstName: string;
     private lastName: string
-    // private roles: string[];
     private birthday: Date;
     private phone: string;
     private gender: string;
@@ -12,6 +11,7 @@ export class User {
     private affiliation: string;
     private url: string;
     private status: UserStatusEnum;
+    private admin: boolean = false;
 
     constructor(email: string, firstName: string, lastName: string) {
         this.email = email;
@@ -30,14 +30,6 @@ export class User {
     getLastName(): string {
         return this.lastName;
     }
-
-    // listRoles(): string[] {
-    //     return this.roles;
-    // }
-
-    // hasRole(role: string): boolean {
-    //     return this.roles.includes(role);
-    // }
 
     setBirthday(birthday: Date) {
         this.birthday = birthday;
@@ -109,6 +101,14 @@ export class User {
 
     getStatus(): UserStatusEnum {
         return this.status;
+    }
+
+    setAdmin(admin: boolean) {
+        this.admin = admin;
+    }
+
+    isAdmin(): boolean {
+        return this.admin;
     }
 
 }

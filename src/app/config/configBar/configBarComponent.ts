@@ -1,12 +1,15 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { VBContext } from "../../utils/VBContext";
-import { UIUtils } from "../../utils/UIUtils";
+import { Observable } from 'rxjs/Observable';
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { ProjectListModal } from '../../project/projectListModal';
 import { Project, ProjectTypesEnum } from "../../models/Project";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
-import { RefactorServices } from "../../services/refactorServices";
 import { ModalServices } from "../../widget/modal/modalServices";
+import { VBContext } from "../../utils/VBContext";
+import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
     selector: "config-bar",
@@ -16,13 +19,14 @@ export class ConfigBarComponent {
 
     private currentProject: Project;
 
-    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices,
-        private refactorService: RefactorServices, private modalService: ModalServices, private router: Router) { }
+    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, 
+        private modalService: ModalServices, private router: Router, private modal: Modal) {
+    }
 
     /**
      * returns true if a project is open. Useful to enable/disable navbar links
      */
-    private isProjectOpen(): boolean {
+    private isProjectAccessed(): boolean {
         this.currentProject = VBContext.getWorkingProject();
         return VBContext.getWorkingProject() != undefined;
     }
@@ -32,6 +36,15 @@ export class ConfigBarComponent {
      */
     private isUserLogged(): boolean {
         return VBContext.isLoggedIn();
+    }
+
+    /**
+     * Opens a modal that allows to change project among the open
+     */
+    private changeProject() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(ProjectListModal, overlayConfig);
     }
 
     private clearData() {
@@ -75,7 +88,7 @@ export class ConfigBarComponent {
                 );
             },
             () => { }
-            );
+        );
     }
 
 }

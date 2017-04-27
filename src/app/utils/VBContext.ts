@@ -28,6 +28,7 @@ class ProjectContext {
 export class VBContext {
 
     private static workingProjectCtx: ProjectContext = new ProjectContext();
+    private static projectChanged: boolean;
     private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     private static loggedUser: User;
@@ -49,6 +50,18 @@ export class VBContext {
      */
     static removeWorkingProject() {
         this.workingProjectCtx.reset();
+    }
+
+    /**
+     * When project changes set a flag in the context, so the CustomReuseStrategy knows if to reattach or reload a route
+     */
+    static notifyProjectChanged() {
+        this.projectChanged = true;
+    }
+    static isProjectChanged() {
+        var changed = this.projectChanged;
+        this.projectChanged = false; //reset
+        return changed;
     }
 
     //there is no removeDefaultNamespace since it is remove with the working project (see removeWorkingProject)

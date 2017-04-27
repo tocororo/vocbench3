@@ -279,4 +279,16 @@ export class UserServices {
         );
     }
 
+    /**
+     * Deletes a user
+     * @param email
+     */
+    deleteUser(email: string) {
+        console.log("[UserServices] deleteUser");
+        var params: any = {
+            email: email
+        }
+        return this.httpMgr.doGet(this.serviceName, "deleteUser", params, this.oldTypeService, true);
+    }
+
 }

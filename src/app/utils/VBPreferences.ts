@@ -18,7 +18,7 @@ export class VBPreferences {
      * To call each time the user change project
      */
     initUserProjectPreferences() {
-        this.prefService.getProjectPreferences().subscribe(
+        return this.prefService.getProjectPreferences().map(
             prefs => {
                 this.languages = prefs.languages;
                 let activeSchemePref = prefs.active_scheme;

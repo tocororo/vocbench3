@@ -1,22 +1,25 @@
-import {Component} from "@angular/core";
-import {Router} from "@angular/router";
-import {AuthServices} from "../services/authServices";
-import {UserServices} from "../services/userServices";
-import {ModalServices} from "../widget/modal/modalServices";
-import {VBContext} from "../utils/VBContext";
+import { Component, Output, EventEmitter } from "@angular/core";
+import { Router } from "@angular/router";
+import { AuthServices } from "../services/authServices";
+import { UserServices } from "../services/userServices";
+import { ModalServices } from "../widget/modal/modalServices";
+import { VBContext } from "../utils/VBContext";
+import { User } from "../models/User";
 
 @Component({
     selector: "login",
     templateUrl: "./loginComponent.html",
 })
 export class LoginComponent {
-    
+
+    @Output() loggedIn: EventEmitter<User> = new EventEmitter();
+
     private rememberMe: boolean = false;
     private email: string = "admin@vocbench.com";
     private password: string = "admin";
-    
+
     constructor(private router: Router, private authService: AuthServices, private userService: UserServices,
-        private modalService: ModalServices) {}
+        private modalService: ModalServices) { }
 
     ngOnInit() {
         this.userService.getUser().subscribe(
@@ -33,13 +36,12 @@ export class LoginComponent {
             this.login();
         }
     }
-    
+
     private login() {
-        //here I should do an authentication request to server. In case of success, store the returned token and redirect to project
         this.authService.login(this.email, this.password, this.rememberMe).subscribe(
-            res => {
+            user => {
                 if (VBContext.isLoggedIn()) {
-                    this.router.navigate(['/Projects']);
+                    this.loggedIn.emit();
                 }
             }
             //wrong login is already handled in HttpManager#handleError 
