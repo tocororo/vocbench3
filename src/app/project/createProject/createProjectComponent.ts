@@ -44,7 +44,7 @@ export class CreateProjectComponent {
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
     private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    private sailConfigurerPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.SailConfigurer";
+    private repositoryImplConfigurerPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
     //core repository containing data
     private dataRepoId: string;
     private dataRepoConfList: {factoryID: string, configuration: PluginConfiguration}[]; 
@@ -84,7 +84,7 @@ export class CreateProjectComponent {
 
     ngOnInit() {
         //init sail repository plugin
-        this.pluginService.getAvailablePlugins(this.sailConfigurerPluginID).subscribe(
+        this.pluginService.getAvailablePlugins(this.repositoryImplConfigurerPluginID).subscribe(
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
