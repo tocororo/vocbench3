@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal";
-import { Router } from "@angular/router";
+import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal";
 import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
-import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig } from "../../models/Project";
+import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
 import { ModalServices } from "../../widget/modal/modalServices";
 import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/pluginConfigModal/pluginConfigModal";
@@ -77,9 +78,8 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConfList: PluginConfiguration[]; //plugin configurations for the selected plugin
     private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
 
-    constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices,
-        private pluginService: PluginsServices, private router: Router, private modalService: ModalServices,
-        private modal: Modal) {
+    constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, private pluginService: PluginsServices,
+        private router: Router, private modalService: ModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -178,6 +178,23 @@ export class CreateProjectComponent {
         );
     }
 
+    private changeRemoteRepository(repoType: "data" | "support") {
+        if (this.remoteAccessConfig.serverURL == null || this.remoteAccessConfig.serverURL.trim() == "") {
+            this.modalService.alert("Missing configuration", "The remote repository has not been configure ('Remote Access Config')."
+                + " Please, enter at least the server url, then retry.", "error");
+            return;
+        }
+        this.openSelectRemoteRepoModal(repoType).then(
+            (repo: any) => {
+                if (repoType == "data") {
+                    this.dataRepoId = (<Repository>repo).id;
+                } else {
+                    this.supportRepoId = (<Repository>repo).id;
+                }
+            }
+        );
+    }
+
     private configureSupportRepo() {
         this.openConfigurePluginModal(this.selectedSupportRepoConf.configuration).then(
             (config: any) => {
@@ -261,6 +278,21 @@ export class CreateProjectComponent {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PluginConfigModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to select a remote repository
+     */
+    private openSelectRemoteRepoModal(repoType: "data" | "support") {
+        var title: string = repoType == "data" ? "Select Remote Data Repository" : "Select Remote History/Validation Repository";
+        var modalData = new RemoteRepoSelectionModalData(title, this.remoteAccessConfig);
+        const builder = new BSModalContextBuilder<RemoteRepoSelectionModalData>(
+            modalData, undefined, RemoteRepoSelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(RemoteRepoSelectionModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

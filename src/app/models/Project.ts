@@ -169,3 +169,11 @@ export class RemoteRepositoryAccessConfig {
     public username: string;
     public password: string;
 }
+
+export class Repository {
+    public id: string;
+    public location: string;
+    public description: string;
+    public readable: boolean;
+    public writable: boolean;
+}

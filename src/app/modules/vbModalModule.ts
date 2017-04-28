@@ -52,6 +52,7 @@ import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/brow
 
 //project config modal
 import { RemoteAccessConfigModal } from "../project/createProject/remoteAccessConfigModal";
+import { RemoteRepoSelectionModal } from "../project/createProject/remoteRepoSelectionModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
@@ -78,7 +79,7 @@ import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInpu
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
+        RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
         PluginConfigModal, FilterGraphsModal,
         EditableNsInput
@@ -101,7 +102,7 @@ import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInpu
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
+        RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
         PluginConfigModal, FilterGraphsModal
     ]

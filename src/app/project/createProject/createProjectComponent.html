@@ -75,12 +75,19 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2">Data Repository ID</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm" name="dataRepoId" [(ngModel)]="dataRepoId" placeholder="Data Repository ID"
-                                     [disabled]="isSelectedRepoAccessCreateMode()">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="dataRepoId" [(ngModel)]="dataRepoId"
+                                        placeholder="Data Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" (click)="changeRemoteRepository('data')"
+                                            title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
+                                            <span class="glyphicon glyphicon-folder-open"></span>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="control-label col-sm-2">
                                 <label>Configuration</label>
-                                <span class="glyphicon glyphicon-info-sign" title="???????????????????????????"></span>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input-group" >
@@ -98,12 +105,20 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2">History/Validation Repository ID</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control input-sm" name="supportRepoId" [(ngModel)]="supportRepoId"
-                                    placeholder="History/Validation Repository ID" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" name="supportRepoId" [(ngModel)]="supportRepoId"
+                                        placeholder="History/Validation Repository ID" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" (click)="changeRemoteRepository('support')"
+                                            title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                            <span class="glyphicon glyphicon-folder-open"></span>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="control-label col-sm-2">
-                                <label>Configuration</label>
                                 <span class="glyphicon glyphicon-info-sign" title="Is highly recommended not to use inference and to use a native repository"></span>
+                                <label>Configuration</label>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input-group">
