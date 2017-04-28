@@ -14,7 +14,7 @@ export class PluginConfigModalData extends BSModalContext {
 }
 
 @Component({
-    selector: "plguin-config-modal",
+    selector: "plugin-config-modal",
     templateUrl: "./pluginConfigModal.html",
 })
 export class PluginConfigModal implements ModalComponent<PluginConfigModalData> {
