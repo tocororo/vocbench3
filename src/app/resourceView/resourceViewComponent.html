@@ -1,13 +1,8 @@
 <div class="panel panel-default vbox blockingDivHost">
     <div class="panel-heading">
         <div class="hbox" style="align-items: center">
-            <label style="margin-right: 8px;">Resource:</label>
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
-            <div style="margin-left: 8px; flex: 1;">
-                <resource-rename [resource]="resource"></resource-rename>
-            </div>
-            <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="alignResource()"
-                [disabled]="!resource.getAdditionalProperty('explicit')">Align</button>
+            <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;"></resource-rename>
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: showInferred}"
                 title="Show/hide inferred information" (click)="showHideInferred()">
                 <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
@@ -16,6 +11,21 @@
             <button class="btn btn-default btn-xs" title="Refresh" (click)="buildResourceView(resource)" style="margin-left: 3px;">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
+
+            <div class="dropdown pull-right">
+                <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown">
+                    <span>&#9662;</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
+                        <a (click)="alignResource()">Align with external resource</a>
+                    </li>
+                    <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
+                        <a (click)="setAsDeprecated()">Set as deprecated</a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
     <div class="panel-body scrollableContainer">

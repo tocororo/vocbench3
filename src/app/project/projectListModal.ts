@@ -65,9 +65,10 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                 ).subscribe(
                     res => {
                         VBContext.notifyProjectChanged();
+                        var currentRoute = this.router.url;
                         this.router.navigate(['/Home']).then(
                             success => {
-                                this.router.navigate(['/Data']);
+                                this.router.navigate([currentRoute]);
                             }
                         );
                     }

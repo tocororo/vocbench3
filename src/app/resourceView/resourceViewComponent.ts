@@ -281,6 +281,10 @@ export class ResourceViewComponent {
         );
     }
 
+    private setAsDeprecated() {
+        alert("Not yet available");
+    }
+
     /**
      * Opens a modal to create an alignment.
      * @return an object containing "property" and "object", namely the mapping property and the 
