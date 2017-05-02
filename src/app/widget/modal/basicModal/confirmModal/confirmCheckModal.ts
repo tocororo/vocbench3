@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
 
 export class ConfirmCheckModalData extends BSModalContext {
     /**
@@ -29,16 +29,16 @@ export class ConfirmCheckModalData extends BSModalContext {
     templateUrl: "./confirmCheckModal.html",
 })
 export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> {
-	context: ConfirmCheckModalData;
-    
+    context: ConfirmCheckModalData;
+
     private check: boolean = false;
-    
+
     private headerStyle: string;
     private msgStyle: string;
 
     constructor(public dialog: DialogRef<ConfirmCheckModalData>) {
         this.context = dialog.context;
-        
+
         //based on the modal type set the css style of the message alert
         switch (this.context.type) {
             case "info":
@@ -52,14 +52,14 @@ export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> 
             case "warning":
                 this.msgStyle = "alert alert-warning";
                 this.headerStyle = "modal-title text-warning";
-                break;                
+                break;
             default:
                 this.msgStyle = "alert alert-info";
                 this.headerStyle = "modal-title text-info";
                 break;
         }
     }
-    
+
     ok(event: Event) {
         this.dialog.close(this.check);
     }

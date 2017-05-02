@@ -9,7 +9,7 @@ import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/pluginConfigModal/pluginConfigModal";
 import { UIUtils } from "../../utils/UIUtils";
 

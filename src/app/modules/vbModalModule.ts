@@ -7,25 +7,21 @@ import { TreeAndListModule } from "./treeAndListModule";
 import { CustomFormModule } from "./customFormModule";
 
 //services to open modals
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 import { BrowsingServices } from "../widget/modal/browsingModal/browsingServices";
+import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 
 //basic modals
-import { AlertModal } from '../widget/modal/alertModal/alertModal';
-import { ConfirmModal } from '../widget/modal/confirmModal/confirmModal';
-import { ConfirmCheckModal } from '../widget/modal/confirmModal/confirmCheckModal';
-import { DownloadModal } from '../widget/modal/downloadModal/downloadModal';
-import { FilePickerModal } from '../widget/modal/filePickerModal/filePickerModal';
-import { NewPlainLiteralModal } from '../widget/modal/newPlainLiteralModal/newPlainLiteralModal';
-import { NewResourceModal } from '../widget/modal/newResourceModal/newResourceModal';
-import { NewResourceCfModal } from '../widget/modal/newResourceModal/newResourceCfModal';
-import { NewSkosResourceCfModal } from '../widget/modal/newResourceModal/newSkosResourceCfModal';
-import { NewTypedLiteralModal } from '../widget/modal/newTypedLiteralModal/newTypedLiteralModal';
-import { PromptModal } from '../widget/modal/promptModal/promptModal';
-import { PromptPrefixedModal } from '../widget/modal/promptModal/promptPrefixedModal';
-import { SelectionModal } from '../widget/modal/selectionModal/selectionModal';
-import { ResourceSelectionModal } from '../widget/modal/selectionModal/resourceSelectionModal';
-import { CustomFormSelectionModal } from '../widget/modal/selectionModal/customFormSelectionModal';
+import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
+import { ConfirmModal } from '../widget/modal/basicModal/confirmModal/confirmModal';
+import { ConfirmCheckModal } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
+import { DownloadModal } from '../widget/modal/basicModal/downloadModal/downloadModal';
+import { FilePickerModal } from '../widget/modal/basicModal/filePickerModal/filePickerModal';
+import { PromptModal } from '../widget/modal/basicModal/promptModal/promptModal';
+import { PromptPrefixedModal } from '../widget/modal/basicModal/promptModal/promptPrefixedModal';
+import { SelectionModal } from '../widget/modal/basicModal/selectionModal/selectionModal';
+import { ResourceSelectionModal } from '../widget/modal/basicModal/selectionModal/resourceSelectionModal';
+import { CustomFormSelectionModal } from '../widget/modal/basicModal/selectionModal/customFormSelectionModal';
 
 //shared modals
 import { PluginConfigModal } from "../widget/modal/pluginConfigModal/pluginConfigModal";
@@ -38,6 +34,13 @@ import { InstanceListModal } from '../widget/modal/browsingModal/instanceListMod
 import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
 import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
 import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
+
+//creation modals
+import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
+import { NewResourceModal } from '../widget/modal/creationModal/newResourceModal/newResourceModal';
+import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newResourceCfModal';
+import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newSkosResourceCfModal';
+import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
 
 //metadata modals
 import { ImportOntologyModal } from '../config/dataManagement/metadata/importOntologyModal';
@@ -67,7 +70,7 @@ import { ImportRoleModal } from "../administration/administrationModals/importRo
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 
 //this is used only in newResource modals, if it will be useful elsewhere, it can be moved in sharedModule
-import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInput';
+import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule],
@@ -85,7 +88,7 @@ import { EditableNsInput } from '../widget/modal/newResourceModal/editableNsInpu
         EditableNsInput
     ],
     exports: [],
-    providers: [ModalServices, BrowsingServices],
+    providers: [ModalServices, BrowsingServices, CreationModalServices],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
      * (From ngModule FAQ https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-what-not-to-export)

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ModalServices } from "../modal/modalServices";
+import { ModalServices } from "../modal/basicModal/modalServices";
 
 @Component({
     selector: 'input-editable',

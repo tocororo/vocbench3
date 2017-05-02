@@ -4,7 +4,7 @@ import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { ModalServices } from "../../../../widget/modal/modalServices";
+import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
 import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 import { AbstractTree } from "../../../abstractTree";
 

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from '@angular/router';
 import { AuthServices } from "../services/authServices";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { User } from "../models/User";

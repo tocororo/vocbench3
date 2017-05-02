@@ -1,40 +1,36 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
 
-export class ConfirmModalData extends BSModalContext {
+export class AlertModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param message modal message
      * @param type type of the modal. Determines the style of the message alert.
      *      Available values: "info", "warning", "error"
-     * @param yesText text of the yes button
-     * @param noText text of the no button
      */
     constructor(
         public title: string = 'Modal Title',
         public message: string = 'Modal Body!',
-        public type: string = 'info',
-        public yesText: string = 'Yes',
-        public noText: string = 'No'
+        public type: string = 'info'
     ) {
         super();
     }
 }
 
 @Component({
-    selector: "confirm-modal",
-    templateUrl: "./confirmModal.html",
+    selector: "alert-modal",
+    templateUrl: "./alertModal.html",
 })
-export class ConfirmModal implements ModalComponent<ConfirmModalData> {
-    context: ConfirmModalData;
-    
+export class AlertModal implements ModalComponent<AlertModalData> {
+    context: AlertModalData;
+
     private headerStyle: string;
     private msgStyle: string;
 
-    constructor(public dialog: DialogRef<ConfirmModalData>) {
+    constructor(public dialog: DialogRef<AlertModalData>) {
         this.context = dialog.context;
-        
+
         //based on the modal type set the css style of the message alert
         switch (this.context.type) {
             case "info":
@@ -48,20 +44,16 @@ export class ConfirmModal implements ModalComponent<ConfirmModalData> {
             case "warning":
                 this.msgStyle = "alert alert-warning";
                 this.headerStyle = "modal-title text-warning";
-                break;                
+                break;
             default:
                 this.msgStyle = "alert alert-info";
                 this.headerStyle = "modal-title text-info";
                 break;
         }
     }
-    
-    ok(event: Event) {
-        this.dialog.close(true);
-    }
 
-    cancel() {
-        this.dialog.dismiss();
+    ok() {
+        this.dialog.close(true);
     }
 
 }

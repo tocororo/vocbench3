@@ -1,5 +1,12 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span>
+            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()">
+                <rdf-resource [resource]="resourceClass"></rdf-resource>
+            </button>
+        </span>
+    </div>
 </div>
 <div class="modal-body">
     <div class="vbox" (keydown)="onKeydown($event)">
@@ -29,9 +36,9 @@
             </tbody>
         </table>
 
-        <template [ngIf]="context.cfId">
+        <template [ngIf]="customFormId">
             <div style="height:1px; border-bottom:1px solid #ddd; margin: 5px;"></div>
-            <custom-form [cfId]="context.cfId" [(ngModel)]="formFields"></custom-form>
+            <custom-form [cfId]="customFormId" [(ngModel)]="formFields"></custom-form>
         </template>
 
     </div>

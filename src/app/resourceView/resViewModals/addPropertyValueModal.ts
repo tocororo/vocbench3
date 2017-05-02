@@ -4,7 +4,7 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VBPreferences } from '../../utils/VBPreferences';
-import { ModalServices } from '../../widget/modal/modalServices';
+import { ModalServices } from '../../widget/modal/basicModal/modalServices';
 import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";

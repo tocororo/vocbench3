@@ -105,11 +105,13 @@ export class SkosServices {
      * @param label preferred label of the concept (comprehensive of the lang)
      * @param conceptScheme scheme where new concept should belong
      * @param newConcept URI concept
+     * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept_NEW(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+    createTopConcept_NEW(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, conceptCls?: ARTURIResource, 
+        customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -117,6 +119,9 @@ export class SkosServices {
         };
         if (newConcept != null) {
             params.newConcept = newConcept
+        }
+        if (conceptCls != null) {
+            params.conceptCls = conceptCls;
         }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
@@ -194,12 +199,13 @@ export class SkosServices {
      * @param broaderConcept broader of the new created concept
      * @param conceptScheme scheme where new concept should belong
      * @param newConcept URI concept
+     * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new concept
      */
     createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
-            customFormId?: string, userPromptMap?: any) {
+            conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -208,6 +214,9 @@ export class SkosServices {
         };
         if (newConcept != null) {
             params.newConcept = newConcept
+        }
+        if (conceptCls != null) {
+            params.conceptCls = conceptCls;
         }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
@@ -325,17 +334,22 @@ export class SkosServices {
      * Creates a new scheme
      * @param label the lexical form of the pref label
      * @param newScheme the (optional) uri of the scheme
+     * @param schemeCls class of the scheme that is creating (a subclass of skos:ConceptScheme, if not provided the default is skos:ConceptScheme)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new scheme
      */
-    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource, 
+            customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConceptScheme");
         var params: any = {
             label: label
         };
         if (newScheme != undefined) {
             params.newScheme = newScheme;
+        };
+        if (schemeCls != undefined) {
+            params.schemeCls = schemeCls;
         };
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;

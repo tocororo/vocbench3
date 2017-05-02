@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { InputOutputServices } from "../../../services/inputOutputServices";
 import { ExportServices } from "../../../services/exportServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { RDFFormat } from "../../../models/RDFFormat";

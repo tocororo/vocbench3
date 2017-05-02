@@ -9,9 +9,9 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
-
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
     selector: "properties-renderer",
@@ -32,8 +32,8 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
     removeBtnImgTitle = "Remove property value";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
     }
 
     ngOnInit() {

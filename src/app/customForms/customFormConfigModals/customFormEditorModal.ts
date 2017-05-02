@@ -6,7 +6,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType } from "../../models/CustomForms";
 import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
 export class CustomFormEditorModalData extends BSModalContext {

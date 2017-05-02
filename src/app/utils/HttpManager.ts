@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
 import { VBContext } from './VBContext';
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 
 @Injectable()
 export class HttpManager {

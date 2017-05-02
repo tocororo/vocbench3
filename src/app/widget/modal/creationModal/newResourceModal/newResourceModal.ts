@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { VBContext } from "../../../utils/VBContext"
+import { VBContext } from "../../../../utils/VBContext"
 
 export class NewResourceModalData extends BSModalContext {
     constructor(
@@ -32,11 +32,15 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     }
 
     ngOnInit() {
+        console.log("newResource onInit");
         this.lang = this.context.lang;
+        console.log("onInit end");
     }
 
     ngAfterViewInit() {
+        console.log("mewRes after Init");
         this.inputToFocus.nativeElement.focus();
+        console.log("mewRes after Init 2");
     }
 
     private onKeydown(event: KeyboardEvent) {

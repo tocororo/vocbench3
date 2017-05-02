@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ARTResource, ARTLiteral } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
@@ -18,7 +18,7 @@ export class OverlappedLabelComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private modalService: ModalServices) { }
+        private creationModal: CreationModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -53,7 +53,7 @@ export class OverlappedLabelComponent {
      * Fixes by changing prefLabel
      */
     changePrefLabel(record: any) {
-        this.modalService.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
+        this.creationModal.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
             (data: any) => {
                 var label = data.value;
@@ -109,7 +109,7 @@ export class OverlappedLabelComponent {
      * Fixes by changing altLabel
      */
     changeAltLabel(record: any) {
-        this.modalService.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
+        this.creationModal.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
             (data: any) => {
                 var label = data.value;

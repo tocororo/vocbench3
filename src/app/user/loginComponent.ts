@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 import { VBContext } from "../utils/VBContext";
 import { User } from "../models/User";
 

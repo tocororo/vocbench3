@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
-import {CustomForm} from "../../../models/CustomForms";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { CustomForm } from "../../../../models/CustomForms";
 
 export class CustomFormSelectionModalData extends BSModalContext {
     /**
@@ -22,9 +22,9 @@ export class CustomFormSelectionModalData extends BSModalContext {
 })
 export class CustomFormSelectionModal implements ModalComponent<CustomFormSelectionModalData> {
     context: CustomFormSelectionModalData;
-    
+
     private selectedCF: CustomForm;
-    
+
     constructor(public dialog: DialogRef<CustomFormSelectionModalData>) {
         this.context = dialog.context;
     }

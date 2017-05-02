@@ -20,8 +20,6 @@ import {UserProfileComponent} from "./user/userProfileComponent";
 import {RegistrationComponent} from "./user/registrationComponent";
 // import {AdministrationComponent} from "./administration/administrationComponent"
 
-import {TestComponent} from "./test/testComponent";
-
 export const routes: Routes = [
     {path: "", redirectTo: "/Home", pathMatch: "full"},
     {path: "Home", component: HomeComponent},
@@ -34,7 +32,6 @@ export const routes: Routes = [
     {path: "Registration", component: RegistrationComponent},
     {path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard]},
     {path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [UnsavedChangesGuard]},
-    {path: "Test", component: TestComponent},
     //lazy loading of module with child route
     {path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AdminGuard]},
     {path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard]},

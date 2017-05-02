@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+
+    <table class="table table-condensed table-borderless" (keydown)="onKeydown($event)">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td><label>Label:</label></td>
+                <td>
+                    <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                        <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                        <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>URI:</label></td>
+                <td>
+                    <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                    </editable-ns-input>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { VBContext } from "../../../utils/VBContext"
+import { VBContext } from "../../../../utils/VBContext"
 
 @Component({
     selector: "editable-ns-input",
@@ -24,7 +24,7 @@ export class EditableNsInput implements ControlValueAccessor {
     private localName: string;
     private uri: string;
 
-    constructor() {}
+    constructor() { }
 
     ngOnInit() {
         this.namespace = VBContext.getDefaultNamespace();

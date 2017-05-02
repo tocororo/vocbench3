@@ -1,30 +1,30 @@
-import {Component} from "@angular/core";
-import {ModalServices} from "../../widget/modal/modalServices";
-import {ARTURIResource, RDFTypesEnum} from "../../models/ARTResources";
-import {RDFS} from "../../models/Vocabulary";
-import {VBContext} from "../../utils/VBContext";
-import {IcvServices} from "../../services/icvServices";
-import {PropertyServices} from "../../services/propertyServices";
-import {SkosServices} from "../../services/skosServices";
-import {SkosxlServices} from "../../services/skosxlServices";
+import { Component } from "@angular/core";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
+import { RDFS } from "../../models/Vocabulary";
+import { VBContext } from "../../utils/VBContext";
+import { IcvServices } from "../../services/icvServices";
+import { PropertyServices } from "../../services/propertyServices";
+import { SkosServices } from "../../services/skosServices";
+import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "no-label-resource-component",
     templateUrl: "./noLabelResourceComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
 export class NoLabelResourceComponent {
-    
+
     private brokenResourceList: Array<ARTURIResource>;
     private ontoType: string;
-    
+
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private modalService: ModalServices) {}
-    
+        private propService: PropertyServices, private creationModal: CreationModalServices) { }
+
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
-    
+
     /**
      * Run the check
      */
@@ -45,13 +45,13 @@ export class NoLabelResourceComponent {
             //TODO
         }
     }
-    
+
     /**
      * Fixes resource by setting a label 
      */
     fix(resource: ARTURIResource) {
         if (this.ontoType == "SKOS") {
-            this.modalService.newPlainLiteral("Add skos:prefLabel").then(
+            this.creationModal.newPlainLiteral("Add skos:prefLabel").then(
                 (data: any) => {
                     this.skosService.setPrefLabel(resource, data.value, data.lang).subscribe(
                         stResp => {
@@ -59,10 +59,10 @@ export class NoLabelResourceComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             );
         } else if (this.ontoType == "SKOS-XL") {
-            this.modalService.newPlainLiteral("Add skosxl:prefLabel").then(
+            this.creationModal.newPlainLiteral("Add skosxl:prefLabel").then(
                 (data: any) => {
                     this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
@@ -70,10 +70,10 @@ export class NoLabelResourceComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             );
         } else { //OWL 
-            this.modalService.newPlainLiteral("Add rdfs:label").then(
+            this.creationModal.newPlainLiteral("Add rdfs:label").then(
                 (data: any) => {
                     this.propService.createAndAddPropValue(resource, RDFS.label, data.value, null, RDFTypesEnum.plainLiteral, data.lang).subscribe(
                         stResp => {
@@ -81,9 +81,9 @@ export class NoLabelResourceComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             );
         }
     }
-    
+
 }

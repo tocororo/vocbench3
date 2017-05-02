@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 
 import {SharedModule} from './sharedModule';
 
-import {ModalServices} from "../widget/modal/modalServices";
+import {ModalServices} from "../widget/modal/basicModal/modalServices";
 import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
 
 import {CustomFormModal} from '../customForms/customForm/customFormModal';

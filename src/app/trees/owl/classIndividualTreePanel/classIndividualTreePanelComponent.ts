@@ -6,7 +6,7 @@ import { SearchServices } from "../../../services/searchServices";
 import { OwlServices } from "../../../services/owlServices";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { DeleteServices } from "../../../services/deleteServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { UIUtils } from "../../../utils/UIUtils";

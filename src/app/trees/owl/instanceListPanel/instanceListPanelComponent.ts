@@ -6,7 +6,8 @@ import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { DeleteServices } from "../../../services/deleteServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
 
@@ -22,7 +23,8 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private owlService: OwlServices, private deleteService: DeleteServices, private searchService: SearchServices, 
+    constructor(private classesService: ClassesServices, private owlService: OwlServices, private deleteService: DeleteServices, 
+        private searchService: SearchServices, private creationModal: CreationModalServices,
         cfService: CustomFormsServices, modalService: ModalServices) {
         super(cfService, modalService);
     }
@@ -30,7 +32,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
     private create() {
         this.selectCustomForm(this.cls).then(
             cfId => { 
-                this.modalService.newResourceCf("Create a new instance of " + this.cls.getShow(), cfId).then(
+                this.creationModal.newResourceCf("Create a new instance of " + this.cls.getShow(), cfId).then(
                     (data: any) => {
                         this.classesService.createInstance(data.uriResource, this.cls, cfId, data.cfValueMap).subscribe();
                     },

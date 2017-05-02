@@ -3,7 +3,7 @@ import { AbstractPanel } from "./abstractPanel";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "panel",

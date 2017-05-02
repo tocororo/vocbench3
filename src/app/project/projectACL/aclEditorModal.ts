@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ProjectServices} from "../../services/projectServices";
-import {ModalServices} from "../../widget/modal/modalServices";
+import {ModalServices} from "../../widget/modal/basicModal/modalServices";
 import {AccessLevel, LockLevel, Project} from '../../models/Project';
 
 export class ACLEditorModalData extends BSModalContext {

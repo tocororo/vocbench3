@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { AdministrationServices } from "../services/administrationServices";
 import { AuthServices } from "../services/authServices";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "config-admin-component",

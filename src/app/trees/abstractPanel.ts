@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "panel",
@@ -48,7 +48,6 @@ export abstract class AbstractPanel {
         return new Promise((resolve, reject) => {
             this.cfService.getCustomConstructors(cls).subscribe(
                 customForms => {
-                    console.log("available CF", customForms);
                     if (customForms.length == 0) { //empty form collection
                         resolve(null);
                     } else if (customForms.length == 1) {

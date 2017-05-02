@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
 
 export class PromptPrefixedModalData extends BSModalContext {
     /**
@@ -31,16 +31,16 @@ export class PromptPrefixedModalData extends BSModalContext {
 })
 export class PromptPrefixedModal implements ModalComponent<PromptPrefixedModalData> {
     context: PromptPrefixedModalData;
-    
+
     private inputTxt: string;
-    
+
     private submitted: boolean = false;
-    
+
     constructor(public dialog: DialogRef<PromptPrefixedModalData>) {
         this.context = dialog.context;
         this.inputTxt = this.context.value;
     }
-    
+
     ngOnInit() {
         document.getElementById("toFocus").focus();
     }
@@ -54,7 +54,7 @@ export class PromptPrefixedModal implements ModalComponent<PromptPrefixedModalDa
     cancel() {
         this.dialog.dismiss();
     }
-    
+
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
             this.submitted = true;
@@ -63,7 +63,7 @@ export class PromptPrefixedModal implements ModalComponent<PromptPrefixedModalDa
             }
         }
     }
-    
+
     private isInputValid(): boolean {
         return (this.inputTxt != undefined && this.inputTxt.trim() != "");
     }

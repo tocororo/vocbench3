@@ -7,7 +7,7 @@ import { ProjectListModal } from '../../project/projectListModal';
 import { Project, ProjectTypesEnum } from "../../models/Project";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 

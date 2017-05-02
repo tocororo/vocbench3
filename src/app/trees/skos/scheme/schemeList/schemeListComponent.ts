@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { ModalServices } from "../../../../widget/modal/modalServices";
+import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "scheme-list",

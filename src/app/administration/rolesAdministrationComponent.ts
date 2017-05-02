@@ -4,7 +4,7 @@ import { OverlayConfig } from 'angular2-modal';
 import { CapabilityEditorModal, CapabilityEditorModalData } from "./administrationModals/capabilityEditorModal";
 import { ImportRoleModal, ImportRoleModalData } from "./administrationModals/importRoleModal";
 import { AdministrationServices } from "../services/administrationServices";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 import { Role } from "../models/User";
 import { Project } from "../models/Project";
 import { VBContext } from "../utils/VBContext";

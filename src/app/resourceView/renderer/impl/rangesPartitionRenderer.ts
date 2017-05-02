@@ -9,8 +9,9 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
     selector: "ranges-renderer",
@@ -31,9 +32,9 @@ export class RangesPartitionRenderer extends AbstractPredObjListRenderer {
     removeBtnImgTitle = "Remove range";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
+        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
         private manchService: ManchesterServices) {
-        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

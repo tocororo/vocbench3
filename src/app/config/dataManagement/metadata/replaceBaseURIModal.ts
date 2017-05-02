@@ -4,7 +4,7 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VBPreferences } from "../../../utils/VBPreferences";
 import { UIUtils } from "../../../utils/UIUtils";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 
 export class ReplaceBaseURIModalData extends BSModalContext {
     /**

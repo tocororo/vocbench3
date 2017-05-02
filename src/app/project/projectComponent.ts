@@ -11,7 +11,7 @@ import { VBContext } from '../utils/VBContext';
 import { VBPreferences } from '../utils/VBPreferences';
 import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "project-component",

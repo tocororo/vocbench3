@@ -3,7 +3,8 @@ import { CollectionTreeComponent } from "../collectionTree/collectionTreeCompone
 import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { ModalServices } from "../../../../widget/modal/modalServices";
+import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../../../models/ARTResources";
 import { VBContext } from "../../../../utils/VBContext";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -26,14 +27,14 @@ export class CollectionTreePanelComponent {
     private ONTO_TYPE: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private modalService: ModalServices) { }
+        private modalService: ModalServices, private creationModal: CreationModalServices) { }
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
     }
 
     private createCollection() {
-        this.modalService.newResource("Create new skos:Collection").then(
+        this.creationModal.newResource("Create new skos:Collection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -53,7 +54,7 @@ export class CollectionTreePanelComponent {
     }
 
     private createOrderedCollection() {
-        this.modalService.newResource("Create new skos:OrderedCollection").then(
+        this.creationModal.newResource("Create new skos:OrderedCollection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -73,7 +74,7 @@ export class CollectionTreePanelComponent {
     }
 
     private createNestedCollection() {
-        this.modalService.newResource("Create a nested skos:Collection").then(
+        this.creationModal.newResource("Create a nested skos:Collection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -93,7 +94,7 @@ export class CollectionTreePanelComponent {
     }
 
     private createNestedOrderedCollection() {
-        this.modalService.newResource("Create a nested skos:OrderedCollection").then(
+        this.creationModal.newResource("Create a nested skos:OrderedCollection").then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {

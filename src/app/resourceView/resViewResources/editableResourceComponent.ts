@@ -7,7 +7,7 @@ import { SKOSXL } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ManchesterServices } from "../../services/manchesterServices";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
 

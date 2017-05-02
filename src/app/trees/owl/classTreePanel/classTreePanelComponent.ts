@@ -6,7 +6,8 @@ import { ClassesServices } from "../../../services/classesServices";
 import { DeleteServices } from "../../../services/deleteServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -24,7 +25,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private owlService: OwlServices,
-        private deleteService: DeleteServices, private searchService: SearchServices,
+        private deleteService: DeleteServices, private searchService: SearchServices, private creationModal: CreationModalServices,
         cfService: CustomFormsServices, modalService: ModalServices) {
         super(cfService, modalService);
     }
@@ -34,7 +35,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     createRoot() {
         this.selectCustomForm(OWL.class).then(
             cfId => { 
-                this.modalService.newResourceCf("Create a new class", cfId).then(
+                this.creationModal.newResourceCf("Create a new class", cfId).then(
                     (data: any) => {
                         this.classesService.createClass(data.uriResource, OWL.thing, cfId, data.cfValueMap).subscribe();
                     },
@@ -47,7 +48,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     createChild() {
         this.selectCustomForm(OWL.class).then(
             cfId => { 
-                this.modalService.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), cfId).then(
+                this.creationModal.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), cfId).then(
                     (data: any) => {
                         this.classesService.createClass(data.uriResource, this.selectedNode, cfId, data.cfValueMap).subscribe();
                     },

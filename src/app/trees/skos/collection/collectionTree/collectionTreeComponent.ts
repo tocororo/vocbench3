@@ -5,7 +5,7 @@ import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
-import { ModalServices } from "../../../../widget/modal/modalServices";
+import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
 import { AbstractTree } from "../../../abstractTree";
 
 @Component({

@@ -1,11 +1,11 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTURIResource} from "../../../models/ARTResources";
-import {XmlSchema, SKOS} from "../../../models/Vocabulary";
+import { Component } from "@angular/core";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { ARTURIResource } from "../../../../models/ARTResources";
+import { XmlSchema, SKOS } from "../../../../models/Vocabulary";
 
 export class NewTypedLiteralModalData extends BSModalContext {
-    
+
     /**
      * @param allowedDatatypes array of datatype URIs of the allowed datatypes in the typed literal creation.
      * If null all the datatypes are allowed
@@ -24,20 +24,20 @@ export class NewTypedLiteralModalData extends BSModalContext {
 })
 export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModalData> {
     context: NewTypedLiteralModalData;
-    
+
     private datatypes: Array<string> = [
         XmlSchema.boolean.getURI(), XmlSchema.date.getURI(), XmlSchema.dateTime.getURI(), XmlSchema.float.getURI(),
         XmlSchema.integer.getURI(), XmlSchema.string.getURI(), XmlSchema.time.getURI()
     ];
-    
+
     private submitted: boolean = false;
     private value: any;
     private datatype: string;
-    
+
     constructor(public dialog: DialogRef<NewTypedLiteralModalData>) {
         this.context = dialog.context;
     }
-    
+
     ngOnInit() {
         document.getElementById("toFocus").focus();
         //initialize default datatype to xsd:string if allowed, to the first allowed otherwise
@@ -45,13 +45,13 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
             this.datatype = XmlSchema.string.getURI();
         } else {
             if (this.context.allowedDatatypes.indexOf(XmlSchema.string.getURI()) != -1) {
-                this.datatype = XmlSchema.string.getURI();       
+                this.datatype = XmlSchema.string.getURI();
             } else {
                 this.datatype = this.context.allowedDatatypes[0];
-            }       
+            }
         }
     }
-    
+
     /**
      * Returns true if the current datatype doesn't admit all values.
      * (e.g. boolean admits only true and false, time admits values like hh:mm:ss, ...)
@@ -60,7 +60,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         return (this.datatype == XmlSchema.boolean.getURI() || this.datatype == XmlSchema.date.getURI() ||
             this.datatype == XmlSchema.dateTime.getURI() || this.datatype == XmlSchema.time.getURI());
     }
-    
+
     /**
      * Tells if the given datatype is allowed in the current typed literal creation
      * Useful to enable/disable the selection of the <option> in the <select> of the datatypes
@@ -72,7 +72,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
             return this.context.allowedDatatypes.indexOf(datatype) != -1;
         }
     }
-    
+
     private isInputValid(): boolean {
         var valid: boolean = false;
         if (this.value != undefined) {
@@ -88,16 +88,16 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         }
         return valid;
     }
-    
+
     ok(event: Event) {
         this.submitted = true;
         if (this.isInputValid()) {
-            this.dialog.close({value: this.value, datatype: this.datatype});    
+            this.dialog.close({ value: this.value, datatype: this.datatype });
         }
     }
 
     cancel() {
         this.dialog.dismiss();
     }
-    
+
 }

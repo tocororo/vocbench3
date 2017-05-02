@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { UserServices } from "../services/userServices";
 import { User, UserStatusEnum } from "../models/User";
 import { VBContext } from "../utils/VBContext";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "users-admin-component",

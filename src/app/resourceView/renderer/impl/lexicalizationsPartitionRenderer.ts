@@ -7,7 +7,7 @@ import { PropertyServices } from "../../../services/propertyServices";
 import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { BrowsingServices } from '../../../widget/modal/browsingModal/browsingServices';
 
 @Component({
@@ -38,7 +38,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
     ];
 
     constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propertyService: PropertyServices, private resViewService: ResourceViewServices, private modalService: ModalServices,
+        private propertyService: PropertyServices, private resViewService: ResourceViewServices, private creationModal: CreationModalServices,
         private browsingService: BrowsingServices) {
         super();
     }
@@ -102,7 +102,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
     }
 
     private enrichProperty(predicate: ARTURIResource) {
-        this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
+        this.creationModal.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():

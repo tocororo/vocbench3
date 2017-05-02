@@ -5,7 +5,7 @@ import {FormField} from "../../models/CustomForms";
 import {RDFResourceRolesEnum} from "../../models/ARTResources";
 import {VBContext} from "../../utils/VBContext";
 import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ModalServices} from "../../widget/modal/modalServices";
+import {ModalServices} from "../../widget/modal/basicModal/modalServices";
 import {CustomFormsServices} from "../../services/customFormsServices";
 
 export class CustomFormModalData extends BSModalContext {

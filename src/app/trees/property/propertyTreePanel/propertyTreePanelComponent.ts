@@ -7,7 +7,8 @@ import { PropertyServices } from "../../../services/propertyServices";
 import { DeleteServices } from "../../../services/deleteServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
     selector: "property-tree-panel",
@@ -21,7 +22,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
     constructor(private propService: PropertyServices, private deleteService: DeleteServices, private searchService: SearchServices,
-        cfService: CustomFormsServices, modalService: ModalServices) {
+        private creationModal: CreationModalServices, cfService: CustomFormsServices, modalService: ModalServices) {
         super(cfService, modalService);
     }
 
@@ -29,7 +30,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         let propertyType: ARTURIResource = this.convertRoleToClass(role);
         this.selectCustomForm(propertyType).then(
             cfId => { 
-                this.modalService.newResourceCf("Create a new " + propertyType.getShow(), cfId).then(
+                this.creationModal.newResourceCf("Create a new " + propertyType.getShow(), cfId).then(
                     (data: any) => {
                         this.propService.createProperty(propertyType, data.uriResource, cfId, data.cfValueMap).subscribe();
                     },
@@ -44,7 +45,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
         this.selectCustomForm(propertyType).then(
             cfId => {
-                this.modalService.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), cfId).then(
+                this.creationModal.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), cfId).then(
                     (data: any) => {
                         this.propService.createSubProperty(propertyType, data.uriResource, this.selectedNode, cfId, data.cfValueMap).subscribe();
                     },

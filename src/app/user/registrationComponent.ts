@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { ModalServices } from "../widget/modal/modalServices";
+import { ModalServices } from "../widget/modal/basicModal/modalServices";
 import { Countries } from "../models/LanguagesCountries";
 import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";

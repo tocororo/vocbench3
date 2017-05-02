@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBPreferences } from "../../utils/VBPreferences";

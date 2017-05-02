@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 
 @Component({
     selector: "refactor-component",

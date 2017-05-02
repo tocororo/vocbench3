@@ -8,7 +8,7 @@ import { Plugin, PluginConfiguration } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { PluginConfigModal, PluginConfigModalData } from "../../../widget/modal/pluginConfigModal/pluginConfigModal";
 import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/filterGraphsModal";
 

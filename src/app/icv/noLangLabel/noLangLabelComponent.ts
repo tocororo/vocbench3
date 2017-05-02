@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTResource, ARTURIResource, ARTLiteral } from "../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
@@ -20,7 +20,7 @@ export class NoLangLabelComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private modalService: ModalServices) { }
+        private propService: PropertyServices, private creationModal: CreationModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -63,7 +63,7 @@ export class NoLangLabelComponent {
     setLanguage(record: any) {
         if (this.ontoType == "SKOS") {
             let label: ARTLiteral = <ARTLiteral>record.label;
-            this.modalService.newPlainLiteral("Set language", label.getValue(), true).then(
+            this.creationModal.newPlainLiteral("Set language", label.getValue(), true).then(
                 (data: any) => {
                     var lang = data.lang;
                     if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
@@ -102,7 +102,7 @@ export class NoLangLabelComponent {
             );
         } else if (this.ontoType == "SKOS-XL") {
             let label: ARTResource = <ARTResource>record.label;
-            this.modalService.newPlainLiteral("Set language", label.getShow(), true).then(
+            this.creationModal.newPlainLiteral("Set language", label.getShow(), true).then(
                 (data: any) => {
                     var lang = data.lang;
                     this.skosxlService.changeLabelInfo(label, label.getShow(), lang).subscribe(

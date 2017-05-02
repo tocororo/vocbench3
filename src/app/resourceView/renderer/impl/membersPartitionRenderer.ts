@@ -10,8 +10,9 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
+import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
     selector: "members-renderer",
@@ -32,9 +33,9 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
     removeBtnImgTitle = "Remove member";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, rvModalService: ResViewModalServices,
+        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
     }
 
     /**

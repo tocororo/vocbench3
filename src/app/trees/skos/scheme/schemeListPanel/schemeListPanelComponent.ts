@@ -4,7 +4,8 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
-import { ModalServices } from "../../../../widget/modal/modalServices";
+import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { VBContext } from '../../../../utils/VBContext';
 import { VBPreferences } from '../../../../utils/VBPreferences';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -23,7 +24,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private ONTO_TYPE: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBPreferences,
+        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModal: CreationModalServices,
         cfService: CustomFormsServices, modalService: ModalServices) {
         super(cfService, modalService);
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
@@ -54,16 +55,16 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private createScheme(cfId?: string) {
-        this.modalService.newSkosResourceCf("Create new skos:ConceptScheme", cfId).then(
+        this.creationModal.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme).then(
             (res: any) => {
                 console.log("returned data ", res);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createConceptScheme(res.label, res.uriResource, cfId, res.cfValueMap).subscribe(
+                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         newScheme => { this.schemeList.push(newScheme); },
                         err => { }
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createConceptScheme(res.label, res.uriResource, cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         newScheme => { this.schemeList.push(newScheme); },
                         err => { }
                     );

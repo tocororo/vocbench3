@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { SparqlServices } from "../services/sparqlServices";
-import { ModalServices } from '../widget/modal/modalServices';
+import { ModalServices } from '../widget/modal/basicModal/modalServices';
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { PrefixMapping } from "../models/PrefixMapping";

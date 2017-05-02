@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
@@ -17,7 +18,7 @@ export class NoTopConceptSchemeComponent {
     private brokenSchemeList: Array<ARTURIResource>;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices,
-        private modalService: ModalServices, private browsingService: BrowsingServices) { }
+        private modalService: ModalServices, private browsingService: BrowsingServices, private creationModal: CreationModalServices) { }
 
     /**
      * Run the check
@@ -59,7 +60,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.modalService.newResource("Create top Concept").then(
+        this.creationModal.newResource("Create top Concept").then(
             (data: any) => {
                 this.skosService.createTopConcept(data.label, data.lang, scheme, data.uri).subscribe(
                     stResp => {

@@ -5,7 +5,7 @@ import { VBContext } from "../../utils/VBContext";
 import { Cookie } from "../../utils/Cookie";
 import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource } from "../../models/ARTResources";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { AlignmentCell } from "./AlignmentCell";
 import { ValidationSettingsModal } from "./validationSettingsModal/validationSettingsModal"
 import { ValidationReportModal, ValidationReportModalData } from "./validationReportModal/validationReportModal"

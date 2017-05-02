@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {ARTNode} from "../../../models/ARTResources";
+import {ARTNode} from "../../../../models/ARTResources";
 
 export class ResourceSelectionModalData extends BSModalContext {
     /**

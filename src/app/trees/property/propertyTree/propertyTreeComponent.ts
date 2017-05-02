@@ -4,7 +4,7 @@ import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
 import { AbstractTree } from "../../abstractTree";
 

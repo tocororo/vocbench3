@@ -7,7 +7,7 @@ import { ClassesServices } from "../../../services/classesServices";
 import { OwlServices } from "../../../services/owlServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { AbstractTree } from "../../abstractTree";
 
 @Component({

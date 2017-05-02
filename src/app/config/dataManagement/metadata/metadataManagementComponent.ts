@@ -9,7 +9,7 @@ import { VBContext } from "../../../utils/VBContext";
 import { VBPreferences } from "../../../utils/VBPreferences";
 import { UIUtils } from "../../../utils/UIUtils";
 import { PrefixMapping } from "../../../models/PrefixMapping";
-import { ModalServices } from "../../../widget/modal/modalServices";
+import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
 import { ReplaceBaseURIModal, ReplaceBaseURIModalData } from "./replaceBaseURIModal";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 import { ImportOntologyModal, ImportOntologyModalData, ImportType } from "./importOntologyModal";

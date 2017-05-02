@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
-import {DomSanitizer} from "@angular/platform-browser"
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import { Component } from "@angular/core";
+import { DomSanitizer } from "@angular/platform-browser"
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
 
 export class FilePickerModalData extends BSModalContext {
     /**
@@ -28,14 +28,14 @@ export class FilePickerModalData extends BSModalContext {
 })
 export class FilePickerModal implements ModalComponent<FilePickerModalData> {
     context: FilePickerModalData;
-    
+
     private pickedFile: File;
-    
+
     constructor(public dialog: DialogRef<FilePickerModalData>) {
         this.context = dialog.context;
     }
-    
-    ngOnInit() {}
+
+    ngOnInit() { }
 
     private fileChangeEvent(file: File) {
         this.pickedFile = file;

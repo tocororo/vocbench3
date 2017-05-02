@@ -1,47 +1,36 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { FormField } from "../../../models/CustomForms"
-import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources"
+import { FormField } from "../../../../models/CustomForms"
+import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
 
-export class NewSkosResourceCfModalData extends BSModalContext {
+export class NewResourceCfModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
         public cfId: string,
-        public lang: string
     ) {
         super();
     }
 }
 
 @Component({
-    selector: "new-skos-resource-cf-modal",
-    templateUrl: "./newSkosResourceCfModal.html",
+    selector: "new-resource-cf-modal",
+    templateUrl: "./newResourceCfModal.html",
 })
-export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfModalData> {
-    context: NewSkosResourceCfModalData;
-
-    @ViewChild("toFocus") inputToFocus: ElementRef;
+export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData> {
+    context: NewResourceCfModalData;
 
     //standard form
-    private label: string;
-    private lang: string;
     private uri: string;
 
     //custom form
     private formFields: FormField[] = [];
 
-    constructor(public dialog: DialogRef<NewSkosResourceCfModalData>) {
+    constructor(public dialog: DialogRef<NewResourceCfModalData>) {
         this.context = dialog.context;
     }
 
-    ngOnInit() {
-        this.lang = this.context.lang;
-    }
-
-    ngAfterViewInit() {
-        this.inputToFocus.nativeElement.focus();
-    }
+    ngOnInit() { }
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
@@ -51,12 +40,8 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
         }
     }
 
-    private onLangChange(newLang: string) {
-        this.lang = newLang;
-    }
-
     private isInputValid(): boolean {
-        var standardFormValid: boolean = (this.label != undefined && this.label.trim() != "");
+        var standardFormValid: boolean = (this.uri != null && this.uri.trim() != "");
         var customFormValid: boolean = true;
         for (var i = 0; i < this.formFields.length; i++) {
             var entry = this.formFields[i];
@@ -91,14 +76,9 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
             }
         }
 
-        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cfValueMap: any} = {
-            uriResource: null,
-            label: new ARTLiteral(this.label, null, this.lang),
+        var returnedData: { uriResource: ARTURIResource, cfValueMap: any} = {
+            uriResource: new ARTURIResource(this.uri),
             cfValueMap: entryMap
-        }
-        //Set URI only if localName is not empty
-        if (this.uri != null && this.uri.trim() != "") {
-            returnedData.uriResource = new ARTURIResource(this.uri);
         }
         this.dialog.close(returnedData);
     }

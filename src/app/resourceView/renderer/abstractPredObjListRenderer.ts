@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-
 import { PropertyServices } from "../../services/propertyServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
 import { SKOSXL } from "../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../models/CustomForms";
@@ -35,14 +35,17 @@ export abstract class AbstractPredObjListRenderer {
     protected skosxlService: SkosxlServices;
     protected modalService: ModalServices;
     protected browsingService: BrowsingServices;
+    protected creationModal: CreationModalServices;
     protected rvModalService: ResViewModalServices;
     
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, resViewModalService: ResViewModalServices) {
+        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, 
+        resViewModalService: ResViewModalServices) {
         this.propService = propService;
         this.cfService = cfService;
         this.skosxlService = skosxlService;
         this.modalService = modalService;
+        this.creationModal = creationModal;
         this.rvModalService = resViewModalService;
         this.resourcesService = resourcesService;
         this.browsingService = browsingService;
@@ -133,7 +136,7 @@ export abstract class AbstractPredObjListRenderer {
         if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
             predicate.getURI() == SKOSXL.altLabel.getURI() ||
             predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
-            this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
+            this.creationModal.newPlainLiteral("Add " + predicate.getShow()).then(
                 (literal: any) => {
                     switch (predicate.getURI()) {
                         case SKOSXL.prefLabel.getURI():
@@ -279,7 +282,7 @@ export abstract class AbstractPredObjListRenderer {
      * Opens a newPlainLiteral modal to enrich the predicate with a plain literal value 
      */
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
-        this.modalService.newPlainLiteral("Add " + predicate.getShow()).then(
+        this.creationModal.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 this.propService.createAndAddPropValue(this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
                     stResp => { this.update.emit(null) }
@@ -293,7 +296,7 @@ export abstract class AbstractPredObjListRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: string[]) {
-        this.modalService.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
+        this.creationModal.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
             (literal: any) => {
                 this.propService.createAndAddPropValue(this.resource, predicate, literal.value, literal.datatype, RDFTypesEnum.typedLiteral).subscribe(
                     stResp => this.update.emit(null)

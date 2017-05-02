@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {CustomFormsServices} from "../services/customFormsServices";
-import {ModalServices} from "../widget/modal/modalServices";
+import {ModalServices} from "../widget/modal/basicModal/modalServices";
 import {FormCollMappingModal} from "./customFormConfigModals/formCollMappingModal"
 import {FormCollEditorModal, FormCollEditorModalData} from "./customFormConfigModals/formCollEditorModal"
 import {CustomFormEditorModal, CustomFormEditorModalData} from "./customFormConfigModals/customFormEditorModal"

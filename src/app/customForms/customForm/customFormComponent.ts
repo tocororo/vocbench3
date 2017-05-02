@@ -1,10 +1,10 @@
-import { Component, Input, forwardRef } from "@angular/core";
+import { Component, Input, SimpleChanges, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormField } from "../../models/CustomForms";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../widget/modal/modalServices";
+import { ModalServices } from "../../widget/modal/basicModal/modalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
 /**
@@ -30,6 +30,15 @@ export class CustomForm implements ControlValueAccessor {
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['cfId'] && changes['cfId'].currentValue) {
+            this.initFormFields();
+        }
+    }
+
+    private initFormFields() {
         this.cfService.getCustomFormRepresentation(this.cfId).subscribe(
             form => {
                 this.formFields = form
@@ -38,13 +47,14 @@ export class CustomForm implements ControlValueAccessor {
                 for (var i = 0; i < this.formFields.length; i++) {
                     this.formFields[i]['checked'] = true;
                 }
-                this.propagateChange(this.formFields);
+                // this.propagateChange(this.formFields);
             },
             err => {
                 this.modalService.alert("Error", "Impossible to create the CustomForm (" + this.cfId
                     + "). Its description may contains error. " + err, "error");
             }
-        )
+        );
+        this.propagateChange(this.formFields);
     }
 
     private isProjectSKOS() {

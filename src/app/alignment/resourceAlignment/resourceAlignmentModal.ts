@@ -4,7 +4,7 @@ import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
-import {ModalServices} from "../../widget/modal/modalServices";
+import {ModalServices} from "../../widget/modal/basicModal/modalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
 import {BrowseExternalResourceModal} from "./browseExternalResourceModal"
 
