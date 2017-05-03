@@ -65,10 +65,16 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
     private changeFacet(facetName: string, checked: boolean) {
         if (facetName == "symmetric") {
             this.setPropertyFacet(OWL.symmetricProperty, checked);
+        } else if (facetName == "asymmetric") {
+            this.setPropertyFacet(OWL.asymmetricProperty, checked);
         } else if (facetName == "functional") {
             this.setPropertyFacet(OWL.functionalProperty, checked);
         } else if (facetName == "inverseFunctional") {
             this.setPropertyFacet(OWL.inverseFunctionalProperty, checked);
+        } else if (facetName == "reflexive") {
+            this.setPropertyFacet(OWL.reflexiveProperty, checked);
+        } else if (facetName == "irreflexive") {
+            this.setPropertyFacet(OWL.irreflexiveProperty, checked);
         } else if (facetName == "transitive") {
             this.setPropertyFacet(OWL.transitiveProperty, checked);
         }

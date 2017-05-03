@@ -53,15 +53,18 @@ export class OWL {
     //CLASSES
     public static allDifferent = new ARTURIResource(OWL.namespace + "AllDifferent", "owl:AllDifferent", RDFResourceRolesEnum.cls);
     public static annotationProperty = new ARTURIResource(OWL.namespace + "AnnotationProperty", "owl:AnnotationProperty", RDFResourceRolesEnum.cls);
+    public static asymmetricProperty = new ARTURIResource(OWL.namespace + "AsymmetricProperty", "owl:AsymmetricProperty", RDFResourceRolesEnum.cls);
     public static class = new ARTURIResource(OWL.namespace + "Class", "owl:Class", RDFResourceRolesEnum.cls);
     public static datatypeProperty = new ARTURIResource(OWL.namespace + "DatatypeProperty", "owl:DatatypeProperty", RDFResourceRolesEnum.cls);
     public static deprecatedClass = new ARTURIResource(OWL.namespace + "DeprecatedClass", "owl:DeprecatedClass", RDFResourceRolesEnum.cls);
     public static deprecatedProperty = new ARTURIResource(OWL.namespace + "DeprecatedProperty", "owl:DeprecatedProperty", RDFResourceRolesEnum.cls);
     public static functionalProperty = new ARTURIResource(OWL.namespace + "FunctionalProperty", "owl:FunctionalProperty", RDFResourceRolesEnum.cls);
     public static inverseFunctionalProperty = new ARTURIResource(OWL.namespace + "InverseFunctionalProperty", "owl:InverseFunctionalProperty", RDFResourceRolesEnum.cls);
+    public static irreflexiveProperty = new ARTURIResource(OWL.namespace + "IrreflexiveProperty", "owl:IrreflexiveProperty", RDFResourceRolesEnum.cls);
     public static objectProperty = new ARTURIResource(OWL.namespace + "ObjectProperty", "owl:ObjectProperty", RDFResourceRolesEnum.cls);
     public static ontology = new ARTURIResource(OWL.namespace + "Ontology", "owl:Ontology", RDFResourceRolesEnum.cls);
     public static ontologyProperty = new ARTURIResource(OWL.namespace + "OntologyProperty", "owl:OntologyProperty", RDFResourceRolesEnum.cls);
+    public static reflexiveProperty = new ARTURIResource(OWL.namespace + "ReflexiveProperty", "owl:ReflexiveProperty", RDFResourceRolesEnum.cls);
     public static restriction = new ARTURIResource(OWL.namespace + "Restriction", "owl:Restriction", RDFResourceRolesEnum.cls);
     public static symmetricProperty = new ARTURIResource(OWL.namespace + "SymmetricProperty", "owl:SymmetricProperty", RDFResourceRolesEnum.cls);
     public static transitiveProperty = new ARTURIResource(OWL.namespace + "TransitiveProperty", "owl:TransitiveProperty", RDFResourceRolesEnum.cls);

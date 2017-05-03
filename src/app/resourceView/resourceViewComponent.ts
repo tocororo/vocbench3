@@ -246,7 +246,7 @@ export class ResourceViewComponent {
      * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)
      */
     private parseFacetsPartition(facetsPartition: any) {
-        var facetsName = ["functional", "inverseFunctional", "symmetric", "transitive"];
+        var facetsName = ["functional", "inverseFunctional", "reflexive", "irreflexive", "symmetric", "asymmetric", "transitive"];
         //init default facets
         this.propertyFacets = [];
         for (var i = 0; i < facetsName.length; i++) {
