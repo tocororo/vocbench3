@@ -33,11 +33,13 @@ export class CreationModalServices {
     /**
      * Opens a modal to create a new resource with uri plus custom form supplement fields
      * @param title the title of the modal dialog
+     * @param cls class of the new creating resource
+     * @param clsChangeable tells if the class of the creating resource can be changed
      * @param cfId the custom form id
      * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, cfValueMap:any}
      */
-    newResourceCf(title: string, cfId?: string) {
-        var modalData = new NewResourceCfModalData(title, cfId);
+    newResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, cfId?: string) {
+        var modalData = new NewResourceCfModalData(title, cls, clsChangeable, cfId);
         const builder = new BSModalContextBuilder<NewResourceCfModalData>(
             modalData, undefined, NewResourceCfModalData
         );
@@ -50,12 +52,14 @@ export class CreationModalServices {
     /**
      * Opens a modal to create a new skos resource with label, language and uri (optional), plus custom form supplement fields
      * @param title the title of the modal dialog
+     * @param cls class of the new creating resource
+     * @param clsChangeable tells if the class of the creating resource can be changed
      * @param cfId the custom form id
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
      * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, label:ARTLiteral, cfValueMap:any}
      */
-    newSkosResourceCf(title: string, cls: ARTURIResource, cfId?: string, lang?: string) {
-        var modalData = new NewSkosResourceCfModalData(title, cls, cfId, lang);
+    newSkosResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, cfId?: string, lang?: string) {
+        var modalData = new NewSkosResourceCfModalData(title, cls, clsChangeable, cfId, lang);
         const builder = new BSModalContextBuilder<NewSkosResourceCfModalData>(
             modalData, undefined, NewSkosResourceCfModalData
         );

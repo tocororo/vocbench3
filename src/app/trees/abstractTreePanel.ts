@@ -33,7 +33,7 @@ export abstract class AbstractTreePanel extends AbstractPanel {
 
     abstract createRoot(role?: RDFResourceRolesEnum): void;
 
-    abstract createChild(): void;
+    abstract createChild(role?: RDFResourceRolesEnum): void;
 
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)

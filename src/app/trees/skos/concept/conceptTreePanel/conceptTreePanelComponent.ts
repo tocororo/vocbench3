@@ -81,7 +81,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     private createTopConcept(cfId?: string) {
-        this.creationModal.newSkosResourceCf("Create new skos:Concept", SKOS.concept, cfId).then(
+        this.creationModal.newSkosResourceCf("Create new skos:Concept", SKOS.concept, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -101,7 +101,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     private createNarrower(cfId?: string) {
-        this.creationModal.newSkosResourceCf("Create a skos:narrower", SKOS.concept, cfId).then(
+        this.creationModal.newSkosResourceCf("Create a skos:narrower", SKOS.concept, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {

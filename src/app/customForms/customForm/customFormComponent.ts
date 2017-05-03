@@ -47,14 +47,13 @@ export class CustomForm implements ControlValueAccessor {
                 for (var i = 0; i < this.formFields.length; i++) {
                     this.formFields[i]['checked'] = true;
                 }
-                // this.propagateChange(this.formFields);
+                this.propagateChange(this.formFields);
             },
             err => {
                 this.modalService.alert("Error", "Impossible to create the CustomForm (" + this.cfId
                     + "). Its description may contains error. " + err, "error");
             }
         );
-        this.propagateChange(this.formFields);
     }
 
     private isProjectSKOS() {

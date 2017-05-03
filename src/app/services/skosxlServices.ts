@@ -416,28 +416,32 @@ export class SkosxlServices {
     
     /**
      * Creates a root collection
-     * @param prefLabel the preferred label of the collection
-     * @param prefLabelLang the language of the preferred label
-     * @param collection the name of the collection. If not provided its URI is generated randomically
-     * @param lang language in which the show attribute should be rendered
-     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
+     * @param collectioType the type of the collection (skos:Collection or skos:OrderedCollection)
+     * @param label the preferred label
+     * @param newCollection the (optional) uri of the collection
+     * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
+     * @param customFormId id of the custom form that set additional info to the collection
+     * @param userPromptMap json map object of key - value of the custom form
+     * @return the new collection
      */
-    createRootCollection(prefLabel: string, prefLabelLang: string, collection?: string, lang?: string, mode?: string) {
+    createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource, 
+        customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createCollection");
         var params: any = {
-            prefLabel: prefLabel,
-            prefLabelLang: prefLabelLang
+            collectionType: collectionType,
+            label: label
+        };
+        if (newCollection != null) {
+            params.newCollection = newCollection
         }
-        if (collection != undefined) {
-            params.collection = collection;
+        if (collectionCls != null) {
+            params.collectionCls = collectionCls;
         }
-        if (lang != undefined) {
-            params.lang = lang;
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        if (mode != undefined) {
-            params.mode = mode;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "createCollection", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, this.oldTypeService, true).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -448,107 +452,38 @@ export class SkosxlServices {
     }
 
     /**
-     * Creates a nested collection for the given container
-     * @param container the container collection
-     * @param prefLabel the preferred label of the collection
-     * @param prefLabelLang the language of the preferred label
-     * @param collection the name of the collection. If not provided its URI is generated randomically
-     * @param lang language in which the show attribute should be rendered
-     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
+     * Creates a root collection
+     * @param collectioType the type of the collection (skos:Collection or skos:OrderedCollection)
+     * @param containingCollection the collection which the new collection is member
+     * @param newCollection the (optional) uri of the collection
+     * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
+     * @param customFormId id of the custom form that set additional info to the collection
+     * @param userPromptMap json map object of key - value of the custom form
+     * @return the new collection
      */
-    createNestedCollection(container: ARTResource, prefLabel: string, prefLabelLang: string, 
-        collection?: string, lang?: string, mode?: string) {
-
+    createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral, 
+        newCollection?: ARTURIResource, collectionCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createCollection");
         var params: any = {
-            container: container.getNominalValue(),
-            prefLabel: prefLabel,
-            prefLabelLang: prefLabelLang
+            collectionType: collectionType,
+            containingCollection: containingCollection,
+            label: label
         };
-        if (collection != undefined) {
-            params.collection = collection;
+        if (newCollection != null) {
+            params.newCollection = newCollection
         }
-        if (lang != undefined) {
-            params.lang = lang;
+        if (collectionCls != null) {
+            params.collectionCls = collectionCls;
         }
-        if (mode != undefined) {
-            params.mode = mode;
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doGet(this.serviceName_old, "createCollection", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, this.oldTypeService, true).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
-                return newColl;
-            }
-        );
-    }
-
-    /**
-     * Creates a root ordered collection
-     * @param prefLabel the preferred label of the collection
-     * @param prefLabelLang the language of the preferred label
-     * @param collection the name of the collection. If not provided its URI is generated randomically
-     * @param lang language in which the show attribute should be rendered
-     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
-     */
-    createRootOrderedCollection(prefLabel: string, prefLabelLang: string, collection?: string, lang?: string, mode?: string) {
-        console.log("[SkosServices] createRootOrderedCollection");
-        var params: any = {
-            prefLabel: prefLabel,
-            prefLabelLang: prefLabelLang
-        }
-        if (collection != undefined) {
-            params.collection = collection;
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        if (mode != undefined) {
-            params.mode = mode;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "createOrderedCollection", params, this.oldTypeService_old).map(
-            stResp => {
-                var newColl = Deserializer.createURI(stResp);
-                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.rootCollectionCreatedEvent.emit(newColl);
-                return newColl;
-            }
-        );
-    }
-
-    /**
-     * Creates a nested ordered collection for the given container
-     * @param container the container collection
-     * @param prefLabel the preferred label of the collection
-     * @param prefLabelLang the language of the preferred label
-     * @param collection the name of the collection. If not provided its URI is generated randomically
-     * @param lang language in which the show attribute should be rendered
-     * @param mode can be 'bnode' or 'uri'. Default is 'bnode'
-     */
-    createNestedOrderedCollection(container: ARTResource, prefLabel: string, prefLabelLang: string, 
-        collection?: string, lang?: string, mode?: string) {
-
-        console.log("[SkosServices] createNestedOrderedCollection");
-        var params: any = {
-            container: container.getNominalValue(),
-            prefLabel: prefLabel,
-            prefLabelLang: prefLabelLang
-        };
-        if (collection != undefined) {
-            params.collection = collection;
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        if (mode != undefined) {
-            params.mode = mode;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "createOrderedCollection", params, this.oldTypeService_old).map(
-            stResp => {
-                var newColl = Deserializer.createURI(stResp);
-                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: container});
+                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: containingCollection});
                 return newColl;
             }
         );

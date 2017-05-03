@@ -7,21 +7,21 @@
                     <img src="../../../../../assets/images/collection_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a (click)="createCollection()">Collection</a></li>
-                    <li><a (click)="createOrderedCollection()">OrderedCollection</a></li>
+                    <li><a (click)="createRoot('skosCollection')">Collection</a></li>
+                    <li><a (click)="createRoot('skosOrderedCollection')">OrderedCollection</a></li>
                 </ul>
             </div>
             <div class="btn-group btn-group-xs" role="group" >
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Create a nested Collection" 
-                    [disabled]="!selectedCollection">
+                    [disabled]="!selectedNode">
                     <img src="../../../../../assets/images/collection_addNested.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a (click)="createNestedCollection()">Collection</a></li>
-                    <li><a (click)="createNestedOrderedCollection()">OrderedCollection</a></li>
+                    <li><a (click)="createChild('skosCollection')">Collection</a></li>
+                    <li><a (click)="createChild('skosOrderedCollection')">OrderedCollection</a></li>
                 </ul>
             </div>
-            <button class="btn btn-default" title="Delete Collection" (click)="deleteCollection()" [disabled]="!selectedCollection">
+            <button class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="!selectedNode">
                 <img src="../../../../../assets/images/collection_delete.png" class="panelButtonImg"/>
             </button>
         </div>

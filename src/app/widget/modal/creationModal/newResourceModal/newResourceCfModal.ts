@@ -1,12 +1,17 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { FormField } from "../../../../models/CustomForms"
+import { CustomFormsServices } from "../../../../services/customFormsServices"
+import { BrowsingServices } from "../../browsingModal/browsingServices"
+import { ModalServices } from "../../basicModal/modalServices"
+import { FormField, CustomForm } from "../../../../models/CustomForms"
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
 
 export class NewResourceCfModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
+        public cls: ARTURIResource, //class that this modal is creating
+        public clsChangeable: boolean = true,
         public cfId: string,
     ) {
         super();
@@ -20,17 +25,24 @@ export class NewResourceCfModalData extends BSModalContext {
 export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData> {
     context: NewResourceCfModalData;
 
+    private resourceClass: ARTURIResource;
+    private customFormId: string;
+
     //standard form
     private uri: string;
 
     //custom form
     private formFields: FormField[] = [];
 
-    constructor(public dialog: DialogRef<NewResourceCfModalData>) {
+    constructor(public dialog: DialogRef<NewResourceCfModalData>, private cfService: CustomFormsServices,
+        private modalService: ModalServices, private browsingService: BrowsingServices) {
         this.context = dialog.context;
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.resourceClass = this.context.cls;
+        this.customFormId = this.context.cfId;
+    }
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
@@ -38,6 +50,34 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
                 this.ok(event);
             }
         }
+    }
+
+    private changeClass() {
+        this.browsingService.browseClassTree("Change class", [this.context.cls]).then(
+            (selectedClass: any) => {
+                if ((<ARTURIResource>selectedClass).getURI() != this.resourceClass.getURI()) {
+                    this.resourceClass = selectedClass;
+                     this.cfService.getCustomConstructors(this.resourceClass).subscribe(
+                        customForms => {
+                            if (customForms.length == 0) { //empty form collection
+                                this.customFormId = null;
+                                this.formFields = [];
+                            } else if (customForms.length == 1) {
+                                this.customFormId = customForms[0].getId(); 
+                            } else { //(forms.length > 1) //let user choose
+                                return this.modalService.selectCustomForm("Update form constructor", customForms).then(
+                                    (selectedCF: any) => {
+                                        this.customFormId = (<CustomForm>selectedCF).getId();
+                                    },
+                                    () => {}
+                                );
+                            }
+                        }
+                    );
+                }
+            },
+            () => {}
+        )
     }
 
     private isInputValid(): boolean {
@@ -76,8 +116,10 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
             }
         }
 
-        var returnedData: { uriResource: ARTURIResource, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
             uriResource: new ARTURIResource(this.uri),
+            cls: this.resourceClass,
+            cfId: this.customFormId,
             cfValueMap: entryMap
         }
         this.dialog.close(returnedData);

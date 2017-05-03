@@ -11,6 +11,7 @@ export class NewSkosResourceCfModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
         public cls: ARTURIResource, //class that this modal is creating
+        public clsChangeable: boolean = true,
         public cfId: string,
         public lang: string
     ) {
@@ -38,10 +39,8 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
     //custom form
     private formFields: FormField[] = [];
 
-    constructor(public dialog: DialogRef<NewSkosResourceCfModalData>, 
-        private cfService: CustomFormsServices,
-        private modalService: ModalServices, 
-        private browsingService: BrowsingServices) {
+    constructor(public dialog: DialogRef<NewSkosResourceCfModalData>, private cfService: CustomFormsServices,
+        private modalService: ModalServices, private browsingService: BrowsingServices) {
         this.context = dialog.context;
     }
 
@@ -68,7 +67,7 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
     }
 
     private changeClass() {
-        this.browsingService.browseClassTree("Change class", [this.resourceClass]).then(
+        this.browsingService.browseClassTree("Change class", [this.context.cls]).then(
             (selectedClass: any) => {
                 if ((<ARTURIResource>selectedClass).getURI() != this.resourceClass.getURI()) {
                     this.resourceClass = selectedClass;
@@ -76,6 +75,7 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
                         customForms => {
                             if (customForms.length == 0) { //empty form collection
                                 this.customFormId = null;
+                                this.formFields = [];
                             } else if (customForms.length == 1) {
                                 this.customFormId = customForms[0].getId(); 
                             } else { //(forms.length > 1) //let user choose

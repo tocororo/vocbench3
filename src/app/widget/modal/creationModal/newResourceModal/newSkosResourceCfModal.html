@@ -2,7 +2,7 @@
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
         <span>
-            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()">
+            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()" [disabled]="!context.clsChangeable">
                 <rdf-resource [resource]="resourceClass"></rdf-resource>
             </button>
         </span>

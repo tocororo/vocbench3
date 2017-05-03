@@ -55,7 +55,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private createScheme(cfId?: string) {
-        this.creationModal.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme).then(
+        this.creationModal.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true, cfId).then(
             (res: any) => {
                 console.log("returned data ", res);
                 if (this.ONTO_TYPE == "SKOS") {

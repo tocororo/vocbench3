@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {Deserializer} from "../utils/Deserializer";
-import {ARTURIResource} from "../models/ARTResources";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
+import { ARTURIResource } from "../models/ARTResources";
 
 @Injectable()
 export class SearchServices {
 
     private serviceName = "Search";
     private oldTypeService = false;
-    
+
     constructor(private httpMgr: HttpManager) { }
 
     /**
@@ -23,7 +23,7 @@ export class SearchServices {
      * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      * @return an array of resources
      */
-    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, 
+    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
         searchMode: string, lang?: string, scheme?: ARTURIResource): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
@@ -75,7 +75,7 @@ export class SearchServices {
             }
         );
     }
-    
+
     /**
      * Returns the shortest path from a root to the given resource
      * @param resource
@@ -87,26 +87,14 @@ export class SearchServices {
         console.log("[SearchServices] getPathFromRoot");
         var params: any = {
             role: role,
-            resourceURI: resource.getURI()
+            resourceURI: resource
         };
         if (scheme != undefined) {
-            params.scheme = scheme.getURI();
+            params.schemeURI = scheme;
         }
-        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService, true).map(
             stResp => {
-                var path = new Array<ARTURIResource>();
-                var pathColl: NodeListOf<Element> = stResp.getElementsByTagName("path");
-                var shortestPathLength = 99999;
-                var shortestPathElem: Element;
-                for (var i = 0; i < pathColl.length; i++) { //retrieve shortest path
-                    var pathLength: number = Number(pathColl[i].getAttribute("length"));
-                    if (pathLength < shortestPathLength) {
-                        shortestPathElem = pathColl[i];
-                        shortestPathLength = pathLength;
-                    }
-                }
-                path = Deserializer.createURIArray(shortestPathElem);
-                return path;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
