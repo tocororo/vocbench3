@@ -60,7 +60,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     private createCollection(collectionType: ARTURIResource, cfId: string) {
-        this.creationModal.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, false, cfId).then(
+        this.creationModal.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -94,7 +94,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     private createNestedCollection(collectionType: ARTURIResource, cfId: string) {
-         this.creationModal.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, false, cfId).then(
+         this.creationModal.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
