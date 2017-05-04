@@ -4,7 +4,7 @@ import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
-import {ModalServices} from "../../widget/modal/basicModal/modalServices";
+import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
 import {BrowseExternalResourceModal} from "./browseExternalResourceModal"
 
@@ -30,7 +30,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     private alignedObject: ARTURIResource;
     
     constructor(public dialog: DialogRef<ResourceAlignmentModalData>, public modal: Modal,
-        public alignService: AlignmentServices, public modalService: ModalServices) {
+        public alignService: AlignmentServices, public basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
     
@@ -79,7 +79,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
                 () => { this.alignedObject = null; }
             );
         } else {
-            this.modalService.alert("Error", "Impossible to align this resource. Cannot determine the resource role", "error").then(
+            this.basicModals.alert("Error", "Impossible to align this resource. Cannot determine the resource role", "error").then(
                 result => { this.cancel(); }
             );
         }

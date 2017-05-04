@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { Countries } from "../models/LanguagesCountries";
 import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";
@@ -34,7 +34,7 @@ export class RegistrationComponent {
 
     private EMAIL_PATTERN = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
 
-    constructor(private userService: UserServices, private router: Router, private modalService: ModalServices) { }
+    constructor(private userService: UserServices, private router: Router, private basicModals: BasicModalServices) { }
 
     private submit() {
         this.submitted = true;
@@ -44,7 +44,7 @@ export class RegistrationComponent {
                 this.birthday, this.gender, this.country, this.address, this.affiliation, this.url, this.phone).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                    this.modalService.alert("Registration complete",
+                    this.basicModals.alert("Registration complete",
                         "User " + this.firstName + " " + this.lastName + " registered succesfully." +
                         " You can now login with your email (" + this.email + ") and the password you provided").then(
                         result => {
@@ -55,7 +55,7 @@ export class RegistrationComponent {
                 () => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
                 )
         } else {
-            this.modalService.alert("Registration error", "Please, check the inserted data.", "warning");
+            this.basicModals.alert("Registration error", "Please, check the inserted data.", "warning");
         }
     }
 

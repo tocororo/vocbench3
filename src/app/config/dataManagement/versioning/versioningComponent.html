@@ -1,0 +1,70 @@
+<div class="vbox">
+    
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Versioning</label>
+        </div>
+       
+        <div class="panel-body vbox">
+
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Versions:</label>
+
+                    <div class="btn-group btn-group-xs" style="margin-right: 5px">
+                        <button class="btn btn-default" (click)="swithcToVersion()" [disabled]="!selectedVersion">
+                            Switch to
+                        </button>
+                        <button class="btn btn-default" (click)="delteVersion()" [disabled]="!selectedVersion">
+                            Delete
+                        </button>
+                    </div>
+
+                    <div class="dropdown pull-right">
+                        <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                            Dump...
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a (click)="dump()">Dump a new version</a></li>
+                            <li><a (click)="dumpWithLocation()">Dump a new version to a different location</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="subPanel-body scrollableContainer" style="flex: 1;">
+                    <table class="table table-condensed table-hoverable" style="flex: 1">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Version ID</th>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">Location</th>
+                                <th class="text-center">Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let v of versionList" (click)="selectVersion(v)" [ngClass]="{active: v == selectedVersion}">
+                                <td class="text-center">
+                                    {{v.id}}
+                                </td>
+                                <td class="text-center">
+                                    {{v.date}}
+                                </td>
+                                <td class="text-center">
+                                    {{v.location}}
+                                </td>
+                                <td class="text-center">
+                                    <span *ngIf="isActiveVersion(v)" class="glyphicon glyphicon-ok"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+</div>

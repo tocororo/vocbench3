@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
 import {ProjectServices} from "../../services/projectServices";
-import {ModalServices} from "../../widget/modal/basicModal/modalServices";
+import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
 import {AccessLevel, LockLevel, Project} from '../../models/Project';
 
 export class ACLEditorModalData extends BSModalContext {
@@ -26,7 +26,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
     private update: boolean = false; //useful to tells to the calling component if this modal has updated something
 
-    constructor(public dialog: DialogRef<ACLEditorModalData>, private projectService: ProjectServices, private modalService: ModalServices) {
+    constructor(public dialog: DialogRef<ACLEditorModalData>, private projectService: ProjectServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -39,7 +39,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         var oldLevel: AccessLevel = consumer.availableACLLevel;
         console.log("oldLevel", oldLevel);
         console.log("newLevel", newLevel);
-        this.modalService.confirm("Update Access Level", "Are you sure to change Access Level of '" 
+        this.basicModals.confirm("Update Access Level", "Are you sure to change Access Level of '" 
             + this.context.acl.name + "' to '" + newLevel + "' for the consumer '" + consumer.name + "'?", "warning").then(
             confirm => {
                 this.projectService.updateAccessLevel(new Project(this.context.acl.name), new Project(consumer.name), newLevel).subscribe(
@@ -57,7 +57,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
     private onLockLevelChange(newLevel: LockLevel) {
         var oldLevel: LockLevel = this.lock.availableLockLevel;
-        this.modalService.confirm("Update Lock Level", "Are you sure to change project lock to '" + newLevel + "'?", "warning").then(
+        this.basicModals.confirm("Update Lock Level", "Are you sure to change project lock to '" + newLevel + "'?", "warning").then(
             confirm => {
                 this.projectService.updateLockLevel(new Project(this.context.acl.name), newLevel).subscribe(
                     stResp => {

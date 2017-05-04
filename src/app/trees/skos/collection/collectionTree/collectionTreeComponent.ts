@@ -5,7 +5,7 @@ import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
-import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTree } from "../../../abstractTree";
 
 @Component({
@@ -18,7 +18,7 @@ export class CollectionTreeComponent extends AbstractTree {
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
         eventHandler: VBEventHandler) {
 
         super(eventHandler);

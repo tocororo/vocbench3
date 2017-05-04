@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
 import {OverlayConfig} from 'angular2-modal';
 import {CustomFormsServices} from "../services/customFormsServices";
-import {ModalServices} from "../widget/modal/basicModal/modalServices";
+import {BasicModalServices} from "../widget/modal/basicModal/basicModalServices";
 import {FormCollMappingModal} from "./customFormConfigModals/formCollMappingModal"
 import {FormCollEditorModal, FormCollEditorModalData} from "./customFormConfigModals/formCollEditorModal"
 import {CustomFormEditorModal, CustomFormEditorModalData} from "./customFormConfigModals/customFormEditorModal"
@@ -25,7 +25,7 @@ export class CustomFormConfigComponent {
     private selectedFormColl: FormCollection;
     private selectedCustomForm: CustomForm;
     
-    constructor(private customFormsService: CustomFormsServices, private modalService: ModalServices, private modal: Modal) {}
+    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modal: Modal) {}
     
     ngOnInit() {
         this.initCFConfMap();
@@ -66,7 +66,7 @@ export class CustomFormConfigComponent {
                     for (var i = 0; i < this.cfConfigurationMap.length; i++) {
                         if (this.cfConfigurationMap[i].getResource().getURI() == resource.getURI()) {
                             //already in a mapping
-                            this.modalService.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
+                            this.basicModals.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
                                 ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
                                 ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
                                 "warning");
@@ -153,7 +153,7 @@ export class CustomFormConfigComponent {
     }
     
     private deleteFormCollection() {
-        this.modalService.confirm("Delete Form Collection", "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", "warning").then(
+        this.basicModals.confirm("Delete Form Collection", "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", "warning").then(
             confirm => {
                 this.customFormsService.deleteFormCollection(this.selectedFormColl.getId()).subscribe(
                     stResp => {
@@ -167,12 +167,12 @@ export class CustomFormConfigComponent {
     }
 
     private cloneFormCollection() {
-        this.modalService.promptPrefixed("Clone FormCollection", FormCollection.PREFIX, "ID", null, false, true).then(
+        this.basicModals.promptPrefixed("Clone FormCollection", FormCollection.PREFIX, "ID", null, false, true).then(
             (value: any) => {
                 let fcId = FormCollection.PREFIX + value;
                 for (var i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
-                        this.modalService.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
+                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
                         return;
                     }
                 }
@@ -190,7 +190,7 @@ export class CustomFormConfigComponent {
         this.customFormsService.exportFormCollection(this.selectedFormColl.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.modalService.downloadLink("Export FormCollection", null, exportLink, this.selectedFormColl.getId() + ".xml");
+                this.basicModals.downloadLink("Export FormCollection", null, exportLink, this.selectedFormColl.getId() + ".xml");
             }
         );
     }
@@ -271,12 +271,12 @@ export class CustomFormConfigComponent {
     }
 
     private cloneCustomForm() {
-        this.modalService.promptPrefixed("Clone CustomForm", CustomForm.PREFIX, "ID", null, false, true).then(
+        this.basicModals.promptPrefixed("Clone CustomForm", CustomForm.PREFIX, "ID", null, false, true).then(
             (value: any) => {
                 let fcId = CustomForm.PREFIX + value;
                 for (var i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
-                        this.modalService.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
+                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
                         return;
                     }
                 }
@@ -294,7 +294,7 @@ export class CustomFormConfigComponent {
         this.customFormsService.isFormLinkedToCollection(this.selectedCustomForm.getId()).subscribe(
             result => {
                 if (result) { //selectedCustomForm belong to a CR
-                    this.modalService.confirmCheck("Delete CustomForm", "You are deleting a CustomForm that " +
+                    this.basicModals.confirmCheck("Delete CustomForm", "You are deleting a CustomForm that " +
                         "belongs to one or more FormCollection(s). Are you sure?", "Delete also FormCollection(s) left empty", "error").then(
                         (check: any) => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId(), check).subscribe(
@@ -310,7 +310,7 @@ export class CustomFormConfigComponent {
                         () => {}
                     );
                 } else { //selectedCustomForm does not belong to any FormCollection
-                    this.modalService.confirm("Delete CustomForm", "You are deleting CustomForm " + this.selectedCustomForm.getId() + 
+                    this.basicModals.confirm("Delete CustomForm", "You are deleting CustomForm " + this.selectedCustomForm.getId() + 
                         ". Are you sure?", "warning").then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(
@@ -330,7 +330,7 @@ export class CustomFormConfigComponent {
         this.customFormsService.exportCustomForm(this.selectedCustomForm.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.modalService.downloadLink("Export FormCollection", null, exportLink, this.selectedCustomForm.getId() + ".xml");
+                this.basicModals.downloadLink("Export FormCollection", null, exportLink, this.selectedCustomForm.getId() + ".xml");
             }
         );
     }

@@ -9,8 +9,8 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
-import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
@@ -32,8 +32,8 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
     removeBtnImgTitle = "Remove property value";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
+        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     ngOnInit() {
@@ -42,7 +42,7 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
 
     add(predicate?: ARTURIResource) {
         if (predicate == null) {
-            this.browsingService.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
+            this.browsingModals.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
                 (selectedProp: any) => {
                     this.add(selectedProp);
                 },

@@ -40,6 +40,7 @@ import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataCom
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
 import { MetadataManagementComponent } from "../config/dataManagement/metadata/metadataManagementComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
+import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
 import { VocbenchSettingsComponent } from "../settings/vocbenchSettingsComponent";
 import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 import { AdministrationComponent } from "../administration/administrationComponent";
@@ -77,6 +78,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
             ExportDataComponent,
             MetadataManagementComponent,
             RefactorComponent,
+            VersioningComponent,
             VocbenchSettingsComponent,
             AdministrationComponent,
       ],

@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { AdministrationServices } from "../services/administrationServices";
 import { AuthServices } from "../services/authServices";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "config-admin-component",
@@ -16,7 +16,7 @@ export class ConfigAdministrationComponent {
     private config: any = {};
 
     constructor(private adminService: AdministrationServices, private authService: AuthServices, 
-        private modalService: ModalServices, private router: Router) {}
+        private basicModals: BasicModalServices, private router: Router) {}
 
     ngOnInit() {
         this.adminService.getAdministrationConfig().subscribe(
@@ -29,7 +29,7 @@ export class ConfigAdministrationComponent {
 
     private submitChange() {
         if (this.pristineConfig.emailAdminAddress != this.config.emailAdminAddress) {
-            this.modalService.confirm("Update configuration", "The administrator email address has changed. " + 
+            this.basicModals.confirm("Update configuration", "The administrator email address has changed. " + 
                 "If you confirm you'll be logged out. Are you sure to continue?", "warning").then(
                 result => {
                     this.updateAdminConfig().subscribe(

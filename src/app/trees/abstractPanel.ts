@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "panel",
@@ -30,10 +30,10 @@ export abstract class AbstractPanel {
      * CONSTRUCTOR
      */
     protected cfService: CustomFormsServices;
-    protected modalService: ModalServices;
-    constructor(cfService: CustomFormsServices, modalService: ModalServices) {
+    protected basicModals: BasicModalServices;
+    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices) {
         this.cfService = cfService;
-        this.modalService = modalService;
+        this.basicModals = basicModals;
     }
 
     /**
@@ -53,7 +53,7 @@ export abstract class AbstractPanel {
                     } else if (customForms.length == 1) {
                         resolve(customForms[0].getId()); 
                     } else { //(forms.length > 1) //let user choose
-                        return this.modalService.selectCustomForm("Select constructor form", customForms).then(
+                        return this.basicModals.selectCustomForm("Select constructor form", customForms).then(
                             (selectedCF: any) => {
                                 resolve((<CustomForm>selectedCF).getId());
                             },

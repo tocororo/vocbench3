@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { PluginConfiguration } from "../../../models/Plugins";
-import { ARTURIResource } from "../../../models/ARTResources";
+import { PluginConfiguration } from "../../../../models/Plugins";
+import { ARTURIResource } from "../../../../models/ARTResources";
 
 export class PluginConfigModalData extends BSModalContext {
     /**
@@ -28,9 +28,7 @@ export class PluginConfigModal implements ModalComponent<PluginConfigModalData> 
 
     ngOnInit() {
         //copy the context configuration (so changes of params don't affect original configuration params)
-        // this.config = JSON.parse(JSON.stringify((this.context.configuration)));
         this.config = Object.assign({}, this.context.configuration);
-        // JSON.parse(JSON.stringify((this.context.configuration)));
     }
 
     private isOkClickable(): boolean {

@@ -8,7 +8,7 @@ import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { BrowsingServices } from '../../../widget/modal/browsingModal/browsingServices';
+import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -38,8 +38,8 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
     ];
 
     constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propertyService: PropertyServices, private resViewService: ResourceViewServices, private creationModal: CreationModalServices,
-        private browsingService: BrowsingServices) {
+        private propertyService: PropertyServices, private resViewService: ResourceViewServices, private creationModals: CreationModalServices,
+        private browsingModals: BrowsingModalServices) {
         super();
     }
 
@@ -82,7 +82,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
 
     add(predicate?: ARTURIResource) {
         if (predicate == undefined) {
-            this.browsingService.browsePropertyTree("Select a property", this.rootProperties).then(
+            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                 (selectedProp: any) => {
                     if (this.isKnownProperty(selectedProp)) {
                         this.enrichProperty(selectedProp);
@@ -102,7 +102,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
     }
 
     private enrichProperty(predicate: ARTURIResource) {
-        this.creationModal.newPlainLiteral("Add " + predicate.getShow()).then(
+        this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():

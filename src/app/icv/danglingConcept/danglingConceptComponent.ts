@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBPreferences } from "../../utils/VBPreferences";
 import { UIUtils } from "../../utils/UIUtils";
@@ -19,7 +19,7 @@ export class DanglingConceptComponent {
     private brokenConceptList: Array<ARTURIResource>;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBPreferences,
-        private modalService: ModalServices, private browsingService: BrowsingServices) { }
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         this.skosService.getAllSchemes().subscribe( //new service
@@ -83,7 +83,7 @@ export class DanglingConceptComponent {
      * Fixes concept by selecting a broader concept
      */
     private selectBroader(concept: ARTURIResource) {
-        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, true).then(
+        this.browsingModals.browseConceptTree("Select a skos:broader", this.selectedScheme, true).then(
             (broader: any) => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
@@ -99,7 +99,7 @@ export class DanglingConceptComponent {
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        this.browsingService.browseConceptTree("Select a skos:broader", this.selectedScheme, false).then(
+        this.browsingModals.browseConceptTree("Select a skos:broader", this.selectedScheme, false).then(
             (broader: any) => {
                 this.icvService.setBroaderForAllDangling(this.selectedScheme, broader).subscribe(
                     stResp => {
@@ -115,7 +115,7 @@ export class DanglingConceptComponent {
      * Fixes concept by removing the concept from the current scheme 
      */
     private removeFromScheme(concept: ARTURIResource) {
-        this.modalService.confirm("Remove from scheme", "Warning, if this concept has narrowers, removing the " +
+        this.basicModals.confirm("Remove from scheme", "Warning, if this concept has narrowers, removing the " +
             "dangling concept from the scheme may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
                 this.skosService.removeConceptFromScheme(concept, this.selectedScheme).subscribe(
@@ -132,7 +132,7 @@ export class DanglingConceptComponent {
      * Fixes concepts by removing them all from the current scheme 
      */
     private removeAllFromScheme() {
-        this.modalService.confirm("Remove from scheme", "Warning, if the concepts have narrowers, removing them " +
+        this.basicModals.confirm("Remove from scheme", "Warning, if the concepts have narrowers, removing them " +
             "may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
                 this.icvService.removeAllDanglingFromScheme(this.selectedScheme).subscribe(

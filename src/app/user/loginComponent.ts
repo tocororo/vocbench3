@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
 import { User } from "../models/User";
 
@@ -19,7 +19,7 @@ export class LoginComponent {
     private password: string = "admin";
 
     constructor(private router: Router, private authService: AuthServices, private userService: UserServices,
-        private modalService: ModalServices) { }
+        private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.userService.getUser().subscribe(

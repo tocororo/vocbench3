@@ -4,8 +4,8 @@ import {DialogRef, ModalComponent} from "angular2-modal";
 import {FormField} from "../../models/CustomForms";
 import {RDFResourceRolesEnum} from "../../models/ARTResources";
 import {VBContext} from "../../utils/VBContext";
-import {BrowsingServices} from "../../widget/modal/browsingModal/browsingServices";
-import {ModalServices} from "../../widget/modal/basicModal/modalServices";
+import {BrowsingModalServices} from "../../widget/modal/browsingModal/browsingModalServices";
+import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
 import {CustomFormsServices} from "../../services/customFormsServices";
 
 export class CustomFormModalData extends BSModalContext {
@@ -35,8 +35,8 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     
     private formFields: FormField[] = [];
     
-    constructor(public dialog: DialogRef<CustomFormModalData>, public cfService: CustomFormsServices, public browsingService: BrowsingServices,
-        private modalService: ModalServices) {
+    constructor(public dialog: DialogRef<CustomFormModalData>, public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices,
+        private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 

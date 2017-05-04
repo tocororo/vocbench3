@@ -19,7 +19,7 @@ export class NoLabelResourceComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private creationModal: CreationModalServices) { }
+        private propService: PropertyServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -51,7 +51,7 @@ export class NoLabelResourceComponent {
      */
     fix(resource: ARTURIResource) {
         if (this.ontoType == "SKOS") {
-            this.creationModal.newPlainLiteral("Add skos:prefLabel").then(
+            this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
                 (data: any) => {
                     this.skosService.setPrefLabel(resource, data.value, data.lang).subscribe(
                         stResp => {
@@ -62,7 +62,7 @@ export class NoLabelResourceComponent {
                 () => { }
             );
         } else if (this.ontoType == "SKOS-XL") {
-            this.creationModal.newPlainLiteral("Add skosxl:prefLabel").then(
+            this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
                 (data: any) => {
                     this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {
@@ -73,7 +73,7 @@ export class NoLabelResourceComponent {
                 () => { }
             );
         } else { //OWL 
-            this.creationModal.newPlainLiteral("Add rdfs:label").then(
+            this.creationModals.newPlainLiteral("Add rdfs:label").then(
                 (data: any) => {
                     this.propService.createAndAddPropValue(resource, RDFS.label, data.value, null, RDFTypesEnum.plainLiteral, data.lang).subscribe(
                         stResp => {

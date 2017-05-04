@@ -5,7 +5,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
-import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
@@ -36,9 +36,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModal: CreationModalServices,
-        cfService: CustomFormsServices, modalService: ModalServices) {
-        super(cfService, modalService);
+        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        super(cfService, basicModals);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (newScheme: ARTURIResource) => this.onSchemeChanged(newScheme)));
@@ -81,7 +81,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     private createTopConcept(cfId?: string) {
-        this.creationModal.newSkosResourceCf("Create new skos:Concept", SKOS.concept, true, cfId).then(
+        this.creationModals.newSkosResourceCf("Create new skos:Concept", SKOS.concept, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -101,7 +101,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     private createNarrower(cfId?: string) {
-        this.creationModal.newSkosResourceCf("Create a skos:narrower", SKOS.concept, true, cfId).then(
+        this.creationModals.newSkosResourceCf("Create a skos:narrower", SKOS.concept, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -181,19 +181,19 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             // this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", null, this.workingScheme).subscribe(
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", 
                 this.preferences.getDefaultLanguage(), this.workingScheme).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.viewChildTree.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.viewChildTree.openTreeAt(selectedResource);
                                 },

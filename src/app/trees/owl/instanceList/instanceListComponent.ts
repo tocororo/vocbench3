@@ -4,7 +4,7 @@ import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SearchServices } from "../../../services/searchServices";
 
 @Component({
@@ -34,7 +34,7 @@ export class InstanceListComponent {
     private eventSubscriptions: any[] = [];
 
     constructor(private owlServices: OwlServices, private clsService: ClassesServices, private searchService: SearchServices,
-        private modalService: ModalServices, private eventHandler: VBEventHandler) {
+        private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: any) => this.onInstanceDeleted(data.instance, data.cls)));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(

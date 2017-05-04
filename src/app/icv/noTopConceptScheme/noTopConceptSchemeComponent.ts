@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { UIUtils } from "../../utils/UIUtils";
@@ -18,7 +18,7 @@ export class NoTopConceptSchemeComponent {
     private brokenSchemeList: Array<ARTURIResource>;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices,
-        private modalService: ModalServices, private browsingService: BrowsingServices, private creationModal: CreationModalServices) { }
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices) { }
 
     /**
      * Run the check
@@ -44,7 +44,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by selecting a top concept 
      */
     selectTopConcept(scheme: ARTURIResource) {
-        this.browsingService.browseConceptTree("Select a top concept", scheme, true).then(
+        this.browsingModals.browseConceptTree("Select a top concept", scheme, true).then(
             (concept: any) => {
                 this.skosService.addTopConcept(concept, scheme).subscribe(
                     (stResp: any) => {
@@ -60,7 +60,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.creationModal.newResource("Create top Concept").then(
+        this.creationModals.newResource("Create top Concept").then(
             (data: any) => {
                 this.skosService.createTopConcept(data.label, data.lang, scheme, data.uri).subscribe(
                     stResp => {
@@ -76,7 +76,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by deleting it 
      */
     deleteScheme(scheme: ARTURIResource) {
-        this.modalService.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some concepts, " +
+        this.basicModals.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             result => {
                 this.skosService.deleteScheme(scheme).subscribe(
@@ -93,7 +93,7 @@ export class NoTopConceptSchemeComponent {
      * Fixes schemes by deleting them all 
      */
     deleteAllScheme() {
-        this.modalService.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
+        this.basicModals.confirm("Delete scheme", "Warning, deleting the schemes, if they contain some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             confirm => {
                 var deleteSchemeFnArray: any[] = [];

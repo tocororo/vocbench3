@@ -18,7 +18,7 @@ export class OverlappedLabelComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private creationModal: CreationModalServices) { }
+        private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -53,7 +53,7 @@ export class OverlappedLabelComponent {
      * Fixes by changing prefLabel
      */
     changePrefLabel(record: any) {
-        this.creationModal.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
+        this.creationModals.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
             (data: any) => {
                 var label = data.value;
@@ -109,7 +109,7 @@ export class OverlappedLabelComponent {
      * Fixes by changing altLabel
      */
     changeAltLabel(record: any) {
-        this.creationModal.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
+        this.creationModals.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
             (data: any) => {
                 var label = data.value;

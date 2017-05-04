@@ -5,9 +5,9 @@ import { SkosxlServices } from "../../services/skosxlServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SKOSXL } from "../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../models/CustomForms";
 
@@ -33,22 +33,22 @@ export abstract class AbstractPredObjListRenderer {
     protected resourcesService: ResourcesServices;
     protected cfService: CustomFormsServices;
     protected skosxlService: SkosxlServices;
-    protected modalService: ModalServices;
-    protected browsingService: BrowsingServices;
-    protected creationModal: CreationModalServices;
+    protected basicModals: BasicModalServices;
+    protected browsingModals: BrowsingModalServices;
+    protected creationModals: CreationModalServices;
     protected rvModalService: ResViewModalServices;
     
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, 
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModalService: ResViewModalServices) {
         this.propService = propService;
         this.cfService = cfService;
         this.skosxlService = skosxlService;
-        this.modalService = modalService;
-        this.creationModal = creationModal;
+        this.basicModals = basicModals;
+        this.creationModals = creationModal;
         this.rvModalService = resViewModalService;
         this.resourcesService = resourcesService;
-        this.browsingService = browsingService;
+        this.browsingModals = browsingModals;
     }
 
     /**
@@ -136,7 +136,7 @@ export abstract class AbstractPredObjListRenderer {
         if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
             predicate.getURI() == SKOSXL.altLabel.getURI() ||
             predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
-            this.creationModal.newPlainLiteral("Add " + predicate.getShow()).then(
+            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
                 (literal: any) => {
                     switch (predicate.getURI()) {
                         case SKOSXL.prefLabel.getURI():
@@ -178,7 +178,7 @@ export abstract class AbstractPredObjListRenderer {
                             this.enrichWithTypedLiteral(predicate, datatypes);
                         } else if (ranges.type == RDFTypesEnum.literal) {
                             var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
-                            this.modalService.select("Select range type", null, options).then(
+                            this.basicModals.select("Select range type", null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.typedLiteral) {
                                         this.enrichWithTypedLiteral(predicate);
@@ -190,7 +190,7 @@ export abstract class AbstractPredObjListRenderer {
                             )
                         } else if (ranges.type == RDFTypesEnum.undetermined) {
                             var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
-                            this.modalService.select("Select range type", null, options).then(
+                            this.basicModals.select("Select range type", null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
                                         this.enrichWithResource(predicate);
@@ -203,7 +203,7 @@ export abstract class AbstractPredObjListRenderer {
                                 () => { }
                             )
                         } else if (ranges.type == "inconsistent") {
-                            this.modalService.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
+                            this.basicModals.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
                         }
                     } else if (ranges != undefined && formCollection != undefined) { //both "classic" and custom range
                         var rangeOptions: CustomForm[] = [];
@@ -223,7 +223,7 @@ export abstract class AbstractPredObjListRenderer {
                         rangeOptions = rangeOptions.concat(customForms);
 
                         //ask the user to choose
-                        this.modalService.selectCustomForm("Select a range type", rangeOptions).then(
+                        this.basicModals.selectCustomForm("Select a range type", rangeOptions).then(
                             (selectedCF: any) => {
                                 //check if selected range is one of the customs
                                 for (var i = 0; i < customForms.length; i++) {
@@ -248,7 +248,7 @@ export abstract class AbstractPredObjListRenderer {
                             this.enrichWithCustomForm(predicate, forms[0]);
                         } else if (forms.length > 1) { //multiple CREntry => ask which one to use
                             //prepare the range options with the custom range entries
-                            this.modalService.selectCustomForm("Select a Custom Range", forms).then(
+                            this.basicModals.selectCustomForm("Select a Custom Range", forms).then(
                                 (selectedCF: any) => {
                                     this.enrichWithCustomForm(predicate, (<CustomForm>selectedCF));
                                     return;
@@ -256,7 +256,7 @@ export abstract class AbstractPredObjListRenderer {
                                 () => {}
                             )
                         } else { //no CR linked to the property has no Entries => error
-                            this.modalService.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " +  predicate.getShow() + 
+                            this.basicModals.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " +  predicate.getShow() + 
                                 ", doesn't contain any CustomForm", "error");
                         }
                     }
@@ -282,7 +282,7 @@ export abstract class AbstractPredObjListRenderer {
      * Opens a newPlainLiteral modal to enrich the predicate with a plain literal value 
      */
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
-        this.creationModal.newPlainLiteral("Add " + predicate.getShow()).then(
+        this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 this.propService.createAndAddPropValue(this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
                     stResp => { this.update.emit(null) }
@@ -296,7 +296,7 @@ export abstract class AbstractPredObjListRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: string[]) {
-        this.creationModal.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
+        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
             (literal: any) => {
                 this.propService.createAndAddPropValue(this.resource, predicate, literal.value, literal.datatype, RDFTypesEnum.typedLiteral).subscribe(
                     stResp => this.update.emit(null)

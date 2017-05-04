@@ -4,7 +4,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
-import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { VBContext } from '../../../../utils/VBContext';
 import { VBPreferences } from '../../../../utils/VBPreferences';
@@ -24,9 +24,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private ONTO_TYPE: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModal: CreationModalServices,
-        cfService: CustomFormsServices, modalService: ModalServices) {
-        super(cfService, modalService);
+        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        super(cfService, basicModals);
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
     }
 
@@ -55,7 +55,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private createScheme(cfId?: string) {
-        this.creationModal.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true, cfId).then(
+        this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true, cfId).then(
             (res: any) => {
                 console.log("returned data ", res);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -91,7 +91,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private deleteNotEmptySchemeHandler() {
         var retainOpt = "Retain dangling concepts";
         var deleteOpt = "Delete dangling concepts";
-        this.modalService.select("Delete scheme", "The operation will produce dangling concepts"
+        this.basicModals.select("Delete scheme", "The operation will produce dangling concepts"
             + " because the scheme is not empty. What do you want to do?", [retainOpt, deleteOpt]).then(
             (selection: any) => {
                 var deleteDanglingConc = selection == deleteOpt;
@@ -157,18 +157,18 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             console.log("1 result");
                             this.selectScheme(this.getSchemeToSelectFromList(searchResult[0]));
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
                                 },

@@ -7,7 +7,7 @@ import { PropertyServices } from "../../../services/propertyServices";
 import { DeleteServices } from "../../../services/deleteServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
@@ -22,15 +22,15 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
     constructor(private propService: PropertyServices, private deleteService: DeleteServices, private searchService: SearchServices,
-        private creationModal: CreationModalServices, cfService: CustomFormsServices, modalService: ModalServices) {
-        super(cfService, modalService);
+        private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        super(cfService, basicModals);
     }
 
     createRoot(role: RDFResourceRolesEnum) {
         let propertyType: ARTURIResource = this.convertRoleToClass(role);
         this.selectCustomForm(propertyType).then(
             cfId => { 
-                this.creationModal.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false, cfId).then(
+                this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false, cfId).then(
                     (data: any) => {
                         this.propService.createProperty(data.cls, data.uriResource, data.cfId, data.cfValueMap).subscribe();
                     },
@@ -45,7 +45,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
         this.selectCustomForm(propertyType).then(
             cfId => {
-                this.creationModal.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false, cfId).then(
+                this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false, cfId).then(
                     (data: any) => {
                         this.propService.createSubProperty(data.cls, data.uriResource, this.selectedNode, data.cfId, data.cfValueMap).subscribe();
                     },
@@ -73,17 +73,17 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.viewChildTree.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.viewChildTree.openTreeAt(selectedResource);
                                 },

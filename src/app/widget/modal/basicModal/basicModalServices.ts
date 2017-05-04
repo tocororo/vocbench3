@@ -10,11 +10,6 @@ import { ConfirmCheckModal, ConfirmCheckModalData } from "./confirmModal/confirm
 import { AlertModal, AlertModalData } from "./alertModal/alertModal";
 import { DownloadModal, DownloadModalData } from "./downloadModal/downloadModal";
 import { FilePickerModal, FilePickerModalData } from "./filePickerModal/filePickerModal";
-// import {NewResourceModal, NewResourceModalData} from "./newResourceModal/newResourceModal";
-// import {NewResourceCfModal, NewResourceCfModalData} from "./newResourceModal/newResourceCfModal";
-// import {NewSkosResourceCfModal, NewSkosResourceCfModalData} from "./newResourceModal/newSkosResourceCfModal";
-// import {NewPlainLiteralModal, NewPlainLiteralModalData} from "./newPlainLiteralModal/newPlainLiteralModal";
-// import {NewTypedLiteralModal, NewTypedLiteralModalData} from "./newTypedLiteralModal/newTypedLiteralModal";
 import { SelectionModal, SelectionModalData } from "./selectionModal/selectionModal";
 import { ResourceSelectionModal, ResourceSelectionModalData } from "./selectionModal/resourceSelectionModal";
 import { CustomFormSelectionModal, CustomFormSelectionModalData } from "./selectionModal/customFormSelectionModal";
@@ -22,7 +17,7 @@ import { CustomFormSelectionModal, CustomFormSelectionModalData } from "./select
 export type ModalType = "info" | "error" | "warning";
 
 @Injectable()
-export class ModalServices {
+export class BasicModalServices {
 
     constructor(private modal: Modal) { }
 

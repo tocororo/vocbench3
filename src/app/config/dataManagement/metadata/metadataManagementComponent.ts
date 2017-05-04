@@ -9,7 +9,7 @@ import { VBContext } from "../../../utils/VBContext";
 import { VBPreferences } from "../../../utils/VBPreferences";
 import { UIUtils } from "../../../utils/UIUtils";
 import { PrefixMapping } from "../../../models/PrefixMapping";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ReplaceBaseURIModal, ReplaceBaseURIModalData } from "./replaceBaseURIModal";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 import { ImportOntologyModal, ImportOntologyModalData, ImportType } from "./importOntologyModal";
@@ -40,7 +40,7 @@ export class MetadataManagementComponent {
     private mirrorList: Array<any>; //array of {file: string, namespace: string}
 
     constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
-        private refactorService: RefactorServices, private modalService: ModalServices, private preferences: VBPreferences,
+        private refactorService: RefactorServices, private basicModals: BasicModalServices, private preferences: VBPreferences,
         private modal: Modal) { }
 
     ngOnInit() {
@@ -168,7 +168,7 @@ export class MetadataManagementComponent {
             var message = "Save change of ";
             if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
                 message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
-                this.modalService.confirm("Refactor", message, "warning").then(
+                this.basicModals.confirm("Refactor", message, "warning").then(
                     confirm => {
                         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
@@ -176,7 +176,7 @@ export class MetadataManagementComponent {
                                 this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                                     stResp => {
                                         UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                                        this.modalService.alert("Refactor", "BaseURI and namespace have been updated successfully");
+                                        this.basicModals.alert("Refactor", "BaseURI and namespace have been updated successfully");
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
@@ -195,13 +195,13 @@ export class MetadataManagementComponent {
                 );
             } else if (this.baseURI != this.pristineBaseURI) { //changed only baseURI
                 message += "baseURI? (Attention, baseURI refactoring could be a long process)";
-                this.modalService.confirm("Refactor", message, "warning").then(
+                this.basicModals.confirm("Refactor", message, "warning").then(
                     confirm => {
                         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                             stResp => {
                                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                                this.modalService.alert("Refactor", "BaseURI has been updated successfully and refactor complete.");
+                                this.basicModals.alert("Refactor", "BaseURI has been updated successfully and refactor complete.");
                                 this.refreshBaseURI();
                                 this.nsBaseURISubmitted = true;
                             }
@@ -215,11 +215,11 @@ export class MetadataManagementComponent {
                 )
             } else if (this.namespace != this.pristineNamespace) {//changed only namespace
                 message += "namespace?";
-                this.modalService.confirm("Save changes", message, "warning").then(
+                this.basicModals.confirm("Save changes", message, "warning").then(
                     confirm => {
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
-                                this.modalService.alert("Refactor", "Mamespace has been updated successfully");
+                                this.basicModals.alert("Refactor", "Mamespace has been updated successfully");
                                 this.refreshDefaultNamespace();
                                 this.nsBaseURISubmitted = true;
                             }
@@ -233,7 +233,7 @@ export class MetadataManagementComponent {
                 )
             }
         } else {
-            this.modalService.alert("Error", "Please insert valid namespace and baseURI", "error");
+            this.basicModals.alert("Error", "Please insert valid namespace and baseURI", "error");
         }
     }
 
@@ -460,7 +460,7 @@ export class MetadataManagementComponent {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebWithUri(mirror: any) {
-        this.modalService.prompt("Update ontology mirror from web", "BaseURI").then(
+        this.basicModals.prompt("Update ontology mirror from web", "BaseURI").then(
             (newNamespace: any) => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.ontoMgrService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
@@ -480,7 +480,7 @@ export class MetadataManagementComponent {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebFromAltUrl(mirror: any) {
-        this.modalService.prompt("Update ontology mirror from web", "URL").then(
+        this.basicModals.prompt("Update ontology mirror from web", "URL").then(
             (url: any) => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
@@ -500,7 +500,7 @@ export class MetadataManagementComponent {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromLocalFile(mirror: any) {
-        this.modalService.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
+        this.basicModals.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
             (file: any) => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(

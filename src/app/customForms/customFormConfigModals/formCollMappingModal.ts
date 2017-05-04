@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { CustomFormsServices } from "../../services/customFormsServices";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { ARTURIResource } from "../../models/ARTResources";
 import { FormCollection } from "../../models/CustomForms";
 import { RDF, OWL } from "../../models/Vocabulary";
@@ -19,7 +19,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     private selectedFormColl: FormCollection;
 
     constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices,
-        private browsingService: BrowsingServices) {
+        private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
 
@@ -32,7 +32,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     }
 
     private selectProperty() {
-        this.browsingService.browsePropertyTree("Select a property").then(
+        this.browsingModals.browsePropertyTree("Select a property").then(
             (prop: any) => {
                 this.selectedResource = prop;
             },
@@ -41,7 +41,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     }
 
     private selectClass() {
-        this.browsingService.browseClassTree("Select a class", [RDF.property, OWL.class, OWL.thing]).then(
+        this.browsingModals.browseClassTree("Select a class", [RDF.property, OWL.class, OWL.thing]).then(
             (cls: any) => {
                 this.selectedResource = cls;
             },

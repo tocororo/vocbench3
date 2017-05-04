@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
@@ -21,7 +21,7 @@ export class OnlyAltLabelResourceComponent {
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private modalService: ModalServices, private creationModal: CreationModalServices) { }
+        private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -59,7 +59,7 @@ export class OnlyAltLabelResourceComponent {
         if (this.ontoType == "SKOS") {
             this.skosService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
-                    this.modalService.selectResource("Select alternative label", null, altLabels).then(
+                    this.basicModals.selectResource("Select alternative label", null, altLabels).then(
                         (selectedAltLabel: any) => {
                             this.changeAltToPref(record.resource, selectedAltLabel).subscribe(
                                 () => {
@@ -74,7 +74,7 @@ export class OnlyAltLabelResourceComponent {
         } else if (this.ontoType == "SKOS-XL") {
             this.skosxlService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
-                    this.modalService.selectResource("Select alternative label", null, altLabels).then(
+                    this.basicModals.selectResource("Select alternative label", null, altLabels).then(
                         (selectedAltLabel: any) => {
                             this.changeAltToPref(record.resource, selectedAltLabel).subscribe(
                                 () => {
@@ -122,7 +122,7 @@ export class OnlyAltLabelResourceComponent {
      */
     addPrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
-            this.creationModal.newPlainLiteral("Add skos:prefLabel").then(
+            this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
                 (data: any) => {
                     this.skosService.setPrefLabel(record.resource, data.value, data.lang).subscribe(
                         stResp => {
@@ -133,7 +133,7 @@ export class OnlyAltLabelResourceComponent {
                 () => { }
             )
         } else if (this.ontoType == "SKOS-XL") {
-            this.creationModal.newPlainLiteral("Add skosxl:prefLabel").then(
+            this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
                 (data: any) => {
                     this.skosxlService.setPrefLabel(record.resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
                         stResp => {

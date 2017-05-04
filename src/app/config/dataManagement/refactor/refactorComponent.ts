@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "refactor-component",
@@ -15,7 +15,7 @@ export class RefactorComponent {
     
     private reifyNotes: boolean = false; //used in skos->skoxl
 
-    constructor(private refactorService: RefactorServices, private modalService: ModalServices) { }
+    constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -30,7 +30,7 @@ export class RefactorComponent {
     }
 
     private skosToSkosxl() {
-        this.modalService.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", "warning").then(
+        this.basicModals.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
@@ -45,7 +45,7 @@ export class RefactorComponent {
     }
 
     private skosxlToSkos() {
-        this.modalService.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", "warning").then(
+        this.basicModals.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.SKOSXLtoSKOS().subscribe(
@@ -61,7 +61,7 @@ export class RefactorComponent {
 
     //TODO: some event in order to destroy the data component
     private migrateData() {
-        this.modalService.confirm("Migrate data", "This could be a long process. Are you sure to continue?", "warning").then(
+        this.basicModals.confirm("Migrate data", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(

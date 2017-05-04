@@ -30,6 +30,7 @@ import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { UserServices } from "../services/userServices";
+import { VersionsServices } from "../services/versionsServices";
 
 @NgModule({
     imports: [HttpModule],
@@ -63,7 +64,8 @@ import { UserServices } from "../services/userServices";
         SkosServices,
         SkosxlServices,
         SparqlServices,
-        UserServices
+        UserServices,
+        VersionsServices
     ]
 })
 export class STServicesModule { }

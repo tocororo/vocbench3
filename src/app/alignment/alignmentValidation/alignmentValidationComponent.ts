@@ -5,7 +5,7 @@ import { VBContext } from "../../utils/VBContext";
 import { Cookie } from "../../utils/Cookie";
 import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource } from "../../models/ARTResources";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AlignmentCell } from "./AlignmentCell";
 import { ValidationSettingsModal } from "./validationSettingsModal/validationSettingsModal"
 import { ValidationReportModal, ValidationReportModalData } from "./validationReportModal/validationReportModal"
@@ -53,7 +53,7 @@ export class AlignmentValidationComponent {
     ];
 
     constructor(private alignmentService: AlignmentServices,
-        private modalService: ModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         //init settings (where not provided, set a default)
@@ -146,7 +146,7 @@ export class AlignmentValidationComponent {
                 //replace the accepted alignment cell with the returned one
                 this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
                 if ((<AlignmentCell>resultCell).getStatus() == "error") {
-                    this.modalService.alert("Error", (<AlignmentCell>resultCell).getComment(), "error");
+                    this.basicModals.alert("Error", (<AlignmentCell>resultCell).getComment(), "error");
                 }
             }
         )
@@ -188,7 +188,7 @@ export class AlignmentValidationComponent {
     private changeRelation(cell: AlignmentCell, relation: string) {
         //change relation only if user choses a relation different from the current
         if (cell.getRelation() != relation) {
-            this.modalService.confirm("Change relation",
+            this.basicModals.confirm("Change relation",
                 "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
                 "warning").then(
                 confirm => {
@@ -308,7 +308,7 @@ export class AlignmentValidationComponent {
      */
     private applyToOnto() {
         if (this.rejectedAlignmentAction == "skip") {
-            this.modalService.confirm("Apply validation", "This operation will add to the ontology the triples of the "
+            this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments. Are you sure to continue?", "warning").then(
                 confirm => {
                     this.applyValidation(false);
@@ -316,7 +316,7 @@ export class AlignmentValidationComponent {
                 () => { }
                 );
         } else if (this.rejectedAlignmentAction == "delete") {
-            this.modalService.confirm("Apply validation", "This operation will add to the ontology the triples of the "
+            this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments and delete the triples of the ones rejected. Are you sure to continue?", "warning").then(
                 confirm => {
                     this.applyValidation(true);
@@ -324,7 +324,7 @@ export class AlignmentValidationComponent {
                 () => { }
                 );
         } else if (this.rejectedAlignmentAction == "ask") {
-            this.modalService.confirmCheck("Apply valdiation", "This operation will add to the ontology the triples of the "
+            this.basicModals.confirmCheck("Apply valdiation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments. Are you sure to continue?", "Delete triples of rejected alignments", "warning").then(
                 (confirm: any) => {
                     this.applyValidation(confirm);
@@ -361,7 +361,7 @@ export class AlignmentValidationComponent {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.modalService.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
+                this.basicModals.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
             }
         );
     }

@@ -11,7 +11,7 @@ import { VBContext } from '../utils/VBContext';
 import { VBPreferences } from '../utils/VBPreferences';
 import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "project-component",
@@ -23,7 +23,7 @@ export class ProjectComponent implements OnInit {
     private selectedProject: Project; //project selected in the list
 
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private preferences: VBPreferences, private router: Router, private modalService: ModalServices, private modal: Modal) {
+        private preferences: VBPreferences, private router: Router, private basicModals: BasicModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -58,11 +58,11 @@ export class ProjectComponent implements OnInit {
 
     private deleteProject() {
         if (this.selectedProject.isOpen()) {
-            this.modalService.alert("Delete project", this.selectedProject.getName() +
+            this.basicModals.alert("Delete project", this.selectedProject.getName() +
                 " is currently open. Please, close the project and then retry.", "warning");
             return;
         } else {
-            this.modalService.confirm("Delete project", "Attention, this operation will delete the project " +
+            this.basicModals.confirm("Delete project", "Attention, this operation will delete the project " +
                 this.selectedProject.getName() + ". Are you sure to proceed?", "warning").then(
                 result => {
                     this.projectService.deleteProject(this.selectedProject).subscribe(
@@ -93,13 +93,13 @@ export class ProjectComponent implements OnInit {
      */
     private exportProject() {
         if (!this.selectedProject.isOpen()) {
-            this.modalService.alert("Export project", "You can export only open projects", "error");
+            this.basicModals.alert("Export project", "You can export only open projects", "error");
             return;
         }
         this.projectService.exportProject(this.selectedProject).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.modalService.downloadLink("Export project", null, exportLink, "export.zip");
+                this.basicModals.downloadLink("Export project", null, exportLink, "export.zip");
             }
         );
     }
@@ -141,7 +141,7 @@ export class ProjectComponent implements OnInit {
     private closeProject(project: Project) {
         if (project.getType() == ProjectTypesEnum.saveToStore) {
             //if closing project is non-persistent ask to save
-            this.modalService.confirm("Save project", "You're closing a non-persistent project " + project.getName()
+            this.basicModals.confirm("Save project", "You're closing a non-persistent project " + project.getName()
                 + ". Do you want to save changes?", "warning").then(
                 confirm => {//save then disconnect
                     this.projectService.saveProject(project).subscribe(
@@ -179,7 +179,7 @@ export class ProjectComponent implements OnInit {
         this.projectService.saveProject(project).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                this.modalService.alert("Save project", "Project " + project.getName() + " saved successfully");
+                this.basicModals.alert("Save project", "Project " + project.getName() + " saved successfully");
             },
             err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
         );

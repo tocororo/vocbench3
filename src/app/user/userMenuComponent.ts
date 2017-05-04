@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from '@angular/router';
 import { AuthServices } from "../services/authServices";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { User } from "../models/User";
@@ -16,7 +16,7 @@ export class UserMenuComponent {
     private currentUser: User;
 
     constructor(private router: Router, private evtHandler: VBEventHandler,
-        private authService: AuthServices, private modalService: ModalServices) { }
+        private authService: AuthServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.currentUser = VBContext.getLoggedUser();

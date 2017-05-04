@@ -6,7 +6,7 @@ import { OwlServices } from "../../../services/owlServices";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
 import { RDFS, OWL } from "../../../models/Vocabulary";
-import { BrowsingServices } from '../../../widget/modal/browsingModal/browsingServices';
+import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 
 @Component({
@@ -33,13 +33,13 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
     removeBtnImgTitle = "Remove class axiom";
 
     constructor(private propertyService: PropertyServices, private owlService: OwlServices, private manchService: ManchesterServices,
-        private cfService: CustomFormsServices, private browsingService: BrowsingServices, private resViewModalService: ResViewModalServices) {
+        private cfService: CustomFormsServices, private browsingModals: BrowsingModalServices, private resViewModalService: ResViewModalServices) {
         super();
     }
 
     add(predicate?: ARTURIResource) {
         if (predicate == undefined) {
-            this.browsingService.browsePropertyTree("Select a property", this.rootProperties).then(
+            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                 (selectedProp: any) => {
                     if (this.isKnownProperty(selectedProp)) {
                         this.enrichProperty(selectedProp);

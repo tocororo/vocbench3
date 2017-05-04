@@ -4,8 +4,8 @@ import {FormsModule} from '@angular/forms';
 
 import {SharedModule} from './sharedModule';
 
-import {ModalServices} from "../widget/modal/basicModal/modalServices";
-import {BrowsingServices} from "../widget/modal/browsingModal/browsingServices";
+import {BasicModalServices} from "../widget/modal/basicModal/basicModalServices";
+import {BrowsingModalServices} from "../widget/modal/browsingModal/browsingModalServices";
 
 import {CustomFormModal} from '../customForms/customForm/customFormModal';
 import {CustomForm} from '../customForms/customForm/customFormComponent';
@@ -18,7 +18,7 @@ import {ImportCfModal} from '../customForms/customFormConfigModals/importCfModal
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
-    providers: [ModalServices, BrowsingServices],
+    providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
         CustomForm,
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,

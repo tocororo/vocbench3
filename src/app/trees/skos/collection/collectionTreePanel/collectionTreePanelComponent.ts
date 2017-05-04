@@ -5,7 +5,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
-import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
@@ -24,9 +24,9 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     private ONTO_TYPE: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private creationModal: CreationModalServices,
-        cfService: CustomFormsServices, modalService: ModalServices) {
-        super(cfService, modalService);
+        private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        super(cfService, basicModals);
     }
 
     ngOnInit() {
@@ -60,7 +60,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     private createCollection(collectionType: ARTURIResource, cfId: string) {
-        this.creationModal.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true, cfId).then(
+        this.creationModals.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -94,7 +94,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     private createNestedCollection(collectionType: ARTURIResource, cfId: string) {
-         this.creationModal.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true, cfId).then(
+         this.creationModals.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true, cfId).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -163,17 +163,17 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.viewChildTree.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.viewChildTree.openTreeAt(selectedResource);
                                 },

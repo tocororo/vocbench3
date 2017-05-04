@@ -1,7 +1,7 @@
 import {Component, Input, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
 import {Modal} from 'angular2-modal/plugins/bootstrap';
 import {ARTResource, ARTURIResource} from "../models/ARTResources";
-import {ModalServices} from "../widget/modal/basicModal/modalServices";
+import {BasicModalServices} from "../widget/modal/basicModal/basicModalServices";
 import {RefactorServices} from "../services/refactorServices";
 
 @Component({
@@ -22,7 +22,7 @@ export class ResourceRenameComponent {
     private renameLocked = true;
     private namespaceLocked = true;
     
-    constructor(private refactorService: RefactorServices, private modalService: ModalServices) {}
+    constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) {}
     
     ngOnInit() {
         if (this.resource.isURIResource()) {
@@ -68,7 +68,7 @@ export class ResourceRenameComponent {
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         if (this.namespaceLocked) { //just the namespace has changed
             if (this.localName.trim() == "") {
-                this.modalService.alert("Rename", "You have to write a valid local name", "error");
+                this.basicModals.alert("Rename", "You have to write a valid local name", "error");
                 this.cancelRename()
                 return;
             }
@@ -76,7 +76,7 @@ export class ResourceRenameComponent {
         } else { //complete renaming (ns + localName)
             newUri = this.totalRenameInput.nativeElement.value;
             if (newUri.trim() == "") {
-                this.modalService.alert("Rename", "You have to write a valid URI", "error");
+                this.basicModals.alert("Rename", "You have to write a valid URI", "error");
                 this.cancelRename()
                 return;
             }
@@ -110,9 +110,9 @@ export class ResourceRenameComponent {
         try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
-            this.modalService.alert("Copy resource URI", "Resource URI copied in clipboard!");
+            this.basicModals.alert("Copy resource URI", "Resource URI copied in clipboard!");
         } catch (err) {
-            this.modalService.alert("Copy resource URI", "Unable to copy the resource URI in the clipboard");
+            this.basicModals.alert("Copy resource URI", "Unable to copy the resource URI in the clipboard");
         } finally {
             document.body.removeChild(textArea);
         }

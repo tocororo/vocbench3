@@ -8,8 +8,8 @@ import { Plugin, PluginConfiguration } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
-import { PluginConfigModal, PluginConfigModalData } from "../../../widget/modal/pluginConfigModal/pluginConfigModal";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/filterGraphsModal";
 
 @Component({
@@ -34,7 +34,7 @@ export class ExportDataComponent {
     private selectedFilterChainElement: FilterChainElement;
 
     constructor(private pluginService: PluginsServices, private exportService: ExportServices, private metadataService: MetadataServices,
-        private modalService: ModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.exportService.getOutputFormats().subscribe(
@@ -206,7 +206,8 @@ export class ExportDataComponent {
 
     private configureFilter(filterChainEl: FilterChainElement) {
         var selectedConfiguration: PluginConfiguration = filterChainEl.selectedPlugin.selectedConfiguration;
-        this.openConfigurationModal(selectedConfiguration).then(
+        // this.openConfigurationModal(selectedConfiguration).then(
+        this.sharedModals.configurePlugin(selectedConfiguration).then(
             (filterCfg: any) => {
                 //update the selected configuration...
                 filterChainEl.selectedPlugin.selectedConfiguration = filterCfg;
@@ -219,17 +220,6 @@ export class ExportDataComponent {
                 }
             },
             () => { }
-        );
-    }
-
-    private openConfigurationModal(configuration: PluginConfiguration) {
-        var modalData = new PluginConfigModalData(configuration);
-        const builder = new BSModalContextBuilder<PluginConfigModalData>(
-            modalData, undefined, PluginConfigModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PluginConfigModal, overlayConfig).then(
-            dialog => dialog.result
         );
     }
 
@@ -275,7 +265,7 @@ export class ExportDataComponent {
         //check if every filter has been configured
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
-                this.modalService.alert("Missing filter configuration", "An export filter ("
+                this.basicModals.alert("Missing filter configuration", "An export filter ("
                     + this.filtersChain[i].selectedPlugin.plugin.factoryID + ") need to be configured", "warning");
                 return;
             }
@@ -324,18 +314,18 @@ export class ExportDataComponent {
             blob => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 var exportLink = window.URL.createObjectURL(blob);
-                this.modalService.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+                this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
             },
             err => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                this.modalService.confirm("Warning", err + " Do you want to force the export?", "warning").then(
+                this.basicModals.confirm("Warning", err + " Do you want to force the export?", "warning").then(
                     yes => {
                         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat, true).subscribe(
                             blob => {
                                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                                 var exportLink = window.URL.createObjectURL(blob);
-                                this.modalService.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+                                this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
                             }
                         );
                     },

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { SparqlServices } from "../services/sparqlServices";
-import { ModalServices } from '../widget/modal/basicModal/modalServices';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { PrefixMapping } from "../models/PrefixMapping";
@@ -16,7 +16,7 @@ export class SparqlComponent {
     private tabs: Array<any> = [];
     private activeTab: any;
 
-    constructor(private sparqlService: SparqlServices, private modalService: ModalServices) { }
+    constructor(private sparqlService: SparqlServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         //collect the prefix namespace mappings
@@ -222,7 +222,7 @@ export class SparqlComponent {
         var data = new Blob([fileContent], { type: 'text/plain' });
         var textFile = window.URL.createObjectURL(data);
         var fileName = "result." + type;
-        this.modalService.downloadLink("Save SPARQL results", null, textFile, fileName).then(
+        this.basicModals.downloadLink("Save SPARQL results", null, textFile, fileName).then(
             done => { window.URL.revokeObjectURL(textFile); },
             () => { }
         );

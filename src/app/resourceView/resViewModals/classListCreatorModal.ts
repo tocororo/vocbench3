@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTResource, ARTURIResource, ARTBNode, ResAttribute, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { ModalServices } from '../../widget/modal/basicModal/modalServices';
+import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { ManchesterServices } from "../../services/manchesterServices";
 
 export class ClassListCreatorModalData extends BSModalContext {
@@ -26,7 +26,7 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
     private duplicateResource: ARTResource; //resource tried to add to the classList but already there 
 
     constructor(public dialog: DialogRef<ClassListCreatorModalData>, public manchService: ManchesterServices,
-        private modalService: ModalServices) {
+        private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -70,7 +70,7 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
                     this.manchExpr = null;
                     this.duplicateResource = null;
                 } else {
-                    this.modalService.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
+                    this.basicModals.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
                 }
             }
         )

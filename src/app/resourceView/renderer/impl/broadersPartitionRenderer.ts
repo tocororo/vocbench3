@@ -10,8 +10,8 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
-import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
@@ -33,9 +33,9 @@ export class BroadersPartitionRenderer extends AbstractPredObjListRenderer {
     removeBtnImgTitle = "Remove broader";
 
     constructor(propService: PropertyServices, resourceService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
         private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourceService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
+        super(propService, resourceService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
     }
     
 

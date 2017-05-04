@@ -4,7 +4,7 @@ import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 import { AbstractTree } from "../../../abstractTree";
 
@@ -23,7 +23,7 @@ export class ConceptTreeComponent extends AbstractTree {
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private modalService: ModalServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
         eventHandler: VBEventHandler) {
 
         super(eventHandler);

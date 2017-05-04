@@ -7,9 +7,10 @@ import { TreeAndListModule } from "./treeAndListModule";
 import { CustomFormModule } from "./customFormModule";
 
 //services to open modals
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
-import { BrowsingServices } from "../widget/modal/browsingModal/browsingServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 //basic modals
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
@@ -24,7 +25,8 @@ import { ResourceSelectionModal } from '../widget/modal/basicModal/selectionModa
 import { CustomFormSelectionModal } from '../widget/modal/basicModal/selectionModal/customFormSelectionModal';
 
 //shared modals
-import { PluginConfigModal } from "../widget/modal/pluginConfigModal/pluginConfigModal";
+import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
+import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
 
 //browsing modals
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
@@ -54,7 +56,6 @@ import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceA
 import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
 
 //project config modal
-import { RemoteAccessConfigModal } from "../project/createProject/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal } from "../project/createProject/remoteRepoSelectionModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 import { ProjectACLModal } from "../project/projectACL/projectACLModal";
@@ -66,8 +67,9 @@ import { UserProjBindingModal } from "../administration/administrationModals/use
 import { CapabilityEditorModal } from "../administration/administrationModals/capabilityEditorModal";
 import { ImportRoleModal } from "../administration/administrationModals/importRoleModal";
 
-//export modals
+//config modals
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
+import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 
 //this is used only in newResource modals, if it will be useful elsewhere, it can be moved in sharedModule
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
@@ -84,11 +86,11 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
-        PluginConfigModal, FilterGraphsModal,
+        PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput
     ],
     exports: [],
-    providers: [ModalServices, BrowsingServices, CreationModalServices],
+    providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
      * (From ngModule FAQ https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-what-not-to-export)
@@ -107,7 +109,7 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
-        PluginConfigModal, FilterGraphsModal
+        PluginConfigModal, FilterGraphsModal, DumpCreationModal
     ]
 })
 export class VBModalModule { }

@@ -1,5 +1,5 @@
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
-import { Project } from '../models/Project';
+import { Project, VersionInfo } from '../models/Project';
 import { PrefixMapping } from '../models/PrefixMapping';
 import { User } from '../models/User';
 import { Cookie } from "./Cookie";
@@ -30,6 +30,7 @@ export class VBContext {
     private static workingProjectCtx: ProjectContext = new ProjectContext();
     private static projectChanged: boolean;
     private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
+    private static ctxVersion: VersionInfo; //version used
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     private static loggedUser: User;
 
@@ -91,13 +92,24 @@ export class VBContext {
     static getContextProject(): Project {
         return this.ctxProject;
     }
-
     /**
      * Removes a contextual project (project temporarly used in some scenarios)
      */
     static removeContextProject() {
         this.ctxProject = null;
     }
+
+
+    static setContextVersion(version: VersionInfo) {
+        this.ctxVersion = version;
+    }
+    static getContextVersion(): VersionInfo {
+        return this.ctxVersion;
+    }
+    static removeContextVersion() {
+        this.ctxVersion = null;
+    }
+    
 
     static setLoggedUser(user: User) {
         this.loggedUser = user;

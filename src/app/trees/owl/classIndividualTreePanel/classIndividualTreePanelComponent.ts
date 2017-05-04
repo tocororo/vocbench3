@@ -6,7 +6,7 @@ import { SearchServices } from "../../../services/searchServices";
 import { OwlServices } from "../../../services/owlServices";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { DeleteServices } from "../../../services/deleteServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -39,7 +39,7 @@ export class ClassIndividualTreePanelComponent {
     private selectedInstance: ARTURIResource;
 
     constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
-        private deleteService: DeleteServices, private modalService: ModalServices, private sanitizer: DomSanitizer) { }
+        private deleteService: DeleteServices, private basicModals: BasicModalServices, private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
         this.refreshTreeListStyles();
@@ -47,17 +47,17 @@ export class ClassIndividualTreePanelComponent {
 
     private doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },

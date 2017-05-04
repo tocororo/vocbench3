@@ -7,7 +7,7 @@ import { SKOSXL } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ManchesterServices } from "../../services/manchesterServices";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
 
@@ -34,7 +34,7 @@ export class EditableResourceComponent {
 	private resourceStringValue: string; //editable representation of the resource
 
 	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices, private manchesterService: ManchesterServices,
-		private modalService: ModalServices, private rvModalService: ResViewModalServices) { }
+		private basicModals: BasicModalServices, private rvModalService: ResViewModalServices) { }
 
 	private edit() {
 		if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
@@ -136,7 +136,7 @@ export class EditableResourceComponent {
 					this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
 					let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
 						+ ". The change may cause an inconsistency. Do you want to apply the change? ";
-					this.modalService.confirm("Warning", warningMsg, "warning").then(
+					this.basicModals.confirm("Warning", warningMsg, "warning").then(
 						confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
 						reject => { this.editInProgress = false; }
 					);
@@ -144,7 +144,7 @@ export class EditableResourceComponent {
 					this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
 				}
 			} catch (err) {
-				this.modalService.alert("Edit", err, "error");
+				this.basicModals.alert("Edit", err, "error");
 				this.editInProgress = false;
 			}
 		} else {

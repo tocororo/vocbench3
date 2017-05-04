@@ -177,3 +177,9 @@ export class Repository {
     public readable: boolean;
     public writable: boolean;
 }
+
+export class VersionInfo {
+    public id: string;
+    public date: string;
+    public location: string;
+}

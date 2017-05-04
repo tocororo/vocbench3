@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { UserServices } from "../services/userServices";
 import { User, UserStatusEnum } from "../models/User";
 import { VBContext } from "../utils/VBContext";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "users-admin-component",
@@ -18,7 +18,7 @@ export class UsersAdministrationComponent {
     private showDisabled: boolean = true;
     private showNew: boolean = true;
 
-    constructor(private userService: UserServices, private modalService: ModalServices) { }
+    constructor(private userService: UserServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initUserList();
@@ -54,7 +54,7 @@ export class UsersAdministrationComponent {
     private enableDisableUser() {
         var enabled = this.selectedUser.getStatus() == UserStatusEnum.ENABLED;
         if (enabled) {
-            this.modalService.confirm("Disable user", "You are disabling user "
+            this.basicModals.confirm("Disable user", "You are disabling user "
                 + this.selectedUser.getFirstName() + " " + this.selectedUser.getLastName() + ". Are you sure?").then(
                 result => {
                     this.userService.enableUser(this.selectedUser.getEmail(), false).subscribe(
@@ -66,7 +66,7 @@ export class UsersAdministrationComponent {
                 () => {}
             );
         } else {
-            this.modalService.confirm("Enable user", "You are enabling user "
+            this.basicModals.confirm("Enable user", "You are enabling user "
                 + this.selectedUser.getFirstName() + " " + this.selectedUser.getLastName() + ". Are you sure?", "warning").then(
                 result => {
                     this.userService.enableUser(this.selectedUser.getEmail(), true).subscribe(
@@ -86,7 +86,7 @@ export class UsersAdministrationComponent {
     }
 
     private deleteUser() {
-        this.modalService.confirm("Delete user", "You are deleting user "
+        this.basicModals.confirm("Delete user", "You are deleting user "
             + this.selectedUser.getFirstName() + " " + this.selectedUser.getLastName() + ". Are you sure?", "warning").then(
             result => {
                 this.userService.deleteUser(this.selectedUser.getEmail()).subscribe(

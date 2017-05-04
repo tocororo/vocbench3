@@ -12,13 +12,9 @@ import { ARTURIResource } from "../../../models/ARTResources";
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
- * I cannot use the existing modalService because the tree Compoenents inside the browsingModals already opens modals in case of
- * excpetions, so they have already injected modalService. So, modalService would crates a CustomModal that 
- * needs a tree Component injected, and the tree Compoenent in turn needs modalService injected creating a injection cycle
- * modalService -> CustomModal -> treeComponent -> modalService
  */
 @Injectable()
-export class BrowsingServices {
+export class BrowsingModalServices {
 
     constructor(private modal: Modal) { }
 

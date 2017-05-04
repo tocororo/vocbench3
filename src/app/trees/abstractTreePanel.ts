@@ -3,7 +3,7 @@ import { AbstractPanel } from "./abstractPanel";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "panel",
@@ -23,8 +23,8 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     /**
      * CONSTRUCTOR
      */
-    constructor(cfService: CustomFormsServices, modalService: ModalServices) {
-        super(cfService, modalService);
+    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        super(cfService, basicModals);
     }
 
     /**

@@ -6,8 +6,8 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
@@ -32,13 +32,13 @@ export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
     removeBtnImgTitle = "Remove note";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
+        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {
         if (predicate == null) {
-            this.browsingService.browsePropertyTree("Select a property", [this.rootProperty]).then(
+            this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
                 (selectedProp: any) => {
                     this.add(selectedProp);
                 },

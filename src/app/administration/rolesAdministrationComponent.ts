@@ -4,7 +4,7 @@ import { OverlayConfig } from 'angular2-modal';
 import { CapabilityEditorModal, CapabilityEditorModalData } from "./administrationModals/capabilityEditorModal";
 import { ImportRoleModal, ImportRoleModalData } from "./administrationModals/importRoleModal";
 import { AdministrationServices } from "../services/administrationServices";
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { Role } from "../models/User";
 import { Project } from "../models/Project";
 import { VBContext } from "../utils/VBContext";
@@ -26,7 +26,7 @@ export class RolesAdministrationComponent {
     private capabilityList: string[];
     private selectedCapability: string;
 
-    constructor(private adminService: AdministrationServices, private modalService: ModalServices, private modal: Modal) { }
+    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.project = VBContext.getWorkingProject();
@@ -58,10 +58,10 @@ export class RolesAdministrationComponent {
     }
 
     private createRole() {
-        this.modalService.prompt("Create role", "Role name", null, null, false, true).then(
+        this.basicModals.prompt("Create role", "Role name", null, null, false, true).then(
             (result: any) => {
                 if (this.roleExists(result)) {
-                    this.modalService.alert("Duplicated role", "A role with the same name (" + result + ") already exists", "error");
+                    this.basicModals.alert("Duplicated role", "A role with the same name (" + result + ") already exists", "error");
                     return;
                 }
                 this.adminService.createRole(result).subscribe(
@@ -92,7 +92,7 @@ export class RolesAdministrationComponent {
             dialog => dialog.result.then(
                 (data: any) => {
                     if (this.roleExists(data.name)) {
-                        this.modalService.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", "error");
+                        this.basicModals.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", "error");
                         return;
                     }
                     this.adminService.importRole(data.file, data.name).subscribe(
@@ -109,7 +109,7 @@ export class RolesAdministrationComponent {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.modalService.downloadLink("Export Role", null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
+                this.basicModals.downloadLink("Export Role", null, exportLink, "role_" + this.selectedRole.getName() + ".pl");
             }
         )
     }
@@ -137,7 +137,7 @@ export class RolesAdministrationComponent {
             dialog => dialog.result.then(
                 (capability: any) => {
                     if (this.capabilityList.indexOf(capability) != -1) {
-                        this.modalService.alert("Duplicated capability", "Capability " + capability + 
+                        this.basicModals.alert("Duplicated capability", "Capability " + capability + 
                             " already exists in role " + this.selectedRole.getName(), "error").then();
                         return;
                     }
@@ -171,7 +171,7 @@ export class RolesAdministrationComponent {
             dialog => dialog.result.then(
                 (capability: any) => {
                     if (this.capabilityList.indexOf(capability) != -1) {
-                        this.modalService.alert("Duplicated capability", "Capability " + capability + 
+                        this.basicModals.alert("Duplicated capability", "Capability " + capability + 
                             " already exists in role " + this.selectedRole.getName(), "error").then();
                         return;
                     }

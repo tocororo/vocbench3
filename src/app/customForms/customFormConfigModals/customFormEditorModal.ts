@@ -5,8 +5,8 @@ import { ConverterPickerModal, ConverterPickerModalData } from "./converterPicke
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType } from "../../models/CustomForms";
 import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
 export class CustomFormEditorModalData extends BSModalContext {
@@ -44,8 +44,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private submitted: boolean = false;
     private errorMsg: string;
 
-    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private browsingService: BrowsingServices,
-        private modalService: ModalServices, private cfService: CustomFormsServices) {
+    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private browsingModals: BrowsingModalServices,
+        private basicModals: BasicModalServices, private cfService: CustomFormsServices) {
         this.context = dialog.context;
     }
 
@@ -97,7 +97,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         }
     }
     private addPropToChain(where?: "before" | "after") {
-        this.browsingService.browsePropertyTree("Add property").then(
+        this.browsingModals.browsePropertyTree("Add property").then(
             (prop: any) => {
                 console.log("adding " + prop.getURI() + " " + where);
                 if (where == null) {
@@ -152,7 +152,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         if (serializedPropChain.length > 0) {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
         }
-        this.modalService.prompt("Edit property chain", null, "Write the chain as sequenze of IRI comma (,) separated", serializedPropChain, true).then(
+        this.basicModals.prompt("Edit property chain", null, "Write the chain as sequenze of IRI comma (,) separated", serializedPropChain, true).then(
             (value: any) => {
                 var chain: string = String(value).trim();
                 if (chain.length != 0) {

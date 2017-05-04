@@ -2,15 +2,14 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal";
 import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
-import { PluginConfigModal, PluginConfigModalData } from "../../widget/modal/pluginConfigModal/pluginConfigModal";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
@@ -79,7 +78,7 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
 
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, private pluginService: PluginsServices,
-        private router: Router, private modalService: ModalServices, private modal: Modal) {
+        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -159,18 +158,16 @@ export class CreateProjectComponent {
      * Configure the selected repository access in case it is remote.
      */
     private configureRemoteRepositoryAccess() {
-        var modalData = new RemoteAccessConfigModalData(this.remoteAccessConfig);
-        const builder = new BSModalContextBuilder<RemoteAccessConfigModalData>(
-            modalData, undefined, RemoteAccessConfigModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(RemoteAccessConfigModal, overlayConfig).then(
-            dialog => dialog.result
+        this.sharedModals.configureRemoteRepositoryAccess(this.remoteAccessConfig).then(
+            (config: any) => {
+                this.remoteAccessConfig = config;
+            },
+            () => {}
         );
     }
 
     private configureDataRepo() {
-        this.openConfigurePluginModal(this.selectedDataRepoConf.configuration).then(
+        this.sharedModals.configurePlugin(this.selectedDataRepoConf.configuration).then(
             (config: any) => {
                 this.selectedDataRepoConf.configuration.params = (<PluginConfiguration>config).params;
             },
@@ -180,7 +177,7 @@ export class CreateProjectComponent {
 
     private changeRemoteRepository(repoType: "data" | "support") {
         if (this.remoteAccessConfig.serverURL == null || this.remoteAccessConfig.serverURL.trim() == "") {
-            this.modalService.alert("Missing configuration", "The remote repository has not been configure ('Remote Access Config')."
+            this.basicModals.alert("Missing configuration", "The remote repository has not been configure ('Remote Access Config')."
                 + " Please, enter at least the server url, then retry.", "error");
             return;
         }
@@ -196,7 +193,7 @@ export class CreateProjectComponent {
     }
 
     private configureSupportRepo() {
-        this.openConfigurePluginModal(this.selectedSupportRepoConf.configuration).then(
+        this.sharedModals.configurePlugin(this.selectedSupportRepoConf.configuration).then(
             (config: any) => {
                 this.selectedSupportRepoConf.configuration.params = (<PluginConfiguration>config).params;
             },
@@ -228,7 +225,7 @@ export class CreateProjectComponent {
     }
 
     private configureUriGenConf() {
-        this.openConfigurePluginModal(this.selectedUriGenPluginConf).then(
+        this.sharedModals.configurePlugin(this.selectedUriGenPluginConf).then(
             (config: any) => {
                 this.selectedUriGenPluginConf.params = (<PluginConfiguration>config).params;
             },
@@ -260,26 +257,12 @@ export class CreateProjectComponent {
     }
 
     private configureRendEngConf() {
-        this.openConfigurePluginModal(this.selectedRendEngPluginConf).then(
+        this.sharedModals.configurePlugin(this.selectedRendEngPluginConf).then(
             (config: any) => {
                 this.selectedRendEngPluginConf.params = (<PluginConfiguration>config).params;
             },
             () => {}
         )
-    }
-
-    /**
-     * Opens a modal to change configurations
-     */
-    private openConfigurePluginModal(configuration: PluginConfiguration) {
-        var modalData = new PluginConfigModalData(configuration);
-        const builder = new BSModalContextBuilder<PluginConfigModalData>(
-            modalData, undefined, PluginConfigModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PluginConfigModal, overlayConfig).then(
-            dialog => dialog.result
-        );
     }
 
     /**
@@ -301,12 +284,12 @@ export class CreateProjectComponent {
 
         //check project name
         if (!this.projectName || this.projectName.trim() == "") {
-            this.modalService.alert("Create project", "Project name is missing or not valid", "warning");
+            this.basicModals.alert("Create project", "Project name is missing or not valid", "warning");
             return;
         }
         //check baseURI
         if (!this.baseURI || this.baseURI.trim() == "") {
-            this.modalService.alert("Create project", "BaseURI is missing or not valid", "warning");
+            this.basicModals.alert("Create project", "BaseURI is missing or not valid", "warning");
             return;
         }
 
@@ -318,7 +301,7 @@ export class CreateProjectComponent {
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
             if ((!this.remoteAccessConfig.serverURL || this.remoteAccessConfig.serverURL.trim() == "")) {
-                this.modalService.alert("Create project",
+                this.basicModals.alert("Create project",
                     "Remote repository access/creation requires a configuration. Please check serverURL, username and password in 'Remote Access Config'.", "warning");
                 return;
             }
@@ -337,7 +320,7 @@ export class CreateProjectComponent {
                 //...and in case if every required configuration parameters are not null
                 for (var i = 0; i < coreRepoConfigParams.length; i++) {
                     if (coreRepoConfigParams[i].required && coreRepoConfigParams[i].value != null) {
-                        this.modalService.alert("Create project",
+                        this.basicModals.alert("Create project",
                             "Data Repository (" + this.selectedDataRepoConf.configuration.shortName + ") requires to be configured", "warning");
                         return;
                     }
@@ -367,7 +350,7 @@ export class CreateProjectComponent {
                 //...and in case if every required configuration parameters are not null
                 for (var i = 0; i < supportRepoConfigParams.length; i++) {
                     if (supportRepoConfigParams[i].required && supportRepoConfigParams[i].value != null) {
-                        this.modalService.alert("Create project",
+                        this.basicModals.alert("Create project",
                             "History/Validation Repository (" + this.selectedSupportRepoConf.configuration.shortName + ") requires to be configured", "warning");
                         return;
                     }
@@ -396,7 +379,7 @@ export class CreateProjectComponent {
                 //...and in case if every required configuration parameters are not null
                 for (var i = 0; i < this.selectedUriGenPluginConf.params.length; i++) {
                     if (this.selectedUriGenPluginConf.params[i].required && this.selectedUriGenPluginConf.params[i].value != null) {
-                        this.modalService.alert("Create project",
+                        this.basicModals.alert("Create project",
                             "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName + ") requires configuration", "warning");
                         return;
                     }
@@ -426,7 +409,7 @@ export class CreateProjectComponent {
                 //...and in case if every required configuration parameters are not null
                 for (var i = 0; i < this.selectedRendEngPluginConf.params.length; i++) {
                     if (this.selectedRendEngPluginConf.params[i].required && this.selectedRendEngPluginConf.params[i].value != null) {
-                        this.modalService.alert("Create project",
+                        this.basicModals.alert("Create project",
                             "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName + ") requires configuration", "warning");
                         return;
                     }
@@ -456,7 +439,7 @@ export class CreateProjectComponent {
             uriGeneratorSpecification, renderingEngineSpecification).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                this.modalService.alert("Create project", "Project created successfully").then(
+                this.basicModals.alert("Create project", "Project created successfully").then(
                     () => this.router.navigate(['/Projects'])
                 );
             },

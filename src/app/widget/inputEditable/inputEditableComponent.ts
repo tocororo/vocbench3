@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ModalServices } from "../modal/basicModal/modalServices";
+import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 
 @Component({
     selector: 'input-editable',
@@ -19,7 +19,7 @@ export class InputEditableComponent implements OnInit {
     private editInProgress: boolean = false;
     private pristineValue: string; //original input value, as backup
 
-    constructor(private modalService: ModalServices) { }
+    constructor(private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         //init class of input field
@@ -46,7 +46,7 @@ export class InputEditableComponent implements OnInit {
             this.pristineValue = this.value;
             this.valueEdited.emit(this.value);
         } else {
-            this.modalService.alert("Invalid value", "The value inserted is not valid. Please check and retry.", "error");
+            this.basicModals.alert("Invalid value", "The value inserted is not valid. Please check and retry.", "error");
         }
     }
 

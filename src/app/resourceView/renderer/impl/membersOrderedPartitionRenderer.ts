@@ -12,8 +12,8 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
-import { BrowsingServices } from "../../../widget/modal/browsingModal/browsingServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 
 @Component({
@@ -38,9 +38,9 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
     private selectedMember: ARTResource;
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        modalService: ModalServices, browsingService: BrowsingServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
         private skosService: SkosServices) {
-        super(propService, resourcesService, cfService, skosxlService, modalService, browsingService, creationModal, rvModalService);
+        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     private selectMember(member: ARTResource) {

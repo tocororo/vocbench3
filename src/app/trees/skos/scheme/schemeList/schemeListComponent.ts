@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { ModalServices } from "../../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "scheme-list",
@@ -18,7 +18,7 @@ export class SchemeListComponent {
     private selectedScheme: ARTURIResource;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private modalService: ModalServices) { }
+        private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.skosService.getAllSchemes().subscribe( //new service
@@ -46,17 +46,17 @@ export class SchemeListComponent {
 
     private doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.selectScheme(this.getSchemeToSelectFromList(searchResult[0]));
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
                                 },

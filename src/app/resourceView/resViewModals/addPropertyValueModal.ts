@@ -4,8 +4,8 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VBPreferences } from '../../utils/VBPreferences';
-import { ModalServices } from '../../widget/modal/basicModal/modalServices';
-import { BrowsingServices } from '../../widget/modal/browsingModal/browsingServices';
+import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
+import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
 
@@ -76,7 +76,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
-        private propService: PropertyServices, private browsingService: BrowsingServices, private modalService: ModalServices,
+        private propService: PropertyServices, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices,
         private preferences: VBPreferences) {
         this.context = dialog.context;
     }
@@ -89,7 +89,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
 
     private changeProperty() {
-        this.browsingService.browsePropertyTree("Select a property", [this.rootProperty]).then(
+        this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
                 this.selectedProperty = selectedProp;
             },
@@ -209,7 +209,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                     if (valid) {
                         this.dialog.close({ property: this.selectedProperty, value: this.manchExpr });
                     } else {
-                        this.modalService.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
+                        this.basicModals.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
                     }
                 }
             );

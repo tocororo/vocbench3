@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
 import { VBContext } from './VBContext';
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Injectable()
 export class HttpManager {
@@ -22,7 +22,7 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
-    constructor(private http: Http, private router: Router, private modalService: ModalServices) {
+    constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
         let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
         let st_port: string = window['st_port'];
@@ -343,6 +343,9 @@ export class HttpManager {
      * Returns the request context parameters.
      */
     private getContextParametersForUrl(): string {
+
+        console.log("getting ctx parameters");
+
         var params: string = "";
 
         //if a (temp) context project is set, use it
@@ -350,6 +353,11 @@ export class HttpManager {
             params += "ctx_project=" + encodeURIComponent(VBContext.getContextProject().getName()) + "&";
         } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
+        }
+
+        console.log("ctx versione", VBContext.getContextVersion());
+        if (VBContext.getContextVersion() != null) {
+            params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().id) + "&";
         }
 
         if (VBContext.getSessionToken() != undefined) {
@@ -398,14 +406,14 @@ export class HttpManager {
           "statusText": "", "headers": {}, "type": 3, "url": null }
         */
         if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
-            this.modalService.alert("Error",
+            this.basicModals.alert("Error",
                 "No SemanticTurkey server found! Please check that a server is listening on "
                 + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
                 + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
         } else if (err.status == 401 || err.status == 403) {
             //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
-            this.modalService.alert("Error", err._body, "error").then(
+            this.basicModals.alert("Error", err._body, "error").then(
                 result => {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
@@ -415,7 +423,7 @@ export class HttpManager {
                 }
             );
         } else if (!skipErrorAlert) {
-            this.modalService.alert("Error", err, "error");
+            this.basicModals.alert("Error", err, "error");
         }
         return Observable.throw(err);
     }

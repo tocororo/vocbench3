@@ -3,8 +3,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormField } from "../../models/CustomForms";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
 /**
@@ -26,7 +26,7 @@ export class CustomForm implements ControlValueAccessor {
     private formFields: FormField[];
     private submittedWithError: boolean = false;
 
-    constructor(public cfService: CustomFormsServices, public browsingService: BrowsingServices, private modalService: ModalServices) { }
+    constructor(public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
@@ -50,7 +50,7 @@ export class CustomForm implements ControlValueAccessor {
                 this.propagateChange(this.formFields);
             },
             err => {
-                this.modalService.alert("Error", "Impossible to create the CustomForm (" + this.cfId
+                this.basicModals.alert("Error", "Impossible to create the CustomForm (" + this.cfId
                     + "). Its description may contains error. " + err, "error");
             }
         );
@@ -88,7 +88,7 @@ export class CustomForm implements ControlValueAccessor {
 
     private pickExistingReource(role: RDFResourceRolesEnum, formField: FormField) {
         if (role == RDFResourceRolesEnum.cls) {
-            this.browsingService.browseClassTree("Select a Class").then(
+            this.browsingModals.browseClassTree("Select a Class").then(
                 (selectedResource: any) => {
                     formField['value'] = selectedResource.getNominalValue();
                     this.propagateChange(this.formFields);
@@ -96,7 +96,7 @@ export class CustomForm implements ControlValueAccessor {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.individual) {
-            this.browsingService.browseClassIndividualTree("Select an Instance").then(
+            this.browsingModals.browseClassIndividualTree("Select an Instance").then(
                 (selectedResource: any) => {
                     formField['value'] = selectedResource.getNominalValue();
                     this.propagateChange(this.formFields);
@@ -104,7 +104,7 @@ export class CustomForm implements ControlValueAccessor {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.concept) {
-            this.browsingService.browseConceptTree("Select a Concept").then(
+            this.browsingModals.browseConceptTree("Select a Concept").then(
                 (selectedResource: any) => {
                     formField['value'] = selectedResource.getNominalValue();
                     this.propagateChange(this.formFields);
@@ -112,7 +112,7 @@ export class CustomForm implements ControlValueAccessor {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            this.browsingService.browseSchemeList("Select a ConceptScheme").then(
+            this.browsingModals.browseSchemeList("Select a ConceptScheme").then(
                 (selectedResource: any) => {
                     formField['value'] = selectedResource.getNominalValue();
                     this.propagateChange(this.formFields);
@@ -120,7 +120,7 @@ export class CustomForm implements ControlValueAccessor {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.skosCollection) {
-            this.browsingService.browseCollectionTree("Select a Collection").then(
+            this.browsingModals.browseCollectionTree("Select a Collection").then(
                 (selectedResource: any) => {
                     formField['value'] = selectedResource.getNominalValue();
                     this.propagateChange(this.formFields);
@@ -128,7 +128,7 @@ export class CustomForm implements ControlValueAccessor {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.property) {
-            this.browsingService.browsePropertyTree("Select a Property").then(
+            this.browsingModals.browsePropertyTree("Select a Property").then(
                 (selectedResource: any) => {
                     formField['value'] = selectedResource.getNominalValue();
                     this.propagateChange(this.formFields);

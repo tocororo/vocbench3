@@ -6,7 +6,7 @@ import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { DeleteServices } from "../../../services/deleteServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -24,15 +24,15 @@ export class InstanceListPanelComponent extends AbstractPanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private owlService: OwlServices, private deleteService: DeleteServices, 
-        private searchService: SearchServices, private creationModal: CreationModalServices,
-        cfService: CustomFormsServices, modalService: ModalServices) {
-        super(cfService, modalService);
+        private searchService: SearchServices, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        super(cfService, basicModals);
     }
 
     private create() {
         this.selectCustomForm(this.cls).then(
             cfId => { 
-                this.creationModal.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false, cfId).then(
+                this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false, cfId).then(
                     (data: any) => {
                         this.classesService.createInstance(data.uriResource, this.cls, cfId, data.cfValueMap).subscribe();
                     },
@@ -64,17 +64,17 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
-            this.modalService.alert("Search", "Please enter a valid string to search", "error");
+            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             this.searchService.searchInstancesOfClass(this.cls, searchedText, true, true, "contain").subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
-                        this.modalService.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.selectSearchedInstance(this.cls, searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.modalService.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedInstance(this.cls, selectedResource);
                                 },

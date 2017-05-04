@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { CustomFormsServices } from "../../../../services/customFormsServices"
-import { BrowsingServices } from "../../browsingModal/browsingServices"
-import { ModalServices } from "../../basicModal/modalServices"
+import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
+import { BasicModalServices } from "../../basicModal/basicModalServices"
 import { FormField, CustomForm } from "../../../../models/CustomForms"
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
 
@@ -35,7 +35,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
     private formFields: FormField[] = [];
 
     constructor(public dialog: DialogRef<NewResourceCfModalData>, private cfService: CustomFormsServices,
-        private modalService: ModalServices, private browsingService: BrowsingServices) {
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
 
@@ -53,7 +53,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
     }
 
     private changeClass() {
-        this.browsingService.browseClassTree("Change class", [this.context.cls]).then(
+        this.browsingModals.browseClassTree("Change class", [this.context.cls]).then(
             (selectedClass: any) => {
                 if ((<ARTURIResource>selectedClass).getURI() != this.resourceClass.getURI()) {
                     this.resourceClass = selectedClass;
@@ -65,7 +65,7 @@ export class NewResourceCfModal implements ModalComponent<NewResourceCfModalData
                             } else if (customForms.length == 1) {
                                 this.customFormId = customForms[0].getId(); 
                             } else { //(forms.length > 1) //let user choose
-                                return this.modalService.selectCustomForm("Update form constructor", customForms).then(
+                                return this.basicModals.selectCustomForm("Update form constructor", customForms).then(
                                     (selectedCF: any) => {
                                         this.customFormId = (<CustomForm>selectedCF).getId();
                                     },

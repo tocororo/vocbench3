@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
 import { VBPreferences } from "../../utils/VBPreferences";
@@ -19,7 +19,7 @@ export class DanglingXLabelComponent {
     private brokenLabelList: Array<ARTResource>;
 
     constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private deleteService: DeleteServices,
-        private browsingService: BrowsingServices, private modalService: ModalServices, private preferences: VBPreferences) { }
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBPreferences) { }
 
     /**
      * Run the check
@@ -53,9 +53,9 @@ export class DanglingXLabelComponent {
     assignLabel(xlabel: ARTResource) {
         //as pref alt or hidden?
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
-        this.modalService.selectResource("Set skosxl:Label as", null, predOpts).then(
+        this.basicModals.selectResource("Set skosxl:Label as", null, predOpts).then(
             (selectedPred: any) => {
-                this.browsingService.browseConceptTree("Assign xLabel to concept", this.preferences.getActiveScheme(), true).then(
+                this.browsingModals.browseConceptTree("Assign xLabel to concept", this.preferences.getActiveScheme(), true).then(
                     (concept: any) => {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(

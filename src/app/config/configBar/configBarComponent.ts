@@ -4,10 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { ProjectListModal } from '../../project/projectListModal';
-import { Project, ProjectTypesEnum } from "../../models/Project";
+import { Project, ProjectTypesEnum, VersionInfo } from "../../models/Project";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
-import { ModalServices } from "../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 
@@ -20,7 +20,7 @@ export class ConfigBarComponent {
     private currentProject: Project;
 
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, 
-        private modalService: ModalServices, private router: Router, private modal: Modal) {
+        private basicModals: BasicModalServices, private router: Router, private modal: Modal) {
     }
 
     /**
@@ -39,6 +39,13 @@ export class ConfigBarComponent {
     }
 
     /**
+     * Returns the current version of the project
+     */
+    private getCtxVersion(): VersionInfo {
+        return VBContext.getContextVersion();
+    }
+
+    /**
      * Opens a modal that allows to change project among the open
      */
     private changeProject() {
@@ -48,14 +55,14 @@ export class ConfigBarComponent {
     }
 
     private clearData() {
-        this.modalService.confirm("Clear data", "This operation will erase all the data stored in the project." +
+        this.basicModals.confirm("Clear data", "This operation will erase all the data stored in the project." +
             " The project will be closed and then you will be redirect to the projects page." +
             " Are you sure to proceed?", "warning").then(
             result => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.inOutService.clearData().subscribe(
                     stResp => {
-                        this.modalService.alert("Clear data", "All data cleared successfully!");
+                        this.basicModals.alert("Clear data", "All data cleared successfully!");
                         //if project is not-persistent save it before closing
                         if (VBContext.getWorkingProject().getType() == ProjectTypesEnum.saveToStore) {
                             this.projectService.saveProject(VBContext.getWorkingProject()).subscribe(

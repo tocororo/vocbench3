@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, CanDeactivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { VBContext } from './VBContext';
-import { ModalServices } from "../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UserServices } from '../services/userServices';
 
 /**
@@ -95,14 +95,14 @@ export interface CanDeactivateOnChangesComponent {
 @Injectable()
 export class UnsavedChangesGuard implements CanDeactivate<CanDeactivateOnChangesComponent> {
 
-    constructor(private modalService: ModalServices) { }
+    constructor(private basicModals: BasicModalServices) { }
 
     canDeactivate(component: CanDeactivateOnChangesComponent): boolean | Observable<boolean> {
         //check if component has hasUnsavedChanges method, in case evaluate it
         if (component.hasUnsavedChanges) {
             if (component.hasUnsavedChanges()) {
                 return Observable.fromPromise(
-                    this.modalService.confirm("Warning", "There could be unsaved changes. Do you want to leave this page and discard the changes",
+                    this.basicModals.confirm("Warning", "There could be unsaved changes. Do you want to leave this page and discard the changes",
                             "warning").then(
                         yes => { return true },
                         no => { return false }

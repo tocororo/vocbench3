@@ -4,7 +4,7 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VBPreferences } from "../../../utils/VBPreferences";
 import { UIUtils } from "../../../utils/UIUtils";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 export class ReplaceBaseURIModalData extends BSModalContext {
     /**
@@ -32,7 +32,7 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
     private errorMsg: string;
 
     constructor(public dialog: DialogRef<ReplaceBaseURIModalData>, public refactorService: RefactorServices,
-        private preferences: VBPreferences, private modalService: ModalServices) {
+        private preferences: VBPreferences, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -56,7 +56,7 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
             return;
         }
 
-        this.modalService.confirm("Replace baseURI", "This operation could be a long process. Are you sure to proceed?", "warning").then(
+        this.basicModals.confirm("Replace baseURI", "This operation could be a long process. Are you sure to proceed?", "warning").then(
             confirm => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.refactorService.replaceBaseURI(this.newBaseURI, this.oldBaseURI).subscribe(

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { InputOutputServices } from "../../../services/inputOutputServices";
 import { ExportServices } from "../../../services/exportServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { RDFFormat } from "../../../models/RDFFormat";
@@ -23,7 +23,7 @@ export class LoadDataComponent {
 
     private selectedImportAllowance: string;
 
-    constructor(private inOutService: InputOutputServices, private exportService: ExportServices, private modalService: ModalServices) { }
+    constructor(private inOutService: InputOutputServices, private exportService: ExportServices, private basicModals: BasicModalServices) { }
 
     private ngOnInit() {
         this.exportService.getOutputFormats().subscribe(
@@ -55,9 +55,9 @@ export class LoadDataComponent {
 
     private load() {
         if (this.fileToUpload == null) {
-            this.modalService.alert("Load Data", "A file is required", "warning");
+            this.basicModals.alert("Load Data", "A file is required", "warning");
         } else if (this.baseURI == null || this.baseURI.trim() == "") {
-            this.modalService.alert("Load Data", "BaseURI required", "warning");
+            this.basicModals.alert("Load Data", "BaseURI required", "warning");
         } else {
             UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
             var formatParam: RDFFormat = null;
@@ -67,7 +67,7 @@ export class LoadDataComponent {
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.selectedImportAllowance, this.selectedFormat).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                    this.modalService.alert("Import data", "Data imported successfully");
+                    this.basicModals.alert("Import data", "Data imported successfully");
                 },
                 err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
             );

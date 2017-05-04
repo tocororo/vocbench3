@@ -4,7 +4,7 @@ import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
-import { ModalServices } from "../../../widget/modal/basicModal/modalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
 import { AbstractTree } from "../../abstractTree";
 
@@ -22,7 +22,7 @@ export class PropertyTreeComponent extends AbstractTree {
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
     constructor(private propertyService: PropertyServices, private searchService: SearchServices,
-        private modalService: ModalServices, eventHandler: VBEventHandler) {
+        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         
         super(eventHandler);
 

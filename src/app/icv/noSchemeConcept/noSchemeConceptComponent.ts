@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
-import { BrowsingServices } from "../../widget/modal/browsingModal/browsingServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -15,7 +15,7 @@ export class NoSchemeConceptComponent {
 
     private brokenConceptList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingService: BrowsingServices) { }
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingModals: BrowsingModalServices) { }
 
     /**
      * Run the check
@@ -40,7 +40,7 @@ export class NoSchemeConceptComponent {
      * Fixes concept by adding it to a scheme 
      */
     addToScheme(concept: ARTURIResource) {
-        this.browsingService.browseSchemeList("Select a scheme").then(
+        this.browsingModals.browseSchemeList("Select a scheme").then(
             (scheme: any) => {
                 this.skosService.addConceptToScheme(concept, scheme).subscribe(
                     stResp => {
@@ -56,7 +56,7 @@ export class NoSchemeConceptComponent {
      * Fixes concepts by adding them all to a scheme
      */
     addAllToScheme() {
-        this.browsingService.browseSchemeList("Select a scheme").then(
+        this.browsingModals.browseSchemeList("Select a scheme").then(
             (scheme: any) => {
                 this.icvService.addAllConceptsToScheme(scheme).subscribe(
                     stResp => {
