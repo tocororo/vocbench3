@@ -5,53 +5,71 @@
 
     <div class="scrollableContainer">
 
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label class="control-label col-sm-2">Repository Access:</label>
-                <div class="col-sm-10">
-                    <div class="input-group">
-                        <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
-                            <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-sm" (click)="configureRemoteRepositoryAccess()" [disabled]="!isSelectedRepoAccessRemote()">
-                                Remote Access Config
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!--<div class="form-group">
-                <label class="control-label col-sm-2">Data Repository ID</label>
-                <div class="col-sm-4">
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" name="dataRepoId" [(ngModel)]="dataRepoId"
-                            placeholder="Data Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" (click)="changeRemoteRepository('data')"
-                                title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
-                                <span class="glyphicon glyphicon-folder-open"></span>
-                            </button>
-                        </span>
-                    </div>
-                </div>
-                <div class="control-label col-sm-2">
-                    <label>Configuration</label>
-                </div>
-                <div class="col-sm-4">
-                    <div class="input-group" >
-                        <select class="form-control input-sm" [(ngModel)]="selectedDataRepoConf" name="selectedDataRepoConf"
-                            [disabled]="!isSelectedRepoAccessCreateMode()">
-                            <option *ngFor="let rc of dataRepoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-sm" (click)="configureDataRepo()" [disabled]="!isSelectedRepoAccessCreateMode()">Configure</button>
-                        </span>
-                    </div>
-                </div>
-            </div>-->
-        </form>
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>Version ID:</label>
+                    </td>
+                    <td colspan="3">
+                        <input type="text" class="form-control input-sm" [(ngModel)]="versionId" placeholder="Version ID">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>Repository Access:</label>
+                    </td>
+                    <td colspan="3">
+                        <div class="input-group" style="width: 100%">
+                            <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess">
+                                <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">
+                                    {{repoAcc}}
+                                </option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" (click)="configureRemoteRepositoryAccess()" [disabled]="!isSelectedRepoAccessRemote()">
+                                    Remote Access Config
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>Repository ID:</label>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" [(ngModel)]="repositoryId" placeholder="Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" (click)="changeRemoteRepository()"
+                                    title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
+                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                    <td colspan="2">
+                        <div class="input-group" style="width: 100%">
+                            <select class="form-control input-sm" [(ngModel)]="selectedRepoConf" [disabled]="!isSelectedRepoAccessCreateMode()">
+                                <option *ngFor="let rc of repoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" (click)="configureRepo()" [disabled]="!isSelectedRepoAccessCreateMode()">
+                                    Configure
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
     </div>
 

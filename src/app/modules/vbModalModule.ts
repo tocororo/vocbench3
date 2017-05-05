@@ -27,6 +27,7 @@ import { CustomFormSelectionModal } from '../widget/modal/basicModal/selectionMo
 //shared modals
 import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
+import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
 
 //browsing modals
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
@@ -56,7 +57,6 @@ import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceA
 import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
 
 //project config modal
-import { RemoteRepoSelectionModal } from "../project/createProject/remoteRepoSelectionModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";

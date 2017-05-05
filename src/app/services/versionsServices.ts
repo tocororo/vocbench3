@@ -13,16 +13,20 @@ export class VersionsServices {
     constructor(private httpMgr: HttpManager) { }
 
     /**
-     * 
+     * Gets the available versions for the current project
      */
     getVersions(): Observable<VersionInfo[]> {
         console.log("[VersionsServices] getVersions");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getVersions", params, this.oldTypeService, true).map(
             stResp => {
+                console.log("stResp", stResp)
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    versions.push({ id: stResp[i].id, date: stResp[i].date, location: stResp[i].location});
+                    let es = stResp[i].instant.epochSecond;
+                    let d: Date = new Date(0);
+                    d.setUTCSeconds(es);
+                    versions.push(stResp[i]);
                 }
                 //TODO sort by date
                 return versions;

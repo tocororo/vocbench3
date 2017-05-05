@@ -40,6 +40,17 @@ export class UIUtils {
         blockingDiv.style.display = "none";
     }
 
+    /**
+     * Hides all the blocking divs and remove them from the list of pending blocking divs.
+     */
+    static stopAllLoadingDiv() {
+        //hide all the blocking divs
+        for (var i = 0; i < UIUtils.pendingBlockingDiv.length; i++) {
+            UIUtils.pendingBlockingDiv[i].style.display = "none";
+        }
+        UIUtils.pendingBlockingDiv = []; //empty the blocking div list
+    }
+
 
 
 

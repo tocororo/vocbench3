@@ -7,18 +7,18 @@
         <table class="table table-condensed table-hoverable" >
             <thead>
                 <tr>
-                    <th class="text-center">ID</th>
+                    <th class="text-center" style="width: 1%">ID</th>
                     <th class="text-center">Location</th>
                     <th class="text-center">Description</th>
-                    <th class="text-center">Readable</th>
-                    <th class="text-center">Writeable</th>
+                    <th class="text-center" style="width: 1%">Readable</th>
+                    <th class="text-center" style="width: 1%">Writeable</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let repo of repoList" (click)="selectedRepo = repo" [ngClass]="{ active : selectedRepo == repo}">
                     <td style="font-weight: bold;">{{repo.id}}</td>
-                    <td>{{repo.location}}</td>
-                    <td>{{repo.description}}</td>
+                    <td class="text-center">{{repo.location}}</td>
+                    <td class="text-center">{{repo.description}}</td>
                     <td class="text-center">{{repo.readable}}</td>
                     <td class="text-center">{{repo.writable}}</td>
                 </tr>

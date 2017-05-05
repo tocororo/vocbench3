@@ -179,7 +179,10 @@ export class Repository {
 }
 
 export class VersionInfo {
-    public id: string;
-    public date: string;
-    public location: string;
+    public versionId: string;
+    public repositoryId: string;
+    public instant: { 
+        epochSecond: number,
+        nano: number
+    };
 }

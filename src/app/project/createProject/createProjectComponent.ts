@@ -1,8 +1,5 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
-import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal";
 import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
@@ -78,7 +75,7 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
 
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, private pluginService: PluginsServices,
-        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {
+        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
@@ -181,7 +178,9 @@ export class CreateProjectComponent {
                 + " Please, enter at least the server url, then retry.", "error");
             return;
         }
-        this.openSelectRemoteRepoModal(repoType).then(
+
+        var title: string = repoType == "data" ? "Select Remote Data Repository" : "Select Remote History/Validation Repository";
+        this.sharedModals.selectRemoteRepository(title, this.remoteAccessConfig).then(
             (repo: any) => {
                 if (repoType == "data") {
                     this.dataRepoId = (<Repository>repo).id;
@@ -263,21 +262,6 @@ export class CreateProjectComponent {
             },
             () => {}
         )
-    }
-
-    /**
-     * Opens a modal to select a remote repository
-     */
-    private openSelectRemoteRepoModal(repoType: "data" | "support") {
-        var title: string = repoType == "data" ? "Select Remote Data Repository" : "Select Remote History/Validation Repository";
-        var modalData = new RemoteRepoSelectionModalData(title, this.remoteAccessConfig);
-        const builder = new BSModalContextBuilder<RemoteRepoSelectionModalData>(
-            modalData, undefined, RemoteRepoSelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(RemoteRepoSelectionModal, overlayConfig).then(
-            dialog => dialog.result
-        );
     }
 
     private createtNew() {

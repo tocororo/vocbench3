@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import 'rxjs/Rx'; //for map function
 import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
+import { UIUtils } from "../utils/UIUtils";
 import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
 import { VBContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -344,8 +345,6 @@ export class HttpManager {
      */
     private getContextParametersForUrl(): string {
 
-        console.log("getting ctx parameters");
-
         var params: string = "";
 
         //if a (temp) context project is set, use it
@@ -355,7 +354,6 @@ export class HttpManager {
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
 
-        console.log("ctx versione", VBContext.getContextVersion());
         if (VBContext.getContextVersion() != null) {
             params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().id) + "&";
         }
@@ -425,6 +423,7 @@ export class HttpManager {
         } else if (!skipErrorAlert) {
             this.basicModals.alert("Error", err, "error");
         }
+        UIUtils.stopAllLoadingDiv();
         return Observable.throw(err);
     }
 

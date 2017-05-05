@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { RepositoriesServices } from "../../services/repositoriesServices";
-import { RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
+import { RepositoriesServices } from "../../../../services/repositoriesServices";
+import { RemoteRepositoryAccessConfig, Repository } from "../../../../models/Project";
 
 export class RemoteRepoSelectionModalData extends BSModalContext {
     /**
@@ -33,7 +33,6 @@ export class RemoteRepoSelectionModal implements ModalComponent<RemoteRepoSelect
             this.context.repoConfig.serverURL, this.context.repoConfig.username, this.context.repoConfig.password).subscribe(
             repositories => {
                 this.repoList = repositories;
-                console.log("repo", repositories);
             }
         );
     }

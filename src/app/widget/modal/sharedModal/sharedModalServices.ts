@@ -5,6 +5,7 @@ import { PluginConfiguration } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
+import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
 
 @Injectable()
 export class SharedModalServices {
@@ -39,6 +40,23 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(RemoteAccessConfigModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to pick a remote repository. Note, this modal doesn't check if the remote repo configuration provided
+     * is ok, the check of serverURL must be done previously.
+     * @param title
+     * @param remoteRepoConfig contains serverURL, username and password
+     */
+    selectRemoteRepository(title: string, remoteRepoConfig: RemoteRepositoryAccessConfig) {
+        var modalData = new RemoteRepoSelectionModalData(title, remoteRepoConfig);
+        const builder = new BSModalContextBuilder<RemoteRepoSelectionModalData>(
+            modalData, undefined, RemoteRepoSelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        return this.modal.open(RemoteRepoSelectionModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

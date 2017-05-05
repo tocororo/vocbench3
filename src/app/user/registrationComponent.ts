@@ -45,12 +45,13 @@ export class RegistrationComponent {
                 stResp => {
                     UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     this.basicModals.alert("Registration complete",
-                        "User " + this.firstName + " " + this.lastName + " registered succesfully." +
-                        " You can now login with your email (" + this.email + ") and the password you provided").then(
+                        "The request for registration has been sent and is now pending activation. " +
+                        "After the system administrator accepts your request, it will be possible to login with your email " +
+                        this.email + " and the password you provided").then(
                         result => {
                             this.router.navigate(['/Home']);
                         }
-                        );
+                    );
                 },
                 () => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
                 )

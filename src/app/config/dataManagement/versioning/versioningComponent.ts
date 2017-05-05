@@ -6,6 +6,7 @@ import { VersionsServices } from "../../../services/versionsServices";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { VBContext } from '../../../utils/VBContext';
 import { VBEventHandler } from '../../../utils/VBEventHandler';
+import { UIUtils } from '../../../utils/UIUtils';
 import { RepositoryAccess, RepositoryAccessType, VersionInfo } from '../../../models/Project';
 
 @Component({
@@ -28,7 +29,7 @@ export class VersioningComponent {
     private initVersions() {
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [{ id: "current", date: "---", location: "---" }];
+                this.versionList = [{ versionId: "current", repositoryId: "---", instant: null }];
                 this.versionList = this.versionList.concat(versions);
             }
         );
@@ -43,7 +44,6 @@ export class VersioningComponent {
     }
 
     private swithcToVersion() {
-        console.log("switching to ", this.selectedVersion);
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
             VBContext.removeContextVersion();
         } else {
@@ -53,12 +53,15 @@ export class VersioningComponent {
     }
 
     private dump() {
-        //TODO which repo access? the same of the project? In case, how can I retrieve that? or local?
+        //TODO when service updates, remove repoAccess from parameter
         let repoAccess = new RepositoryAccess(RepositoryAccessType.CreateLocal);
-        this.basicModals.prompt("Create a project dump", "Version ID").then(
+        
+        this.basicModals.prompt("Create a version dump", "Version ID").then(
             (id: any) => {
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
                 this.versionsService.createVersionDump(id, repoAccess).subscribe(
                     stResp => {
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.initVersions();
                     }
                 );
@@ -68,7 +71,23 @@ export class VersioningComponent {
     }
 
     private dumpWithLocation() {
-        var modalData = new DumpCreationModalData("Configure dump");
+        this.configureDumpWithLocation().then(
+            (data: any) => {
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                this.versionsService.createVersionDump(
+                    data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification).subscribe(
+                    stResp => {
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        this.initVersions();
+                    }
+                );
+            },
+            () => {}
+        )
+    }
+
+    private configureDumpWithLocation() {
+        var modalData = new DumpCreationModalData("Configure version dump");
         const builder = new BSModalContextBuilder<DumpCreationModalData>(
             modalData, undefined, DumpCreationModalData
         );
