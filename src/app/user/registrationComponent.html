@@ -51,9 +51,14 @@
                         <tr>
                             <td nowrap><label>Gender:</label></td>
                             <td>
-                                <select [(ngModel)]="gender" name="gender" class="form-control input-sm">
-                                    <option *ngFor="let g of genders" [value]="g">{{g}}</option>
-                                </select>
+                                <div class="hbox">
+                                    <select [(ngModel)]="selectedGender" name="selectedGender" class="form-control input-sm" 
+                                        style="margin-right: 4px;" (change)="onGenderChange()">
+                                        <option *ngFor="let g of genders" [value]="g">{{g}}</option>
+                                    </select>
+                                    <input type="text" class="form-control input-sm" [(ngModel)]="gender" name="gender" 
+                                        [disabled]="selectedGender != 'Other'">
+                                </div>
                             </td>
                             <td nowrap><label>Birthday:</label></td>
                             <td>

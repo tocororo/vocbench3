@@ -14,7 +14,8 @@ export class RegistrationComponent {
 
     private countries = Countries.countryList;
 
-    private genders = ["Male", "Female"];
+    private genders = ["Male", "Female", "Other"];
+    private selectedGender: string;
 
     private submitted: boolean = false;
 
@@ -54,9 +55,17 @@ export class RegistrationComponent {
                     );
                 },
                 () => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
-                )
+            );
         } else {
             this.basicModals.alert("Registration error", "Please, check the inserted data.", "warning");
+        }
+    }
+
+    private onGenderChange() {
+        if (this.selectedGender == "Other") {
+            this.gender = null;
+        } else {
+            this.gender = this.selectedGender;
         }
     }
 

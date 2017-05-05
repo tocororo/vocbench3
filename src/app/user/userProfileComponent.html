@@ -34,7 +34,7 @@
                             </input-editable>
                         </td>
                         <td nowrap><label>Gender:</label></td>
-                        <td><input-editable type="select" [options]="genders" [value]="user.getGender()" (valueEdited)="updateGender($event)"></input-editable></td>
+                        <td><input-editable [value]="user.getGender()" (valueEdited)="updateGender($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Country:</label></td>
