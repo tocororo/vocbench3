@@ -23,10 +23,25 @@ export class VersionsServices {
                 console.log("stResp", stResp)
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let es = stResp[i].instant.epochSecond;
-                    let d: Date = new Date(0);
-                    d.setUTCSeconds(es);
-                    versions.push(stResp[i]);
+                    let v: VersionInfo = {
+                        versionId: stResp[i].versionId,
+                        repositoryId: stResp[i].repositoryId,
+                        dateTime: null
+                    }
+                    //parse and format datetime
+                    let d = new Date(stResp[i].dateTime);
+                    var yyyy = d.getFullYear();
+                    console.log(d.getFullYear);
+                    var month = d.getMonth()+1;
+                    var MM = (month > 9 ? ' ': '0') + month;
+                    var day = d.getDate();
+                    var dd = (day > 9 ? ' ': '0') + day;
+                    var hh = d.getHours();
+                    var mm = d.getMinutes();
+                    var ss = d.getSeconds();
+                    v.dateTime = yyyy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss;
+
+                    versions.push(v);
                 }
                 //TODO sort by date
                 return versions;

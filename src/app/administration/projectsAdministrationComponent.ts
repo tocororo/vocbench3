@@ -98,7 +98,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private removeUserFromProject() {
-        console.log("remove user " + this.selectedUser.getLastName() + " from " + this.selectedProject.getName());
+        console.log("remove user " + this.selectedUser.getFamilyName() + " from " + this.selectedProject.getName());
         //TODO call service
     }
 

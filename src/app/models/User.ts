@@ -1,7 +1,7 @@
 export class User {
     private email: string;
-    private firstName: string;
-    private lastName: string
+    private givenName: string;
+    private familyName: string
     private birthday: Date;
     private phone: string;
     private gender: string;
@@ -13,22 +13,22 @@ export class User {
     private status: UserStatusEnum;
     private admin: boolean = false;
 
-    constructor(email: string, firstName: string, lastName: string) {
+    constructor(email: string, givenName: string, familyName: string) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.givenName = givenName;
+        this.familyName = familyName;
     }
 
     getEmail(): string {
         return this.email;
     }
 
-    getFirstName(): string {
-        return this.firstName;
+    getGivenName(): string {
+        return this.givenName;
     }
 
-    getLastName(): string {
-        return this.lastName;
+    getFamilyName(): string {
+        return this.familyName;
     }
 
     setBirthday(birthday: Date) {
@@ -190,11 +190,11 @@ export class Role {
 
 }
 
-export type UserStatusEnum = "REGISTERED" | "DISABLED" | "ENABLED";
+export type UserStatusEnum = "NEW" | "INACTIVE" | "ACTIVE";
 export const UserStatusEnum = {
-    REGISTERED: "REGISTERED" as UserStatusEnum,
-    DISABLED: "DISABLED" as UserStatusEnum,
-    ENABLED: "ENABLED" as UserStatusEnum
+    NEW: "NEW" as UserStatusEnum,
+    INACTIVE: "INACTIVE" as UserStatusEnum,
+    ACTIVE: "ACTIVE" as UserStatusEnum
 }
 
 export type RoleLevel = "system" | "project";

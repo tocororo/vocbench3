@@ -355,7 +355,7 @@ export class HttpManager {
         }
 
         if (VBContext.getContextVersion() != null) {
-            params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().id) + "&";
+            params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
         }
 
         if (VBContext.getSessionToken() != undefined) {

@@ -56,8 +56,8 @@ export class UserServices {
      * Register a new user
      * @param email
      * @param password
-     * @param firstName
-     * @param lastName
+     * @param givenName
+     * @param familyName
      * @param birthday
      * @param gender
      * @param country
@@ -66,14 +66,14 @@ export class UserServices {
      * @param url
      * @param phone
      */
-    registerUser(email: string, password: string, firstName: string, lastName: string,
+    registerUser(email: string, password: string, givenName: string, familyName: string,
         birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, phone: string) {
         console.log("[UserServices] registerUser");
         var params: any = {
             email: email,
             password: password,
-            firstName: firstName,
-            lastName: lastName
+            givenName: givenName,
+            familyName: familyName
         }
         if (birthday != undefined) {
             params.birthday = birthday;
@@ -100,17 +100,17 @@ export class UserServices {
     }
 
     /**
-     * Updates firstName of the given user. Returns the updated user.
+     * Updates givenName of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param firstName
+     * @param givenName
      */
-    updateUserFirstName(email: string, firstName: string): Observable<User> {
-        console.log("[UserServices] updateUserFirstName");
+    updateUserGivenName(email: string, givenName: string): Observable<User> {
+        console.log("[UserServices] updateUserGivenName");
         var params: any = {
             email: email,
-            firstName: firstName,
+            givenName: givenName,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserFirstName", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "updateUserGivenName", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -118,17 +118,17 @@ export class UserServices {
     }
 
     /**
-     * Updates lastName of the given user. Returns the updated user.
+     * Updates familyName of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param lastName
+     * @param familyName
      */
-    updateUserLastName(email: string, lastName: string): Observable<User> {
-        console.log("[UserServices] updateUserLastName");
+    updateUserFamilyName(email: string, familyName: string): Observable<User> {
+        console.log("[UserServices] updateUserFamilyName");
         var params: any = {
             email: email,
-            lastName: lastName,
+            familyName: familyName,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserLastName", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "updateUserFamilyName", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }

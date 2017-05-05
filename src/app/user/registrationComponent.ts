@@ -23,8 +23,8 @@ export class RegistrationComponent {
     private username: string;
     private password: string;
     private confirmedPassword: string;
-    private firstName: string;
-    private lastName: string;
+    private givenName: string;
+    private familyName: string;
     private birthday: Date;
     private gender: string;
     private country: string;
@@ -41,14 +41,13 @@ export class RegistrationComponent {
         this.submitted = true;
         if (this.isDataValid()) {
             UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
-            this.userService.registerUser(this.email, this.password, this.firstName, this.lastName,
+            this.userService.registerUser(this.email, this.password, this.givenName, this.familyName,
                 this.birthday, this.gender, this.country, this.address, this.affiliation, this.url, this.phone).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     this.basicModals.alert("Registration complete",
-                        "The request for registration has been sent and is now pending activation. " +
-                        "After the system administrator accepts your request, it will be possible to login with your email " +
-                        this.email + " and the password you provided").then(
+                        "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
+                        "it will be possible to login with your email (" + this.email + ") and the password you provided").then(
                         result => {
                             this.router.navigate(['/Home']);
                         }
@@ -73,8 +72,8 @@ export class RegistrationComponent {
         var emailValid = this.email && this.email.trim() != "" && new RegExp(this.EMAIL_PATTERN).test(this.email);
         // var usernameValid = this.username && this.username.trim() != "";
         var pwdValid = this.password && this.password.trim() != "" && this.isConfirmPwdOk();
-        var firstLastNameValid = this.firstName && this.firstName.trim() != "" && this.lastName && this.lastName.trim() != "";
-        return emailValid && pwdValid && firstLastNameValid;
+        var givenFamilyNameValid = this.givenName && this.givenName.trim() != "" && this.familyName && this.familyName.trim() != "";
+        return emailValid && pwdValid && givenFamilyNameValid;
     }
 
     /**

@@ -100,7 +100,7 @@ export class Deserializer {
     };
 
     /**
-     * @param resp json response containing {"user"" : [{firstName: string, lastName: string, ...}, {...}]}
+     * @param resp json response containing {"user"" : [{givenName: string, familyName: string, ...}, {...}]}
      */
     static createUsersArray(resp: any): User[] {
         var users: User[] = [];
@@ -126,7 +126,7 @@ export class Deserializer {
         if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
             return null;
         }
-        var user = new User(userJson.email, userJson.firstName, userJson.lastName);
+        var user = new User(userJson.email, userJson.givenName, userJson.familyName);
         user.setRegistrationDate(userJson.registrationDate);
         user.setStatus(userJson.status);
         user.setAdmin(userJson.admin);

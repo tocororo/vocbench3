@@ -29,7 +29,7 @@ export class VersioningComponent {
     private initVersions() {
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [{ versionId: "current", repositoryId: "---", instant: null }];
+                this.versionList = [{ versionId: "current", repositoryId: "---", dateTime: "---" }];
                 this.versionList = this.versionList.concat(versions);
             }
         );
@@ -102,7 +102,7 @@ export class VersioningComponent {
         if (activeVersion == null) {
             return this.versionList.indexOf(version) == 0;
         } else {
-            return VBContext.getContextVersion().id == version.id;
+            return VBContext.getContextVersion().versionId == version.versionId;
         }
     }
 

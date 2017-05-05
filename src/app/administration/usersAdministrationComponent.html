@@ -12,12 +12,12 @@
                     <label style="flex: 1;">Users:</label>
                     <div class="pull-right">
                         <div style="display: inline-flex; align-items: center; margin-left: 2px;">
-                            <span>Enabled</span>
-                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showEnabled">
+                            <span>Active</span>
+                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showActive">
                         </div>
                         <div style="display: inline-flex; align-items: center; margin-left: 2px;">
-                            <span>Disabled</span>
-                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showDisabled">
+                            <span>Inactive</span>
+                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showInactive">
                         </div>
                         <div style="display: inline-flex; align-items: center; margin-left: 2px;">
                             <span>New</span>
@@ -29,7 +29,7 @@
                     <div class="scrollableContainer">
                         <template ngFor let-u [ngForOf]="users">
                             <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
-                                <span style="flex:1">{{u.getFirstName()}} {{u.getLastName()}}</span>
+                                <span style="flex:1">{{u.getGivenName()}} {{u.getFamilyName()}}</span>
                                 <span *ngIf="u.getStatus() == 'REGISTERED'" class="glyphicon glyphicon-exclamation-sign pull-right"
                                     style="color: red" title="New registered user"></span>
                             </div>
@@ -40,7 +40,17 @@
 
             <div class="subPanel vbox" style="flex: 5; margin-left: 5px;">
                 <div class="subPanel-heading">
-                    <label>User Details:</label>
+                    <label style="flex: 1;">User Details:</label>
+                    <div *ngIf="selectedUser" class="btn-group btn-group-xs" role="group">
+                        <button type="button" class="btn btn-default" (click)="enableDisableUser()"
+                            [ngClass]="{'active green': isUserActive(selectedUser)}" [disabled]="isChangeStatusButtonDisabled()">
+                            Active
+                        </button>
+                        <button type="button" class="btn btn-default" (click)="enableDisableUser()"
+                            [ngClass]="{'active red': !isUserActive(selectedUser)}" [disabled]="isChangeStatusButtonDisabled()">
+                            Inactive
+                        </button>
+                    </div>
                 </div>
                 <div class="subPanel-body" style="flex: 1;">
                     <div *ngIf="selectedUser">
@@ -53,10 +63,10 @@
                             </colgroup>
                             <tbody>
                                 <tr>
-                                    <td nowrap><label>First name:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getFirstName()" readonly></td>
-                                    <td nowrap><label>Last name:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getLastName()" readonly></td>
+                                    <td nowrap><label>Given name:</label></td>
+                                    <td><input class="form-control input-sm" [value]="selectedUser.getGivenName()" readonly></td>
+                                    <td nowrap><label>Family name:</label></td>
+                                    <td><input class="form-control input-sm" [value]="selectedUser.getFamilyName()" readonly></td>
                                 </tr>
                                 <tr>
                                     <td nowrap><label>E-mail:</label></td>
@@ -112,11 +122,6 @@
                     </div>
                 </div>
                 <div class="subPanel-footer" *ngIf="selectedUser">
-                    <button class="btn btn-default btn-xs" [ngClass]="{active: selectedUser.getStatus() == 'ENABLED'}"
-                        (click)="enableDisableUser()" [disabled]="isEnableButtonDisabled()">
-                        <span *ngIf="selectedUser.getStatus() == 'ENABLED'">Enabled</span>
-                        <span *ngIf="selectedUser.getStatus() != 'ENABLED'">Disabled</span>
-                    </button>
                     <button class="btn btn-default btn-xs pull-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
                         Delete
                     </button>

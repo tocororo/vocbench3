@@ -13,7 +13,6 @@ export class UserProfileComponent {
 
     private user: User;
 
-    private genders = ["Male", "Female"];
     private countries = Countries.countryList;
 
     constructor(private userService: UserServices) { }
@@ -22,16 +21,16 @@ export class UserProfileComponent {
         this.user = VBContext.getLoggedUser();
     }
 
-    private updateFirstName(newFirstName: string) {
-        this.userService.updateUserFirstName(this.user.getEmail(), newFirstName).subscribe(
+    private updateGivenName(newGivenName: string) {
+        this.userService.updateUserGivenName(this.user.getEmail(), newGivenName).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
             }
         )
     }
 
-    private updateLastName(newLastName: string) {
-        this.userService.updateUserLastName(this.user.getEmail(), newLastName).subscribe(
+    private updateFamilyName(newFamilyName: string) {
+        this.userService.updateUserFamilyName(this.user.getEmail(), newFamilyName).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
             }

@@ -35,7 +35,7 @@
                 <div class="subPanel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
-                            <span>{{u.getFirstName()}} {{u.getLastName()}}</span>
+                            <span>{{u.getGivenName()}} {{u.getFamilyName()}}</span>
                         </div>
                     </div>
                 </div>

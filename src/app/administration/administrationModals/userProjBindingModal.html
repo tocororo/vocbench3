@@ -13,7 +13,7 @@
                 <div class="scrollableContainer">
                     <div *ngFor="let u of userList" class="listItem" [ngClass]="{active: u == selectedUser, disabled: isUserAlreadyBound(u)}"
                         (click)="selectUser(u)">
-                        {{u.getFirstName()}} {{u.getLastName()}} <span class="greyText"> ({{u.getEmail()}})</span>
+                        {{u.getGivenName()}} {{u.getFamilyName()}} <span class="greyText"> ({{u.getEmail()}})</span>
                     </div>
                 </div>
             </div>

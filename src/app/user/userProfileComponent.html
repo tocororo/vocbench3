@@ -16,10 +16,10 @@
                 </colgroup>
                 <tbody>
                     <tr>
-                        <td nowrap><label>First name:</label></td>
-                        <td><input-editable [value]="user.getFirstName()" (valueEdited)="updateFirstName($event)"></input-editable></td>
-                        <td nowrap><label>Last name:</label></td>
-                        <td><input-editable [value]="user.getLastName()" (valueEdited)="updateLastName($event)"></input-editable></td>
+                        <td nowrap><label>Given name:</label></td>
+                        <td><input-editable [value]="user.getGivenName()" (valueEdited)="updateGivenName($event)"></input-editable></td>
+                        <td nowrap><label>Family name:</label></td>
+                        <td><input-editable [value]="user.getFamilyName()" (valueEdited)="updateFamilyName($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>E-mail:</label></td>

@@ -181,8 +181,5 @@ export class Repository {
 export class VersionInfo {
     public versionId: string;
     public repositoryId: string;
-    public instant: { 
-        epochSecond: number,
-        nano: number
-    };
+    public dateTime: string;
 }
