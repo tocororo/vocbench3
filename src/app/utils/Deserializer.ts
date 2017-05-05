@@ -149,7 +149,7 @@ export class Deserializer {
             user.setAffiliation(userJson.affiliation);
         }
         if (userJson.url != undefined) {
-            user.setUrl(userJson.ur);
+            user.setUrl(userJson.url);
         }
         return user;
     }
