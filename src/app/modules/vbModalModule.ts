@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { CustomFormModule } from "./customFormModule";
+import { UserModule } from "./userModule";
 
 //services to open modals
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -66,6 +67,7 @@ import { ProjectListModal } from "../project/projectListModal";
 import { UserProjBindingModal } from "../administration/administrationModals/userProjBindingModal";
 import { CapabilityEditorModal } from "../administration/administrationModals/capabilityEditorModal";
 import { ImportRoleModal } from "../administration/administrationModals/importRoleModal";
+import { UserCreateModal } from "../administration/administrationModals/userCreateModal";
 
 //config modals
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
@@ -75,7 +77,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule],
+    imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewSkosResourceCfModal, NewTypedLiteralModal,
@@ -85,7 +87,7 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
-        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
+        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput
     ],
@@ -108,7 +110,7 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
-        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal,
+        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal
     ]
 })

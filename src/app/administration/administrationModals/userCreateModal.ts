@@ -1,23 +1,37 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { Countries } from "../models/LanguagesCountries";
-import { UserForm } from "../models/User";
-import { UserServices } from "../services/userServices";
-import { UIUtils } from "../utils/UIUtils";
+import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "angular2-modal";
+import { UserServices } from "../../services/userServices";
+import { UserForm } from "../../models/User";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { UIUtils } from "../../utils/UIUtils";
 
+export class UserCreateModalData extends BSModalContext {
+    /**
+     * @param title title of the dialog
+     */
+    constructor(public title: string) {
+        super();
+    }
+}
+
+/**
+ * Modal that allows to choose among a set of rdfResource
+ */
 @Component({
-    selector: "registration-component",
-    templateUrl: "./registrationComponent.html",
-    host: { class: "pageComponent" }
+    selector: "user-create-modal",
+    templateUrl: "./userCreateModal.html",
 })
-export class RegistrationComponent {
+export class UserCreateModal implements ModalComponent<UserCreateModalData> {
+    context: UserCreateModalData;
 
     private userForm: UserForm;
 
-    constructor(private userService: UserServices, private router: Router, private basicModals: BasicModalServices) { }
+    constructor(public dialog: DialogRef<UserCreateModalData>, private userService: UserServices, private basicModals: BasicModalServices) {
+        this.context = dialog.context;
+    }
 
-    private submit() {
+    ok(event: Event) {
         //check all required parameter
         if (!this.userForm.email || 
             (!this.userForm.password || this.userForm.password.trim() == "") ||
@@ -43,15 +57,15 @@ export class RegistrationComponent {
             this.userForm.url, this.userForm.phone).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                this.basicModals.alert("Registration complete",
-                    "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
-                    "it will be possible to login with your email (" + this.userForm.email + ") and the password you provided").then(
-                    result => {
-                        this.router.navigate(['/Home']);
-                    }
-                );
+                this.basicModals.alert("User created", "User succesfully created");
+                event.stopPropagation();
+                this.dialog.close();
             }
         );
+    }
+
+    cancel() {
+        this.dialog.dismiss();
     }
 
 }

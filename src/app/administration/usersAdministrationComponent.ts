@@ -1,4 +1,7 @@
 import { Component } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { UserCreateModal, UserCreateModalData } from "./administrationModals/userCreateModal"
 import { UserServices } from "../services/userServices";
 import { User, UserStatusEnum } from "../models/User";
 import { VBContext } from "../utils/VBContext";
@@ -19,7 +22,7 @@ export class UsersAdministrationComponent {
     private showInactive: boolean = true;
     private showNew: boolean = true;
 
-    constructor(private userService: UserServices, private basicModals: BasicModalServices) { }
+    constructor(private userService: UserServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initUserList();
@@ -36,6 +39,22 @@ export class UsersAdministrationComponent {
 
     private selectUser(user: User) {
         this.selectedUser = user;
+    }
+
+    private createUser() {
+        var modalData = new UserCreateModalData("Create user");
+        const builder = new BSModalContextBuilder<UserCreateModalData>(
+            modalData, undefined, UserCreateModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        return this.modal.open(UserCreateModal, overlayConfig).then(
+            dialog => dialog.result.then(
+                res => {
+                    this.initUserList();
+                },
+                () => {}
+            )
+        );
     }
 
     /**

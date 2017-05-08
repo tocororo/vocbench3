@@ -43,7 +43,15 @@ export class VersionsServices {
 
                     versions.push(v);
                 }
-                //TODO sort by date
+                //sort by date
+                versions.sort(
+                    function (v1: VersionInfo, v2: VersionInfo) {
+                        if (v1.dateTime > v2.dateTime) return -1;
+                        if (v1.dateTime < v2.dateTime) return 1;
+                        return 0;
+                    }
+                );
+
                 return versions;
             }
         );

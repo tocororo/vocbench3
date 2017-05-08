@@ -1,0 +1,94 @@
+<form role="form">
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 40%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 40%;">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td nowrap><label>E-mail:</label><span style="color: red">*</span></td>
+                <td colspan="3">
+                    <input type="email" class="form-control input-sm" placeholder="e-mail address" [(ngModel)]="form.email" name="email"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Password:</label><span style="color: red">*</span></td>
+                <td>
+                    <input type="password" class="form-control input-sm" placeholder="password" [(ngModel)]="form.password" name="password"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+                <td nowrap><label>Confirm password:</label><span style="color: red">*</span></td>
+                <td>
+                    <input type="password" class="form-control input-sm"  [ngClass]="{invalid : !isConfirmPwdOk()}"
+                        placeholder="password" [(ngModel)]="form.confirmedPassword" name="confirmedPassword"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Given name:</label><span style="color: red">*</span></td>
+                <td>
+                    <input type="text" class="form-control input-sm" placeholder="given name" [(ngModel)]="form.givenName" name="givenName"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+                <td nowrap><label>Family name:</label><span style="color: red">*</span></td>
+                <td>
+                    <input type="text" class="form-control input-sm" placeholder="family name" [(ngModel)]="form.familyName" name="familyName"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Gender:</label></td>
+                <td>
+                    <div class="hbox">
+                        <select [(ngModel)]="selectedGender" name="selectedGender" class="form-control input-sm" 
+                            style="margin-right: 4px;" (change)="onGenderChange()">
+                            <option *ngFor="let g of genders" [value]="g">{{g}}</option>
+                        </select>
+                        <input type="text" class="form-control input-sm" [(ngModel)]="form.gender" name="gender" 
+                            [disabled]="selectedGender != 'Other'" (ngModelChange)="onModelChanged()">
+                    </div>
+                </td>
+                <td nowrap><label>Birthday:</label></td>
+                <td>
+                    <input type="date" class="form-control input-sm" [(ngModel)]="form.birthday" name="birthday" placeholder="yyyy-MM-dd"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Country:</label></td>
+                <td>
+                    <select [(ngModel)]="form.country" name="country" class="form-control input-sm" (ngModelChange)="onModelChanged()">
+                        <option *ngFor="let c of countries" [value]="c">{{c}}</option>
+                    </select>
+                </td>
+                <td nowrap><label>Address:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.address" name="address" placeholder="address"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Phone:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.phone" name="phone" placeholder="phone number"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+                <td nowrap><label>Url:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.url" name="url" placeholder="url"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Affiliation:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.affiliation" name="affiliation" placeholder="affiliation"
+                        (ngModelChange)="onModelChanged()">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

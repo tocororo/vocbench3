@@ -11,17 +11,23 @@
                 <div class="subPanel-heading">
                     <label style="flex: 1;">Users:</label>
                     <div class="pull-right">
-                        <div style="display: inline-flex; align-items: center; margin-left: 2px;">
-                            <span>Active</span>
-                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showActive">
-                        </div>
-                        <div style="display: inline-flex; align-items: center; margin-left: 2px;">
-                            <span>Inactive</span>
-                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showInactive">
-                        </div>
-                        <div style="display: inline-flex; align-items: center; margin-left: 2px;">
-                            <span>New</span>
-                            <input type="checkbox" style="margin-left: 2px;" [(ngModel)]="showNew">
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button #actBtn class="btn btn-default" [ngClass]="{active: showActive}" (click)="showActive = !showActive"
+                                    title="Show/Hide active users" (mouseup)="actBtn.blur()">Active
+                                </button>
+                                <button #inactBtn class="btn btn-default" [ngClass]="{active: showInactive}" (click)="showInactive = !showInactive"
+                                    title="Show/Hide inactive users" (mouseup)="inactBtn.blur()">Inactive
+                                </button>
+                                <button #newBtn class="btn btn-default" [ngClass]="{active: showNew}" (click)="showNew = !showNew"
+                                    title="Show/Hide new users" (mouseup)="newBtn.blur()">New
+                                </button>
+                            </div>
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-default" (click)="createUser()" title="Create user">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

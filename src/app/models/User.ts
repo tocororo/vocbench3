@@ -202,3 +202,28 @@ export const RoleLevel = {
     system: "system" as RoleLevel,
     project: "project" as RoleLevel
 }
+
+export class UserForm {
+
+    email: string;
+    username: string;
+    password: string;
+    confirmedPassword: string;
+    givenName: string;
+    familyName: string;
+    birthday: Date;
+    gender: string;
+    country: string;
+    address: string;
+    affiliation: string;
+    url: string;
+    phone: string;
+
+    static regexp = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}");
+
+    constructor() { }
+
+    static isValidEmail(email: string) {
+        return UserForm.regexp.test(email);
+    }
+}
