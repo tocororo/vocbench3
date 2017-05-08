@@ -33,12 +33,15 @@ export class VersionsServices {
                     var yyyy = d.getFullYear();
                     console.log(d.getFullYear);
                     var month = d.getMonth()+1;
-                    var MM = (month > 9 ? ' ': '0') + month;
+                    var MM = (month > 9 ? "" : "0") + month;
                     var day = d.getDate();
-                    var dd = (day > 9 ? ' ': '0') + day;
-                    var hh = d.getHours();
-                    var mm = d.getMinutes();
-                    var ss = d.getSeconds();
+                    var dd = (day > 9 ? "" : "0") + day;
+                    var hours = d.getHours();
+                    var hh = (hours > 9 ? "" : "0") + hours;
+                    var minutes = d.getMinutes();
+                    var mm = (minutes > 9 ? "" : "0") + minutes;
+                    var seconds = d.getSeconds();
+                    var ss = (seconds > 9 ? "" : "0") + seconds;
                     v.dateTime = yyyy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss;
 
                     versions.push(v);
