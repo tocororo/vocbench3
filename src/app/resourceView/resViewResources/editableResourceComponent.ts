@@ -29,6 +29,8 @@ export class EditableResourceComponent {
 	private rangeType: RDFTypesEnum;
 	private ranges: { type: string, rangeCollection: ARTURIResource[] }; //stores response.ranges of getRange service
 
+	private isClassAxiom: boolean = false;
+
 	private editInProgress: boolean = false;
 	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
@@ -51,7 +53,7 @@ export class EditableResourceComponent {
 	}
 
 	private computeResourceStringValue() {
-		if (this.ranges != null) { //check to void error in case the property has custom ranges that replace the "classic" range
+		if (this.ranges != null) { //check to avoid error in case the property has custom ranges that replace the "classic" range
 			let type: string = this.ranges.type;
 			if (type == "resource") {
 				this.rangeType = RDFTypesEnum.resource;
@@ -60,22 +62,35 @@ export class EditableResourceComponent {
 					let literalForm: ARTLiteral = new ARTLiteral(
 						this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 					this.resourceStringValue = literalForm.toNT();
+					this.resourceStringValuePristine = this.resourceStringValue;
 				}
 				//special case: if user is editing a class restriction, the widget should allow to edit the manchester expression
-				else if (this.resource.isBNode() && this.resource.getShow().startsWith("(") && this.resource.getShow().endsWith(")")) {
-					this.resourceStringValue = this.resource.getShow();
+				else if (this.resource.isBNode()) {
+					this.manchesterService.isClassAxiom(<ARTBNode>this.resource).subscribe(
+						isClassAxiom => {
+							if (isClassAxiom) {
+								this.isClassAxiom = true;
+								this.resourceStringValue = this.resource.getShow();
+							} else {
+								this.resourceStringValue = this.resource.toNT();
+							}
+							this.resourceStringValuePristine = this.resourceStringValue;
+						}
+					)
 				} else {
 					this.resourceStringValue = this.resource.toNT();
+					this.resourceStringValuePristine = this.resourceStringValue;
 				}
 			} else if (type.toLowerCase().includes("literal")) {
 				this.rangeType = RDFTypesEnum.literal;
 				this.resourceStringValue = this.resource.toNT();
+				this.resourceStringValuePristine = this.resourceStringValue;
 			} else {
 				this.rangeType = RDFTypesEnum.undetermined; //default
 				this.resourceStringValue = this.resource.toNT();
+				this.resourceStringValuePristine = this.resourceStringValue;
 			}
 		}
-		this.resourceStringValuePristine = this.resourceStringValue;
 	}
 
 	private confirmEdit() {
@@ -92,7 +107,11 @@ export class EditableResourceComponent {
 					newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
 				} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
 					newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
-				} else if (this.resource.isBNode() && this.resourceStringValue.startsWith("(") && this.resourceStringValue.endsWith(")")) {
+				// } else if (this.resource.isBNode() && this.resourceStringValue.startsWith("(") && this.resourceStringValue.endsWith(")")) {
+				} else if (this.resource.isBNode() && this.isClassAxiom) {
+					/** If the editing resource is a bnode, if it is represent class axiom and the previous check failed,
+					 * I can assume that the user has typed a new manchester expression to represent a class axiom */
+					this.isClassAxiom = false;
 					this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
 					return;
 				} else {
@@ -165,12 +184,20 @@ export class EditableResourceComponent {
 	}
 
 	private applyManchesterUpdate(node: ARTBNode, expression: string) {
-		this.manchesterService.updateExpression(this.resourceStringValue, <ARTBNode>this.resource).subscribe(
-			stResp => {
-				this.editInProgress = false;
-				this.update.emit(); 
+		this.manchesterService.checkExpression(expression).subscribe(
+			valid => {
+				if (valid) {
+					this.manchesterService.updateExpression(this.resourceStringValue, <ARTBNode>this.resource).subscribe(
+						stResp => {
+							this.editInProgress = false;
+							this.update.emit(); 
+						}
+					);
+				} else {
+					this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "error");
+				}
 			}
-		);
+		)
 	}
 
 	private cancelEdit() {

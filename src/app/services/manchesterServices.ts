@@ -1,6 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, ARTNode, ARTBNode} from "../models/ARTResources";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { ARTURIResource, ARTNode, ARTBNode } from "../models/ARTResources";
 
 @Injectable()
 export class ManchesterServices {
@@ -9,7 +10,7 @@ export class ManchesterServices {
     private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
-    
+
     /**
      * Checks if a manchester expression in valid
      * @param manchExpr manchester expression to check
@@ -37,7 +38,7 @@ export class ManchesterServices {
         };
         return this.httpMgr.doGet(this.serviceName, "createRestriction", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Removes a restriction
      * @param cls the subject class of the restriction
@@ -67,6 +68,14 @@ export class ManchesterServices {
         };
         return this.httpMgr.doGet(this.serviceName, "updateExpression", params, this.oldTypeService, true);
     }
-    
+
+    isClassAxiom(bnode: ARTBNode): Observable<boolean> {
+        console.log("[ManchesterServices] isClassAxiom");
+        var params = {
+            bnode: bnode
+        };
+        return this.httpMgr.doGet(this.serviceName, "isClassAxiom", params, this.oldTypeService, true);
+    }
+
 
 }
