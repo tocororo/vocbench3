@@ -86,7 +86,7 @@ export class ProjectsAdministrationComponent {
                 data => {
                     var user: User = data.user;
                     var roles: string[] = data.roles;
-                    this.adminService.addProjectUserBinding(this.selectedProject.getName(), user.getEmail(), roles).subscribe(
+                    this.adminService.addRolesToUser(this.selectedProject.getName(), user.getEmail(), roles).subscribe(
                         stResp => {
                             this.usersBound.push(user);
                         }
@@ -99,7 +99,12 @@ export class ProjectsAdministrationComponent {
 
     private removeUserFromProject() {
         console.log("remove user " + this.selectedUser.getFamilyName() + " from " + this.selectedProject.getName());
-        //TODO call service
+        this.adminService.removeAllRolesFromUser(this.selectedProject.getName(), this.selectedUser.getEmail()).subscribe(
+            stResp => {
+                this.puBinding.addRole(this.selectedRole.getName());
+                this.selectedRole = null;
+            }
+        );
     }
 
     //==== PROJECT-USER PROPERTIES PANEL ====
@@ -115,7 +120,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private addRole() {
-        this.adminService.addRoleToUser(this.selectedProject.getName(), this.selectedUser.getEmail(), this.selectedRole.getName()).subscribe(
+        this.adminService.addRolesToUser(this.selectedProject.getName(), this.selectedUser.getEmail(), [this.selectedRole.getName()]).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
                 this.selectedRole = null;

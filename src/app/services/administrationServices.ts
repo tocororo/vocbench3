@@ -68,36 +68,36 @@ export class AdministrationServices {
     }
 
     /**
-     * Assigns a user to a project with the given roles, so creates a new binding
+     * Assigns roles to a user in a project
      * @param projectName
      * @param email
      * @param roles
      */
-    addProjectUserBinding(projectName: string, email: string, roles: string[]) {
-        console.log("[AdministrationServices] addProjectUserBinding");
+    addRolesToUser(projectName: string, email: string, roles: string[]) {
+        console.log("[AdministrationServices] addRolesToUser");
         var params: any = {
             projectName: projectName,
             email: email,
             roles: roles
         };
-        return this.httpMgr.doGet(this.serviceName, "addProjectUserBinding", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "addRolesToUser", params, this.oldTypeService, true);
     }
 
-    /**
-     * Adds a role to a user in a project
-     * @param projectName
-     * @param email
-     * @param role
-     */
-    addRoleToUser(projectName: string, email: string, role: string) {
-        console.log("[AdministrationServices] addRoleToUser");
-        var params: any = {
-            projectName: projectName,
-            email: email,
-            role: role
-        };
-        return this.httpMgr.doGet(this.serviceName, "addRoleToUser", params, this.oldTypeService, true);
-    }
+    // /**
+    //  * Adds a role to a user in a project
+    //  * @param projectName
+    //  * @param email
+    //  * @param role
+    //  */
+    // addRoleToUser(projectName: string, email: string, role: string) {
+    //     console.log("[AdministrationServices] addRoleToUser");
+    //     var params: any = {
+    //         projectName: projectName,
+    //         email: email,
+    //         role: role
+    //     };
+    //     return this.httpMgr.doGet(this.serviceName, "addRoleToUser", params, this.oldTypeService, true);
+    // }
 
     /**
      * Removes a role to a user in a project
@@ -113,6 +113,22 @@ export class AdministrationServices {
             role: role
         };
         return this.httpMgr.doGet(this.serviceName, "removeRoleFromUser", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Removes a role to a user in a project
+     * @param projectName
+     * @param email
+     * @param role
+     */
+    removeAllRolesFromUser(projectName: string, email: string) {
+        console.log("[AdministrationServices] removeAllRolesFromUser");
+        var params: any = {
+            projectName: projectName,
+            email: email,
+            role: role
+        };
+        return this.httpMgr.doGet(this.serviceName, "removeAllRolesFromUser", params, this.oldTypeService, true);
     }
 
     //ROLES

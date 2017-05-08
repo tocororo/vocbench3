@@ -21,8 +21,7 @@
                         <button class="btn btn-default" (click)="importRole()" title="Import role" [disabled]="!project">
                             <span class="glyphicon glyphicon-open"></span>
                         </button>
-                        <button class="btn btn-default" (click)="exportRole()" title="Export role"
-                             [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
+                        <button class="btn btn-default" (click)="exportRole()" title="Export role" [disabled]="!selectedRole">
                             <span class="glyphicon glyphicon-save"></span>
                         </button>
                     </div>
