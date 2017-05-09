@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { ARTURIResource } from "../../../models/ARTResources";
+import { ARTURIResource, ARTResource } from "../../../models/ARTResources";
 import { NewResourceModal, NewResourceModalData } from "./newResourceModal/newResourceModal";
 import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/newResourceCfModal";
 import { NewSkosResourceCfModal, NewSkosResourceCfModalData } from "./newResourceModal/newSkosResourceCfModal";
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
+import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/newConceptFromLabelModal";
 
 @Injectable()
 export class CreationModalServices {
@@ -102,6 +103,25 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewTypedLiteralModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to create a new concept with a preset skosxl:Label
+     * @param title the title of the modal dialog
+     * @param xLabel label that the new concept will have
+     * @param cls class of the new creating resource
+     * @param clsChangeable tells if the class of the creating resource can be changed
+     * @param cfId the custom form id
+     */
+    newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, cfId?: string) {
+        var modalData = new NewConceptFromLabelModalData(title, xLabel, cls, clsChangeable, cfId);
+        const builder = new BSModalContextBuilder<NewConceptFromLabelModalData>(
+            modalData, undefined, NewConceptFromLabelModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewConceptFromLabelModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

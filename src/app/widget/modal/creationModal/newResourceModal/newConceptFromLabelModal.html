@@ -9,6 +9,7 @@
     </div>
 </div>
 <div class="modal-body">
+
     <div class="vbox" (keydown)="onKeydown($event)">
 
         <table class="table table-condensed table-borderless">
@@ -18,9 +19,17 @@
             </colgroup>
             <tbody>
                 <tr>
+                    <td><label>Label:</label></td>
+                    <td>
+                        <div class="form-control input-sm">
+                            <rdf-resource [resource]="context.xLabel"></rdf-resource>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td><label>URI:</label></td>
                     <td>
-                        <editable-ns-input [(ngModel)]="uri"  [toFocus]="true">
+                        <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
                         </editable-ns-input>
                     </td>
                 </tr>

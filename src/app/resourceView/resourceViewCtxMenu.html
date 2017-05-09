@@ -1,0 +1,17 @@
+<div class="dropdown pull-right">
+    <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown">
+        <span>&#9662;</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
+            <a (click)="alignResource()">Align with external resource</a>
+        </li>
+        <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
+            <a (click)="setAsDeprecated()">Set as deprecated</a>
+        </li>
+        <li *ngIf="resource.getRole() == 'xLabel'"
+            [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
+            <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
+        </li>
+    </ul>
+</div>

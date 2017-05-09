@@ -3,10 +3,12 @@
 </div>
 <div class="modal-body vbox" style="height: 40vh;">
     
-    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 2px 4px; margin-bottom: 4px;">
-        <rdf-resource *ngIf="selectedResource" [resource]="selectedResource"></rdf-resource>
+    <div style="display: flex; margin-bottom: 4px;">
+        <div class="form-control input-sm" style="margin-right: 4px;">
+            <rdf-resource *ngIf="selectedResource" [resource]="selectedResource"></rdf-resource>
+        </div>
         <div class="dropdown pull-right">
-            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+            <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
                 Select Resource
                 <span class="caret"></span>
             </button>
@@ -23,7 +25,6 @@
                 </li>
             </ul>
         </div>
-
     </div>
     
     <div class="panel panel-default vbox">

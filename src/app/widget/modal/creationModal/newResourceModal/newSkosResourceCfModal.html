@@ -36,10 +36,8 @@
             </tbody>
         </table>
 
-        <template [ngIf]="customFormId">
-            <div style="height:1px; border-bottom:1px solid #ddd; margin: 5px;"></div>
-            <custom-form [cfId]="customFormId" [(ngModel)]="formFields"></custom-form>
-        </template>
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
 
     </div>
 

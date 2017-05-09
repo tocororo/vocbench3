@@ -45,6 +45,7 @@ import { NewResourceModal } from '../widget/modal/creationModal/newResourceModal
 import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newResourceCfModal';
 import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newSkosResourceCfModal';
 import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
+import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/newConceptFromLabelModal';
 
 //metadata modals
 import { ImportOntologyModal } from '../config/dataManagement/metadata/importOntologyModal';
@@ -80,7 +81,8 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewSkosResourceCfModal, NewTypedLiteralModal,
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, 
+        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
@@ -103,7 +105,8 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
      */
     entryComponents: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewSkosResourceCfModal, NewTypedLiteralModal,
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, 
+        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,

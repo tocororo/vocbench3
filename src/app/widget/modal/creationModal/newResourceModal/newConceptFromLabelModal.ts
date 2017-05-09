@@ -5,26 +5,26 @@ import { CustomFormsServices } from "../../../../services/customFormsServices"
 import { BasicModalServices } from "../../basicModal/basicModalServices"
 import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
 import { CustomForm, FormField } from "../../../../models/CustomForms"
-import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
+import { ARTLiteral, ARTURIResource, ARTResource } from "../../../../models/ARTResources"
 
-export class NewSkosResourceCfModalData extends BSModalContext {
+export class NewConceptFromLabelModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
+        public xLabel: ARTResource,
         public cls: ARTURIResource, //class that this modal is creating
         public clsChangeable: boolean = true,
         public cfId: string,
-        public lang: string
     ) {
         super();
     }
 }
 
 @Component({
-    selector: "new-skos-resource-cf-modal",
-    templateUrl: "./newSkosResourceCfModal.html",
+    selector: "new-concept-from-label-modal",
+    templateUrl: "./newConceptFromLabelModal.html",
 })
-export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfModalData> {
-    context: NewSkosResourceCfModalData;
+export class NewConceptFromLabelModal implements ModalComponent<NewConceptFromLabelModalData> {
+    context: NewConceptFromLabelModalData;
 
     @ViewChild("toFocus") inputToFocus: ElementRef;
 
@@ -32,20 +32,17 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
     private customFormId: string;
 
     //standard form
-    private label: string;
-    private lang: string;
     private uri: string;
 
     //custom form
     private formFields: FormField[] = [];
 
-    constructor(public dialog: DialogRef<NewSkosResourceCfModalData>, private cfService: CustomFormsServices,
+    constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, private cfService: CustomFormsServices,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.lang = this.context.lang;
         this.resourceClass = this.context.cls;
         this.customFormId = this.context.cfId;
     }
@@ -60,10 +57,6 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
                 this.ok(event);
             }
         }
-    }
-
-    private onLangChange(newLang: string) {
-        this.lang = newLang;
     }
 
     private changeClass() {
@@ -95,7 +88,6 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
     }
 
     private isInputValid(): boolean {
-        var standardFormValid: boolean = (this.label != undefined && this.label.trim() != "");
         var customFormValid: boolean = true;
         for (var i = 0; i < this.formFields.length; i++) {
             var entry = this.formFields[i];
@@ -105,7 +97,7 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
                 customFormValid = false;
             }
         }
-        return (standardFormValid && customFormValid);
+        return customFormValid;
     }
 
     ok(event: Event) {
@@ -130,14 +122,13 @@ export class NewSkosResourceCfModal implements ModalComponent<NewSkosResourceCfM
             }
         }
 
-        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
             uriResource: null,
-            label: new ARTLiteral(this.label, null, this.lang),
             cls: this.resourceClass,
             cfId: this.customFormId,
             cfValueMap: entryMap
         }
-        //Set URI only if localName is not empty
+        //Set URI only if not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
         }

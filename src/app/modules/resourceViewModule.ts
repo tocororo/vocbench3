@@ -7,6 +7,7 @@ import { TreeAndListModule } from "./treeAndListModule";
 
 import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
 import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
+import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
 import { ResourceViewPanelComponent } from '../resourceView/resourceViewPanel/resourceViewPanelComponent';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewPanel/resourceViewSplittedComponent';
 import { ResourceViewTabbedComponent } from '../resourceView/resourceViewPanel/resourceViewTabbedComponent';
@@ -45,7 +46,8 @@ import { AddPropertyValueModal } from '../resourceView/resViewModals/addProperty
     declarations: [
         ResourceViewComponent, ResourceViewPanelComponent,
         ResourceViewSplittedComponent, ResourceViewTabbedComponent,
-        ResourceRenameComponent, ReifiedResourceComponent, EditableResourceComponent,
+        ResourceRenameComponent, ResourceViewContextMenu,
+        ReifiedResourceComponent, EditableResourceComponent,
         //renderers
         BroadersPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
         LexicalizationsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { ARTURIResource, ResourceUtils } from "../models/ARTResources";
+import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
 
 @Injectable()
 export class RefactorServices {
@@ -91,6 +91,56 @@ export class RefactorServices {
         return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
+            }
+        );
+    }
+
+    /**
+     * @param xLabel the label to move to a new concept
+     * @param conceptScheme scheme where new concept belongs
+     * @param oldConcept concept that owned the xLabel
+     * @param newConcept uri of the new concept to spawn
+     * @param broaderConcept
+     * @param customFormId id of the custom form that set additional info to the concept
+     * @param userPromptMap json map object of key - value of the custom form
+     */
+    spawnNewConceptFromLabel(xLabel: ARTResource, conceptScheme: ARTURIResource, oldConcept: ARTURIResource, 
+        newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
+        // altToPrefXLabel?: ARTResource, //this is the alt label of the oldConcept that should be moved as prefLabel (not used server side)
+		customFormId?: string, userPromptMap?: any) {
+
+        console.log("[RefactorServices] spawnNewConceptFromLabel");
+        var params: any = {
+            xLabel: xLabel,
+            conceptScheme: conceptScheme,
+            oldConcept: oldConcept
+        }
+        if (newConcept != undefined) {
+            params.newConcept = newConcept;
+        }
+        if (broaderConcept != undefined) {
+            params.broaderConcept = broaderConcept;
+        }
+        // if (altToPrefXLabel != undefined) {
+        //     params.altToPrefXLabel = altToPrefXLabel;
+        // }
+        if (customFormId != null && userPromptMap != null) {
+            params.customFormId = customFormId;
+            params.userPromptMap = JSON.stringify(userPromptMap);
+        }
+        return this.httpMgr.doGet(this.serviceName, "spawnNewConceptFromLabel", params, this.oldTypeService, true).map(
+            stResp => {
+                if (broaderConcept != null) { //created narrower
+                    var newConc = Deserializer.createURI(stResp);
+                    newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                    this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broaderConcept});
+                    return newConc;
+                } else { //created topConcept
+                    var newConc = Deserializer.createURI(stResp);
+                    newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                    this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: conceptScheme});
+                    return {concept: newConc, scheme: conceptScheme};
+                }
             }
         );
     }

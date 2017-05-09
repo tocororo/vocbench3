@@ -9,5 +9,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedCF">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button *ngIf="!context.hideNo" class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

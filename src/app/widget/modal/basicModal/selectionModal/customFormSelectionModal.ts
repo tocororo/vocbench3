@@ -7,8 +7,9 @@ export class CustomFormSelectionModalData extends BSModalContext {
     /**
      * @param title title of the modal
      * @param cfList array of CustomForm among which choose
+     * @param hideNo tells if the no button should be hide
      */
-    constructor(public title: string, public cfList: Array<CustomForm>) {
+    constructor(public title: string, public cfList: Array<CustomForm>, public hideNo: boolean = false) {
         super();
     }
 }
