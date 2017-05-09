@@ -56,10 +56,7 @@ export class VersioningComponent {
         this.basicModals.prompt("Create a version dump", "Version ID").then(
             (id: any) => {
                 UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
-                //TODO when service updates, remove repoAccess from parameter
-                let repoAccess = new RepositoryAccess(RepositoryAccessType.CreateLocal);
-                this.versionsService.createVersionDump(id, repoAccess).subscribe(
-                // this.versionsService.createVersionDump(id).subscribe(
+                this.versionsService.createVersionDump(id).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                         this.initVersions();

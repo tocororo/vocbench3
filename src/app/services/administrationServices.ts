@@ -83,22 +83,6 @@ export class AdministrationServices {
         return this.httpMgr.doGet(this.serviceName, "addRolesToUser", params, this.oldTypeService, true);
     }
 
-    // /**
-    //  * Adds a role to a user in a project
-    //  * @param projectName
-    //  * @param email
-    //  * @param role
-    //  */
-    // addRoleToUser(projectName: string, email: string, role: string) {
-    //     console.log("[AdministrationServices] addRoleToUser");
-    //     var params: any = {
-    //         projectName: projectName,
-    //         email: email,
-    //         role: role
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "addRoleToUser", params, this.oldTypeService, true);
-    // }
-
     /**
      * Removes a role to a user in a project
      * @param projectName
@@ -125,8 +109,7 @@ export class AdministrationServices {
         console.log("[AdministrationServices] removeAllRolesFromUser");
         var params: any = {
             projectName: projectName,
-            email: email,
-            role: role
+            email: email
         };
         return this.httpMgr.doGet(this.serviceName, "removeAllRolesFromUser", params, this.oldTypeService, true);
     }
