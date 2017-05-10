@@ -49,13 +49,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private create() {
-        this.selectCustomForm(SKOS.conceptScheme).then(
-            cfId => { this.createScheme(cfId); }
-        );
-    }
-
-    private createScheme(cfId?: string) {
-        this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true, cfId).then(
+        this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
             (res: any) => {
                 console.log("returned data ", res);
                 if (this.ONTO_TYPE == "SKOS") {

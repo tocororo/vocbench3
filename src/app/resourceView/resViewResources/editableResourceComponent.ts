@@ -3,13 +3,16 @@ import {
 	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
 	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
 } from "../../models/ARTResources";
-import { SKOSXL } from "../../models/Vocabulary";
+import { SKOSXL, SKOS } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ManchesterServices } from "../../services/manchesterServices";
+import { RefactorServices } from "../../services/refactorServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
+import { VBPreferences } from "../../utils/VBPreferences";
 
 @Component({
 	selector: "editable-resource",
@@ -35,8 +38,13 @@ export class EditableResourceComponent {
 	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
 
-	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices, private manchesterService: ManchesterServices,
-		private basicModals: BasicModalServices, private rvModalService: ResViewModalServices) { }
+	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
+		private manchesterService: ManchesterServices, private refactorService: RefactorServices,
+		private basicModals: BasicModalServices, private creationModals: CreationModalServices, private rvModalService: ResViewModalServices,
+		private preferences: VBPreferences) { }
+
+
+	//======== "edit" HANDLER ========
 
 	private edit() {
 		if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
@@ -204,6 +212,11 @@ export class EditableResourceComponent {
 		this.editInProgress = false;
 	}
 
+	//================================
+
+	/**
+	 * "Replace with existing resource" menu item
+	 */
 	private replace() {
 		this.rvModalService.addPropertyValue("Replace", this.subject, this.predicate, false).then(
 			(data: any) => {
@@ -213,6 +226,44 @@ export class EditableResourceComponent {
 		)
 	}
 
+
+	//====== "Spawn new concept from this xLabel" HANDLER
+
+	/**
+	 * Determines if the menu item should be visible. Visible only if the resource described in the ResView is a concept
+	 * and if the object is a xLabel
+	 */
+	private isSpawnWithLabelAvailable() {
+		if (this.resource.isResource()) {
+			return ((<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel &&
+				this.subject.getRole() == RDFResourceRolesEnum.concept);
+		} else {
+			return false;
+		}
+	}
+
+	private spawnNewConceptWithLabel() {
+		//here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
+		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept).then(
+            data => {
+                console.log(data);
+                let scheme: ARTURIResource = this.preferences.getActiveScheme();
+                let oldConcept: ARTURIResource = <ARTURIResource>this.subject; 
+                let broaderConcept: ARTURIResource = null; //TODO give the possibility to select a broader
+                this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, scheme, oldConcept,
+                    data.uriResource, broaderConcept, data.cfId, data.cfValueMap).subscribe(
+                    stResp => {
+                        this.update.emit();
+                    }
+                );
+            },
+            () => {}
+		);
+	}
+
+	/**
+	 * "Delete" menu item
+	 */
 	private delete() {
 		this.deleteOutput.emit();
 	}

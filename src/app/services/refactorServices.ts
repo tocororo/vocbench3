@@ -106,7 +106,6 @@ export class RefactorServices {
      */
     spawnNewConceptFromLabel(xLabel: ARTResource, conceptScheme: ARTURIResource, oldConcept: ARTURIResource, 
         newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
-        // altToPrefXLabel?: ARTResource, //this is the alt label of the oldConcept that should be moved as prefLabel (not used server side)
 		customFormId?: string, userPromptMap?: any) {
 
         console.log("[RefactorServices] spawnNewConceptFromLabel");
@@ -121,9 +120,6 @@ export class RefactorServices {
         if (broaderConcept != undefined) {
             params.broaderConcept = broaderConcept;
         }
-        // if (altToPrefXLabel != undefined) {
-        //     params.altToPrefXLabel = altToPrefXLabel;
-        // }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);

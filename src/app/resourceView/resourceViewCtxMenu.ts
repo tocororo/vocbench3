@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { ARTResource } from "../models/ARTResources";
-import { SKOS } from "../models/Vocabulary";
 import { AlignmentServices } from "../services/alignmentServices";
+import { RefactorServices } from "../services/refactorServices";
 import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal"
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { SKOS } from "../models/Vocabulary";
+import { VBPreferences } from "../utils/VBPreferences";
 
 @Component({
     selector: "res-view-menu",
@@ -16,7 +18,8 @@ export class ResourceViewContextMenu {
     @Input() resource: ARTResource;
     @Output() update = new EventEmitter();
 
-    constructor(private alignServices: AlignmentServices, private creationModals: CreationModalServices, private modal: Modal) { }
+    constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices,
+        private preferences: VBPreferences, private creationModals: CreationModalServices, private modal: Modal) { }
 
     private alignResource() {
         this.openAlignmentModal().then(
@@ -55,6 +58,16 @@ export class ResourceViewContextMenu {
         this.creationModals.newConceptFromLabel("Spawn new concept", this.resource, SKOS.concept).then(
             data => {
                 console.log(data);
+                let scheme: ARTURIResource = this.preferences.getActiveScheme();
+                let oldConcept: ARTURIResource = null; //from the resView of the xLabel I don't know the concept to which it belongs, 
+                    //so oldConcept is null and lets the server find the oldConcept
+                let broaderConcept: ARTURIResource = null; //TODO give the possibility to select a broader
+                this.refactorService.spawnNewConceptFromLabel(this.resource, scheme, oldConcept,
+                    data.uriResource, broaderConcept, data.cfId, data.cfValueMap).subscribe(
+                    stResp => {
+                        this.update.emit();
+                    }
+                );
             },
             () => {}
         );

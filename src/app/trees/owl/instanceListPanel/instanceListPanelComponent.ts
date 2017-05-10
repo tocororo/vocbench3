@@ -30,15 +30,11 @@ export class InstanceListPanelComponent extends AbstractPanel {
     }
 
     private create() {
-        this.selectCustomForm(this.cls).then(
-            cfId => { 
-                this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false, cfId).then(
-                    (data: any) => {
-                        this.classesService.createInstance(data.uriResource, this.cls, cfId, data.cfValueMap).subscribe();
-                    },
-                    () => {}
-                )
-            }
+        this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false).then(
+            (data: any) => {
+                this.classesService.createInstance(data.uriResource, this.cls, data.cfId, data.cfValueMap).subscribe();
+            },
+            () => {}
         );
     }
 

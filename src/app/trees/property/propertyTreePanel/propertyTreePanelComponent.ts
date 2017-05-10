@@ -28,30 +28,22 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     createRoot(role: RDFResourceRolesEnum) {
         let propertyType: ARTURIResource = this.convertRoleToClass(role);
-        this.selectCustomForm(propertyType).then(
-            cfId => { 
-                this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false, cfId).then(
-                    (data: any) => {
-                        this.propService.createProperty(data.cls, data.uriResource, data.cfId, data.cfValueMap).subscribe();
-                    },
-                    () => {}
-                )
-            }
+        this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false).then(
+            (data: any) => {
+                this.propService.createProperty(data.cls, data.uriResource, data.cfId, data.cfValueMap).subscribe();
+            },
+            () => {}
         );
     }
 
     createChild() {
         let parentRole: RDFResourceRolesEnum = this.selectedNode.getRole();
         let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
-        this.selectCustomForm(propertyType).then(
-            cfId => {
-                this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false, cfId).then(
-                    (data: any) => {
-                        this.propService.createSubProperty(data.cls, data.uriResource, this.selectedNode, data.cfId, data.cfValueMap).subscribe();
-                    },
-                    () => {}
-                )
-            }
+        this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false).then(
+            (data: any) => {
+                this.propService.createSubProperty(data.cls, data.uriResource, this.selectedNode, data.cfId, data.cfValueMap).subscribe();
+            },
+            () => {}
         );
     }
 

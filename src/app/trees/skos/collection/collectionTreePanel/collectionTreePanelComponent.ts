@@ -42,9 +42,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
             collectionType = SKOS.orderedCollection;
         }
-        this.selectCustomForm(collectionType).then(
-            cfId => { this.createCollection(collectionType, cfId); }
-        );
+        this.createCollection(collectionType);
     }
 
     createChild(role: RDFResourceRolesEnum) {
@@ -54,13 +52,11 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
             collectionType = SKOS.orderedCollection;
         }
-        this.selectCustomForm(collectionType).then(
-            cfId => { this.createNestedCollection(collectionType, cfId); }
-        );
+        this.createNestedCollection(collectionType);
     }
 
-    private createCollection(collectionType: ARTURIResource, cfId: string) {
-        this.creationModals.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true, cfId).then(
+    private createCollection(collectionType: ARTURIResource) {
+        this.creationModals.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
@@ -93,8 +89,8 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         );
     }
 
-    private createNestedCollection(collectionType: ARTURIResource, cfId: string) {
-         this.creationModals.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true, cfId).then(
+    private createNestedCollection(collectionType: ARTURIResource) {
+         this.creationModals.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {

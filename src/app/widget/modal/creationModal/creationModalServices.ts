@@ -39,8 +39,8 @@ export class CreationModalServices {
      * @param cfId the custom form id
      * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, cfValueMap:any}
      */
-    newResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, cfId?: string) {
-        var modalData = new NewResourceCfModalData(title, cls, clsChangeable, cfId);
+    newResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean) {
+        var modalData = new NewResourceCfModalData(title, cls, clsChangeable);
         const builder = new BSModalContextBuilder<NewResourceCfModalData>(
             modalData, undefined, NewResourceCfModalData
         );
@@ -55,12 +55,11 @@ export class CreationModalServices {
      * @param title the title of the modal dialog
      * @param cls class of the new creating resource
      * @param clsChangeable tells if the class of the creating resource can be changed
-     * @param cfId the custom form id
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
      * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, label:ARTLiteral, cfValueMap:any}
      */
-    newSkosResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, cfId?: string, lang?: string) {
-        var modalData = new NewSkosResourceCfModalData(title, cls, clsChangeable, cfId, lang);
+    newSkosResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, lang?: string) {
+        var modalData = new NewSkosResourceCfModalData(title, cls, clsChangeable, lang);
         const builder = new BSModalContextBuilder<NewSkosResourceCfModalData>(
             modalData, undefined, NewSkosResourceCfModalData
         );
@@ -113,10 +112,9 @@ export class CreationModalServices {
      * @param xLabel label that the new concept will have
      * @param cls class of the new creating resource
      * @param clsChangeable tells if the class of the creating resource can be changed
-     * @param cfId the custom form id
      */
-    newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, cfId?: string) {
-        var modalData = new NewConceptFromLabelModalData(title, xLabel, cls, clsChangeable, cfId);
+    newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean) {
+        var modalData = new NewConceptFromLabelModalData(title, xLabel, cls, clsChangeable);
         const builder = new BSModalContextBuilder<NewConceptFromLabelModalData>(
             modalData, undefined, NewConceptFromLabelModalData
         );
