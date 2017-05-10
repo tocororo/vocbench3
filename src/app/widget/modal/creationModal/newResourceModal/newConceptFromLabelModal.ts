@@ -29,6 +29,10 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     //standard form
     private uri: string;
 
+    private positionList: string[] = ["Top Concept", "Child of existing Concept"];
+    private position: string = this.positionList[0];
+    private broader: ARTURIResource;
+
     constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals)
@@ -45,8 +49,27 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     }
 
     isStandardFormDataValid(): boolean {
-        //there is no standard form field (the only field standard is the xLabel to move that is given and not changeable)
+        //the only field to check is "broader" only in case it's creating a narrower
+        if (this.isPositionNarrower()) {
+            return this.broader != null;
+        }
         return true;
+    }
+
+    /**
+     * Tells if selected position option is "Child of existing Concept", so the modal is creating a narrower.
+     * Useful to show in the view the broader selection field
+     */
+    private isPositionNarrower(): boolean {
+        return this.position == this.positionList[1];
+    }
+
+    private selectBroader() {
+        this.browsingModals.browseConceptTree("Select broader").then(
+            (concept: any) => {
+                this.broader = concept;
+            }
+        )
     }
 
     ok(event: Event) {
@@ -55,8 +78,9 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
             uriResource: null,
+            broader: null,
             cls: this.resourceClass,
             cfId: this.customFormId,
             cfValueMap: entryMap
@@ -64,6 +88,10 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         //Set URI only if not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
+        }
+        //set broader only if position in "Child of existing Concept"
+        if (this.isPositionNarrower()) {
+            returnedData.broader = this.broader;
         }
         this.dialog.close(returnedData);
     }

@@ -19,7 +19,7 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td><label>Label:</label></td>
+                    <td class="text-right"><label>Label:</label></td>
                     <td>
                         <div class="form-control input-sm">
                             <rdf-resource [resource]="context.xLabel"></rdf-resource>
@@ -27,10 +27,33 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label>URI:</label></td>
+                    <td class="text-right"><label>URI:</label></td>
                     <td>
                         <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
                         </editable-ns-input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>Position:</label></td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="position">
+                            <option *ngFor="let p of positionList">{{p}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionNarrower()">
+                    <td class="text-right"><label>Broader:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="form-control input-sm">
+                                <rdf-resource *ngIf="broader" [resource]="broader"></rdf-resource>
+                            </div>
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectBroader()">
+                                    <img src="../../../../../assets/images/class_create.png"/>
+                                </button>
+                            </span>
+                        </div>
                     </td>
                 </tr>
             </tbody>

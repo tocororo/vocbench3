@@ -8,7 +8,7 @@
         <template ngFor let-field [ngForOf]="formFields">
             <tr *ngIf="!field.isDependency()">
                 <!--Form entry label-->
-                <td><label>{{field.getUserPrompt()}}:</label></td>
+                <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
                 <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
                 <td>
                     <div *ngIf="field.getType() == 'literal'">

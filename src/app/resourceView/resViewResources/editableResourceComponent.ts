@@ -230,8 +230,9 @@ export class EditableResourceComponent {
 	//====== "Spawn new concept from this xLabel" HANDLER
 
 	/**
-	 * Determines if the menu item should be visible. Visible only if the resource described in the ResView is a concept
-	 * and if the object is a xLabel
+	 * Determines if the menu item should be visible.
+	 * Visible only if the object is a xLabel and if the resource described in the ResView is a concept
+	 * (so avoid "spawn new concept..." from xlabel of scheme/collection... and from xLabel in labelRelation partition of an xLabel ResView)
 	 */
 	private isSpawnWithLabelAvailable() {
 		if (this.resource.isResource()) {
@@ -249,9 +250,8 @@ export class EditableResourceComponent {
                 console.log(data);
                 let scheme: ARTURIResource = this.preferences.getActiveScheme();
                 let oldConcept: ARTURIResource = <ARTURIResource>this.subject; 
-                let broaderConcept: ARTURIResource = null; //TODO give the possibility to select a broader
                 this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, scheme, oldConcept,
-                    data.uriResource, broaderConcept, data.cfId, data.cfValueMap).subscribe(
+                    data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
                     stResp => {
                         this.update.emit();
                     }

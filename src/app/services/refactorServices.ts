@@ -98,13 +98,13 @@ export class RefactorServices {
     /**
      * @param xLabel the label to move to a new concept
      * @param conceptScheme scheme where new concept belongs
-     * @param oldConcept concept that owned the xLabel
-     * @param newConcept uri of the new concept to spawn
-     * @param broaderConcept
+     * @param oldConcept concept that owned the xLabel (if null it is retrieved directly from label)
+     * @param newConcept uri of the new concept to spawn (if null the uri will be randomically generated)
+     * @param broaderConcept broader of the new created concept (if null the concept will be a top)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      */
-    spawnNewConceptFromLabel(xLabel: ARTResource, conceptScheme: ARTURIResource, oldConcept: ARTURIResource, 
+    spawnNewConceptFromLabel(xLabel: ARTResource, conceptScheme: ARTURIResource, oldConcept?: ARTURIResource, 
         newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
 		customFormId?: string, userPromptMap?: any) {
 
@@ -112,7 +112,9 @@ export class RefactorServices {
         var params: any = {
             xLabel: xLabel,
             conceptScheme: conceptScheme,
-            oldConcept: oldConcept
+        }
+        if (oldConcept != undefined) {
+            params.oldConcept = oldConcept;
         }
         if (newConcept != undefined) {
             params.newConcept = newConcept;

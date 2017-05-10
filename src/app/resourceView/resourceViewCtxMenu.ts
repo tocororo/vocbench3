@@ -59,17 +59,16 @@ export class ResourceViewContextMenu {
             data => {
                 console.log(data);
                 let scheme: ARTURIResource = this.preferences.getActiveScheme();
-                let oldConcept: ARTURIResource = null; //from the resView of the xLabel I don't know the concept to which it belongs, 
-                    //so oldConcept is null and lets the server find the oldConcept
-                let broaderConcept: ARTURIResource = null; //TODO give the possibility to select a broader
-                this.refactorService.spawnNewConceptFromLabel(this.resource, scheme, oldConcept,
-                    data.uriResource, broaderConcept, data.cfId, data.cfValueMap).subscribe(
+                //from the resView of the xLabel I don't know the concept to which it belongs, 
+                //so oldConcept in spawnNewConceptFromLabel request is null and lets the server find the oldConcept
+                this.refactorService.spawnNewConceptFromLabel(this.resource, scheme, null,
+                    data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
                     stResp => {
                         this.update.emit();
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 
