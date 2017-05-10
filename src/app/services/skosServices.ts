@@ -67,38 +67,6 @@ export class SkosServices {
     }
 
     /**
-     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme
-     * @param prefLabel preferred label of the concept
-     * @param prefLabelLang language of the preferred label
-     * @param scheme scheme where new concept should belong
-     * @param concept local name of the new top concept
-     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
-     * in the response)
-     * @return an object containing concept and scheme
-     */
-    createTopConcept(prefLabel: string, prefLabelLang: string, scheme: ARTURIResource, concept?: string, lang?: string) {
-        console.log("[SkosServices] createConcept");
-        var params: any = {
-            prefLabel: prefLabel,
-            prefLabelLang,
-            scheme: scheme.getURI(),
-        };
-        if (concept != undefined) {
-            params.concept = concept;
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService_old).map(
-            stResp => {
-                var newConc = Deserializer.createURI(stResp);
-                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: scheme});
-                return {concept: newConc, scheme: scheme};
-            });
-    }
-
-    /**
      * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme.
      * NB: although the service server-side has both label and newConcept optional, here only newConcept is optional,
      * so the user is forced to write at least the label.
@@ -110,7 +78,7 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept_NEW(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, conceptCls?: ARTURIResource, 
+    createTopConcept(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, conceptCls?: ARTURIResource, 
         customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {

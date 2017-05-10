@@ -4,9 +4,13 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary";
+import { VBPreferences } from "../../utils/VBPreferences";
+import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
+import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "no-top-concept-scheme-component",
@@ -17,8 +21,9 @@ export class NoTopConceptSchemeComponent {
 
     private brokenSchemeList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices,
-        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private creationModals: CreationModalServices) { }
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
+        private preferences: VBPreferences, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
+        private creationModals: CreationModalServices) { }
 
     /**
      * Run the check
@@ -60,13 +65,23 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        this.creationModals.newResource("Create top Concept").then(
-            (data: any) => {
-                this.skosService.createTopConcept(data.label, data.lang, scheme, data.uri).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                )
+        let workingScheme: ARTURIResource = this.preferences.getActiveScheme();
+        let ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.creationModals.newSkosResourceCf("Create new skos:Concept", SKOS.concept, true).then(
+            (res: any) => {
+                if (ontoType == "SKOS") {
+                    this.skosService.createTopConcept(res.label, workingScheme, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                        stResp => {
+                            this.runIcv();
+                        }
+                    );
+                } else { //SKOSXL
+                    this.skosxlService.createTopConcept_NEW(res.label, workingScheme, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                        stResp => {
+                            this.runIcv();
+                        }
+                    );
+                }
             },
             () => { }
         );
