@@ -428,6 +428,18 @@ export class ResourceUtils {
     }
 
     /**
+     * Tells if a list contains a given resource
+     */
+    static containsResource(list: ARTResource[], resource: ARTResource) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].getNominalValue() == resource.getNominalValue()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the rendering of a resource.
      * If rendering is true, returns the show of the resource.
      * If rendering is false, if the resource is a URI resource, reuturns its qname (if not available, the whole uri), if the

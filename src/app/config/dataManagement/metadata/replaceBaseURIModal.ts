@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { RefactorServices } from "../../../services/refactorServices";
+import { ARTURIResource } from "../../../models/ARTResources";
 import { VBPreferences } from "../../../utils/VBPreferences";
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -62,11 +63,15 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
                 this.refactorService.replaceBaseURI(this.newBaseURI, this.oldBaseURI).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                        //remove scheme if defaultBaseURI was replaced
-                        let activeScheme = this.preferences.getActiveScheme();
-                        if (activeScheme != null && activeScheme.getURI().startsWith(this.oldBaseURI)) {
-                            this.preferences.setActiveScheme(null);
+                        //remove schemes which defaultBaseURI was replaced
+                        let activeSchemes = this.preferences.getActiveSchemes();
+                        let updatedActiveSchemes: ARTURIResource[] = [];
+                        for (var i = 0; i < activeSchemes.length; i++) {
+                            if (!activeSchemes[i].getURI().startsWith(this.oldBaseURI)) {
+                                updatedActiveSchemes.push(activeSchemes[i]);
+                            }
                         }
+                        this.preferences.setActiveSchemes(updatedActiveSchemes);
                         event.stopPropagation();
                         event.preventDefault();
                         this.dialog.close();

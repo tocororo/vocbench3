@@ -11,7 +11,7 @@ import { AbstractTreeNode } from "../../../abstractTreeNode";
 })
 export class ConceptTreeNodeComponent extends AbstractTreeNode {
 
-    @Input() scheme: ARTURIResource;
+    @Input() schemes: ARTURIResource[];
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
@@ -47,7 +47,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
  	 */
     expandNode() {
         this.nodeExpandStart.emit();
-        this.skosService.getNarrowerConcepts(this.node, this.scheme).subscribe(
+        this.skosService.getNarrowerConcepts(this.node, this.schemes).subscribe(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
@@ -97,9 +97,10 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     }
 
     private onConceptRemovedFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
-            this.onConceptDeleted(concept);
-        }
+        //TODO See comment in onConceptRemovedFromScheme in conceptTreeComponent
+        // if (this.scheme != undefined && this.scheme.getURI() == scheme.getURI()) {
+        //     this.onConceptDeleted(concept);
+        // }
     }
 
     private onBroaderRemoved(concept: ARTURIResource, broader: ARTURIResource) {

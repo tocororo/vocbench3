@@ -17,7 +17,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
 
     private projectList: Array<Project> = [];
     private project: Project;
-    private scheme: ARTURIResource; //scheme to explore in case target project is skos(xl)
+    private schemes: ARTURIResource[]; //scheme to explore in case target project is skos(xl)
     private alignedObject: ARTURIResource;
 
     private activeView: RDFResourceRolesEnum;
@@ -48,9 +48,9 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
         this.alignedObject = null;
         
         if (this.isProjectSKOS()) {
-            this.preferenceService.getActiveScheme(this.project.getName()).subscribe(
-                scheme => {
-                    this.scheme = scheme;
+            this.preferenceService.getActiveSchemes(this.project.getName()).subscribe(
+                schemes => {
+                    this.schemes = schemes;
                 }
             );
         }

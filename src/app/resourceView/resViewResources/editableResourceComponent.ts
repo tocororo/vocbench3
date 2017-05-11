@@ -115,7 +115,7 @@ export class EditableResourceComponent {
 					newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
 				} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
 					newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
-				// } else if (this.resource.isBNode() && this.resourceStringValue.startsWith("(") && this.resourceStringValue.endsWith(")")) {
+					// } else if (this.resource.isBNode() && this.resourceStringValue.startsWith("(") && this.resourceStringValue.endsWith(")")) {
 				} else if (this.resource.isBNode() && this.isClassAxiom) {
 					/** If the editing resource is a bnode, if it is represent class axiom and the previous check failed,
 					 * I can assume that the user has typed a new manchester expression to represent a class axiom */
@@ -186,7 +186,7 @@ export class EditableResourceComponent {
 				/** Event propagated to the resView that refreshes.
 				 * I cannot simply update the rdf-resource since the URI of the resource
 				 * in the predicate objects list stored in the partition render is still the same */
-				this.update.emit(); 
+				this.update.emit();
 			}
 		);
 	}
@@ -198,7 +198,7 @@ export class EditableResourceComponent {
 					this.manchesterService.updateExpression(this.resourceStringValue, <ARTBNode>this.resource).subscribe(
 						stResp => {
 							this.editInProgress = false;
-							this.update.emit(); 
+							this.update.emit();
 						}
 					);
 				} else {
@@ -246,18 +246,18 @@ export class EditableResourceComponent {
 	private spawnNewConceptWithLabel() {
 		//here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
 		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept).then(
-            data => {
-                console.log(data);
-                let scheme: ARTURIResource = this.preferences.getActiveScheme();
-                let oldConcept: ARTURIResource = <ARTURIResource>this.subject; 
-                this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, scheme, oldConcept,
-                    data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
-                    stResp => {
-                        this.update.emit();
-                    }
-                );
-            },
-            () => {}
+			data => {
+				console.log(data);
+				let schemes: ARTURIResource[] = this.preferences.getActiveSchemes();
+				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
+				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, schemes, oldConcept,
+					data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
+					stResp => {
+						this.update.emit();
+					}
+				);
+			},
+			() => { }
 		);
 	}
 

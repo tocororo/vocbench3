@@ -22,10 +22,14 @@ export class DanglingConceptComponent {
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
-        this.skosService.getAllSchemes().subscribe( //new service
+        this.skosService.getAllSchemes().subscribe(
             schemeList => {
                 this.schemeList = schemeList;
-                var currentScheme = this.preferences.getActiveScheme();
+                var activeSchemes: ARTURIResource[] = this.preferences.getActiveSchemes();
+                var currentScheme: ARTURIResource;
+                if (activeSchemes.length > 0) {
+                    currentScheme = activeSchemes[0];
+                }
                 if (currentScheme != null) {
                     for (var i = 0; i < this.schemeList.length; i++) {
                         if (this.schemeList[i].getURI() == currentScheme.getURI()) {
@@ -83,7 +87,7 @@ export class DanglingConceptComponent {
      * Fixes concept by selecting a broader concept
      */
     private selectBroader(concept: ARTURIResource) {
-        this.browsingModals.browseConceptTree("Select a skos:broader", this.selectedScheme, true).then(
+        this.browsingModals.browseConceptTree("Select a skos:broader", [this.selectedScheme], true).then(
             (broader: any) => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
@@ -99,7 +103,7 @@ export class DanglingConceptComponent {
      * Fixes all concepts by selecting a broader concept for them all 
      */
     private selectBroaderForAll() {
-        this.browsingModals.browseConceptTree("Select a skos:broader", this.selectedScheme, false).then(
+        this.browsingModals.browseConceptTree("Select a skos:broader", [this.selectedScheme], false).then(
             (broader: any) => {
                 this.icvService.setBroaderForAllDangling(this.selectedScheme, broader).subscribe(
                     stResp => {

@@ -8,7 +8,7 @@ import { VBEventHandler } from '../utils/VBEventHandler';
 export class VBPreferences {
 
     private languages: string[] = []; //contains langTag or a single element "*" that means all languages
-    private activeScheme: ARTURIResource;
+    private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
 
@@ -21,11 +21,12 @@ export class VBPreferences {
         return this.prefService.getProjectPreferences().map(
             prefs => {
                 this.languages = prefs.languages;
-                let activeSchemePref = prefs.active_scheme;
-                if (activeSchemePref != null) {
-                    this.activeScheme = new ARTURIResource(prefs.active_scheme, null, RDFResourceRolesEnum.conceptScheme);
-                } else {
-                    this.activeScheme = null;
+                let activeSchemesPref = prefs.active_schemes;
+                this.activeSchemes = [];
+                if (activeSchemesPref != null) {
+                    for (var i = 0; i < activeSchemesPref.length; i++) {
+                        this.activeSchemes.push(new ARTURIResource(activeSchemesPref[i], null, RDFResourceRolesEnum.conceptScheme));
+                    }
                 }
                 this.showFlags = prefs.show_flags;
                 this.showInstancesNumber = prefs.show_instances_number;
@@ -33,16 +34,28 @@ export class VBPreferences {
         )
     }
 
-    getActiveScheme(): ARTURIResource {
-        return this.activeScheme;
+    getActiveSchemes(): ARTURIResource[] {
+        return this.activeSchemes;
     }
-    setActiveScheme(scheme: ARTURIResource) {
-        this.activeScheme = scheme;
-        this.prefService.setActiveScheme(scheme).subscribe(
+    setActiveSchemes(schemes: ARTURIResource[]) {
+        if (schemes == null) {
+            this.activeSchemes = [];
+        } else {
+            this.activeSchemes = schemes;
+        }
+        this.prefService.setActiveSchemes(schemes).subscribe(
             stResp => {
-                this.eventHandler.schemeChangedEvent.emit(scheme);
+                this.eventHandler.schemeChangedEvent.emit(schemes);
             }
         );
+    }
+    isActiveScheme(scheme: ARTURIResource) {
+        for (var i = 0; i < this.activeSchemes.length; i++) {
+            if (scheme.getURI() == this.activeSchemes[i].getURI()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     getShowFlags(): boolean {

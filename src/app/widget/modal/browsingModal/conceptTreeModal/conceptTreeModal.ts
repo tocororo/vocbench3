@@ -11,7 +11,7 @@ export class ConceptTreeModalData extends BSModalContext {
      */
     constructor(
         public title: string = 'Modal Title',
-        public scheme: ARTURIResource,
+        public schemes: ARTURIResource[],
         public schemeChangeable: boolean = false
     ) {
         super();

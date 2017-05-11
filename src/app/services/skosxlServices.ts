@@ -19,65 +19,23 @@ export class SkosxlServices {
     //====== Concept services ======
     
     /**
-     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme
-     * @param prefLabel preferred label of the concept
-     * @param prefLabelLang language of the preferred label
-     * @param scheme scheme where new concept should belong
-     * @param concept local name of the new top concept
-     * @param lang language in which the new created concept should be desplayed (determines the "show" of the concept
-     * in the response)
-     * @return an object containing concept and scheme
-     */
-    createTopConcept(prefLabel: string, prefLabelLang: string, scheme: ARTURIResource, concept?: string, lang?: string) {
-        console.log("[SkosxlServices] createConcept");
-        var params: any = {
-            prefLabel: prefLabel,
-            prefLabelLang,
-            scheme: scheme.getURI(),
-        };
-        if (concept != undefined) {
-            params.concept = concept;
-        }
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "createConcept", params, this.oldTypeService_old).map(
-            stResp => {
-                //the response may contain 2 <uri> elements: one for new created concept and one for new created xLabel
-                //parse return and insert in the event just the new concept
-                var newConc: ARTURIResource;
-                var uriColl: HTMLCollection = stResp.getElementsByTagName("uri");
-                var parsedUriColl = Deserializer.createURIArrayGivenList(uriColl);
-                for (var i = 0; i < parsedUriColl.length; i++) {
-                    if (parsedUriColl[i].getRole() == RDFResourceRolesEnum.concept) {
-                        newConc = parsedUriColl[i];
-                        break;
-                    }
-                }
-                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: scheme});
-                return {concept: newConc, scheme: scheme};
-            });
-    }
-
-    /**
      * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme.
      * NB: although the service server-side has both label and newConcept optional, here only newConcept is optional,
      * so the user is forced to write at least the label.
      * @param label preferred label of the concept (comprehensive of the lang)
-     * @param conceptScheme scheme where new concept should belong
+     * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept_NEW(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
+    createTopConcept_NEW(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
             customFormId?: string, userPromptMap?: any) {
         console.log("[SkosxlServices] createConcept");
         var params: any = {
             label: label,
-            conceptScheme: conceptScheme,
+            conceptSchemes: conceptSchemes,
         };
         if (newConcept != null) {
             params.newConcept = newConcept
@@ -93,8 +51,8 @@ export class SkosxlServices {
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: conceptScheme});
-                return {concept: newConc, scheme: conceptScheme};
+                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, schemes: conceptSchemes});
+                return {concept: newConc, schemes: conceptSchemes};
             }
         );
     }
@@ -103,19 +61,19 @@ export class SkosxlServices {
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
      * @param label preferred label of the concept (comprehensive of the lang)
      * @param broaderConcept broader of the new created concept
-     * @param conceptScheme scheme where new concept should belong
+     * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new concept
      */
-    createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
+    createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource,
             conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosxlServices] createConcept");
         var params: any = {
             label: label,
-            conceptScheme: conceptScheme,
+            conceptSchemes: conceptSchemes,
             broaderConcept: broaderConcept
         };
         if (newConcept != null) {

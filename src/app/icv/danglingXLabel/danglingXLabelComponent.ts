@@ -55,7 +55,7 @@ export class DanglingXLabelComponent {
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
         this.basicModals.selectResource("Set skosxl:Label as", null, predOpts).then(
             (selectedPred: any) => {
-                this.browsingModals.browseConceptTree("Assign xLabel to concept", this.preferences.getActiveScheme(), true).then(
+                this.browsingModals.browseConceptTree("Assign xLabel to concept", this.preferences.getActiveSchemes(), true).then(
                     (concept: any) => {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(

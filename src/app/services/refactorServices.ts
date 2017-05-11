@@ -104,14 +104,14 @@ export class RefactorServices {
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      */
-    spawnNewConceptFromLabel(xLabel: ARTResource, conceptScheme: ARTURIResource, oldConcept?: ARTURIResource, 
+    spawnNewConceptFromLabel(xLabel: ARTResource, conceptSchemes: ARTURIResource[], oldConcept?: ARTURIResource, 
         newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
 		customFormId?: string, userPromptMap?: any) {
 
         console.log("[RefactorServices] spawnNewConceptFromLabel");
         var params: any = {
             xLabel: xLabel,
-            conceptScheme: conceptScheme,
+            conceptSchemes: conceptSchemes,
         }
         if (oldConcept != undefined) {
             params.oldConcept = oldConcept;
@@ -136,8 +136,8 @@ export class RefactorServices {
                 } else { //created topConcept
                     var newConc = Deserializer.createURI(stResp);
                     newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                    this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: conceptScheme});
-                    return {concept: newConc, scheme: conceptScheme};
+                    this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, schemes: conceptSchemes});
+                    return {concept: newConc, schemes: conceptSchemes};
                 }
             }
         );

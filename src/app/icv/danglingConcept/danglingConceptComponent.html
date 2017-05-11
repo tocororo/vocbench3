@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <label style="flex: 1;">Dangling concepts</label>
         <select class="form-control input-xs" style="width: initial; margin-right: 4px;" [(ngModel)]="selectedScheme">
-            <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getURI()}}</option>
+            <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getShow()}}</option>
         </select>
         <button class="btn btn-xs btn-default" (click)="runIcv()" [disabled]="!selectedScheme">Run</button>
     </div>

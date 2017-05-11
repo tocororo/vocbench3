@@ -2,10 +2,10 @@
     <!-- Commands -->
     <div class="panel-heading">  
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="!workingScheme">
+            <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="isNoSchemeMode()">
                 <img src="../../../../../assets/images/concept_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedNode || !workingScheme">
+            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedNode || isNoSchemeMode()">
                 <img src="../../../../../assets/images/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="!selectedNode">
@@ -13,7 +13,7 @@
             </button>
         </div>
         <div *ngIf="editable" style="margin: 0px 5px;">
-            <img *ngIf="!workingScheme" src="../../../../../assets/images/warning.png"
+            <img *ngIf="isNoSchemeMode()" src="../../../../../assets/images/warning.png"
                 title="No skos:ConceptScheme selected, creation operation are disabled">
         </div>
         <div style="flex: 1"></div>
@@ -37,7 +37,7 @@
             </select>
         </div>
 
-        <concept-tree [scheme]="workingScheme" [rendering]="rendering"
+        <concept-tree [schemes]="workingSchemes" [rendering]="rendering"
             (nodeSelected)="onNodeSelected($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>

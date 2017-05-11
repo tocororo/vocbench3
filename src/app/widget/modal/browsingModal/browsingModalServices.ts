@@ -74,8 +74,8 @@ export class BrowsingModalServices {
      * @param schemeChangeable if true a menu is shown and the user can browse not only the selected scheme
      * @return if the modal closes with ok returns a promise containing the selected concept
      */
-    browseConceptTree(title: string, scheme?: ARTURIResource, schemeChangeable?: boolean) {
-        var modalData = new ConceptTreeModalData(title, scheme, schemeChangeable);
+    browseConceptTree(title: string, schemes?: ARTURIResource[], schemeChangeable?: boolean) {
+        var modalData = new ConceptTreeModalData(title, schemes, schemeChangeable);
         const builder = new BSModalContextBuilder<ConceptTreeModalData>(
             modalData, undefined, ConceptTreeModalData
         );

@@ -180,7 +180,7 @@ export class MetadataManagementComponent {
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
-                                        this.preferences.setActiveScheme(null);
+                                        this.preferences.setActiveSchemes([]);
                                     }
                                 )
                             }

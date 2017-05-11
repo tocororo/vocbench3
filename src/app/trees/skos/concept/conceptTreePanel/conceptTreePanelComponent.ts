@@ -20,7 +20,7 @@ import { SKOS } from "../../../../models/Vocabulary";
     templateUrl: "./conceptTreePanelComponent.html",
 })
 export class ConceptTreePanelComponent extends AbstractTreePanel {
-    @Input() scheme: ARTURIResource; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context
+    @Input() schemes: ARTURIResource[]; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context
     @Input() schemeChangeable: boolean = false; //if true, above the tree is shown a menu to select a scheme
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
 
@@ -31,7 +31,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
-    private workingScheme: ARTURIResource;//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
+    private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
 
@@ -41,28 +41,31 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         super(cfService, basicModals);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-            (newScheme: ARTURIResource) => this.onSchemeChanged(newScheme)));
+            (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));
     }
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
-        if (this.scheme === undefined) { //if @Input is not provided at all, get the scheme from the preferences
-            this.workingScheme = this.preferences.getActiveScheme();
-        } else { //if @Input scheme is provided (it could be null => no scheme-mode), initialize the tree with this scheme
-            this.workingScheme = this.scheme;
-        }
-        //init the scheme list if the concept tree allows dynamic change of scheme
-        if (this.schemeChangeable) {
-            this.skosService.getAllSchemes().subscribe( //new service
-                schemes => {
-                    this.schemeList = schemes;
-                    if (this.workingScheme != null) {
-                        this.selectedSchemeUri = this.workingScheme.getURI();
-                    } else {
-                        this.selectedSchemeUri = "---";
-                    }
+        if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
+            this.workingSchemes = this.preferences.getActiveSchemes();
+        } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
+            if (this.schemeChangeable) {
+                if (this.schemes.length > 0) {
+                    this.selectedSchemeUri = this.schemes[0].getURI();
+                    this.workingSchemes = [this.schemes[0]];
+                } else { //no scheme mode
+                    this.selectedSchemeUri = "---"; //no scheme
+                    this.workingSchemes = [];
                 }
-            );
+                //init the scheme list if the concept tree allows dynamic change of scheme
+                this.skosService.getAllSchemes().subscribe(
+                    schemes => {
+                        this.schemeList = schemes;
+                    }
+                );
+            } else {
+                this.workingSchemes = this.schemes;
+            }
         }
     }
 
@@ -73,11 +76,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(res.label, this.workingScheme, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosService.createTopConcept(res.label, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept_NEW(res.label, this.workingScheme, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createTopConcept_NEW(res.label, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
@@ -91,11 +94,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(res.label, this.selectedNode, this.workingScheme, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosService.createNarrower(res.label, this.selectedNode, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(res.label, this.selectedNode, this.workingScheme, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createNarrower(res.label, this.selectedNode, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
@@ -132,16 +135,25 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.viewChildTree.initTree();
     }
 
+    private isNoSchemeMode() {
+        return this.workingSchemes.length == 0;
+    }
+
     //scheme selection menu handlers
 
     /**
      * Listener to <select> element that allows to change dynamically the scheme of the
      * concept tree (visible only if @Input schemeChangeable is true).
+     * This is only invokable if schemeChangeable is true, this mode allow only one scheme at time, so can reset workingSchemes
      */
     private onSchemeSelectionChange() {
-        this.workingScheme = this.getSchemeResourceFromUri(this.selectedSchemeUri);
-        // this.initTree();
-        this.schemeChanged.emit(this.workingScheme);
+        var newSelectedScheme: ARTURIResource = this.getSchemeResourceFromUri(this.selectedSchemeUri);
+        if (newSelectedScheme != null) { //if it is not "no-scheme"                 
+            this.workingSchemes = [newSelectedScheme];
+        } else {
+            this.workingSchemes = [];
+        }
+        this.schemeChanged.emit(newSelectedScheme);
     }
 
     /**
@@ -168,8 +180,14 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             // this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", null, this.workingScheme).subscribe(
+            let searchingScheme: ARTURIResource[] = [];
+            if (this.schemeChangeable) {
+                searchingScheme.push(this.getSchemeResourceFromUri(this.selectedSchemeUri));
+            } else {
+                searchingScheme = this.workingSchemes;
+            }
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", 
-                this.preferences.getDefaultLanguage(), this.workingScheme).subscribe(
+                this.preferences.getDefaultLanguage(), searchingScheme).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -198,8 +216,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.selectedNode = null;
     }
 
-    private onSchemeChanged(scheme: ARTURIResource) {
-        this.workingScheme = scheme;
+    private onSchemeChanged(schemes: ARTURIResource[]) {
+        this.workingSchemes = schemes;
     }
 
 }

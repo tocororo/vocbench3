@@ -20,11 +20,11 @@ export class SearchServices {
      * @param useURI tells if the searched string should be searched in the entire URI (as well as in labels)
      * @param searchMode available searchMode values: "contain", "start", "end", "exact"
      * @param lang if provided tells in which language render the show of the results (only for concepts and schemes)
-     * @param scheme scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
+     * @param schemes scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
-        searchMode: string, lang?: string, scheme?: ARTURIResource): Observable<ARTURIResource[]> {
+        searchMode: string, lang?: string, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -36,8 +36,8 @@ export class SearchServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        if (scheme != undefined) {
-            params.scheme = scheme;
+        if (schemes != undefined) {
+            params.scheme = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService, true).map(
             stResp => {
@@ -80,17 +80,17 @@ export class SearchServices {
      * Returns the shortest path from a root to the given resource
      * @param resource
      * @param role role of the given resource, available roles: "concept", "cls", "property"
-     * @param scheme where all the resource of the path should belong (optional and used only for concept)
+     * @param schemes where all the resource of the path should belong (optional and used only for concept)
      * @return an array of resources
      */
-    getPathFromRoot(resource: ARTURIResource, role: string, scheme?: ARTURIResource) {
+    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[]) {
         console.log("[SearchServices] getPathFromRoot");
         var params: any = {
             role: role,
             resourceURI: resource
         };
-        if (scheme != undefined) {
-            params.schemeURI = scheme;
+        if (schemes != undefined) {
+            params.schemeURI = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService, true).map(
             stResp => {

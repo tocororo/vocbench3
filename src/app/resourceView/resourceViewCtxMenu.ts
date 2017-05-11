@@ -57,11 +57,10 @@ export class ResourceViewContextMenu {
     private spawnNewConceptWithLabel() {
         this.creationModals.newConceptFromLabel("Spawn new concept", this.resource, SKOS.concept).then(
             data => {
-                console.log(data);
-                let scheme: ARTURIResource = this.preferences.getActiveScheme();
+                let schemes: ARTURIResource[] = this.preferences.getActiveSchemes();
                 //from the resView of the xLabel I don't know the concept to which it belongs, 
                 //so oldConcept in spawnNewConceptFromLabel request is null and lets the server find the oldConcept
-                this.refactorService.spawnNewConceptFromLabel(this.resource, scheme, null,
+                this.refactorService.spawnNewConceptFromLabel(this.resource, schemes, null,
                     data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
                     stResp => {
                         this.update.emit();

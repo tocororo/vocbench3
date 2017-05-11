@@ -2,7 +2,7 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body vbox" style="height:70vh;">
-    <concept-tree-panel [editable]="false" [schemeChangeable]="context.schemeChangeable" [scheme]="context.scheme"
+    <concept-tree-panel [editable]="false" [schemeChangeable]="context.schemeChangeable" [schemes]="context.schemes"
         (nodeSelected)="onConceptSelected($event)" >
     </concept-tree-panel>
 </div>

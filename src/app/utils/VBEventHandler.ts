@@ -13,7 +13,7 @@ import { ResourceViewMode } from '../utils/VBPreferences';
 export class VBEventHandler {
 
     //CONCEPT EVENTS
-    public topConceptCreatedEvent: EventEmitter<{ concept: ARTURIResource, scheme: ARTURIResource }> = new VBEventEmitter("topConceptCreatedEvent");
+    public topConceptCreatedEvent: EventEmitter<{ concept: ARTURIResource, schemes: ARTURIResource[] }> = new VBEventEmitter("topConceptCreatedEvent");
     public narrowerCreatedEvent: EventEmitter<{ narrower: ARTURIResource, broader: ARTURIResource }> = new VBEventEmitter("narrowerCreatedEvent");
     public broaderAddedEvent: EventEmitter<{ narrower: ARTURIResource, broader: ARTURIResource }> = new VBEventEmitter("broaderAddedEvent");
     //optional "broader" (if not top Concept) to tells the position where the concept should be attached in the tree
@@ -26,7 +26,7 @@ export class VBEventHandler {
 
     //SCHEME EVENTS
     //event should contain the selected scheme
-    public schemeChangedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeChangedEvent");
+    public schemeChangedEvent: EventEmitter<ARTURIResource[]> = new VBEventEmitter("schemeChangedEvent");
 
     //COLLECTION EVENTS
     public rootCollectionCreatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTURIResource>("rootCollectionCreatedEvent");

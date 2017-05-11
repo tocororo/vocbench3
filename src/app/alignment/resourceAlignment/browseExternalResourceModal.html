@@ -28,7 +28,7 @@
         <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false">
         </class-tree-panel>
                 
-        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [scheme]="scheme" [editable]="false"
+        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false"
             (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
         </concept-tree-panel>
                 
@@ -41,7 +41,7 @@
         <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" (nodeSelected)="onResourceSelected($event)">
         </collection-tree-panel>
         
-        <class-individual-tree *ngIf="activeView=='individual'" [scheme]="scheme" (nodeSelected)="onResourceSelected($event)">
+        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" (nodeSelected)="onResourceSelected($event)">
         </class-individual-tree>
 
     </div>

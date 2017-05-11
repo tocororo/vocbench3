@@ -52,7 +52,7 @@ export class TopConceptsPartitionRenderer extends AbstractPredObjListRenderer {
                 } else { //it's adding a subProperty of skos:topConceptOf
                     this.propService.addExistingPropValue(this.resource, prop, scheme.getURI(), RDFTypesEnum.resource).subscribe(
                         stResp => {
-                            this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, scheme: scheme});
+                            this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, schemes: [scheme]});
                             this.update.emit(null);
                         }
                     );

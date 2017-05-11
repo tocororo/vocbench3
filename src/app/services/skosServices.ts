@@ -20,14 +20,14 @@ export class SkosServices {
     
     /**
      * Returns the topConcepts of the given scheme
-     * @param scheme
+     * @param schemes
      * @return an array of top concepts
      */
-    getTopConcepts(scheme: ARTURIResource) {
+    getTopConcepts(schemes: ARTURIResource[]) {
         console.log("[SkosServices] getTopConcepts");
         var params: any = {};
-        if (scheme != null) {
-            params.scheme = scheme;
+        if (schemes != null) {
+            params.schemes = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, false, true).map(
             stResp => {
@@ -43,17 +43,17 @@ export class SkosServices {
     /**
      * Returns the narrowers of the given concept
      * @param concept
-     * @param scheme scheme where the narrower should belong
+     * @param schemes schemes where the narrower should belong
      * @return an array of narrowers
      */
-    getNarrowerConcepts(concept: ARTURIResource, scheme: ARTURIResource) {
+    getNarrowerConcepts(concept: ARTURIResource, schemes: ARTURIResource[]) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params: any = {
             concept: concept,
             treeView: true,
         };
-        if (scheme != null) {
-            params.scheme = scheme;
+        if (schemes != null) {
+            params.schemes = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, false, true).map(
             stResp => {
@@ -71,19 +71,19 @@ export class SkosServices {
      * NB: although the service server-side has both label and newConcept optional, here only newConcept is optional,
      * so the user is forced to write at least the label.
      * @param label preferred label of the concept (comprehensive of the lang)
-     * @param conceptScheme scheme where new concept should belong
+     * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept(label: ARTLiteral, conceptScheme: ARTURIResource, newConcept?: ARTURIResource, conceptCls?: ARTURIResource, 
+    createTopConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource, 
         customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
-            conceptScheme: conceptScheme,
+            conceptSchemes: conceptSchemes,
         };
         if (newConcept != null) {
             params.newConcept = newConcept
@@ -99,8 +99,8 @@ export class SkosServices {
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, scheme: conceptScheme});
-                return {concept: newConc, scheme: conceptScheme};
+                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, schemes: conceptSchemes});
+                return {concept: newConc, scheme: conceptSchemes};
             }
         );
     }
@@ -119,7 +119,7 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "addTopConcept", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.topConceptCreatedEvent.emit({concept: concept, scheme: scheme});
+                this.eventHandler.topConceptCreatedEvent.emit({concept: concept, schemes: [scheme]});
                 return {concept: concept, scheme: scheme};
             }
         );
@@ -165,19 +165,19 @@ export class SkosServices {
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
      * @param label preferred label of the concept (comprehensive of the lang)
      * @param broaderConcept broader of the new created concept
-     * @param conceptScheme scheme where new concept should belong
+     * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new concept
      */
-    createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptScheme: ARTURIResource, newConcept?: ARTURIResource,
+    createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource,
             conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
-            conceptScheme: conceptScheme,
+            conceptSchemes: conceptSchemes,
             broaderConcept: broaderConcept
         };
         if (newConcept != null) {

@@ -61,7 +61,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
     //restrictions for trees/lists
     //attribute useful for different Tree/list components
-    private scheme: ARTURIResource; //useful if the property that is it going to enrich should allow to select a skos:Concept
+    private schemes: ARTURIResource[]; //useful if the property that is it going to enrich should allow to select a skos:Concept
     //so the modal should show a concept tree focused on the current scheme
     // private classForInstanceList: ARTURIResource;
     private rootsForClsIndList: ARTURIResource[];
@@ -140,7 +140,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
                                 this.viewType = "classTree";
                             } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
-                                this.scheme = this.preferences.getActiveScheme();
+                                this.schemes = this.preferences.getActiveSchemes();
                                 this.viewType = "conceptTree";
                             } else if (rangeClass.getURI() == SKOS.conceptScheme.getURI()) {
                                 this.viewType = "schemeList";

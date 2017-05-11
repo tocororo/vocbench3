@@ -50,33 +50,33 @@ export class PreferencesServices {
     }
 
     /**
-     * Sets the default active skos concept scheme
-     * @param scheme 
+     * Sets the default active skos concept schemes
+     * @param scheme s
      */
-    setActiveScheme(scheme?: ARTURIResource) {
-        console.log("[PreferencesServices] setActiveScheme");
+    setActiveSchemes(schemes?: ARTURIResource[]) {
+        console.log("[PreferencesServices] setActiveSchemes");
         var params: any = {}
-        if (scheme != null) {
-            params.scheme = scheme;
+        if (schemes != null) {
+            params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "setActiveScheme", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "setActiveSchemes", params, this.oldTypeService, true);
     }
 
     /**
-     * Returns the active scheme for the given project
+     * Returns the active schemes for the given project
      * @param projectName 
      */
-    getActiveScheme(projectName: string): Observable<ARTURIResource> {
-        console.log("[PreferencesServices] getActiveScheme");
+    getActiveSchemes(projectName: string): Observable<ARTURIResource[]> {
+        console.log("[PreferencesServices] getActiveSchemes");
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "getActiveScheme", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params, this.oldTypeService, true).map(
             stResp => {
                 if (stResp == null) {
                     return null;
                 } else {
-                    return Deserializer.createURI(stResp);
+                    return Deserializer.createURIArray(stResp);
                 }
             }
         );
