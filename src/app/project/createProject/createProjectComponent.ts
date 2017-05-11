@@ -20,7 +20,10 @@ export class CreateProjectComponent {
      * BASIC PROJECT SETTINGS
      */
     private projectName: string;
-    private baseURI: string;
+
+    private baseUriPrefix: string = "http://";
+    private baseUriSuffix: string;;
+    // private baseURI: string;
 
     private modelTypeList = [
         { value: "it.uniroma2.art.owlart.models.OWLModel", label: "OWL" },
@@ -272,7 +275,7 @@ export class CreateProjectComponent {
             return;
         }
         //check baseURI
-        if (!this.baseURI || this.baseURI.trim() == "") {
+        if (!this.baseUriSuffix || this.baseUriSuffix.trim() == "") {
             this.basicModals.alert("Create project", "BaseURI is missing or not valid", "warning");
             return;
         }
@@ -417,7 +420,8 @@ export class CreateProjectComponent {
          * Execute request
          */
         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
-        this.projectService.createProject(this.projectName, this.modelType, this.baseURI, this.history, this.validation,
+        this.projectService.createProject(this.projectName, this.modelType, this.baseUriPrefix + this.baseUriSuffix,
+            this.history, this.validation,
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, supportRepoSailConfigurerSpecification,
             uriGeneratorSpecification, renderingEngineSpecification).subscribe(
