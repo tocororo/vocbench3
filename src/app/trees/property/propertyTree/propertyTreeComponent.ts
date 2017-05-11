@@ -29,7 +29,7 @@ export class PropertyTreeComponent extends AbstractTree {
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(
             (node: ARTURIResource) => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
-            (property: ARTURIResource) => this.onPropertyDeleted(property)));
+            (property: ARTURIResource) => this.onTreeNodeDeleted(property)));
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             (data: any) => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
@@ -161,18 +161,6 @@ export class PropertyTreeComponent extends AbstractTree {
 
     private onTopPropertyCreated(property: ARTURIResource) {
         this.roots.push(property);
-    }
-
-    private onPropertyDeleted(property: ARTURIResource) {
-        //check if the property to delete is a topProperty
-        for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == property.getURI()) {
-                this.roots.splice(i, 1);
-                break;
-            }
-        }
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
     }
 
     private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {

@@ -33,6 +33,8 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     private position: string = this.positionList[0];
     private broader: ARTURIResource;
 
+    private schemes: ARTURIResource[];
+
     constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals)
@@ -48,10 +50,18 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         this.changeClassWithRoot(this.context.cls);
     }
 
+    private onSchemesChanged(schemes: ARTURIResource[]) {
+        this.schemes = schemes;
+    }
+
     isStandardFormDataValid(): boolean {
-        //the only field to check is "broader" only in case it's creating a narrower
         if (this.isPositionNarrower()) {
-            return this.broader != null;
+            if (this.broader == null) {
+                return false;
+            }
+        }
+        if (this.schemes == null || this.schemes.length == 0) {
+            return false;
         }
         return true;
     }
@@ -78,10 +88,11 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
             uriResource: null,
             broader: null,
             cls: this.resourceClass,
+            schemes: this.schemes,
             cfId: this.customFormId,
             cfValueMap: entryMap
         }

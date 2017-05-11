@@ -8,6 +8,7 @@ import { NewSkosResourceCfModal, NewSkosResourceCfModalData } from "./newResourc
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
 import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/newConceptFromLabelModal";
+import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/newConceptCfModal";
 
 @Injectable()
 export class CreationModalServices {
@@ -46,6 +47,25 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewResourceCfModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to create a new skos concept with label, language, uri (optional) and schemes, plus custom form supplement fields
+     * @param title the title of the modal dialog
+     * @param broader the broader concept of the new creating (only if not topConcept)
+     * @param clsChangeable tells if the class of the creating resource can be changed
+     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
+     * @return 
+     */
+    newConceptCf(title: string, broader?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
+        var modalData = new NewConceptCfModalData(title, broader, clsChangeable, lang);
+        const builder = new BSModalContextBuilder<NewConceptCfModalData>(
+            modalData, undefined, NewConceptCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewConceptCfModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

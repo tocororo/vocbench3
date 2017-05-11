@@ -65,18 +65,17 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        let workingSchemes: ARTURIResource[] = this.preferences.getActiveSchemes();
         let ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
-        this.creationModals.newSkosResourceCf("Create new skos:Concept", SKOS.concept, true).then(
-            (res: any) => {
+        this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
+            (data: any) => {
                 if (ontoType == "SKOS") {
-                    this.skosService.createTopConcept(res.label, workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => {
                             this.runIcv();
                         }
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept_NEW(res.label, workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createTopConcept_NEW(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => {
                             this.runIcv();
                         }

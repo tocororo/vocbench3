@@ -8,10 +8,10 @@ import { BrowsingModalServices } from "../../browsingModal/browsingModalServices
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
 import { SKOS } from "../../../../models/Vocabulary"
 
-export class NewSkosResourceCfModalData extends BSModalContext {
+export class NewConceptCfModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
-        public cls: ARTURIResource, //class that this modal is creating
+        public broader: ARTURIResource,
         public clsChangeable: boolean = true,
         public lang: string
     ) {
@@ -20,11 +20,11 @@ export class NewSkosResourceCfModalData extends BSModalContext {
 }
 
 @Component({
-    selector: "new-skos-resource-cf-modal",
-    templateUrl: "./newSkosResourceCfModal.html",
+    selector: "new-concept-cf-modal",
+    templateUrl: "./newConceptCfModal.html",
 })
-export class NewSkosResourceCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewSkosResourceCfModalData> {
-    context: NewSkosResourceCfModalData;
+export class NewConceptCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewConceptCfModalData> {
+    context: NewConceptCfModalData;
 
     @ViewChild("toFocus") inputToFocus: ElementRef;
 
@@ -32,17 +32,20 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
     private label: string;
     private lang: string;
     private uri: string;
+    private schemes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<NewSkosResourceCfModalData>, cfService: CustomFormsServices,
+    constructor(public dialog: DialogRef<NewConceptCfModalData>, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
         this.context = dialog.context;
+        console.log("constructor newConcept");
     }
 
     ngOnInit() {
         this.lang = this.context.lang;
-        this.resourceClass = this.context.cls;
+        this.resourceClass = SKOS.concept;
         this.selectCustomForm();
+        console.log("onInit newConcept");
     }
 
     ngAfterViewInit() {
@@ -53,12 +56,17 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
         this.lang = newLang;
     }
 
+    private onSchemesChanged(schemes: ARTURIResource[]) {
+        this.schemes = schemes;
+    }
+
     changeClass() {
-        this.changeClassWithRoot(this.context.cls);
+        this.changeClassWithRoot(SKOS.concept);
     }
 
     isStandardFormDataValid(): boolean {
-        return (this.label != undefined && this.label.trim() != "");
+        return (this.label != undefined && this.label.trim() != "" &&
+            this.schemes != null && this.schemes.length > 0);
     }
 
     ok(event: Event) {
@@ -67,10 +75,11 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
             cls: this.resourceClass,
+            schemes: this.schemes,
             cfId: this.customFormId,
             cfValueMap: entryMap
         }

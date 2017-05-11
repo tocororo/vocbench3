@@ -1,5 +1,5 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
-import { ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { UIUtils } from "../utils/UIUtils";
 
@@ -75,6 +75,20 @@ export abstract class AbstractTree {
         this.selectedNode = node;
         this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(node);
+    }
+
+    //BROADCAST EVENT HANDLERS
+
+    onTreeNodeDeleted(deletedNode: ARTResource) {
+        //check if the node to delete is a root
+        for (var i = 0; i < this.roots.length; i++) {
+            if (this.roots[i].getURI() == deletedNode.getNominalValue()) {
+                this.roots.splice(i, 1);
+                break;
+            }
+        }
+        //reset the selected node
+        this.nodeSelected.emit(undefined);
     }
 
 }

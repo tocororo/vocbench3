@@ -504,6 +504,22 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Returns an array of all the schemes with the attribute "inScheme" to true if the given concept is in the scheme.
+     * @param concept
+     */
+    getSchemesMatrixPerConcept(concept: ARTURIResource) {
+        console.log("[SkosServices] getSchemesMatrixPerConcept");
+        var params: any = {
+            concept: concept
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params, this.oldTypeService, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
     //====== Collection services ======
 
     /**

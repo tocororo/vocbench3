@@ -109,7 +109,7 @@ resource-view-splitted, resource-view-tabbed {
 
 tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, instance-list-panel, property-tree-panel,
 collection-tree-panel, concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list,
-class-individual-tree, resource-view {
+class-individual-tree, resource-view, scheme-selection {
     display: flex;
     flex: 1;
     min-height: 0;
@@ -585,7 +585,7 @@ input[type="radio"], input[type="checkbox"] {
 
 /* To center vertically the modals. Note: this solution is not well tested. 
 If modals  show layout problems try to remove it.*/
-.modal {
+/*.modal {
   text-align: center;
 }
 @media screen and (min-width: 768px) { 
@@ -600,7 +600,7 @@ If modals  show layout problems try to remove it.*/
   display: inline-block;
   text-align: left;
   vertical-align: middle;
-}
+}*/
 
 .dropdown-menu .divider {
     margin: 2px 0px;

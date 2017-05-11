@@ -12,7 +12,6 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
-import { VBPreferences } from "../../utils/VBPreferences";
 
 @Component({
 	selector: "editable-resource",
@@ -40,8 +39,7 @@ export class EditableResourceComponent {
 
 	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
 		private manchesterService: ManchesterServices, private refactorService: RefactorServices,
-		private basicModals: BasicModalServices, private creationModals: CreationModalServices, private rvModalService: ResViewModalServices,
-		private preferences: VBPreferences) { }
+		private basicModals: BasicModalServices, private creationModals: CreationModalServices, private rvModalService: ResViewModalServices) { }
 
 
 	//======== "edit" HANDLER ========
@@ -248,9 +246,8 @@ export class EditableResourceComponent {
 		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept).then(
 			data => {
 				console.log(data);
-				let schemes: ARTURIResource[] = this.preferences.getActiveSchemes();
 				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
-				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, schemes, oldConcept,
+				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
 					data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
 					stResp => {
 						this.update.emit();

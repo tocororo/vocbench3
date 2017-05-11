@@ -27,7 +27,7 @@ export class ClassTreeComponent extends AbstractTree {
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
-            (cls: ARTURIResource) => this.onClassDeleted(cls)));
+            (cls: ARTURIResource) => this.onTreeNodeDeleted(cls)));
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -79,21 +79,6 @@ export class ClassTreeComponent extends AbstractTree {
                 }
             }
         );
-    }
-
-
-    //EVENT LISTENERS
-
-    private onClassDeleted(cls: ARTURIResource) {
-        //check if the class to delete is a root
-        for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == cls.getURI()) {
-                this.roots.splice(i, 1);
-                break;
-            }
-        }
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
     }
 
 }

@@ -18,7 +18,7 @@ import { SKOS } from "../../../../models/Vocabulary";
 })
 export class SchemeListPanelComponent extends AbstractPanel {
 
-    private schemeList: SchemeListItem[] = [];
+    private schemeList: SchemeListItem[];
 
     private ONTO_TYPE: string;
 
@@ -35,6 +35,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private initList() {
+        this.schemeList = [];
         this.selectedNode = null;
         this.skosService.getAllSchemes().subscribe(
             schemes => {

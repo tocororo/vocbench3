@@ -7,7 +7,6 @@ import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
-import { VBPreferences } from "../utils/VBPreferences";
 
 @Component({
     selector: "res-view-menu",
@@ -19,7 +18,7 @@ export class ResourceViewContextMenu {
     @Output() update = new EventEmitter();
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices,
-        private preferences: VBPreferences, private creationModals: CreationModalServices, private modal: Modal) { }
+        private creationModals: CreationModalServices, private modal: Modal) { }
 
     private alignResource() {
         this.openAlignmentModal().then(
@@ -57,10 +56,9 @@ export class ResourceViewContextMenu {
     private spawnNewConceptWithLabel() {
         this.creationModals.newConceptFromLabel("Spawn new concept", this.resource, SKOS.concept).then(
             data => {
-                let schemes: ARTURIResource[] = this.preferences.getActiveSchemes();
                 //from the resView of the xLabel I don't know the concept to which it belongs, 
                 //so oldConcept in spawnNewConceptFromLabel request is null and lets the server find the oldConcept
-                this.refactorService.spawnNewConceptFromLabel(this.resource, schemes, null,
+                this.refactorService.spawnNewConceptFromLabel(this.resource, data.schemes, null,
                     data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
                     stResp => {
                         this.update.emit();

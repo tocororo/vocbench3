@@ -72,15 +72,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //top bar commands handlers
 
     createRoot() {
-        this.creationModals.newSkosResourceCf("Create new skos:Concept", SKOS.concept, true).then(
-            (res: any) => {
+        this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
+            (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createTopConcept(res.label, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept_NEW(res.label, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createTopConcept_NEW(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }
@@ -90,15 +90,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     createChild() {
-        this.creationModals.newSkosResourceCf("Create a skos:narrower", SKOS.concept, true).then(
-            (res: any) => {
+        this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, true).then(
+            (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.createNarrower(res.label, this.selectedNode, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createNarrower(res.label, this.selectedNode, this.workingSchemes, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    this.skosxlService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }

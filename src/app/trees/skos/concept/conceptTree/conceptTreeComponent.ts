@@ -31,7 +31,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: {concept: ARTURIResource, schemes: ARTURIResource[]}) => this.onTopConceptCreated(data.concept, data.schemes)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
-            (deletedConcept: ARTURIResource) => this.onConceptDeleted(deletedConcept)));
+            (deletedConcept: ARTURIResource) => this.onTreeNodeDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedFromSchemeEvent.subscribe(
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
@@ -98,18 +98,6 @@ export class ConceptTreeComponent extends AbstractTree {
                 }
             }
         }
-    }
-
-    private onConceptDeleted(deletedConcept: ARTURIResource) {
-        //check if the concept to delete is a root
-        for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == deletedConcept.getURI()) {
-                this.roots.splice(i, 1);
-                break;
-            }
-        }
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
     }
 
     //data contains "concept" and "scheme"

@@ -38,7 +38,7 @@ export class OwlServices {
     
     /**
      * Removes a superClass from a class.
-     * Emits a subClassRemovedEvent with cls (the superClass removed) and subClass
+     * Emits a superClassRemovedEvent with cls (the superClass removed) and subClass
      * (the class to which su superClass has been removed)
      * @param cls class to which remove a superClass
      * @param superClass superClass to be removed
@@ -51,7 +51,7 @@ export class OwlServices {
         };
         return this.httpMgr.doGet(this.serviceName, "removeSuperCls", params, this.oldTypeService).map(
             stResp => {
-                this.eventHandler.subClassRemovedEvent.emit({cls: superClass, subClass: cls});
+                this.eventHandler.superClassRemovedEvent.emit({cls: superClass, subClass: cls});
                 return stResp;
             }
         );

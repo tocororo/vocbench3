@@ -16,11 +16,11 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     constructor(private skosService: SkosServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
-            (deletedCollection: ARTResource) => this.onCollectionDeleted(deletedCollection)));
+            (deletedCollection: ARTResource) => this.onTreeNodeDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionCreatedEvent.subscribe(
-            (data: any) => this.onNestedCollectionCreated(data.nested, data.container)));
+            (data: any) => this.onChildCreated(data.container, data.nested)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
-            (data: any) => this.onNestedCollectionCreated(data.nested, data.container)));
+            (data: any) => this.onChildCreated(data.container, data.nested)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
             (data: any) => this.onNestedCollectionAddedFirst(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedLastEvent.subscribe(
@@ -28,7 +28,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedInPositionEvent.subscribe(
             (data: any) => this.onNestedCollectionAddedInPosition(data.nested, data.container, data.position)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionRemovedEvent.subscribe(
-            (data: any) => this.onNestedCollectionRemoved(data.nested, data.container)));
+            (data: any) => this.onParentRemoved(data.container, data.nested)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
@@ -62,30 +62,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
 
     //EVENT LISTENERS
 
-    private onCollectionDeleted(deletedCollection: ARTResource) {
-        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].getURI() == deletedCollection.getNominalValue()) {
-                children.splice(i, 1);
-                //if node has no more children change info of node so the UI will update
-                if (children.length == 0) {
-                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-                    this.node.setAdditionalProperty(ResAttribute.OPEN, false);
-                }
-                break;
-            }
-        }
-    }
-
-    private onNestedCollectionCreated(nested: ARTURIResource, container: ARTURIResource) {
-        //add the new collection as children only if the container is the current collection
-        if (this.node.getURI() == container.getURI()) {
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(nested);
-            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
-            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
-        }
-    }
-
     private onNestedCollectionAddedFirst(nested: ARTURIResource, container: ARTURIResource) {
         //add the new collection as children only if the container is the current collection
         if (this.node.getURI() == container.getURI()) {
@@ -110,13 +86,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).splice(position, 0, nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.node.setAdditionalProperty(ResAttribute.OPEN, true);
-        }
-    }
-
-    private onNestedCollectionRemoved(nested: ARTURIResource, container: ARTURIResource) {
-        //remove the nested collection from children only if the container is the current collection
-        if (this.node.getURI() == container.getURI()) {
-            this.onCollectionDeleted(nested);
         }
     }
 

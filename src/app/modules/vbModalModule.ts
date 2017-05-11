@@ -45,7 +45,12 @@ import { NewResourceModal } from '../widget/modal/creationModal/newResourceModal
 import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newResourceCfModal';
 import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newSkosResourceCfModal';
 import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
+import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/newConceptCfModal';
 import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/newConceptFromLabelModal';
+
+//these are used only in creation modals, if they will be useful elsewhere, they can be moved in sharedModule
+import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
+import { SchemeSelectionComponent } from '../widget/modal/creationModal/newResourceModal/schemeSelectionComponent';
 
 //metadata modals
 import { ImportOntologyModal } from '../config/dataManagement/metadata/importOntologyModal';
@@ -74,14 +79,11 @@ import { UserCreateModal } from "../administration/administrationModals/userCrea
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 
-//this is used only in newResource modals, if it will be useful elsewhere, it can be moved in sharedModule
-import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
-
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, 
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
@@ -91,7 +93,7 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        EditableNsInput
+        EditableNsInput, SchemeSelectionComponent
     ],
     exports: [],
     providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices],
@@ -105,7 +107,7 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
      */
     entryComponents: [
         AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, 
+        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,

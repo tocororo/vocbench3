@@ -138,6 +138,20 @@ export abstract class AbstractTreeNode {
     //     }
     // }
 
+    private onNodeSelected(node: ARTURIResource) {
+        this.nodeSelected.emit(node);
+    }
+
+    //Listeners to node expansion start/end. Simply forward the event to the parent
+    private onNodeExpandStart() {
+        this.nodeExpandStart.emit();
+    }
+    private onNodeExpandEnd() {
+        this.nodeExpandEnd.emit();
+    }
+
+    //BROADCAST EVENTS HANDLERS
+
     /**
      * Called when a resource is renamed in resource view.
      * This function replace the uri of the resource contained in the node if it is the resource
@@ -150,16 +164,42 @@ export abstract class AbstractTreeNode {
         }
     }
 
-    private onNodeSelected(node: ARTURIResource) {
-        this.nodeSelected.emit(node);
+    onTreeNodeDeleted(deletedNode: ARTResource) {
+        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].getURI() == deletedNode.getNominalValue()) {
+                children.splice(i, 1);
+                //if node has no more children change info of node so the UI will update
+                if (children.length == 0) {
+                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                    this.node.setAdditionalProperty(ResAttribute.OPEN, false);
+                }
+                break;
+            }
+        }
     }
 
-    //Listeners to node expansion start/end. Simply forward the event to the parent
-    private onNodeExpandStart() {
-        this.nodeExpandStart.emit();
+    onChildCreated(parent: ARTResource, child: ARTResource) {
+        //if the parent is the current node, update more attribute
+        if (this.node.getNominalValue() == parent.getNominalValue()) {
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+        }
     }
-    private onNodeExpandEnd() {
-        this.nodeExpandEnd.emit();
+
+    onParentAdded(parent: ARTResource, child: ARTResource) {
+        if (this.node.getNominalValue() == parent.getNominalValue()) {//if the parent is the current node
+            this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
+            //if it was open add the child to the visible children
+            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) {
+                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(child);
+            }
+        }
+    }
+
+    onParentRemoved(parent: ARTResource, child: ARTResource) {
+        if (parent.getNominalValue() == this.node.getURI()) {
+            this.onTreeNodeDeleted(child);
+        }
     }
 
 }

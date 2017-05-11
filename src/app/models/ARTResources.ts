@@ -328,6 +328,7 @@ export class ResAttribute {
     public static GRAPHS = "graphs"; //used in getResourceView response
     public static MEMBERS = "members"; //used for ordered collections
     public static INDEX = "index"; //used for members of ordered collections
+    public static IN_SCHEME = "inScheme"; //used only in Skos.getSchemesMatrixPerConcept()
     
     //never in st responses, added because are util for tree
     public static OPEN = "open";

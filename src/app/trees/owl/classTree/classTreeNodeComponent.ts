@@ -19,13 +19,13 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     constructor(private owlService: OwlServices, private clsService: ClassesServices, private pref: VBPreferences, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
-            (data: any) => this.onSubClassCreated(data.subClass, data.superClass)));
+            (data: any) => this.onChildCreated(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(
-            (data: any) => this.onSuperClassAdded(data.subClass, data.superClass)));
+            (data: any) => this.onParentAdded(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
-            (cls: ARTURIResource) => this.onClassDeleted(cls)));
-        this.eventSubscriptions.push(eventHandler.subClassRemovedEvent.subscribe(
-            (data: any) => this.onSubClassRemoved(data.cls, data.subClass)));
+            (cls: ARTURIResource) => this.onTreeNodeDeleted(cls)));
+        this.eventSubscriptions.push(eventHandler.superClassRemovedEvent.subscribe(
+            (data: any) => this.onParentRemoved(data.cls, data.subClass)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
@@ -68,46 +68,6 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     //EVENT LISTENERS
-
-    private onClassDeleted(cls: ARTURIResource) {
-        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].getURI() == cls.getURI()) {
-                children.splice(i, 1);
-                //if node has no more children change info of node so the UI will update
-                if (children.length == 0) {
-                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-                    this.node.setAdditionalProperty(ResAttribute.OPEN, false);
-                }
-                break;
-            }
-        }
-    }
-
-    private onSubClassCreated(subClass: ARTURIResource, superClass: ARTURIResource) {
-        //add the new class as children only if the parent is the current class
-        if (this.node.getURI() == superClass.getURI()) {
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subClass);
-            this.node.setAdditionalProperty(ResAttribute.MORE, 1);
-            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
-        }
-    }
-
-    private onSuperClassAdded(subClass: ARTURIResource, superClass: ARTURIResource) {
-        if (this.node.getURI() == superClass.getURI()) {//if the superClass is the current node
-            this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
-            //if it was open add the subClass to the visible children
-            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) {
-                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(subClass);
-            }
-        }
-    }
-
-    private onSubClassRemoved(cls: ARTURIResource, subClass: ARTURIResource) {
-        if (cls.getURI() == this.node.getURI()) {
-            this.onClassDeleted(subClass);
-        }
-    }
 
     //decrease numInst property when an instance of the current class is deleted
     private onInstanceDeleted(cls: ARTURIResource) {

@@ -428,6 +428,10 @@ export class Deserializer {
         if (index != undefined) {
             uriRes.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
         }
+        var inScheme = uri[ResAttribute.IN_SCHEME];
+        if (inScheme != undefined) {
+            uriRes.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
+        }
 
         return uriRes;
     }
@@ -462,6 +466,10 @@ export class Deserializer {
         var index = bnode[ResAttribute.INDEX];
         if (index != undefined) {
             bNodeRes.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
+        }
+        var inScheme = bnode[ResAttribute.IN_SCHEME];
+        if (inScheme != undefined) {
+            bnode.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
         }
 
         return bNodeRes;

@@ -26,7 +26,7 @@ export class CollectionTreeComponent extends AbstractTree {
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
             (newColl: ARTURIResource) => this.onRootCollectionCreated(newColl)));
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
-            (deletedCollection: ARTURIResource) => this.onCollectionDeleted(deletedCollection)));
+            (deletedCollection: ARTURIResource) => this.onTreeNodeDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedEvent.subscribe(
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionAddedFirstEvent.subscribe(
@@ -82,18 +82,6 @@ export class CollectionTreeComponent extends AbstractTree {
                 break;
             }
         }
-    }
-
-    private onCollectionDeleted(deletedCollection: ARTURIResource) {
-        //check if the collection to delete is a root
-        for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getNominalValue() == deletedCollection.getNominalValue()) {
-                this.roots.splice(i, 1);
-                break;
-            }
-        }
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
     }
 
 }
