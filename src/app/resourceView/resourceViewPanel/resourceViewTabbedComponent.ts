@@ -9,8 +9,8 @@ export class ResourceViewTabbedComponent {
     
     @Input() resource: ARTResource;
     
-    private tabs: Array<any> = [];
-    private activeTab: any;
+    private tabs: Array<Tab> = [];
+    // private activeTab: Tab;
     
     constructor() {}
     
@@ -19,8 +19,9 @@ export class ResourceViewTabbedComponent {
             var res: ARTResource = changes['resource'].currentValue;
             var tab = this.getTabWithResource(res);
             if (tab != null) {//resource already open in a tab => moves it as first tab
-                this.closeTab(tab);
-                this.setFirstTab(res);
+                // this.closeTab(tab);
+                // this.setFirstTab(res);
+                this.moveToFirst(tab);
             } else {
                 this.setFirstTab(res);
             }
@@ -52,10 +53,8 @@ export class ResourceViewTabbedComponent {
     //TAB HANDLER
     
     private setFirstTab(resource: ARTResource) {
-        //deactivate the previous tab
-        if (this.activeTab != null) {
-            this.activeTab.active = false;
-        }
+        //deactivate the previous active tab
+        this.deactivateCurrentActiveTab();
         //set as removable the previous first tab
         if (this.tabs.length > 0) {
             this.tabs[0].removable = true;
@@ -66,38 +65,49 @@ export class ResourceViewTabbedComponent {
             removable: false,
             active: true
         });
-        this.activeTab = this.tabs[0];
     }
     
     private addTab(resource: ARTResource) {
-        //deactivate the previous tab
-        if (this.activeTab != null) {
-            this.activeTab.active = false;
-        }
+        //deactivate the previous active tab
+        this.deactivateCurrentActiveTab();
         this.tabs.push({
             resource: resource,
             removable: true,
             active: true
         });
-        this.activeTab = this.tabs[this.tabs.length-1];
+    }
+
+    /**
+     * Move an existing open tab to the first position as set as active.
+     * This differs from setFirstTab that create a new tab (loading or reloading a resource view).
+     */
+    private moveToFirst(tab: Tab) {
+        //deactivate the previous active tab
+        this.deactivateCurrentActiveTab();
+        //set as removable the previous first tab (the one that will be shifted to 2nd position)
+        if (this.tabs.length > 0) {
+            this.tabs[0].removable = true;
+        }
+        this.closeTab(tab); //close the tab that will be moved in 1st position
+        tab.active = true; //active tab
+        this.tabs.unshift(tab); //and insert at first position
+        
     }
     
-    private selectTab(t: any) {
-        this.activeTab.active = false;
+    private selectTab(t: Tab) {
+        //deactivate the previous active tab
+        this.deactivateCurrentActiveTab();
         t.active = true;
-        this.activeTab = t;
     }
     
-    private closeTab(t: any) {
+    private closeTab(t: Tab) {
         var tabIdx = this.tabs.indexOf(t);
-        //if the closed tab is active and not the only one, change the active tab
+        //if the closed tab is active and not the only open, change the active tab
         if (t.active && this.tabs.length > 1) {
             if (tabIdx == this.tabs.length-1) { //if the closed tab was the last one, active the previous
                 this.tabs[tabIdx-1].active = true;
-                this.activeTab = this.tabs[tabIdx-1];
             } else { //otherwise active the next
                 this.tabs[tabIdx+1].active = true;
-                this.activeTab = this.tabs[tabIdx+1];
             }
         }
         this.tabs.splice(tabIdx, 1);
@@ -109,7 +119,20 @@ export class ResourceViewTabbedComponent {
     private closeAllTabs() {
         this.tabs.splice(1);
         this.tabs[0].active = true;
-        this.activeTab = this.tabs[0];
+    }
+
+    private deactivateCurrentActiveTab() {
+        for (var i = 0; i < this.tabs.length; i++) {
+            if (this.tabs[i].active) {
+                this.tabs[i].active = false;
+            }
+        }
     }
     
+}
+
+class Tab {
+    resource: ARTResource;
+    removable: boolean;
+    active: boolean;
 }
