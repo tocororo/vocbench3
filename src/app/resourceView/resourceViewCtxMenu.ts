@@ -3,6 +3,7 @@ import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { AlignmentServices } from "../services/alignmentServices";
 import { RefactorServices } from "../services/refactorServices";
+import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal"
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
@@ -18,7 +19,7 @@ export class ResourceViewContextMenu {
     @Output() update = new EventEmitter();
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices,
-        private creationModals: CreationModalServices, private modal: Modal) { }
+        private resourcesService: ResourcesServices, private creationModals: CreationModalServices, private modal: Modal) { }
 
     private alignResource() {
         this.openAlignmentModal().then(
@@ -49,10 +50,6 @@ export class ResourceViewContextMenu {
         );
     }
 
-    private setAsDeprecated() {
-        alert("Not yet available");
-    }
-
     private spawnNewConceptWithLabel() {
         this.creationModals.newConceptFromLabel("Spawn new concept", this.resource, SKOS.concept).then(
             data => {
@@ -66,6 +63,21 @@ export class ResourceViewContextMenu {
                 );
             },
             () => { }
+        );
+    }
+
+    /**
+     * Useful to enable menu item only for URIResource
+     */
+    private isURIResource() {
+        return this.resource.isURIResource();
+    }
+
+    private setAsDeprecated() {
+        this.resourcesService.setDeprecated(this.resource).subscribe(
+            stResp => {
+                this.update.emit();
+            }
         );
     }
 

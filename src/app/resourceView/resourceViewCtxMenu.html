@@ -6,7 +6,7 @@
         <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
             <a (click)="alignResource()">Align with external resource</a>
         </li>
-        <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
+        <li *ngIf="isURIResource()"[ngClass]="{disabled : !resource.getAdditionalProperty('explicit')}">
             <a (click)="setAsDeprecated()">Set as deprecated</a>
         </li>
         <li *ngIf="resource.getRole() == 'xLabel'"
