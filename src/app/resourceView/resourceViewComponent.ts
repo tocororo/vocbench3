@@ -14,6 +14,7 @@ export class ResourceViewComponent {
 
     @Input() resource: ARTResource;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+    @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
     private viewInitialized: boolean = false;
@@ -80,9 +81,7 @@ export class ResourceViewComponent {
             stResp => {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-            },
-            err => {
+                this.update.emit(this.resource);
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
         );

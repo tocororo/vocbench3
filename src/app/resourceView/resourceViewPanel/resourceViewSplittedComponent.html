@@ -1,9 +1,9 @@
 <div class="vbox">
-    <resource-view [resource]="resource" (dblclickObj)="objectDblClick($event)"></resource-view>
+    <resource-view [resource]="resource" (dblclickObj)="objectDblClick($event)" (update)="onMainResourceUpdate($event)"></resource-view>
 </div>
 
-<div class="vbox" style="margin-left: 5px; position: relative" *ngIf="object">
-    <resource-view [resource]="object" (dblclickObj)="objectDblClick($event)"></resource-view>
+<div *ngIf="object" class="vbox" style="margin-left: 5px; position: relative">
+    <resource-view [resource]="object" (dblclickObj)="objectDblClick($event)" (update)="onSecondaryResourceUpdate($event)"></resource-view>
     <div style="position: absolute; left: 2px; top: 0px;">
         <button type="button" class="close" (click)="closeSecondaryResView()" title="Close this resource view">
             <span class="glyphicon glyphicon-remove" style="font-size: 10px"></span>

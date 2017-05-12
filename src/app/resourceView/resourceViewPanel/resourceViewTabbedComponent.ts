@@ -1,33 +1,31 @@
-import {Component, Input, SimpleChanges} from "@angular/core";
-import {ARTResource} from "../../models/ARTResources";
+import { Component, Input, SimpleChanges } from "@angular/core";
+import { ARTResource, ResAttribute } from "../../models/ARTResources";
 
 @Component({
     selector: "resource-view-tabbed",
     templateUrl: "./resourceViewTabbedComponent.html",
 })
 export class ResourceViewTabbedComponent {
-    
+
     @Input() resource: ARTResource;
-    
+
     private tabs: Array<Tab> = [];
     // private activeTab: Tab;
-    
-    constructor() {}
-    
+
+    constructor() { }
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource']) {
             var res: ARTResource = changes['resource'].currentValue;
             var tab = this.getTabWithResource(res);
             if (tab != null) {//resource already open in a tab => moves it as first tab
-                // this.closeTab(tab);
-                // this.setFirstTab(res);
                 this.moveToFirst(tab);
             } else {
                 this.setFirstTab(res);
             }
         }
     }
-    
+
     private objectDblClick(obj: ARTResource) {
         var tab = this.getTabWithResource(obj);
         if (tab != null) { //object already open in a tab => select it
@@ -36,7 +34,7 @@ export class ResourceViewTabbedComponent {
             this.addTab(obj);
         }
     }
-    
+
     /**
      * Returns the tab where the given resource is described.
      * If none tab describes that resource, returns null
@@ -49,9 +47,9 @@ export class ResourceViewTabbedComponent {
         }
         return null;
     }
-    
+
     //TAB HANDLER
-    
+
     private setFirstTab(resource: ARTResource) {
         //deactivate the previous active tab
         this.deactivateCurrentActiveTab();
@@ -66,7 +64,7 @@ export class ResourceViewTabbedComponent {
             active: true
         });
     }
-    
+
     private addTab(resource: ARTResource) {
         //deactivate the previous active tab
         this.deactivateCurrentActiveTab();
@@ -91,23 +89,23 @@ export class ResourceViewTabbedComponent {
         this.closeTab(tab); //close the tab that will be moved in 1st position
         tab.active = true; //active tab
         this.tabs.unshift(tab); //and insert at first position
-        
+
     }
-    
+
     private selectTab(t: Tab) {
         //deactivate the previous active tab
         this.deactivateCurrentActiveTab();
         t.active = true;
     }
-    
+
     private closeTab(t: Tab) {
         var tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active and not the only open, change the active tab
         if (t.active && this.tabs.length > 1) {
-            if (tabIdx == this.tabs.length-1) { //if the closed tab was the last one, active the previous
-                this.tabs[tabIdx-1].active = true;
+            if (tabIdx == this.tabs.length - 1) { //if the closed tab was the last one, active the previous
+                this.tabs[tabIdx - 1].active = true;
             } else { //otherwise active the next
-                this.tabs[tabIdx+1].active = true;
+                this.tabs[tabIdx + 1].active = true;
             }
         }
         this.tabs.splice(tabIdx, 1);
@@ -128,7 +126,21 @@ export class ResourceViewTabbedComponent {
             }
         }
     }
-    
+
+    /**
+     * When changes on resource view make change the show of the resource, update the resource of the tab
+     * so that the header of the tab shows the updated resource.
+     * NB this udpate affects also the resource in the tree (since resource stored the object passed from the tree)
+     */
+    private onResourceUpdate(resource: ARTResource) {
+        for (var i = 0; i < this.tabs.length; i++) {
+            if (this.tabs[i].resource.getNominalValue() == resource.getNominalValue()) {
+                this.tabs[i].resource[ResAttribute.SHOW] = resource.getShow();
+                this.tabs[i].resource[ResAttribute.ROLE] = resource.getRole();
+            }
+        }
+    }
+
 }
 
 class Tab {

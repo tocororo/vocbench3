@@ -32,7 +32,7 @@
             This is preferred because has better performance, restore the previous if problems come out caused by
             refresh after the resource changes -->
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}" [hidden]="!t.active">
-            <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)"></resource-view>
+            <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)" (update)="onResourceUpdate($event)"></resource-view>
         </div>
         
     </div>
