@@ -44,27 +44,6 @@ export abstract class AbstractPanel {
 
     abstract delete(): void;
 
-    // selectCustomForm(cls: ARTURIResource): Promise<string> {
-    //     return new Promise((resolve, reject) => {
-    //         this.cfService.getCustomConstructors(cls).subscribe(
-    //             customForms => {
-    //                 if (customForms.length == 0) { //empty form collection
-    //                     resolve(null);
-    //                 } else if (customForms.length == 1) {
-    //                     resolve(customForms[0].getId()); 
-    //                 } else { //(forms.length > 1) //let user choose
-    //                     return this.basicModals.selectCustomForm("Select constructor form", customForms).then(
-    //                         (selectedCF: any) => {
-    //                             resolve((<CustomForm>selectedCF).getId());
-    //                         },
-    //                         () => {}
-    //                     );
-    //                 }
-    //             }
-    //         );
-    //     });
-    // }
-
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)
      */

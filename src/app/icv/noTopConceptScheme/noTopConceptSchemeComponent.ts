@@ -93,7 +93,7 @@ export class NoTopConceptSchemeComponent {
         this.basicModals.confirm("Delete scheme", "Warning, deleting this scheme, if it contains some concepts, " +
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             result => {
-                this.skosService.deleteScheme(scheme).subscribe(
+                this.skosService.deleteConceptScheme(scheme).subscribe(
                     stResp => {
                         this.runIcv();
                     }
@@ -111,7 +111,7 @@ export class NoTopConceptSchemeComponent {
             "will generate concepts in no scheme. Are you sure to proceed?").then(
             confirm => {
                 var deleteSchemeFnArray: any[] = [];
-                deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteScheme(sc));
+                deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteConceptScheme(sc));
                 //call the collected functions and subscribe when all are completed
                 Observable.forkJoin(deleteSchemeFnArray).subscribe(
                     res => {

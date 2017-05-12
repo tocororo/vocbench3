@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpManager} from "../utils/HttpManager";
-import {Deserializer} from "../utils/Deserializer";
-import {VBEventHandler} from "../utils/VBEventHandler";
-import {ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../models/ARTResources";
-import {SKOS} from "../models/Vocabulary";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
+import { SKOS } from "../models/Vocabulary";
 
 @Injectable()
 export class SkosServices {
@@ -15,9 +16,9 @@ export class SkosServices {
     private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
-    
+
     //====== Concept services ====== 
-    
+
     /**
      * Returns the topConcepts of the given scheme
      * @param schemes
@@ -78,7 +79,7 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource, 
+    createTopConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
         customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {
@@ -99,8 +100,8 @@ export class SkosServices {
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, schemes: conceptSchemes});
-                return {concept: newConc, scheme: conceptSchemes};
+                this.eventHandler.topConceptCreatedEvent.emit({ concept: newConc, schemes: conceptSchemes });
+                return { concept: newConc, scheme: conceptSchemes };
             }
         );
     }
@@ -119,12 +120,12 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "addTopConcept", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.topConceptCreatedEvent.emit({concept: concept, schemes: [scheme]});
-                return {concept: concept, scheme: scheme};
+                this.eventHandler.topConceptCreatedEvent.emit({ concept: concept, schemes: [scheme] });
+                return { concept: concept, scheme: scheme };
             }
         );
     }
-    
+
     /**
      * Removes the given concept as top concept of a scheme. Emit a conceptRemovedAsTopConceptEvent with concept and scheme.
      * @param concept the top concept
@@ -138,9 +139,9 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "removeTopConcept", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.conceptRemovedAsTopConceptEvent.emit({concept: concept, scheme: scheme});
+                this.eventHandler.conceptRemovedAsTopConceptEvent.emit({ concept: concept, scheme: scheme });
                 return stResp;
-            }   
+            }
         );
     }
 
@@ -173,7 +174,7 @@ export class SkosServices {
      * @return the new concept
      */
     createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource,
-            conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -194,12 +195,12 @@ export class SkosServices {
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broaderConcept});
+                this.eventHandler.narrowerCreatedEvent.emit({ narrower: newConc, broader: broaderConcept });
                 return newConc;
             }
         );
     }
-    
+
     /**
      * Adds the broader relation between two concepts. Emits a narrowerAddedEvent with narrower and broader
      * @param concept concept to which add the broader
@@ -216,7 +217,7 @@ export class SkosServices {
                 var narrower: ARTURIResource = Deserializer.createURI(stResp);
                 narrower.setAdditionalProperty(ResAttribute.CHILDREN, []);
                 narrower.setAdditionalProperty(ResAttribute.MORE, concept.getAdditionalProperty(ResAttribute.MORE));
-                this.eventHandler.broaderAddedEvent.emit({narrower: narrower, broader: broaderConcept});
+                this.eventHandler.broaderAddedEvent.emit({ narrower: narrower, broader: broaderConcept });
                 return stResp;
             }
         );
@@ -235,7 +236,7 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "removeBroaderConcept", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.broaderRemovedEvent.emit({concept: concept, broader: broaderConcept});
+                this.eventHandler.broaderRemovedEvent.emit({ concept: concept, broader: broaderConcept });
                 return stResp;
             }
         );
@@ -276,12 +277,12 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "removeConceptFromScheme", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.conceptRemovedFromSchemeEvent.emit({concept: concept, scheme: scheme});
-                return {concept: concept, scheme: scheme};
+                this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: concept, scheme: scheme });
+                return { concept: concept, scheme: scheme };
             }
         );
     }
-    
+
     //====== Scheme services ======
 
     /**
@@ -307,8 +308,8 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new scheme
      */
-    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource, 
-            customFormId?: string, userPromptMap?: any) {
+    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource,
+        customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createConceptScheme");
         var params: any = {
             label: label
@@ -332,26 +333,32 @@ export class SkosServices {
     }
 
     /**
-     * Deletes a scheme. Throws an Error if forceDeleteDanglingConcepts is not passed and the scheme is not empty
-     * @param scheme the scheme to delete
-     * @param forceDeleteDanglingConcepts tells whether the dangling concept should be deleted
+     * Checks if a scheme is empty
+     * @param scheme
      */
-    deleteScheme(scheme: ARTURIResource, forceDeleteDanglingConcepts?: boolean) {
-        console.log("[SkosServices] deleteScheme");
+    isSchemeEmpty(scheme: ARTURIResource): Observable<boolean> {
+        console.log("[SkosServices] isSchemeEmpty");
         var params: any = {
-            scheme: scheme.getURI(),
-            setForceDeleteDanglingConcepts: forceDeleteDanglingConcepts != undefined,
+            scheme: scheme
         };
-        if (forceDeleteDanglingConcepts != undefined) {
-            params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
-        }
-        //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component
-        //(e.g. ask to the user to delete or retain dangling concepts) 
-        return this.httpMgr.doGet(this.serviceName_old, "deleteScheme", params, this.oldTypeService_old, false, true);
+        return this.httpMgr.doGet(this.serviceName, "isSchemeEmpty", params, this.oldTypeService, true);
     }
-    
+
+    /**
+     * Deletes a scheme
+     * @param scheme the scheme to delete
+     */
+    deleteConceptScheme(scheme: ARTURIResource) {
+        console.log("[SkosServices] deleteConceptScheme");
+        var params: any = {
+            scheme: scheme
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params, this.oldTypeService, true);
+    }
+
+
     //====== Label services ======
-    
+
     /**
      * Sets a preferred label to the given concept (or scheme). Emits a skosPrefLabelSetEvent with
      * resource, label and lang
@@ -368,7 +375,7 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.skosPrefLabelSetEvent.emit({resource: concept, label: label, lang: lang});
+                this.eventHandler.skosPrefLabelSetEvent.emit({ resource: concept, label: label, lang: lang });
                 return stResp;
             }
         );
@@ -392,11 +399,11 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService_old).map(
             stResp => {
-                this.eventHandler.skosPrefLabelRemovedEvent.emit({resource: concept, label: label, lang: lang});
+                this.eventHandler.skosPrefLabelRemovedEvent.emit({ resource: concept, label: label, lang: lang });
                 return stResp;
             }
         );
-	}
+    }
 
     /**
      * Returns the alternative skos labels for the given concept in the given language
@@ -448,7 +455,7 @@ export class SkosServices {
             params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName_old, "removeAltLabel", params, this.oldTypeService_old);
-	}
+    }
 
     /**
      * Adds an hidden label to the given concept (or scheme)
@@ -482,8 +489,8 @@ export class SkosServices {
             params.lang = lang;
         }
         return this.httpMgr.doGet(this.serviceName_old, "removeHiddenLabel", params, this.oldTypeService_old);
-	}
-    
+    }
+
     /**
      * Returns the show of a resource (concept or scheme) according to the given language (if provide)
      * @param resource concept or conceptScheme
@@ -569,7 +576,7 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
-    createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource, 
+    createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource,
         customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createCollection");
         var params: any = {
@@ -606,7 +613,7 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
-    createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral, 
+    createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral,
         newCollection?: ARTURIResource, collectionCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createCollection");
         var params: any = {
@@ -628,7 +635,7 @@ export class SkosServices {
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: containingCollection});
+                this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: newColl, container: containingCollection });
                 return newColl;
             }
         );
@@ -655,8 +662,8 @@ export class SkosServices {
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
                     var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-                    this.eventHandler.nestedCollectionAddedEvent.emit({nested: nested, container: collection});
-                } 
+                    this.eventHandler.nestedCollectionAddedEvent.emit({ nested: nested, container: collection });
+                }
                 return stResp;
             }
         );
@@ -683,14 +690,14 @@ export class SkosServices {
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                    this.eventHandler.nestedCollectionRemovedEvent.emit({nested: element, container: collection});
+                    this.eventHandler.nestedCollectionRemovedEvent.emit({ nested: element, container: collection });
                     //if the removed nested collection turns into a root, emits a rootCollectionCreatedEvent
                     var addedRootElemColl = stResp.getElementsByTagName("addedRoot");
                     if (addedRootElemColl.length > 0) {
                         var newRoot: ARTResource = Deserializer.createRDFResource(addedRootElemColl[0].children[0]);
                         this.eventHandler.rootCollectionCreatedEvent.emit(newRoot);
                     }
-                } 
+                }
                 return stResp;
             }
         );
@@ -735,13 +742,13 @@ export class SkosServices {
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
                     var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-                    this.eventHandler.nestedCollectionAddedFirstEvent.emit({nested: nested, container: collection});
-                } 
+                    this.eventHandler.nestedCollectionAddedFirstEvent.emit({ nested: nested, container: collection });
+                }
                 return stResp;
             }
         );
     }
-    
+
     /**
      * Adds an element to an ordered collection at its end.
      * If the element is a collection, emits a nestedCollectionAddedLastEvent
@@ -764,8 +771,8 @@ export class SkosServices {
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
                     var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-                    this.eventHandler.nestedCollectionAddedLastEvent.emit({nested: nested, container: collection});
-                } 
+                    this.eventHandler.nestedCollectionAddedLastEvent.emit({ nested: nested, container: collection });
+                }
                 return stResp;
             }
         );
@@ -795,13 +802,13 @@ export class SkosServices {
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
                     var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-                    this.eventHandler.nestedCollectionAddedInPositionEvent.emit({nested: nested, container: collection, position: index});
-                } 
+                    this.eventHandler.nestedCollectionAddedInPositionEvent.emit({ nested: nested, container: collection, position: index });
+                }
                 return stResp;
             }
         );
     }
-    
+
     /**
      * Removes an element from an ordered collection. If the element is a collection, emits a nestedCollectionRemovedEvent.
      * Moreover if the removed nested collection is no member of another one, it turns into a root, 
@@ -825,19 +832,19 @@ export class SkosServices {
                 //collection members have individual as role 
                 if (true || element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                    this.eventHandler.nestedCollectionRemovedEvent.emit({nested: element, container: collection});
+                    this.eventHandler.nestedCollectionRemovedEvent.emit({ nested: element, container: collection });
                     //if the removed nested collection turns into a root, emits a rootCollectionCreatedEvent
                     var addedRootElemColl = stResp.getElementsByTagName("addedRoot");
                     if (addedRootElemColl.length > 0) {
                         var newRoot: ARTResource = Deserializer.createRDFResource(addedRootElemColl[0].children[0]);
                         this.eventHandler.rootCollectionCreatedEvent.emit(newRoot);
                     }
-                } 
+                }
                 return stResp;
             }
         );
     }
-    
+
     /**
      * Deletes an ordered collection. Emits a collectionDeletedEvent
      * @param collection Collection to delete

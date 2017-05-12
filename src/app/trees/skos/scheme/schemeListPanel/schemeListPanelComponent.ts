@@ -72,38 +72,33 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     delete() {
-        if (this.ONTO_TYPE == "SKOS") {
-            this.skosService.deleteScheme(this.selectedNode).subscribe(
-                stResp => this.deleteSchemeRespHandler(),
-                err => this.deleteNotEmptySchemeHandler()
-            );
-        } else { //SKOSXL
-            this.skosxlService.deleteScheme(this.selectedNode).subscribe(
-                stResp => this.deleteSchemeRespHandler(),
-                err => this.deleteNotEmptySchemeHandler()
-            );
-        }
-    }
-
-    private deleteNotEmptySchemeHandler() {
-        var retainOpt = "Retain dangling concepts";
-        var deleteOpt = "Delete dangling concepts";
-        this.basicModals.select("Delete scheme", "The operation will produce dangling concepts"
-            + " because the scheme is not empty. What do you want to do?", [retainOpt, deleteOpt]).then(
-            (selection: any) => {
-                var deleteDanglingConc = selection == deleteOpt;
-                if (this.ONTO_TYPE == "SKOS") {
-                    this.skosService.deleteScheme(this.selectedNode, deleteDanglingConc).subscribe(
-                        stResp => this.deleteSchemeRespHandler()
-                    );
-                } else { //SKOSXL
-                    this.skosxlService.deleteScheme(this.selectedNode, deleteDanglingConc).subscribe(
-                        stResp => this.deleteSchemeRespHandler()
+        this.skosService.isSchemeEmpty(this.selectedNode).subscribe(
+            empty => {
+                if (empty) {
+                    this.deleteScheme();
+                } else {
+                    this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
+                        + " Are you sure to continue?", "warning").then(
+                        confirm => {
+                            this.deleteScheme();
+                        },
+                        reject => {}
                     );
                 }
-            },
-            () => { }
+            }
+        )
+    }
+
+    private deleteScheme() {
+        if (this.ONTO_TYPE == "SKOS") {
+            this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
+                stResp => this.deleteSchemeRespHandler(),
             );
+        } else { //SKOSXL
+            this.skosxlService.deleteConceptScheme(this.selectedNode).subscribe(
+                stResp => this.deleteSchemeRespHandler(),
+            );
+        }
     }
 
     /**

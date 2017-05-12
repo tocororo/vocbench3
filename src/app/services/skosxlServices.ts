@@ -149,21 +149,15 @@ export class SkosxlServices {
     }
     
     /**
-     * Deletes a scheme. Throws an Error if forceDeleteDanglingConcepts is not passed and the scheme is not empty
+     * Deletes a scheme and its xLabels
      * @param scheme the scheme to delete
-     * @param forceDeleteDanglingConcepts tells whether the dangling concept should be deleted
      */
-    deleteScheme(scheme: ARTURIResource, forceDeleteDanglingConcepts?: boolean) {
-        console.log("[SkosxlServices] deleteScheme");
+    deleteConceptScheme(scheme: ARTURIResource) {
+        console.log("[SkosServices] deleteConceptScheme");
         var params: any = {
-            scheme: scheme.getURI(),
-            setForceDeleteDanglingConcepts: forceDeleteDanglingConcepts != undefined,
+            scheme: scheme
         };
-        if (forceDeleteDanglingConcepts != undefined) {
-            params.forceDeleteDanglingConcepts = forceDeleteDanglingConcepts;
-        }
-        //last param skips the "Error" alert in case the scheme has concept, so I can handle it in the component
-        return this.httpMgr.doGet(this.serviceName_old, "deleteScheme", params, this.oldTypeService_old, false, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params, this.oldTypeService, true);
     }
     
     //====== Label services ======
