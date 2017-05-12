@@ -222,6 +222,12 @@ export class UIUtils {
             imgSrc = require("../../assets/images/date.png");
         } else if (datatype == XmlSchema.time.getURI()) {
             imgSrc = require("../../assets/images/time.png");
+        } else if (datatype == XmlSchema.string.getURI()) {
+            imgSrc = require("../../assets/images/string.png");
+        } else if (datatype == XmlSchema.boolean.getURI()) {
+            imgSrc = require("../../assets/images/boolean.png");
+        } else if (datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.float.getURI() || datatype == XmlSchema.double.getURI()) {
+            imgSrc = require("../../assets/images/number2.png");
         }
         return imgSrc;
     }
