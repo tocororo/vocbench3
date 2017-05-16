@@ -82,7 +82,7 @@ export class VersionsServices {
             params.repositoryId = repositoryId;
         }
         if (repoConfigurerSpecification != null) {
-            params.repoConfigurerSpecification = repoConfigurerSpecification;
+            params.repoConfigurerSpecification = JSON.stringify(repoConfigurerSpecification);
         }
         return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, this.oldTypeService, true);
     }

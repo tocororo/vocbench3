@@ -227,7 +227,7 @@ export class UIUtils {
         } else if (datatype == XmlSchema.boolean.getURI()) {
             imgSrc = require("../../assets/images/boolean.png");
         } else if (datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.float.getURI() || datatype == XmlSchema.double.getURI()) {
-            imgSrc = require("../../assets/images/number2.png");
+            imgSrc = require("../../assets/images/number.png");
         }
         return imgSrc;
     }

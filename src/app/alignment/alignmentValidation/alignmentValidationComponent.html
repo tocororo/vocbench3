@@ -51,8 +51,8 @@
                     </thead>
                     <tbody class="text-center">
                         <tr *ngFor="let a of alignmentCellList">
-                            <td style="border: 0px 1px 1px solid #ddd">{{a.getEntity1()}}</td>
-                            <td>{{a.getEntity2()}}</td>
+                            <td style="border: 0px 1px 1px solid #ddd">{{a.getEntity1().getShow()}}</td>
+                            <td>{{a.getEntity2().getShow()}}</td>
                             <td style="position: relative"
                                 (mouseover)="editRel.style.display='initial'" (mouseout)="editRel.style.display='none'">
                                 <div class="progress" style="margin-bottom: 0; background-color: #d9534f;">

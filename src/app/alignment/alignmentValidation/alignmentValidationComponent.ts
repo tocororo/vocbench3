@@ -52,8 +52,7 @@ export class AlignmentValidationComponent {
         { relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of" }
     ];
 
-    constructor(private alignmentService: AlignmentServices,
-        private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private alignmentService: AlignmentServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         //init settings (where not provided, set a default)
@@ -382,7 +381,7 @@ export class AlignmentValidationComponent {
      */
     private getIndexOfCell(cell: AlignmentCell): number {
         return this.alignmentCellList.findIndex(c =>
-            c.getEntity1() == cell.getEntity1() && c.getEntity2() == cell.getEntity2());
+            c.getEntity1().getURI() == cell.getEntity1().getURI() && c.getEntity2().getURI() == cell.getEntity2().getURI());
     }
 
 }

@@ -11,7 +11,7 @@ import { VBContext } from "../utils/VBContext";
 // This impl. bases upon one that can be found in the router's test cases.
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
-    private pathWithState: string[] = ["Data", "Sparql"];
+    private pathWithState: string[] = ["Data", "Sparql", "AlignmentValidation"];
 
     // private projectChanged: boolean;
 
