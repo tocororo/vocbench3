@@ -19,7 +19,7 @@ export class CustomFormSelectionModalData extends BSModalContext {
  */
 @Component({
     selector: "cf-selection-modal",
-    templateUrl: "./customFormselectionModal.html",
+    templateUrl: "./customFormSelectionModal.html",
 })
 export class CustomFormSelectionModal implements ModalComponent<CustomFormSelectionModalData> {
     context: CustomFormSelectionModalData;
