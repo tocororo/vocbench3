@@ -6,6 +6,7 @@ import { ComponentRef } from "@angular/core";
 import { ProjectComponent } from "../project/projectComponent";
 import { SparqlComponent } from "../sparql/sparqlComponent";
 import { DataComponent } from "../data/dataComponent";
+import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { VBContext } from "../utils/VBContext";
 
 // This impl. bases upon one that can be found in the router's test cases.
@@ -55,6 +56,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
         // Return false (that means "don't attach the cached route") if it's going to "Data" route and project was changed in the meantime
         if (this.pathWithState.indexOf(route.routeConfig.path) != -1) {
             if (VBContext.isProjectChanged()) {
+                VBContext.setProjectChanged(false); //reset projectChanged
                 // destroy the previous stored DataComponent and SparqlComponent and remove them from the handlers map
                 if (this.handlers["Data"]) {
                     let detachedRouteHandle = this.handlers["Data"];
@@ -67,6 +69,12 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
                     let componentRef: ComponentRef<SparqlComponent> = detachedRouteHandle['componentRef'];
                     componentRef.destroy();
                     delete this.handlers["Sparql"];
+                }
+                if (this.handlers["AlignmentValidation"]) {
+                    let detachedRouteHandle = this.handlers["AlignmentValidation"];
+                    let componentRef: ComponentRef<AlignmentValidationComponent> = detachedRouteHandle['componentRef'];
+                    componentRef.destroy();
+                    delete this.handlers["AlignmentValidation"];
                 }
                 //return false, so it attacches a new DataComponent
                 return false;

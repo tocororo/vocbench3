@@ -117,7 +117,7 @@ export class ProjectComponent implements OnInit {
         this.projectService.accessProject(project).subscribe(
             stResp => {
                 VBContext.setWorkingProject(project);
-                VBContext.notifyProjectChanged();
+                VBContext.setProjectChanged(true);
                 project.setOpen(true);
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                 //init the project preferences for the project

@@ -12,7 +12,7 @@
                     <label class="control-label col-sm-1">Project Name:</label>
                     <div class="col-sm-11">
                         <input type="text" class="form-control input-sm" name="projectName" [(ngModel)]="projectName"
-                            placeholder="Project name" (ngModelChange)="onProjectNameChange()">
+                            placeholder="Project name" (ngModelChange)="onProjectNameChange()" sanitized>
                     </div>
                 </div>
                 <div class="form-group">
@@ -25,11 +25,10 @@
                                     <span style="margin-left: 5px;">{{baseUriPrefix}}</span>
                                 </button>
                                 <ul class="dropdown-menu" style="min-width: 70px;">
-                                    <li><a (click)="baseUriPrefix = 'http://'">http://</a></li>
-                                    <li><a (click)="baseUriPrefix = 'https://'">https://</a></li>
+                                    <li *ngFor="let pref of baseUriPrefixList"><a (click)="baseUriPrefix = pref">{{pref}}</a></li>
                                 </ul>
                             </div>
-                            <input type="text" class="form-control" name="baseURI" [(ngModel)]="baseUriSuffix" sanitized>
+                            <input type="text" class="form-control" name="baseURI" [(ngModel)]="baseUriSuffix" (paste)="onBaseUriPaste($event)">
                         </div>
                     </div>
                 </div>

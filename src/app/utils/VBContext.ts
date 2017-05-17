@@ -56,13 +56,14 @@ export class VBContext {
     /**
      * When project changes set a flag in the context, so the CustomReuseStrategy knows if to reattach or reload a route
      */
-    static notifyProjectChanged() {
-        this.projectChanged = true;
+    static setProjectChanged(changed: boolean) {
+        this.projectChanged = changed;
+    }
+    static resetProjectChanged() {
+        this.projectChanged = false;
     }
     static isProjectChanged() {
-        var changed = this.projectChanged;
-        this.projectChanged = false; //reset
-        return changed;
+        return this.projectChanged;
     }
 
     //there is no removeDefaultNamespace since it is remove with the working project (see removeWorkingProject)

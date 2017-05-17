@@ -21,7 +21,8 @@ export class CreateProjectComponent {
      */
     private projectName: string;
 
-    private baseUriPrefix: string = "http://";
+    private baseUriPrefixList: string[] = ["http://", "https://"];
+    private baseUriPrefix: string = this.baseUriPrefixList[0];
     private baseUriSuffix: string;;
     // private baseURI: string;
 
@@ -131,6 +132,23 @@ export class CreateProjectComponent {
         if (this.isSelectedRepoAccessCreateMode()) {
             this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_core";
             this.supportRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
+        }
+    }
+
+    /**
+     * When user paste a uri update baseUriPrefix and baseUriSuffix
+     * @param event
+     */
+    private onBaseUriPaste(event: ClipboardEvent) {
+        var pastedText = event.clipboardData.getData("text/plain");
+        for (var i = 0; i < this.baseUriPrefixList.length; i++) {
+            let pref = this.baseUriPrefixList[i];
+            if (pastedText.startsWith(pref)) {
+                this.baseUriPrefix = pref;
+                this.baseUriSuffix = pastedText.substring(this.baseUriPrefix.length);
+                event.preventDefault();
+                break;
+            }
         }
     }
 

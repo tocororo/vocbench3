@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ARTURIResource, ARTResource } from '../models/ARTResources';
 import { ResourceViewMode } from '../utils/VBPreferences';
+import { VBContext } from '../utils/VBContext';
 
 /**
  * This class need to be injected in constructor of every Component that throws or subscribes to an event.
@@ -66,7 +67,7 @@ export class VBEventHandler {
 
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
-    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent");
+    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
 
     //user changes resourceViewMode preference => resource view panel need to be updated
     public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter("resViewModeChangedEvent");
@@ -88,13 +89,27 @@ export class VBEventHandler {
 
 class VBEventEmitter<T> extends EventEmitter<T> {
     private eventName: string
+    private onlyIfProjectNotChanged: boolean; //if true the event is fired only if project is not changed
 
-    constructor(eventName: string, isAsync?: boolean) {
+    /**
+     * 
+     * @param eventName 
+     * @param onlyIfProjectNotChanged if true the event is fired only if the project is not changed. Useful for example in 
+     *      refreshDataBroadcastEvent (if project is changed, firing the event would cause exception since the refresh of data is based
+     *      on scheme of old project)
+     * @param isAsync 
+     */
+    constructor(eventName: string, onlyIfProjectNotChanged?: boolean, isAsync?: boolean) {
         super(isAsync);
         this.eventName = eventName;
+        this.onlyIfProjectNotChanged = onlyIfProjectNotChanged;
     }
 
     emit(value?: T): void {
+        //if the project is changed and onlyIfProjectNotChanged is true don't emit event 
+        if (this.onlyIfProjectNotChanged && VBContext.isProjectChanged()) {
+            return;
+        }
         console.debug("[", this.eventName, "]", value);
         super.emit(value);
     }
