@@ -64,7 +64,7 @@ export class LoadDataComponent {
             if (!this.inferFormatFromFile) {
                 formatParam = this.selectedFormat;
             }
-            this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.selectedImportAllowance, this.selectedFormat).subscribe(
+            this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.selectedImportAllowance, formatParam).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
                     this.basicModals.alert("Import data", "Data imported successfully");
