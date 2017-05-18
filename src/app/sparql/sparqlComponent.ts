@@ -13,8 +13,9 @@ import { PrefixMapping } from "../models/PrefixMapping";
 export class SparqlComponent {
 
     private sampleQuery: string = "SELECT * WHERE {\n    ?s ?p ?o .\n} LIMIT 10";
-    private tabs: Array<any> = [];
-    private activeTab: any;
+    private tabs: Array<Tab> = [];
+
+    private resultsLimit: number = 100;
 
     constructor(private sparqlService: SparqlServices, private basicModals: BasicModalServices) { }
 
@@ -40,12 +41,13 @@ export class SparqlComponent {
             queryTime: null,
             inferred: false,
             removable: false,
-            active: true
+            active: true,
+            resultsPage: 0,
+            resultsTotPage: 0
         });
-        this.activeTab = this.tabs[0];
     }
 
-    private doQuery(tab: any) {
+    private doQuery(tab: Tab) {
         var initTime = new Date().getTime();
         tab.queryResult = null;
         UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
@@ -61,6 +63,12 @@ export class SparqlComponent {
                 if (data.resulttype == "tuple" || data.resulttype == "graph") {
                     tab.headers = data.sparql.head.vars;
                     tab.queryResult = data.sparql.results.bindings;
+                    //paging handler
+                    tab.resultsTotPage = Math.floor(tab.queryResult.length / this.resultsLimit);
+                    if (tab.queryResult.length % this.resultsLimit > 0) {
+                        tab.resultsTotPage++;
+                    }
+                    console.log(tab);
                 } else if (data.resulttype == "boolean") {
                     tab.headers = ["boolean"];
                     tab.queryResult = Boolean(data.sparql.boolean);
@@ -80,24 +88,26 @@ export class SparqlComponent {
      * valid tells wheter the query is syntactically correct
      * mode tells the query mode (query/update) 
      */
-    private onQueryChange(event: any) {
-        this.activeTab.query = event.query;
-        this.activeTab.queryValid = event.valid;
-        this.activeTab.queryMode = event.mode;
+    private onQueryChange(tab: Tab, event: any) {
+        tab.query = event.query;
+        tab.queryValid = event.valid;
+        tab.queryMode = event.mode;
     }
 
-    private clear(tab: any) {
+    private clear(tab: Tab) {
         tab.respSparqlJSON = null;
         tab.headers = null;
         tab.queryResult = null;
         tab.queryTime = null;
+        tab.resultsPage = 0;
+        tab.resultsTotPage = 0;
     }
 
-    private exportAsJSON(tab: any) {
+    private exportAsJSON(tab: Tab) {
         this.downloadSavedResult(JSON.stringify(tab.respSparqlJSON), "json");
     }
 
-    private exportAsCSV(tab: any) {
+    private exportAsCSV(tab: Tab) {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
         var serialization = "";
         var separator = ",";
@@ -152,7 +162,7 @@ export class SparqlComponent {
         return value;
     }
 
-    private exportAsTSV(tab: any) {
+    private exportAsTSV(tab: Tab) {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
         var serialization = "";
         var separator = "\t";
@@ -246,10 +256,12 @@ export class SparqlComponent {
     //TAB HANDLER
 
     addTab() {
-        this.activeTab.active = false;
+        this.getActiveTab().active = false;
         this.tabs.push({
             query: this.sampleQuery,
             queryMode: "query",
+            respSparqlJSON: null,
+            resultType: null,
             headers: null,
             queryResult: null,
             queryInProgress: false,
@@ -257,29 +269,54 @@ export class SparqlComponent {
             queryTime: null,
             inferred: false,
             removable: true,
-            active: true
+            active: true,
+            resultsPage: 0,
+            resultsTotPage: 0
         });
-        this.activeTab = this.tabs[this.tabs.length - 1];
     }
 
-    selectTab(t: any) {
-        this.activeTab.active = false;
+    selectTab(t: Tab) {
+        this.getActiveTab().active = false;
         t.active = true;
-        this.activeTab = t;
     }
 
-    closeTab(t: any) {
+    closeTab(t: Tab) {
         var tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active, change the active tab
         if (t.active) {
             if (tabIdx == this.tabs.length - 1) { //if the closed tab was the last one, active the previous
                 this.tabs[tabIdx - 1].active = true;
-                this.activeTab = this.tabs[tabIdx - 1];
             } else { //otherwise active the next
                 this.tabs[tabIdx + 1].active = true;
-                this.activeTab = this.tabs[tabIdx + 1];
             }
         }
         this.tabs.splice(tabIdx, 1);
     }
+
+    private getActiveTab(): Tab {
+        for (var i = 0; i < this.tabs.length; i++) {
+            if (this.tabs[i].active) {
+                return this.tabs[i];
+            }
+        }
+    }
+}
+
+class Tab {
+    query: string;
+    queryMode: "query" | "update";
+    respSparqlJSON: any; //keep the "sparql" JSON object contained in the response
+    resultType: "graph" | "tuple" | "boolean"; //graph / tuple / boolean
+    headers: string[];
+    queryResult: any;
+    queryInProgress: boolean;
+    queryValid: boolean;
+    queryTime: string;
+    inferred: boolean;
+    removable: boolean;
+    active: boolean;
+
+    //result paging
+    resultsPage: number;
+    resultsTotPage: number;
 }

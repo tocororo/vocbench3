@@ -24,7 +24,7 @@
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <template [ngIf]="t.active">
                 
-                <yasgui [query]="t.query" (querychange)="onQueryChange($event)"></yasgui>
+                <yasgui [query]="t.query" (querychange)="onQueryChange(t, $event)"></yasgui>
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">
@@ -68,12 +68,14 @@
                             </thead>
                             <tbody style="overflow: auto;">
                                 <template [ngIf]="t.resultType != 'boolean'">
-                                    <tr *ngFor="let bindings of t.queryResult">
-                                        <td *ngFor="let h of t.headers">
-                                            <template [ngIf]="bindings[h]">
-                                                {{bindings[h].value}}
-                                            </template>
-                                        </td>
+                                    <tr *ngFor="let bindings of t.queryResult; let i=index">
+                                        <template [ngIf]="i >= t.resultsPage*resultsLimit && i < t.resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
+                                            <td *ngFor="let h of t.headers">
+                                                <template [ngIf]="bindings[h]">
+                                                    {{bindings[h].value}}
+                                                </template>
+                                            </td>
+                                        </template>
                                     </tr>
                                 </template>
                                 <template [ngIf]="t.resultType == 'boolean'">
@@ -86,6 +88,22 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <div *ngIf="t.queryResult.length > resultsLimit">
+                        <div class="btn-group btn-group-xs pull-right" style="margin-top: 4px;" role="group">
+                            <button class="btn btn-default" title="Previous page" (click)="t.resultsPage=t.resultsPage-1" [disabled]="t.resultsPage==0">
+                                <span class="glyphicon glyphicon-triangle-left"></span>
+                            </button>
+                            <button class="btn btn-default" style="cursor: auto" disabled>
+                                <span>{{t.resultsPage+1}} of {{t.resultsTotPage}}</span>
+                            </button>
+                            <button class="btn btn-default" title="Next page" (click)="t.resultsPage=t.resultsPage+1" [disabled]="t.resultsPage==t.resultsTotPage-1">
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                            </button>
+                        </div>
+                    </div>
+
+
                 </div>
             </template>
         </div>
