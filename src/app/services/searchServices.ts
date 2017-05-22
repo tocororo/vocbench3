@@ -90,7 +90,7 @@ export class SearchServices {
             resourceURI: resource
         };
         if (schemes != undefined) {
-            params.schemeURI = schemes;
+            params.schemesIRI = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService, true).map(
             stResp => {

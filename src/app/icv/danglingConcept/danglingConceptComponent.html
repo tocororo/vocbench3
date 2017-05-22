@@ -21,7 +21,7 @@
             <a [routerLink]="['/Schemes']">select a skos:conceptScheme</a>
         </div>
 
-        <div *ngIf="selectedScheme">
+        <template [ngIf]="selectedScheme">
             <div *ngIf="!brokenConceptList" style="padding: 4px;">
                 Press <strong>Run</strong> button to run the check.
             </div>
@@ -48,7 +48,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </template>
     </div>
     <div class="panel-footer">
         <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="dropup pull-right">

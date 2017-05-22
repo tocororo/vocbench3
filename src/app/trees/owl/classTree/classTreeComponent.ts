@@ -59,6 +59,10 @@ export class ClassTreeComponent extends AbstractTree {
     openTreeAt(node: ARTURIResource) {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls).subscribe(
             path => {
+                if (path.length == 0) {
+                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the tree");
+                    return;
+                };
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 //open tree from root to node
                 for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand

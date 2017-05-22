@@ -179,16 +179,17 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            // this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", null, this.workingScheme).subscribe(
             let searchingScheme: ARTURIResource[] = [];
             if (this.schemeChangeable) {
                 searchingScheme.push(this.getSchemeResourceFromUri(this.selectedSchemeUri));
             } else {
                 searchingScheme = this.workingSchemes;
             }
+            UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", 
                 this.preferences.getDefaultLanguage(), searchingScheme).subscribe(
                 searchResult => {
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results

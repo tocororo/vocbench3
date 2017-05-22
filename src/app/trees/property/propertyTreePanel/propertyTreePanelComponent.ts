@@ -9,6 +9,7 @@ import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { UIUtils } from "../../../utils/UIUtils";
 
 @Component({
     selector: "property-tree-panel",
@@ -67,8 +68,10 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], true, true, "contain").subscribe(
                 searchResult => {
+                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results

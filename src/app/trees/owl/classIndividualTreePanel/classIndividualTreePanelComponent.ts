@@ -9,8 +9,6 @@ import { DeleteServices } from "../../../services/deleteServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
-import { UIUtils } from "../../../utils/UIUtils";
-
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot
