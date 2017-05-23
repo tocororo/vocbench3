@@ -2,10 +2,10 @@
     
     <!--Tabs navigation-->
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-        <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
+        <li *ngFor="let t of tabs; let i=index" [ngClass]="{active : t.active}">
             <a href (click)="selectTab(t)">
                 <rdf-resource [resource]="t.resource"></rdf-resource>
-                <span *ngIf="t.removable" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
+                <span *ngIf="i > 0" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
                     onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
                 </span>

@@ -53,14 +53,9 @@ export class ResourceViewTabbedComponent {
     private setFirstTab(resource: ARTResource) {
         //deactivate the previous active tab
         this.deactivateCurrentActiveTab();
-        //set as removable the previous first tab
-        if (this.tabs.length > 0) {
-            this.tabs[0].removable = true;
-        }
         //add a new first tab with the resource
         this.tabs.unshift({
             resource: resource,
-            removable: false,
             active: true
         });
     }
@@ -70,7 +65,6 @@ export class ResourceViewTabbedComponent {
         this.deactivateCurrentActiveTab();
         this.tabs.push({
             resource: resource,
-            removable: true,
             active: true
         });
     }
@@ -82,10 +76,6 @@ export class ResourceViewTabbedComponent {
     private moveToFirst(tab: Tab) {
         //deactivate the previous active tab
         this.deactivateCurrentActiveTab();
-        //set as removable the previous first tab (the one that will be shifted to 2nd position)
-        if (this.tabs.length > 0) {
-            this.tabs[0].removable = true;
-        }
         this.closeTab(tab); //close the tab that will be moved in 1st position
         tab.active = true; //active tab
         this.tabs.unshift(tab); //and insert at first position
@@ -145,6 +135,5 @@ export class ResourceViewTabbedComponent {
 
 class Tab {
     resource: ARTResource;
-    removable: boolean;
     active: boolean;
 }
