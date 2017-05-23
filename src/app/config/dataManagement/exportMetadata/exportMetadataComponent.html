@@ -1,122 +1,118 @@
-<div class="vbox">
-    
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <label>Export metadata:</label>
-        </div>
-       
-        <div class="panel-body vbox">
-
-            <table class="table table-condensed table-borderless">
-                <colgroup>
-                    <col style="width: 1%;">
-                    <col>
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <td nowrap>
-                            <label>Export Format:</label>
-                        </td>
-                        <td>
-                            <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
-                                <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap>
-                            <label>Exporter Plugin:</label>
-                        </td>
-                        <td>
-                            <select class="form-control input-sm" [(ngModel)]="selectedExporterPlugin" name="exporter" (change)="onPluginChange()">
-                                <option *ngFor="let e of exporterPlugins" [ngValue]="e">{{e.factoryID}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap>
-                            <label>Plugin Configuration:</label>
-                        </td>
-                        <td>
-                            <div class="input-group">
-                                <select class="form-control input-sm" [(ngModel)]="selectedConfiguration" name="configuration">
-                                    <option *ngFor="let c of selectedExporterPluginConfigurations" [ngValue]="c">{{c.shortName}}</option>
-                                </select>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default btn-sm" (click)="configurePlugin()" 
-                                        [disabled]="!selectedConfiguration || selectedConfiguration.params.length == 0">
-                                        Configure
-                                    </button>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-
-            <div class="subPanel vbox" style="margin-top: 6px;">
-                <div class="subPanel-heading">
-                    <label>Settings</label>
-                </div>
-                <div class="subPanel-body scrollableContainer">
-                    <template [ngIf]="selectedExporterSettings">
-
-                        <table class="table table-condensed table-borderless">
-                            <colgroup>
-                                <col style="width: 1%;">
-                                <col style="width: 1%;">
-                                <col>
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3" class="text-center">
-                                        <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
-                                            <label>{{selectedExporterSettings.extensionPointSettings.shortName}}</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let p of selectedExporterSettings.extensionPointSettings.params">
-                                    <td class="text-right" nowrap>
-                                        <label>{{p.name}}</label>
-                                        <span *ngIf="p.required">*</span>
-                                    </td>
-                                    <td>
-                                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
-                                    </td>
-                                    <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="text-center">
-                                        <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
-                                            <label>{{selectedExporterSettings.pluginSettings.shortName}}</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let p of selectedExporterSettings.pluginSettings.params">
-                                    <td class="text-right" nowrap>
-                                        <label>{{p.name}}</label>
-                                        <span *ngIf="p.required">*</span>
-                                    </td>
-                                    <td>
-                                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
-                                    </td>
-                                    <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </template>
-                </div>
-            </div>
-
-        </div>
-        
-        <div class="panel-footer">
-            <span class="pull-left">(*) Mandatory field</span>
-            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="export()">Submit</button>
-            <span class="clearfix"></span> <!--To fix UI bug-->
-        </div>
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label>Export metadata:</label>
     </div>
     
+    <div class="panel-body vbox">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap>
+                        <label>Export Format:</label>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
+                            <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap>
+                        <label>Exporter Plugin:</label>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="selectedExporterPlugin" name="exporter" (change)="onPluginChange()">
+                            <option *ngFor="let e of exporterPlugins" [ngValue]="e">{{e.factoryID}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap>
+                        <label>Plugin Configuration:</label>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <select class="form-control input-sm" [(ngModel)]="selectedConfiguration" name="configuration">
+                                <option *ngFor="let c of selectedExporterPluginConfigurations" [ngValue]="c">{{c.shortName}}</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" (click)="configurePlugin()" 
+                                    [disabled]="!selectedConfiguration || selectedConfiguration.params.length == 0">
+                                    Configure
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class="subPanel vbox" style="margin-top: 6px;">
+            <div class="subPanel-heading">
+                <label>Settings</label>
+            </div>
+            <div class="subPanel-body scrollableContainer">
+                <template [ngIf]="selectedExporterSettings">
+
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
+                                        <label>{{selectedExporterSettings.extensionPointSettings.shortName}}</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let p of selectedExporterSettings.extensionPointSettings.params">
+                                <td class="text-right" nowrap>
+                                    <label>{{p.name}}</label>
+                                    <span *ngIf="p.required">*</span>
+                                </td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                                </td>
+                                <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
+                                        <label>{{selectedExporterSettings.pluginSettings.shortName}}</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let p of selectedExporterSettings.pluginSettings.params">
+                                <td class="text-right" nowrap>
+                                    <label>{{p.name}}</label>
+                                    <span *ngIf="p.required">*</span>
+                                </td>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                                </td>
+                                <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </template>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="panel-footer">
+        <span class="pull-left">(*) Mandatory field</span>
+        <button type="submit" class="btn btn-default btn-sm pull-right" (click)="export()">Submit</button>
+        <span class="clearfix"></span> <!--To fix UI bug-->
+    </div>
 </div>

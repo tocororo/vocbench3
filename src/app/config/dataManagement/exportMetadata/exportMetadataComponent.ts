@@ -5,8 +5,6 @@ import { PluginsServices } from "../../../services/pluginsServices";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-// import { UIUtils } from "../../../utils/UIUtils";
-// import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "export-metadata-component",

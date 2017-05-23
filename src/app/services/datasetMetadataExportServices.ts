@@ -29,7 +29,8 @@ export class DatasetMetadataExportServices {
                     let param: PluginConfigParam = new PluginConfigParam(
                         extPointParamsJson[i].name, 
                         extPointParamsJson[i].description, 
-                        extPointParamsJson[i].required
+                        extPointParamsJson[i].required,
+                        extPointParamsJson[i].value
                     );
                     extPointParams.push(param);
                 }
@@ -44,7 +45,8 @@ export class DatasetMetadataExportServices {
                     let param: PluginConfigParam = new PluginConfigParam(
                         pluginParamsJson[i].name, 
                         pluginParamsJson[i].description, 
-                        pluginParamsJson[i].required
+                        pluginParamsJson[i].required,
+                        pluginParamsJson[i].value
                     );
                     pluginParams.push(param);
                 }
