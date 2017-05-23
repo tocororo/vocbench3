@@ -329,6 +329,12 @@ export class ResAttribute {
     public static MEMBERS = "members"; //used for ordered collections
     public static INDEX = "index"; //used for members of ordered collections
     public static IN_SCHEME = "inScheme"; //used only in Skos.getSchemesMatrixPerConcept()
+    public static NATURE = "nature"; //content is a triple separated by "-": <uri of class of resource> - <graph of ???> - <deprecated true/false>
+
+    //never in st responses, result of nature parsing
+    public static RES_CLASS = "res_class"; //class of the resource
+    public static RES_GRAPH = "res_graph"; //graph where the resource is defined
+    public static DEPRECATED = "deprecated";
     
     //never in st responses, added because are util for tree
     public static OPEN = "open";

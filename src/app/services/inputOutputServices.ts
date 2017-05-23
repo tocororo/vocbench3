@@ -42,7 +42,7 @@ export class InputOutputServices {
     clearData() {
         console.log("[InputOutputServices] clearData");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "clearData", params, this.oldTypeService);
+        return this.httpMgr.doPost(this.serviceName, "clearData", params, this.oldTypeService, true);
     }
 
 }

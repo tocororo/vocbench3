@@ -143,7 +143,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
             if (this.selectedRepoConf.configuration.editRequired) {
                 //check if every required configuration parameters are not null
                 for (var i = 0; i < repoConfigParams.length; i++) {
-                    if (repoConfigParams[i].required && repoConfigParams[i].value != null) {
+                    if (repoConfigParams[i].required && repoConfigParams[i].value == null) {
                         this.basicModals.alert("Missing configuration", "Required parameter(s) missing in repository configuration (" +
                             this.selectedRepoConf.configuration.shortName +")", "error");
                         return;

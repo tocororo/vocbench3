@@ -386,52 +386,8 @@ export class Deserializer {
         var show: string = uri[ResAttribute.SHOW];
         var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>uri[ResAttribute.ROLE];
         var uriRes: ARTURIResource = new ARTURIResource(id, show, role);
-
         //other properties
-        var qname = uri[ResAttribute.QNAME];
-        if (qname != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.QNAME, qname);
-        }
-        var explicit = uri[ResAttribute.EXPLICIT];
-        if (explicit != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
-        }
-        var more = uri[ResAttribute.MORE];
-        if (more != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.MORE, more);
-        }
-        var numInst = uri[ResAttribute.NUM_INST];
-        if (numInst != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
-        }
-        var hasCustomRange = uri[ResAttribute.HAS_CUSTOM_RANGE];
-        if (hasCustomRange != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
-        }
-        var resourcePosition = uri[ResAttribute.RESOURCE_POSITION];
-        if (resourcePosition != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
-        }
-        var lang = uri[ResAttribute.LANG];
-        if (lang != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.LANG, lang);
-        }
-        var graphs = uri[ResAttribute.GRAPHS];
-        if (graphs != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
-        }
-        var members = uri[ResAttribute.MEMBERS];
-        if (members != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
-        }
-        var index = uri[ResAttribute.INDEX];
-        if (index != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
-        }
-        var inScheme = uri[ResAttribute.IN_SCHEME];
-        if (inScheme != undefined) {
-            uriRes.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
-        }
+        this.parseResourceOptionalProperties(uri, uriRes);
 
         return uriRes;
     }
@@ -441,38 +397,70 @@ export class Deserializer {
         var show = bnode[ResAttribute.SHOW];
         var role = RDFResourceRolesEnum[bnode[ResAttribute.ROLE]];
         var bNodeRes = new ARTBNode(id, show, role);
-
-        //optional properties
-        var explicit = bnode[ResAttribute.EXPLICIT];
-        if (explicit != undefined) {
-            bNodeRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
-        }
-        var resourcePosition = bnode[ResAttribute.RESOURCE_POSITION];
-        if (resourcePosition != undefined) {
-            bNodeRes.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
-        }
-        var lang = bnode[ResAttribute.LANG];
-        if (lang != undefined) {
-            bNodeRes.setAdditionalProperty(ResAttribute.LANG, lang);
-        }
-        var graphs = bnode[ResAttribute.GRAPHS];
-        if (graphs != undefined) {
-            bNodeRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
-        }
-        var members = bnode[ResAttribute.MEMBERS];
-        if (members != undefined) {
-            bNodeRes.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
-        }
-        var index = bnode[ResAttribute.INDEX];
-        if (index != undefined) {
-            bNodeRes.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
-        }
-        var inScheme = bnode[ResAttribute.IN_SCHEME];
-        if (inScheme != undefined) {
-            bnode.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
-        }
+        //other properties
+        this.parseResourceOptionalProperties(bnode, bNodeRes);
 
         return bNodeRes;
+    }
+
+    private static parseResourceOptionalProperties(resJson: any, resource: ARTResource) {
+        var qname: string = resJson[ResAttribute.QNAME];
+        if (qname != undefined) {
+            resource.setAdditionalProperty(ResAttribute.QNAME, qname);
+        }
+        var explicit: boolean = resJson[ResAttribute.EXPLICIT];
+        if (explicit != undefined) {
+            resource.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
+        }
+        var more: boolean = resJson[ResAttribute.MORE];
+        if (more != undefined) {
+            resource.setAdditionalProperty(ResAttribute.MORE, more);
+        }
+        var numInst: number = resJson[ResAttribute.NUM_INST];
+        if (numInst != undefined) {
+            resource.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
+        }
+        var hasCustomRange: boolean = resJson[ResAttribute.HAS_CUSTOM_RANGE];
+        if (hasCustomRange != undefined) {
+            resource.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
+        }
+        var resourcePosition: string = resJson[ResAttribute.RESOURCE_POSITION];
+        if (resourcePosition != undefined) {
+            resource.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
+        }
+        var lang: string = resJson[ResAttribute.LANG];
+        if (lang != undefined) {
+            resource.setAdditionalProperty(ResAttribute.LANG, lang);
+        }
+        var graphs: string = resJson[ResAttribute.GRAPHS];
+        if (graphs != undefined) {
+            resource.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
+        }
+        var members: any[] = resJson[ResAttribute.MEMBERS];
+        if (members != undefined) {
+            resource.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
+        }
+        var index: any = resJson[ResAttribute.INDEX];
+        if (index != undefined) {
+            resource.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
+        }
+        var inScheme: string = resJson[ResAttribute.IN_SCHEME];
+        if (inScheme != undefined) {
+            resource.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
+        }
+        var nature: string = resJson[ResAttribute.NATURE];
+        // console.log("[[[[[" + resource.getNominalValue() + "]]]]]")
+        // console.log("nature: ", nature);
+        if (nature != undefined) {
+            let splitted: string[] = nature.split(",");
+            for (var i = 0; i < splitted.length; i++) {
+                let classGraphDeprecated: string[] = splitted[i].split("-");
+                // console.log("\tsplitted: " + splitted[i]);
+                // console.log("\t\tclass: ", classGraphDeprecated[0]);
+                // console.log("\t\tgraph: ", classGraphDeprecated[1]);
+                // console.log("\t\tdeprecated: ", classGraphDeprecated[2]);
+            }
+        }
     }
 
     private static createLiteralJSON(literal: any): ARTLiteral {
@@ -541,7 +529,7 @@ export class Deserializer {
         return uriResourceArray;
     }
 
-    private static createResourceArrayJSON(resArray: any): ARTResource[] {
+    private static createResourceArrayJSON(resArray: any[]): ARTResource[] {
         var resourceArray: ARTResource[] = new Array();
         for (var i = 0; i < resArray.length; i++) {
             resourceArray.push(this.createRDFResourceJSON(resArray[i]));
