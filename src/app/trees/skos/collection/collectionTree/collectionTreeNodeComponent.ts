@@ -54,7 +54,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
                 ResourceUtils.sortResources(nestedColl, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node
-                this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+                this.open = true;
                 this.nodeExpandEnd.emit();
             }
         );
@@ -67,7 +67,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
         if (this.node.getURI() == container.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).unshift(nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
-            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+            this.open = true;
         }
     }
 
@@ -76,7 +76,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
         if (this.node.getURI() == container.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
-            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+            this.open = true;
         }
     }
 
@@ -85,7 +85,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
         if (this.node.getURI() == container.getURI()) {
             this.node.getAdditionalProperty(ResAttribute.CHILDREN).splice(position, 0, nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
-            this.node.setAdditionalProperty(ResAttribute.OPEN, true);
+            this.open = true;
         }
     }
 

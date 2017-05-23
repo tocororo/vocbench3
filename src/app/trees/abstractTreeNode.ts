@@ -26,6 +26,7 @@ export abstract class AbstractTreeNode {
     /**
      * ATTRIBUTES
      */
+    open: boolean = false;
 
     //structure to support the tree opening
     pendingSearch: any = {
@@ -78,7 +79,7 @@ export abstract class AbstractTreeNode {
    	 * Collapse the subtree div.
    	 */
     private collapseNode() {
-		this.node.setAdditionalProperty(ResAttribute.OPEN, false);
+        this.open = false;
         this.node.setAdditionalProperty(ResAttribute.CHILDREN, []);
     }
 
@@ -96,7 +97,7 @@ export abstract class AbstractTreeNode {
                 this.selectNode();
             }
         } else {
-            if (!this.node.getAdditionalProperty(ResAttribute.OPEN)) { //if node is close, expand itself
+            if (!this.open) { //if node is close, expand itself
                 this.expandNode();
             }
             var nodeChildren = this.viewChildrenNode.toArray();
@@ -172,7 +173,7 @@ export abstract class AbstractTreeNode {
                 //if node has no more children change info of node so the UI will update
                 if (children.length == 0) {
                     this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-                    this.node.setAdditionalProperty(ResAttribute.OPEN, false);
+                    this.open = false;
                 }
                 break;
             }
@@ -183,6 +184,10 @@ export abstract class AbstractTreeNode {
         //if the parent is the current node, update more attribute
         if (this.node.getNominalValue() == parent.getNominalValue()) {
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
+            if (this.open) { //if node is open, show the child with its children
+                let children: ARTResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
+                children.push(child);
+            }
         }
     }
 
@@ -190,7 +195,7 @@ export abstract class AbstractTreeNode {
         if (this.node.getNominalValue() == parent.getNominalValue()) {//if the parent is the current node
             this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
             //if it was open add the child to the visible children
-            if (this.node.getAdditionalProperty(ResAttribute.OPEN)) {
+            if (this.open) {
                 this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(child);
             }
         }

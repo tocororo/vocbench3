@@ -337,7 +337,6 @@ export class ResAttribute {
     public static DEPRECATED = "deprecated";
     
     //never in st responses, added because are util for tree
-    public static OPEN = "open";
     public static CHILDREN = "children";
     public static SELECTED = "selected";
     

@@ -449,16 +449,16 @@ export class Deserializer {
             resource.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
         }
         var nature: string = resJson[ResAttribute.NATURE];
-        // console.log("[[[[[" + resource.getNominalValue() + "]]]]]")
-        // console.log("nature: ", nature);
         if (nature != undefined) {
             let splitted: string[] = nature.split(",");
             for (var i = 0; i < splitted.length; i++) {
                 let classGraphDeprecated: string[] = splitted[i].split("-");
-                // console.log("\tsplitted: " + splitted[i]);
-                // console.log("\t\tclass: ", classGraphDeprecated[0]);
-                // console.log("\t\tgraph: ", classGraphDeprecated[1]);
-                // console.log("\t\tdeprecated: ", classGraphDeprecated[2]);
+                let cls: string = classGraphDeprecated[0];
+                let graph: string = classGraphDeprecated[1];
+                let deprecated: boolean = classGraphDeprecated[2] == "true";
+                resource.setAdditionalProperty(ResAttribute.RES_CLASS, cls); //this should be the attribute role in the future?
+                resource.setAdditionalProperty(ResAttribute.RES_GRAPH, graph);
+                resource.setAdditionalProperty(ResAttribute.DEPRECATED, deprecated);
             }
         }
     }

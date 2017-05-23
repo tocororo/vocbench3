@@ -62,6 +62,7 @@ export class UIUtils {
 
         var classImgSrc = require("../../assets/images/class.png");
         var classImportedImgSrc = require("../../assets/images/class_imported.png");
+        var classDeprecatedSrc = require("../../assets/images/class_deprecated.png");
         var individualImgSrc = require("../../assets/images/individual.png");
         var individualImportedImgSrc = require("../../assets/images/individual_imported.png");
         var conceptImgSrc = require("../../assets/images/concept.png");
@@ -86,10 +87,13 @@ export class UIUtils {
         var imgSrc: string;
         if (rdfResource.isResource()) {
             var role = (<ARTResource>rdfResource).getRole().toLowerCase();
+            var deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
                 rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
-                if (!explicit) {
+                if (deprecated) {
+                    imgSrc = classDeprecatedSrc;
+                } else if (!explicit) {
                     imgSrc = classImportedImgSrc;
                 } else {
                     imgSrc = classImgSrc;
