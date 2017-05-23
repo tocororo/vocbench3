@@ -38,6 +38,7 @@ import { CreateProjectComponent } from "../project/createProject/createProjectCo
 import { IcvComponent } from "../icv/icvComponent";
 import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
+import { ExportMetadataComponent } from "../config/dataManagement/exportMetadata/exportMetadataComponent";
 import { MetadataManagementComponent } from "../config/dataManagement/metadata/metadataManagementComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
@@ -76,6 +77,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
             CustomFormConfigComponent,
             LoadDataComponent,
             ExportDataComponent,
+            ExportMetadataComponent,
             MetadataManagementComponent,
             RefactorComponent,
             VersioningComponent,
