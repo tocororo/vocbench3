@@ -36,6 +36,7 @@ import { CustomFormConfigComponent } from "../customForms/customFormConfComponen
 import { ImportProjectComponent } from "../project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 import { IcvComponent } from "../icv/icvComponent";
+import { HistoryComponent } from "../history/historyComponent";
 import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
 import { ExportMetadataComponent } from "../config/dataManagement/exportMetadata/exportMetadataComponent";
@@ -73,6 +74,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
             DataComponent,
             SparqlComponent,
             IcvComponent,
+            HistoryComponent,
             AlignmentValidationComponent,
             CustomFormConfigComponent,
             LoadDataComponent,

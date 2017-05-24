@@ -79,6 +79,9 @@ import { UserCreateModal } from "../administration/administrationModals/userCrea
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 
+//history modals
+import { CommitDeltaModal } from "../history/commitDeltaModal";
+
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
@@ -93,6 +96,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
+        CommitDeltaModal,
         EditableNsInput, SchemeSelectionComponent
     ],
     exports: [],
@@ -116,7 +120,8 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
         ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
-        PluginConfigModal, FilterGraphsModal, DumpCreationModal
+        PluginConfigModal, FilterGraphsModal, DumpCreationModal,
+        CommitDeltaModal
     ]
 })
 export class VBModalModule { }

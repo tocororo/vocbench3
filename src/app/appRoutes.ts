@@ -6,6 +6,7 @@ import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
 import { DataComponent } from "./data/dataComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
+import { HistoryComponent } from "./history/historyComponent";
 // import {IcvComponent} from "./icv/icvComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
@@ -29,11 +30,12 @@ export const routes: Routes = [
     { path: "Projects", component: ProjectComponent, canActivate: [AdminGuard] },
     { path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "History", component: HistoryComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration", component: RegistrationComponent },
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },
-    { path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [UnsavedChangesGuard] },
+    { path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard] },
     //lazy loading of module with child route
     { path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AdminGuard] },
     { path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard] },

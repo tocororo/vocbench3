@@ -1,0 +1,78 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label>History</label>
+    </div>
+    
+    <div class="panel-body vbox scrollableContainer">
+
+        <table class="table table-condensed table-hoverable table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center">Commit</th>
+                    <th class="text-center">Subject</th>
+                    <th class="text-center">Action</th>
+                    <th class="text-center">User</th>
+                    <!--<th class="text-center">Validate</th>-->
+                    <!--<th class="text-center">Notes</th>-->
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of history">
+                    <td nowrap>
+                        <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="item.subject">
+                            {{item.subject.getURI()}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="item.operation" [title]="item.operation.id">
+                            {{item.operation.show}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="item.user" [title]="item.user.id">
+                            {{item.user.show}}
+                        </span>
+                    </td>
+                    <!--<td>
+                        <select class="form-control input-xs" [(ngModel)]="item.validationAction">
+                            <option value="select">Select</option>
+                            <option value="accept">Accept</option>
+                            <option value="reject">Reject</option>
+                        </select>
+                    </td>-->
+                    <!--<td>
+                        <input class="form-control input-xs">
+                    </td>-->
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+
+    <div class="panel-footer">
+        <!--<button type="submit" class="btn btn-default btn-sm pull-right" (click)="validate()">Validate</button>
+        <span class="clearfix"></span>-->
+        <div class="btn-group btn-group-xs pull-right" role="group">
+            <button class="btn btn-default" title="Previous" (click)="getPreviousCommits()" [disabled]="'true'">
+                <span class="glyphicon glyphicon-triangle-left"></span>
+            </button>
+            <!--<button class="btn btn-default" style="cursor: auto" disabled>
+                <span>{{t.resultsPage+1}} of {{t.resultsTotPage}}</span>
+            </button>-->
+            <button class="btn btn-default" title="Next" (click)="getNextCommits()" [disabled]="!hasNext">
+                <span class="glyphicon glyphicon-triangle-right"></span>
+            </button>
+        </div>
+    </div>
+
+</div>

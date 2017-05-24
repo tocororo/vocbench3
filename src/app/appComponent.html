@@ -12,11 +12,14 @@
                 <li *ngIf="isUserLogged() && isUserAdmin()" routerLinkActive="active">
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
+                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active">
                     <a [routerLink]="['/Data']">Data</a>
                 </li>
-				<li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active" [ngClass]="{disabled: !isProjectOpen()}">
+				<li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
+                </li>
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" routerLinkActive="active">
+                    <a [routerLink]="['/History']">History</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">

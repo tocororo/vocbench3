@@ -1,8 +1,8 @@
 export class Project {
     private name: string;
     private accessible: boolean;
-    private modelConfigType: string;
-    private ontmgr: string;
+    private historyEnabled: boolean;
+    private validationEnabled: boolean;
     private ontoType: string;
     private open: boolean;
     private status: Object;
@@ -15,11 +15,6 @@ export class Project {
         "it.uniroma2.art.owlart.models.SKOSModel" : "SKOS",
         "it.uniroma2.art.owlart.models.SKOSXLModel" : "SKOS-XL"
     };
-    
-    private static knownOntoMgrInterfaces = {
-        "it.uniroma2.art.semanticturkey.ontology.sesame2.OntologyManagerFactorySesame2Impl" : "Sesame2",
-        "it.uniroma2.art.semanticturkey.ontology.rdf4j.OntologyManagerFactoryRDF4JImpl" : "RDF4J"
-    }
     
     // constructor() {}
     
@@ -44,30 +39,21 @@ export class Project {
     public isAccessible(): boolean {
         return this.accessible;
     }
-    
-    public setModelConfigType(modelConfigType: string) {
-        this.modelConfigType = modelConfigType;
+
+    public setHistoryEnabled(historyEnabled: boolean) {
+        this.historyEnabled = historyEnabled;
     }
     
-    public getModelConfigType(): string {
-        return this.modelConfigType;
+    public isHistoryEnabled(): boolean {
+        return this.historyEnabled;
+    }
+
+    public setValidationEnabled(validationEnabled: boolean) {
+        this.validationEnabled = validationEnabled;
     }
     
-    public setOntoMgr(ontmgr: string) {
-        this.ontmgr = ontmgr;
-    }
-    
-    public getOntoMgr(): string {
-        return this.ontmgr;
-    }
-    
-    public getPrettyPrintOntoMgr(): string {
-        var prettyPrint: string = null;
-        prettyPrint = Project.knownOntoMgrInterfaces[this.ontmgr];
-        if (prettyPrint == null) {
-            prettyPrint = this.ontmgr.substring(this.ontmgr.lastIndexOf("."));
-        }
-        return prettyPrint;
+    public isValidationEnabled(): boolean {
+        return this.validationEnabled;
     }
     
     public setOntoType(ontoType: string) {

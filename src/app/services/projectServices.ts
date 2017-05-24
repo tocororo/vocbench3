@@ -29,8 +29,8 @@ export class ProjectServices {
                 for (var i = 0; i < projColl.length; i++) {
                     var proj = new Project();
                     proj.setAccessible(projColl[i].getAttribute("accessible") == "true");
-                    proj.setModelConfigType(projColl[i].getAttribute("modelConfigType"));
-                    proj.setOntoMgr(projColl[i].getAttribute("ontmgr"));
+                    proj.setHistoryEnabled(projColl[i].getAttribute("historyEnabled") == "true");
+                    proj.setValidationEnabled(projColl[i].getAttribute("validationEnabled") == "true");
                     proj.setOntoType(projColl[i].getAttribute("ontoType"));
                     proj.setOpen(projColl[i].getAttribute("open") == "true");
                     var status: any = new Object();

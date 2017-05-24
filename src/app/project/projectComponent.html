@@ -28,9 +28,10 @@
                     <th class="text-center">Accessed</th>
                     <th class="text-center">Open/Close</th>
                     <th class="text-center">Project Name</th>
-                    <th class="text-center">Triple Store</th>
                     <th class="text-center">Type</th>
                     <th class="text-center">Onto Type</th>
+                    <th class="text-center">History</th>
+                    <th class="text-center">Validation</th>
                     <th class="text-center">Status</th>
                 </tr>
             </thead>
@@ -55,7 +56,6 @@
                     <td class="text-center">
                         {{p.getName()}}
                     </td>
-                    <td class="text-center">{{p.getPrettyPrintOntoMgr()}}</td>
                     <td class="text-center">
                         {{p.getType()}}
                         <button *ngIf="p.getType() == 'saveToStore'" class="btn btn-default btn-xs" (click)="saveProject(p)"
@@ -64,6 +64,16 @@
                         </button>
                     </td>
                     <td class="text-center">{{p.getPrettyPrintOntoType()}}</td>
+
+                    <td class="text-center">
+                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" title="History enabled"></span>
+                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" title="History disabled"></span>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" title="Validation enabled"></span>
+                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" title="Validation disabled"></span>
+                    </td>
+
                     <td class="text-center">
                         <span [class]="p.getStatus().class" [title]="p.getStatus().message"></span>
                     </td>

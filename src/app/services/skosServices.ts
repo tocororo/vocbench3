@@ -30,7 +30,7 @@ export class SkosServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, false, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService, true).map(
             stResp => {
                 var topConcepts = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topConcepts.length; i++) {
@@ -56,7 +56,7 @@ export class SkosServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, false, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService, true).map(
             stResp => {
                 var narrower = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < narrower.length; i++) {
@@ -292,7 +292,7 @@ export class SkosServices {
     getAllSchemes() {
         console.log("[SkosServices] getAllSchemes");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, false, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -492,26 +492,6 @@ export class SkosServices {
     }
 
     /**
-     * Returns the show of a resource (concept or scheme) according to the given language (if provide)
-     * @param resource concept or conceptScheme
-     * @param lang if provided returns the show for that language, otherwise returns the localName of the resource 
-     */
-    getShow(resource: ARTURIResource, lang?: string) {
-        console.log("[SkosServices] getShow");
-        var params: any = {
-            resourceName: resource.getURI()
-        };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "getShow", params, this.oldTypeService_old).map(
-            stResp => {
-                return stResp.getElementsByTagName("show")[0].getAttribute("value");
-            }
-        );
-    }
-
-    /**
      * Returns an array of all the schemes with the attribute "inScheme" to true if the given concept is in the scheme.
      * @param concept
      */
@@ -535,7 +515,7 @@ export class SkosServices {
     getRootCollections() {
         console.log("[SkosServices] getRootCollections");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, false, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, this.oldTypeService, true).map(
             stResp => {
                 var rootColl = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < rootColl.length; i++) {
@@ -555,7 +535,7 @@ export class SkosServices {
         var params: any = {
             container: container
         };
-        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, false, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, this.oldTypeService, true).map(
             stResp => {
                 var nestedColl = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < nestedColl.length; i++) {
@@ -656,7 +636,7 @@ export class SkosServices {
         if (lang != null) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName_old, "addToCollection", params, true).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addToCollection", params, this.oldTypeService_old).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {

@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Commit details
+    </h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh">
+
+    <div class="scrollableContainer">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th class="text-center">Subject</th>
+                    <th class="text-center">Predicate</th>
+                    <th class="text-center">Object</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let add of additions">
+                    <td class="text-center">
+                        {{add.subject.toNT()}}
+                    </td>
+                    <td class="text-center">
+                        {{add.predicate.toNT()}}
+                    </td>
+                    <td class="text-center">
+                        {{add.object.toNT()}}
+                    </td>
+                    <td class="text-center">
+                        Added
+                    </td>
+                </tr>
+                <tr *ngFor="let rem of removals">
+                    <td class="text-center">
+                        {{rem.subject.toNT()}}
+                    </td>
+                    <td class="text-center">
+                        {{rem.predicate.toNT()}}
+                    </td>
+                    <td class="text-center">
+                        {{rem.object.toNT()}}
+                    </td>
+                    <td class="text-center">
+                        Removed
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>
