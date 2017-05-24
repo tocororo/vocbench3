@@ -45,7 +45,7 @@ export class HistoryComponent {
         const builder = new BSModalContextBuilder<CommitDeltaModalData>(
             modalData, undefined, CommitDeltaModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
         return this.modal.open(CommitDeltaModal, overlayConfig).then(
             dialog => dialog.result
         );
