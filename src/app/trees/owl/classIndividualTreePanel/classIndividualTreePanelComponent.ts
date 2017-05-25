@@ -5,7 +5,6 @@ import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPan
 import { SearchServices } from "../../../services/searchServices";
 import { OwlServices } from "../../../services/owlServices";
 import { IndividualsServices } from "../../../services/individualsServices";
-import { DeleteServices } from "../../../services/deleteServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
@@ -37,7 +36,7 @@ export class ClassIndividualTreePanelComponent {
     private selectedInstance: ARTURIResource;
 
     constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
-        private deleteService: DeleteServices, private basicModals: BasicModalServices, private sanitizer: DomSanitizer) { }
+        private basicModals: BasicModalServices, private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
         this.refreshTreeListStyles();

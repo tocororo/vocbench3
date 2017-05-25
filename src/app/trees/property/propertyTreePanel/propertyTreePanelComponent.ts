@@ -1,10 +1,9 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { AbstractTreePanel } from "../../abstractTreePanel"
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { OWL, RDF } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
-import { DeleteServices } from "../../../services/deleteServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -22,7 +21,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
-    constructor(private propService: PropertyServices, private deleteService: DeleteServices, private searchService: SearchServices,
+    constructor(private propService: PropertyServices, private searchService: SearchServices,
         private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }
@@ -49,12 +48,17 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     }
 
     delete() {
-        this.deleteService.removeProperty(this.selectedNode).subscribe(
+        if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
+            this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
+                " since it has subProperty(ies). Please delete the subProperty(ies) and retry", "warning");
+            return;
+        }
+        this.propService.deleteProperty(this.selectedNode).subscribe(
             stResp => {
                 this.selectedNode = null;
                 this.nodeSelected.emit(undefined);
             }
-        );
+        )
     }
 
     refresh() {

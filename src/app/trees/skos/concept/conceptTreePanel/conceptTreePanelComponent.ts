@@ -109,7 +109,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     delete() {
         if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-            this.basicModals.alert("Delete concept", "The concept you are trying to delete has narrower concepts; delete them before.", "error");
+            this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
+                " since it has narrower concept(s). Please delete the narrower(s) and retry", "warning");
             return;
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);

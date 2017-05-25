@@ -7,7 +7,7 @@ import { VBPreferences } from "../../utils/VBPreferences";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosxlServices } from "../../services/skosxlServices";
-import { DeleteServices } from "../../services/deleteServices";
+import { ClassesServices } from "../../services/classesServices";
 
 @Component({
     selector: "dangling-label-component",
@@ -18,7 +18,7 @@ export class DanglingXLabelComponent {
 
     private brokenLabelList: Array<ARTResource>;
 
-    constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private deleteService: DeleteServices,
+    constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private classesService: ClassesServices,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBPreferences) { }
 
     /**
@@ -39,7 +39,7 @@ export class DanglingXLabelComponent {
      * Deletes the given xlabel
      */
     deleteLabel(xlabel: ARTResource) {
-        this.deleteService.removeInstance(xlabel, SKOSXL.label).subscribe(
+        this.classesService.deleteInstance(xlabel, SKOSXL.label).subscribe(
             stResp => {
                 this.runIcv();
             }

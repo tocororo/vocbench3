@@ -100,6 +100,23 @@ export class ClassesServices {
     }
 
     /**
+     * Removes a class. Emits a classDeletedEvent with the removed class
+     * @param cls 
+     */
+    deleteClass(cls: ARTURIResource) {
+        console.log("[ClassesServices] deleteClass");
+        var params: any = {
+            cls: cls
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteClass", params, this.oldTypeService, true).map(
+            stResp => {
+                this.eventHandler.classDeletedEvent.emit(cls);
+                return stResp;
+            }
+        );
+    }
+
+    /**
      * Creates a new instance for the given class
      * @param newInstance 
      * @param cls 
@@ -121,6 +138,25 @@ export class ClassesServices {
             stResp => {
                 var instance = Deserializer.createURI(stResp);
                 this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Deletes an instance. Emits an instanceDeletedEvent with instance (the removed instance) and
+     * cls (the type of the instance)
+     * @param instance the instance to remove
+     * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
+     */
+    deleteInstance(instance: ARTResource, cls: ARTURIResource) {
+        console.log("[ClassesServices] deleteInstance");
+        var params: any = {
+            instance: instance
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteInstance", params, this.oldTypeService, true).map(
+            stResp => {
+                this.eventHandler.instanceDeletedEvent.emit({instance: instance, cls: cls});
                 return stResp;
             }
         );

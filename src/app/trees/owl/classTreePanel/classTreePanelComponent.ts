@@ -3,7 +3,6 @@ import { AbstractTreePanel } from "../../abstractTreePanel"
 import { ClassTreeComponent } from "../classTree/classTreeComponent";
 import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
-import { DeleteServices } from "../../../services/deleteServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -25,7 +24,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private owlService: OwlServices,
-        private deleteService: DeleteServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+        private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }
@@ -56,8 +55,13 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
                 " since it has instance(s). Please delete the instance(s) and retry.", "warning");
             return;
         }
+        if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
+            this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
+                " since it has subClass(es). Please delete the subClass(es) and retry", "warning");
+            return;
+        }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
-        this.deleteService.removeClass(this.selectedNode).subscribe(
+        this.classesService.deleteClass(this.selectedNode).subscribe(
             stResp => {
                 this.selectedNode = null;
                 this.nodeSelected.emit(this.selectedNode);

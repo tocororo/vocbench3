@@ -4,7 +4,6 @@ import { InstanceListComponent } from "../instanceList/instanceListComponent";
 import { SearchServices } from "../../../services/searchServices";
 import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
-import { DeleteServices } from "../../../services/deleteServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
@@ -23,7 +22,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private owlService: OwlServices, private deleteService: DeleteServices, 
+    constructor(private classesService: ClassesServices, private owlService: OwlServices,
         private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
@@ -40,7 +39,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     delete() {
         UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-        this.deleteService.removeInstance(this.selectedNode, this.cls).subscribe(
+        this.classesService.deleteInstance(this.selectedNode, this.cls).subscribe(
             stResp => {
                 this.selectedNode = null;
                 this.nodeSelected.emit(this.selectedNode);

@@ -306,6 +306,23 @@ export class PropertyServices {
         );
     }
 
+    /**
+     * Deletes a property. Emits a propertyDeletedEvent with property (the deleted property)
+     * @param property 
+     */
+    deleteProperty(property: ARTURIResource) {
+        console.log("[PropertyServices] deleteProperty");
+        var params: any = {
+            property: property
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteProperty", params, this.oldTypeService, true).map(
+            stResp => {
+                this.eventHandler.propertyDeletedEvent.emit(property);
+                return property;
+            }
+        );
+    }
+
 
     //============= OLD SERVICES =================
 
