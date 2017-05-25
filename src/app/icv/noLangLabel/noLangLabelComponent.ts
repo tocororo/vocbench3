@@ -64,12 +64,11 @@ export class NoLangLabelComponent {
         if (this.ontoType == "SKOS") {
             let label: ARTLiteral = <ARTLiteral>record.label;
             this.creationModals.newPlainLiteral("Set language", label.getValue(), true).then(
-                (data: any) => {
-                    var lang = data.lang;
+                (literal: any) => {
                     if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
-                        this.skosService.removePrefLabel(record.resource, label.getValue()).subscribe(
+                        this.skosService.removePrefLabel(record.resource, label).subscribe(
                             stResp => {
-                                this.skosService.setPrefLabel(record.resource, label.getValue(), lang).subscribe(
+                                this.skosService.setPrefLabel(record.resource, literal).subscribe(
                                     stResp => {
                                         this.runIcv();
                                     }
@@ -77,9 +76,9 @@ export class NoLangLabelComponent {
                             }
                         );
                     } else if (record.predicate.getURI() == SKOS.altLabel.getURI()) {
-                        this.skosService.removeAltLabel(record.resource, label.getValue()).subscribe(
+                        this.skosService.removeAltLabel(record.resource, label).subscribe(
                             stResp => {
-                                this.skosService.addAltLabel(record.resource, label.getValue(), lang).subscribe(
+                                this.skosService.addAltLabel(record.resource, literal).subscribe(
                                     stResp => {
                                         this.runIcv();
                                     }
@@ -87,9 +86,9 @@ export class NoLangLabelComponent {
                             }
                         );
                     } else if (record.predicate.getURI() == SKOS.hiddenLabel.getURI()) {
-                        this.skosService.removeHiddenLabel(record.resource, label.getValue()).subscribe(
+                        this.skosService.removeHiddenLabel(record.resource, label).subscribe(
                             stResp => {
-                                this.skosService.addHiddenLabel(record.resource, label.getValue(), lang).subscribe(
+                                this.skosService.addHiddenLabel(record.resource, literal).subscribe(
                                     stResp => {
                                         this.runIcv();
                                     }
@@ -103,9 +102,8 @@ export class NoLangLabelComponent {
         } else if (this.ontoType == "SKOS-XL") {
             let label: ARTResource = <ARTResource>record.label;
             this.creationModals.newPlainLiteral("Set language", label.getShow(), true).then(
-                (data: any) => {
-                    var lang = data.lang;
-                    this.skosxlService.changeLabelInfo(label, label.getShow(), lang).subscribe(
+                (literal: any) => {
+                    this.skosxlService.changeLabelInfo(label, label.getShow(), (<ARTLiteral>literal).getLang()).subscribe(
                         stResp => {
                             this.runIcv();
                         }
@@ -122,19 +120,19 @@ export class NoLangLabelComponent {
     removeLabel(record: any) {
         if (this.ontoType == "SKOS") {
             if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
-                this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getValue()).subscribe(
+                this.skosService.removePrefLabel(record.resource, record.label).subscribe(
                     stResp => {
                         this.runIcv();
                     }
                 );
             } else if (record.predicate.getURI() == SKOS.altLabel.getURI()) {
-                this.skosService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getValue()).subscribe(
+                this.skosService.removeAltLabel(record.resource, record.label).subscribe(
                     stResp => {
                         this.runIcv();
                     }
                 );
             } else if (record.predicate.getURI() == SKOS.hiddenLabel.getURI()) {
-                this.skosService.removeHiddenLabel(record.resource, (<ARTLiteral>record.label).getValue()).subscribe(
+                this.skosService.removeHiddenLabel(record.resource, record.label).subscribe(
                     stResp => {
                         this.runIcv();
                     }

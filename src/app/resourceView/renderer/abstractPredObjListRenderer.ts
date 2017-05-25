@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { PropertyServices } from "../../services/propertyServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
@@ -140,17 +140,17 @@ export abstract class AbstractPredObjListRenderer {
                 (literal: any) => {
                     switch (predicate.getURI()) {
                         case SKOSXL.prefLabel.getURI():
-                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;
                         case SKOSXL.altLabel.getURI():
-                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;
                         case SKOSXL.hiddenLabel.getURI():
-                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;
@@ -284,7 +284,7 @@ export abstract class AbstractPredObjListRenderer {
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
         this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
-                this.propService.createAndAddPropValue(this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
+                this.propService.createAndAddPropValue(this.resource, predicate, (<ARTLiteral>literal).getValue(), null, RDFTypesEnum.plainLiteral, (<ARTLiteral>literal).getLang()).subscribe(
                     stResp => { this.update.emit(null) }
                 );
             },

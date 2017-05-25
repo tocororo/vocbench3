@@ -11,7 +11,7 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { CustomForm } from "../../../../models/CustomForms";
 import { SKOS } from "../../../../models/Vocabulary";
 
@@ -108,6 +108,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     delete() {
+        if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
+            this.basicModals.alert("Delete concept", "The concept you are trying to delete has narrower concepts; delete them before.", "error");
+            return;
+        }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         if (this.ONTO_TYPE == "SKOS") {
             this.skosService.deleteConcept(this.selectedNode).subscribe(

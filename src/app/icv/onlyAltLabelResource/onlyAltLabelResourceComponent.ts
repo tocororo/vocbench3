@@ -96,9 +96,9 @@ export class OnlyAltLabelResourceComponent {
     private changeAltToPref(resource: ARTURIResource, label: ARTNode) {
         return new Observable((observer: any) => {
             if (this.ontoType == "SKOS") {
-                this.skosService.removeAltLabel(resource, (<ARTLiteral>label).getValue(), (<ARTLiteral>label).getLang()).subscribe(
+                this.skosService.removeAltLabel(resource, <ARTLiteral>label).subscribe(
                     stResp => {
-                        this.skosService.setPrefLabel(resource, (<ARTLiteral>label).getValue(), (<ARTLiteral>label).getLang()).subscribe(
+                        this.skosService.setPrefLabel(resource, (<ARTLiteral>label)).subscribe(
                             stResp => {
                                 observer.next();
                                 observer.complete();
@@ -123,8 +123,8 @@ export class OnlyAltLabelResourceComponent {
     addPrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
             this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
-                (data: any) => {
-                    this.skosService.setPrefLabel(record.resource, data.value, data.lang).subscribe(
+                (literal: any) => {
+                    this.skosService.setPrefLabel(record.resource, literal).subscribe(
                         stResp => {
                             this.runIcv();
                         }
@@ -134,8 +134,8 @@ export class OnlyAltLabelResourceComponent {
             )
         } else if (this.ontoType == "SKOS-XL") {
             this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
-                (data: any) => {
-                    this.skosxlService.setPrefLabel(record.resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
+                (literal: any) => {
+                    this.skosxlService.setPrefLabel(record.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.runIcv();
                         }

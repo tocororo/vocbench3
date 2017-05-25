@@ -55,13 +55,11 @@ export class OverlappedLabelComponent {
     changePrefLabel(record: any) {
         this.creationModals.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
-            (data: any) => {
-                var label = data.value;
-                var lang = data.lang;
+            (literal: any) => {
                 if (this.ontoType == "SKOS") {
-                    this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getValue(), lang).subscribe(
+                    this.skosService.removePrefLabel(record.resource, record.label).subscribe(
                         stResp => {
-                            this.skosService.setPrefLabel(record.resource, label, lang).subscribe(
+                            this.skosService.setPrefLabel(record.resource, literal).subscribe(
                                 stResp => {
                                     this.runIcv();
                                 }
@@ -70,10 +68,10 @@ export class OverlappedLabelComponent {
                     )
                 } else { //SKOS-XL
                     //first get the xlabel to change
-                    this.skosxlService.getPrefLabel(record.resource, lang).subscribe(
+                    this.skosxlService.getPrefLabel(record.resource, (<ARTLiteral>literal).getLang()).subscribe(
                         xlabel => {
                             //then update info
-                            this.skosxlService.changeLabelInfo(xlabel, label, lang).subscribe(
+                            this.skosxlService.changeLabelInfo(xlabel, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang()).subscribe(
                                 stResp => {
                                     this.runIcv();
                                 }
@@ -91,7 +89,7 @@ export class OverlappedLabelComponent {
      */
     removePrefLabel(record: any) {
         if (this.ontoType == "SKOS") {
-            this.skosService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getValue(), (<ARTLiteral>record.label).getLang()).subscribe(
+            this.skosService.removePrefLabel(record.resource, record.label).subscribe(
                 stReso => {
                     this.runIcv();
                 }
@@ -111,13 +109,11 @@ export class OverlappedLabelComponent {
     changeAltLabel(record: any) {
         this.creationModals.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
             (<ARTLiteral>record.label).getLang(), true).then(
-            (data: any) => {
-                var label = data.value;
-                var lang = data.lang;
+            (literal: any) => {
                 if (this.ontoType == "SKOS") {
-                    this.skosService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getValue(), (<ARTLiteral>record.label).getLang()).subscribe(
+                    this.skosService.removeAltLabel(record.resource, <ARTLiteral>record.label).subscribe(
                         stReso => {
-                            this.skosService.addAltLabel(record.resource, label, lang).subscribe(
+                            this.skosService.addAltLabel(record.resource, literal).subscribe(
                                 stResp => {
                                     this.runIcv();
                                 }
@@ -126,13 +122,13 @@ export class OverlappedLabelComponent {
                     );
                 } else { //SKOS-XL
                     //first get the xlabel to change
-                    this.skosxlService.getAltLabels(record.resource, lang).subscribe(
+                    this.skosxlService.getAltLabels(record.resource, (<ARTLiteral>literal).getLang()).subscribe(
                         altLabels => {
                             //look for the alt label URI
                             for (var i = 0; i < altLabels.length; i++) {
                                 if (altLabels[i].getShow() == (<ARTLiteral>record.label).getValue()) {
                                     //then update info
-                                    this.skosxlService.changeLabelInfo(<ARTResource>altLabels[i], label, lang).subscribe(
+                                    this.skosxlService.changeLabelInfo(<ARTResource>altLabels[i], (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang()).subscribe(
                                         stResp => {
                                             this.runIcv();
                                         }
@@ -152,7 +148,7 @@ export class OverlappedLabelComponent {
      */
     removeAltLabel(record: any) {
         if (this.ontoType == "SKOS") {
-            this.skosService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getValue(), (<ARTLiteral>record.label).getLang()).subscribe(
+            this.skosService.removeAltLabel(record.resource, <ARTLiteral>record.label).subscribe(
                 stReso => {
                     this.runIcv();
                 }

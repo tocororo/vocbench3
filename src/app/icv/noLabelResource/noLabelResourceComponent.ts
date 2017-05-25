@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
+import { ARTURIResource, ARTLiteral, RDFTypesEnum } from "../../models/ARTResources";
 import { RDFS } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { IcvServices } from "../../services/icvServices";
@@ -52,8 +52,8 @@ export class NoLabelResourceComponent {
     fix(resource: ARTURIResource) {
         if (this.ontoType == "SKOS") {
             this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
-                (data: any) => {
-                    this.skosService.setPrefLabel(resource, data.value, data.lang).subscribe(
+                (literal: any) => {
+                    this.skosService.setPrefLabel(resource, literal).subscribe(
                         stResp => {
                             this.runIcv();
                         }
@@ -63,8 +63,8 @@ export class NoLabelResourceComponent {
             );
         } else if (this.ontoType == "SKOS-XL") {
             this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
-                (data: any) => {
-                    this.skosxlService.setPrefLabel(resource, data.value, data.lang, RDFTypesEnum.uri).subscribe(
+                (literal: any) => {
+                    this.skosxlService.setPrefLabel(resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.runIcv();
                         }
@@ -74,8 +74,9 @@ export class NoLabelResourceComponent {
             );
         } else { //OWL 
             this.creationModals.newPlainLiteral("Add rdfs:label").then(
-                (data: any) => {
-                    this.propService.createAndAddPropValue(resource, RDFS.label, data.value, null, RDFTypesEnum.plainLiteral, data.lang).subscribe(
+                (literal: any) => {
+                    this.propService.createAndAddPropValue(resource, RDFS.label,(<ARTLiteral>literal).getValue(), null, 
+                        RDFTypesEnum.plainLiteral, (<ARTLiteral>literal).getLang()).subscribe(
                         stResp => {
                             this.runIcv();
                         }

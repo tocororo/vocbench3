@@ -106,38 +106,38 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
             (literal: any) => {
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
-                        this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                        this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
-                        this.skosxlService.addAltLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                        this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
-                        this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, literal.value, literal.lang, RDFTypesEnum.uri).subscribe(
+                        this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.prefLabel.getURI():
-                        this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal.value, literal.lang).subscribe(
+                        this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.altLabel.getURI():
-                        this.skosService.addAltLabel(<ARTURIResource>this.resource, literal.value, literal.lang).subscribe(
+                        this.skosService.addAltLabel(<ARTURIResource>this.resource, literal).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case SKOS.hiddenLabel.getURI():
-                        this.skosService.addHiddenLabel(<ARTURIResource>this.resource, literal.value, literal.lang).subscribe(
+                        this.skosService.addHiddenLabel(<ARTURIResource>this.resource, literal).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
                     case RDFS.label.getURI():
                         this.propertyService.createAndAddPropValue(
-                            this.resource, predicate, literal.value, null, RDFTypesEnum.plainLiteral, literal.lang).subscribe(
+                            this.resource, predicate, (<ARTLiteral>literal).getValue(), null, RDFTypesEnum.plainLiteral, (<ARTLiteral>literal).getLang()).subscribe(
                             stResp => this.update.emit(null)
                             );
                         break;
@@ -181,17 +181,17 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
                 );
                 break;
             case SKOS.prefLabel.getURI():
-                this.skosService.removePrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getValue(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>object).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.altLabel.getURI():
-                this.skosService.removeAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getValue(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>object).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;
             case SKOS.hiddenLabel.getURI():
-                this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>object).getValue(), (<ARTLiteral>object).getLang()).subscribe(
+                this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object).subscribe(
                     stResp => this.update.emit(null)
                 );
                 break;

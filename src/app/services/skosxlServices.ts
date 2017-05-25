@@ -181,8 +181,7 @@ export class SkosxlServices {
     }
     
     /**
-     * Sets a preferred label to the given concept (or scheme). Emits a skosxlPrefLabelSetEvent with
-     * resource, label and lang)
+     * Sets a preferred label to the given concept (or scheme).
      * @param concept
      * @param label lexical value of the label
      * @param lang
@@ -196,17 +195,11 @@ export class SkosxlServices {
             lang: lang,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService_old).map(
-            stResp => {
-                this.eventHandler.skosxlPrefLabelSetEvent.emit({resource: concept, label: label, lang: lang});
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService_old);
     }
     
     /**
-     * Removes a preferred label from the given concept (or scheme). Emits a skosxlPrefLabelRemovedEvent with
-     * resource, label and lang)
+     * Removes a preferred label from the given concept (or scheme).
      * @param concept 
      * @param label label to remove
      * @param lang
@@ -220,12 +213,7 @@ export class SkosxlServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService_old).map(
-            stResp => {
-                this.eventHandler.skosxlPrefLabelRemovedEvent.emit({resource: concept, label: label, lang: lang});
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService_old);
 	}
 
     /**

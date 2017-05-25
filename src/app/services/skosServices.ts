@@ -115,10 +115,10 @@ export class SkosServices {
     addTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] addTopConcept");
         var params: any = {
-            concept: concept.getURI(),
-            scheme: scheme.getURI(),
+            concept: concept,
+            scheme: scheme,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "addTopConcept", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "addTopConcept", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.topConceptCreatedEvent.emit({ concept: concept, schemes: [scheme] });
                 return { concept: concept, scheme: scheme };
@@ -152,9 +152,9 @@ export class SkosServices {
     deleteConcept(concept: ARTURIResource) {
         console.log("[SkosServices] deleteConcept");
         var params: any = {
-            concept: concept.getURI(),
+            concept: concept,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "deleteConcept", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteConcept", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
@@ -209,15 +209,13 @@ export class SkosServices {
     addBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
         console.log("[SkosServices] addBroaderConcept");
         var params: any = {
-            concept: concept.getURI(),
-            broaderConcept: broaderConcept.getURI(),
+            concept: concept,
+            broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "addBroaderConcept", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "addBroaderConcept", params, this.oldTypeService, true).map(
             stResp => {
-                var narrower: ARTURIResource = Deserializer.createURI(stResp);
-                narrower.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                narrower.setAdditionalProperty(ResAttribute.MORE, concept.getAdditionalProperty(ResAttribute.MORE));
-                this.eventHandler.broaderAddedEvent.emit({ narrower: narrower, broader: broaderConcept });
+                //concept doesn't contain info about "more", so when the concept is appended in the tree, it doesn't show the arrow for expand it
+                this.eventHandler.broaderAddedEvent.emit({ narrower: concept, broader: broaderConcept });
                 return stResp;
             }
         );
@@ -231,10 +229,10 @@ export class SkosServices {
     removeBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
         console.log("[SkosServices] removeBroaderConcept");
         var params: any = {
-            concept: concept.getURI(),
-            broaderConcept: broaderConcept.getURI(),
+            concept: concept,
+            broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "removeBroaderConcept", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "removeBroaderConcept", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.broaderRemovedEvent.emit({ concept: concept, broader: broaderConcept });
                 return stResp;
@@ -247,16 +245,13 @@ export class SkosServices {
      * @param concept 
      * @param scheme
      */
-    addConceptToScheme(concept: ARTURIResource, scheme: ARTURIResource, lang?: string) {
+    addConceptToScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] addConceptToScheme");
         var params: any = {
-            concept: concept.getURI(),
-            scheme: scheme.getURI(),
+            concept: concept,
+            scheme: scheme
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "addConceptToScheme", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "addConceptToScheme", params, this.oldTypeService, true);
         /**
          * here I should emit an event conceptAddedToSchemEvent with {concept, scheme, broader?}
          * where borader is optional and tells if the concept should appear under another concept or it's a topConcept
@@ -272,10 +267,10 @@ export class SkosServices {
     removeConceptFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] removeConceptFromScheme");
         var params: any = {
-            concept: concept.getURI(),
-            scheme: scheme.getURI(),
+            concept: concept,
+            scheme: scheme,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "removeConceptFromScheme", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "removeConceptFromScheme", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: concept, scheme: scheme });
                 return { concept: concept, scheme: scheme };
@@ -360,63 +355,46 @@ export class SkosServices {
     //====== Label services ======
 
     /**
-     * Sets a preferred label to the given concept (or scheme). Emits a skosPrefLabelSetEvent with
-     * resource, label and lang
+     * Sets a preferred label to the given concept (or scheme)
      * @param concept
-     * @param label lexical value of the label
-     * @param lang
+     * @param literal label
      */
-    setPrefLabel(concept: ARTURIResource, label: string, lang: string) {
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral) {
         console.log("[SkosServices] setPrefLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
-            lang: lang,
+            concept: concept,
+            literal: literal
         };
-        return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService_old).map(
-            stResp => {
-                this.eventHandler.skosPrefLabelSetEvent.emit({ resource: concept, label: label, lang: lang });
-                return stResp;
-            }
-        );
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, this.oldTypeService, true);
     }
 
     /**
-     * Removes a preferred label from the given concept (or scheme). Emits a skosPrefLabelRemovedEvent with
-     * resource, label and lang
+     * Removes a preferred label from the given concept (or scheme).
      * @param concept 
      * @param label label to remove
      * @param lang
      */
-    removePrefLabel(concept: ARTURIResource, label: string, lang?: string) {
+    removePrefLabel(concept: ARTURIResource, literal: ARTLiteral) {
         console.log("[SkosServices] removePrefLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
+            concept: concept,
+            literal: literal
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService_old).map(
-            stResp => {
-                this.eventHandler.skosPrefLabelRemovedEvent.emit({ resource: concept, label: label, lang: lang });
-                return stResp;
-            }
-        );
+        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, this.oldTypeService, true);
     }
 
     /**
      * Returns the alternative skos labels for the given concept in the given language
      * @param concept
-     * @param lang
+     * @param language
      */
-    getAltLabels(concept: ARTURIResource, lang: string) {
+    getAltLabels(concept: ARTURIResource, language: string) {
         console.log("[SkosServices] getAltLabels");
         var params: any = {
-            concept: concept.getURI(),
-            lang: lang,
+            concept: concept,
+            language: language,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "getAltLabels", params, this.oldTypeService_old).map(
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
             }
@@ -426,69 +404,57 @@ export class SkosServices {
     /**
      * Adds an alternative label to the given concept (or scheme)
      * @param concept
-     * @param label lexical value of the label
-     * @param lang
+     * @param literal label
      */
-    addAltLabel(concept: ARTURIResource, label: string, lang: string) {
+    addAltLabel(concept: ARTURIResource, literal: ARTLiteral) {
         console.log("[SkosServices] addAltLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
-            lang: lang,
+            concept: concept,
+            literal: literal
         };
-        return this.httpMgr.doGet(this.serviceName_old, "addAltLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, this.oldTypeService, true);
     }
 
     /**
      * Removes an alternative label from the given concept (or scheme)
      * @param concept 
-     * @param label label to remove
-     * @param lang
+     * @param literal label to remove
      */
-    removeAltLabel(concept: ARTURIResource, label: string, lang?: string) {
+    removeAltLabel(concept: ARTURIResource, literal: ARTLiteral) {
         console.log("[SkosServices] removeAltLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
+            concept: concept,
+            literal: literal
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "removeAltLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, this.oldTypeService, true);
     }
 
     /**
      * Adds an hidden label to the given concept (or scheme)
      * @param concept
-     * @param label lexical value of the label
-     * @param lang
+     * @param literal label
      */
-    addHiddenLabel(concept: ARTURIResource, label: string, lang: string) {
+    addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral) {
         console.log("[SkosServices] addHiddenLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
-            lang: lang,
+            concept: concept,
+            literal: literal
         };
-        return this.httpMgr.doGet(this.serviceName_old, "addHiddenLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, this.oldTypeService, true);
     }
 
     /**
      * Removes an hidden label from the given concept (or scheme)
      * @param concept 
-     * @param label label to remove
-     * @param lang
+     * @param literal label to remove
      */
-    removeHiddenLabel(concept: ARTURIResource, label: string, lang?: string) {
+    removeHiddenLabel(concept: ARTURIResource, literal: ARTLiteral) {
         console.log("[SkosServices] removeHiddenLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
+            concept: concept,
+            literal: literal,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "removeHiddenLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, this.oldTypeService, true);
     }
 
     /**

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
-import { ARTURIResource, ARTResource, ResAttribute, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
@@ -31,14 +31,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onParentRemoved(data.container, data.nested)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
-        this.eventSubscriptions.push(eventHandler.skosPrefLabelSetEvent.subscribe(
-            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
-        this.eventSubscriptions.push(eventHandler.skosxlPrefLabelSetEvent.subscribe(
-            (data: any) => this.onPrefLabelSet(data.resource, data.label, data.lang)));
-        this.eventSubscriptions.push(eventHandler.skosPrefLabelRemovedEvent.subscribe(
-            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
-        this.eventSubscriptions.push(eventHandler.skosxlPrefLabelRemovedEvent.subscribe(
-            (data: any) => this.onPrefLabelRemoved(data.resource, data.label, data.lang)));
     }
 
     /**
@@ -87,30 +79,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.open = true;
         }
-    }
-
-    private onPrefLabelSet(resource: ARTURIResource, label: string, lang: string) {
-        /**
-         * the following code is commented since the show of a resource is computed by the server according to the languages preference
-         * and there is no way update the show after a pref label is set
-         */
-        // if (this.rendering && VBContext.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
-        //     this.node['show'] = label;
-        // }
-    }
-
-    private onPrefLabelRemoved(resource: ARTURIResource, label: string, lang: string) {
-        /**
-         * the following code is commented since the getShow() service, that is used to update the show of the concept,
-         * gets as parameter just one language instead of an array of lang representing all the language that are used currently
-         */
-        // if (this.rendering && VBContext.getContentLanguage() == lang && resource.getURI() == this.node.getURI()) {
-        //     this.skosService.getShow(resource, VBContext.getContentLanguage()).subscribe(
-        //         show => {
-        //             this.node['show'] = show;
-        //         }
-        //     )
-        // }
     }
 
 }

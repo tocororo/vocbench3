@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
+import { ARTLiteral } from "../../../../models/ARTResources";
 
 export class NewPlainLiteralModalData extends BSModalContext {
     /**
@@ -61,7 +62,7 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
     }
 
     ok(event: Event) {
-        this.dialog.close({ value: this.value, lang: this.lang });
+        this.dialog.close(new ARTLiteral(this.value, null, this.lang));
     }
 
     cancel() {

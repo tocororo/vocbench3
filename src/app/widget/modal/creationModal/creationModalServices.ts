@@ -96,7 +96,7 @@ export class CreationModalServices {
      * @param valueReadonly if true the input field is disable and cannot be changed
      * @param lang the language selected as default
      * @param langReadonly if true the language selection is disable and language cannot be changed
-     * @return if the modal closes with ok returns a promise containing an object with value and lang
+     * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
     newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean) {
         var modalData = new NewPlainLiteralModalData(title, value, valueReadonly, lang, langReadonly);

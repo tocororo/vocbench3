@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { ARTURIResource, ARTResource } from '../models/ARTResources';
+import { ARTURIResource, ARTResource, ARTLiteral } from '../models/ARTResources';
 import { ResourceViewMode } from '../utils/VBPreferences';
 import { VBContext } from '../utils/VBContext';
 
@@ -57,13 +57,6 @@ export class VBEventHandler {
     public superPropertyAddedEvent: EventEmitter<{ subProperty: ARTURIResource, superProperty: ARTURIResource }> = new VBEventEmitter("superPropertyAddedEvent");
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("propertyDeletedEvent");
     public superPropertyRemovedEvent: EventEmitter<{ property: ARTURIResource, superProperty: ARTURIResource }> = new VBEventEmitter("superPropertyRemovedEvent");
-
-    //LABEL EVENTS
-    public skosPrefLabelSetEvent: EventEmitter<{ resource: ARTResource, label: string, lang: string }> = new VBEventEmitter("skosPrefLabelSetEvent");
-    public skosPrefLabelRemovedEvent: EventEmitter<{ resource: ARTResource, label: string, lang: string }> = new VBEventEmitter("skosPrefLabelRemovedEvent");
-    public skosxlPrefLabelSetEvent: EventEmitter<{ resource: ARTResource, label: string, lang: string }> = new VBEventEmitter("skosxlPrefLabelSetEvent");
-    public skosxlPrefLabelRemovedEvent: EventEmitter<{ resource: ARTResource, label: string, lang: string }> = new VBEventEmitter("skosxlPrefLabelRemovedEvent");
-
 
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
