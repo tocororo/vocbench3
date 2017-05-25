@@ -7,16 +7,27 @@
 
     <div class="scrollableContainer">
         <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
             <thead>
                 <tr>
+                    <th class="text-center"></th>
                     <th class="text-center">Subject</th>
                     <th class="text-center">Predicate</th>
                     <th class="text-center">Object</th>
-                    <th class="text-center">Action</th>
+                    <th class="text-center">Context</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let add of additions">
+                    <td class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
+                        <span class="glyphicon glyphicon-plus" style="color: green" title="Added"></span>
+                    </td>
                     <td class="text-center">
                         {{add.subject.toNT()}}
                     </td>
@@ -27,10 +38,13 @@
                         {{add.object.toNT()}}
                     </td>
                     <td class="text-center">
-                        Added
+                        {{add.context.toNT()}}
                     </td>
                 </tr>
                 <tr *ngFor="let rem of removals">
+                    <td class="text-center" style="background: lightpink !important; padding: 3px 6px;">
+                        <span class="glyphicon glyphicon-minus" style="color: red" title="Removed"></span>
+                    </td>
                     <td class="text-center">
                         {{rem.subject.toNT()}}
                     </td>
@@ -41,7 +55,7 @@
                         {{rem.object.toNT()}}
                     </td>
                     <td class="text-center">
-                        Removed
+                        {{rem.context.toNT()}}
                     </td>
                 </tr>
             </tbody>
