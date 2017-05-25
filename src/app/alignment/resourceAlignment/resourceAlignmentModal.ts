@@ -39,7 +39,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     }
     
     private initPropList() {
-        this.alignService.getMappingRelations(this.context.resource, this.allPropCheck).subscribe(
+        this.alignService.getMappingProperties(this.context.resource, this.allPropCheck).subscribe(
             props => {
                 this.mappingPropList = props;
                 this.mappingProperty = null;

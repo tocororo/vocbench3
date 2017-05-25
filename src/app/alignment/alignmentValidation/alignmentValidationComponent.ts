@@ -7,8 +7,9 @@ import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource } from "../../models/ARTResources";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AlignmentCell } from "./AlignmentCell";
-import { ValidationSettingsModal } from "./validationSettingsModal/validationSettingsModal"
-import { ValidationReportModal, ValidationReportModalData } from "./validationReportModal/validationReportModal"
+import { ValidationSettingsModal } from "./alignmentValidationModals/validationSettingsModal"
+import { ValidationReportModal, ValidationReportModalData } from "./alignmentValidationModals/validationReportModal"
+import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from "./alignmentValidationModals/mappingPropertySelectionModal"
 import { AlignmentServices } from "../../services/alignmentServices";
 
 @Component({
@@ -17,6 +18,8 @@ import { AlignmentServices } from "../../services/alignmentServices";
     host: { class: "pageComponent" }
 })
 export class AlignmentValidationComponent {
+
+    private sessionToken: string;
 
     private alignmentFile: File;
     private alignmentCellList: Array<AlignmentCell> = [];
@@ -43,6 +46,8 @@ export class AlignmentValidationComponent {
     private confOnMeter: boolean; //tells if relation confidence should be shown on meter
     private alignmentPerPage: number; //max alignments per page
 
+    private unknownRelation: boolean = false; //keep trace if there is some unknown relation (not a symbol, e.g. a classname)
+    private knownRelations: string[] = ["=", ">", "<", "%", "HasInstance", "InstanceOf"];
     private relationSymbols: Array<any> = [
         { relation: "=", dlSymbol: "\u2261", text: "equivalent" },
         { relation: ">", dlSymbol: "\u2292", text: "subsumes" },
@@ -55,6 +60,7 @@ export class AlignmentValidationComponent {
     constructor(private alignmentService: AlignmentServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
+        this.sessionToken = this.generateSessionRandomToken();
         //init settings (where not provided, set a default)
         this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
         if (this.rejectedAlignmentAction == null) {
@@ -75,16 +81,8 @@ export class AlignmentValidationComponent {
     }
 
     ngOnDestroy() {
-        //close session only if token is defined
-        //(token is defined only when sessios is initialized once the alignment is loaded)
-        if (VBContext.getSessionToken() != undefined) {
-            // close session server side
-            this.alignmentService.closeSession().subscribe(
-                stResp => {//and remove token client side
-                    VBContext.removeSessionToken();
-                }
-            );
-        }
+        // close session server side
+        this.alignmentService.closeSession().subscribe();
     }
 
     /**
@@ -98,11 +96,21 @@ export class AlignmentValidationComponent {
      * Loads the alignment file and the mapping cells
      */
     private loadAlignment() {
-        VBContext.setSessionToken(this.generateSessionRandomToken());
+        this.alignmentService.setSessionToken(this.sessionToken);
+        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
         this.alignmentService.loadAlignment(this.alignmentFile).subscribe(
-            alignedOnto => {
-                this.sourceBaseURI = alignedOnto.onto1;
-                this.targetBaseURI = alignedOnto.onto2;
+            stResp => {
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                this.sourceBaseURI = stResp.onto1;
+                this.targetBaseURI = stResp.onto2;
+                for (var i = 0; i < stResp.unknownRelations.length; i++) {
+                    this.relationSymbols.push({
+                        relation: stResp.unknownRelations[i],
+                        dlSymbol: stResp.unknownRelations[i],
+                        text: stResp.unknownRelations[i]
+                    }
+                    );
+                }
                 this.updateAlignmentCells();
             }
         );
@@ -116,6 +124,16 @@ export class AlignmentValidationComponent {
             map => {
                 this.totPage = map.totPage;
                 this.alignmentCellList = map.cells;
+                //check if there is at least an unknown relation (could be a classname)
+                //useful to enlarge the progress bar in the view in order to contains the relation name
+                this.unknownRelation = false;
+                for (var i = 0; i < this.alignmentCellList.length; i++) {
+                    let relation = this.alignmentCellList[i].getRelation();
+                    if (this.knownRelations.indexOf(relation) == -1) {
+                        this.unknownRelation = true;
+                        break;
+                    }
+                }
             }
         );
     }
@@ -145,10 +163,37 @@ export class AlignmentValidationComponent {
                 //replace the accepted alignment cell with the returned one
                 this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
                 if ((<AlignmentCell>resultCell).getStatus() == "error") {
-                    this.basicModals.alert("Error", (<AlignmentCell>resultCell).getComment(), "error");
+                    this.selectMappingProperty(resultCell).then(
+                        (data: any) => {
+                            let mappingProp: ARTURIResource = data.property;
+                            let setAsDefault: boolean = data.setAsDefault;
+                            this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), data.property, data.setAsDefault).subscribe(
+                                resultCell => {
+                                    //replace the accepted alignment cell with the returned one
+                                    this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                                }
+                            )
+                        },
+                        () => {}
+                    )
                 }
             }
         )
+    }
+
+    /**
+     * 
+     * @param cell 
+     */
+    private selectMappingProperty(cell: AlignmentCell) {
+        var modalData = new MappingPropertySelectionModalData("Invalid relation", cell.getComment(), cell.getEntity1());
+        const builder = new BSModalContextBuilder<MappingPropertySelectionModalData>(
+            modalData, undefined, MappingPropertySelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(MappingPropertySelectionModal, overlayConfig).then(
+            dialog => dialog.result
+        );
     }
 
     /**
@@ -167,7 +212,7 @@ export class AlignmentValidationComponent {
      * Returns the relation symbol rendered according to the show type in settings (relation, dlSymbol or text)
      */
     private getRelationRendered(cell: AlignmentCell): string {
-        var result = "";
+        var result = cell.getRelation();
         var rel = cell.getRelation();
         for (var i = 0; i < this.relationSymbols.length; i++) {
             if (this.relationSymbols[i].relation == rel) {
@@ -208,11 +253,17 @@ export class AlignmentValidationComponent {
      * Retrieves the suggested mapping properties and set them to the alignment cell.
      */
     private getSuggestedMappingProperties(cell: AlignmentCell) {
-        this.alignmentService.listSuggestedProperties(cell.getEntity1(), cell.getRelation()).subscribe(
-            props => {
-                cell.setSuggestedMappingProperties(props);
-            }
-        )
+        //call the service only if suggested properties for the given cell is not yet initialized
+        if (cell.getSuggestedMappingProperties() == null) {
+            this.alignmentService.getSuggestedProperties(cell.getEntity1(), cell.getRelation()).subscribe(
+                props => {
+                    cell.setSuggestedMappingProperties(props);
+                }
+            );
+        } else {
+            return cell.getSuggestedMappingProperties();
+        }
+        
     }
 
     /**

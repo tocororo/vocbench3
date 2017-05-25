@@ -369,12 +369,18 @@ input[type=number]::-webkit-outer-spin-button {
  */
 .progress {
     position: relative;
+    margin-bottom: 0;
+    background-color: #d9534f;
 }
-.progress > .progress-bar > span {
+.progress > .progress-bar > .progress-value {
     position: absolute;
     display: block;
     width: 100%;
     color: white;
+    white-space: nowrap;
+}
+.large-progress {
+    min-width: 130px;
 }
  
 lang-picker {

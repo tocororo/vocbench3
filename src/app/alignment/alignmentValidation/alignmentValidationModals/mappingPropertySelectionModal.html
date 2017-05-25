@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">{{context.title}}</h3>
+</div>
+<div class="modal-body vbox">
+    <div class="alert alert-warning">
+        {{context.message}}
+        <div>You can force a property</div>
+    </div>
+
+    <div class="hbox" style="align-items: center ; margin-top: 4px;">
+        <label style="margin-right: 4px; white-space: nowrap">Mapping property: </label>
+        <select class="form-control input-sm" [(ngModel)]="selectedProperty">
+            <option *ngFor="let p of mappingPropList" [title]="p.getURI()" [ngValue]="p">{{p.getShow()}}</option>
+        </select>
+    </div>
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="setAsDefault">Set the property as default for the relation
+        </label>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProperty">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

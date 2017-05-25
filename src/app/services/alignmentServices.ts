@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
+import { VBContext } from "../utils/VBContext";
 import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
 
 @Injectable()
@@ -19,19 +20,21 @@ export class AlignmentServices {
      * Returns the available alignment properties depending on the project and resource type (property,
 	 * or concept, or class,...).
 	 * @param resource resource to align
-	 * @param allMappingProps if false returns just the mapping properties available for the current
+	 * @param allMappingProps if false returns just the mapping properties available for the current resource and
 	 * model type; if true returns all the mapping properties independently from the model type
 	 * @return a collection of properties
      */
-    getMappingRelations(resource: ARTResource, allMappingProps: boolean) {
-        console.log("[AlignmentServices] getMappingRelations");
+    getMappingProperties(resource: ARTResource, allMappingProps: boolean) {
+        console.log("[AlignmentServices] getMappingProperties");
         var params: any = {
             resource: resource,
             allMappingProps: allMappingProps
         };
-        return this.httpMgr.doGet(this.serviceName, "getMappingRelations", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params, this.oldTypeService, true).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                var props: ARTURIResource[] = Deserializer.createURIArray(stResp);
+                ResourceUtils.sortResources(props, "value");
+                return props;
             }
         );
     }
@@ -60,7 +63,7 @@ export class AlignmentServices {
      * @param file alignment file to upload
      * @return return an object with "onto1" and "onto2", namely the baseURI of the two aligned ontologies
      */
-    loadAlignment(file: File) {
+    loadAlignment(file: File): Observable<{onto1: string, onto2: string, unknownRelations: string[]}> {
         console.log("[AlignmentServices] loadAlignment");
         var data = {
             inputFile: file
@@ -69,7 +72,11 @@ export class AlignmentServices {
             stResp => {
                 var onto1 = stResp.onto1;
                 var onto2 = stResp.onto2;
-                return { onto1: onto1, onto2: onto2 };
+                var unknownRelations: string[] = [];
+                for (var i = 0; i < stResp.unknownRelations.length; i++) {
+                    unknownRelations.push(stResp.unknownRelations[i]);
+                }
+                return { onto1: onto1, onto2: onto2, unknownRelations: unknownRelations };
             }
         );
     }
@@ -113,15 +120,23 @@ export class AlignmentServices {
      * @param entity1 uri of the source entity of the alignment
      * @param entity2 uri of the target entity of the alignment
      * @param relation the relation of the alignment
+     * @param forcedProperty the property to use in the mapping
+     * @param setAsDefault if true, set the given property as default for the relation
      * @return a cell resulting from the action
      */
-    acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string) {
+    acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, forcedProperty?: ARTURIResource, setAsDefault?: boolean) {
         console.log("[AlignmentServices] acceptAlignment");
-        var params = {
+        var params: any = {
             entity1: entity1,
             entity2: entity2,
             relation: relation
         };
+        if (forcedProperty != null) {
+            params.forcedProperty = forcedProperty;
+            if (setAsDefault != null) { //this is used only if forcedProperty is passed
+                params.setAsDefault = setAsDefault;
+            }
+        }
         return this.httpMgr.doGet(this.serviceName, "acceptAlignment", params, this.oldTypeService, true).map(
             stResp => {
                 return this.parseAlignmentCell(stResp);
@@ -305,13 +320,13 @@ export class AlignmentServices {
      * @param relation the relation of the alignment cell
      * @return collection of ARTURIResource representing suggested mapping property
      */
-    listSuggestedProperties(entity: ARTURIResource, relation: string) {
-        console.log("[AlignmentServices] listSuggestedProperties");
+    getSuggestedProperties(entity: ARTURIResource, relation: string) {
+        console.log("[AlignmentServices] getSuggestedProperties");
         var params = {
             entity: entity,
             relation: relation
         };
-        return this.httpMgr.doGet(this.serviceName, "listSuggestedProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getSuggestedProperties", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -333,7 +348,12 @@ export class AlignmentServices {
     closeSession() {
         console.log("[AlignmentServices] closeSession");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "closeSession", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "closeSession", params, this.oldTypeService, true).map(
+            stResp => {
+                VBContext.removeSessionToken();
+                return stResp;
+            }
+        );
     }
 
 
@@ -368,5 +388,8 @@ export class AlignmentServices {
         return c;
     }
 
+    public setSessionToken(token: string) {
+        VBContext.setSessionToken(token);
+    }
 
 }

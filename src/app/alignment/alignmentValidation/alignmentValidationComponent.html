@@ -43,32 +43,37 @@
                         <tr>
                             <th class="text-center">Source entity</th>
                             <th class="text-center">target entity</th>
-                            <th class="text-center" style="width: 10%">Relation</th>
+                            <th class="text-center">Relation</th>
                             <th class="text-center">Mapping Property</th>
                             <th class="text-center" style="width: 1%">Action</th>
                             <th class="text-center" style="width: 1%">Status</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        <tr *ngFor="let a of alignmentCellList">
+                        <tr *ngFor="let a of alignmentCellList; let i=index;">
                             <td style="border: 0px 1px 1px solid #ddd">{{a.getEntity1().getShow()}}</td>
                             <td>{{a.getEntity2().getShow()}}</td>
                             <td style="position: relative"
                                 (mouseover)="editRel.style.display='initial'" (mouseout)="editRel.style.display='none'">
-                                <div class="progress" style="margin-bottom: 0; background-color: #d9534f;">
+                                <div class="progress" [ngClass]="{ 'large-progress' : unknownRelation }">
                                     <div class="progress-bar progress-bar-success progress-bar-striped active"
                                         role="progressbar" [ngStyle]="{'width': a.getMeasure()*100+'%'}">
-                                        <span style="white-space: nowrap">{{getRelationRendered(a)}}</span>
+                                        <span class="progress-value" [title]="a.getRelation()+' ('+a.getMeasure()+')'">
+                                            {{getRelationRendered(a)}}
+                                        </span>
                                     </div>
                                 </div>
                                 <div #editRel class="btn-group" style="position: absolute; top: 0; right: 0; display: none;">
                                     <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu pull-right">
                                         <li *ngFor="let rel of relationSymbols">
                                             <a (click)="changeRelation(a, rel.relation)">
-                                                {{rel.relation}}<span *ngIf="a.getRelation() == rel.relation" class="glyphicon glyphicon-ok pull-right"></span>
+                                                <div class="hbox">
+                                                    <span style="flex:1">{{rel.relation}}</span>
+                                                    <span *ngIf="a.getRelation() == rel.relation" style="margin-left: 3px;" class="glyphicon glyphicon-ok pull-right"></span>
+                                                </div>
                                             </a>
                                         </li>
                                     </ul>
@@ -76,7 +81,7 @@
                             </td>
                             <td>
                                 <span *ngIf="a.getMappingProperty()">
-                                    <div class="btn-group">
+                                    <div class="btn-group" [ngClass]="{ dropup : i > alignmentCellList.length/2 }">
                                         <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"
                                             (click)="getSuggestedMappingProperties(a)">
                                             {{a.getMappingProperty().getShow()}}

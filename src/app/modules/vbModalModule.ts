@@ -58,8 +58,9 @@ import { PrefixNamespaceModal } from '../config/dataManagement/metadata/prefixNa
 import { ReplaceBaseURIModal } from '../config/dataManagement/metadata/replaceBaseURIModal';
 
 //alignment modals
-import { ValidationSettingsModal } from '../alignment/alignmentValidation/validationSettingsModal/validationSettingsModal';
-import { ValidationReportModal } from '../alignment/alignmentValidation/validationReportModal/validationReportModal';
+import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
+import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
+import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
 
@@ -92,7 +93,7 @@ import { CommitDeltaModal } from "../history/commitDeltaModal";
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
-        ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
+        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
@@ -117,7 +118,7 @@ import { CommitDeltaModal } from "../history/commitDeltaModal";
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
-        ValidationSettingsModal, ValidationReportModal, ResourceAlignmentModal, BrowseExternalResourceModal,
+        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,

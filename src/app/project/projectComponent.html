@@ -66,12 +66,12 @@
                     <td class="text-center">{{p.getPrettyPrintOntoType()}}</td>
 
                     <td class="text-center">
-                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" title="History enabled"></span>
-                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" title="History disabled"></span>
+                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
+                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
                     </td>
                     <td class="text-center">
-                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" title="Validation enabled"></span>
-                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" title="Validation disabled"></span>
+                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
+                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
                     </td>
 
                     <td class="text-center">
