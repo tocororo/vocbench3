@@ -4,6 +4,7 @@ import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
+import { UIUtils } from "../utils/UIUtils";
 import { User } from "../models/User";
 
 @Component({
@@ -49,7 +50,20 @@ export class LoginComponent {
     }
 
     private forgotPassword() {
-        alert("Not yet available"); //TODO
+        this.basicModals.prompt("Forgot password", "E-mail", "Insert the e-mail address of your account. " + 
+            "You will receive an e-mail with the instructions for resetting the password").then(
+            email => {
+                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                this.userService.forgotPassword(email).subscribe(
+                    stResp => {
+                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        this.basicModals.alert("Forgot password", 
+                            "An e-mail with the instructions for resetting password has been sent to the provided address.");
+                    }
+                );
+            },
+            () => {}
+        );
     }
 
 }

@@ -10,11 +10,12 @@ import { UserProfileComponent } from '../user/userProfileComponent';
 import { RegistrationComponent } from '../user/registrationComponent';
 import { UserMenuComponent } from '../user/userMenuComponent';
 import { UserCreateComponent } from '../user/userCreateComponent';
+import { ResetPasswordComponent } from '../user/resetPasswordComponent';
 
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule],
-    declarations: [LoginComponent, RegistrationComponent, UserMenuComponent, UserProfileComponent, UserCreateComponent],
-    exports: [LoginComponent, RegistrationComponent, UserMenuComponent, UserProfileComponent, UserCreateComponent],
+    declarations: [LoginComponent, RegistrationComponent, UserMenuComponent, UserProfileComponent, UserCreateComponent, ResetPasswordComponent],
+    exports: [LoginComponent, UserMenuComponent, UserCreateComponent],
     providers: []
 })
 export class UserModule { }

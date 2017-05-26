@@ -45,6 +45,7 @@ export class CreateProjectComponent {
     private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
     private repositoryImplConfigurerPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
+    private DEFAULT_REPO_CONFIGURER = "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration";
     //core repository containing data
     private dataRepoId: string;
     private dataRepoConfList: {factoryID: string, configuration: PluginConfiguration}[]; 
@@ -97,7 +98,19 @@ export class CreateProjectComponent {
                                 this.supportRepoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
                             }
                             this.selectedDataRepoConf = this.dataRepoConfList[0];
+                            for (var i = 0; i < this.dataRepoConfList.length; i++) {
+                                if (this.dataRepoConfList[i].configuration.type == this.DEFAULT_REPO_CONFIGURER) {
+                                    this.selectedDataRepoConf = this.dataRepoConfList[i];
+                                    break;
+                                }
+                            }
                             this.selectedSupportRepoConf = this.supportRepoConfList[0];
+                            for (var i = 0; i < this.supportRepoConfList.length; i++) {
+                                if (this.supportRepoConfList[i].configuration.type == this.DEFAULT_REPO_CONFIGURER) {
+                                    this.selectedSupportRepoConf = this.supportRepoConfList[i];
+                                    break;
+                                }
+                            }
                         }
                     );
                 }

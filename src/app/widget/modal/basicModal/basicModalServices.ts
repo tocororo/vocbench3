@@ -28,8 +28,8 @@ export class BasicModalServices {
      * @param label the label of the input field (optional)
      * @param message the message to show over the input field (optional)
      * @param value the value inserted by default in the input field
-     * @param inputOptional tells if the input field is optional or mandatory
-     * @param inputSanitized tells if the text in the input field should be sanitized
+     * @param inputOptional tells if the input field is optional or mandatory (default false)
+     * @param inputSanitized tells if the text in the input field should be sanitized (default false)
      * @return if the modal closes with ok returns a promise containing the input text
      */
     prompt(title: string, label?: string, message?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {

@@ -110,7 +110,7 @@ export class UserServices {
             email: email,
             givenName: givenName,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserGivenName", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -128,7 +128,7 @@ export class UserServices {
             email: email,
             familyName: familyName,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserFamilyName", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -146,7 +146,7 @@ export class UserServices {
             email: email,
             phone: phone,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserPhone", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -164,7 +164,7 @@ export class UserServices {
             email: email,
             birthday: birthday,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserBirthday", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserBirthday", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -182,7 +182,7 @@ export class UserServices {
             email: email,
             gender: gender,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserGender", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserGender", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -200,7 +200,7 @@ export class UserServices {
             email: email,
             country: country,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserCountry", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserCountry", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -218,7 +218,7 @@ export class UserServices {
             email: email,
             address: address,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserAddress", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -236,7 +236,7 @@ export class UserServices {
             email: email,
             affiliation: affiliation,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserAffiliation", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -254,7 +254,7 @@ export class UserServices {
             email: email,
             url: url,
         }
-        return this.httpMgr.doGet(this.serviceName, "updateUserUrl", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -272,7 +272,7 @@ export class UserServices {
             email: email,
             enabled: enabled,
         }
-        return this.httpMgr.doGet(this.serviceName, "enableUser", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "enableUser", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -288,7 +288,36 @@ export class UserServices {
         var params: any = {
             email: email
         }
-        return this.httpMgr.doGet(this.serviceName, "deleteUser", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteUser", params, this.oldTypeService, true);
+    }
+
+
+
+    /**
+     * 
+     * @param email 
+     */
+    forgotPassword(email: string) {
+        console.log("[UserServices] forgotPassword");
+        var params: any = {
+            email: email,
+            vbHostAddress: location.hostname + ":" + location.port
+        }
+        return this.httpMgr.doPost(this.serviceName, "forgotPassword", params, this.oldTypeService, true);
+    }
+
+    /**
+     * 
+     * @param email 
+     * @param token 
+     */
+    resetPassword(email: string, token: string) {
+        console.log("[UserServices] resetPassword");
+        var params: any = {
+            email: email,
+            token: token
+        }
+        return this.httpMgr.doPost(this.serviceName, "resetPassword", params, this.oldTypeService, true);
     }
 
 }

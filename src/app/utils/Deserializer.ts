@@ -104,8 +104,8 @@ export class Deserializer {
      */
     static createUsersArray(resp: any): User[] {
         var users: User[] = [];
-        for (var i = 0; i < resp.users.length; i++) {
-            users.push(this.createUser(resp.users[i]));
+        for (var i = 0; i < resp.length; i++) {
+            users.push(this.createUser(resp[i]));
         }
         return users;
     }
@@ -116,13 +116,7 @@ export class Deserializer {
      * or directly a "user" element
      */
     static createUser(resp: any): User {
-        var userJson: any;
-        if (resp.user != null) {
-            userJson = resp.user; //resp is the "data" element
-        } else {
-            userJson = resp; //resp is a "user" object
-        }
-
+        var userJson: any = resp;
         if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
             return null;
         }

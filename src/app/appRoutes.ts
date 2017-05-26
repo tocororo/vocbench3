@@ -7,7 +7,6 @@ import { ProjectComponent } from "./project/projectComponent";
 import { DataComponent } from "./data/dataComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { HistoryComponent } from "./history/historyComponent";
-// import {IcvComponent} from "./icv/icvComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
 import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
@@ -21,7 +20,7 @@ import { VersioningComponent } from "./config/dataManagement/versioning/versioni
 import { VocbenchSettingsComponent } from "./settings/vocbenchSettingsComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
-// import {AdministrationComponent} from "./administration/administrationComponent"
+import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 
 export const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
@@ -34,6 +33,7 @@ export const routes: Routes = [
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration", component: RegistrationComponent },
+    { path: "ResetPassword/:token", component: ResetPasswordComponent},
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard] },
     //lazy loading of module with child route
