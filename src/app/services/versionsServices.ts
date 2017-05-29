@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
 import { RepositoryAccess, VersionInfo } from "../models/Project";
 import { PluginSpecification } from "../models/Plugins";
 
@@ -20,7 +21,6 @@ export class VersionsServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getVersions", params, this.oldTypeService, true).map(
             stResp => {
-                console.log("stResp", stResp)
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let v: VersionInfo = {
@@ -29,21 +29,7 @@ export class VersionsServices {
                         dateTime: null
                     }
                     //parse and format datetime
-                    let d = new Date(stResp[i].dateTime);
-                    var yyyy = d.getFullYear();
-                    console.log(d.getFullYear);
-                    var month = d.getMonth()+1;
-                    var MM = (month > 9 ? "" : "0") + month;
-                    var day = d.getDate();
-                    var dd = (day > 9 ? "" : "0") + day;
-                    var hours = d.getHours();
-                    var hh = (hours > 9 ? "" : "0") + hours;
-                    var minutes = d.getMinutes();
-                    var mm = (minutes > 9 ? "" : "0") + minutes;
-                    var seconds = d.getSeconds();
-                    var ss = (seconds > 9 ? "" : "0") + seconds;
-                    v.dateTime = yyyy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss;
-
+                    v.dateTime = Deserializer.parseDateTime(stResp[i].dateTime);
                     versions.push(v);
                 }
                 //sort by date

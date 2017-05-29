@@ -53,8 +53,21 @@ export class HistoryServices {
                     if (itemJson.subject != null) {
                         subject = new ARTURIResource(itemJson.subject['@id']);
                     }
+
+                    let startTime: string;
+                    let startTimeJson = itemJson.startTime;
+                    if (startTimeJson != null) {
+                        startTime = Deserializer.parseDateTime(startTimeJson);
+                    }
+
+                    let endTime: string;
+                    let endTimeJson = itemJson.endTime;
+                    if (endTimeJson != null) {
+                        endTime = Deserializer.parseDateTime(endTimeJson);
+                    }
                     
-                    let item: HistoryItem = new HistoryItem(new ARTURIResource(itemJson.commit), user, operation, subject);
+                    let item: HistoryItem = new HistoryItem(new ARTURIResource(itemJson.commit), user, operation, subject, startTime, endTime);
+
                     items.push(item);
                 }
                 return { items: items, next: stResp.next };

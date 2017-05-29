@@ -6,11 +6,16 @@ export class HistoryItem {
     public operation: HistoryOperation;
     public subject: ARTURIResource;
     public validationAction: string;
-    constructor(commit: ARTURIResource, user: HistoryItemUser, operation: HistoryOperation, subject: ARTURIResource) {
+    public startTime: string;
+    public endTime: string;
+    constructor(commit: ARTURIResource, user: HistoryItemUser, operation: HistoryOperation, subject: ARTURIResource, 
+            startTime: string, endTime: string) {
         this.commit = commit;
         this.user = user;
         this.operation = operation;
         this.subject = subject;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 }
 

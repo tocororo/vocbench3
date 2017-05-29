@@ -19,6 +19,7 @@
                     <th class="text-center">Subject</th>
                     <th class="text-center">Action</th>
                     <th class="text-center">User</th>
+                    <th class="text-center">Date</th>
                     <!--<th class="text-center">Validate</th>-->
                     <!--<th class="text-center">Notes</th>-->
                 </tr>
@@ -42,6 +43,9 @@
                         <span *ngIf="item.user" [title]="item.user.id">
                             {{item.user.show}}
                         </span>
+                    </td>
+                    <td class="text-center">
+                        {{item.endTime}}
                     </td>
                     <!--<td>
                         <select class="form-control input-xs" [(ngModel)]="item.validationAction">
