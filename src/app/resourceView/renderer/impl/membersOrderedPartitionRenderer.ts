@@ -59,19 +59,13 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
      * Adds a first member to an ordered collection 
      */
     private addFirst(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, propChangeable).then(
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
-
-                if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addFirstToOrderedCollection(this.resource, member).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //it's using a subProperty of skos:member
-                    alert("Enrichment of " + prop.getShow() + " not available");
-                }
+                this.skosService.addFirstToOrderedCollection(this.resource, member).subscribe(
+                    stResp => this.update.emit(null)
+                );
             },
             () => { }
         );
@@ -81,19 +75,13 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
      * Adds a last member to an ordered collection 
      */
     private addLast(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, propChangeable).then(
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
-
-                if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addLastToOrderedCollection(this.resource, member).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //it's using a subProperty of skos:member
-                    alert("Enrichment of " + prop.getShow() + " not available");
-                }
+                this.skosService.addLastToOrderedCollection(this.resource, member).subscribe(
+                    stResp => this.update.emit(null)
+                );
             },
             () => { }
         );
@@ -103,19 +91,14 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
      * Adds a member in a given position to an ordered collection 
      */
     private addBefore(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, propChangeable).then(
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
                 var position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
-                if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //it's using a subProperty of skos:member
-                    alert("Enrichment of " + prop.getShow() + " not available");
-                }
+                this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
+                    stResp => this.update.emit(null)
+                );
             },
             () => { }
         );
@@ -125,19 +108,14 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
      * Adds a member in a given position to an ordered collection 
      */
     private addAfter(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, propChangeable).then(
+        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
                 var position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
-                if (prop.getURI() == this.membersProperty.getURI()) { //it's using skos:member
-                    this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //it's using a subProperty of skos:member
-                    alert("Enrichment of " + prop.getShow() + " not available");
-                }
+                this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
+                    stResp => this.update.emit(null)
+                );
             },
             () => { }
         );
