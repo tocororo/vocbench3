@@ -51,31 +51,43 @@ export class SparqlComponent {
         var initTime = new Date().getTime();
         tab.queryResult = null;
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
-            data => {
-                tab.respSparqlJSON = data.sparql;
-                //calculates the time spent in query
-                var finishTime = new Date().getTime();
-                var diffTime = finishTime - initTime;
-                tab.queryTime = this.getPrettyPrintTime(diffTime);
-                //process result
-                tab.resultType = data.resulttype;
-                if (data.resulttype == "tuple" || data.resulttype == "graph") {
-                    tab.headers = data.sparql.head.vars;
-                    tab.queryResult = data.sparql.results.bindings;
-                    //paging handler
-                    tab.resultsTotPage = Math.floor(tab.queryResult.length / this.resultsLimit);
-                    if (tab.queryResult.length % this.resultsLimit > 0) {
-                        tab.resultsTotPage++;
-                    }
-                    console.log(tab);
-                } else if (data.resulttype == "boolean") {
-                    tab.headers = ["boolean"];
-                    tab.queryResult = Boolean(data.sparql.boolean);
+        if (tab.queryMode == "query") {
+            this.sparqlService.evaluateQuery(tab.query, tab.inferred).subscribe(
+                stResp => {
+                    this.sparqlResponseHandler(tab, stResp, initTime);
                 }
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+            );
+        } else { //queryMode "update"
+            this.sparqlService.executeUpdate(tab.query).subscribe(
+                stResp => {
+                    this.sparqlResponseHandler(tab, stResp, initTime);
+                }
+            );
+        }
+    }
+
+    private sparqlResponseHandler(tab: Tab, stResp: any, initTime: number) {
+        tab.respSparqlJSON = stResp.sparql;
+        //calculates the time spent in query
+        var finishTime = new Date().getTime();
+        var diffTime = finishTime - initTime;
+        tab.queryTime = this.getPrettyPrintTime(diffTime);
+        //process result
+        tab.resultType = stResp.resultType;
+        if (stResp.resultType == "tuple" || stResp.resultType == "graph") {
+            tab.headers = stResp.sparql.head.vars;
+            tab.queryResult = stResp.sparql.results.bindings;
+            //paging handler
+            tab.resultsTotPage = Math.floor(tab.queryResult.length / this.resultsLimit);
+            if (tab.queryResult.length % this.resultsLimit > 0) {
+                tab.resultsTotPage++;
             }
-        );
+            console.log(tab);
+        } else if (stResp.resultType == "boolean") {
+            tab.headers = ["boolean"];
+            tab.queryResult = Boolean(stResp.sparql.boolean);
+        }
+        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
     }
 
     /**
