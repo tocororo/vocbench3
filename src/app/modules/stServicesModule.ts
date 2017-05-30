@@ -31,6 +31,7 @@ import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { UserServices } from "../services/userServices";
+import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
 
 @NgModule({
@@ -67,6 +68,7 @@ import { VersionsServices } from "../services/versionsServices";
         SkosxlServices,
         SparqlServices,
         UserServices,
+        ValidationServices,
         VersionsServices
     ]
 })

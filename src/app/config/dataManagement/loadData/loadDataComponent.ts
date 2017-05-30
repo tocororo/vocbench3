@@ -59,17 +59,16 @@ export class LoadDataComponent {
         } else if (this.baseURI == null || this.baseURI.trim() == "") {
             this.basicModals.alert("Load Data", "BaseURI required", "warning");
         } else {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
             var formatParam: RDFFormat = null;
             if (!this.inferFormatFromFile) {
                 formatParam = this.selectedFormat;
             }
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.selectedImportAllowance, formatParam).subscribe(
                 stResp => {
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert("Import data", "Data imported successfully");
-                },
-                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                }
             );
         }
     }

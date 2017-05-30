@@ -27,10 +27,10 @@ export class ResetPasswordComponent {
     }
 
     private reset() {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.userService.resetPassword(this.email, this.token).subscribe(
             stResp => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Reset password", "Password has been successfully reset. "
                     + "You will receive an e-mail with the new temporary password.").then(
                     confirm => {

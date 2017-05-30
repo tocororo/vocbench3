@@ -3,7 +3,7 @@ import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
 import { HistoryServices } from "../services/historyServices";
-import { HistoryItem, HistoryItemUser, HistoryOperation } from "../models/History";
+import { CommitInfo } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
 
 @Component({
@@ -13,23 +13,23 @@ import { ARTURIResource } from "../models/ARTResources";
 })
 export class HistoryComponent {
 
-    private history: HistoryItem[];
+    private commits: CommitInfo[];
     private hasNext: boolean = false;
 
     constructor(private historyService: HistoryServices, private modal: Modal) {}
 
     ngOnInit() {
-        this.listHistoryItems(null);
+        this.listCommits(null);
     }
 
-    private listHistoryItems(parentCommit?: ARTURIResource) {
+    private listCommits(parentCommit?: ARTURIResource) {
         this.historyService.getCommits(parentCommit).subscribe(
             commits => {
-                this.history = commits.items;
+                this.commits = commits.items;
                 // this.parentCommit = this.history[this.history.length].commit; //set as parent commit the last one
                 this.hasNext = commits.next;
             }
-        )
+        );
     }
 
     private getPreviousCommits() {
@@ -37,10 +37,10 @@ export class HistoryComponent {
     }
 
     private getNextCommits() {
-        this.listHistoryItems(this.history[this.history.length-1].commit);
+        this.listCommits(this.commits[this.commits.length-1].commit);
     }
 
-    private getCommitDelta(item: HistoryItem) {
+    private getCommitDelta(item: CommitInfo) {
         var modalData = new CommitDeltaModalData(item.commit);
         const builder = new BSModalContextBuilder<CommitDeltaModalData>(
             modalData, undefined, CommitDeltaModalData

@@ -1,0 +1,88 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label>Staged commits</label>
+    </div>
+    
+    <div class="panel-body vbox scrollableContainer">
+
+        <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center">Commit</th>
+                    <th class="text-center">Subject</th>
+                    <th class="text-center">Action</th>
+                    <th class="text-center">User</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Validate</th>
+                    <th class="text-center">Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of commits">
+                    <td class="text-center" nowrap>
+                        <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="item.subject">
+                            {{item.subject.getURI()}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="item.operation" [title]="item.operation.getURI()">
+                            {{item.operation.getShow()}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="item.user" [title]="item.user.getURI()">
+                            {{item.user.getShow()}}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        {{item.endTime}}
+                    </td>
+                    <td>
+                        <select class="form-control input-xs" [(ngModel)]="item.validationAction">
+                            <option *ngFor="let act of validationActions" [ngValue]="act.value">{{act.show}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control input-xs" [(ngModel)]="item.notes">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+
+    <div class="panel-footer">
+        <div class="hbox  pull-right" style="align-items: center">
+
+            <div class="btn-group btn-group-xs" role="group" style="margin-right: 6px;">
+                <button class="btn btn-default" title="Previous" (click)="getPreviousCommits()" [disabled]="'true'">
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                </button>
+                <!--<button class="btn btn-default" style="cursor: auto" disabled>
+                    <span>{{t.resultsPage+1}} of {{t.resultsTotPage}}</span>
+                </button>-->
+                <button class="btn btn-default" title="Next" (click)="getNextCommits()" [disabled]="!hasNext">
+                    <span class="glyphicon glyphicon-triangle-right"></span>
+                </button>
+            </div>
+
+            <div class="btn-group btn-group-xs" role="group" style="margin-right: 12px;">
+                <button class="btn btn-xs btn-default" (click)="acceptAll()">Accept all</button>
+                <button class="btn btn-xs btn-default" (click)="rejectAll()">Reject all</button>
+            </div>
+
+            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="validate()">Validate</button>
+        </div>
+    </div>
+
+</div>

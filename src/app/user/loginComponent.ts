@@ -53,10 +53,10 @@ export class LoginComponent {
         this.basicModals.prompt("Forgot password", "E-mail", "Insert the e-mail address of your account. " + 
             "You will receive an e-mail with the instructions for resetting the password").then(
             email => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.userService.forgotPassword(email).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert("Forgot password", 
                             "An e-mail with the instructions for resetting password has been sent to the provided address.");
                     }

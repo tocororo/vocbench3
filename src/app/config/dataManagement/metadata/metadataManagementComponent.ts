@@ -170,12 +170,12 @@ export class MetadataManagementComponent {
                 message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
                 this.basicModals.confirm("Refactor", message, "warning").then(
                     confirm => {
-                        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
                                 this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                                     stResp => {
-                                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                         this.basicModals.alert("Refactor", "BaseURI and namespace have been updated successfully");
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
@@ -197,10 +197,10 @@ export class MetadataManagementComponent {
                 message += "baseURI? (Attention, baseURI refactoring could be a long process)";
                 this.basicModals.confirm("Refactor", message, "warning").then(
                     confirm => {
-                        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
                             stResp => {
-                                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                 this.basicModals.alert("Refactor", "BaseURI has been updated successfully and refactor complete.");
                                 this.refreshBaseURI();
                                 this.nsBaseURISubmitted = true;
@@ -333,15 +333,14 @@ export class MetadataManagementComponent {
     private importFromWeb() {
         this.openImportModal("Import from web", ImportType.fromWeb).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 )
             },
             () => { }
@@ -355,16 +354,15 @@ export class MetadataManagementComponent {
     private importFromWebToMirror() {
         this.openImportModal("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
                         this.refreshOntoMirror();
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 )
             },
             () => { }
@@ -378,15 +376,14 @@ export class MetadataManagementComponent {
     private importFromLocalFile() {
         this.openImportModal("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance,).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 )
             },
             () => { }
@@ -400,15 +397,14 @@ export class MetadataManagementComponent {
     private importFromOntologyMirror() {
         this.openImportModal("Import from ontology mirror", ImportType.fromOntologyMirror).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 )
             },
             () => { }
@@ -419,10 +415,10 @@ export class MetadataManagementComponent {
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
     private removeImport(importedOntology: {id: string, status: string, imports: any[]}) {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.metadataService.removeImport(importedOntology.id).subscribe(
             stResp => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 //Refreshes the imports and the namespace prefix mapping
                 this.refreshImports();
                 this.refreshNSPrefixMappings();
@@ -462,13 +458,12 @@ export class MetadataManagementComponent {
     private updateMirrorFromWebWithUri(mirror: any) {
         this.basicModals.prompt("Update ontology mirror from web", "BaseURI").then(
             (newNamespace: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.ontoMgrService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refreshOntoMirror();
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 );
             },
             () => { }
@@ -482,13 +477,12 @@ export class MetadataManagementComponent {
     private updateMirrorFromWebFromAltUrl(mirror: any) {
         this.basicModals.prompt("Update ontology mirror from web", "URL").then(
             (url: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refreshOntoMirror();
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 );
             },
             () => { }
@@ -502,12 +496,11 @@ export class MetadataManagementComponent {
     private updateMirrorFromLocalFile(mirror: any) {
         this.basicModals.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
             (file: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                    },
-                    () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    }
                 )
             },
             () => { }

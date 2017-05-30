@@ -48,4 +48,15 @@ export class AppComponent {
         return false;
     }
 
+    /**
+     * Returns true if the current open project has validation enabled
+     */
+    private isProjectValidationEnabled(): boolean {
+        var wProj: Project = VBContext.getWorkingProject();
+        if (wProj != undefined) {
+            return wProj.isValidationEnabled();
+        }
+        return false;
+    }
+
 }

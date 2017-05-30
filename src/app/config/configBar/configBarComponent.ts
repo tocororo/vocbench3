@@ -58,7 +58,7 @@ export class ConfigBarComponent {
             " The project will be closed and then you will be redirect to the projects page." +
             " Are you sure to proceed?", "warning").then(
             result => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
                     stResp => {
                         this.basicModals.alert("Clear data", "All data cleared successfully!");
@@ -69,28 +69,24 @@ export class ConfigBarComponent {
                                     //then close project
                                     this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
                                         stResp => {
-                                            UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                             //then redirect to home page
                                             this.router.navigate(['/Projects']);
-                                        },
-                                        err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                                        }
                                     );
-                                },
-                                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                                }
                             )
                         } else {
                             //project is presistent, it doesn't need to be saved, just close the project
                             this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
                                 stResp => {
-                                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                     //then redirect to home page
                                     this.router.navigate(['/Projects']);
-                                },
-                                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                                }
                             );
                         }
-                    },
-                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                    }
                 );
             },
             () => { }

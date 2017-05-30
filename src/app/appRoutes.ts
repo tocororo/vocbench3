@@ -6,7 +6,8 @@ import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
 import { DataComponent } from "./data/dataComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
-import { HistoryComponent } from "./history/historyComponent";
+import { HistoryComponent } from "./historyValidation/historyComponent";
+import { ValidationComponent } from "./historyValidation/validationComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
 import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
@@ -30,6 +31,7 @@ export const routes: Routes = [
     { path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "History", component: HistoryComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration", component: RegistrationComponent },

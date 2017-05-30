@@ -47,11 +47,11 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     }
 
     private accessProject() {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessProject(this.selectedProject).subscribe(
             stResp => {
                 VBContext.setWorkingProject(this.selectedProject);
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 Observable.forkJoin(
                     //init the project preferences for the project
                     this.preferences.initUserProjectPreferences(),
@@ -73,8 +73,7 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                         );
                     }
                 );
-            },
-            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+            }
         );
     }
 

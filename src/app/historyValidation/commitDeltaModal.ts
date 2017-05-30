@@ -18,6 +18,7 @@ export class CommitDeltaModalData extends BSModalContext {
 export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
     context: CommitDeltaModalData;
 
+
     private additions: CommitOperation[];
     private removals: CommitOperation[];
 
@@ -33,7 +34,6 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
             }
         );
     }
-
 
     ok(event: Event) {
         event.stopPropagation();

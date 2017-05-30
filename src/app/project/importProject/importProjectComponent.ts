@@ -24,15 +24,14 @@ export class ImportProjectComponent {
     private import() {
         this.submitted = true;
         if (this.projectName && this.projectName.trim() != "" && this.fileToUpload) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
             this.projectService.importProject(this.projectName, this.fileToUpload).subscribe(
                 stResp => {
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.basicModals.alert("Import project", "Project imported successfully").then(
                         confirm => this.router.navigate(["/Projects"])
                     );
-                },
-                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                }
             );
         }
     }

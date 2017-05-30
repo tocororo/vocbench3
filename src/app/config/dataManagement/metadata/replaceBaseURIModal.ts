@@ -59,10 +59,10 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
 
         this.basicModals.confirm("Replace baseURI", "This operation could be a long process. Are you sure to proceed?", "warning").then(
             confirm => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.replaceBaseURI(this.newBaseURI, this.oldBaseURI).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //remove schemes which defaultBaseURI was replaced
                         let activeSchemes = this.preferences.getActiveSchemes();
                         let updatedActiveSchemes: ARTURIResource[] = [];
@@ -75,8 +75,7 @@ export class ReplaceBaseURIModal implements ModalComponent<ReplaceBaseURIModalDa
                         event.stopPropagation();
                         event.preventDefault();
                         this.dialog.close();
-                    },
-                    err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    }
                 );
             },
             () => { }

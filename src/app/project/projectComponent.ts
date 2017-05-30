@@ -113,13 +113,13 @@ export class ProjectComponent implements OnInit {
     }
 
     private openProject(project: Project) {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessProject(project).subscribe(
             stResp => {
                 VBContext.setWorkingProject(project);
                 VBContext.setProjectChanged(true);
                 project.setOpen(true);
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 //init the project preferences for the project
                 this.preferences.initUserProjectPreferences().subscribe();
                 //get default namespace of the project and set it to the vbContext
@@ -133,8 +133,7 @@ export class ProjectComponent implements OnInit {
                         VBContext.setPrefixMappings(mappings);
                     }
                 )
-            },
-            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+            }
         );
     }
 
@@ -164,24 +163,22 @@ export class ProjectComponent implements OnInit {
      * Returns an observable so I can disconnect and connect to a new project in synchronous way
      */
     private disconnectFromProject(project: Project) {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.disconnectFromProject(project).subscribe(
             stResp => {
                 project.setOpen(false);
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-            },
-            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+            }
         );
     }
 
     private saveProject(project: Project) {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.saveProject(project).subscribe(
             stResp => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Save project", "Project " + project.getName() + " saved successfully");
-            },
-            err => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+            }
         );
     }
 

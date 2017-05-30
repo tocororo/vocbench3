@@ -37,12 +37,12 @@ export class RegistrationComponent {
             this.basicModals.alert("Invalid data", "Password and confirmed password are different.", "error");
             return;
         }
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName,
             this.userForm.birthday, this.userForm.gender, this.userForm.country, this.userForm.address, this.userForm.affiliation,
             this.userForm.url, this.userForm.phone).subscribe(
             stResp => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Registration complete",
                     "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
                     "it will be possible to login with your email (" + this.userForm.email + ") and the password you provided").then(

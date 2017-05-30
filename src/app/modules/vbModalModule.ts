@@ -81,7 +81,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 
 //history modals
-import { CommitDeltaModal } from "../history/commitDeltaModal";
+import { CommitDeltaModal } from "../historyValidation/commitDeltaModal";
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],

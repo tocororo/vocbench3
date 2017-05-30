@@ -1,47 +1,36 @@
 import { ARTURIResource, ARTResource, ARTNode } from "./ARTResources";
 
-export class HistoryItem {
+export class CommitInfo {
     public commit: ARTURIResource;
-    public user: HistoryItemUser;
-    public operation: HistoryOperation;
+    public user: ARTURIResource;
+    public operation: ARTURIResource;
     public subject: ARTURIResource;
-    public validationAction: string;
     public startTime: string;
     public endTime: string;
-    constructor(commit: ARTURIResource, user: HistoryItemUser, operation: HistoryOperation, subject: ARTURIResource, 
+
+    constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, subject: ARTURIResource, 
             startTime: string, endTime: string) {
         this.commit = commit;
         this.user = user;
+
         this.operation = operation;
+        if (operation != null) {
+            let stCoreServices: string = "st-core-services/";
+            let operationShow = operation.getURI();
+            var idx = operationShow.indexOf(stCoreServices);
+            if (idx != -1) {
+                operationShow = operationShow.substring(idx + stCoreServices.length);
+            }
+            this.operation.setShow(operationShow);
+        }
+        
+        
+
         this.subject = subject;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 }
-
-export class HistoryItemUser {
-    public id: string;
-    public show: string;
-    constructor(id: string, show: string) {
-        this.id = id;
-        this.show = show;
-    }
-}
-
-export class HistoryOperation {
-    public id: string;
-    public show: string;
-    constructor(id: string) {
-        this.id = id;
-        this.show = this.id;
-        var stCoreServices: string = "st-core-services/";
-        var idx = this.id.indexOf(stCoreServices);
-        if (idx != -1) {
-            this.show = this.id.substring(idx + stCoreServices.length);
-        }
-    }
-}
-
 
 export class CommitOperation {
     public subject: ARTResource;
@@ -55,10 +44,3 @@ export class CommitOperation {
         this.context = context;
     }
 }
-
-
-// export type ValidationAction = "accept" | "reject";
-// export const ValidationAction = {
-//     accept: "accept" as ValidationAction,
-//     reject: "reject" as ValidationAction
-// }

@@ -50,7 +50,7 @@ export class SparqlComponent {
     private doQuery(tab: Tab) {
         var initTime = new Date().getTime();
         tab.queryResult = null;
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.sparqlService.resolveQuery(tab.query, "SPARQL", tab.inferred, tab.queryMode).subscribe(
             data => {
                 tab.respSparqlJSON = data.sparql;
@@ -73,10 +73,7 @@ export class SparqlComponent {
                     tab.headers = ["boolean"];
                     tab.queryResult = Boolean(data.sparql.boolean);
                 }
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-            },
-            err => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
             }
         );
     }

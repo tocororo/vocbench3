@@ -97,10 +97,10 @@ export class AlignmentValidationComponent {
      */
     private loadAlignment() {
         this.alignmentService.setSessionToken(this.sessionToken);
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.alignmentService.loadAlignment(this.alignmentFile).subscribe(
             stResp => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.sourceBaseURI = stResp.onto1;
                 this.targetBaseURI = stResp.onto2;
                 for (var i = 0; i < stResp.unknownRelations.length; i++) {
@@ -308,38 +308,34 @@ export class AlignmentValidationComponent {
     }
 
     private doQuickAction() {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (this.chosenQuickAction == this.qaAcceptAll) {
             this.alignmentService.acceptAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                },
-                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                }
             )
         } else if (this.chosenQuickAction == this.qaAcceptAllAbove) {
             this.alignmentService.acceptAllAbove(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                },
-                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                }
             )
         } else if (this.chosenQuickAction == this.qaRejectAll) {
             this.alignmentService.rejectAllAlignment().subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                },
-                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                }
             )
         } else if (this.chosenQuickAction == this.qaRejectAllUnder) {
             this.alignmentService.rejectAllUnder(this.threshold).subscribe(
                 cells => {
                     this.updateAlignmentListAfterQuickAction(cells);
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                },
-                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"))
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                }
             )
         }
     }
@@ -388,10 +384,10 @@ export class AlignmentValidationComponent {
      * calls the service to apply the validation and shows the report dialog.
      */
     private applyValidation(deleteReject: boolean) {
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.alignmentService.applyValidation(deleteReject).subscribe(
             report => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 //open report modal
                 var modalData = new ValidationReportModalData(report);
                 const builder = new BSModalContextBuilder<ValidationReportModalData>(
@@ -402,8 +398,7 @@ export class AlignmentValidationComponent {
                 return this.modal.open(ValidationReportModal, overlayConfig).then(
                     dialog => dialog.result
                 );
-            },
-            () => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+            }
         )
     }
 

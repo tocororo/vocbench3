@@ -32,12 +32,11 @@ export class RefactorComponent {
     private skosToSkosxl() {
         this.basicModals.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                    },
-                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    }
                 );
             },
             () => {}
@@ -47,12 +46,11 @@ export class RefactorComponent {
     private skosxlToSkos() {
         this.basicModals.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.SKOSXLtoSKOS().subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                    },
-                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    }
                 );
             },
             () => {}
@@ -63,12 +61,11 @@ export class RefactorComponent {
     private migrateData() {
         this.basicModals.confirm("Migrate data", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
-                    },
-                    err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen")); }
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    }
                 );
             },
             () => {}

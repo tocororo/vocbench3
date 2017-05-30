@@ -14,6 +14,8 @@ export class UIUtils {
      */
     private static pendingBlockingDiv: HTMLElement[] = []; //list of div that is waiting to show
 
+    public static blockDivFullScreen: HTMLElement = document.getElementById("blockDivFullScreen");
+
     /**
      * This method should be invoked when a request is sent.
      * The blocking div is added to the list of pending blocking div.

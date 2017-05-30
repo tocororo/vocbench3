@@ -55,10 +55,10 @@ export class VersioningComponent {
     private dump() {
         this.basicModals.prompt("Create a version dump", "Version ID").then(
             (id: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.versionsService.createVersionDump(id).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.initVersions();
                     }
                 );
@@ -70,11 +70,11 @@ export class VersioningComponent {
     private dumpWithLocation() {
         this.configureDumpWithLocation().then(
             (data: any) => {
-                UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.versionsService.createVersionDump(
                     data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.initVersions();
                     }
                 );

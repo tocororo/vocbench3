@@ -450,20 +450,17 @@ export class CreateProjectComponent {
         /**
          * Execute request
          */
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.createProject(this.projectName, this.modelType, this.baseUriPrefix + this.baseUriSuffix,
             this.history, this.validation,
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, supportRepoSailConfigurerSpecification,
             uriGeneratorSpecification, renderingEngineSpecification).subscribe(
             stResp => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Create project", "Project created successfully").then(
                     () => this.router.navigate(['/Projects'])
                 );
-            },
-            err => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
             }
         );
     }

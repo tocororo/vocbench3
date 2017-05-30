@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HistoryItem, HistoryItemUser, HistoryOperation, CommitOperation } from "../models/History";
+import { CommitInfo, CommitOperation } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
@@ -18,7 +18,7 @@ export class HistoryServices {
      * @param parentCommit if provided, it will return the commits performed after the parentCommit
      * @param limit limit number of commits returned (default 100)
      */
-    getCommits(parentCommit?: ARTURIResource, limit?: number): Observable<{ items: HistoryItem[], next: boolean }> {
+    getCommits(parentCommit?: ARTURIResource, limit?: number): Observable<{ items: CommitInfo[], next: boolean }> {
         console.log("[HistoryServices] getCommits");
         var params: any = {};
         if (parentCommit != null) {
@@ -30,23 +30,23 @@ export class HistoryServices {
         
         return this.httpMgr.doGet(this.serviceName, "getCommits", params, this.oldTypeService, true).map(
             stResp => {
-                var items: HistoryItem[] = [];
+                var items: CommitInfo[] = [];
                 var itemsJsonArray: any[] = stResp.items;
                 for (var i = 0; i < itemsJsonArray.length; i++) {
                     let itemJson: any = itemsJsonArray[i];
 
                     let commit: ARTURIResource = new ARTURIResource(itemJson.commit);
                     
-                    let user: HistoryItemUser;
+                    let user: ARTURIResource;
                     let userJson = itemJson.user;
                     if (userJson != null) {
-                        user = new HistoryItemUser(userJson['@id'], userJson.show);
+                        user = new ARTURIResource(userJson['@id'], userJson.show);
                     }
 
-                    let operation: HistoryOperation;
+                    let operation: ARTURIResource;
                     let operationJson = itemJson.operation;
                     if (operationJson != null) {
-                        operation = new HistoryOperation(operationJson['@id']);
+                        operation = new ARTURIResource(operationJson['@id']);
                     }
 
                     let subject: ARTURIResource;
@@ -66,7 +66,7 @@ export class HistoryServices {
                         endTime = Deserializer.parseDateTime(endTimeJson);
                     }
                     
-                    let item: HistoryItem = new HistoryItem(new ARTURIResource(itemJson.commit), user, operation, subject, startTime, endTime);
+                    let item: CommitInfo = new CommitInfo(new ARTURIResource(itemJson.commit), user, operation, subject, startTime, endTime);
 
                     items.push(item);
                 }

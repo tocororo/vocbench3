@@ -309,21 +309,21 @@ export class ExportDataComponent {
             filteringPipeline.push(filterStep);
         }
 
-        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat).subscribe(
             blob => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
             },
             err => {
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.confirm("Warning", err + " Do you want to force the export?", "warning").then(
                     yes => {
-                        UIUtils.startLoadingDiv(document.getElementById("blockDivFullScreen"));
+                        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat, true).subscribe(
                             blob => {
-                                UIUtils.stopLoadingDiv(document.getElementById("blockDivFullScreen"));
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                 var exportLink = window.URL.createObjectURL(blob);
                                 this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
                             }

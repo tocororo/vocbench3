@@ -21,6 +21,9 @@
                 <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" routerLinkActive="active">
                     <a [routerLink]="['/History']">History</a>
                 </li>
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" routerLinkActive="active">
+                    <a [routerLink]="['/Validation']">Validation</a>
+                </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                         Tools <span class="caret"></span>
