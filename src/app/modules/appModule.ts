@@ -14,6 +14,7 @@ import { ResourceViewModule } from "./resourceViewModule";
 import { ICVModule } from "./icvModule";
 import { AdministrationModule } from "./administrationModule";
 import { UserModule } from "./userModule";
+import { MetadataModule } from "./metadataModule";
 
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
@@ -40,8 +41,6 @@ import { HistoryComponent } from "../historyValidation/historyComponent";
 import { ValidationComponent } from "../historyValidation/validationComponent";
 import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
-import { ExportMetadataComponent } from "../config/dataManagement/exportMetadata/exportMetadataComponent";
-import { MetadataManagementComponent } from "../config/dataManagement/metadata/metadataManagementComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
 import { VocbenchSettingsComponent } from "../settings/vocbenchSettingsComponent";
@@ -54,7 +53,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
-            UserModule, ICVModule, AdministrationModule, CustomFormModule,
+            UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
 
             STServicesModule,
             appRouting,
@@ -81,8 +80,6 @@ import { AdministrationComponent } from "../administration/administrationCompone
             CustomFormConfigComponent,
             LoadDataComponent,
             ExportDataComponent,
-            ExportMetadataComponent,
-            MetadataManagementComponent,
             RefactorComponent,
             VersioningComponent,
             VocbenchSettingsComponent,

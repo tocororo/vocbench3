@@ -12,13 +12,7 @@ var $: JQueryStatic = require('jquery');
 
 @Component({
     selector: 'yasgui',
-    template: `
-        <div class="hbox" style="align-items: center; justify-content: flex-end;">
-            <span style="margin-right: 3px;">Fetch prefix from prefix.cc</span>
-            <input type="checkbox" (change)="onCheckboxChange($event.target.checked)" [(ngModel)]="fetchFromPrefixCheck">
-        </div>
-        <textarea #txtarea>{{query}}</textarea>
-    `,
+    templateUrl: "./yasguiComponent.html",
 })
 export class YasguiComponent {
     @Input() query: string;

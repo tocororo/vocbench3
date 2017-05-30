@@ -53,9 +53,8 @@ import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/
 import { SchemeSelectionComponent } from '../widget/modal/creationModal/newResourceModal/schemeSelectionComponent';
 
 //metadata modals
-import { ImportOntologyModal } from '../config/dataManagement/metadata/importOntologyModal';
-import { PrefixNamespaceModal } from '../config/dataManagement/metadata/prefixNamespaceModal';
-import { ReplaceBaseURIModal } from '../config/dataManagement/metadata/replaceBaseURIModal';
+import { ImportOntologyModal } from '../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
+import { PrefixNamespaceModal } from '../config/dataManagement/metadata/namespacesAndImports/prefixNamespaceModal';
 
 //alignment modals
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
@@ -92,7 +91,7 @@ import { CommitDeltaModal } from "../historyValidation/commitDeltaModal";
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
-        ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
+        ImportOntologyModal, PrefixNamespaceModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
@@ -117,7 +116,7 @@ import { CommitDeltaModal } from "../historyValidation/commitDeltaModal";
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
-        ImportOntologyModal, PrefixNamespaceModal, ReplaceBaseURIModal,
+        ImportOntologyModal, PrefixNamespaceModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,

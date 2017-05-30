@@ -24,7 +24,7 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
     private extendedCapability: string; //"capablity(<topic>, <CRUDV>)" where <topic> is <area>(<subject> [, <scope>])
 
     private areaStruct = [
-        { value: "rdf", label: "RDF", description: "???"}, 
+        { value: "rdf", label: "RDF", description: "Editing of content data"}, 
         { value: "rbac", label: "RBAC", description: "Role Based Access Control management"},
         { value: "pm", label: "PM", description: "Project management"},
         { value: "um", label: "UM", description: "User management"},
@@ -38,7 +38,7 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         { value : "R", label: "Read", checked: false },
         { value : "U", label: "Update", checked: false },
         { value : "D", label: "Delete", checked: false },
-        { value : "V", label: "Validation", checked: false }
+        { value : "V", label: "Validate", checked: false }
     ];
 
     constructor(public dialog: DialogRef<CapabilityEditorModalData>) {

@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "angular2-modal";
-import {OntoManagerServices} from '../../../services/ontoManagerServices';
-import {ExportServices} from '../../../services/exportServices';
-import {RDFFormat} from '../../../models/RDFFormat';
+import {OntoManagerServices} from '../../../../services/ontoManagerServices';
+import {ExportServices} from '../../../../services/exportServices';
+import {RDFFormat} from '../../../../models/RDFFormat';
 
 export class ImportOntologyModalData extends BSModalContext {
     /**

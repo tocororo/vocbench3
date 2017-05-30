@@ -13,17 +13,7 @@
             <tbody>
                 <tr>
                     <td nowrap>
-                        <label>Export Format:</label>
-                    </td>
-                    <td>
-                        <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
-                            <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td nowrap>
-                        <label>Exporter Plugin:</label>
+                        <label>Metadata Vocabulary:</label>
                     </td>
                     <td>
                         <select class="form-control input-sm" [(ngModel)]="selectedExporterPlugin" name="exporter" (change)="onPluginChange()">
@@ -33,7 +23,7 @@
                 </tr>
                 <tr>
                     <td nowrap>
-                        <label>Plugin Configuration:</label>
+                        <label>Exporter Configuration:</label>
                     </td>
                     <td>
                         <div class="input-group">
@@ -68,7 +58,7 @@
                         </colgroup>
                         <tbody>
                             <template [ngIf]="selectedExporterSettings.extensionPointSettings.params">
-                                <tr>
+                                <tr *ngIf="selectedExporterSettings.extensionPointSettings.params.length > 0">
                                     <td colspan="3" class="text-center">
                                         <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
                                             <label>{{selectedExporterSettings.extensionPointSettings.shortName}}</label>
@@ -116,7 +106,18 @@
     
     <div class="panel-footer">
         <span class="pull-left">(*) Mandatory field</span>
-        <button type="submit" class="btn btn-default btn-sm pull-right" (click)="export()" [disabled]="!selectedExporterSettings">Submit</button>
-        <span class="clearfix"></span> <!--To fix UI bug-->
+        <button type="submit" class="btn btn-default btn-sm pull-right" (click)="saveSettings()" [disabled]="!selectedExporterSettings">Save</button>
+        <div class="col-sm-2 pull-right">
+            <div class="input-group">
+                <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
+                    <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-sm" (click)="export()" [disabled]="!selectedExporterSettings">
+                        Export
+                    </button>
+                </span>
+            </div>
+        </div>
     </div>
 </div>
