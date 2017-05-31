@@ -5,6 +5,8 @@ import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
+import { ARTURIResource } from "../../models/ARTResources";
+import { RDFS, OWL, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { UIUtils } from "../../utils/UIUtils";
@@ -26,12 +28,19 @@ export class CreateProjectComponent {
     private baseUriSuffix: string;;
     // private baseURI: string;
 
-    private modelTypeList = [
-        { value: "it.uniroma2.art.owlart.models.OWLModel", label: "OWL" },
-        { value: "it.uniroma2.art.owlart.models.SKOSModel", label: "SKOS" },
-        { value: "it.uniroma2.art.owlart.models.SKOSXLModel", label: "SKOSXL" }
+    private ontoModelList = [
+        { value: new ARTURIResource(OWL.uri), label: "OWL" },
+        { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
     ];
-    private modelType: string = this.modelTypeList[0].value;
+    private ontoModelType: ARTURIResource = this.ontoModelList[0].value;
+
+    private lexicalModelList = [
+        { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
+        { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
+        { value: new ARTURIResource(SKOSXL.uri), label: "SKOSXL" }
+    ];
+    private lexicalModelType: ARTURIResource = this.lexicalModelList[0].value;
+    
 
     private history: boolean = false;
     private validation: boolean = false;
@@ -451,8 +460,8 @@ export class CreateProjectComponent {
          * Execute request
          */
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.projectService.createProject(this.projectName, this.modelType, this.baseUriPrefix + this.baseUriSuffix,
-            this.history, this.validation,
+        this.projectService.createProject(this.projectName, this.baseUriPrefix + this.baseUriSuffix,
+            this.ontoModelType, this.lexicalModelType, this.history, this.validation,
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, supportRepoSailConfigurerSpecification,
             uriGeneratorSpecification, renderingEngineSpecification).subscribe(

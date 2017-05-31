@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, SimpleChanges } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBPreferences } from "../../utils/VBPreferences";
@@ -6,12 +6,35 @@ import { VBPreferences } from "../../utils/VBPreferences";
 @Component({
 	selector: "rdf-resource",
 	templateUrl: "./rdfResourceComponent.html",
+	styles: [`
+		.stagingAdd { color: green; font-style: italic; }
+		.stagingRemove { color: darkred; text-decoration: line-through; }`
+	]
 })
 export class RdfResourceComponent {
 	@Input() resource: ARTNode;
 	@Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
 
+	private renderingClass: string = "";
+
 	constructor(private preferences: VBPreferences) { }
+
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes['resource'] && changes['resource'].currentValue) {
+			let graphs: ARTURIResource[] = this.resource.getGraphs();
+			let stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
+			let stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
+			for (var i = 0; i < graphs.length; i++) {
+				if (graphs[i].getURI().startsWith(stagingAddGraph)) {
+					this.renderingClass = "stagingAdd";
+					break;
+				} else if (graphs[i].getURI().startsWith(stagingRemoveGraph)) {
+					this.renderingClass = "stagingRemove";
+					break;
+				}
+			}
+		}
+	}
 
 	private getRendering(): string {
 		return ResourceUtils.getRendering(this.resource, this.rendering);

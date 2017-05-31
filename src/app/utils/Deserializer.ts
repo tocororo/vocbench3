@@ -444,16 +444,20 @@ export class Deserializer {
         }
         var nature: string = resJson[ResAttribute.NATURE];
         if (nature != undefined) {
+            let classes: ARTURIResource[] = [];
+            let graphs: ARTURIResource[] = [];
             let splitted: string[] = nature.split(",");
             for (var i = 0; i < splitted.length; i++) {
-                let classGraphDeprecated: string[] = splitted[i].split("-");
-                let cls: string = classGraphDeprecated[0];
-                let graph: string = classGraphDeprecated[1];
+                let classGraphDeprecated: string[] = splitted[i].split("|_|");
+                let cls: ARTURIResource = new ARTURIResource(classGraphDeprecated[0]);
+                classes.push(cls);
+                let graph: ARTURIResource = new ARTURIResource(classGraphDeprecated[1]);
+                graphs.push(graph);
                 let deprecated: boolean = classGraphDeprecated[2] == "true";
-                resource.setAdditionalProperty(ResAttribute.RES_CLASS, cls); //this should be the attribute role in the future?
-                resource.setAdditionalProperty(ResAttribute.RES_GRAPH, graph);
                 resource.setAdditionalProperty(ResAttribute.DEPRECATED, deprecated);
             }
+            resource.setAdditionalProperty(ResAttribute.NATURE_CLASSES, classes);
+            resource.setAdditionalProperty(ResAttribute.NATURE_GRAPHS, graphs);
         }
     }
 

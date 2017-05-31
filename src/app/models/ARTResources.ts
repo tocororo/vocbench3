@@ -1,39 +1,73 @@
 import { PrefixMapping } from "./PrefixMapping";
 
-export interface ARTNode {
-    isResource(): boolean;
-    isURIResource(): boolean;
-    isLiteral(): boolean;
-    isBNode(): boolean;
-    getNominalValue(): string;
-    getShow(): string;
-    toNT(): string;
-    setAdditionalProperty(propName: string, propValue: any): void;
-    deleteAdditionalProperty(propName: string): void;
-    getAdditionalProperty(propName: string): any;
-    clone(): ARTNode;
+export abstract class ARTNode {
+
+    constructor() {};
+
+    isResource(): boolean {
+        return false;
+    }
+    isURIResource(): boolean {
+        return false;
+    }
+    isLiteral(): boolean {
+        return false;
+    }
+    isBNode(): boolean{
+        return false;
+    }
+
+    abstract getNominalValue(): string;
+    abstract getShow(): string;
+    
+    getGraphs(): ARTURIResource[] {
+        //graphs could be in "graphs" attribute...
+        let graphs: ARTURIResource[] = [];
+        let graphsAttr: string = this[ResAttribute.GRAPHS];
+        if (graphsAttr != null) {
+            let splitted: string[] = graphsAttr.split(",");
+            for (var i = 0; i < splitted.length; i++) {
+                graphs.push(new ARTURIResource(splitted[i]));
+            }
+        }
+        //... and in "nature"
+        let natureGraphs: ARTURIResource[] = this[ResAttribute.NATURE_GRAPHS];
+        if (natureGraphs != null) {
+            for (var i = 0; i < natureGraphs.length; i++) {
+                graphs.push(natureGraphs[i]);
+            }
+        }
+        return graphs;
+    }
+    
+    abstract toNT(): string;
+    
+    setAdditionalProperty(propName: string, propValue: any): void {
+        this[propName] = propValue;
+    }
+    deleteAdditionalProperty(propName: string) {
+        delete this[propName];
+    }
+    getAdditionalProperty(propName: string) {
+        return this[propName];
+    }
+    
+    abstract clone(): ARTNode;
 }
 
-export interface ARTResource extends ARTNode {
-    getRole(): RDFResourceRolesEnum;
-}
-
-export class ARTURIResource implements ARTResource {
-    private uri: string;
-    private show: string;
-    private role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
-
-    constructor(uri: string, show?: string, role?: RDFResourceRolesEnum) {
-        this.uri = uri;
+export abstract class ARTResource extends ARTNode {
+    
+    protected show: string;
+    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
+    
+    constructor(show?: string, role?: RDFResourceRolesEnum) {
+        super();
         this.show = show;
         if (role != null) { this.role = role; }
-    }
+    };
 
-    setURI(uri: string) {
-        this.uri = uri;
-    }
-    getURI(): string {
-        return this.uri;
+    isResource(): boolean {
+        return true;
     }
 
     setRole(role: RDFResourceRolesEnum) {
@@ -43,22 +77,38 @@ export class ARTURIResource implements ARTResource {
         return this.role;
     }
 
-    isResource(): boolean {
-        return true;
-    };
+    setShow(show: string) {
+        this.show = show;
+    }
+    getShow(): string {
+        if (this.show != null) {
+            return this.show;
+        } else {
+            return this.getNominalValue();
+        }
+    }
+
+}
+
+export class ARTURIResource extends ARTResource {
+    private uri: string;
+
+    constructor(uri: string, show?: string, role?: RDFResourceRolesEnum) {
+        super(show, role);
+        this.uri = uri;
+    }
+
+    setURI(uri: string) {
+        this.uri = uri;
+    }
+    getURI(): string {
+        return this.uri;
+    }
 
     isURIResource(): boolean {
         return true;
     };
 
-    isLiteral(): boolean {
-        return false;
-    }
-
-    isBNode(): boolean {
-        return false;
-    }
-    
     getBaseURI() {
         if (this.uri.lastIndexOf("#") > -1) {
             return this.uri.substring(0, this.uri.lastIndexOf("#")+1);
@@ -75,17 +125,6 @@ export class ARTURIResource implements ARTResource {
         }
     }
 
-    setShow(show: string) {
-        this.show = show;
-    }
-    getShow(): string {
-        if (this.show != null) {
-            return this.show;
-        } else {
-            return this.getNominalValue();
-        }
-    }
-
     getNominalValue(): string {
         return this.uri;
     };
@@ -93,18 +132,6 @@ export class ARTURIResource implements ARTResource {
     toNT(): string {
         return "<" + this.uri + ">";
     };
-
-    setAdditionalProperty(propName: string, propValue: any): void {
-        this[propName] = propValue;
-    }
-
-    deleteAdditionalProperty(propName: string) {
-        delete this[propName];
-    }
-
-    getAdditionalProperty(propName: string) {
-        return this[propName];
-    }
 
     clone(): ARTURIResource {
         let cloneRes = new ARTURIResource(this.uri, this.show, this.role);
@@ -117,15 +144,12 @@ export class ARTURIResource implements ARTResource {
 
 }
 
-export class ARTBNode implements ARTResource {
+export class ARTBNode extends ARTResource {
     private id: string;
-    private show: string;
-    private role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
 
     constructor(id: string, show?: string, role?: RDFResourceRolesEnum) {
+        super(show, role);
         this.id = id;
-        this.show = show;
-        if (role != null) { this.role = role; }
     }
 
     setId(id: string) {
@@ -135,39 +159,9 @@ export class ARTBNode implements ARTResource {
         return this.id;
     }
 
-    setRole(role: RDFResourceRolesEnum) {
-        this.role = role;
-    }
-    getRole(): RDFResourceRolesEnum {
-        return this.role;
-    }
-
-    isResource(): boolean {
-        return true;
-    };
-
-    isURIResource(): boolean {
-        return false;
-    };
-
-    isLiteral(): boolean {
-        return false;
-    };
-
     isBNode(): boolean {
         return true;
     };
-
-    setShow(show: string) {
-        this.show = show;
-    }
-    getShow(): string {
-        if (this.show != null) {
-            return this.show;
-        } else {
-            return this.getNominalValue();
-        }
-    }
 
     getNominalValue(): string {
         return this.id;
@@ -176,18 +170,6 @@ export class ARTBNode implements ARTResource {
     toNT(): string {
         return this.getNominalValue();
     };
-
-    setAdditionalProperty(propName: string, propValue: any): void {
-        this[propName] = propValue;
-    }
-
-    deleteAdditionalProperty(propName: string) {
-        delete this[propName];
-    }
-
-    getAdditionalProperty(propName: string) {
-        return this[propName];
-    }
 
     clone(): ARTBNode {
         let cloneRes = new ARTBNode(this.id, this.show, this.role);
@@ -200,12 +182,13 @@ export class ARTBNode implements ARTResource {
 
 }
 
-export class ARTLiteral implements ARTNode {
+export class ARTLiteral extends ARTNode {
     private value: string;
     private datatype: string;
     private lang: string;
 
     constructor(value: string, datatype?: string, lang?: string) {
+        super();
         this.value = value;
         this.datatype = datatype;
         this.lang = lang;
@@ -221,7 +204,6 @@ export class ARTLiteral implements ARTNode {
     setDatatype(datatype: string) {
         this.datatype = datatype;
     }
-
     getDatatype(): string {
         return this.datatype;
     };
@@ -229,17 +211,8 @@ export class ARTLiteral implements ARTNode {
     setLang(lang: string) {
         this.lang = lang;
     }
-
     getLang(): string {
         return this.lang;
-    };
-
-    isResource(): boolean {
-        return false;
-    };
-
-    isURIResource(): boolean {
-        return false;
     };
 
     isLiteral(): boolean {
@@ -249,10 +222,6 @@ export class ARTLiteral implements ARTNode {
     isTypedLiteral(): boolean {
         return this.datatype != null;
     };
-
-    isBNode(): boolean {
-        return false;
-    }
 
     getNominalValue(): string {
         return this.toNT();
@@ -271,18 +240,6 @@ export class ARTLiteral implements ARTNode {
         }
         return nt;
     };
-
-    setAdditionalProperty(propName: string, propValue: any): void {
-        this[propName] = propValue;
-    }
-
-    deleteAdditionalProperty(propName: string): void {
-        delete this[propName];
-    }
-
-    getAdditionalProperty(propName: string): any {
-        return this[propName];
-    }
 
     clone(): ARTLiteral {
         let cloneRes = new ARTLiteral(this.value);
@@ -332,8 +289,8 @@ export class ResAttribute {
     public static NATURE = "nature"; //content is a triple separated by "-": <uri of class of resource> - <graph of ???> - <deprecated true/false>
 
     //never in st responses, result of nature parsing
-    public static RES_CLASS = "res_class"; //class of the resource
-    public static RES_GRAPH = "res_graph"; //graph where the resource is defined
+    public static NATURE_CLASSES = "res_class"; //class of the resource
+    public static NATURE_GRAPHS = "res_graph"; //graph where the resource is defined
     public static DEPRECATED = "deprecated";
     
     //never in st responses, added because are util for tree
