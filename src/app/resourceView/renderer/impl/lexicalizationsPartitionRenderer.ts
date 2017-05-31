@@ -28,7 +28,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
         SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
     label = "Lexicalizations";
     addBtnImgTitle = "Add a lexicalization";
-    addBtnImgSrc = require("../../../../assets/images/propAnnotation_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
     removeBtnImgTitle = "Remove lexicalization";
 
     private predicateOrder: string[] = [

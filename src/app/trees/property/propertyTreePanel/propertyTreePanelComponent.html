@@ -4,42 +4,42 @@
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <div class="btn-group btn-group-xs" role="group">
                 <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property">
-                    <img src="../../../../assets/images/prop_create.png" class="panelButtonImg"/>
+                    <img src="../../../../assets/images/icons/actions/prop_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
                         <a (click)="createRoot('property')">
-                            <img src="../../../../assets/images/prop.png"/>rdf:Property
+                            <img src="../../../../assets/images/icons/res/prop.png"/>rdf:Property
                         </a>
                     </li>
                     <li>
                         <a (click)="createRoot('objectProperty')">
-                            <img src="../../../../assets/images/propObject.png"/>owl:ObjectProperty
+                            <img src="../../../../assets/images/icons/res/propObject.png"/>owl:ObjectProperty
                         </a>
                     </li>
                     <li>
                         <a (click)="createRoot('datatypeProperty')">
-                            <img src="../../../../assets/images/propDatatype.png"/>owl:DatatypeProperty
+                            <img src="../../../../assets/images/icons/res/propDatatype.png"/>owl:DatatypeProperty
                         </a>
                     </li>
                     <li>
                         <a (click)="createRoot('annotationProperty')">
-                            <img src="../../../../assets/images/propAnnotation.png"/>owl:AnnotationProperty
+                            <img src="../../../../assets/images/icons/res/propAnnotation.png"/>owl:AnnotationProperty
                         </a>
                     </li>
                     <li>
                         <a (click)="createRoot('ontologyProperty')">
-                            <img src="../../../../assets/images/propOntology.png"/>owl:OntologyProperty
+                            <img src="../../../../assets/images/icons/res/propOntology.png"/>owl:OntologyProperty
                         </a>
                     </li>
                 </ul>
             </div>
             <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="!selectedNode">
-                <img src="../../../../assets/images/prop_addSubProperty.png" class="panelButtonImg"/>
+                <img src="../../../../assets/images/icons/actions/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Property" (click)="delete()" 
                     [disabled]="!selectedNode || !selectedNode.getAdditionalProperty('explicit')">
-                <img src="../../../../assets/images/prop_delete.png" class="panelButtonImg"/>
+                <img src="../../../../assets/images/icons/actions/prop_delete.png" class="panelButtonImg"/>
             </button>
         </div>
 

@@ -27,7 +27,7 @@ export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer
     rootProperty: ARTURIResource = SKOSXL.labelRelation;
     label = "Label relations";
     addBtnImgTitle = "Add a label relation";
-    addBtnImgSrc = require("../../../../assets/images/propObject_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
     removeBtnImgTitle = "Remove label relation";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

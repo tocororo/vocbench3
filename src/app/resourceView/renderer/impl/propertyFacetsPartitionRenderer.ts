@@ -28,7 +28,7 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
     rootProperty: ARTURIResource = OWL.inverseOf;
     label = "Property facets";
     addBtnImgTitle = "Add a inverse property";
-    addBtnImgSrc = require("../../../../assets/images/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
     removeBtnImgTitle = "Remove inverse property";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

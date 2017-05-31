@@ -29,7 +29,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
     label = "Class axioms";
     addBtnImgTitle = "Add a class axiom";
-    addBtnImgSrc = require("../../../../assets/images/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove class axiom";
 
     constructor(private propertyService: PropertyServices, private owlService: OwlServices, private manchService: ManchesterServices,

@@ -1,8 +1,8 @@
 <div class="treeNode" #treeNodeElement>
 	<div class="expandCollapseBtnContainer">
             <img *ngIf="node.getAdditionalProperty('more')==1 && !open"
-                  src="../../../../../assets/images/arrow.png" class="arrow-right" (click)="expandNode()">
-            <img *ngIf="open" src="../../../../../assets/images/arrow.png" (click)="collapseNode()">
+                  src="../../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode()">
+            <img *ngIf="open" src="../../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
 	</div>
 	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>

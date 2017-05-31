@@ -29,7 +29,7 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty = SKOS.member;
     label = "Members";
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../assets/images/collection_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
     removeBtnImgTitle = "Remove member";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

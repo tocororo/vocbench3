@@ -29,7 +29,7 @@ export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = SKOS.inScheme;
     label = "Schemes";
     addBtnImgTitle = "Add to a ConceptScheme";
-    addBtnImgSrc = require("../../../../assets/images/conceptScheme_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/conceptScheme_create.png");
     removeBtnImgTitle = "Remove from ConceptScheme";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

@@ -28,7 +28,7 @@ export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = SKOS.note;
     label = "Notes";
     addBtnImgTitle = "Add a note";
-    addBtnImgSrc = require("../../../../assets/images/propAnnotation_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
     removeBtnImgTitle = "Remove note";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

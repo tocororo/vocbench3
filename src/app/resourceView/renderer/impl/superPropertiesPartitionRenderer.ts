@@ -28,7 +28,7 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRendere
     rootProperty: ARTURIResource = RDFS.subPropertyOf;
     label = "Superproperties";
     addBtnImgTitle = "Add a superproperty";
-    addBtnImgSrc = require("../../../../assets/images/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
     removeBtnImgTitle = "Remove superproperty";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

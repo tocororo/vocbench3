@@ -32,7 +32,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
     membersProperty = SKOS.member;
     label = "Members";
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../assets/images/collection_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
     removeBtnImgTitle = "Remove member";
 
     private selectedMember: ARTResource;

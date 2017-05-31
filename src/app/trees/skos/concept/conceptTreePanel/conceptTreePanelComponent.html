@@ -3,17 +3,17 @@
     <div class="panel-heading">  
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="isNoSchemeMode()">
-                <img src="../../../../../assets/images/concept_create.png" class="panelButtonImg"/>
+                <img src="../../../../../assets/images/icons/actions/concept_create.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedNode || isNoSchemeMode()">
-                <img src="../../../../../assets/images/concept_addNarrower.png" class="panelButtonImg"/>
+                <img src="../../../../../assets/images/icons/actions/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="!selectedNode">
-                <img src="../../../../../assets/images/concept_delete.png" class="panelButtonImg"/>
+                <img src="../../../../../assets/images/icons/actions/concept_delete.png" class="panelButtonImg"/>
             </button>
         </div>
         <div *ngIf="editable" style="margin: 0px 5px;">
-            <img *ngIf="isNoSchemeMode()" src="../../../../../assets/images/warning.png"
+            <img *ngIf="isNoSchemeMode()" src="../../../../../assets/images/icons/warning.png"
                 title="No skos:ConceptScheme selected, creation operation are disabled">
         </div>
         <div style="flex: 1"></div>

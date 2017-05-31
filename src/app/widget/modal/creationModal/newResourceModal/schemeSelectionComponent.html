@@ -1,14 +1,14 @@
 <div class="groupPanel vbox">
     <div class="groupPanel-heading">
         <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
-            <img src="../../../../../assets/images/arrow.png" (click)="collapsed = !collapsed"
+            <img src="../../../../../assets/images/icons/arrow.png" (click)="collapsed = !collapsed"
                 [ngClass]="{'arrow-right': collapsed}">
         </div>
         <span style="flex: 1">
             <label class="groupPanel-heading-content">Schemes:</label>
         </span>
         <span *ngIf="!collapsed" class="groupPanel-heading-content">
-            <input type="image" src="../../../../../assets/images/conceptScheme_create.png" (click)="addScheme()">
+            <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" (click)="addScheme()">
         </span>
     </div>
     <div class="groupPanel-body vbox">

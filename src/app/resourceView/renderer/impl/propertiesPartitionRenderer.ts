@@ -27,7 +27,7 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
 
     rootProperty: ARTURIResource = null; //there is no root property for this partition
     label = "Properties";
-    addBtnImgSrc = require("../../../../assets/images/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
     addBtnImgTitle = "Add a property value";
     removeBtnImgTitle = "Remove property value";
 

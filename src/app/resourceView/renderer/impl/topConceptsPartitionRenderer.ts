@@ -29,7 +29,7 @@ export class TopConceptsPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = SKOS.topConceptOf;
     label = "Top Concept of";
     addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
-    addBtnImgSrc = require("../../../../assets/images/conceptScheme_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/conceptScheme_create.png");
     removeBtnImgTitle = "Remove as topConcept";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

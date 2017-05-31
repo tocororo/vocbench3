@@ -4,7 +4,7 @@
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <div class="btn-group btn-group-xs" role="group" title="Create Collection">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <img src="../../../../../assets/images/collection_create.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/collection_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a (click)="createRoot('skosCollection')">Collection</a></li>
@@ -14,7 +14,7 @@
             <div class="btn-group btn-group-xs" role="group" >
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Create a nested Collection" 
                     [disabled]="!selectedNode">
-                    <img src="../../../../../assets/images/collection_addNested.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/collection_addNested.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a (click)="createChild('skosCollection')">Collection</a></li>
@@ -22,7 +22,7 @@
                 </ul>
             </div>
             <button class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="!selectedNode">
-                <img src="../../../../../assets/images/collection_delete.png" class="panelButtonImg"/>
+                <img src="../../../../../assets/images/icons/actions/collection_delete.png" class="panelButtonImg"/>
             </button>
         </div>
         <div style="flex: 1;"></div>

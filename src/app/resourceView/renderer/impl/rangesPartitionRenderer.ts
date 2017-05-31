@@ -28,7 +28,7 @@ export class RangesPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = RDFS.range;
     label = "Ranges";
     addBtnImgTitle = "Add a range";
-    addBtnImgSrc = require("../../../../assets/images/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove range";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

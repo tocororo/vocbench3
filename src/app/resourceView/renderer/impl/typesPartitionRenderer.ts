@@ -29,7 +29,7 @@ export class TypesPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = RDF.type;
     label = "Types";
     addBtnImgTitle = "Add a type";
-    addBtnImgSrc = require("../../../../assets/images/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove type";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,

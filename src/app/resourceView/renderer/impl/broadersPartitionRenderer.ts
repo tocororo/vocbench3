@@ -29,7 +29,7 @@ export class BroadersPartitionRenderer extends AbstractPredObjListRenderer {
     rootProperty: ARTURIResource = SKOS.broader;
     label = "Broaders";
     addBtnImgTitle = "Add broader";
-    addBtnImgSrc = require("../../../../assets/images/concept_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/concept_create.png");
     removeBtnImgTitle = "Remove broader";
 
     constructor(propService: PropertyServices, resourceService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
