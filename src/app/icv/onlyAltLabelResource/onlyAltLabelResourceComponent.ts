@@ -135,7 +135,7 @@ export class OnlyAltLabelResourceComponent {
         } else if (this.ontoType == "SKOS-XL") {
             this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
                 (literal: any) => {
-                    this.skosxlService.setPrefLabel(record.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
+                    this.skosxlService.setPrefLabel(record.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                         stResp => {
                             this.runIcv();
                         }

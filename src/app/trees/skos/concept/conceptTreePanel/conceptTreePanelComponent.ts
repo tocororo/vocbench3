@@ -80,7 +80,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept_NEW(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                    this.skosxlService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
                 }

@@ -55,7 +55,7 @@
                             <template ngFor let-icv [ngForOf]="labelIcv.list">
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
-                                    <td><i>{{icv.description}} {{ontotype}}</i></td>
+                                    <td><i>{{icv.description}}</i></td>
                                     <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
                                 </tr>
                             </template>

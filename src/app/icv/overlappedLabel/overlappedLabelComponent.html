@@ -31,11 +31,12 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let record of brokenRecordList">
-                        <td>
+                        <td class="text-center">
                             <rdf-resource [resource]="record.resource"></rdf-resource>
                         </td>
-                        <td>
-                            <rdf-resource [resource]="record.label"></rdf-resource>
+                        <td class="text-center">
+                            <rdf-resource *ngIf="ontoType == 'SKOS'" [resource]="record.label"></rdf-resource>
+                            <rdf-resource *ngIf="ontoType == 'SKOS-XL'" [resource]="record.prefLabel"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-default" (click)="changePrefLabel(record)">Change pref label</button>

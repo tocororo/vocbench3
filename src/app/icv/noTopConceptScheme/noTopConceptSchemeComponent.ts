@@ -75,7 +75,7 @@ export class NoTopConceptSchemeComponent {
                         }
                     );
                 } else { //SKOSXL
-                    this.skosxlService.createTopConcept_NEW(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                    this.skosxlService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => {
                             this.runIcv();
                         }

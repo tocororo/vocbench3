@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpManager} from "../utils/HttpManager";
-import {ARTURIResource, ARTResource, ARTNode, ARTLiteral} from "../models/ARTResources";
-import {Deserializer} from "../utils/Deserializer";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { ARTURIResource, ARTResource, ARTNode, ARTLiteral } from "../models/ARTResources";
+import { Deserializer } from "../utils/Deserializer";
 
 @Injectable()
 export class IcvServices {
@@ -9,7 +10,7 @@ export class IcvServices {
     private serviceName = "ICV";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager) {}
+    constructor(private httpMgr: HttpManager) { }
 
     /**
      * Returns a list of records <concept>, where concept is a dangling skos:Concept in the given
@@ -27,7 +28,7 @@ export class IcvServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params, this.oldTypeService);
     }
-    
+
     /**
      * Detects cyclic hierarchical relations. Returns a list of records top, n1, n2 where 
 	 * top is likely the cause of the cycle, n1 and n2 are vertex that belong to the cycle
@@ -37,7 +38,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listCyclicConcepts", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of skos:ConceptScheme that have no top concept
      */
@@ -46,7 +47,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of skos:Concept that don't belong to any scheme 
      * @param limit max number of results to return
@@ -59,7 +60,7 @@ export class IcvServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of skos:Concept that are topConcept but have a broader 
      */
@@ -72,7 +73,7 @@ export class IcvServices {
     //=============================
     //======== LABEL CHECKS ========
     //=============================
-    
+
     /**
      * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skos:prefLabel
 	 * in the same language
@@ -82,7 +83,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSPrefLabel", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skosxl:prefLabel
 	 * in the same language
@@ -109,13 +110,13 @@ export class IcvServices {
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
                     var langRes = new ARTLiteral(lang);
                     langRes.setLang(lang);
-                    records.push({resource: resource, lang: langRes});
+                    records.push({ resource: resource, lang: langRes });
                 }
                 return records;
             }
         );
     }
-    
+
     /**
      * Returns a list of records resource-lang, of concept or conceptScheme that have a skosxl:altLabel for a lang
      * but not a skosxl:prefLabel
@@ -132,13 +133,13 @@ export class IcvServices {
                     var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
                     var langRes = new ARTLiteral(lang);
                     langRes.setLang(lang);
-                    records.push({resource: resource, lang: langRes});
+                    records.push({ resource: resource, lang: langRes });
                 }
                 return records;
             }
         );
     }
-    
+
     /**
      * Returns a list of concepts or scheme that have no skos:prefLabel
      */
@@ -151,7 +152,7 @@ export class IcvServices {
             }
         );
     }
-    
+
     /**
      * Returns a list of concepts or scheme that have no skosxl:prefLabel
      */
@@ -164,7 +165,7 @@ export class IcvServices {
             }
         );
     }
-    
+
     /**
      * Returns a list of pairs concept-lang of that concept that have more skos:prefLabel in a same language
      */
@@ -173,7 +174,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSPrefLabel", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of records concept-lang of that concept that have more skosxl:prefLabel in a same language
      */
@@ -182,7 +183,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSXLPrefLabel", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
      * skos label without languageTag
@@ -198,13 +199,13 @@ export class IcvServices {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
                     var predicate: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("predicate")[0].children[0]);
                     var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i].getElementsByTagName("object")[0].children[0]);
-                    records.push({resource: resource, predicate: predicate, label: label});
+                    records.push({ resource: resource, predicate: predicate, label: label });
                 }
                 return records;
             }
         );
     }
-    
+
     /**
      * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
      * skosxl label without languageTag
@@ -220,13 +221,13 @@ export class IcvServices {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
                     var predicate: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("predicate")[0].children[0]);
                     var label: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("object")[0].children[0]);
-                    records.push({resource: resource, predicate: predicate, label: label});
+                    records.push({ resource: resource, predicate: predicate, label: label });
                 }
                 return records;
             }
         );
     }
-    
+
     /**
      * Returns a list of records {resource: ARTURIResource, label: ARTLiteral}. A record like that means that the resource has 
 	 * the same skos:prefLabel and skos:altLabel in the same language
@@ -241,18 +242,18 @@ export class IcvServices {
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
                     var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
-                    records.push({resource: resource, label: label});
+                    records.push({ resource: resource, label: label });
                 }
                 return records;
             }
         );
     }
-    
+
     /**
      * Returns a list of records {resource: ARTURIResource, label: ARTLiteral}. A record like that means that the resource has 
 	 * the same skosxl:prefLabel and skosxl:altLabel in the same language
      */
-    listResourcesWithOverlappedSKOSXLLabel() {
+    listResourcesWithOverlappedSKOSXLLabel(): Observable<{ resource: ARTURIResource, prefLabel: ARTResource, altLabel: ARTResource }[]> {
         console.log("[IcvServices] listResourcesWithOverlappedSKOSXLLabel");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params, this.oldTypeService).map(
@@ -261,29 +262,30 @@ export class IcvServices {
                 var records: any[] = [];
                 for (var i = 0; i < recordElemColl.length; i++) {
                     var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
-                    var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
-                    records.push({resource: resource, label: label});
+                    var prefLabel: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("prefLabel")[0].children[0]);
+                    var altLabel: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("altLabel")[0].children[0]);
+                    records.push({ resource: resource, prefLabel: prefLabel, altLabel: altLabel });
                 }
                 return records;
             }
         );
     }
-    
+
     /**
      * Returns a list of records concept-labelPred-label-lang. A record like that means that
-	 * that the concept ?concept has the skos label ?label in language ?lang for the predicates ?labelPred that
-	 * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
+     * that the concept ?concept has the skos label ?label in language ?lang for the predicates ?labelPred that
+     * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
      */
     listConceptsWithExtraWhitespaceInSKOSLabel() {
         console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSLabel");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSLabel", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns a list of records concept-labelPred-label-lang. A record like that means that
-	 * that the concept ?concept has the skosxl label ?label in language ?lang for the predicates ?labelPred that
-	 * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
+     * that the concept ?concept has the skosxl label ?label in language ?lang for the predicates ?labelPred that
+     * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
      */
     listConceptsWithExtraWhitespaceInSKOSXLLabel() {
         console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSXLLabel");
@@ -303,7 +305,7 @@ export class IcvServices {
             }
         );
     }
-    
+
     /**
      * Returns a list of skos:Concept that have redundant hierarchical relations
      */
@@ -312,7 +314,7 @@ export class IcvServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params, this.oldTypeService);
     }
-    
+
     /**
      * Returns resources which URI contains white spaces
      * @param limit max number of results to return
@@ -325,14 +327,14 @@ export class IcvServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params, this.oldTypeService);
     }
-    
+
     //=============================
     //======== QUICK FIXES ========
     //=============================
-    
+
     /**
      * Quick fix for dangling concepts. Set all dangling concepts as topConceptOf the given scheme
-	 * @param scheme
+     * @param scheme
      */
     setAllDanglingAsTopConcept(scheme: ARTURIResource) {
         console.log("[IcvServices] setAllDanglingAsTopConcept");
@@ -341,11 +343,11 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "setAllDanglingAsTopConcept", params, this.oldTypeService);
     }
-    
+
     /**
      * Quick fix for dangling concepts. Set the given broader for all dangling concepts in the given scheme 
-	 * @param scheme
-	 * @param broader
+     * @param scheme
+     * @param broader
      */
     setBroaderForAllDangling(scheme: ARTURIResource, broader: ARTURIResource) {
         console.log("[IcvServices] setBroaderForAllDangling");
@@ -356,10 +358,10 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "setBroaderForAllDangling", params, this.oldTypeService);
     }
-    
+
     /**
      * Quick fix for dangling concepts. Removes all dangling concepts from the given scheme
-	 * @param scheme
+     * @param scheme
      */
     removeAllDanglingFromScheme(scheme: ARTURIResource) {
         console.log("[IcvServices] removeAllDanglingFromScheme");
@@ -371,7 +373,7 @@ export class IcvServices {
 
     /**
      * Quick fix for dangling concepts. Deletes all dangling concepts of the given scheme
-	 * @param scheme
+     * @param scheme
      */
     deleteAllDanglingConcepts(scheme: ARTURIResource) {
         console.log("[IcvServices] deleteAllDanglingConcepts");
@@ -380,10 +382,10 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingConcepts", params, this.oldTypeService);
     }
-    
+
     /**
      * Quick fix for concepts in no scheme. Add all concepts without scheme to the given scheme
-	 * @param scheme
+     * @param scheme
      */
     addAllConceptsToScheme(scheme: ARTURIResource) {
         console.log("[IcvServices] addAllConceptsToScheme");
@@ -392,13 +394,13 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "addAllConceptsToScheme", params, this.oldTypeService);
     }
-    
+
     /**
-	 * Fix for topConcept with broader. Remove all the broader relation in the given scheme of the given concept.
-	 * @param concept
-	 * @param scheme
-	 */
-	removeBroadersToConcept(concept: ARTURIResource, scheme: ARTURIResource) {
+     * Fix for topConcept with broader. Remove all the broader relation in the given scheme of the given concept.
+     * @param concept
+     * @param scheme
+     */
+    removeBroadersToConcept(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[IcvServices] removeBroadersToConcept");
         var params: any = {
             concept: concept.getURI(),
@@ -406,16 +408,16 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "removeBroadersToConcept", params, this.oldTypeService);
     }
-    
+
     /**
-	 * Quick fix for topConcept with broader. Remove all the broader (or narrower) relation in the 
-	 * of top concepts with broader (in the same scheme).
-	 */
-	removeBroadersToAllConcepts() {
+     * Quick fix for topConcept with broader. Remove all the broader (or narrower) relation in the 
+     * of top concepts with broader (in the same scheme).
+     */
+    removeBroadersToAllConcepts() {
         console.log("[IcvServices] removeBroadersToAllConcepts");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "removeBroadersToAllConcepts", params, this.oldTypeService);
-    } 
+    }
 
     /**
      * Quick fix for topConcept with broader. Remove as topConceptOf all the topConcept with broader.
@@ -427,14 +429,14 @@ export class IcvServices {
     }
 
     /**
-	 * Quick fix for hierarchical redundancy. Remove narrower/broader redundant relations.
-	 */
-	removeAllHierarchicalRedundancy() {
+     * Quick fix for hierarchical redundancy. Remove narrower/broader redundant relations.
+     */
+    removeAllHierarchicalRedundancy() {
         console.log("[IcvServices] removeAllHierarchicalRedundancy");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "removeAllHierarchicalRedundancy", params, this.oldTypeService);
     }
-    
+
     /**
      * Quick fix for dangling xLabel. Deletes all the dangling labels.
      */
@@ -446,9 +448,9 @@ export class IcvServices {
 
     /**
      * Fix for dangling xLabel. Links the dangling xLabel to the given concept through the given predicate 
-	 * @param concept
-	 * @param xlabelPred
-	 * @param xlabel
+     * @param concept
+     * @param xlabelPred
+     * @param xlabel
      */
     setDanglingXLabel(concept: ARTURIResource, xlabelPred: ARTURIResource, xlabel: ARTResource) {
         console.log("[IcvServices] setDanglingXLabel");

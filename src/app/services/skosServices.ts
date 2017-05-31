@@ -9,9 +9,6 @@ import { SKOS } from "../models/Vocabulary";
 @Injectable()
 export class SkosServices {
 
-    private serviceName_old = "skos";
-    private oldTypeService_old = true;
-
     private serviceName = "SKOS";
     private oldTypeService = false;
 
@@ -134,10 +131,10 @@ export class SkosServices {
     removeTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[SkosServices] removeTopConcept");
         var params: any = {
-            concept: concept.getURI(),
-            scheme: scheme.getURI(),
+            concept: concept,
+            scheme: scheme,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "removeTopConcept", params, this.oldTypeService_old).map(
+        return this.httpMgr.doPost(this.serviceName, "removeTopConcept", params, this.oldTypeService, true).map(
             stResp => {
                 this.eventHandler.conceptRemovedAsTopConceptEvent.emit({ concept: concept, scheme: scheme });
                 return stResp;

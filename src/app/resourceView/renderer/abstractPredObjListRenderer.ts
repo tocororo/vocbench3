@@ -140,17 +140,17 @@ export abstract class AbstractPredObjListRenderer {
                 (literal: any) => {
                     switch (predicate.getURI()) {
                         case SKOSXL.prefLabel.getURI():
-                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
+                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;
                         case SKOSXL.altLabel.getURI():
-                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
+                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;
                         case SKOSXL.hiddenLabel.getURI():
-                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang(), RDFTypesEnum.uri).subscribe(
+                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, ARTResource, ARTLiteral } from "../../models/ARTResources";
+import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
@@ -14,7 +14,8 @@ import { SkosxlServices } from "../../services/skosxlServices";
 })
 export class OverlappedLabelComponent {
 
-    private brokenRecordList: Array<any>; //{resource: ARTURIResource, label: ARTLiteral}
+    private brokenRecordList: Array<any>; //if SKOS {resource: ARTURIResource, label: ARTLiteral}
+            //if SKOSXL {resource: ARTURIResource, prefLabel: ARTResource, altLabel: ARTResource}
     private ontoType: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
@@ -43,8 +44,7 @@ export class OverlappedLabelComponent {
                 brokenRecords => {
                     this.brokenRecordList = brokenRecords;
                     UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-                },
-                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
+                }
             );
         }
     }
@@ -71,7 +71,7 @@ export class OverlappedLabelComponent {
                     this.skosxlService.getPrefLabel(record.resource, (<ARTLiteral>literal).getLang()).subscribe(
                         xlabel => {
                             //then update info
-                            this.skosxlService.changeLabelInfo(xlabel, (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang()).subscribe(
+                            this.skosxlService.changeLabelInfo(xlabel, (<ARTLiteral>literal)).subscribe(
                                 stResp => {
                                     this.runIcv();
                                 }
@@ -81,7 +81,7 @@ export class OverlappedLabelComponent {
                 }
             },
             () => { }
-            )
+        );
     }
 
     /**
@@ -95,7 +95,7 @@ export class OverlappedLabelComponent {
                 }
             );
         } else { //SKOS-XL
-            this.skosxlService.removePrefLabel(record.resource, (<ARTLiteral>record.label).getValue(), (<ARTLiteral>record.label).getLang()).subscribe(
+            this.skosxlService.removePrefLabel(record.resource, (<ARTResource>record.prefLabel)).subscribe(
                 stReso => {
                     this.runIcv();
                 }
@@ -107,8 +107,16 @@ export class OverlappedLabelComponent {
      * Fixes by changing altLabel
      */
     changeAltLabel(record: any) {
-        this.creationModals.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
-            (<ARTLiteral>record.label).getLang(), true).then(
+        var literalForm: string;
+        var lang: string;
+        if (this.ontoType == "SKOS") {
+            literalForm = (<ARTLiteral>record.label).getValue();
+            lang = (<ARTLiteral>record.label).getLang();
+        } else {
+            literalForm = (<ARTResource>record.altLabel).getShow();
+            lang = (<ARTResource>record.altLabel).getAdditionalProperty(ResAttribute.LANG);
+        }
+        this.creationModals.newPlainLiteral("Change preferred label", literalForm, false, lang, true).then(
             (literal: any) => {
                 if (this.ontoType == "SKOS") {
                     this.skosService.removeAltLabel(record.resource, <ARTLiteral>record.label).subscribe(
@@ -121,26 +129,15 @@ export class OverlappedLabelComponent {
                         }
                     );
                 } else { //SKOS-XL
-                    //first get the xlabel to change
-                    this.skosxlService.getAltLabels(record.resource, (<ARTLiteral>literal).getLang()).subscribe(
-                        altLabels => {
-                            //look for the alt label URI
-                            for (var i = 0; i < altLabels.length; i++) {
-                                if (altLabels[i].getShow() == (<ARTLiteral>record.label).getValue()) {
-                                    //then update info
-                                    this.skosxlService.changeLabelInfo(<ARTResource>altLabels[i], (<ARTLiteral>literal).getValue(), (<ARTLiteral>literal).getLang()).subscribe(
-                                        stResp => {
-                                            this.runIcv();
-                                        }
-                                    )
-                                }
-                            }
+                    this.skosxlService.changeLabelInfo((<ARTResource>record.altLabel), (<ARTLiteral>literal)).subscribe(
+                        stResp => {
+                            this.runIcv();
                         }
                     );
                 }
             },
             () => { }
-            );
+        );
     }
 
     /**
@@ -154,7 +151,7 @@ export class OverlappedLabelComponent {
                 }
             );
         } else { //SKOS-XL
-            this.skosxlService.removeAltLabel(record.resource, (<ARTLiteral>record.label).getValue(), (<ARTLiteral>record.label).getLang()).subscribe(
+            this.skosxlService.removeAltLabel(record.resource, (<ARTResource>record.altLabel)).subscribe(
                 stReso => {
                     this.runIcv();
                 }

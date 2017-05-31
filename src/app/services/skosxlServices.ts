@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {VBEventHandler} from "../utils/VBEventHandler";
-import {HttpManager} from "../utils/HttpManager";
-import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum} from "../models/ARTResources";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { HttpManager } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
+import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
 
 @Injectable()
 export class SkosxlServices {
@@ -12,12 +13,12 @@ export class SkosxlServices {
 
     private serviceName = "SKOSXL";
     private oldTypeService = false;
-    
+
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
-    
+
     //====== Concept services ======
-    
+
     /**
      * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme.
      * NB: although the service server-side has both label and newConcept optional, here only newConcept is optional,
@@ -30,8 +31,8 @@ export class SkosxlServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept_NEW(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
-            customFormId?: string, userPromptMap?: any) {
+    createTopConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
+        customFormId?: string, userPromptMap?: any) {
         console.log("[SkosxlServices] createConcept");
         var params: any = {
             label: label,
@@ -51,12 +52,12 @@ export class SkosxlServices {
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, schemes: conceptSchemes});
-                return {concept: newConc, schemes: conceptSchemes};
+                this.eventHandler.topConceptCreatedEvent.emit({ concept: newConc, schemes: conceptSchemes });
+                return { concept: newConc, schemes: conceptSchemes };
             }
         );
     }
-    
+
     /**
      * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
      * @param label preferred label of the concept (comprehensive of the lang)
@@ -69,7 +70,7 @@ export class SkosxlServices {
      * @return the new concept
      */
     createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource,
-            conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosxlServices] createConcept");
         var params: any = {
             label: label,
@@ -90,12 +91,12 @@ export class SkosxlServices {
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broaderConcept});
+                this.eventHandler.narrowerCreatedEvent.emit({ narrower: newConc, broader: broaderConcept });
                 return newConc;
             }
         );
     }
-    
+
     /**
      * Deletes the given concept. Emits a conceptDeletedEvent with the deleted concept
      * @param concept the concept to delete
@@ -112,10 +113,10 @@ export class SkosxlServices {
             }
         );
     }
-    
-    
+
+
     //====== Scheme services ======
-    
+
     /**
      * Creates a new scheme
      * @param label the lexical form of the pref label
@@ -147,7 +148,7 @@ export class SkosxlServices {
             }
         );
     }
-    
+
     /**
      * Deletes a scheme and its xLabels
      * @param scheme the scheme to delete
@@ -159,7 +160,7 @@ export class SkosxlServices {
         };
         return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params, this.oldTypeService, true);
     }
-    
+
     //====== Label services ======
 
     /**
@@ -170,51 +171,45 @@ export class SkosxlServices {
     getPrefLabel(concept: ARTURIResource, lang: string) {
         console.log("[SkosxlServices] getPrefLabel");
         var params: any = {
-            concept: concept.getURI(),
+            concept: concept,
             lang: lang
         };
-        return this.httpMgr.doGet(this.serviceName_old, "getPrefLabel", params, this.oldTypeService_old).map(
+        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params, this.oldTypeService, true).map(
             stResp => {
-                return Deserializer.createRDFResource(stResp.children[0]);
+                return Deserializer.createRDFResource(stResp[0]);
             }
         );
     }
-    
+
     /**
      * Sets a preferred label to the given concept (or scheme).
      * @param concept
-     * @param label lexical value of the label
-     * @param lang
+     * @param literal
      * @param mode available values: uri or bnode
      */
-    setPrefLabel(concept: ARTURIResource, label: string, lang: string, mode: string) {
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string) {
         console.log("[SkosxlServices] setPrefLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
-            lang: lang,
+            concept: concept,
+            literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "setPrefLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Removes a preferred label from the given concept (or scheme).
      * @param concept 
-     * @param label label to remove
-     * @param lang
+     * @param xlabel label to remove
      */
-    removePrefLabel(concept: ARTURIResource, label: string, lang?: string) {
+    removePrefLabel(concept: ARTURIResource, xlabel: ARTResource) {
         console.log("[SkosxlServices] removePrefLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
+            concept: concept,
+            xlabel: xlabel,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "removePrefLabel", params, this.oldTypeService_old);
-	}
+        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, this.oldTypeService, true);
+    }
 
     /**
      * Returns the alternative skosxl labels for the given concept in the given language
@@ -224,104 +219,89 @@ export class SkosxlServices {
     getAltLabels(concept: ARTURIResource, lang: string) {
         console.log("[SkosxlServices] getAltLabels");
         var params: any = {
-            concept: concept.getURI(),
+            concept: concept,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "getAltLabels", params, this.oldTypeService_old).map(
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
             }
         );
     }
-    
+
     /**
      * Adds an alternative label to the given concept (or scheme)
      * @param concept
-     * @param label lexical value of the label
-     * @param lang
+     * @param literal
      * @param mode available values: uri or bnode
      */
-    addAltLabel(concept: ARTURIResource, label: string, lang: string, mode: string) {
+    addAltLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string) {
         console.log("[SkosxlServices] addAltLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
-            lang: lang,
+            concept: concept,
+            literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "addAltLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Removes an alternative label from the given concept (or scheme)
      * @param concept 
-     * @param label label to remove
-     * @param lang
+     * @param xlabel label to remove
      */
-    removeAltLabel(concept: ARTURIResource, label: string, lang?: string) {
+    removeAltLabel(concept: ARTURIResource, xlabel: ARTResource) {
         console.log("[SkosxlServices] removeAltLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
+            concept: concept,
+            xlabel: xlabel,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "removeAltLabel", params, this.oldTypeService_old);
-	}
-    
+        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, this.oldTypeService, true);
+    }
+
     /**
      * Adds an hidden label to the given concept (or scheme)
      * @param concept
-     * @param label lexical value of the label
-     * @param lang
+     * @param literal
      * @param mode available values: uri or bnode
      */
-    addHiddenLabel(concept: ARTURIResource, label: string, lang: string, mode: string) {
+    addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string) {
         console.log("[SkosxlServices] addHiddenLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
-            lang: lang,
+            concept: concept,
+            literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "addHiddenLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, this.oldTypeService, true);
     }
-    
+
     /**
      * Removes an hidden label from the given concept (or scheme)
      * @param concept 
-     * @param label label to remove
-     * @param lang
+     * @param xlabel label to remove
      */
-    removeHiddenLabel(concept: ARTURIResource, label: string, lang?: string) {
+    removeHiddenLabel(concept: ARTURIResource, xlabel: ARTResource) {
         console.log("[SkosxlServices] removeHiddenLabel");
         var params: any = {
-            concept: concept.getURI(),
-            label: label,
+            concept: concept,
+            xlabel: xlabel,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "removeHiddenLabel", params, this.oldTypeService_old);
-	}
+        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, this.oldTypeService, true);
+    }
 
     /**
      * Updates the info (literal form or language) about an xLabel
-     * @param xLabel
+     * @param xlabel
      * @param label
      * @param lang
      */
-    changeLabelInfo(xLabel: ARTResource, label: string, lang?: string) {
+    changeLabelInfo(xlabel: ARTResource, literal: ARTLiteral) {
         console.log("[SkosxlServices] changeLabelInfo");
         var params: any = {
-            xlabelURI: xLabel.getNominalValue(),
-            label: label,
+            xlabel: xlabel,
+            literal: literal,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
-        return this.httpMgr.doGet(this.serviceName_old, "changeLabelInfo", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "changeLabelInfo", params, this.oldTypeService, true);
     }
 
     /**
@@ -332,10 +312,10 @@ export class SkosxlServices {
     prefToAtlLabel(concept: ARTURIResource, xLabel: ARTResource) {
         console.log("[SkosxlServices] prefToAtlLabel");
         var params: any = {
-            concept: concept.getURI(),
-            xlabelURI: xLabel.getNominalValue()
+            concept: concept,
+            xlabelURI: xLabel
         };
-        return this.httpMgr.doGet(this.serviceName_old, "prefToAtlLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "prefToAtlLabel", params, this.oldTypeService, true);
     }
 
     /**
@@ -353,7 +333,7 @@ export class SkosxlServices {
     }
 
     //====== Collection services ======
-    
+
     /**
      * Creates a root collection
      * @param collectioType the type of the collection (skos:Collection or skos:OrderedCollection)
@@ -364,7 +344,7 @@ export class SkosxlServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
-    createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource, 
+    createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource,
         customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createCollection");
         var params: any = {
@@ -401,7 +381,7 @@ export class SkosxlServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
-    createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral, 
+    createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral,
         newCollection?: ARTURIResource, collectionCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
         console.log("[SkosServices] createCollection");
         var params: any = {
@@ -423,7 +403,7 @@ export class SkosxlServices {
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.nestedCollectionCreatedEvent.emit({nested: newColl, container: containingCollection});
+                this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: newColl, container: containingCollection });
                 return newColl;
             }
         );
