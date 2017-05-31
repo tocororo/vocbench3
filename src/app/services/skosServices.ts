@@ -653,27 +653,6 @@ export class SkosServices {
      * @param element Collection or Concept to add
      * @param lang language used to render the added element in the response
      */
-    // addFirstToOrderedCollection(collection: ARTResource, element: ARTResource, lang?: string) {
-    //     console.log("[SkosServices] addFirstToOrderedCollection");
-    //     var params: any = {
-    //         collection: collection.getNominalValue(),
-    //         element: element.getNominalValue()
-    //     };
-    //     if (lang != null) {
-    //         params.lang = lang;
-    //     }
-    //     return this.httpMgr.doGet(this.serviceName_old, "addFirstToOrderedCollection", params, this.oldTypeService_old).map(
-    //         stResp => {
-    //             if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
-    //                 element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-    //                 var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
-    //                 var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-    //                 this.eventHandler.nestedCollectionAddedFirstEvent.emit({ nested: nested, container: collection });
-    //             }
-    //             return stResp;
-    //         }
-    //     );
-    // }
     addFirstToOrderedCollection(collection: ARTResource, element: ARTResource) {
         console.log("[SkosServices] addFirstToOrderedCollection");
         var params: any = {
@@ -698,27 +677,6 @@ export class SkosServices {
      * @param element Collection or Concept to add
      * @param lang language used to render the added element in the response
      */
-    // addLastToOrderedCollection(collection: ARTResource, element: ARTResource, lang?: string) {
-    //     console.log("[SkosServices] addLastToOrderedCollection");
-    //     var params: any = {
-    //         collection: collection.getNominalValue(),
-    //         element: element.getNominalValue()
-    //     };
-    //     if (lang != null) {
-    //         params.lang = lang;
-    //     }
-    //     return this.httpMgr.doGet(this.serviceName_old, "addLastToOrderedCollection", params, this.oldTypeService_old).map(
-    //         stResp => {
-    //             if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
-    //                 element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-    //                 var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
-    //                 var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-    //                 this.eventHandler.nestedCollectionAddedLastEvent.emit({ nested: nested, container: collection });
-    //             }
-    //             return stResp;
-    //         }
-    //     );
-    // }
     addLastToOrderedCollection(collection: ARTResource, element: ARTResource) {
         console.log("[SkosServices] addLastToOrderedCollection");
         var params: any = {
@@ -744,28 +702,6 @@ export class SkosServices {
      * @param index position where to add the element
      * @param lang language used to render the added element in the response
      */
-    // addInPositionToOrderedCollection(collection: ARTResource, element: ARTResource, index: number, lang?: string) {
-    //     console.log("[SkosServices] addInPositionToOrderedCollection");
-    //     var params: any = {
-    //         collection: collection.getNominalValue(),
-    //         element: element.getNominalValue(),
-    //         index: index
-    //     };
-    //     if (lang != null) {
-    //         params.lang = lang;
-    //     }
-    //     return this.httpMgr.doGet(this.serviceName_old, "addInPositionToOrderedCollection", params, this.oldTypeService_old).map(
-    //         stResp => {
-    //             if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
-    //                 element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-    //                 var addedNestedElem = stResp.getElementsByTagName("addedNested")[0];
-    //                 var nested: ARTResource = Deserializer.createRDFResource(addedNestedElem.children[0]);
-    //                 this.eventHandler.nestedCollectionAddedInPositionEvent.emit({ nested: nested, container: collection, position: index });
-    //             }
-    //             return stResp;
-    //         }
-    //     );
-    // }
     addInPositionToOrderedCollection(collection: ARTResource, element: ARTResource, index: number) {
         console.log("[SkosServices] addInPositionToOrderedCollection");
         var params: any = {

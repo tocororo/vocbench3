@@ -71,6 +71,8 @@ export class UIUtils {
         
         var individualImgSrc = require("../../assets/images/icons/res/individual.png");
         var individualImportedImgSrc = require("../../assets/images/icons/res/individual_imported.png");
+        var individualDeprecatedImgSrc = require("../../assets/images/icons/res/individual_deprecated.png");
+        var individualImportedDeprecatedImgSrc = require("../../assets/images/icons/res/individual_imported_deprecated.png");
         
         var conceptImgSrc = require("../../assets/images/icons/res/concept.png");
         var conceptImportedImgSrc = require("../../assets/images/icons/res/concept_imported.png");
@@ -84,7 +86,13 @@ export class UIUtils {
         
         var collectionImgSrc = require("../../assets/images/icons/res/collection.png");
         var collectionImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
-        // var collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
+        var collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
+        var collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
+
+        var orderedCollectionImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
+        var orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png"); //To update
+        var orderedCollectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
+        var orderedCollectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
 
         var xLabelImgSrc = require("../../assets/images/icons/res/xLabel.png");
         var xLabelImportedImgSrc = require("../../assets/images/icons/res/xLabel_imported.png");
@@ -98,7 +106,7 @@ export class UIUtils {
         
         var propObjectImgSrc = require("../../assets/images/icons/res/propObject.png");
         var propObjectImportedImgSrc = require("../../assets/images/icons/res/propObject_imported.png");
-        // var propObjectDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_deprecated.png");
+        var propObjectDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_deprecated.png");
         var propObjectImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_imported_deprecated.png");
         
         var propDatatypeImgSrc = require("../../assets/images/icons/res/propDatatype.png");
@@ -143,10 +151,14 @@ export class UIUtils {
                     imgSrc = conceptDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
+                imgSrc = individualImgSrc;
                 if (!explicit) {
                     imgSrc = individualImportedImgSrc;
-                } else {
-                    imgSrc = individualImgSrc;
+                    if (deprecated) {
+                        imgSrc = individualImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = individualDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
                 imgSrc = conceptSchemeImgSrc;
@@ -166,19 +178,27 @@ export class UIUtils {
                         imgSrc = propObjectImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    // imgSrc = propObjectDeprecatedImgSrc;
+                    imgSrc = propObjectDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.skosCollection.toLowerCase()) {
+                imgSrc = collectionImgSrc;
                 if (!explicit) {
                     imgSrc = collectionImportedImgSrc;
-                } else {
-                    imgSrc = collectionImgSrc;
+                    if (deprecated) {
+                        imgSrc = collectionImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = collectionDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.skosOrderedCollection.toLowerCase()) {
+                imgSrc = orderedCollectionImgSrc;
                 if (!explicit) {
-                    imgSrc = collectionImportedImgSrc;
-                } else {
-                    imgSrc = collectionImgSrc;
+                    imgSrc = orderedCollectionImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = orderedCollectionImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = orderedCollectionDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.datatypeProperty.toLowerCase()) {
                 imgSrc = propDatatypeImgSrc;
