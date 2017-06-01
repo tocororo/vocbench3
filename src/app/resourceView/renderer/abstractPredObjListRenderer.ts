@@ -268,7 +268,7 @@ export abstract class AbstractPredObjListRenderer {
     private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
         this.rvModalService.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
-                this.cfService.executeForm(this.resource, predicate, form.getId(), entryMap).subscribe(
+                this.cfService.addValueThroughCustomRange(this.resource, predicate, form.getId(), entryMap).subscribe(
                     (stResp: any) => {
                         this.update.emit(null);
                     }

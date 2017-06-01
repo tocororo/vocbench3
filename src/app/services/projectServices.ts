@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
 import { Project, AccessLevel, LockLevel, RepositoryAccess } from '../models/Project';
+import { ARTURIResource } from '../models/ARTResources';
 import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
@@ -31,7 +32,8 @@ export class ProjectServices {
                     proj.setAccessible(projColl[i].getAttribute("accessible") == "true");
                     proj.setHistoryEnabled(projColl[i].getAttribute("historyEnabled") == "true");
                     proj.setValidationEnabled(projColl[i].getAttribute("validationEnabled") == "true");
-                    proj.setOntoType(projColl[i].getAttribute("ontoType"));
+                    proj.setModelType(projColl[i].getAttribute("model"));
+                    proj.setLexicalizationModelType(projColl[i].getAttribute("lexicalizationModel"));
                     proj.setOpen(projColl[i].getAttribute("open") == "true");
                     var status: any = new Object();
                     var hasIssues = projColl[i].getAttribute("status") != "ok";
@@ -101,7 +103,7 @@ export class ProjectServices {
      * @param uriGeneratorSpecification
      * @param renderingEngineSpecification
      */
-    createProject(projectName: string, modelType: string, baseURI: string,
+    createProject(projectName: string, baseURI: string, model: ARTURIResource, lexicalizationModel: ARTURIResource,
         historyEnabled: boolean, validationEnabled: boolean, repositoryAccess: RepositoryAccess,
         coreRepoID: string, supportRepoID: string,
         coreRepoSailConfigurerSpecification?: PluginSpecification, supportRepoSailConfigurerSpecification?: PluginSpecification,
@@ -111,8 +113,9 @@ export class ProjectServices {
         var params: any = {
             consumer: "SYSTEM",
             projectName: projectName,
-            modelType: modelType,
             baseURI: baseURI,
+            model: model,
+            lexicalizationModel: lexicalizationModel,
             historyEnabled: historyEnabled,
             validationEnabled: validationEnabled,
             repositoryAccess: repositoryAccess.stringify(),

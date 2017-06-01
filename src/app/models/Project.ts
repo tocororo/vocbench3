@@ -1,22 +1,17 @@
+import { RDFS, OWL, SKOS, SKOSXL } from "./Vocabulary";
+
 export class Project {
     private name: string;
     private accessible: boolean;
     private historyEnabled: boolean;
     private validationEnabled: boolean;
-    private ontoType: string;
+    
+    private model: string;
+    private lexicalizationModel: string;
+
     private open: boolean;
     private status: Object;
     private type: string;
-    
-    private static knownRDFModelInterfaces = {
-        "it.uniroma2.art.owlart.models.RDFModel" : "RDF",
-        "it.uniroma2.art.owlart.models.RDFSModel" : "RDFS",
-        "it.uniroma2.art.owlart.models.OWLModel" : "OWL",
-        "it.uniroma2.art.owlart.models.SKOSModel" : "SKOS",
-        "it.uniroma2.art.owlart.models.SKOSXLModel" : "SKOS-XL"
-    };
-    
-    // constructor() {}
     
     constructor(name?: string) {
         if (name != undefined) {
@@ -56,27 +51,41 @@ export class Project {
         return this.validationEnabled;
     }
     
-    public setOntoType(ontoType: string) {
-        this.ontoType = ontoType;
+    public setModelType(modelType: string) {
+        this.model = modelType;
     }
-    
-    public getOntoType(): string {
-        return this.ontoType;
-    }
-    
-    public getPrettyPrintOntoType(): string {
-        var prettyPrint: string = null;
-        prettyPrint = Project.knownRDFModelInterfaces[this.ontoType];
-        if (prettyPrint == null) {
-            prettyPrint = this.ontoType.substring(this.ontoType.lastIndexOf("."));
+    public getModelType(prettyPrint?: boolean): string {
+        if (prettyPrint) {
+            return this.getPrettyPrintModelType(this.model);
         }
-        return prettyPrint;
+        return this.model;
+    }
+
+    public setLexicalizationModelType(lexicalizationModel: string) {
+        this.lexicalizationModel = lexicalizationModel;
+    }
+    public getLexicalizationModelType(prettyPrint?: boolean): string {
+        if (prettyPrint) {
+            return this.getPrettyPrintModelType(this.lexicalizationModel);
+        }
+        return this.lexicalizationModel;
+    }
+
+    private getPrettyPrintModelType(modelType: string) {
+        if (modelType == RDFS.uri) {
+            return "RDFS";
+        } else if (modelType == OWL.uri) {
+            return "OWL";
+        } else if (modelType == SKOS.uri) {
+            return "SKOS";
+        } else if (modelType == SKOSXL.uri) {
+            return "SKOSXL";
+        }
     }
     
     public setOpen(open: boolean) {
         this.open = open;
     }
-    
     public isOpen(): boolean {
         return this.open;
     }
@@ -84,7 +93,6 @@ export class Project {
     public setStatus(status: Object) {
         this.status = status;
     }
-    
     public getStatus(): Object {
         return this.status;
     }
@@ -92,7 +100,6 @@ export class Project {
     public setType(type: string) {
         this.type = type;
     }
-    
     public getType(): string {
         return this.type;
     }

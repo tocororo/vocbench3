@@ -29,7 +29,8 @@
                     <th class="text-center">Open/Close</th>
                     <th class="text-center">Project Name</th>
                     <th class="text-center">Type</th>
-                    <th class="text-center">Onto Type</th>
+                    <th class="text-center">Model</th>
+                    <th class="text-center">Lexicalization Model</th>
                     <th class="text-center">History</th>
                     <th class="text-center">Validation</th>
                     <th class="text-center">Status</th>
@@ -47,11 +48,6 @@
                             <img *ngIf="!p.isOpen()" src="../../assets/images/icons/folder.gif">
                             <img *ngIf="p.isOpen()" src="../../assets/images/icons/folder-open.gif">
                         </button>
-                        <!--Alternative style-->
-                        <!--<button class="btn btn-default btn-xs" [ngClass]="{active: p.isOpen()}" (click)="openOrCloseProject(p)">
-                            <span *ngIf="!p.isOpen()" class="glyphicon glyphicon-folder-close"></span>
-                            <span *ngIf="p.isOpen()" class="glyphicon glyphicon-folder-open"></span>
-                        </button>-->
                     </td>
                     <td class="text-center">
                         {{p.getName()}}
@@ -63,8 +59,8 @@
                             <span class="glyphicon glyphicon-floppy-disk"></span>
                         </button>
                     </td>
-                    <td class="text-center">{{p.getPrettyPrintOntoType()}}</td>
-
+                    <td class="text-center">{{p.getModelType(true)}}</td>
+                    <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
                     <td class="text-center">
                         <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
                         <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>

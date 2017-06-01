@@ -13,6 +13,9 @@ export class PropertyServices {
     private serviceName = "Properties";
     private oldTypeService = false;
 
+    private serviceName_old = "property";
+    private oldTypeService_old = true;
+
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
@@ -327,52 +330,6 @@ export class PropertyServices {
     //============= OLD SERVICES =================
 
     /**
-     * Creates a property with the given name of the given type.
-     * Emits a topPropertyCreatedEvent with the new property
-     * @param propertyName local name of the property
-     * @param propertyType type of the property 
-     * @return the created property
-     */
-    addProperty(propertyName: string, propertyType: RDFResourceRolesEnum) {
-        console.log("[PropertyServices] addProperty");
-        var params: any = {
-            propertyQName: propertyName,
-            propertyType: propertyType,
-        };
-        return this.httpMgr.doGet("property", "addProperty", params, true).map(
-            stResp => {
-                var newProp = Deserializer.createURI(stResp);
-                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topPropertyCreatedEvent.emit(newProp);
-                return newProp;
-            }
-        );
-    }
-
-    /**
-     * Creates a subproperty. Emits a subPropertyCreatedEvent with subProperty and superProperty
-     * @param propertyQName local name of the subproperty to create
-     * @param superProperty the superProperty of the creating property
-     * @return the created sub property
-     */
-    addSubProperty(propertyQName: string, superProperty: ARTURIResource) {
-        console.log("[PropertyServices] addSubProperty");
-        var params: any = {
-            propertyQName: propertyQName,
-            propertyType: superProperty.getRole(),
-            superPropertyQName: superProperty.getURI(),
-        };
-        return this.httpMgr.doGet("property", "addProperty", params, true).map(
-            stResp => {
-                var newProp = Deserializer.createURI(stResp.getElementsByTagName("Property")[0]);
-                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.subPropertyCreatedEvent.emit({subProperty: newProp, superProperty: superProperty});
-                return newProp;
-            }
-        );
-    }
-    
-    /**
      * Adds a superProperty to the given property. Emits a subPropertyCreatedEvent with subProperty and superProperty
      * @param property property to which add a super property
      * @param superProperty the superProperty to add
@@ -383,7 +340,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             superPropertyQName: superProperty.getURI(),
         };
-        return this.httpMgr.doGet("property", "addSuperProperty", params, true).map(
+        return this.httpMgr.doGet(this.serviceName_old, "addSuperProperty", params, this.oldTypeService_old).map(
             stResp => {
                 //waiting that the addSuperProperty is refactored (returning subProperty info in response)
                 //create subProperty by duplicating property param
@@ -409,7 +366,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             superPropertyQName: superProperty.getURI(),
         };
-        return this.httpMgr.doGet("property", "removeSuperProperty", params, true).map(
+        return this.httpMgr.doGet(this.serviceName_old, "removeSuperProperty", params, this.oldTypeService_old).map(
             stResp => {
                 this.eventHandler.superPropertyRemovedEvent.emit({property: property, superProperty: superProperty});
                 return stResp;
@@ -438,7 +395,7 @@ export class PropertyServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet("property", "removePropValue", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "removePropValue", params, this.oldTypeService_old);
     }
 
     /**
@@ -462,7 +419,7 @@ export class PropertyServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet("property", "createAndAddPropValue", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "createAndAddPropValue", params, this.oldTypeService_old);
     }
 
     /**
@@ -480,7 +437,7 @@ export class PropertyServices {
             value: value,
             type: type,
         };
-        return this.httpMgr.doGet("property", "addExistingPropValue", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "addExistingPropValue", params, this.oldTypeService_old);
     }
 
     /**
@@ -494,7 +451,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             domainPropertyQName: domain.getURI()
         };
-        return this.httpMgr.doGet("property", "addPropertyDomain", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "addPropertyDomain", params, this.oldTypeService_old);
     }
     
     /**
@@ -508,7 +465,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             domainPropertyQName: domain.getURI(),
         };
-        return this.httpMgr.doGet("property", "removePropertyDomain", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "removePropertyDomain", params, this.oldTypeService_old);
     }
     
     /**
@@ -522,7 +479,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             rangePropertyQName: range.getURI()
         };
-        return this.httpMgr.doGet("property", "addPropertyRange", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "addPropertyRange", params, this.oldTypeService_old);
     }
 
     /**
@@ -536,7 +493,7 @@ export class PropertyServices {
             propertyQName: property.getURI(),
             rangePropertyQName: range.getURI(),
         };
-        return this.httpMgr.doGet("property", "removePropertyRange", params, true);
+        return this.httpMgr.doGet(this.serviceName_old, "removePropertyRange", params, this.oldTypeService_old);
     }
     
 }

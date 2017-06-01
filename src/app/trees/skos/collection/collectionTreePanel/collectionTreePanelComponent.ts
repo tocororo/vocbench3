@@ -21,7 +21,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     private searchInputPlaceholder: string;
 
-    private ONTO_TYPE: string;
+    private lexicalizationModel: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private creationModals: CreationModalServices,
@@ -30,7 +30,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     ngOnInit() {
-        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
     //top bar commands handlers
@@ -59,7 +59,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.ONTO_TYPE == "SKOS") {
+                if (this.lexicalizationModel == SKOS.uri) {
                     if (collectionType.getURI() == SKOS.collection.getURI()) {
                         this.skosService.createRootCollection(SKOS.collection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                             stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
@@ -93,7 +93,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
          this.creationModals.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.ONTO_TYPE == "SKOS") {
+                if (this.lexicalizationModel == SKOS.uri) {
                     if (collectionType.getURI() == SKOS.collection.getURI()) {
                         this.skosService.createNestedCollection(
                                 SKOS.collection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(

@@ -20,7 +20,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     private schemeList: SchemeListItem[];
 
-    private ONTO_TYPE: string;
+    private lexicalizationModel: string;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
@@ -30,7 +30,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     ngOnInit() {
-        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
         this.initList();
     }
 
@@ -55,7 +55,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
         this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
             (res: any) => {
                 console.log("returned data ", res);
-                if (this.ONTO_TYPE == "SKOS") {
+                if (this.lexicalizationModel == SKOS.uri) { //TODO warning, if the lexicalization model is rdfs here it invokes the creation with skosxl
                     this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         newScheme => { this.schemeList.push({ checked: false, scheme: newScheme }); },
                         err => { }
@@ -90,15 +90,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private deleteScheme() {
-        if (this.ONTO_TYPE == "SKOS") {
-            this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
-                stResp => this.deleteSchemeRespHandler(),
-            );
-        } else { //SKOSXL
-            this.skosxlService.deleteConceptScheme(this.selectedNode).subscribe(
-                stResp => this.deleteSchemeRespHandler(),
-            );
-        }
+        this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
+            stResp => this.deleteSchemeRespHandler(),
+        );
     }
 
     /**

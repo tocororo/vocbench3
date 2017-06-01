@@ -17,13 +17,13 @@ import { SkosxlServices } from "../../services/skosxlServices";
 export class NoLangLabelComponent {
 
     private brokenRecordList: Array<any>; //{resource: ARTURIResource, predicate: ARTURIResource, label: ARTLiteral(SKOS)/ARTResource(XL)}
-    private ontoType: string;
+    private lexicalizationModel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private propService: PropertyServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
-        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
     /**
@@ -31,7 +31,7 @@ export class NoLangLabelComponent {
      */
     runIcv() {
         //TODO check when service will be refactored
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithNoLanguageTagSKOSLabel().subscribe(
                 records => {
@@ -40,7 +40,7 @@ export class NoLangLabelComponent {
                 },
                 err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
             );
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithNoLanguageTagSKOSXLLabel().subscribe(
                 records => {
@@ -61,7 +61,7 @@ export class NoLangLabelComponent {
      * label, then adds a new one with language.
      */
     setLanguage(record: any) {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             let label: ARTLiteral = <ARTLiteral>record.label;
             this.creationModals.newPlainLiteral("Set language", label.getValue(), true).then(
                 (literal: any) => {
@@ -99,7 +99,7 @@ export class NoLangLabelComponent {
                 },
                 () => { }
             );
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             let label: ARTResource = <ARTResource>record.label;
             this.creationModals.newPlainLiteral("Set language", label.getShow(), true).then(
                 (literal: any) => {
@@ -118,7 +118,7 @@ export class NoLangLabelComponent {
      * Fixes resource by removing the label.
      */
     removeLabel(record: any) {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
                 this.skosService.removePrefLabel(record.resource, record.label).subscribe(
                     stResp => {
@@ -138,7 +138,7 @@ export class NoLangLabelComponent {
                     }
                 );
             }
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             if (record.predicate.getURI() == SKOSXL.prefLabel.getURI()) {
                 this.skosxlService.removePrefLabel(record.resource, (<ARTResource>record.label)).subscribe(
                     stResp => {

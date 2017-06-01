@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
+import { SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -11,22 +12,22 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 })
 export class RefactorComponent {
 
-    private ontoType: string; //OWL, SKOS, SKOS-XL
+    private lexicalizationModel: string; //RDFS, SKOS, SKOS-XL
     
     private reifyNotes: boolean = false; //used in skos->skoxl
 
     constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
-        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
-    private isSkosProject(): boolean {
-        return this.ontoType.includes("SKOS");
+    private skosToSkosxlEnabled(): boolean {
+        return this.lexicalizationModel == SKOSXL.uri;
     }
 
-    private isSkosxlProject(): boolean {
-        return this.ontoType == "SKOS-XL";
+    private skosxlToSkosEnabled(): boolean {
+        return (this.lexicalizationModel == SKOSXL.uri || this.lexicalizationModel == SKOSXL.uri);
     }
 
     private skosToSkosxl() {

@@ -131,15 +131,15 @@ export class CustomFormsServices {
      * @param entryMap array of object {key: value} where "key" is the feature
      * name in the pearl rule which its "value" is provided by means a custom form
      */
-    executeForm(subject: ARTResource, predicate: ARTURIResource, customFormId: string, entryMap: any) {
-        console.log("[CustomFormsServices] executeForm");
+    addValueThroughCustomRange(subject: ARTResource, predicate: ARTURIResource, customFormId: string, entryMap: any) {
+        console.log("[CustomFormsServices] addValueThroughCustomRange");
         var params: any = {
             subject: subject,
             predicate: predicate,
             customFormId: customFormId,
             userPromptMap: JSON.stringify(entryMap)
         };
-        return this.httpMgr.doPost(this.serviceName, "executeForm", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addValueThroughCustomRange", params, this.oldTypeService, true);
     }
 
     /**

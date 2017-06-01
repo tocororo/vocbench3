@@ -5,6 +5,7 @@ import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
+import { SKOS } from "../../models/Vocabulary";
 import { ProjectServices } from "../../services/projectServices";
 import { PreferencesServices } from "../../services/preferencesServices";
 
@@ -75,7 +76,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
     }
 
     private isProjectSKOS(): boolean {
-        return this.project.getPrettyPrintOntoType().includes("SKOS");
+        return this.project.getModelType() == SKOS.uri;
     }
 
     private isOkClickable(): boolean {

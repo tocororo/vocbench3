@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../models/ARTResources';
+import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VBPreferences } from '../../utils/VBPreferences';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
@@ -214,6 +214,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                 }
             );
         } else {
+            this.selectedResource.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.dialog.close({ property: this.selectedProperty, value: this.selectedResource });
         }
     }

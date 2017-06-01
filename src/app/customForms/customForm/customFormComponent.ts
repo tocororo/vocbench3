@@ -2,6 +2,7 @@ import { Component, Input, SimpleChanges, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormField } from "../../models/CustomForms";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { SKOS } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -29,7 +30,7 @@ export class CustomForm implements ControlValueAccessor {
     constructor(public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
-        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.ontoType = VBContext.getWorkingProject().getModelType();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -57,7 +58,7 @@ export class CustomForm implements ControlValueAccessor {
     }
 
     private isProjectSKOS() {
-        return this.ontoType.includes('SKOS');
+        return this.ontoType == SKOS.uri;
     }
 
     /**

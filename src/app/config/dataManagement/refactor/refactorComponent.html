@@ -7,7 +7,7 @@
 
         <div class="panel-body vbox scrollableContainer">
             
-            <div *ngIf="isSkosxlProject()" class="subPanel">
+            <div *ngIf="skosxlToSkosEnabled()" class="subPanel">
                 <div class="subPanel-heading">
                     <label style="flex: 1">SKOS &#8594; SKOS-XL</label>
                 </div>
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <div *ngIf="isSkosProject()" class="subPanel">
+            <div *ngIf="skosToSkosxlEnabled()" class="subPanel">
                 <div class="subPanel-heading">
                     <label style="flex: 1">SKOS-XL &#8594; SKOS</label>
                 </div>

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ARTLiteral, RDFTypesEnum } from "../../models/ARTResources";
-import { RDFS } from "../../models/Vocabulary";
+import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { IcvServices } from "../../services/icvServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -16,26 +16,26 @@ import { SkosxlServices } from "../../services/skosxlServices";
 export class NoLabelResourceComponent {
 
     private brokenResourceList: Array<ARTURIResource>;
-    private ontoType: string;
+    private lexicalizationModel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private propService: PropertyServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
-        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
     /**
      * Run the check
      */
     runIcv() {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             this.icvService.listResourcesWithNoSKOSPrefLabel().subscribe(
                 brokenRes => {
                     this.brokenResourceList = brokenRes;
                 }
             );
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             this.icvService.listResourcesWithNoSKOSXLPrefLabel().subscribe(
                 brokenRes => {
                     this.brokenResourceList = brokenRes;
@@ -50,7 +50,7 @@ export class NoLabelResourceComponent {
      * Fixes resource by setting a label 
      */
     fix(resource: ARTURIResource) {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
                 (literal: any) => {
                     this.skosService.setPrefLabel(resource, literal).subscribe(
@@ -61,7 +61,7 @@ export class NoLabelResourceComponent {
                 },
                 () => { }
             );
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
                 (literal: any) => {
                     this.skosxlService.setPrefLabel(resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(

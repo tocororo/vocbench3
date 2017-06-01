@@ -8,9 +8,6 @@ import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRoles
 @Injectable()
 export class SkosxlServices {
 
-    private serviceName_old = "skosxl";
-    private oldTypeService_old = true;
-
     private serviceName = "SKOSXL";
     private oldTypeService = false;
 
@@ -97,24 +94,6 @@ export class SkosxlServices {
         );
     }
 
-    /**
-     * Deletes the given concept. Emits a conceptDeletedEvent with the deleted concept
-     * @param concept the concept to delete
-     */
-    deleteConcept(concept: ARTURIResource) {
-        console.log("[SkosxlServices] deleteConcept");
-        var params: any = {
-            concept: concept.getURI(),
-        };
-        return this.httpMgr.doGet(this.serviceName_old, "deleteConcept", params, this.oldTypeService_old).map(
-            stResp => {
-                this.eventHandler.conceptDeletedEvent.emit(concept);
-                return stResp;
-            }
-        );
-    }
-
-
     //====== Scheme services ======
 
     /**
@@ -147,18 +126,6 @@ export class SkosxlServices {
                 return newScheme;
             }
         );
-    }
-
-    /**
-     * Deletes a scheme and its xLabels
-     * @param scheme the scheme to delete
-     */
-    deleteConceptScheme(scheme: ARTURIResource) {
-        console.log("[SkosServices] deleteConceptScheme");
-        var params: any = {
-            scheme: scheme
-        };
-        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params, this.oldTypeService, true);
     }
 
     //====== Label services ======
@@ -326,10 +293,10 @@ export class SkosxlServices {
     altToPrefLabel(concept: ARTURIResource, xLabel: ARTResource) {
         console.log("[SkosxlServices] altToPrefLabel");
         var params: any = {
-            concept: concept.getURI(),
-            xlabelURI: xLabel.getNominalValue()
+            concept: concept,
+            xlabelURI: xLabel
         };
-        return this.httpMgr.doGet(this.serviceName_old, "altToPrefLabel", params, this.oldTypeService_old);
+        return this.httpMgr.doPost(this.serviceName, "altToPrefLabel", params, this.oldTypeService, true);
     }
 
     //====== Collection services ======

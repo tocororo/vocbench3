@@ -89,7 +89,7 @@ export class UIUtils {
         var collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
         var collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
 
-        var orderedCollectionImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
+        var orderedCollectionImgSrc = require("../../assets/images/icons/res/orderedCollection.png"); //To update
         var orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png"); //To update
         var orderedCollectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update
         var orderedCollectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection.png"); //To update

@@ -1,6 +1,7 @@
-import {Component, Output, EventEmitter} from "@angular/core";
-import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../models/ARTResources";
-import {VBContext} from "../utils/VBContext";
+import { Component, Output, EventEmitter } from "@angular/core";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { SKOS } from "../models/Vocabulary";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "tree-panel",
@@ -8,7 +9,7 @@ import {VBContext} from "../utils/VBContext";
 })
 export class TreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTResource>();
-    
+
     private selectedResource: ARTResource;
 
     private ONTO_TYPE: string;
@@ -21,12 +22,12 @@ export class TreePanelComponent {
         RDFResourceRolesEnum.property,
     ];
     private activeTab: string;
-    
-    constructor() {}
+
+    constructor() { }
 
     ngOnInit() {
-        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
-        if (this.ONTO_TYPE.includes("SKOS")) {
+        this.ONTO_TYPE = VBContext.getWorkingProject().getModelType();
+        if (this.ONTO_TYPE == SKOS.uri) {
             this.activeTab = RDFResourceRolesEnum.concept;
         } else {
             this.activeTab = RDFResourceRolesEnum.cls;
@@ -41,13 +42,13 @@ export class TreePanelComponent {
      * returns true if a project is SKOS or SKOS-XL. Useful to show/hide tree panel
      */
     private isProjectSKOS(): boolean {
-        return this.ONTO_TYPE.includes("SKOS");
+        return this.ONTO_TYPE == SKOS.uri;
     }
-    
+
     //TAB HANDLER
-    
+
     private selectTab(tabName: string) {
         this.activeTab = tabName;
     }
-    
+
 }

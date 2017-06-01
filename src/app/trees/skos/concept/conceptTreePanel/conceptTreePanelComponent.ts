@@ -26,7 +26,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
-    private ONTO_TYPE: string;
+    private lexicalizationModel: string;
 
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
@@ -45,7 +45,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     ngOnInit() {
-        this.ONTO_TYPE = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = this.preferences.getActiveSchemes();
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
@@ -75,7 +75,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.ONTO_TYPE == "SKOS") {
+                if (this.lexicalizationModel == SKOS.uri) {
                     this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -93,7 +93,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, true).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.ONTO_TYPE == "SKOS") {
+                if (this.lexicalizationModel == SKOS.uri) {
                     this.skosService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
                     );
@@ -114,25 +114,13 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             return;
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-        if (this.ONTO_TYPE == "SKOS") {
-            this.skosService.deleteConcept(this.selectedNode).subscribe(
-                stResp => {
-                    this.selectedNode = null;
-                    this.nodeSelected.emit(undefined);
-                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
-            );
-        } else { //SKOSXL
-            this.skosxlService.deleteConcept(this.selectedNode).subscribe(
-                stResp => {
-                    this.selectedNode = null;
-                    this.nodeSelected.emit(undefined);
-                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
-            );
-        }
+        this.skosService.deleteConcept(this.selectedNode).subscribe(
+            stResp => {
+                this.selectedNode = null;
+                this.nodeSelected.emit(undefined);
+                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+            }
+        );
     }
 
     refresh() {

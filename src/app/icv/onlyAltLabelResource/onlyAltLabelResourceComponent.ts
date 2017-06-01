@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum } from "../../models/ARTResources";
+import { SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
@@ -18,20 +19,20 @@ export class OnlyAltLabelResourceComponent {
 
     private brokenRecordList: Array<any>; //{resource: ARTURIResource, lang: ARTLiteral}
     //lang is an ARTLiteral just to render it with the rdfResource widget
-    private ontoType: string;
+    private lexicalizationModel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
-        this.ontoType = VBContext.getWorkingProject().getPrettyPrintOntoType();
+        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
     /**
      * Run the check
      */
     runIcv() {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithOnlySKOSAltLabel().subscribe(
                 records => {
@@ -40,7 +41,7 @@ export class OnlyAltLabelResourceComponent {
                 err => { },
                 () => UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
             )
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
             this.icvService.listResourcesWithOnlySKOSXLAltLabel().subscribe(
                 records => {
@@ -56,7 +57,7 @@ export class OnlyAltLabelResourceComponent {
      * Fixes resource by setting the alternative label as preferred
      */
     setAltAsPrefLabel(record: any) {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             this.skosService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
                     this.basicModals.selectResource("Select alternative label", null, altLabels).then(
@@ -71,7 +72,7 @@ export class OnlyAltLabelResourceComponent {
                     );
                 }
             );
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             this.skosxlService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
                 altLabels => {
                     this.basicModals.selectResource("Select alternative label", null, altLabels).then(
@@ -95,7 +96,7 @@ export class OnlyAltLabelResourceComponent {
      */
     private changeAltToPref(resource: ARTURIResource, label: ARTNode) {
         return new Observable((observer: any) => {
-            if (this.ontoType == "SKOS") {
+            if (this.lexicalizationModel == SKOS.uri) {
                 this.skosService.removeAltLabel(resource, <ARTLiteral>label).subscribe(
                     stResp => {
                         this.skosService.setPrefLabel(resource, (<ARTLiteral>label)).subscribe(
@@ -106,7 +107,7 @@ export class OnlyAltLabelResourceComponent {
                         )
                     }
                 );
-            } else if (this.ontoType == "SKOS-XL") {
+            } else if (this.lexicalizationModel == SKOSXL.uri) {
                 this.skosxlService.altToPrefLabel(resource, <ARTResource>label).subscribe(
                     stResp => {
                         observer.next();
@@ -121,7 +122,7 @@ export class OnlyAltLabelResourceComponent {
      * Fixes resource by adding a preferred label
      */
     addPrefLabel(record: any) {
-        if (this.ontoType == "SKOS") {
+        if (this.lexicalizationModel == SKOS.uri) {
             this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
                 (literal: any) => {
                     this.skosService.setPrefLabel(record.resource, literal).subscribe(
@@ -132,7 +133,7 @@ export class OnlyAltLabelResourceComponent {
                 },
                 () => { }
             )
-        } else if (this.ontoType == "SKOS-XL") {
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
             this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
                 (literal: any) => {
                     this.skosxlService.setPrefLabel(record.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
