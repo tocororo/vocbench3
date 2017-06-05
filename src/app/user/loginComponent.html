@@ -6,10 +6,10 @@
 	<input type="text" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="email" placeholder="E-mail address">
 	<input type="password" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="password" placeholder="Password">
 	<button class="btn btn-sm btn-primary" style="margin-bottom: 5px;" (click)="login()">Log in</button>
-	<div style="display: flex; align-items: center; margin-bottom: 5px;">
+	<!--<div style="display: flex; align-items: center; margin-bottom: 5px;">
 		Remember me
 		<input type="checkbox" style="margin-left: 3px;" name="rememberMe" [(ngModel)]="rememberMe">
-	</div>
+	</div>-->
 	<a (click)="forgotPassword()" style="cursor: pointer">Forgot password?</a>
-	<a [routerLink]="['/Registration']">Sign up</a>
+	<a [routerLink]="['/Registration/0']">Sign up</a>
 </div>

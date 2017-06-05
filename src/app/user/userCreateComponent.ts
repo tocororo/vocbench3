@@ -17,15 +17,36 @@ export class UserCreateComponent {
     private genders = ["Male", "Female", "Other"];
     private selectedGender: string;
 
+    private iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI, " + 
+        "or in alternative, you can use the personal URL as IRI. If you leave it empty the system will provide a default IRI to your account";
+
     private form: UserForm = new UserForm();
 
     constructor() { }
+
+    ngAfterViewInit() {
+        this.propagateChange(this.form);
+    }
 
     private onGenderChange() {
         if (this.selectedGender == "Other") {
             this.form.gender = null;
         } else {
             this.form.gender = this.selectedGender;
+        }
+        this.propagateChange(this.form);
+    }
+
+    private onUrlAsIriChange() {
+        if (this.form.urlAsIri) {
+            this.form.iri = this.form.url;
+        }
+        this.propagateChange(this.form);
+    }
+
+    private onUrlChange() {
+        if (this.form.urlAsIri) {
+            this.form.iri = this.form.url;
         }
         this.propagateChange(this.form);
     }
@@ -38,7 +59,7 @@ export class UserCreateComponent {
     }
 
 
-    private onModelChanged() {
+    private onModelChange() {
         this.propagateChange(this.form);
     }
 

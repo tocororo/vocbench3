@@ -3,6 +3,7 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { UserServices } from "../../services/userServices";
 import { UserForm } from "../../models/User";
+import { ARTURIResource } from "../../models/ARTResources";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../utils/UIUtils";
 
@@ -41,6 +42,11 @@ export class UserCreateModal implements ModalComponent<UserCreateModalData> {
             this.basicModals.alert("Invalid data", "Please fill all the required fields", "error");
             return;
         }
+        if (this.userForm.urlAsIri && (this.userForm.url == null || this.userForm.url.trim() == "")) {
+            this.basicModals.alert("Invalid data", "You checked the option to use the personal URL as user IRI, but the URL is not provided." + 
+                " Please enter a valid URL or uncheck the above option", "error");
+            return
+        }
         //check email
         if (!UserForm.isValidEmail(this.userForm.email)) {
             this.basicModals.alert("Invalid data", "Please enter a valid e-mail address", "error");
@@ -51,8 +57,19 @@ export class UserCreateModal implements ModalComponent<UserCreateModalData> {
             this.basicModals.alert("Invalid data", "Password and confirmed password are different.", "error");
             return;
         }
+        //check IRI
+        if (this.userForm.urlAsIri && !UserForm.isIriValid(this.userForm.iri)) {
+            this.basicModals.alert("Invalid data", "Please enter a valid IRI.", "error");
+            return;
+        }
+        
+        let userIri: ARTURIResource = null;
+        if (this.userForm.iri != null) {
+            userIri = new ARTURIResource(this.userForm.iri);
+        }
+
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName,
+        this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.birthday, this.userForm.gender, this.userForm.country, this.userForm.address, this.userForm.affiliation,
             this.userForm.url, this.userForm.phone).subscribe(
             stResp => {

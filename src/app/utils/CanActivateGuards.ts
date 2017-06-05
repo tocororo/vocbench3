@@ -24,7 +24,6 @@ export class AuthGuard implements CanActivate {
             return this.userService.getUser().map(
                 user => { //request completed succesfully, set the user in the context and return true
                     if (user) { //getUser returned the logged user
-                        VBContext.setLoggedUser(user);
                         return true;
                     } else { //no logged user, getUser returned null
                         this.router.navigate(['/Home']);
@@ -55,7 +54,6 @@ export class AdminGuard implements CanActivate {
             return this.userService.getUser().map(
                 user => { //request completed succesfully, set the user in the context and return true
                     if (user) { //getUser returned the logged user
-                        VBContext.setLoggedUser(user);
                         return user.isAdmin();
                     } else { //no logged user, getUser returned null
                         this.router.navigate(['/Home']);

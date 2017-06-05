@@ -1,7 +1,10 @@
+import { ARTURIResource } from "./ARTResources";
+
 export class User {
     private email: string;
     private givenName: string;
     private familyName: string
+    private iri: ARTURIResource;
     private birthday: Date;
     private phone: string;
     private gender: string;
@@ -13,10 +16,11 @@ export class User {
     private status: UserStatusEnum;
     private admin: boolean = false;
 
-    constructor(email: string, givenName: string, familyName: string) {
+    constructor(email: string, givenName: string, familyName: string, iri: ARTURIResource) {
         this.email = email;
         this.givenName = givenName;
         this.familyName = familyName;
+        this.iri = iri;
     }
 
     getEmail(): string {
@@ -29,6 +33,10 @@ export class User {
 
     getFamilyName(): string {
         return this.familyName;
+    }
+
+    getIri(): ARTURIResource {
+        return this.iri;
     }
 
     setBirthday(birthday: Date) {
@@ -215,15 +223,22 @@ export class UserForm {
     gender: string;
     country: string;
     address: string;
+    phone: string;
     affiliation: string;
     url: string;
-    phone: string;
+    iri: string;
+    urlAsIri: boolean;
 
-    static regexp = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}");
+    static emailRegexp = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}");
+    static iriRegexp = new RegExp("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     constructor() { }
 
     static isValidEmail(email: string) {
-        return UserForm.regexp.test(email);
+        return UserForm.emailRegexp.test(email);
+    }
+
+    static isIriValid(iri: string) {
+        return UserForm.iriRegexp.test(iri);
     }
 }

@@ -37,6 +37,14 @@ export class UserProfileComponent {
         )
     }
 
+    private updateEmail(newEmail: string) {
+        this.userService.updateUserEmail(this.user.getEmail(), newEmail).subscribe(
+            user => {
+                VBContext.setLoggedUser(user);
+            }
+        )
+    }
+
     private updatePhone(newPhone: string) {
         this.userService.updateUserPhone(this.user.getEmail(), newPhone).subscribe(
             user => {

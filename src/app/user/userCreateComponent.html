@@ -11,32 +11,32 @@
                 <td nowrap><label>E-mail:</label><span style="color: red">*</span></td>
                 <td colspan="3">
                     <input type="email" class="form-control input-sm" placeholder="e-mail address" [(ngModel)]="form.email" name="email"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Password:</label><span style="color: red">*</span></td>
                 <td>
                     <input type="password" class="form-control input-sm" placeholder="password" [(ngModel)]="form.password" name="password"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
                 <td nowrap><label>Confirm password:</label><span style="color: red">*</span></td>
                 <td>
                     <input type="password" class="form-control input-sm"  [ngClass]="{invalid : !isConfirmPwdOk()}"
                         placeholder="password" [(ngModel)]="form.confirmedPassword" name="confirmedPassword"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Given name:</label><span style="color: red">*</span></td>
                 <td>
                     <input type="text" class="form-control input-sm" placeholder="given name" [(ngModel)]="form.givenName" name="givenName"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
                 <td nowrap><label>Family name:</label><span style="color: red">*</span></td>
                 <td>
                     <input type="text" class="form-control input-sm" placeholder="family name" [(ngModel)]="form.familyName" name="familyName"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
             </tr>
             <tr>
@@ -48,45 +48,59 @@
                             <option *ngFor="let g of genders" [value]="g">{{g}}</option>
                         </select>
                         <input type="text" class="form-control input-sm" [(ngModel)]="form.gender" name="gender" 
-                            [disabled]="selectedGender != 'Other'" (ngModelChange)="onModelChanged()">
+                            [disabled]="selectedGender != 'Other'" (ngModelChange)="onModelChange()">
                     </div>
                 </td>
                 <td nowrap><label>Birthday:</label></td>
                 <td>
                     <input type="date" class="form-control input-sm" [(ngModel)]="form.birthday" name="birthday" placeholder="yyyy-MM-dd"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Country:</label></td>
                 <td>
-                    <select [(ngModel)]="form.country" name="country" class="form-control input-sm" (ngModelChange)="onModelChanged()">
+                    <select [(ngModel)]="form.country" name="country" class="form-control input-sm" (ngModelChange)="onModelChange()">
                         <option *ngFor="let c of countries" [value]="c">{{c}}</option>
                     </select>
                 </td>
                 <td nowrap><label>Address:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.address" name="address" placeholder="address"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Phone:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.phone" name="phone" placeholder="phone number"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
                 </td>
-                <td nowrap><label>Url:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.url" name="url" placeholder="url"
-                        (ngModelChange)="onModelChanged()">
-                </td>
-            </tr>
-            <tr>
                 <td nowrap><label>Affiliation:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.affiliation" name="affiliation" placeholder="affiliation"
-                        (ngModelChange)="onModelChanged()">
+                        (ngModelChange)="onModelChange()">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Personal URL:</label></td>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" [(ngModel)]="form.url" name="url" placeholder="url"
+                            (ngModelChange)="onUrlChange()">
+                        <span class="input-group-addon" style="padding: 5px 10px;">
+                            <input type="checkbox" [(ngModel)]="form.urlAsIri" name="urlAsIri" title="Use URL as user IRI"
+                                (ngModelChange)="onUrlAsIriChange()">
+                        </span>
+                    </div>
+                </td>
+                <td nowrap>
+                    <label>User IRI:</label>
+                    <span class="glyphicon glyphicon-info-sign" [title]="iriInfoTitle"></span>
+                </td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.iri" name="iri" placeholder="iri"
+                        (ngModelChange)="onUrlChange()" [disabled]="form.urlAsIri">
                 </td>
             </tr>
         </tbody>

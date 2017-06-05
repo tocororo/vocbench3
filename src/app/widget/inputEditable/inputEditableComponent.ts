@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
+import { UserForm } from "../../models/User";
 
 @Component({
     selector: 'input-editable',
@@ -40,13 +41,13 @@ export class InputEditableComponent implements OnInit {
     }
 
     private confirmEdit() {
-        if (this.value != undefined && this.value.trim() != "") {
-            this.editInProgress = false;
-            this.pristineValue = this.value;
-            this.valueEdited.emit(this.value);
-        } else {
+        if (this.value == undefined || this.value.trim() == "" || (this.type == "email" && !UserForm.isValidEmail(this.value))) {
             this.basicModals.alert("Invalid value", "The value inserted is not valid. Please check and retry.", "error");
+            return;
         }
+        this.editInProgress = false;
+        this.pristineValue = this.value;
+        this.valueEdited.emit(this.value);
     }
 
     private cancelEdit() {

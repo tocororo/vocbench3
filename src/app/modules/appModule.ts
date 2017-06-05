@@ -26,6 +26,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { VBPreferences } from "../utils/VBPreferences";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
+import { UserResolver } from "../utils/UserResolver";
 
 //Components
 import { HomeComponent } from "../homeComponent";
@@ -49,7 +50,8 @@ import { AdministrationComponent } from "../administration/administrationCompone
 
 @NgModule({
       imports: [
-            BrowserModule, RouterModule,
+            RouterModule,
+            BrowserModule,
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
@@ -61,7 +63,7 @@ import { AdministrationComponent } from "../administration/administrationCompone
       ],
       //services with application scope
       providers: [
-            HttpManager, VBEventHandler, VBPreferences, GUARD_PROVIDERS,
+            HttpManager, VBEventHandler, VBPreferences, GUARD_PROVIDERS, UserResolver,
             { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
       ],
       declarations: [

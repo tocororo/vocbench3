@@ -16,21 +16,11 @@ export class LoginComponent {
     @Output() loggedIn: EventEmitter<User> = new EventEmitter();
 
     private rememberMe: boolean = false;
-    private email: string = "admin@vocbench.com";
-    private password: string = "admin";
+    private email: string;
+    private password: string;
 
     constructor(private router: Router, private authService: AuthServices, private userService: UserServices,
         private basicModals: BasicModalServices) { }
-
-    ngOnInit() {
-        this.userService.getUser().subscribe(
-            user => {
-                if (user) {
-                    VBContext.setLoggedUser(user);
-                }
-            }
-        )
-    }
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {

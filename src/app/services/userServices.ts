@@ -1,8 +1,11 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Deserializer} from "../utils/Deserializer";
-import {HttpManager} from "../utils/HttpManager";
-import {User, UserStatusEnum} from "../models/User";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager } from "../utils/HttpManager";
+import { VBContext } from "../utils/VBContext";
+import { User, UserStatusEnum } from "../models/User";
+import { ARTURIResource } from "../models/ARTResources";
 
 @Injectable()
 export class UserServices {
@@ -10,16 +13,26 @@ export class UserServices {
     private serviceName = "Users";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager) {}
+    constructor(private httpMgr: HttpManager, private router: Router) { }
 
     /**
-     * Returns the user corrently logged. Returns null if no user is logged
+     * Returns the user corrently logged (response contains user object).
+     * Returns null if no user is logged (response contains empty user object).
+     * Throw exception if no user is register at all (in this case the response of getUser() is empty).
      */
     getUser(): Observable<User> {
         console.log("[UserServices] getUser");
         return this.httpMgr.doGet(this.serviceName, "getUser", null, this.oldTypeService, true).map(
             stResp => {
-                return Deserializer.createUser(stResp);
+                if (stResp.user != null) { //user object in respnse => serialize it (it could be empty, so no user logged)
+                    let user: User = Deserializer.createUser(stResp.user);
+                    if (user != null) {
+                        VBContext.setLoggedUser(user);
+                    }
+                    return user;
+                } else { //no user object in the response => there is no user registered
+                    this.router.navigate(["/Registration/1"]);
+                }
             }
         );
     }
@@ -66,7 +79,7 @@ export class UserServices {
      * @param url
      * @param phone
      */
-    registerUser(email: string, password: string, givenName: string, familyName: string,
+    registerUser(email: string, password: string, givenName: string, familyName: string, iri: ARTURIResource,
         birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, phone: string) {
         console.log("[UserServices] registerUser");
         var params: any = {
@@ -74,6 +87,9 @@ export class UserServices {
             password: password,
             givenName: givenName,
             familyName: familyName
+        }
+        if (iri != undefined) {
+            params.iri = iri;
         }
         if (birthday != undefined) {
             params.birthday = birthday;
@@ -129,6 +145,24 @@ export class UserServices {
             familyName: familyName,
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params, this.oldTypeService, true).map(
+            stResp => {
+                return Deserializer.createUser(stResp);
+            }
+        );
+    }
+
+    /**
+     * Updates givenName of the given user. Returns the updated user.
+     * @param email email of the user to update
+     * @param givenName
+     */
+    updateUserEmail(email: string, newEmail: string): Observable<User> {
+        console.log("[UserServices] updateUserEmail");
+        var params: any = {
+            email: email,
+            newEmail: newEmail,
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params, this.oldTypeService, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -290,8 +324,6 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "deleteUser", params, this.oldTypeService, true);
     }
-
-
 
     /**
      * 

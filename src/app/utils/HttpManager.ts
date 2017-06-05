@@ -354,7 +354,7 @@ export class HttpManager {
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
 
-        if (VBContext.getContextVersion() != null) {
+        if (VBContext.getContextVersion() != undefined) {
             params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
         }
 

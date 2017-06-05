@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard } from "./utils/CanActivateGuards";
+import { UserResolver } from "./utils/UserResolver";
 
 import { HomeComponent } from "./homeComponent";
 import { ProjectComponent } from "./project/projectComponent";
@@ -23,7 +24,7 @@ import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 
 export const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
-    { path: "Home", component: HomeComponent },
+    { path: "Home", component: HomeComponent, resolve: { user : UserResolver } },
     // route config of navigation bar
     { path: "Projects", component: ProjectComponent, canActivate: [AdminGuard] },
     { path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard] },
@@ -32,7 +33,7 @@ export const routes: Routes = [
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
-    { path: "Registration", component: RegistrationComponent },
+    { path: "Registration/:firstAccess", component: RegistrationComponent }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent},
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard] },

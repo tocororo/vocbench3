@@ -23,7 +23,7 @@
                     </tr>
                     <tr>
                         <td nowrap><label>E-mail:</label></td>
-                        <td><input type="email" class="form-control input-sm" [ngModel]="user.getEmail()" readonly></td>
+                        <td><input-editable type="email" [value]="user.getEmail()" (valueEdited)="updateEmail($event)"></input-editable></td>
                         <td nowrap><label>Phone:</label></td>
                         <td><input-editable [value]="user.getPhone()" (valueEdited)="updatePhone($event)"></input-editable></td>
                     </tr>
@@ -45,7 +45,7 @@
                     <tr>
                         <td nowrap><label>Affiliation:</label></td>
                         <td><input-editable [value]="user.getAffiliation()" (valueEdited)="updateAffiliation($event)"></input-editable></td>
-                        <td nowrap><label>Url:</label></td>
+                        <td nowrap><label>Personal Url:</label></td>
                         <td><input-editable [value]="user.getUrl()" (valueEdited)="updateUrl($event)"></input-editable></td>
                     </tr>
                 </tbody>

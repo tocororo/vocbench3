@@ -115,12 +115,11 @@ export class Deserializer {
      * @param resp could be a "data" element of a response (containing a "user" element)
      * or directly a "user" element
      */
-    static createUser(resp: any): User {
-        var userJson: any = resp;
+    static createUser(userJson: any): User {
         if (userJson.email == null) { //user object is empty (scenario: getUser with no logged user)
             return null;
         }
-        var user = new User(userJson.email, userJson.givenName, userJson.familyName);
+        var user = new User(userJson.email, userJson.givenName, userJson.familyName, userJson.iri);
         user.setRegistrationDate(userJson.registrationDate);
         user.setStatus(userJson.status);
         user.setAdmin(userJson.admin);
