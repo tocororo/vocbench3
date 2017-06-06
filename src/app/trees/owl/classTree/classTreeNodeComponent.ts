@@ -3,7 +3,6 @@ import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ART
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBPreferences } from "../../../utils/VBPreferences";
-import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
@@ -16,7 +15,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
 
-    constructor(private owlService: OwlServices, private clsService: ClassesServices, private pref: VBPreferences, eventHandler: VBEventHandler) {
+    constructor(private clsService: ClassesServices, private pref: VBPreferences, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superClass, data.subClass)));
@@ -25,7 +24,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (cls: ARTURIResource) => this.onTreeNodeDeleted(cls)));
         this.eventSubscriptions.push(eventHandler.superClassRemovedEvent.subscribe(
-            (data: any) => this.onParentRemoved(data.cls, data.subClass)));
+            (data: any) => this.onParentRemoved(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(

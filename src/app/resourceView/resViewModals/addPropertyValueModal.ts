@@ -147,11 +147,17 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             } else if (rangeClass.getURI() == OWL.objectProperty.getURI()) {
                                 this.viewType = "propertyTree";
                                 this.propertyType = RDFResourceRolesEnum.objectProperty;
+                            } else if (rangeClass.getURI() == RDF.property.getURI()) {
+                                this.viewType = "propertyTree";
+                                this.propertyType = RDFResourceRolesEnum.property;
                             } else if (rangeClass.getURI() == SKOSXL.label.getURI()) {
                                 this.viewType = "classAndIndividual";
                                 this.rootsForClsIndList = rangeCollection;
                             } else if (rangeClass.getURI() == RDF.list.getURI()) {
                                 this.viewType = "classAndIndividual";
+                                this.rootsForClsIndList = rangeCollection;
+                            } else { //default
+                                this.viewType = "classAndIndividual";    
                                 this.rootsForClsIndList = rangeCollection;
                             }
                         } else { //length > 1

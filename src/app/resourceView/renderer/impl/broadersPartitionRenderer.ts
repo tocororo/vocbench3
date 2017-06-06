@@ -50,7 +50,7 @@ export class BroadersPartitionRenderer extends AbstractPredObjListRenderer {
                         stResp => this.update.emit(null)
                     ) ;
                 } else { //it's using a subProperty of skos:broader
-                    this.propService.addExistingPropValue(this.resource, prop, broader.getURI(), RDFTypesEnum.resource).subscribe(
+                    this.resourcesService.addValue(this.resource, prop, broader).subscribe(
                         stResp =>{
                             this.eventHandler.broaderAddedEvent.emit({narrower: <ARTURIResource>this.resource, broader: broader});
                             this.update.emit(null);
@@ -73,7 +73,7 @@ export class BroadersPartitionRenderer extends AbstractPredObjListRenderer {
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of skos:broader
-                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                     stResp => {
                         this.eventHandler.broaderRemovedEvent.emit({concept: <ARTURIResource>this.resource, broader: <ARTURIResource>object});
                         this.update.emit(null);

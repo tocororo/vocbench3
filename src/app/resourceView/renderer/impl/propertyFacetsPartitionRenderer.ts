@@ -42,7 +42,7 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var inverseProp: ARTURIResource = data.value;
-                this.propService.addExistingPropValue(this.resource, prop, inverseProp.getURI(), RDFTypesEnum.resource).subscribe(
+                this.resourcesService.addValue(this.resource, prop, inverseProp).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -56,7 +56,7 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
                 stResp => this.update.emit(null)
             );
         } else {
-            this.propService.removePropValue(<ARTURIResource>this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
+            this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         }
@@ -82,11 +82,11 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
 
     private setPropertyFacet(propertyClass: ARTURIResource, value: boolean) {
         if (value) {
-            this.propService.addExistingPropValue(this.resource, RDF.type, propertyClass.getURI(), RDFTypesEnum.uri).subscribe(
+            this.resourcesService.addValue(this.resource, RDF.type, propertyClass).subscribe(
                 stResp => this.update.emit(null)
             );
         } else {
-            this.propService.removePropValue(<ARTURIResource>this.resource, RDF.type, propertyClass.getURI(), null, RDFTypesEnum.uri).subscribe(
+            this.resourcesService.removeValue(<ARTURIResource>this.resource, RDF.type, propertyClass).subscribe(
                 stResp => this.update.emit(null)
             );
         }

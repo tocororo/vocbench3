@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute } from "../models/ARTResources";
 
 @Injectable()
 export class ClassesServices {
@@ -160,6 +160,157 @@ export class ClassesServices {
                 return stResp;
             }
         );
+    }
+
+    /**
+     * Adds a superClass to a class
+     * Emits subClassCreatedEvent containing the subClass and the superClass
+     * @param cls the class to which add the superClass
+     * @param supercls class to add as superClass
+     */
+    addSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
+        console.log("[ClassesServices] addSuperCls");
+        var params: any = {
+            cls: cls,
+            supercls: supercls,
+        };
+        return this.httpMgr.doPost(this.serviceName, "addSuperCls", params, this.oldTypeService, true).map(
+            stResp => {
+                // var subClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
+                // subClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                // subClass.setAdditionalProperty(ResAttribute.MORE, cls.getAdditionalProperty(ResAttribute.MORE));
+                // this.eventHandler.superClassAddedEvent.emit({subClass: subClass, superClass: superClass});
+                this.eventHandler.superClassAddedEvent.emit({subClass: cls, superClass: supercls});
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Removes a superClass from a class.
+     * Emits a superClassRemovedEvent with cls (the superClass removed) and subClass
+     * (the class to which su superClass has been removed)
+     * @param cls class to which remove a superClass
+     * @param superClass superClass to be removed
+     */
+    removeSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
+        console.log("[ClassesServices] removeSuperCls");
+        var params: any = {
+            cls: cls,
+            supercls: supercls,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeSuperCls", params, this.oldTypeService, true).map(
+            stResp => {
+                this.eventHandler.superClassRemovedEvent.emit({superClass: supercls, subClass: cls});
+                return stResp;
+            }
+        );
+    }
+    
+    /**
+     * Adds a collection of class as intersectionOf a class.
+     * @param cls the resource whose the enriching the intersectionOf
+     * @param clsDescriptions collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
+     */
+    addIntersectionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
+        console.log("[ClassesServices] addIntersectionOf");
+        var collNodeArray = new Array<string>();
+        for (var i=0; i<collectionNode.length; i++) {
+            if (collectionNode[i] instanceof ARTBNode) {
+                //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
+                //created manually, the id is the expression (something like :A and :B) so the nominal value
+                //will be invalid (_::A and :B) 
+                collNodeArray.push(collectionNode[i].getShow());
+            } else if (collectionNode[i] instanceof ARTURIResource) {
+                collNodeArray.push(collectionNode[i].toNT());
+            }
+        }
+        var params: any = {
+            cls: cls,
+            clsDescriptions: collNodeArray.join(","),
+        };
+        return this.httpMgr.doPost(this.serviceName, "addIntersectionOf", params, this.oldTypeService, true);
+    }
+    
+    /**
+     * Removes an intersectionOf class axiom
+     * @param cls class to which remove the intersectionOf axiom
+     * @param collectionNode the node representing the intersectionOf expression
+     */
+    removeIntersectionOf(cls: ARTURIResource, collectionNode: ARTNode) {
+        console.log("[ClassesServices] removeIntersectionOf");
+        var params: any = {
+            cls: cls,
+            collectionNode: collectionNode,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeIntersectionOf", params, this.oldTypeService, true);
+    }
+    
+    /**
+     * Adds a collection of class as unionOf a class.
+     * @param cls the resource whose the enriching the unionOf
+     * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
+     */
+    addUnionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
+        console.log("[ClassesServices] addUnionOf");
+        var collNodeArray = new Array<string>();
+        for (var i=0; i<collectionNode.length; i++) {
+            if (collectionNode[i] instanceof ARTBNode) {
+                //getShow because getNominalValue returns "_:"+id and in this case, since the ARTBNode is
+                //created manually, the id is the expression (something like :A and :B) so the nominal value
+                //will be invalid (_::A and :B) 
+                collNodeArray.push(collectionNode[i].getShow());
+            } else if (collectionNode[i] instanceof ARTURIResource) {
+                collNodeArray.push(collectionNode[i].toNT());
+            }
+        }
+        var params: any = {
+            cls: cls,
+            clsDescriptions: collNodeArray.join(","),
+        };
+        return this.httpMgr.doPost(this.serviceName, "addUnionOf", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Removes an unionOf class axiom
+     * @param cls class to which remove the unionOf axiom
+     * @param collectionNode the node representing the unionOf expression
+     */
+    removeUnionOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
+        console.log("[ClassesServices] removeUnionOf");
+        var params: any = {
+            cls: cls,
+            collectionBNode: collectionBNode,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeUnionOf", params, this.oldTypeService, true);
+    }
+    
+    /**
+     * Adds a collection of instances as oneOf a class.
+     * @param cls the resource whose the enriching the unionOf
+     * @param individuals collection of individuals
+     */
+    addOneOf(cls: ARTURIResource, individuals: ARTURIResource[]) {
+        console.log("[ClassesServices] addOneOf");
+        var params: any = {
+            cls: cls,
+            individuals: individuals,
+        };
+        return this.httpMgr.doPost(this.serviceName, "addOneOf", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Removes an oneOf class axiom
+     * @param cls class to which remove the oneOf axiom
+     * @param collectionNode the node representing the oneOf expression
+     */
+    removeOneOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
+        console.log("[ClassesServices] removeOneOf");
+        var params: any = {
+            cls: cls,
+            collectionBNode: collectionBNode,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeOneOf", params, this.oldTypeService, true);
     }
 
 

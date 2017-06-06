@@ -59,7 +59,7 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         } else {
-            this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         }

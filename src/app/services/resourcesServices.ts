@@ -12,15 +12,15 @@ export class ResourcesServices {
 
     /**
      * Updates the value of a triple replacing the old value with the new one
-     * @param resource
+     * @param subject
      * @param property
      * @param value
      * @param newValue
      */
-    updateTriple(resource: ARTResource, property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
+    updateTriple(subject: ARTResource, property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
         console.log("[ResourcesServices] updateTriple");
         var params: any = {
-            resource : resource,
+            subject : subject,
             property : property,
             value : value,
             newValue: newValue
@@ -34,14 +34,14 @@ export class ResourcesServices {
      * @param property
      * @param value
      */
-    removeTriple(resource: ARTResource, property: ARTURIResource, value: ARTNode) {
-        console.log("[ResourcesServices] removeTriple");
+    removeValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
+        console.log("[ResourcesServices] removeValue");
         var params: any = {
-            resource : resource,
+            subject : subject,
             property : property,
             value : value
         };
-        return this.httpMgr.doGet(this.serviceName, "removeTriple", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeValue", params, this.oldTypeService, true);
     }
 
     /**
@@ -54,6 +54,22 @@ export class ResourcesServices {
             resource : resource,
         };
         return this.httpMgr.doGet(this.serviceName, "setDeprecated", params, this.oldTypeService, true);
+    }
+
+    /**
+     * Add a value to a given subject-property pair
+     * @param subject 
+     * @param property 
+     * @param value 
+     */
+    addValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
+        console.log("[ResourcesServices] addValue");
+        var params: any = {
+            subject : subject,
+            property : property,
+            value : value
+        };
+        return this.httpMgr.doGet(this.serviceName, "addValue", params, this.oldTypeService, true);
     }
 
 }

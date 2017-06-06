@@ -284,7 +284,7 @@ export abstract class AbstractPredObjListRenderer {
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
         this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
-                this.propService.createAndAddPropValue(this.resource, predicate, (<ARTLiteral>literal).getValue(), null, RDFTypesEnum.plainLiteral, (<ARTLiteral>literal).getLang()).subscribe(
+                this.resourcesService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
                     stResp => { this.update.emit(null) }
                 );
             },
@@ -298,7 +298,7 @@ export abstract class AbstractPredObjListRenderer {
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: string[]) {
         this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
             (literal: any) => {
-                this.propService.createAndAddPropValue(this.resource, predicate, literal.value, literal.datatype, RDFTypesEnum.typedLiteral).subscribe(
+                this.resourcesService.addValue(this.resource, predicate, <ARTLiteral>literal).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -312,21 +312,12 @@ export abstract class AbstractPredObjListRenderer {
     private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
         this.rvModalService.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
             (resource: any) => {
-                this.propService.addExistingPropValue(this.resource, predicate, resource.getNominalValue(), RDFTypesEnum.resource).subscribe(
+                this.resourcesService.addValue(this.resource, predicate, resource).subscribe(
                     stResp => this.update.emit(null)
                 )
             },
             () => { }
         );
-        // this.resViewModalService.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
-        //     (data: any) => {
-        //         // data.property: this.selectedProperty, value: this.selectedResource }
-        //         this.propService.addExistingPropValue(this.resource, predicate, data.value, RDFTypesEnum.resource).subscribe(
-        //             stResp => { this.update.emit() }
-        //         )
-        //     },
-        //     () => {}
-        // );
     }
 
 }

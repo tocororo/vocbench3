@@ -113,7 +113,7 @@ export class CreationModalServices {
      * Opens a modal to create a new literal with datatype
      * @param title the title of the modal dialog
      * @param allowedDatatypes datatypes allowed in the datatype selection list
-     * @return if the modal closes with ok returns a promise containing an object with value and datatype
+     * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
     newTypedLiteral(title: string, allowedDatatypes?: string[]) {
         var modalData = new NewTypedLiteralModalData(title, allowedDatatypes);

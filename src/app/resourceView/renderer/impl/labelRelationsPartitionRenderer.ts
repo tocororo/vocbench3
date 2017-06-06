@@ -41,7 +41,7 @@ export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var label: ARTResource = data.value;
-                this.propService.addExistingPropValue(this.resource, prop, label.getNominalValue(), RDFTypesEnum.resource).subscribe(
+                this.resourcesService.addValue(this.resource, prop, label).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -55,7 +55,7 @@ export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer
                 stResp => this.update.emit(null)
             );
         } else {
-            this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                 stResp => this.update.emit(null)
             );
         }

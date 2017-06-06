@@ -17,7 +17,6 @@ import { InputOutputServices } from "../services/inputOutputServices";
 import { ManchesterServices } from "../services/manchesterServices";
 import { MetadataServices } from "../services/metadataServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
-import { OwlServices } from "../services/owlServices";
 import { PluginsServices } from "../services/pluginsServices";
 import { PreferencesServices } from "../services/preferencesServices";
 import { ProjectServices } from "../services/projectServices";
@@ -54,7 +53,6 @@ import { VersionsServices } from "../services/versionsServices";
         ManchesterServices,
         MetadataServices,
         OntoManagerServices,
-        OwlServices,
         PluginsServices,
         PreferencesServices,
         ProjectServices,

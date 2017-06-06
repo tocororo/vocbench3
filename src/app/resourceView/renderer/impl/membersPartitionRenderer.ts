@@ -53,7 +53,7 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
                         stResp => this.update.emit(null)
                     );
                 } else { //it's using a subProperty of skos:member
-                    this.propService.addExistingPropValue(this.resource, prop, member.getNominalValue(), RDFTypesEnum.resource).subscribe(
+                    this.resourcesService.addValue(this.resource, prop, member).subscribe(
                         stResp => {
                             if (member.getRole() == RDFResourceRolesEnum.skosCollection ||
                                 member.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -79,7 +79,7 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of rdf:type
-                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                     stResp => {
                         alert("remove of " + predicate.getShow() + " value is not available");
                     }

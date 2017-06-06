@@ -4,7 +4,6 @@ import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { ClassesServices } from "../../../services/classesServices";
-import { OwlServices } from "../../../services/owlServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -23,7 +22,7 @@ export class ClassTreeComponent extends AbstractTree {
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
-    constructor(private owlService: OwlServices, private clsService: ClassesServices, private searchService: SearchServices, 
+    constructor(private clsService: ClassesServices, private searchService: SearchServices, 
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(

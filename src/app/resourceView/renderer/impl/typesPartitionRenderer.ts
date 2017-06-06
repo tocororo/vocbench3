@@ -49,7 +49,7 @@ export class TypesPartitionRenderer extends AbstractPredObjListRenderer {
                         stResp => this.update.emit(null)
                     ) ;
                 } else { //it's adding a subProperty of rdf:type
-                    this.propService.addExistingPropValue(this.resource, prop, typeClass.getURI(), RDFTypesEnum.resource).subscribe(
+                    this.resourcesService.addValue(this.resource, prop, typeClass).subscribe(
                         stResp => {
                             this.eventHandler.typeAddedEvent.emit({resource: this.resource, type: typeClass});
                             this.update.emit(null);
@@ -72,7 +72,7 @@ export class TypesPartitionRenderer extends AbstractPredObjListRenderer {
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of rdf:type
-                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                     stResp => {
                         this.eventHandler.typeRemovedEvent.emit({resource: this.resource, type: <ARTResource>object});
                         this.update.emit(null);

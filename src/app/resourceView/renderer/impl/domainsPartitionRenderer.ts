@@ -54,7 +54,7 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
                             stResp => this.update.emit(null)
                         );
                     } else { //it's using a subProperty of rdfs:domain
-                        this.propService.addExistingPropValue(this.resource, prop, value.getURI(), RDFTypesEnum.resource).subscribe(
+                        this.resourcesService.addValue(this.resource, prop, value).subscribe(
                             stResp => {
                                 this.update.emit(null);
                             }
@@ -82,7 +82,7 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
                         stResp => this.update.emit(null)
                     );
                 } else { //removing subProperty of rdfs:domain
-                    this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                    this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                         stResp => this.update.emit(null)
                     );
                 }

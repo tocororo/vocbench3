@@ -3,7 +3,7 @@ import { AbstractPredObjListMultirootRenderer } from "../abstractPredObjListMult
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
-import { PropertyServices } from "../../../services/propertyServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
@@ -38,8 +38,8 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
     ];
 
     constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propertyService: PropertyServices, private resViewService: ResourceViewServices, private creationModals: CreationModalServices,
-        private browsingModals: BrowsingModalServices) {
+        private resourceService: ResourcesServices, private resViewService: ResourceViewServices, 
+        private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
         super();
     }
 
@@ -136,8 +136,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
                         );
                         break;
                     case RDFS.label.getURI():
-                        this.propertyService.createAndAddPropValue(
-                            this.resource, predicate, (<ARTLiteral>literal).getValue(), null, RDFTypesEnum.plainLiteral, (<ARTLiteral>literal).getLang()).subscribe(
+                        this.resourceService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
                             stResp => this.update.emit(null)
                             );
                         break;
@@ -196,8 +195,7 @@ export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultiro
                 );
                 break;
             case RDFS.label.getURI():
-                this.propertyService.removePropValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object).getValue(),
-                    null, RDFTypesEnum.plainLiteral, (<ARTLiteral>object).getLang()).subscribe(
+                this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object)).subscribe(
                     stResp => this.update.emit(null)
                     );
                 break;

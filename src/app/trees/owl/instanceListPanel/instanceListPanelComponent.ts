@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core
 import { AbstractPanel } from "../../abstractPanel"
 import { InstanceListComponent } from "../instanceList/instanceListComponent";
 import { SearchServices } from "../../../services/searchServices";
-import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -22,8 +21,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private owlService: OwlServices,
-        private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }

@@ -3,7 +3,6 @@ import { DomSanitizer, SafeStyle } from "@angular/platform-browser"
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
 import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
 import { SearchServices } from "../../../services/searchServices";
-import { OwlServices } from "../../../services/owlServices";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
@@ -35,7 +34,7 @@ export class ClassIndividualTreePanelComponent {
     private selectedClass: ARTURIResource;
     private selectedInstance: ARTURIResource;
 
-    constructor(private owlService: OwlServices, private individualService: IndividualsServices, private searchService: SearchServices,
+    constructor(private individualService: IndividualsServices, private searchService: SearchServices,
         private basicModals: BasicModalServices, private sanitizer: DomSanitizer) { }
 
     ngOnInit() {

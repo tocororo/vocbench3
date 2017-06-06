@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { ARTURIResource } from "../../../../models/ARTResources";
+import { ARTURIResource, ARTLiteral } from "../../../../models/ARTResources";
 import { XmlSchema, SKOS } from "../../../../models/Vocabulary";
 
 export class NewTypedLiteralModalData extends BSModalContext {
@@ -92,7 +92,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
     ok(event: Event) {
         this.submitted = true;
         if (this.isInputValid()) {
-            this.dialog.close({ value: this.value, datatype: this.datatype });
+            this.dialog.close(new ARTLiteral(this.value, this.datatype));
         }
     }
 

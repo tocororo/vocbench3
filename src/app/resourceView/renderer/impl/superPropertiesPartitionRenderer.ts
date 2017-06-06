@@ -48,7 +48,7 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRendere
                         stResp => this.update.emit(null)
                     );
                 } else { //it's enriching a subProperty of rdfs:subPropertyOf
-                    this.propService.addExistingPropValue(this.resource, prop, superProp.getURI(), RDFTypesEnum.resource).subscribe(
+                    this.resourcesService.addValue(this.resource, prop, superProp).subscribe(
                         stResp => {
                             //Here I should emit superPropertyAddedEvent but I can't since I don't know if this.resource has child
                             //(to show in tree when attached). In this rare case I suppose that the user should refresh the tree
@@ -72,7 +72,7 @@ export class SuperPropertiesPartitionRenderer extends AbstractPredObjListRendere
                     stResp => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of rdfs:subPropertyOf
-                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                     stResp => {
                         this.eventHandler.superPropertyRemovedEvent.emit({ property: <ARTURIResource>this.resource, superProperty: <ARTURIResource>object });
                         this.update.emit(null);

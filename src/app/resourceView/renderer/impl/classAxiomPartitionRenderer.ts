@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListMultirootRenderer } from "../abstractPredObjListMultirootRenderer";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { PropertyServices } from "../../../services/propertyServices";
-import { OwlServices } from "../../../services/owlServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
+import { ClassesServices } from "../../../services/classesServices";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
 import { RDFS, OWL } from "../../../models/Vocabulary";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
@@ -32,7 +32,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove class axiom";
 
-    constructor(private propertyService: PropertyServices, private owlService: OwlServices, private manchService: ManchesterServices,
+    constructor(private clsService: ClassesServices, private manchService: ManchesterServices, private resourceService: ResourcesServices, 
         private cfService: CustomFormsServices, private browsingModals: BrowsingModalServices, private resViewModalService: ResViewModalServices) {
         super();
     }
@@ -82,11 +82,11 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
                         );
                     } else { //value is an ARTURIResource (a class selected from the tree)
                         if (property.getURI() == RDFS.subClassOf.getURI()) {
-                            this.owlService.addSuperCls(<ARTURIResource>this.resource, value).subscribe(
+                            this.clsService.addSuperCls(<ARTURIResource>this.resource, value).subscribe(
                                 stResp => this.update.emit(null)
                             );
                         } else {
-                            this.propertyService.addExistingPropValue(this.resource, property, value.getURI(), RDFTypesEnum.uri).subscribe(
+                            this.resourceService.addValue(this.resource, property, value).subscribe(
                                 stResp => this.update.emit(null)
                             );
                         }
@@ -105,11 +105,11 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
         this.resViewModalService.createClassList("Add " + property.getShow()).then(
             (classes: any) => {
                 if (property.getURI() == OWL.intersectionOf.getURI()) {
-                    this.owlService.addIntersectionOf(<ARTURIResource>this.resource, classes).subscribe(
+                    this.clsService.addIntersectionOf(<ARTURIResource>this.resource, classes).subscribe(
                         stResp => this.update.emit(null)
                     );
                 } else if (property.getURI() == OWL.unionOf.getURI()) {
-                    this.owlService.addUnionOf(<ARTURIResource>this.resource, classes).subscribe(
+                    this.clsService.addUnionOf(<ARTURIResource>this.resource, classes).subscribe(
                         stResp => this.update.emit(null)
                     );
                 }
@@ -125,7 +125,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
     private createInstanceList(property: ARTURIResource) {
         this.resViewModalService.createInstanceList("Add " + property.getShow()).then(
             (instances: any) => {
-                this.owlService.addOneOf(<ARTURIResource>this.resource, instances).subscribe(
+                this.clsService.addOneOf(<ARTURIResource>this.resource, instances).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -159,7 +159,7 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
                     stResp => this.update.emit(null)
                 )
             } else {
-                this.owlService.removeSuperCls(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
+                this.clsService.removeSuperCls(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
                     stResp => this.update.emit(null)
                 );
             }
@@ -170,20 +170,20 @@ export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMul
                     stResp => this.update.emit(null)
                 )
             } else {
-                this.propertyService.removePropValue(<ARTURIResource>this.resource, predicate, object.getNominalValue(), null, RDFTypesEnum.uri).subscribe(
+                this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, object).subscribe(
                     stResp => this.update.emit(null)
                 );
             }
         } else if (predicate.getURI() == OWL.intersectionOf.getURI()) {
-            this.owlService.removeIntersectionOf(<ARTURIResource>this.resource, object).subscribe(
+            this.clsService.removeIntersectionOf(<ARTURIResource>this.resource, object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else if (predicate.getURI() == OWL.unionOf.getURI()) {
-            this.owlService.removeUnionOf(<ARTURIResource>this.resource, object).subscribe(
+            this.clsService.removeUnionOf(<ARTURIResource>this.resource, <ARTBNode>object).subscribe(
                 stResp => this.update.emit(null)
             );
         } else if (predicate.getURI() == OWL.oneOf.getURI()) {
-            this.owlService.removeOneOf(<ARTURIResource>this.resource, object).subscribe(
+            this.clsService.removeOneOf(<ARTURIResource>this.resource, <ARTBNode>object).subscribe(
                 stResp => this.update.emit(null)
             );
         }

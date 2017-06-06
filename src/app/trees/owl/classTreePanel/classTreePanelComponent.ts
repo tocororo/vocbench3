@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { AbstractTreePanel } from "../../abstractTreePanel"
 import { ClassTreeComponent } from "../classTree/classTreeComponent";
-import { OwlServices } from "../../../services/owlServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -23,8 +22,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private owlService: OwlServices,
-        private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }

@@ -50,7 +50,7 @@ export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
                         stResp => this.update.emit(null)
                     );
                 } else { //it's enriching a subProperty of skos:inScheme
-                    this.propService.addExistingPropValue(this.resource, prop, scheme.getURI(), RDFTypesEnum.resource).subscribe(
+                    this.resourcesService.addValue(this.resource, prop, scheme).subscribe(
                         stResp => {
                             //Here I should emit conceptAddedToSchemEvent but I can't since I don't know if this.resource has broader and child
                             //(to show in tree when attached). In this rare case I suppose that the user should refresh the tree
@@ -75,7 +75,7 @@ export class SchemesPartitionRenderer extends AbstractPredObjListRenderer {
                     data => this.update.emit(null)
                 );
             } else {//predicate is some subProperty of skos:inScheme
-                this.resourcesService.removeTriple(this.resource, predicate, object).subscribe(
+                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
                     stResp => {
                         this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object });
                         this.update.emit(null);

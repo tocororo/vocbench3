@@ -5,6 +5,7 @@ import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { IcvServices } from "../../services/icvServices";
 import { PropertyServices } from "../../services/propertyServices";
+import { ResourcesServices } from "../../services/resourcesServices";
 import { SkosServices } from "../../services/skosServices";
 import { SkosxlServices } from "../../services/skosxlServices";
 
@@ -19,7 +20,7 @@ export class NoLabelResourceComponent {
     private lexicalizationModel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private creationModals: CreationModalServices) { }
+        private resourcesService: ResourcesServices, private propService: PropertyServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
@@ -75,8 +76,7 @@ export class NoLabelResourceComponent {
         } else { //OWL 
             this.creationModals.newPlainLiteral("Add rdfs:label").then(
                 (literal: any) => {
-                    this.propService.createAndAddPropValue(resource, RDFS.label,(<ARTLiteral>literal).getValue(), null, 
-                        RDFTypesEnum.plainLiteral, (<ARTLiteral>literal).getLang()).subscribe(
+                    this.resourcesService.addValue(resource, RDFS.label,(<ARTLiteral>literal)).subscribe(
                         stResp => {
                             this.runIcv();
                         }
