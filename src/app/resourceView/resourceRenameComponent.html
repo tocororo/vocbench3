@@ -10,7 +10,7 @@
         
         <div class="input-group-btn">
             <button *ngIf="renameLocked" class="btn btn-default" style="width:72px" (click)="startRename()"
-                [disabled]="!resource.getAdditionalProperty('explicit')">Rename</button>
+                [disabled]="!resource.getAdditionalProperty('explicit') || readonly">Rename</button>
                 
             <button *ngIf="!renameLocked" class="btn btn-default" style="width:24px; padding: 1px 3px;"
                 (click)="renameResource()">

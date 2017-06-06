@@ -89,7 +89,7 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li *ngFor="let sp of a.getSuggestedMappingProperties()" style="position: relative;">
-                                                <a (click)="changeMappingProperty(a, sp)" style="margin-right: 4px;">{{sp.getShow()}}</a>
+                                                <a (click)="changeMappingProperty(a, sp)" style="margin-right: 18px;">{{sp.getShow()}}</a>
                                                 <span *ngIf="sp.getShow() == a.getMappingProperty().getShow()" 
                                                     class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;">
                                                 </span>

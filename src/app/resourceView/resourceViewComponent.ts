@@ -15,6 +15,7 @@ import { VersionsServices } from "../services/versionsServices";
 export class ResourceViewComponent {
 
     @Input() resource: ARTResource;
+    @Input() readonly: boolean = false;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
@@ -55,7 +56,7 @@ export class ResourceViewComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.preferences.getInferenceInResourceView();
-        if (changes['resource'].currentValue) {
+        if (changes['resource'] && changes['resource'].currentValue) {
             if (this.viewInitialized) {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }
@@ -80,9 +81,9 @@ export class ResourceViewComponent {
      * - the resource is renamed, so it needs to refresh
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
-    private buildResourceView(res: ARTResource, version?: VersionInfo) {
+    private buildResourceView(res: ARTResource) {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resViewService.getResourceView(res, version).subscribe(
+        this.resViewService.getResourceView(res, this.activeVersion).subscribe(
             stResp => {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
@@ -283,6 +284,14 @@ export class ResourceViewComponent {
         this.versionService.getVersions().subscribe(
             versions => {
                 this.versionList = versions;
+                //update the active version
+                if (this.activeVersion != null) {
+                    for (var i = 0; i < this.versionList.length; i++) {
+                        if (this.versionList[i].versionId == this.activeVersion.versionId) {
+                            this.activeVersion = this.versionList[i];
+                        }
+                    }
+                }
             }
         );
     }
@@ -290,8 +299,9 @@ export class ResourceViewComponent {
     private switchToVersion(version?: VersionInfo) {
         if (this.activeVersion != version) {
             this.activeVersion = version;
-            this.buildResourceView(this.resource, version);
+            this.buildResourceView(this.resource);
         }
+        this.readonly = this.activeVersion != null; //if the version is not the current, set the RV in readOnly mode
     }
 
     /**

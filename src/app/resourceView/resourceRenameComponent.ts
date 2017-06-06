@@ -11,6 +11,7 @@ import {RefactorServices} from "../services/refactorServices";
 export class ResourceRenameComponent {
     
     @Input() resource: ARTResource;
+    @Input() readonly: boolean;
     
     @ViewChild('localrenameinput') localRenameInput: ElementRef;
     @ViewChild('totalrenameinput') totalRenameInput: ElementRef;
@@ -31,7 +32,7 @@ export class ResourceRenameComponent {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['resource'].currentValue) {
+        if (changes['resource'] && changes['resource'].currentValue) {
             if (this.resource.isURIResource()) {
                 this.localName = (<ARTURIResource>this.resource).getLocalName();
             }

@@ -2,19 +2,19 @@
     <div class="panel-heading">
         <div class="hbox" style="align-items: center">
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
-            <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;"></resource-rename>
+            <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;" [readonly]="readonly"></resource-rename>
             
             <div class="dropdown pull-right" style="margin-left: 3px;">
-                <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" (click)="listVersions()">
+                <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" (click)="listVersions()" title="Change version">
                     <span class="glyphicon glyphicon-time"></span>
                 </button>
                 <ul class="dropdown-menu">
                     <li style="position: relative;">
-                        <a (click)="switchToVersion()" style="padding-right: 4px">Current</a>
+                        <a (click)="switchToVersion()" style="padding-right: 18px">Current</a>
                         <span *ngIf="!activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;"></span>
                     </li>
                     <li *ngFor="let v of versionList" style="position: relative;">
-                        <a (click)="switchToVersion(v)" style="padding-right: 4px">{{v.dateTimeLocal}} - {{v.versionId}}</a>
+                        <a (click)="switchToVersion(v)" style="padding-right: 18px">{{v.dateTimeLocal}} - {{v.versionId}}</a>
                         <span *ngIf="v == activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;"></span>
                     </li>
                 </ul>
@@ -28,7 +28,7 @@
             <button class="btn btn-default btn-xs" title="Refresh" (click)="buildResourceView(resource)" style="margin-left: 3px;">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
-            <res-view-menu [resource]="resource" (update)="buildResourceView(resource)"></res-view-menu>
+            <res-view-menu [resource]="resource" (update)="buildResourceView(resource)" [readonly]="readonly"></res-view-menu>
         </div>
     </div>
     <div class="panel-body scrollableContainer">

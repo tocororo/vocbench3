@@ -16,6 +16,7 @@ import { SKOS } from "../models/Vocabulary";
 export class ResourceViewContextMenu {
 
     @Input() resource: ARTResource;
+    @Input() readonly: boolean;
     @Output() update = new EventEmitter();
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices,
