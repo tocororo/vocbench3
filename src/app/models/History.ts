@@ -1,15 +1,18 @@
 import { ARTURIResource, ARTResource, ARTNode } from "./ARTResources";
+import { Deserializer } from "../utils/Deserializer";
 
 export class CommitInfo {
     public commit: ARTURIResource;
     public user: ARTURIResource;
     public operation: ARTURIResource;
     public subject: ARTURIResource;
-    public startTime: string;
-    public endTime: string;
+    public startTime: Date;
+    public startTimeLocal: string;
+    public endTime: Date;
+    public endTimeLocal: string;
 
     constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, subject: ARTURIResource, 
-            startTime: string, endTime: string) {
+            startTime: Date, endTime: Date) {
         this.commit = commit;
         this.user = user;
 
@@ -24,11 +27,15 @@ export class CommitInfo {
             this.operation.setShow(operationShow);
         }
         
-        
-
         this.subject = subject;
         this.startTime = startTime;
+        if (startTime != null) {
+            this.startTimeLocal = Deserializer.parseDateTime(startTime);
+        }
         this.endTime = endTime;
+        if (endTime != null) {
+            this.endTimeLocal = Deserializer.parseDateTime(endTime);
+        }
     }
 }
 
@@ -42,5 +49,21 @@ export class CommitOperation {
         this.predicate = predicate;
         this.object = object;
         this.context = context;
+    }
+}
+
+export class VersionInfo {
+    public versionId: string;
+    public repositoryId: string;
+    public dateTime: Date;
+    public dateTimeLocal: string;
+
+    constructor(versionId: string, repositoryId: string, dateTime: Date) {
+        this.versionId = versionId;
+        this.repositoryId = repositoryId;
+        this.dateTime = dateTime;
+        if (dateTime != null) {
+            this.dateTimeLocal = Deserializer.parseDateTime(dateTime);
+        }
     }
 }

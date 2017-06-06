@@ -7,7 +7,8 @@ import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalS
 import { VBContext } from '../../../utils/VBContext';
 import { VBEventHandler } from '../../../utils/VBEventHandler';
 import { UIUtils } from '../../../utils/UIUtils';
-import { RepositoryAccess, RepositoryAccessType, VersionInfo } from '../../../models/Project';
+import { RepositoryAccess, RepositoryAccessType } from '../../../models/Project';
+import { VersionInfo } from '../../../models/History';
 
 @Component({
     selector: "versioning-component",
@@ -29,7 +30,7 @@ export class VersioningComponent {
     private initVersions() {
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [{ versionId: "current", repositoryId: "---", dateTime: "---" }];
+                this.versionList = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: "---" } ];
                 this.versionList = this.versionList.concat(versions);
             }
         );

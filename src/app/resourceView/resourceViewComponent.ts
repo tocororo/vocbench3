@@ -1,10 +1,12 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute } from "../models/ARTResources";
+import { VersionInfo } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBPreferences } from "../utils/VBPreferences";
 import { ResourceViewServices } from "../services/resourceViewServices";
+import { VersionsServices } from "../services/versionsServices";
 
 @Component({
     selector: "resource-view",
@@ -18,6 +20,9 @@ export class ResourceViewComponent {
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
     private viewInitialized: boolean = false;
+
+    private versionList: VersionInfo[];
+    private activeVersion: VersionInfo;
 
     private showInferred = false;
 
@@ -42,7 +47,7 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private eventHandler: VBEventHandler, private preferences: VBPreferences) {
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private eventHandler: VBEventHandler, private preferences: VBPreferences) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -75,9 +80,9 @@ export class ResourceViewComponent {
      * - the resource is renamed, so it needs to refresh
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
-    private buildResourceView(res: ARTResource) {
+    private buildResourceView(res: ARTResource, version?: VersionInfo) {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resViewService.getResourceView(res).subscribe(
+        this.resViewService.getResourceView(res, version).subscribe(
             stResp => {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
@@ -263,11 +268,35 @@ export class ResourceViewComponent {
         this.inverseofColl = Deserializer.createPredicateObjectsList(facetsPartition.inverseOf);
     }
 
+    /**
+     * HEADING BUTTON HANDLERS
+     */
+
     private showHideInferred() {
         this.showInferred = !this.showInferred;
         this.preferences.setInferenceInResourceView(this.showInferred);
         this.fillPartitions();
     }
+
+
+    private listVersions() {
+        this.versionService.getVersions().subscribe(
+            versions => {
+                this.versionList = versions;
+            }
+        );
+    }
+
+    private switchToVersion(version?: VersionInfo) {
+        if (this.activeVersion != version) {
+            this.activeVersion = version;
+            this.buildResourceView(this.resource, version);
+        }
+    }
+
+    /**
+     * EVENT LISTENERS
+     */
 
     private objectDblClick(object: ARTResource) {
         this.dblclickObj.emit(object);

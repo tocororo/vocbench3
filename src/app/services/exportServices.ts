@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTURIResource } from "../models/ARTResources";
 import { RDFFormat } from "../models/RDFFormat";
@@ -80,7 +80,8 @@ export class ExportServices {
         if (force != null) {
             params.force = force;
         }
-        return this.httpMgr.downloadFile(this.serviceName, "export", params, this.oldTypeService, true, true);
+        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        return this.httpMgr.downloadFile(this.serviceName, "export", params, this.oldTypeService, true, options);
     }   
 
 }

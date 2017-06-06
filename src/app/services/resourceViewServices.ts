@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource} from "../models/ARTResources";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { VersionInfo } from "../models/History";
 
 
 @Injectable()
@@ -17,14 +18,18 @@ export class ResourceViewServices {
      * Returns the resource view of the given resource
      * @param resource
      */
-    getResourceView(resource: ARTResource) {
+    getResourceView(resource: ARTResource, version?: VersionInfo) {
         console.log("[resourceViewServices] getResourceView");
         var params: any = {
             resource: resource,
         };
-        return this.httpMgr.doGet("ResourceView2", "getResourceView", params, this.oldTypeService, true);
+        var options: VBRequestOptions;
+        if (version != null) {
+            options = new VBRequestOptions({ versionId : version.versionId });
+        }
+        return this.httpMgr.doGet("ResourceView2", "getResourceView", params, this.oldTypeService, true, options);
     }
-    
+
     /**
      * Returns the lexicalization properties for the given resource
      * @param resource

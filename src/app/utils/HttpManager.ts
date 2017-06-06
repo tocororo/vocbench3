@@ -23,6 +23,9 @@ export class HttpManager {
     //old services url parts
     private oldServerpath: string = "resources/stserver/STServer";
 
+    //default request options, to eventually override through options parameter in doGet, doPost, ...
+    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({ versionId: null, skipErrorAlert: false });
+
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
         let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
@@ -46,26 +49,26 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
-     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
-     *      Is useful to handle the error from the component that invokes the service
-     *      (e.g. see deleteScheme in skos or skosxl services)
+     * @param options further options that overrides the default ones
      */
-    doGet(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
+    doGet(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, options?: VBRequestOptions) {
         var url: string = this.getRequestBaseUrl(service, request, oldType);
+
+        options = this.defaultRequestOptions.merge(options);
 
         //add parameters
         url += this.getParametersForUrl(params);
-        url += this.getContextParametersForUrl();
+        url += this.getContextParametersForUrl(options);
 
         console.log("[GET]: " + url);
 
         var headers = new Headers();
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
-        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
-        return this.http.get(url, options)
+        return this.http.get(url, requestOptions)
             .map(res => {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
@@ -83,7 +86,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                return this.handleError(error, skipErrorAlert);
+                return this.handleError(error, options.skipErrorAlert);
             });
     }
 
@@ -99,14 +102,15 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
-     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
-     *      Is useful to handle the error from the component that invokes the service.
+     * @param options further options that overrides the default ones
      */
-    doPost(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
+    doPost(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, options?: VBRequestOptions) {
         var url: string = this.getRequestBaseUrl(service, request, oldType);
 
+        options = this.defaultRequestOptions.merge(options);
+
         //add ctx parameters
-        url += this.getContextParametersForUrl();
+        url += this.getContextParametersForUrl(options);
 
         console.log("[POST]: " + url);
 
@@ -117,10 +121,10 @@ export class HttpManager {
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
-        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
-        return this.http.post(url, postData, options)
+        return this.http.post(url, postData, requestOptions)
             .map(res => {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
@@ -138,7 +142,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                return this.handleError(error, skipErrorAlert);
+                return this.handleError(error, options.skipErrorAlert);
             });
     }
 
@@ -155,14 +159,15 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
-     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
-     *      Is useful to handle the error from the component that invokes the service.
+     * @param options further options that overrides the default ones
      */
-    uploadFile(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, skipErrorAlert?: boolean) {
+    uploadFile(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, options?: VBRequestOptions) {
         var url: string = this.getRequestBaseUrl(service, request, oldType);
 
+        options = this.defaultRequestOptions.merge(options);
+
         //add ctx parameters
-        url += this.getContextParametersForUrl();
+        url += this.getContextParametersForUrl(options);
 
         console.log("[POST]: " + url);
 
@@ -175,10 +180,10 @@ export class HttpManager {
         var headers = new Headers();
         var acceptRespType = respJson ? "application/json" : "application/xml";
         headers.append('Accept', acceptRespType);
-        var options = new RequestOptions({ headers: headers, withCredentials: true });
+        var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
-        return this.http.post(url, formData, options)
+        return this.http.post(url, formData, requestOptions)
             .map(res => {
                 if (this.isResponseXml(res)) {
                     var parser = new DOMParser();
@@ -196,7 +201,7 @@ export class HttpManager {
                 }
             })
             .catch(error => {
-                return this.handleError(error, skipErrorAlert);
+                return this.handleError(error, options.skipErrorAlert);
             });
     }
 
@@ -212,52 +217,53 @@ export class HttpManager {
 	 *  }
      * @param oldType tells if the request is for the old services or new ones
      * @param post tells if the download is done via post-request (e.g. Export.export() service)
-     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
-     *      Is useful to handle the error from the component that invokes the service.
+     * @param options further options that overrides the default ones
      */
-    downloadFile(service: string, request: string, params: any, oldType: boolean, post?: boolean, skipErrorAlert?: boolean): Observable<Blob> {
+    downloadFile(service: string, request: string, params: any, oldType: boolean, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
         var url: string = this.getRequestBaseUrl(service, request, oldType);
+
+        options = this.defaultRequestOptions.merge(options);
 
         if (post) {
             //add ctx parameters
-            url += this.getContextParametersForUrl();
+            url += this.getContextParametersForUrl(options);
 
             console.log("[POST]: " + url);
             //prepare POST data
             var postData: any = this.getPostData(params);
             var headers = new Headers();
             headers.append('Content-Type', 'application/x-www-form-urlencoded');
-            var options = new RequestOptions({
+            var requestOptions = new RequestOptions({
                 headers: headers,
                 withCredentials: true,
                 responseType: ResponseContentType.ArrayBuffer
             });
 
-            return this.http.post(url, postData, options)
+            return this.http.post(url, postData, requestOptions)
                 .map(
                     res => { return this.arrayBufferRespHanlder(res); }
                 ).catch(
-                    error => { return this.handleError(error, skipErrorAlert) }
+                    error => { return this.handleError(error, options.skipErrorAlert) }
                 );
         } else { //GET
             //add parameters
             url += this.getParametersForUrl(params);
-            url += this.getContextParametersForUrl();
+            url += this.getContextParametersForUrl(options);
 
             console.log("[GET]: " + url);
 
-            var options = new RequestOptions({
+            var requestOptions = new RequestOptions({
                 headers: new Headers(),
                 withCredentials: true,
                 responseType: ResponseContentType.ArrayBuffer
             });
 
             //execute request
-            return this.http.get(url, options)
+            return this.http.get(url, requestOptions)
                 .map(
                     res => { return this.arrayBufferRespHanlder(res); }
                 ).catch(
-                    error => { return this.handleError(error, skipErrorAlert) }
+                    error => { return this.handleError(error, options.skipErrorAlert) }
                 );
         }
 
@@ -343,7 +349,7 @@ export class HttpManager {
     /**
      * Returns the request context parameters.
      */
-    private getContextParametersForUrl(): string {
+    private getContextParametersForUrl(options: VBRequestOptions): string {
 
         var params: string = "";
 
@@ -354,7 +360,9 @@ export class HttpManager {
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
 
-        if (VBContext.getContextVersion() != undefined) {
+        if (options.versionId != undefined) { //give priority to version in VBRequestOptions over version in ctx
+            params += "ctx_version=" + encodeURIComponent(options.versionId) + "&";
+        } else if (VBContext.getContextVersion() != undefined) {
             params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
         }
 
@@ -435,4 +443,47 @@ export class HttpManager {
         return response.headers.get("Content-Type").indexOf(this.contentTypeJson) != -1;
     }
 
+    private mergeRequestOptions(providedOpts: VBRequestOptions) {
+
+    }
+
+}
+
+
+//inspired by angular RequestOptions
+export class VBRequestOptions {
+
+    versionId: string;
+    skipErrorAlert: boolean;
+    
+    constructor({ versionId, skipErrorAlert }: VBRequestOptionsArgs = {}) {
+        this.versionId = versionId != null ? versionId : null;
+        this.skipErrorAlert = skipErrorAlert != null ? skipErrorAlert : null;
+    }
+
+    /**
+     * Creates a copy of the `VBRequestOptions` instance, using the optional input as values to override existing values.
+     * This method will not change the values of the instance on which it is being  called.
+     * @param options 
+     */
+    merge(options?: VBRequestOptions): VBRequestOptions {
+        //if options is provided and its parameters is not null, override the value of the current instance
+        return new VBRequestOptions({
+            versionId: options && options.versionId != null ? options.versionId : this.versionId,
+            skipErrorAlert: options && options.skipErrorAlert != null ? options.skipErrorAlert : this.skipErrorAlert,
+        });
+    }
+}
+//inspired by angular RequestOptionsArgs
+interface VBRequestOptionsArgs {
+    /**
+     * a one-time versionId: is used to switch to a given version only in a precise request
+     */
+    versionId?: string; 
+
+    /**
+     * If true prevents an alert dialog to show up in case of error during requests.
+     * Is useful to handle the error from the component that invokes the service
+     */
+    skipErrorAlert?: boolean
 }

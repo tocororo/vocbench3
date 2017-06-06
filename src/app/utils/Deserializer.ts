@@ -558,9 +558,9 @@ export class Deserializer {
      * Parses a datetime formatted like 2017-05-29T08:34:35.641+0000 and return it formatted as "<date> <time>" accordin to the local format
      * @param datetime 
      */
-    public static parseDateTime(datetime: string): string {
-        let d = new Date(datetime);
-        return d.toLocaleDateString() + " " + d.toLocaleTimeString();
+    public static parseDateTime(datetime: Date): string {
+        // return datetime.toLocaleDateString([], { year: "numeric", month: "2-digit", day: "2-digit" }) + " " + datetime.toLocaleTimeString();
+        return datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString();
     }
 
 }

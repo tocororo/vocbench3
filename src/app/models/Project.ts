@@ -170,9 +170,3 @@ export class Repository {
     public readable: boolean;
     public writable: boolean;
 }
-
-export class VersionInfo {
-    public versionId: string;
-    public repositoryId: string;
-    public dateTime: string;
-}

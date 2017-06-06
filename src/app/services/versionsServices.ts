@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { RepositoryAccess, VersionInfo } from "../models/Project";
+import { RepositoryAccess } from "../models/Project";
+import { VersionInfo } from "../models/History";
 import { PluginSpecification } from "../models/Plugins";
 
 @Injectable()
@@ -23,13 +24,7 @@ export class VersionsServices {
             stResp => {
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let v: VersionInfo = {
-                        versionId: stResp[i].versionId,
-                        repositoryId: stResp[i].repositoryId,
-                        dateTime: null
-                    }
-                    //parse and format datetime
-                    v.dateTime = Deserializer.parseDateTime(stResp[i].dateTime);
+                    let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime));
                     versions.push(v);
                 }
                 //sort by date

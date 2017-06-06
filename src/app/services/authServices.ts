@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
 import { User } from "../models/User";
 
@@ -23,7 +23,8 @@ export class AuthServices {
             password: password,
             _spring_security_remember_me: rememberMe
         }
-        return this.httpMgr.doPost(this.serviceName, "login", params, this.oldTypeService, true, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        return this.httpMgr.doPost(this.serviceName, "login", params, this.oldTypeService, true, options).map(
             stResp => {
                 var loggedUser: User = Deserializer.createUser(stResp);
                 VBContext.setLoggedUser(loggedUser);

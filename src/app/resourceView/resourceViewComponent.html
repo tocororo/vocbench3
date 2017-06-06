@@ -3,6 +3,23 @@
         <div class="hbox" style="align-items: center">
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
             <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;"></resource-rename>
+            
+            <div class="dropdown pull-right" style="margin-left: 3px;">
+                <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" (click)="listVersions()">
+                    <span class="glyphicon glyphicon-time"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li style="position: relative;">
+                        <a (click)="switchToVersion()" style="padding-right: 4px">Current</a>
+                        <span *ngIf="!activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;"></span>
+                    </li>
+                    <li *ngFor="let v of versionList" style="position: relative;">
+                        <a (click)="switchToVersion(v)" style="padding-right: 4px">{{v.dateTimeLocal}} - {{v.versionId}}</a>
+                        <span *ngIf="v == activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;"></span>
+                    </li>
+                </ul>
+            </div>
+            
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: showInferred}"
                 title="Show/hide inferred information" (click)="showHideInferred()">
                 <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum } from "../models/ARTResources";
 import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, FormFieldType, CustomFormLevel } from "../models/CustomForms";
@@ -62,7 +62,8 @@ export class CustomFormsServices {
         var params: any = {
             id: customFormId
         };
-        return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, this.oldTypeService, true, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, this.oldTypeService, true, options).map(
             stResp => {
                 /* this service could throw an error if Pearl is invalid
                 (in this case the server throws a PRParserException and it is handled in HttpManager),

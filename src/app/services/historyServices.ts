@@ -54,16 +54,16 @@ export class HistoryServices {
                         subject = new ARTURIResource(itemJson.subject['@id']);
                     }
 
-                    let startTime: string;
+                    let startTime: Date;
                     let startTimeJson = itemJson.startTime;
                     if (startTimeJson != null) {
-                        startTime = Deserializer.parseDateTime(startTimeJson);
+                        startTime = new Date(startTimeJson);
                     }
 
-                    let endTime: string;
+                    let endTime: Date;
                     let endTimeJson = itemJson.endTime;
                     if (endTimeJson != null) {
-                        endTime = Deserializer.parseDateTime(endTimeJson);
+                        endTime = new Date(endTimeJson);
                     }
                     
                     let item: CommitInfo = new CommitInfo(new ARTURIResource(itemJson.commit), user, operation, subject, startTime, endTime);
