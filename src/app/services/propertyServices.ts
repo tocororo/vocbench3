@@ -11,7 +11,6 @@ import {FormCollection, CustomForm, CustomFormType} from "../models/CustomForms"
 export class PropertyServices {
 
     private serviceName = "Properties";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
@@ -22,7 +21,7 @@ export class PropertyServices {
     getTopProperties(): Observable<ARTURIResource[]> {
         console.log("[PropertyServices] getTopProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopProperties", params, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {
@@ -40,7 +39,7 @@ export class PropertyServices {
     getTopRDFProperties(): Observable<ARTURIResource[]> {
         console.log("[PropertyServices] getTopRDFProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {
@@ -58,7 +57,7 @@ export class PropertyServices {
     getTopObjectProperties(): Observable<ARTURIResource[]> {
         console.log("[PropertyServices] getTopObjectProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {
@@ -76,7 +75,7 @@ export class PropertyServices {
     getTopDatatypeProperties(): Observable<ARTURIResource[]> {
         console.log("[PropertyServices] getTopDatatypeProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {
@@ -94,7 +93,7 @@ export class PropertyServices {
     getTopAnnotationProperties(): Observable<ARTURIResource[]> {
         console.log("[PropertyServices] getTopAnnotationProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {
@@ -112,7 +111,7 @@ export class PropertyServices {
     getTopOntologyProperties(): Observable<ARTURIResource[]> {
         console.log("[PropertyServices] getTopOntologyProperties");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params, true).map(
             stResp => {
                 var topProperties = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topProperties.length; i++) {
@@ -133,7 +132,7 @@ export class PropertyServices {
         var params: any = {
             superProperty: property
         };
-        return this.httpMgr.doGet(this.serviceName, "getSubProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getSubProperties", params, true).map(
             stResp => {
                 var subProps = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < subProps.length; i++) {
@@ -154,7 +153,7 @@ export class PropertyServices {
         var params: any = {
             propList: properties
         };
-        return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params, true).map(
             stResp => {
                 var props = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < props.length; i++) {
@@ -176,7 +175,7 @@ export class PropertyServices {
         var params: any = {
             res: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getRelevantPropertiesForResource", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getRelevantPropertiesForResource", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -201,7 +200,7 @@ export class PropertyServices {
         var params: any = {
             property: property,
         };
-        return this.httpMgr.doGet(this.serviceName, "getRange", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getRange", params, true).map(
             stResp => {
                 let ranges: any;
                 let formCollection: FormCollection;
@@ -262,7 +261,7 @@ export class PropertyServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createProperty", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createProperty", params, true).map(
             stResp => {
                 var newProp = Deserializer.createURI(stResp);
                 newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -296,7 +295,7 @@ export class PropertyServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createProperty", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createProperty", params, true).map(
             stResp => {
                 var newProp = Deserializer.createURI(stResp);
                 newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -315,7 +314,7 @@ export class PropertyServices {
         var params: any = {
             property: property
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteProperty", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteProperty", params, true).map(
             stResp => {
                 this.eventHandler.propertyDeletedEvent.emit(property);
                 return property;
@@ -335,7 +334,7 @@ export class PropertyServices {
             property: property,
             superProperty: superProperty,
         };
-        return this.httpMgr.doPost(this.serviceName, "addSuperProperty", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addSuperProperty", params, true).map(
             stResp => {
                 //create subProperty by duplicating property param
                 var subProperty = property.clone();
@@ -361,7 +360,7 @@ export class PropertyServices {
             property: property,
             superProperty: superProperty,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeSuperProperty", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeSuperProperty", params, true).map(
             stResp => {
                 this.eventHandler.superPropertyRemovedEvent.emit({property: property, superProperty: superProperty});
                 return stResp;
@@ -380,7 +379,7 @@ export class PropertyServices {
             property: property,
             domain: domain
         };
-        return this.httpMgr.doPost(this.serviceName, "addPropertyDomain", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addPropertyDomain", params, true);
     }
     
     /**
@@ -394,7 +393,7 @@ export class PropertyServices {
             property: property,
             domain: domain,
         };
-        return this.httpMgr.doPost(this.serviceName, "removePropertyDomain", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removePropertyDomain", params, true);
     }
     
     /**
@@ -408,7 +407,7 @@ export class PropertyServices {
             property: property,
             range: range
         };
-        return this.httpMgr.doPost(this.serviceName, "addPropertyRange", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addPropertyRange", params, true);
     }
 
     /**
@@ -422,7 +421,7 @@ export class PropertyServices {
             property: property,
             range: range,
         };
-        return this.httpMgr.doPost(this.serviceName, "removePropertyRange", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removePropertyRange", params, true);
     }
     
 }

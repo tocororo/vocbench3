@@ -9,7 +9,6 @@ import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRoles
 export class SkosxlServices {
 
     private serviceName = "SKOSXL";
-    private oldTypeService = false;
 
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
@@ -45,7 +44,7 @@ export class SkosxlServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -84,7 +83,7 @@ export class SkosxlServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -120,7 +119,7 @@ export class SkosxlServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, true).map(
             stResp => {
                 var newScheme = Deserializer.createURI(stResp);
                 return newScheme;
@@ -141,7 +140,7 @@ export class SkosxlServices {
             concept: concept,
             lang: lang
         };
-        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params, true).map(
             stResp => {
                 return Deserializer.createRDFResource(stResp[0]);
             }
@@ -161,7 +160,7 @@ export class SkosxlServices {
             literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true);
     }
 
     /**
@@ -175,7 +174,7 @@ export class SkosxlServices {
             concept: concept,
             xlabel: xlabel,
         };
-        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, true);
     }
 
     /**
@@ -189,7 +188,7 @@ export class SkosxlServices {
             concept: concept,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, true).map(
             stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
             }
@@ -209,7 +208,7 @@ export class SkosxlServices {
             literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, true);
     }
 
     /**
@@ -223,7 +222,7 @@ export class SkosxlServices {
             concept: concept,
             xlabel: xlabel,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, true);
     }
 
     /**
@@ -239,7 +238,7 @@ export class SkosxlServices {
             literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, true);
     }
 
     /**
@@ -253,7 +252,7 @@ export class SkosxlServices {
             concept: concept,
             xlabel: xlabel,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, true);
     }
 
     /**
@@ -268,7 +267,7 @@ export class SkosxlServices {
             xlabel: xlabel,
             literal: literal,
         };
-        return this.httpMgr.doPost(this.serviceName, "changeLabelInfo", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "changeLabelInfo", params, true);
     }
 
     /**
@@ -282,7 +281,7 @@ export class SkosxlServices {
             concept: concept,
             xlabelURI: xLabel
         };
-        return this.httpMgr.doPost(this.serviceName, "prefToAtlLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "prefToAtlLabel", params, true);
     }
 
     /**
@@ -296,7 +295,7 @@ export class SkosxlServices {
             concept: concept,
             xlabelURI: xLabel
         };
-        return this.httpMgr.doPost(this.serviceName, "altToPrefLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "altToPrefLabel", params, true);
     }
 
     //====== Collection services ======
@@ -328,7 +327,7 @@ export class SkosxlServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -366,7 +365,7 @@ export class SkosxlServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);

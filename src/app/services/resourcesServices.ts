@@ -6,7 +6,6 @@ import {ARTResource, ARTURIResource, ARTNode} from "../models/ARTResources";
 export class ResourcesServices {
 
     private serviceName = "Resources";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -25,7 +24,7 @@ export class ResourcesServices {
             value : value,
             newValue: newValue
         };
-        return this.httpMgr.doGet(this.serviceName, "updateTriple", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "updateTriple", params, true);
     }
 
     /**
@@ -41,7 +40,7 @@ export class ResourcesServices {
             property : property,
             value : value
         };
-        return this.httpMgr.doGet(this.serviceName, "removeValue", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeValue", params, true);
     }
 
     /**
@@ -53,7 +52,7 @@ export class ResourcesServices {
         var params: any = {
             resource : resource,
         };
-        return this.httpMgr.doGet(this.serviceName, "setDeprecated", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "setDeprecated", params, true);
     }
 
     /**
@@ -69,7 +68,7 @@ export class ResourcesServices {
             property : property,
             value : value
         };
-        return this.httpMgr.doGet(this.serviceName, "addValue", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "addValue", params, true);
     }
 
 }

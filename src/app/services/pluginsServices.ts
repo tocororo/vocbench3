@@ -7,7 +7,6 @@ import {Plugin, PluginConfiguration, PluginConfigParam} from "../models/Plugins"
 export class PluginsServices {
 
     private serviceName = "Plugins";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
     
@@ -20,7 +19,7 @@ export class PluginsServices {
         var params = {
             extensionPoint: extensionPoint
         };
-        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params).map(
             stResp => {
                 var pluginColl = stResp.getElementsByTagName("plugin");
                 var plugins: Plugin[] = [];
@@ -52,7 +51,7 @@ export class PluginsServices {
         var params = {
             factoryID: factoryID
         };
-        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params).map(
             stResp => {
                 var configurations: PluginConfiguration[] = [];
                 var configColl = stResp.getElementsByTagName("configuration");

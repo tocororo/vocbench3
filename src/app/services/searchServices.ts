@@ -8,7 +8,6 @@ import { ARTURIResource } from "../models/ARTResources";
 export class SearchServices {
 
     private serviceName = "Search";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -39,7 +38,7 @@ export class SearchServices {
         if (schemes != undefined) {
             params.scheme = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchResource", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "searchResource", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -69,7 +68,7 @@ export class SearchServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -92,7 +91,7 @@ export class SearchServices {
         if (schemes != undefined) {
             params.schemesIRI = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

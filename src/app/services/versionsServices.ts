@@ -10,7 +10,6 @@ import { PluginSpecification } from "../models/Plugins";
 export class VersionsServices {
 
     private serviceName = "Versions";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -20,7 +19,7 @@ export class VersionsServices {
     getVersions(): Observable<VersionInfo[]> {
         console.log("[VersionsServices] getVersions");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getVersions", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getVersions", params, true).map(
             stResp => {
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -65,7 +64,7 @@ export class VersionsServices {
         if (repoConfigurerSpecification != null) {
             params.repoConfigurerSpecification = JSON.stringify(repoConfigurerSpecification);
         }
-        return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, true);
     }
 
 

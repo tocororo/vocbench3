@@ -9,7 +9,6 @@ import { Deserializer } from "../utils/Deserializer";
 export class HistoryServices {
 
     private serviceName = "History";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -28,7 +27,7 @@ export class HistoryServices {
             params.limit = limit;
         }
         
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
             stResp => {
                 var items: CommitInfo[] = [];
                 var itemsJsonArray: any[] = stResp.items;
@@ -84,7 +83,7 @@ export class HistoryServices {
         var params: any = {
             commit: commit
         };
-        return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params, true).map(
             stResp => {
                 var additions: CommitOperation[] = [];
                 var removals: CommitOperation[] = [];

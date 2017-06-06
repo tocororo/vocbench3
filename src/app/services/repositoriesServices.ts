@@ -7,7 +7,6 @@ import { Repository } from "../models/Project";
 export class RepositoriesServices {
 
     private serviceName = "Repositories";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -23,7 +22,7 @@ export class RepositoriesServices {
             params.username = username;
             params.password = password;
         }
-        return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params, true).map(
             stResp => {
                 var repositories: Repository[] = [];
                 for (var i = 0; i < stResp.length; i++) {

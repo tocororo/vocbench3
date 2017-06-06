@@ -5,7 +5,6 @@ import {HttpManager} from "../utils/HttpManager";
 export class XmlSchemaServices {
 
     private serviceName = "XMLSchema";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -33,7 +32,7 @@ export class XmlSchemaServices {
         if (offset != undefined) {
             params.offset = offset;
         }
-        return this.httpMgr.doGet(this.serviceName, "formatDateTime", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "formatDateTime", params).map(
             stResp => {
                 return stResp.getElementsByTagName("dateTime")[0].textContent;
             }
@@ -54,7 +53,7 @@ export class XmlSchemaServices {
             month : month,
             day : day
         };
-        return this.httpMgr.doGet(this.serviceName, "formatDate", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "formatDate", params).map(
             stResp => {
                 return stResp.getElementsByTagName("date")[0].textContent;
             }
@@ -75,7 +74,7 @@ export class XmlSchemaServices {
             minute : minute,
             second : second
         };
-        return this.httpMgr.doGet(this.serviceName, "formatTime", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "formatTime", params).map(
             stResp => {
                 return stResp.getElementsByTagName("time")[0].textContent;
             }

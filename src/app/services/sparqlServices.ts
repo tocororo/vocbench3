@@ -6,7 +6,6 @@ import { ARTURIResource } from "../models/ARTResources";
 export class SparqlServices {
 
     private serviceName = "SPARQL";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -43,7 +42,7 @@ export class SparqlServices {
         if (namedGraphs != null) {
             params.namedGraphs = namedGraphs;
         }
-        return this.httpMgr.doPost(this.serviceName, "evaluateQuery", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "evaluateQuery", params, true);
     }
 
     /**
@@ -89,7 +88,7 @@ export class SparqlServices {
         if (defaultRemoveGraphs != null) {
             params.defaultRemoveGraphs = defaultRemoveGraphs;
         }
-        return this.httpMgr.doPost(this.serviceName, "executeUpdate", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "executeUpdate", params, true);
     }
 
 }

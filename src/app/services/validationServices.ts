@@ -9,7 +9,6 @@ import { Deserializer } from "../utils/Deserializer";
 export class ValidationServices {
 
     private serviceName = "Validation";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -24,7 +23,7 @@ export class ValidationServices {
             params.limit = limit;
         }
         
-        return this.httpMgr.doGet(this.serviceName, "getStagedCommits", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getStagedCommits", params, true).map(
             stResp => {
                 var items: CommitInfo[] = [];
                 var itemsJsonArray: any[] = stResp.items;
@@ -80,7 +79,7 @@ export class ValidationServices {
         var params: any = {
             validatableCommit: validatableCommit
         };
-        return this.httpMgr.doPost(this.serviceName, "accept", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "accept", params, true);
     }
 
     /**
@@ -92,7 +91,7 @@ export class ValidationServices {
         var params: any = {
             validatableCommit: validatableCommit
         };
-        return this.httpMgr.doPost(this.serviceName, "reject", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "reject", params, true);
     }
 
 }

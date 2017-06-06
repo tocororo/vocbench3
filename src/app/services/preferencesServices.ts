@@ -8,7 +8,6 @@ import { Deserializer } from "../utils/Deserializer";
 export class PreferencesServices {
 
     private serviceName = "Preferences";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -22,7 +21,7 @@ export class PreferencesServices {
         var params = {
             languages: languages
         };
-        return this.httpMgr.doGet(this.serviceName, "setLanguages", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "setLanguages", params, true);
     }
 
     /**
@@ -34,7 +33,7 @@ export class PreferencesServices {
         var params = {
             show: show
         };
-        return this.httpMgr.doGet(this.serviceName, "setShowFlags", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "setShowFlags", params, true);
     }
 
     /**
@@ -46,7 +45,7 @@ export class PreferencesServices {
         var params = {
             show: show
         };
-        return this.httpMgr.doGet(this.serviceName, "setShowInstancesNumb", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "setShowInstancesNumb", params, true);
     }
 
     /**
@@ -59,7 +58,7 @@ export class PreferencesServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "setActiveSchemes", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "setActiveSchemes", params, true);
     }
 
     /**
@@ -71,7 +70,7 @@ export class PreferencesServices {
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params, true).map(
             stResp => {
                 if (stResp == null) {
                     return null;
@@ -88,7 +87,7 @@ export class PreferencesServices {
     getProjectPreferences() {
         console.log("[PreferencesServices] getProjectPreferences");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true);
     }
 
 }

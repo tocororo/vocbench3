@@ -10,7 +10,6 @@ import { PluginSpecification } from '../models/Plugins';
 export class ProjectServices {
 
     private serviceName = "Projects";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -23,7 +22,7 @@ export class ProjectServices {
         var params = {
             consumer: "SYSTEM"
         };
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params).map(
             stResp => {
                 var projColl = stResp.getElementsByTagName("project");
                 var projectList: Project[] = [];
@@ -72,7 +71,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "disconnectFromProject", params).map(
             stResp => {
                 return stResp;
             }
@@ -91,7 +90,7 @@ export class ProjectServices {
             requestedAccessLevel: "RW",
             requestedLockLevel: "NO"
         };
-        return this.httpMgr.doGet(this.serviceName, "accessProject", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "accessProject", params);
     }
 
     /**
@@ -141,7 +140,7 @@ export class ProjectServices {
         if (modificationDateProperty != undefined) {
             params.modificationDateProperty = modificationDateProperty;
         }
-        return this.httpMgr.doPost("Projects2", "createProject", params, this.oldTypeService, true);
+        return this.httpMgr.doPost("Projects2", "createProject", params, true);
     }
 
     /**
@@ -154,7 +153,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName(),
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteProject", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "deleteProject", params);
     }
 
     /**
@@ -168,7 +167,7 @@ export class ProjectServices {
             newProjectName: projectName,
             importPackage: projectFile
         };
-        return this.httpMgr.uploadFile(this.serviceName, "importProject", data, this.oldTypeService);
+        return this.httpMgr.uploadFile(this.serviceName, "importProject", data);
     }
 
     /**
@@ -180,7 +179,7 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, this.oldTypeService);
+        return this.httpMgr.downloadFile(this.serviceName, "exportProject", params);
     }
 
     /**
@@ -192,7 +191,7 @@ export class ProjectServices {
         var params = {
             project: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName, "saveProject", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "saveProject", params);
     }
 
     /**
@@ -204,7 +203,7 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params).map(
             stResp => {
                 var propertyList: Array<any> = [];
                 var propertyElemColl: HTMLCollection = stResp.getElementsByTagName("property");
@@ -225,7 +224,7 @@ export class ProjectServices {
     getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
         console.log("[ProjectServices] getAccessStatusMap");
         var params = { };
-        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).map(
             stResp => {
                 var aclMap: {name: string, consumers: any[], lock: any}[] = [];
 
@@ -282,7 +281,7 @@ export class ProjectServices {
             consumerName: consumer.getName(),
             accessLevel: accessLevel
         };
-        return this.httpMgr.doGet(this.serviceName, "updateAccessLevel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "updateAccessLevel", params);
     }
 
     /**
@@ -296,7 +295,7 @@ export class ProjectServices {
             projectName: project.getName(),
             lockLevel: lockLevel,
         };
-        return this.httpMgr.doGet(this.serviceName, "updateLockLevel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "updateLockLevel", params);
     }
 
 }

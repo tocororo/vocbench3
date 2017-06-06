@@ -9,7 +9,6 @@ import { ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute } from "..
 export class ClassesServices {
 
     private serviceName = "Classes";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
@@ -23,7 +22,7 @@ export class ClassesServices {
         var params: any = {
             classList: classList
         };
-        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, true).map(
             stResp => {
                 var classes = Deserializer.createResourceArray(stResp);
                 for (var i = 0; i < classes.length; i++) {
@@ -43,7 +42,7 @@ export class ClassesServices {
         var params: any = {
             superClass: superClass
         };
-        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, true).map(
             stResp => {
                 var subClasses = Deserializer.createResourceArray(stResp);
                 for (var i = 0; i < subClasses.length; i++) {
@@ -63,7 +62,7 @@ export class ClassesServices {
         var params: any = {
             cls: cls
         };
-        return this.httpMgr.doGet(this.serviceName, "getInstances", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getInstances", params, true).map(
             stResp => {
                 var instances = Deserializer.createResourceArray(stResp);
                 return instances;
@@ -89,7 +88,7 @@ export class ClassesServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createClass", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createClass", params, true).map(
             stResp => {
                 var newCls = Deserializer.createURI(stResp);
                 newCls.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -108,7 +107,7 @@ export class ClassesServices {
         var params: any = {
             cls: cls
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteClass", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteClass", params, true).map(
             stResp => {
                 this.eventHandler.classDeletedEvent.emit(cls);
                 return stResp;
@@ -134,7 +133,7 @@ export class ClassesServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createInstance", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createInstance", params, true).map(
             stResp => {
                 var instance = Deserializer.createURI(stResp);
                 this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
@@ -154,7 +153,7 @@ export class ClassesServices {
         var params: any = {
             instance: instance
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteInstance", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteInstance", params, true).map(
             stResp => {
                 this.eventHandler.instanceDeletedEvent.emit({instance: instance, cls: cls});
                 return stResp;
@@ -174,7 +173,7 @@ export class ClassesServices {
             cls: cls,
             supercls: supercls,
         };
-        return this.httpMgr.doPost(this.serviceName, "addSuperCls", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addSuperCls", params, true).map(
             stResp => {
                 // var subClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
                 // subClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -199,7 +198,7 @@ export class ClassesServices {
             cls: cls,
             supercls: supercls,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeSuperCls", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeSuperCls", params, true).map(
             stResp => {
                 this.eventHandler.superClassRemovedEvent.emit({superClass: supercls, subClass: cls});
                 return stResp;
@@ -229,7 +228,7 @@ export class ClassesServices {
             cls: cls,
             clsDescriptions: collNodeArray.join(","),
         };
-        return this.httpMgr.doPost(this.serviceName, "addIntersectionOf", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addIntersectionOf", params, true);
     }
     
     /**
@@ -243,7 +242,7 @@ export class ClassesServices {
             cls: cls,
             collectionNode: collectionNode,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeIntersectionOf", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeIntersectionOf", params, true);
     }
     
     /**
@@ -268,7 +267,7 @@ export class ClassesServices {
             cls: cls,
             clsDescriptions: collNodeArray.join(","),
         };
-        return this.httpMgr.doPost(this.serviceName, "addUnionOf", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addUnionOf", params, true);
     }
 
     /**
@@ -282,7 +281,7 @@ export class ClassesServices {
             cls: cls,
             collectionBNode: collectionBNode,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeUnionOf", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeUnionOf", params, true);
     }
     
     /**
@@ -296,7 +295,7 @@ export class ClassesServices {
             cls: cls,
             individuals: individuals,
         };
-        return this.httpMgr.doPost(this.serviceName, "addOneOf", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addOneOf", params, true);
     }
 
     /**
@@ -310,7 +309,7 @@ export class ClassesServices {
             cls: cls,
             collectionBNode: collectionBNode,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeOneOf", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeOneOf", params, true);
     }
 
 

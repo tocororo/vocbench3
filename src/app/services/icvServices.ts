@@ -8,7 +8,6 @@ import { Deserializer } from "../utils/Deserializer";
 export class IcvServices {
 
     private serviceName = "ICV";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -26,7 +25,7 @@ export class IcvServices {
         if (limit != undefined) {
             params.limit = limit;
         }
-        return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params);
     }
 
     /**
@@ -36,7 +35,7 @@ export class IcvServices {
     listCyclicConcepts() {
         console.log("[IcvServices] listCyclicConcepts");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listCyclicConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listCyclicConcepts", params);
     }
 
     /**
@@ -45,7 +44,7 @@ export class IcvServices {
     listConceptSchemesWithNoTopConcept() {
         console.log("[IcvServices] listConceptSchemesWithNoTopConcept");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params);
     }
 
     /**
@@ -58,7 +57,7 @@ export class IcvServices {
         if (limit != undefined) {
             params.limit = limit;
         }
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params);
     }
 
     /**
@@ -67,7 +66,7 @@ export class IcvServices {
     listTopConceptsWithBroader() {
         console.log("[IcvServices] listTopConceptsWithBroader");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params);
     }
 
     //=============================
@@ -81,7 +80,7 @@ export class IcvServices {
     listConceptsWithSameSKOSPrefLabel() {
         console.log("[IcvServices] listConceptsWithSameSKOSPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSPrefLabel", params);
     }
 
     /**
@@ -91,7 +90,7 @@ export class IcvServices {
     listConceptsWithSameSKOSXLPrefLabel() {
         console.log("[IcvServices] listConceptsWithSameSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSXLPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSXLPrefLabel", params);
     }
 
     /**
@@ -101,7 +100,7 @@ export class IcvServices {
     listResourcesWithOnlySKOSAltLabel() {
         console.log("[IcvServices] listResourcesWithOnlySKOSAltLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSAltLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSAltLabel", params).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
                 var records: any[] = [];
@@ -124,7 +123,7 @@ export class IcvServices {
     listResourcesWithOnlySKOSXLAltLabel() {
         console.log("[IcvServices] listResourcesWithOnlySKOSXLAltLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSXLAltLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSXLAltLabel", params).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
                 var records: any[] = [];
@@ -146,7 +145,7 @@ export class IcvServices {
     listResourcesWithNoSKOSPrefLabel() {
         console.log("[IcvServices] listResourcesWithNoSKOSPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -159,7 +158,7 @@ export class IcvServices {
     listResourcesWithNoSKOSXLPrefLabel() {
         console.log("[IcvServices] listResourcesWithNoSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -172,7 +171,7 @@ export class IcvServices {
     listConceptsWithMultipleSKOSPrefLabel() {
         console.log("[IcvServices] listConceptsWithMultipleSKOSPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSPrefLabel", params);
     }
 
     /**
@@ -181,7 +180,7 @@ export class IcvServices {
     listConceptsWithMultipleSKOSXLPrefLabel() {
         console.log("[IcvServices] listConceptsWithMultipleSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSXLPrefLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSXLPrefLabel", params);
     }
 
     /**
@@ -191,7 +190,7 @@ export class IcvServices {
     listResourcesWithNoLanguageTagSKOSLabel() {
         console.log("[IcvServices] listResourcesWithNoLanguageTagSKOSLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSLabel", params).map(
             stResp => {
                 var records: any[] = [];
                 var recordElemColl = stResp.getElementsByTagName("record");
@@ -213,7 +212,7 @@ export class IcvServices {
     listResourcesWithNoLanguageTagSKOSXLLabel() {
         console.log("[IcvServices] listResourcesWithNoLanguageTagSKOSXLLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSXLLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSXLLabel", params).map(
             stResp => {
                 var records: any[] = [];
                 var recordElemColl = stResp.getElementsByTagName("record");
@@ -235,7 +234,7 @@ export class IcvServices {
     listResourcesWithOverlappedSKOSLabel() {
         console.log("[IcvServices] listResourcesWithOverlappedSKOSLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSLabel", params).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
                 var records: any[] = [];
@@ -256,7 +255,7 @@ export class IcvServices {
     listResourcesWithOverlappedSKOSXLLabel(): Observable<{ resource: ARTURIResource, prefLabel: ARTResource, altLabel: ARTResource }[]> {
         console.log("[IcvServices] listResourcesWithOverlappedSKOSXLLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params).map(
             stResp => {
                 var recordElemColl: Element[] = stResp.getElementsByTagName("record");
                 var records: any[] = [];
@@ -279,7 +278,7 @@ export class IcvServices {
     listConceptsWithExtraWhitespaceInSKOSLabel() {
         console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSLabel", params);
     }
 
     /**
@@ -290,7 +289,7 @@ export class IcvServices {
     listConceptsWithExtraWhitespaceInSKOSXLLabel() {
         console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSXLLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSXLLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSXLLabel", params);
     }
 
     /**
@@ -299,7 +298,7 @@ export class IcvServices {
     listDanglingXLabels() {
         console.log("[IcvServices] listDanglingXLabels");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params, this.oldTypeService).map(
+        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params).map(
             stResp => {
                 return <ARTResource[]>Deserializer.createRDFNodeArray(stResp);
             }
@@ -312,7 +311,7 @@ export class IcvServices {
     listHierarchicallyRedundantConcepts() {
         console.log("[IcvServices] listHierarchicallyRedundantConcepts");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params);
     }
 
     /**
@@ -325,7 +324,7 @@ export class IcvServices {
         if (limit != undefined) {
             params.limit = limit;
         }
-        return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params);
     }
 
     //=============================
@@ -341,7 +340,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "setAllDanglingAsTopConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setAllDanglingAsTopConcept", params);
     }
 
     /**
@@ -356,7 +355,7 @@ export class IcvServices {
             scheme: scheme.getURI(),
             broader: broader.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "setBroaderForAllDangling", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setBroaderForAllDangling", params);
     }
 
     /**
@@ -368,7 +367,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "removeAllDanglingFromScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeAllDanglingFromScheme", params);
     }
 
     /**
@@ -380,7 +379,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingConcepts", params);
     }
 
     /**
@@ -392,7 +391,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "addAllConceptsToScheme", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "addAllConceptsToScheme", params);
     }
 
     /**
@@ -406,7 +405,7 @@ export class IcvServices {
             concept: concept.getURI(),
             scheme: scheme.getURI()
         };
-        return this.httpMgr.doGet(this.serviceName, "removeBroadersToConcept", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeBroadersToConcept", params);
     }
 
     /**
@@ -416,7 +415,7 @@ export class IcvServices {
     removeBroadersToAllConcepts() {
         console.log("[IcvServices] removeBroadersToAllConcepts");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "removeBroadersToAllConcepts", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeBroadersToAllConcepts", params);
     }
 
     /**
@@ -425,7 +424,7 @@ export class IcvServices {
     removeAllAsTopConceptsWithBroader() {
         console.log("[IcvServices] removeAllAsTopConceptsWithBroader");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "removeAllAsTopConceptsWithBroader", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeAllAsTopConceptsWithBroader", params);
     }
 
     /**
@@ -434,7 +433,7 @@ export class IcvServices {
     removeAllHierarchicalRedundancy() {
         console.log("[IcvServices] removeAllHierarchicalRedundancy");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "removeAllHierarchicalRedundancy", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "removeAllHierarchicalRedundancy", params);
     }
 
     /**
@@ -443,7 +442,7 @@ export class IcvServices {
     deleteAllDanglingXLabel() {
         console.log("[IcvServices] deleteAllDanglingXLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingXLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingXLabel", params);
     }
 
     /**
@@ -459,7 +458,7 @@ export class IcvServices {
             xlabelPred: xlabelPred.getURI(),
             xlabel: xlabel.getNominalValue()
         };
-        return this.httpMgr.doGet(this.serviceName, "setDanglingXLabel", params, this.oldTypeService);
+        return this.httpMgr.doGet(this.serviceName, "setDanglingXLabel", params);
     }
 
 }

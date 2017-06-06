@@ -10,7 +10,6 @@ import { VersionInfo } from "../models/History";
 export class ResourceViewServices {
 
     private serviceName = "ResourceView";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -27,7 +26,7 @@ export class ResourceViewServices {
         if (version != null) {
             options = new VBRequestOptions({ versionId : version.versionId });
         }
-        return this.httpMgr.doGet("ResourceView2", "getResourceView", params, this.oldTypeService, true, options);
+        return this.httpMgr.doGet("ResourceView2", "getResourceView", params, true, options);
     }
 
     /**
@@ -43,7 +42,7 @@ export class ResourceViewServices {
         if (resourcePosition != null) {
             params.resourcePosition = resourcePosition;
         }
-        return this.httpMgr.doGet("ResourceView2", "getLexicalizationProperties", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet("ResourceView2", "getLexicalizationProperties", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

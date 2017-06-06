@@ -7,7 +7,6 @@ import {ConverterContractDescription, SignatureDescription, ParameterDescription
 export class CODAServices {
 
     private serviceName = "CODA";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -17,7 +16,7 @@ export class CODAServices {
     listConverterContracts(): Observable<ConverterContractDescription[]> {
         console.log("[CODAServices] listConverterContracts");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConverterContracts", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConverterContracts", params, true).map(
             stResp => {
                 let converters: ConverterContractDescription[] = [];
                 for (var i = 0; i < stResp.length; i++) {

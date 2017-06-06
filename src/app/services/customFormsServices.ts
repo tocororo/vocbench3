@@ -9,7 +9,6 @@ import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, Form
 export class CustomFormsServices {
 
     private serviceName = "CustomForms";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -25,7 +24,7 @@ export class CustomFormsServices {
             predicate: predicate,
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params, true).map(
             stResp => {
                 var predicateObjectList: ARTPredicateObjects[];
                 if (stResp.properties != null) { //only if resource has a reified description
@@ -49,7 +48,7 @@ export class CustomFormsServices {
             predicate: predicate,
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "removeReifiedResource", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeReifiedResource", params, true);
     }
 
     /**
@@ -63,7 +62,7 @@ export class CustomFormsServices {
             id: customFormId
         };
         var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
-        return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, this.oldTypeService, true, options).map(
+        return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, true, options).map(
             stResp => {
                 /* this service could throw an error if Pearl is invalid
                 (in this case the server throws a PRParserException and it is handled in HttpManager),
@@ -140,7 +139,7 @@ export class CustomFormsServices {
             customFormId: customFormId,
             userPromptMap: JSON.stringify(entryMap)
         };
-        return this.httpMgr.doPost(this.serviceName, "addValueThroughCustomRange", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addValueThroughCustomRange", params, true);
     }
 
     /**
@@ -153,7 +152,7 @@ export class CustomFormsServices {
     getCustomFormConfigMap(): Observable<FormCollectionMapping[]> {
         console.log("[CustomFormsServices] getCustomFormConfigMap");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getCustomFormConfigMap", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCustomFormConfigMap", params, true).map(
             stResp => {
                 var fcMappings: Array<FormCollectionMapping> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -192,7 +191,7 @@ export class CustomFormsServices {
         if (replace != undefined) {
             params.replace = replace;
         }
-        return this.httpMgr.doGet(this.serviceName, "addFormsMapping", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "addFormsMapping", params, true);
     }
 
     /**
@@ -204,7 +203,7 @@ export class CustomFormsServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "removeFormCollectionOfResource", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeFormCollectionOfResource", params, true);
     }
 
     /**
@@ -218,7 +217,7 @@ export class CustomFormsServices {
             resource: resource,
             replace: replace
         };
-        return this.httpMgr.doGet(this.serviceName, "updateReplace", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "updateReplace", params, true);
     }
 
     /**
@@ -231,7 +230,7 @@ export class CustomFormsServices {
     getAllFormCollections(): Observable<FormCollection[]> {
         console.log("[CustomFormsServices] getAllFormCollections");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllFormCollections", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAllFormCollections", params, true).map(
             stResp => {
                 var formCollections: Array<FormCollection> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -260,7 +259,7 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "getFormCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getFormCollection", params, true).map(
             stResp => {
                 var formColl: FormCollection;
                 var fcId = stResp.id;
@@ -293,7 +292,7 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "createFormCollection", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "createFormCollection", params, true);
     }
 
     /**
@@ -305,7 +304,7 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteFormCollection", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "deleteFormCollection", params, true);
     }
 
     /**
@@ -319,7 +318,7 @@ export class CustomFormsServices {
             sourceId: sourceId,
             targetId: targetId
         };
-        return this.httpMgr.doGet(this.serviceName, "cloneFormCollection", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "cloneFormCollection", params, true);
     }
 
     /**
@@ -331,7 +330,7 @@ export class CustomFormsServices {
         var params = {
             id: id
         };
-        return this.httpMgr.downloadFile(this.serviceName, "exportFormCollection", params, this.oldTypeService);
+        return this.httpMgr.downloadFile(this.serviceName, "exportFormCollection", params);
     }
 
     /**
@@ -347,7 +346,7 @@ export class CustomFormsServices {
         if (newId != null) {
             data.newId = newId;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "importFormCollection", data, this.oldTypeService, true);
+        return this.httpMgr.uploadFile(this.serviceName, "importFormCollection", data, true);
     }
 
     /**
@@ -361,7 +360,7 @@ export class CustomFormsServices {
             formCollectionId: formCollectionId,
             customFormId: customFormId
         };
-        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, true);
     }
 
     /**
@@ -375,7 +374,7 @@ export class CustomFormsServices {
             formCollectionId: formCollectionId,
             customFormId: customFormId
         };
-        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, true);
     }
 
     /**
@@ -388,7 +387,7 @@ export class CustomFormsServices {
     getAllCustomForms(): Observable<CustomForm[]> {
         console.log("[CustomFormsServices] getAllCustomForms");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllCustomForms", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAllCustomForms", params, true).map(
             stResp => {
                 var customForms: Array<CustomForm> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -417,7 +416,7 @@ export class CustomFormsServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getCustomConstructors", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCustomConstructors", params, true).map(
             stResp => {
                 var forms: CustomForm[] = [];
                 if (stResp.forms) {
@@ -450,7 +449,7 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "getCustomForm", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCustomForm", params, true).map(
             stResp => {
                 var id: string = stResp.id;
                 var customForm: CustomForm = new CustomForm(id);
@@ -500,7 +499,7 @@ export class CustomFormsServices {
         if (showPropChain != undefined) {
             params.showPropChain = showPropChain;
         }
-        return this.httpMgr.doPost(this.serviceName, "createCustomForm", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "createCustomForm", params, true);
     }
 
     /**
@@ -514,7 +513,7 @@ export class CustomFormsServices {
             sourceId: sourceId,
             targetId: targetId
         };
-        return this.httpMgr.doGet(this.serviceName, "cloneCustomForm", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "cloneCustomForm", params, true);
     }
 
     /**
@@ -526,7 +525,7 @@ export class CustomFormsServices {
         var params = {
             id: id
         };
-        return this.httpMgr.downloadFile(this.serviceName, "exportCustomForm", params, this.oldTypeService);
+        return this.httpMgr.downloadFile(this.serviceName, "exportCustomForm", params);
     }
 
     /**
@@ -542,7 +541,7 @@ export class CustomFormsServices {
         if (newId != null) {
             data.newId = newId;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "importCustomForm", data, this.oldTypeService, true);
+        return this.httpMgr.uploadFile(this.serviceName, "importCustomForm", data, true);
     }
 
     /**
@@ -557,7 +556,7 @@ export class CustomFormsServices {
         if (deleteEmptyColl != undefined) {
             params.deleteEmptyColl = deleteEmptyColl;
         }
-        return this.httpMgr.doGet(this.serviceName, "deleteCustomForm", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "deleteCustomForm", params, true);
     }
 
     /**
@@ -569,7 +568,7 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "isFormLinkedToCollection", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "isFormLinkedToCollection", params, true);
     }
 
     /**
@@ -591,7 +590,7 @@ export class CustomFormsServices {
         if (showPropChain != undefined) {
             params.showPropChain = showPropChain;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateCustomForm", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "updateCustomForm", params, true);
     }
 
     /**
@@ -605,7 +604,7 @@ export class CustomFormsServices {
         var params: any = {
             propChain: propChain
         };
-        return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params, true);
     }
 
     /**
@@ -621,7 +620,7 @@ export class CustomFormsServices {
             pearl: pearl,
             formType: formType
         };
-        return this.httpMgr.doPost(this.serviceName, "validatePearl", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "validatePearl", params, true);
     }
 
 }

@@ -7,7 +7,6 @@ import { ARTURIResource, ARTNode, ARTBNode } from "../models/ARTResources";
 export class ManchesterServices {
 
     private serviceName = "ManchesterHandler";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -20,7 +19,7 @@ export class ManchesterServices {
         var params = {
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "checkExpression", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "checkExpression", params, true);
     }
 
     /**
@@ -36,7 +35,7 @@ export class ManchesterServices {
             exprType: predicate,
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "createRestriction", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "createRestriction", params, true);
     }
 
     /**
@@ -52,7 +51,7 @@ export class ManchesterServices {
             exprType: predicate,
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "removeExpression", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "removeExpression", params, true);
     }
 
     /**
@@ -66,7 +65,7 @@ export class ManchesterServices {
             newManchExpr: newManchExpr,
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "updateExpression", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "updateExpression", params, true);
     }
 
     isClassAxiom(bnode: ARTBNode): Observable<boolean> {
@@ -74,7 +73,7 @@ export class ManchesterServices {
         var params = {
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "isClassAxiom", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "isClassAxiom", params, true);
     }
 
 

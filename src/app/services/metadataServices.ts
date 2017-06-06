@@ -10,7 +10,6 @@ import { RDFFormat } from "../models/RDFFormat";
 export class MetadataServices {
 
     private serviceName = "Metadata";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
@@ -24,7 +23,7 @@ export class MetadataServices {
     getNamespaceMappings(): Observable<PrefixMapping[]> {
         console.log("[MetadataServices] getNamespaceMappings");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params, true).map(
             stResp => {
                 var mappings: PrefixMapping[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -51,7 +50,7 @@ export class MetadataServices {
             prefix: prefix,
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, true);
     }
 
     /**
@@ -63,7 +62,7 @@ export class MetadataServices {
         var params = {
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "removeNSPrefixMapping", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeNSPrefixMapping", params, true);
     }
 
     /**
@@ -77,7 +76,7 @@ export class MetadataServices {
             prefix: prefix,
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params, true);
     }
 
     /**
@@ -90,7 +89,7 @@ export class MetadataServices {
     getImports(): Observable<{ id: string, status: string, imports: any[] }[]> {
         console.log("[MetadataServices] getImports");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getImports", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getImports", params, true).map(
             stResp => {
                 var importedOntologies: any[] = [];
 
@@ -123,7 +122,7 @@ export class MetadataServices {
         var params: any = {
             baseURI: baseURI
         };
-        return this.httpMgr.doPost(this.serviceName, "removeImport", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeImport", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -149,7 +148,7 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "addFromWeb", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFromWeb", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -177,7 +176,7 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "addFromWebToMirror", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFromWebToMirror", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -200,7 +199,7 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data, this.oldTypeService, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -221,7 +220,7 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.doPost(this.serviceName, "addFromMirror", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFromMirror", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -235,7 +234,7 @@ export class MetadataServices {
     getDefaultNamespace(): Observable<string> {
         console.log("[MetadataServices] getDefaultNamespace");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params, true);
     }
 
     /**
@@ -247,7 +246,7 @@ export class MetadataServices {
         var params = {
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params, true);
     }
 
     /**
@@ -256,7 +255,7 @@ export class MetadataServices {
     getBaseURI(): Observable<string> {
         console.log("[MetadataServices] getBaseURI");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getBaseURI", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "getBaseURI", params, true);
     }
 
     /**
@@ -267,7 +266,7 @@ export class MetadataServices {
         var params: any = {
             qname: qname
         };
-        return this.httpMgr.doGet(this.serviceName, "expandQName", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "expandQName", params, true);
     }
 
 }

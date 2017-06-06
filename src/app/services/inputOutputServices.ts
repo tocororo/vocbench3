@@ -7,7 +7,6 @@ import { RDFFormat } from "../models/RDFFormat";
 export class InputOutputServices {
 
     private serviceName = "InputOutput2";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
@@ -28,7 +27,7 @@ export class InputOutputServices {
         if (format != undefined) {
             data.rdfFormat = format.name;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, this.oldTypeService, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -42,7 +41,7 @@ export class InputOutputServices {
     clearData() {
         console.log("[InputOutputServices] clearData");
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "clearData", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "clearData", params, true);
     }
 
 }

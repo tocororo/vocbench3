@@ -8,7 +8,6 @@ import { RDFFormat } from "../models/RDFFormat";
 export class DatasetMetadataExportServices {
 
     private serviceName = "DatasetMetadataExport";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -20,7 +19,7 @@ export class DatasetMetadataExportServices {
         var params = {
             exporterId: exporterId
         };
-        return this.httpMgr.doGet(this.serviceName, "getExporterSettings", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getExporterSettings", params, true).map(
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
                 let extPointParamsJson: any[] = extPointSettingsJson.parameters;
@@ -72,7 +71,7 @@ export class DatasetMetadataExportServices {
             extensionPointProperties: JSON.stringify(extensionPointProperties),
             pluginProperties: JSON.stringify(pluginProperties)
         };
-        return this.httpMgr.doPost(this.serviceName, "setExporterSettings", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "setExporterSettings", params, true);
     }
 
     /**
@@ -85,7 +84,7 @@ export class DatasetMetadataExportServices {
             exporterSpecification: JSON.stringify(exporterSpecification),
             outputFormat: outputFormat.name
         };
-        return this.httpMgr.downloadFile(this.serviceName, "export", params, this.oldTypeService, true);
+        return this.httpMgr.downloadFile(this.serviceName, "export", params, true);
     }
 
 

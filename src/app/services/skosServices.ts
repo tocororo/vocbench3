@@ -10,7 +10,6 @@ import { SKOS } from "../models/Vocabulary";
 export class SkosServices {
 
     private serviceName = "SKOS";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
@@ -27,7 +26,7 @@ export class SkosServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, true).map(
             stResp => {
                 var topConcepts = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < topConcepts.length; i++) {
@@ -53,7 +52,7 @@ export class SkosServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, true).map(
             stResp => {
                 var narrower = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < narrower.length; i++) {
@@ -93,7 +92,7 @@ export class SkosServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -115,7 +114,7 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doPost(this.serviceName, "addTopConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addTopConcept", params, true).map(
             stResp => {
                 this.eventHandler.topConceptCreatedEvent.emit({ concept: concept, schemes: [scheme] });
                 return { concept: concept, scheme: scheme };
@@ -134,7 +133,7 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeTopConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeTopConcept", params, true).map(
             stResp => {
                 this.eventHandler.conceptRemovedAsTopConceptEvent.emit({ concept: concept, scheme: scheme });
                 return stResp;
@@ -151,7 +150,7 @@ export class SkosServices {
         var params: any = {
             concept: concept,
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteConcept", params, true).map(
             stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
@@ -188,7 +187,7 @@ export class SkosServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
             stResp => {
                 var newConc = Deserializer.createURI(stResp);
                 newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -209,7 +208,7 @@ export class SkosServices {
             concept: concept,
             broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doPost(this.serviceName, "addBroaderConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addBroaderConcept", params, true).map(
             stResp => {
                 //concept doesn't contain info about "more", so when the concept is appended in the tree, it doesn't show the arrow for expand it
                 this.eventHandler.broaderAddedEvent.emit({ narrower: concept, broader: broaderConcept });
@@ -229,7 +228,7 @@ export class SkosServices {
             concept: concept,
             broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeBroaderConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeBroaderConcept", params, true).map(
             stResp => {
                 this.eventHandler.broaderRemovedEvent.emit({ concept: concept, broader: broaderConcept });
                 return stResp;
@@ -248,7 +247,7 @@ export class SkosServices {
             concept: concept,
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "addConceptToScheme", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addConceptToScheme", params, true);
         /**
          * here I should emit an event conceptAddedToSchemEvent with {concept, scheme, broader?}
          * where borader is optional and tells if the concept should appear under another concept or it's a topConcept
@@ -267,7 +266,7 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeConceptFromScheme", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeConceptFromScheme", params, true).map(
             stResp => {
                 this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: concept, scheme: scheme });
                 return { concept: concept, scheme: scheme };
@@ -284,7 +283,7 @@ export class SkosServices {
     getAllSchemes() {
         console.log("[SkosServices] getAllSchemes");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -316,7 +315,7 @@ export class SkosServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, true).map(
             stResp => {
                 var newScheme = Deserializer.createURI(stResp);
                 return newScheme;
@@ -333,7 +332,7 @@ export class SkosServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "isSchemeEmpty", params, this.oldTypeService, true);
+        return this.httpMgr.doGet(this.serviceName, "isSchemeEmpty", params, true);
     }
 
     /**
@@ -345,7 +344,7 @@ export class SkosServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params, true);
     }
 
 
@@ -362,7 +361,7 @@ export class SkosServices {
             concept: concept,
             literal: literal
         };
-        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true);
     }
 
     /**
@@ -377,7 +376,7 @@ export class SkosServices {
             concept: concept,
             literal: literal
         };
-        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, true);
     }
 
     /**
@@ -391,7 +390,7 @@ export class SkosServices {
             concept: concept,
             language: language,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, true).map(
             stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
             }
@@ -409,7 +408,7 @@ export class SkosServices {
             concept: concept,
             literal: literal
         };
-        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, true);
     }
 
     /**
@@ -423,7 +422,7 @@ export class SkosServices {
             concept: concept,
             literal: literal
         };
-        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, true);
     }
 
     /**
@@ -437,7 +436,7 @@ export class SkosServices {
             concept: concept,
             literal: literal
         };
-        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, true);
     }
 
     /**
@@ -451,7 +450,7 @@ export class SkosServices {
             concept: concept,
             literal: literal,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, this.oldTypeService, true);
+        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, true);
     }
 
     /**
@@ -463,7 +462,7 @@ export class SkosServices {
         var params: any = {
             concept: concept
         };
-        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -478,7 +477,7 @@ export class SkosServices {
     getRootCollections() {
         console.log("[SkosServices] getRootCollections");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, true).map(
             stResp => {
                 var rootColl = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < rootColl.length; i++) {
@@ -498,7 +497,7 @@ export class SkosServices {
         var params: any = {
             container: container
         };
-        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, true).map(
             stResp => {
                 var nestedColl = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < nestedColl.length; i++) {
@@ -536,7 +535,7 @@ export class SkosServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -574,7 +573,7 @@ export class SkosServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
             stResp => {
                 var newColl = Deserializer.createURI(stResp);
                 newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
@@ -596,7 +595,7 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "addToCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addToCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -618,7 +617,7 @@ export class SkosServices {
             collection: collection,
             element: element,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeFromCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeFromCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -638,7 +637,7 @@ export class SkosServices {
         var params: any = {
             collection: collection,
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteCollection", params, true).map(
             stResp => {
                 this.eventHandler.collectionDeletedEvent.emit(collection);
                 return stResp;
@@ -659,7 +658,7 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "addFirstToOrderedCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFirstToOrderedCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -683,7 +682,7 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "addLastToOrderedCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addLastToOrderedCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -709,7 +708,7 @@ export class SkosServices {
             element: element,
             index: index
         };
-        return this.httpMgr.doPost(this.serviceName, "addInPositionToOrderedCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addInPositionToOrderedCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -731,7 +730,7 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "removeFromOrderedCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeFromOrderedCollection", params, true).map(
             stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
@@ -751,7 +750,7 @@ export class SkosServices {
         var params: any = {
             collection: collection,
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteOrderedCollection", params, this.oldTypeService, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteOrderedCollection", params, true).map(
             stResp => {
                 this.eventHandler.collectionDeletedEvent.emit(collection);
                 return stResp;

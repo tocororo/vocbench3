@@ -24,7 +24,7 @@ export class HttpManager {
     private oldServerpath: string = "resources/stserver/STServer";
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
-    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({ versionId: null, skipErrorAlert: false });
+    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({ versionId: null, skipErrorAlert: false, oldTypeService: false });
 
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
@@ -51,10 +51,10 @@ export class HttpManager {
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param options further options that overrides the default ones
      */
-    doGet(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, options?: VBRequestOptions) {
-        var url: string = this.getRequestBaseUrl(service, request, oldType);
-
+    doGet(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
+
+        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
 
         //add parameters
         url += this.getParametersForUrl(params);
@@ -104,10 +104,10 @@ export class HttpManager {
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param options further options that overrides the default ones
      */
-    doPost(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, options?: VBRequestOptions) {
-        var url: string = this.getRequestBaseUrl(service, request, oldType);
-
+    doPost(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
+
+        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
@@ -161,10 +161,10 @@ export class HttpManager {
      * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param options further options that overrides the default ones
      */
-    uploadFile(service: string, request: string, params: any, oldType: boolean, respJson?: boolean, options?: VBRequestOptions) {
-        var url: string = this.getRequestBaseUrl(service, request, oldType);
-
+    uploadFile(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
+        
+        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
@@ -219,10 +219,10 @@ export class HttpManager {
      * @param post tells if the download is done via post-request (e.g. Export.export() service)
      * @param options further options that overrides the default ones
      */
-    downloadFile(service: string, request: string, params: any, oldType: boolean, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
-        var url: string = this.getRequestBaseUrl(service, request, oldType);
-
+    downloadFile(service: string, request: string, params: any, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
         options = this.defaultRequestOptions.merge(options);
+        
+        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
 
         if (post) {
             //add ctx parameters
@@ -453,12 +453,14 @@ export class HttpManager {
 //inspired by angular RequestOptions
 export class VBRequestOptions {
 
+    oldTypeService: boolean;
     versionId: string;
     skipErrorAlert: boolean;
     
-    constructor({ versionId, skipErrorAlert }: VBRequestOptionsArgs = {}) {
+    constructor({ versionId, oldTypeService, skipErrorAlert }: VBRequestOptionsArgs = {}) {
         this.versionId = versionId != null ? versionId : null;
         this.skipErrorAlert = skipErrorAlert != null ? skipErrorAlert : null;
+        this.oldTypeService = oldTypeService != null ? oldTypeService : null;
     }
 
     /**
@@ -471,16 +473,22 @@ export class VBRequestOptions {
         return new VBRequestOptions({
             versionId: options && options.versionId != null ? options.versionId : this.versionId,
             skipErrorAlert: options && options.skipErrorAlert != null ? options.skipErrorAlert : this.skipErrorAlert,
+            oldTypeService: options && options.oldTypeService != null ? options.oldTypeService : this.oldTypeService,
         });
     }
 }
+
 //inspired by angular RequestOptionsArgs
 interface VBRequestOptionsArgs {
+    /**
+     * Tells if the service is old type, it determines how to build the request url
+     */
+    oldTypeService?: boolean;
+
     /**
      * a one-time versionId: is used to switch to a given version only in a precise request
      */
     versionId?: string; 
-
     /**
      * If true prevents an alert dialog to show up in case of error during requests.
      * Is useful to handle the error from the component that invokes the service

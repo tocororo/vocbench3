@@ -1,30 +1,30 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class OntoManagerServices {
 
     private serviceName = "ontManager";
-    private oldTypeService = true;
 
     constructor(private httpMgr: HttpManager) { }
-    
+
     /**
      * Returns the list of cached ontology files which replicate the content of ontologies on the web
      * @return Returns a collection of object {file: string, namespace: string} containing
      * "file" (the name of the mirror file) and
      * "namespace" (the namespace of the ontology)
      */
-    getOntologyMirror(): Observable<{file: string, baseURI: string}[]> {
+    getOntologyMirror(): Observable<{ file: string, baseURI: string }[]> {
         console.log("[OntoManagerServices] getOntologyMirror");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, this.oldTypeService).map(
+        var options: VBRequestOptions = new VBRequestOptions({ oldTypeService: true });
+        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, false, options).map(
             stResp => {
-                var mirrors: {file: string, baseURI: string}[] = [];
+                var mirrors: { file: string, baseURI: string }[] = [];
                 var mirrorElemColl: Array<Element> = stResp.getElementsByTagName("Mirror");
                 for (var i = 0; i < mirrorElemColl.length; i++) {
-                    mirrors.push({file: mirrorElemColl[i].getAttribute("file"), baseURI: mirrorElemColl[i].getAttribute("ns")});
+                    mirrors.push({ file: mirrorElemColl[i].getAttribute("file"), baseURI: mirrorElemColl[i].getAttribute("ns") });
                 }
                 return mirrors;
             }
@@ -42,7 +42,8 @@ export class OntoManagerServices {
             ns: namespace,
             file: fileName
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteOntMirrorEntry", params, this.oldTypeService);
+        var options: VBRequestOptions = new VBRequestOptions({ oldTypeService: true });
+        return this.httpMgr.doGet(this.serviceName, "deleteOntMirrorEntry", params, false, options);
     }
 
     /**
@@ -69,13 +70,14 @@ export class OntoManagerServices {
         if (file != undefined) {
             params.localFile = file
         }
+        var options: VBRequestOptions = new VBRequestOptions({ oldTypeService: true });
         if (srcLoc == "lf") {
             //in this case, the update is from a local file, so send the file with a POST
-            return this.httpMgr.uploadFile(this.serviceName, "updateOntMirrorEntry", params, this.oldTypeService);
+            return this.httpMgr.uploadFile(this.serviceName, "updateOntMirrorEntry", params, false, options);
         } else {
-            return this.httpMgr.doGet(this.serviceName, "updateOntMirrorEntry", params, this.oldTypeService);
+            return this.httpMgr.doGet(this.serviceName, "updateOntMirrorEntry", params, false, options);
         }
     }
-    
+
 
 }

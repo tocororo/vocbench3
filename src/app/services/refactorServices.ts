@@ -20,7 +20,7 @@ export class RefactorServices {
         var params: any = {
             reifyNotes: reifyNotes
         };
-        return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -33,7 +33,7 @@ export class RefactorServices {
     SKOSXLtoSKOS() {
         console.log("[RefactorServices] SKOSXLtoSKOS");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -52,7 +52,7 @@ export class RefactorServices {
             oldResource: oldResource,
             newResource: newResource
         };
-        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params, true).map(
             stResp => {
                 let renamedResource: ARTURIResource = oldResource.clone();
                 renamedResource.setURI(newResource.getURI());
@@ -75,7 +75,7 @@ export class RefactorServices {
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = sourceBaseURI;
         }
-        return this.httpMgr.doGet("Refactor", "replaceBaseURI", params, this.oldTypeService).map(
+        return this.httpMgr.doGet("Refactor", "replaceBaseURI", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -88,7 +88,7 @@ export class RefactorServices {
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
-        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -126,7 +126,7 @@ export class RefactorServices {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doGet(this.serviceName, "spawnNewConceptFromLabel", params, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "spawnNewConceptFromLabel", params, true).map(
             stResp => {
                 if (broaderConcept != null) { //created narrower
                     var newConc = Deserializer.createURI(stResp);

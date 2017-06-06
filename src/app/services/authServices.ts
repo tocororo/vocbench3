@@ -9,7 +9,6 @@ import { User } from "../models/User";
 export class AuthServices {
 
     private serviceName = "Auth";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -24,7 +23,7 @@ export class AuthServices {
             _spring_security_remember_me: rememberMe
         }
         var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
-        return this.httpMgr.doPost(this.serviceName, "login", params, this.oldTypeService, true, options).map(
+        return this.httpMgr.doPost(this.serviceName, "login", params, true, options).map(
             stResp => {
                 var loggedUser: User = Deserializer.createUser(stResp);
                 VBContext.setLoggedUser(loggedUser);
@@ -39,7 +38,7 @@ export class AuthServices {
      */
     logout() {
         console.log("[AuthServices] logout");
-        return this.httpMgr.doGet(this.serviceName, "logout", null, this.oldTypeService, true).map(
+        return this.httpMgr.doGet(this.serviceName, "logout", null, true).map(
             stResp => {
                 VBContext.removeLoggedUser();
                 VBContext.removeWorkingProject();
