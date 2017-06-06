@@ -81,8 +81,8 @@ export class RegistrationComponent {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var message: string;
                 if (this.firstAccess) {
-                    message = "Your account has been created. Since it is the only account in VocBench, it will be granted the administration role." +
-                        " It is now possible to login with your email (" + this.userForm.email + " and the password you provided";
+                    message = "The administration account has been created. " +
+                        "It is now possible to login with the email (" + this.userForm.email + " and the password you provided";
                 } else {
                     message = "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
                         "it will be possible to login with your email (" + this.userForm.email + ") and the password you provided";
