@@ -107,7 +107,8 @@ export class ProjectServices {
         historyEnabled: boolean, validationEnabled: boolean, repositoryAccess: RepositoryAccess,
         coreRepoID: string, supportRepoID: string,
         coreRepoSailConfigurerSpecification?: PluginSpecification, supportRepoSailConfigurerSpecification?: PluginSpecification,
-        uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification) {
+        uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
+        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource) {
         
         console.log("[ProjectServices] createProject");
         var params: any = {
@@ -133,6 +134,12 @@ export class ProjectServices {
         }
         if (renderingEngineSpecification != undefined) {
             params.renderingEngineSpecification = JSON.stringify(renderingEngineSpecification);
+        }
+        if (creationDateProperty != undefined) {
+            params.creationDateProperty = creationDateProperty;
+        }
+        if (modificationDateProperty != undefined) {
+            params.modificationDateProperty = modificationDateProperty;
         }
         return this.httpMgr.doPost("Projects2", "createProject", params, this.oldTypeService, true);
     }

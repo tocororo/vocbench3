@@ -6,7 +6,7 @@ import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
-import { RDFS, OWL, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { RDFS, OWL, SKOS, SKOSXL, DC } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { UIUtils } from "../../utils/UIUtils";
@@ -26,7 +26,6 @@ export class CreateProjectComponent {
     private baseUriPrefixList: string[] = ["http://", "https://"];
     private baseUriPrefix: string = this.baseUriPrefixList[0];
     private baseUriSuffix: string;;
-    // private baseURI: string;
 
     private ontoModelList = [
         { value: new ARTURIResource(OWL.uri), label: "OWL" },
@@ -41,7 +40,6 @@ export class CreateProjectComponent {
     ];
     private lexicalModelType: ARTURIResource = this.lexicalModelList[0].value;
     
-
     private history: boolean = false;
     private validation: boolean = false;
 
@@ -87,6 +85,12 @@ export class CreateProjectComponent {
     private rendEngPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> (plugin - available configs)
     private selectedRendEngPluginConfList: PluginConfiguration[]; //plugin configurations for the selected plugin
     private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
+
+    private useProjMetadataProp: boolean = true;
+    private creationDatePropList: ARTURIResource[] = [DC.created];
+    private creationDateProp: ARTURIResource = this.creationDatePropList[0];
+    private modificationDatePropList: ARTURIResource[] = [DC.modified];
+    private modificationDateProp: ARTURIResource = this.modificationDatePropList[0];
 
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, private pluginService: PluginsServices,
         private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
@@ -457,6 +461,16 @@ export class CreateProjectComponent {
         }
 
         /**
+         * Prepare creationDateProperty and modificationDateProperty
+         */
+        var creationProp: ARTURIResource;
+        var modificationProp: ARTURIResource;
+        if (this.useProjMetadataProp) {
+            creationProp = this.creationDateProp;
+            modificationProp = this.modificationDateProp;
+        }
+
+        /**
          * Execute request
          */
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -464,7 +478,8 @@ export class CreateProjectComponent {
             this.ontoModelType, this.lexicalModelType, this.history, this.validation,
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, supportRepoSailConfigurerSpecification,
-            uriGeneratorSpecification, renderingEngineSpecification).subscribe(
+            uriGeneratorSpecification, renderingEngineSpecification,
+            creationProp, modificationProp).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Create project", "Project created successfully").then(

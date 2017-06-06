@@ -204,3 +204,12 @@ export class XmlSchema { //all resources here have role "individual" (don't know
 	public static unsignedShort = new ARTURIResource(XmlSchema.namespace + "unsignedShort", "xsd:unsignedShort", RDFResourceRolesEnum.individual);
 
 }
+
+
+export class DC {
+    public static uri = "http://purl.org/dc/terms";
+    public static namespace = DC.uri + "/";
+    //PROPERTIES
+    public static created = new ARTURIResource(DC.namespace + "created", "dc:created", RDFResourceRolesEnum.property);
+    public static modified = new ARTURIResource(DC.namespace + "modified", "dc:modified", RDFResourceRolesEnum.property);
+}

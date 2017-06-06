@@ -254,6 +254,37 @@
                         </div>
                     </div>
 
+                    <div class="subPanel">
+                        <div class="subPanel-heading">
+                            <label style="flex: 1;">Project metadata property</label>
+                            <div class="checkbox" style="margin: 0px">
+                                <label style="min-height: initial;">
+                                    <input type="checkbox" [(ngModel)]="useProjMetadataProp"> Use metadata project properties
+                                </label>
+                            </div>
+                        </div>
+                        <div class="subPanel-body">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-1">Creation date:</label>
+                                    <div class="col-sm-11">
+                                        <select class="form-control input-sm" [(ngModel)]="creationDateProp" name="creationDateProp" [title]="creationDateProp.getURI()">
+                                            <option *ngFor="let p of creationDatePropList" [ngValue]="p" [title]="p.getURI()">{{p.getShow()}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-1">Modification date:</label>
+                                    <div class="col-sm-11">
+                                        <select class="form-control input-sm" [(ngModel)]="modificationDateProp" name="modificationDateProp">
+                                            <option *ngFor="let p of modificationDatePropList" [ngValue]="p">{{p.getShow()}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
