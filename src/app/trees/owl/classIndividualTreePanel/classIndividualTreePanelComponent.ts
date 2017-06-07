@@ -19,6 +19,7 @@ import { RDF, OWL } from "../../../models/Vocabulary";
     templateUrl: "./classIndividualTreePanelComponent.html",
 })
 export class ClassIndividualTreePanelComponent {
+    @Input() readonly: boolean;
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
 

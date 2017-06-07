@@ -67,6 +67,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private rootsForClsIndList: ARTURIResource[];
     private propertyType: RDFResourceRolesEnum;
 
+    private rootsForClsTree: ARTURIResource[];
 
     private manchExprEnabled: boolean = false; //useful to switch between tree selection or manchester expression input field
     private manchExpr: string;
@@ -139,6 +140,14 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             var rangeClass: ARTURIResource = rangeCollection[0];
                             if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
                                 this.viewType = "classTree";
+                                let role: RDFResourceRolesEnum = this.context.resource.getRole();
+                                if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty ||
+                                    role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty ||
+                                    role == RDFResourceRolesEnum.ontologyProperty) {
+                                    this.rootsForClsTree = [OWL.thing, RDF.property];
+                                } else {
+                                    this.rootsForClsTree = null;
+                                }
                             } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
                                 this.schemes = this.preferences.getActiveSchemes();
                                 this.viewType = "conceptTree";

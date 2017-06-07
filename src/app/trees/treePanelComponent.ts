@@ -13,6 +13,7 @@ export class TreePanelComponent {
     private selectedResource: ARTResource;
 
     private ONTO_TYPE: string;
+    private readonly: boolean;    
 
     private tabs: string[] = [
         RDFResourceRolesEnum.cls,
@@ -32,6 +33,7 @@ export class TreePanelComponent {
         } else {
             this.activeTab = RDFResourceRolesEnum.cls;
         }
+        this.readonly = VBContext.getContextVersion() != null; //if the RV is working on an old dump version, disable the updates
     }
 
     private onNodeSelected(node: ARTResource) {

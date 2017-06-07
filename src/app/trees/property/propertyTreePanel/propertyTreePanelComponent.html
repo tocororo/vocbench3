@@ -3,7 +3,7 @@
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <div class="btn-group btn-group-xs" role="group">
-                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property">
+                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property" [disabled]="readonly">
                     <img src="../../../../assets/images/icons/actions/prop_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
@@ -34,11 +34,11 @@
                     </li>
                 </ul>
             </div>
-            <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="!selectedNode">
+            <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="!selectedNode || readonly">
                 <img src="../../../../assets/images/icons/actions/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Delete Property" (click)="delete()" 
-                    [disabled]="!selectedNode || !selectedNode.getAdditionalProperty('explicit')">
+                    [disabled]="!selectedNode || !selectedNode.getAdditionalProperty('explicit') || readonly">
                 <img src="../../../../assets/images/icons/actions/prop_delete.png" class="panelButtonImg"/>
             </button>
         </div>

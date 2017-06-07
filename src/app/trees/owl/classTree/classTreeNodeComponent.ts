@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
 import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
-import { OWL } from "../../../models/Vocabulary";
+import { OWL, RDFS } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBPreferences } from "../../../utils/VBPreferences";
 import { ClassesServices } from "../../../services/classesServices";
@@ -14,6 +14,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     //ClassTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
+
+    @Input() root: boolean = false;
 
     constructor(private clsService: ClassesServices, private pref: VBPreferences, eventHandler: VBEventHandler) {
         super(eventHandler);
@@ -38,7 +40,9 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     ngOnInit() {
-        if (this.node.getURI() == OWL.thing.getURI() && this.node.getAdditionalProperty(ResAttribute.MORE) == "1") {
+        //expand immediately the node if it is a root and if it is owl:Thing or rdfs:Resource
+        if ((this.node.getURI() == OWL.thing.getURI() || this.node.getURI() == RDFS.resource.getURI()) && 
+            this.root && this.node.getAdditionalProperty(ResAttribute.MORE) == "1") {
             this.expandNode();
         }
     }

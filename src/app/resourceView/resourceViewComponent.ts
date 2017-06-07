@@ -5,6 +5,7 @@ import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBPreferences } from "../utils/VBPreferences";
+import { VBContext } from "../utils/VBContext";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 
@@ -61,6 +62,11 @@ export class ResourceViewComponent {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }
         }
+    }
+
+    ngOnInit() {
+        this.activeVersion = VBContext.getContextVersion();
+        this.readonly = this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
     }
 
     ngAfterViewInit() {

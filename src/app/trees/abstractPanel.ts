@@ -15,7 +15,8 @@ export abstract class AbstractPanel {
      * VIEWCHILD, INPUTS / OUTPUTS
      */
 
-    @Input() editable: boolean = true; //if true show the buttons to edit the tree
+    @Input() editable: boolean = true; //if true show the buttons to edit the tree/list
+    @Input() readonly: boolean = false; //if true disable the buttons to edit the tree/list
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     /**

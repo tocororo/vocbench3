@@ -1,4 +1,5 @@
-<class-tree-panel [style]="classTreeStyle" (nodeSelected)="onClassSelected($event)" [hideSearch]="true"></class-tree-panel>
+<class-tree-panel [style]="classTreeStyle" (nodeSelected)="onClassSelected($event)" [hideSearch]="true" 
+    [readonly]="readonly"></class-tree-panel>
 
 <!-- Splitter -->
 <div class="splitter">
@@ -6,7 +7,8 @@
     <span *ngIf="classTreeFlex < 3" class="glyphicon glyphicon-chevron-down" (click)="expandClassTree()"></span>
 </div>
 
-<instance-list-panel [style]="instanceListStyle" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" [hideSearch]="true"></instance-list-panel>
+<instance-list-panel [style]="instanceListStyle" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
+    [hideSearch]="true" [readonly]="readonly"></instance-list-panel>
 
 <div class="panel panel-default" style="margin-top: 4px;">
     <div class="input-group input-group-xs">

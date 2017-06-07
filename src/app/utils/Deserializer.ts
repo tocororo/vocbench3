@@ -442,12 +442,12 @@ export class Deserializer {
             resource.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
         }
         var nature: string = resJson[ResAttribute.NATURE];
-        if (nature != undefined) {
+        if (nature != undefined && nature != "") {
             let classes: ARTURIResource[] = [];
             let graphs: ARTURIResource[] = [];
-            let splitted: string[] = nature.split(",");
+            let splitted: string[] = nature.split("|_|");
             for (var i = 0; i < splitted.length; i++) {
-                let classGraphDeprecated: string[] = splitted[i].split("|_|");
+                let classGraphDeprecated: string[] = splitted[i].split(",");
                 let cls: ARTURIResource = new ARTURIResource(classGraphDeprecated[0]);
                 classes.push(cls);
                 let graph: ARTURIResource = new ARTURIResource(classGraphDeprecated[1]);

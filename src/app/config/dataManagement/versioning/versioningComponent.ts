@@ -50,7 +50,8 @@ export class VersioningComponent {
         } else {
             VBContext.setContextVersion(this.selectedVersion);
         }
-        this.eventHandler.refreshDataBroadcastEvent.emit();
+        // this.eventHandler.refreshDataBroadcastEvent.emit(); //this doesn't reinitialize the RV, so ngOnInit and ngAfterViewInit doesn't fire
+        VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
 
     private dump() {

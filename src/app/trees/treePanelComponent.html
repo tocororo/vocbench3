@@ -34,23 +34,24 @@
     <div class="tab-content">
         <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
             <div class="vbox">
-                <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)">
+                <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
+                    [readonly]="readonly">
                 </class-individual-tree-panel>
             </div>
         </div>
         <template [ngIf]="isProjectSKOS()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
-                <concept-tree-panel (nodeSelected)="onNodeSelected($event)"></concept-tree-panel>
+                <concept-tree-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></concept-tree-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'conceptScheme'}" [hidden]="activeTab != 'conceptScheme'">
-                <scheme-list-panel (nodeSelected)="onNodeSelected($event)"></scheme-list-panel>
+                <scheme-list-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></scheme-list-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">
-                <collection-tree-panel (nodeSelected)="onNodeSelected($event)"></collection-tree-panel>
+                <collection-tree-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></collection-tree-panel>
             </div>
         </template>
         <div [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
-            <property-tree-panel (nodeSelected)="onNodeSelected($event)"></property-tree-panel>
+            <property-tree-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></property-tree-panel>
         </div>
     </div>
     
