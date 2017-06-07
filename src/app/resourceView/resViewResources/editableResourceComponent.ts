@@ -22,6 +22,7 @@ export class EditableResourceComponent {
 	@Input() subject: ARTResource; //subject of the triple which the "resource" represents the object
 	@Input() predicate: ARTURIResource; //property of the triple which the "resource" represents the object
 	@Input() resource: ARTNode; //resource shown in the component. Represents the object of a triple shown in a ResourceView partition
+	@Input() readonly: boolean;
 	@Output('delete') deleteOutput = new EventEmitter();
 	@Output() update = new EventEmitter();
 	@Output() dblClick = new EventEmitter();

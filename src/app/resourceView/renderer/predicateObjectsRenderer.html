@@ -3,7 +3,7 @@
     <div class="subPanel-heading">
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
         <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(predicateObjects.getPredicate())" 
-            (click)="addValue()" [disabled]="!resource.getAdditionalProperty('explicit')">
+            (click)="addValue()" [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
             <span>+</span>
         </button>
     </div>
@@ -11,13 +11,13 @@
     <div class="subPanel-body">
         <div *ngFor="let obj of predicateObjects.getObjects()" class="listItem">
             <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1"
-                [resource]="obj" [subject]="resource" [predicate]="predicateObjects.getPredicate()"
+                [resource]="obj" [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly"
                 (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"></editable-resource>
             <template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
-                <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()" 
+                <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
                     (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
                 <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
-                    (click)="removeValue(obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                    (click)="removeValue(obj)" [disabled]="!obj.getAdditionalProperty('explicit') || readonly">
                     <span>-</span>
                 </button>
             </template>

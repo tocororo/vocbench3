@@ -2,7 +2,7 @@
     <rdf-resource [resource]="resource" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
     <div class="dropdown pull-right" title="Edit">
         <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown"
-            [disabled]="!resource.getAdditionalProperty('explicit')">
+            [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
             <span>&#9662;</span>
         </button>
         <ul class="dropdown-menu">

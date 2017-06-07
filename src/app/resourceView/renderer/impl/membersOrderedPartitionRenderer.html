@@ -10,7 +10,7 @@
         </span>
         <div class="groupPanel-heading-content dropdown pull-right">
             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"
-                [title]="addBtnImgTitle" [disabled]="!resource.getAdditionalProperty('explicit')">
+                [title]="addBtnImgTitle" [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
                 <img [src]="addBtnImgSrc" style="height: 16px"/>
                 <span class="caret"></span>
             </button>
@@ -35,14 +35,15 @@
                         <div class="listItem">
                             
                             <editable-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" style="flex: 1"
-                                [resource]="obj" [subject]="resource" [predicate]="po.getPredicate()"
+                                [resource]="obj" [subject]="resource" [predicate]="po.getPredicate()" [readonly]="readonly"
                                 (dblClick)="objectDblClick($event)" (delete)="removePredicateObject(po.getPredicate(), obj)"
                                 (update)="onObjectUpdate()"></editable-resource>
                             <template [ngIf]="renderAsReified(po.getPredicate(), obj)">
-                                <reified-resource [resource]="obj" [predicate]="po.getPredicate()" 
+                                <reified-resource [resource]="obj" [predicate]="po.getPredicate()"
                                     (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
-                                <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())"
-                                    (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="!obj.getAdditionalProperty('explicit')">
+                                <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())" 
+                                    (click)="removePredicateObject(po.getPredicate(), obj)"
+                                    [disabled]="!obj.getAdditionalProperty('explicit') || readonly">
                                     <span>-</span>
                                 </button>
                             </template>
@@ -54,7 +55,7 @@
                                 <label style="flex: 1">Members</label>
                                 <div class="dropdown pull-right">
                                     <button class="resViewPartitionBtn dropdown-toggle" data-toggle="dropdown"
-                                        title="Add member" [disabled]="!resource.getAdditionalProperty('explicit')">
+                                        title="Add member" [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
                                         <span>+</span>
                                     </button>
                                     <ul class="dropdown-menu">
@@ -69,7 +70,7 @@
                                 <div *ngFor="let memb of obj.members" class="listItem"(click)="selectMember(memb)"
                                     [ngClass]="{active: memb == selectedMember}">
                                     <editable-resource style="flex: 1" [resource]="memb" [subject]="obj" [predicate]="membersProperty"
-                                        (dblClick)="objectDblClick(memb)" (delete)="removeMember(memb)" (update)="onObjectUpdate()">
+                                        [readonly]="readonly" (dblClick)="objectDblClick(memb)" (delete)="removeMember(memb)" (update)="onObjectUpdate()">
                                     </editable-resource>
                                 </div>
                             </div>

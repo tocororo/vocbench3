@@ -13,6 +13,7 @@ export class PredicateObjectsRenderer {
 
     @Input('pred-obj') predicateObjects: ARTPredicateObjects;
     @Input() resource: ARTResource; //resource described
+    @Input() readonly: boolean;
     @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>();
     @Output() update = new EventEmitter();

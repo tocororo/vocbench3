@@ -9,13 +9,13 @@
         </span>
         <span class="groupPanel-heading-content">
             <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
-                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit')">
+                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
         </span>
     </div>
 
     <div class="groupPanel-body">
         <template [ngIf]="!partitionCollapsed">
-            <pred-obj-renderer *ngFor="let po of predicateObjectList" [pred-obj]="po" [resource]="resource"
+            <pred-obj-renderer *ngFor="let po of predicateObjectList" [pred-obj]="po" [resource]="resource" [readonly]="readonly"
                 (dblclickObj)="objectDblClick($event)" (add)="add(po.getPredicate())"
                 (remove)="removePredicateObject(po.getPredicate(), $event)" (update)="onObjectUpdate()">
             </pred-obj-renderer>
