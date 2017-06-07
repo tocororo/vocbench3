@@ -2,14 +2,12 @@ import { Component, ViewChild } from "@angular/core";
 import { AbstractTreePanel } from "../../../abstractTreePanel"
 import { CollectionTreeComponent } from "../collectionTree/collectionTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
-import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
-import { VBContext } from "../../../../utils/VBContext";
 import { UIUtils } from "../../../../utils/UIUtils";
 
 @Component({
@@ -21,16 +19,9 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     private searchInputPlaceholder: string;
 
-    private lexicalizationModel: string;
-
-    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
-        private creationModals: CreationModalServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
-    }
-
-    ngOnInit() {
-        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
     //top bar commands handlers
@@ -59,30 +50,16 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.lexicalizationModel == SKOS.uri) {
-                    if (collectionType.getURI() == SKOS.collection.getURI()) {
-                        this.skosService.createRootCollection(SKOS.collection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                        this.skosService.createRootCollection(SKOS.orderedCollection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    }
-                } else { //SKOSXL
-                    if (collectionType.getURI() == SKOS.collection.getURI()) {
-                        this.skosxlService.createRootCollection(SKOS.collection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                        this.skosxlService.createRootCollection(SKOS.orderedCollection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    }
+                if (collectionType.getURI() == SKOS.collection.getURI()) {
+                    this.skosService.createRootCollection(SKOS.collection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                    );
+                } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
+                    this.skosService.createRootCollection(SKOS.orderedCollection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                    );
                 }
             },
             () => { }
@@ -93,34 +70,18 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
          this.creationModals.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
             (res: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.lexicalizationModel == SKOS.uri) {
-                    if (collectionType.getURI() == SKOS.collection.getURI()) {
-                        this.skosService.createNestedCollection(
-                                SKOS.collection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                        this.skosService.createNestedCollection(
-                                SKOS.orderedCollection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    }
-                } else { //SKOSXL
-                    if (collectionType.getURI() == SKOS.collection.getURI()) {
-                        this.skosxlService.createNestedCollection(
-                                SKOS.collection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                        this.skosxlService.createNestedCollection(
-                                SKOS.orderedCollection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                            err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                        );
-                    }
+                if (collectionType.getURI() == SKOS.collection.getURI()) {
+                    this.skosService.createNestedCollection(
+                            SKOS.collection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                    );
+                } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
+                    this.skosService.createNestedCollection(
+                            SKOS.orderedCollection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                    );
                 }
             },
             () => { }

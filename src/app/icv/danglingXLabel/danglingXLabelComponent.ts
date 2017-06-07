@@ -6,7 +6,6 @@ import { SKOSXL } from "../../models/Vocabulary";
 import { VBPreferences } from "../../utils/VBPreferences";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
-import { SkosxlServices } from "../../services/skosxlServices";
 import { ClassesServices } from "../../services/classesServices";
 
 @Component({
@@ -18,7 +17,7 @@ export class DanglingXLabelComponent {
 
     private brokenLabelList: Array<ARTResource>;
 
-    constructor(private icvService: IcvServices, private skosxlService: SkosxlServices, private classesService: ClassesServices,
+    constructor(private icvService: IcvServices, private classesService: ClassesServices,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBPreferences) { }
 
     /**

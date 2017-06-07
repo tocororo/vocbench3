@@ -6,11 +6,9 @@ import { CreationModalServices } from "../../widget/modal/creationModal/creation
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBPreferences } from "../../utils/VBPreferences";
-import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
-import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "no-top-concept-scheme-component",
@@ -21,8 +19,8 @@ export class NoTopConceptSchemeComponent {
 
     private brokenSchemeList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private preferences: VBPreferences, private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBPreferences,
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
         private creationModals: CreationModalServices) { }
 
     /**
@@ -65,22 +63,13 @@ export class NoTopConceptSchemeComponent {
      * Fixes scheme by creating a top concept 
      */
     createTopConcept(scheme: ARTURIResource) {
-        let ontoType = VBContext.getWorkingProject().getLexicalizationModelType();
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
             (data: any) => {
-                if (ontoType == SKOS.uri) {
-                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
-                        stResp => {
-                            this.runIcv();
-                        }
-                    );
-                } else { //SKOSXL
-                    this.skosxlService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
-                        stResp => {
-                            this.runIcv();
-                        }
-                    );
-                }
+                this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                    stResp => {
+                        this.runIcv();
+                    }
+                );
             },
             () => { }
         );

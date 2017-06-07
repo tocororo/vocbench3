@@ -1,12 +1,10 @@
 import { Component, Output, EventEmitter } from "@angular/core";
 import { AbstractPanel } from "../../../abstractPanel"
 import { SkosServices } from "../../../../services/skosServices";
-import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBContext } from '../../../../utils/VBContext';
 import { VBPreferences } from '../../../../utils/VBPreferences';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
@@ -20,9 +18,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     private schemeList: SchemeListItem[];
 
-    private lexicalizationModel: string;
-
-    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
@@ -30,7 +26,6 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     ngOnInit() {
-        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
         this.initList();
     }
 
@@ -55,17 +50,10 @@ export class SchemeListPanelComponent extends AbstractPanel {
         this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
             (res: any) => {
                 console.log("returned data ", res);
-                if (this.lexicalizationModel == SKOS.uri) { //TODO warning, if the lexicalization model is rdfs here it invokes the creation with skosxl
-                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                        newScheme => { this.schemeList.push({ checked: false, scheme: newScheme }); },
-                        err => { }
-                    );
-                } else { //SKOSXL
-                    this.skosxlService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                        newScheme => { this.schemeList.push({ checked: false, scheme: newScheme }); },
-                        err => { }
-                    );
-                }
+                this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                    newScheme => { this.schemeList.push({ checked: false, scheme: newScheme }); },
+                    err => { }
+                );
             },
             () => { }
         );

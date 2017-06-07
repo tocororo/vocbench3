@@ -2,12 +2,10 @@ import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core
 import { AbstractTreePanel } from "../../../abstractTreePanel"
 import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
-import { SkosxlServices } from "../../../../services/skosxlServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -26,8 +24,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
-    private lexicalizationModel: string;
-
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
@@ -35,7 +31,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
 
-    constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private searchService: SearchServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
@@ -45,7 +41,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     ngOnInit() {
-        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = this.preferences.getActiveSchemes();
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
@@ -75,15 +70,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.lexicalizationModel == SKOS.uri) {
-                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                    );
-                } else { //SKOSXL
-                    this.skosxlService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                    );
-                }
+                this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                    stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                );
             },
             () => { }
         );
@@ -93,15 +82,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, true).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (this.lexicalizationModel == SKOS.uri) {
-                    this.skosService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                    );
-                } else { //SKOSXL
-                    this.skosxlService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
-                    );
-                }
+                this.skosService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                    stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                );
             },
             () => { }
         );
