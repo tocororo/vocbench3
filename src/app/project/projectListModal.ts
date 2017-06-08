@@ -28,7 +28,7 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
 
     ngOnInit() {
         //TODO this should consider the user and thus should return only project which the user has access
-        this.projectService.listProjects().subscribe(
+        this.projectService.listProjects(null, true).subscribe(
             projects => {
                 for (var i = 0; i < projects.length; i++) {
                     if (projects[i].isOpen()) {

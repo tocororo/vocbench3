@@ -10,7 +10,7 @@ export class Project {
     private lexicalizationModel: string;
 
     private open: boolean;
-    private status: Object;
+    private status: { status: string, message?: string };
     private type: string;
     
     constructor(name?: string) {
@@ -90,10 +90,10 @@ export class Project {
         return this.open;
     }
     
-    public setStatus(status: Object) {
+    public setStatus(status:  { status: string, message?: string }) {
         this.status = status;
     }
-    public getStatus(): Object {
+    public getStatus():  { status: string, message?: string } {
         return this.status;
     }
     

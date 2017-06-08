@@ -71,7 +71,8 @@
                     </td>
 
                     <td class="text-center">
-                        <span [class]="p.getStatus().class" [title]="p.getStatus().message"></span>
+                        <span *ngIf="p.getStatus().status != 'ok'" class="glyphicon glyphicon-exclamation-sign" [title]="p.getStatus().message"></span>
+                        <span *ngIf="p.getStatus().status == 'ok'" class="glyphicon glyphicon-ok-circle" title="ok"></span>
                     </td>
                 </tr>
             </tbody>

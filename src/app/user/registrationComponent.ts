@@ -25,10 +25,6 @@ export class RegistrationComponent {
         this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
     }
 
-    ngAfterViewInit() {
-        console.log(this.userForm);
-    }
-
     private fillDefaultUser() {
         this.userForm.givenName = "Admin";
         this.userForm.familyName = "Admin";
@@ -82,7 +78,7 @@ export class RegistrationComponent {
                 var message: string;
                 if (this.firstAccess) {
                     message = "The administration account has been created. " +
-                        "It is now possible to login with the email (" + this.userForm.email + " and the password you provided";
+                        "It is now possible to login with the email (" + this.userForm.email + ") and the password you provided";
                 } else {
                     message = "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
                         "it will be possible to login with your email (" + this.userForm.email + ") and the password you provided";
@@ -94,11 +90,6 @@ export class RegistrationComponent {
                 );
             }
         );
-    }
-
-
-    private onFormChange() {
-        console.log("form", this.userForm);
     }
 
 }

@@ -30,7 +30,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
     }
 
     ngOnInit() {
-        this.projService.listProjects().subscribe(
+        this.projService.listProjects(VBContext.getWorkingProject(), true, true).subscribe(
             projects => {
                 //keep only the projects (different from the current) compliant with the resource role to align
                 for (var i = 0; i < projects.length; i++) {

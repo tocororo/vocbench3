@@ -21,6 +21,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
     private consumers: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }[];
     private lock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
 
+    private nullAccessLevel: AccessLevel = null;
     private accessLevels: AccessLevel[] = [AccessLevel.R, AccessLevel.RW];
     private lockLevels: LockLevel[] = [LockLevel.R, LockLevel.W, LockLevel.NO];
 
@@ -39,8 +40,16 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         var oldLevel: AccessLevel = consumer.availableACLLevel;
         console.log("oldLevel", oldLevel);
         console.log("newLevel", newLevel);
-        this.basicModals.confirm("Update Access Level", "Are you sure to change Access Level of '" 
-            + this.context.acl.name + "' to '" + newLevel + "' for the consumer '" + consumer.name + "'?", "warning").then(
+
+        var message: string;
+        if (newLevel == this.nullAccessLevel) {
+            message = "Are you sure to revoke Access Level of '" + this.context.acl.name + "' for the consumer '" + consumer.name + "'?"
+        } else {
+            message = "Are you sure to change Access Level of '" + this.context.acl.name + "' to '" + newLevel + 
+                "' for the consumer '" + consumer.name + "'?"
+            
+        }
+        this.basicModals.confirm("Update Access Level", message, "warning").then(
             confirm => {
                 this.projectService.updateAccessLevel(new Project(this.context.acl.name), new Project(consumer.name), newLevel).subscribe(
                     stResp => {

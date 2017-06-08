@@ -15,6 +15,7 @@
                         <td style="width: 1%" nowrap><label>{{c.name}}:</label></td>
                         <td>
                             <select class="form-control input-xs" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
+                                <option [value]="nullAccessLevel">---</option>
                                 <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
                             </select>
                         </td>
