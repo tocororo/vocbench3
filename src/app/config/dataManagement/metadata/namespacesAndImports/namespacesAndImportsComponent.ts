@@ -36,7 +36,7 @@ export class NamespacesAndImportsComponent {
     private importTree: {id: string, status: string, imports: any[]}[]; //{status:string, uri:string, localfile: string}
 
     // Ontology mirror management section
-    private mirrorList: Array<any>; //array of {file: string, namespace: string}
+    private mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}
 
     constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
         private refactorService: RefactorServices, private basicModals: BasicModalServices, private preferences: VBPreferences,
@@ -442,11 +442,11 @@ export class NamespacesAndImportsComponent {
      * Opens a modal in order to update the mirror by providing a new baseURI
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
-    private updateMirrorFromWebWithUri(mirror: any) {
+    private updateMirrorFromWebWithUri(mirror: { file: string, baseURI: string }) {
         this.basicModals.prompt("Update ontology mirror from web", "BaseURI").then(
-            (newNamespace: any) => {
+            (newBaseURI: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.ontoMgrService.updateOntMirrorEntry(newNamespace, mirror.file, "wbu").subscribe(
+                this.ontoMgrService.updateOntologyMirrorEntry("updateFromBaseURI", newBaseURI, mirror.file).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refreshOntoMirror();
@@ -461,11 +461,11 @@ export class NamespacesAndImportsComponent {
      * Opens a modal in order to update the mirror by providing an URL
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
-    private updateMirrorFromWebFromAltUrl(mirror: any) {
+    private updateMirrorFromWebFromAltUrl(mirror: { file: string, baseURI: string }) {
         this.basicModals.prompt("Update ontology mirror from web", "URL").then(
             (url: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "walturl", url).subscribe(
+                this.ontoMgrService.updateOntologyMirrorEntry("updateFromAlternativeURL", mirror.baseURI, mirror.file, url).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refreshOntoMirror();
@@ -480,11 +480,11 @@ export class NamespacesAndImportsComponent {
      * Opens a modal in order to update the mirror by providing a local file
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
-    private updateMirrorFromLocalFile(mirror: any) {
+    private updateMirrorFromLocalFile(mirror: { file: string, baseURI: string }) {
         this.basicModals.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
             (file: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.ontoMgrService.updateOntMirrorEntry(mirror.namespace, mirror.file, "lf", null, file).subscribe(
+                this.ontoMgrService.updateOntologyMirrorEntry("updateFromFile", mirror.baseURI, mirror.file, null, file).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     }
@@ -498,8 +498,8 @@ export class NamespacesAndImportsComponent {
      * Deletes an ontology mirror stored on server
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
-    private deleteOntoMirror(mirror: any) {
-        this.ontoMgrService.deleteOntMirrorEntry(mirror.namespace, mirror.file).subscribe(
+    private deleteOntoMirror(mirror: { file: string, baseURI: string }) {
+        this.ontoMgrService.deleteOntologyMirrorEntry(mirror.baseURI, mirror.file).subscribe(
             stReps => {
                 this.refreshImports();
                 this.refreshOntoMirror();

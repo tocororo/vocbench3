@@ -5,7 +5,8 @@ import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 @Injectable()
 export class OntoManagerServices {
 
-    private serviceName = "ontManager";
+    private serviceName_old = "ontManager";
+    private serviceName = "OntManager";
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -18,13 +19,12 @@ export class OntoManagerServices {
     getOntologyMirror(): Observable<{ file: string, baseURI: string }[]> {
         console.log("[OntoManagerServices] getOntologyMirror");
         var params: any = {};
-        var options: VBRequestOptions = new VBRequestOptions({ oldTypeService: true });
-        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, false, options).map(
+        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, true).map(
             stResp => {
                 var mirrors: { file: string, baseURI: string }[] = [];
-                var mirrorElemColl: Array<Element> = stResp.getElementsByTagName("Mirror");
-                for (var i = 0; i < mirrorElemColl.length; i++) {
-                    mirrors.push({ file: mirrorElemColl[i].getAttribute("file"), baseURI: mirrorElemColl[i].getAttribute("ns") });
+                var mirrorNodeColl: any[] = stResp;
+                for (var i = 0; i < mirrorNodeColl.length; i++) {
+                    mirrors.push({ file: mirrorNodeColl[i].file, baseURI: mirrorNodeColl[i].baseURI });
                 }
                 return mirrors;
             }
@@ -36,48 +36,48 @@ export class OntoManagerServices {
      * @param namespace namespace of the ontology
      * @param fileName name of the mirror file cached on server
      */
-    deleteOntMirrorEntry(namespace: string, fileName: string) {
-        console.log("[OntoManagerServices] deleteOntMirrorEntry");
+    deleteOntologyMirrorEntry(baseURI: string, cacheFileName: string) {
+        console.log("[OntoManagerServices] deleteOntologyMirrorEntry");
         var params: any = {
-            ns: namespace,
-            file: fileName
+            baseURI: baseURI,
+            cacheFileName: cacheFileName
         };
-        var options: VBRequestOptions = new VBRequestOptions({ oldTypeService: true });
-        return this.httpMgr.doGet(this.serviceName, "deleteOntMirrorEntry", params, false, options);
+        return this.httpMgr.doPost(this.serviceName, "deleteOntologyMirrorEntry", params, true);
     }
 
     /**
-     * Updates the content of an ontology mirror file. This service allows to update in 3 ways:
-     * - from web using baseURI as location
-     * - from web using an alternative URL
-     * - from a local file
+     * Updates an entry (and its associated physical file) from the Ontology Mirror. The entry can be updated
+	 * in three different ways (determined by the parameter updateType, differentiating in the source
+	 * of the updated ontology:
+	 *  - updateFromBaseURI: the source is retrieved from the supplied baseURI
+	 *  - updateFromAlternativeURL: the source is retrieved from the address hold by the parameter alternativeURL
+	 *  - updateFromFile: the source has been supplied in the request body (and mapped to the parameter inputFile)
+     * @param updateType
      * @param baseURI baseURI of the ontology 
      * @param mirrorFileName the name of the ontology mirror file to update
-     * @param srcLoc available values: wbu (from web with base URI), walturl (from web with alternative URI), lf (from local file)
-     * @param altURL alternative URL to where download the ontology to mirror. To provide only if srcLoc is "walturl"
-     * @param file file to update onto mirror. To provide only if srcLoc is "lf"
+     * @param alternativeURL alternative URL to where download the ontology to mirror. To provide only if srcLoc is "walturl"
+     * @param inputFile file to update onto mirror. To provide only if srcLoc is "lf"
      */
-    updateOntMirrorEntry(baseURI: string, mirrorFileName: string, srcLoc: string, altURL?: string, file?: File) {
-        console.log("[OntoManagerServices] updateOntMirrorEntry");
+    updateOntologyMirrorEntry(updateType: "updateFromBaseURI" | "updateFromAlternativeURL" | "updateFromFile",
+            baseURI: string, mirrorFileName: string, alternativeURL?: string, inputFile?: File) {
+        console.log("[OntoManagerServices] updateOntologyMirrorEntry");
         var params: any = {
+            updateType: updateType,
             baseURI: baseURI,
             mirrorFileName: mirrorFileName,
-            srcLoc: srcLoc
         };
-        if (altURL != undefined) {
-            params.altURL = altURL;
+        if (alternativeURL != undefined) {
+            params.alternativeURL = alternativeURL;
         }
-        if (file != undefined) {
-            params.localFile = file
+        if (inputFile != undefined) {
+            params.inputFile = inputFile
         }
-        var options: VBRequestOptions = new VBRequestOptions({ oldTypeService: true });
-        if (srcLoc == "lf") {
+        if (updateType == "updateFromFile") {
             //in this case, the update is from a local file, so send the file with a POST
-            return this.httpMgr.uploadFile(this.serviceName, "updateOntMirrorEntry", params, false, options);
+            return this.httpMgr.uploadFile(this.serviceName, "updateOntologyMirrorEntry", params, true);
         } else {
-            return this.httpMgr.doGet(this.serviceName, "updateOntMirrorEntry", params, false, options);
+            return this.httpMgr.doPost(this.serviceName, "updateOntologyMirrorEntry", params, true);
         }
     }
-
 
 }
