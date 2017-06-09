@@ -5,7 +5,6 @@ import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../../mo
 import { RDFS } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
-import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
@@ -31,10 +30,10 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove domain";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
-        private manchService: ManchesterServices) {
-        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
+        rvModalService: ResViewModalServices, private manchService: ManchesterServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

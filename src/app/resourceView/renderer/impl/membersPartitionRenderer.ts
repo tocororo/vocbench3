@@ -6,7 +6,6 @@ import { ARTResource, ARTURIResource, ARTNode, ResAttribute, RDFTypesEnum, RDFRe
 import { SKOS } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
-import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
@@ -32,10 +31,10 @@ export class MembersPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
     removeBtnImgTitle = "Remove member";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
-        private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
+        rvModalService: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     /**

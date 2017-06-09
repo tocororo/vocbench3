@@ -4,7 +4,6 @@ import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
-import { SkosxlServices } from "../../../services/skosxlServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -31,9 +30,10 @@ export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
     removeBtnImgTitle = "Remove note";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
+        rvModalService: ResViewModalServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

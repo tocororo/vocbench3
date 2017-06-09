@@ -55,7 +55,6 @@ export class ProjectServices {
                     proj.setType(projCollJson[i].type);
                     projectList.push(proj);
                 }
-                console.log("proje", projectList);
                 return projectList;
             }
         );

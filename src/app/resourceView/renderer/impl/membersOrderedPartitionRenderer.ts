@@ -8,7 +8,6 @@ import {
 import { SKOS } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
-import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
@@ -37,10 +36,10 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
 
     private selectedMember: ARTResource;
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices,
-        private skosService: SkosServices) {
-        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
+        rvModalService: ResViewModalServices, private skosService: SkosServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     private selectMember(member: ARTResource) {

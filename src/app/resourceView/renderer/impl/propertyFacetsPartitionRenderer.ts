@@ -4,7 +4,6 @@ import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnu
 import { RDF, OWL } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
-import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
@@ -31,9 +30,10 @@ export class PropertyFacetsPartitionRenderer extends AbstractPredObjListRenderer
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
     removeBtnImgTitle = "Remove inverse property";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
+        rvModalService: ResViewModalServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     add(predicate?: ARTURIResource) {

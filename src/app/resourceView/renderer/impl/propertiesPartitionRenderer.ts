@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { SKOSXL } from "../../../models/Vocabulary";
+import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../../models/CustomForms";
 
 import { PropertyServices } from "../../../services/propertyServices";
+import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -31,9 +32,10 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
     addBtnImgTitle = "Add a property value";
     removeBtnImgTitle = "Remove property value";
 
-    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, skosxlService: SkosxlServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, skosxlService, basicModals, browsingModals, creationModal, rvModalService);
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
+        basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
+        rvModalService: ResViewModalServices, private skosService: SkosServices, private skosxlService: SkosxlServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
     ngOnInit() {
@@ -49,7 +51,59 @@ export class PropertiesPartitionRenderer extends AbstractPredObjListRenderer {
                 () => { }
             );
         } else {
-            this.enrichProperty(predicate);
+            //particular cases: labels
+            if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
+                predicate.getURI() == SKOSXL.altLabel.getURI() ||
+                predicate.getURI() == SKOSXL.hiddenLabel.getURI() ||
+                predicate.getURI() == SKOS.prefLabel.getURI() ||
+                predicate.getURI() == SKOS.altLabel.getURI() ||
+                predicate.getURI() == SKOS.hiddenLabel.getURI() ||
+                predicate.getURI() == RDFS.label.getURI()) {
+                this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
+                    (literal: any) => {
+                        switch (predicate.getURI()) {
+                            case SKOSXL.prefLabel.getURI():
+                                this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                            case SKOSXL.altLabel.getURI():
+                                this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                            case SKOSXL.hiddenLabel.getURI():
+                                this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                            case SKOS.prefLabel.getURI():
+                                this.skosService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                            case SKOS.altLabel.getURI():
+                                this.skosService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                            case SKOS.hiddenLabel.getURI():
+                                this.skosService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                            case RDFS.label.getURI():
+                                this.resourcesService.addValue(<ARTURIResource>this.resource, predicate,  (<ARTLiteral>literal)).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                                break;
+                        }
+                    },
+                    () => { }
+                );
+            } else {
+                this.enrichProperty(predicate);
+            }
         }
     }
 
