@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <typed-literal-input [(ngModel)]="value" (datatypeChange)="onDatatypeChange($event)"></typed-literal-input>
+    </div>
+</div>
+
+<button class="btn btn-xs btn-default" style="align-self: center; margin: 4px" (click)="add()" [disabled]="!value">
+    Add
+</button>
+
+<div class="panel panel-default" style="flex: 1">
+    <div class="panel-body scrollableContainer">
+        <div *ngFor="let dr of datarange" class="listItem">
+            <rdf-resource style="flex: 1" [resource]="dr"></rdf-resource>
+            <button class="btn btn-default btn-xs" (click)="remove(dr)">
+                <span class="glyphicon glyphicon-trash" title="Remove datarange"></span>
+            </button>
+        </div>
+    </div>
+</div>

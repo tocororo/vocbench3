@@ -63,19 +63,26 @@ export class ExportServices {
      * @param filteringPipeline a JSON string representing an array of FilteringStep.
      *  Each filter is applied to a subset of the exported graphs. No graph means every exported graph.
      *  An example is [{"filter": {"factoryId": string, "properties": { <key>: <value>, ...}}}]
+     * @param includeInferred
+     * 
      * @param outputFormat the output format. If it does not support graphs, the exported graph are
      *  merged into a single graph
      * @param force if true tells the service to proceed despite the presence of triples in the null
 	 *  context or in graphs named by blank nodes. Otherwise, under this conditions the service
 	 *  would fail, so that available information is not silently ignored
      */
-    export(graphs: ARTURIResource[], filteringPipeline: string, outputFormat?: RDFFormat, force?: boolean) {
+    export(graphs: ARTURIResource[], filteringPipeline: string, includeInferred?: boolean, outputFormat?: RDFFormat, force?: boolean) {
         console.log("[ExportServices] export");
         var params: any = {
             graphs: graphs,
             filteringPipeline: filteringPipeline,
-            outputFormat: outputFormat.name
         };
+        if (outputFormat != null) {
+            params.outputFormat = outputFormat.name;
+        }
+        if (includeInferred != null) {
+            params.includeInferred = includeInferred;
+        }
         if (force != null) {
             params.force = force;
         }

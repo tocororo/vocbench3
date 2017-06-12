@@ -141,12 +141,8 @@ export abstract class AbstractPredObjListRenderer {
                     } else if (ranges.type == RDFTypesEnum.plainLiteral) {
                         this.enrichWithPlainLiteral(predicate);
                     } else if (ranges.type == RDFTypesEnum.typedLiteral) {
-                        var datatypes: string[] = [];
                         //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
-                        for (var i = 0; i < ranges.rangeCollection.length; i++) {
-                            datatypes.push(ranges.rangeCollection[i].getNominalValue());
-                        }
-                        this.enrichWithTypedLiteral(predicate, datatypes);
+                        this.enrichWithTypedLiteral(predicate, ranges.rangeCollection);
                     } else if (ranges.type == RDFTypesEnum.literal) {
                         var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                         this.basicModals.select("Select range type", null, options).then(
@@ -265,7 +261,7 @@ export abstract class AbstractPredObjListRenderer {
     /**
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
-    private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: string[]) {
+    private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[]) {
         this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
             (literal: any) => {
                 this.resourcesService.addValue(this.resource, predicate, <ARTLiteral>literal).subscribe(

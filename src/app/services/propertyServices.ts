@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {VBEventHandler} from "../utils/VBEventHandler";
-import {Deserializer} from "../utils/Deserializer";
-import {ARTResource, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum} from "../models/ARTResources";
-import {RDF, OWL} from "../models/Vocabulary";
-import {FormCollection, CustomForm, CustomFormType} from "../models/CustomForms";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { Deserializer } from "../utils/Deserializer";
+import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
+import { RDF, OWL } from "../models/Vocabulary";
+import { FormCollection, CustomForm, CustomFormType } from "../models/CustomForms";
 
 @Injectable()
 export class PropertyServices {
@@ -195,7 +195,7 @@ export class PropertyServices {
      *              or typedLiteral, then represent the admitted datatypes);
      * - formCollection, an optional FormCollection object only if the property has form collection associated
      */
-    getRange(property: ARTURIResource): Observable<{ranges: {type: RangeType, rangeCollection: ARTURIResource[]}, formCollection: FormCollection}> {
+    getRange(property: ARTURIResource): Observable<{ ranges: { type: RangeType, rangeCollection: ARTURIResource[] }, formCollection: FormCollection }> {
         console.log("[PropertyServices] getRange");
         var params: any = {
             property: property,
@@ -204,7 +204,7 @@ export class PropertyServices {
             stResp => {
                 let ranges: any;
                 let formCollection: FormCollection;
-                
+
                 if (stResp.ranges) {
                     ranges = {};
                     ranges.type = stResp.ranges.type;
@@ -229,7 +229,7 @@ export class PropertyServices {
                         forms.push(cf);
                     }
                     forms.sort(
-                        function(a: CustomForm, b: CustomForm) {
+                        function (a: CustomForm, b: CustomForm) {
                             if (a.getName() < b.getName()) return -1;
                             if (a.getName() > b.getName()) return 1;
                             return 0;
@@ -237,7 +237,7 @@ export class PropertyServices {
                     )
                     formCollection.setForms(forms);
                 }
-                return {ranges: ranges, formCollection: formCollection};
+                return { ranges: ranges, formCollection: formCollection };
             }
         );
     }
@@ -282,7 +282,7 @@ export class PropertyServices {
      * @return the new property
      */
     createSubProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty: ARTURIResource,
-            customFormId?: string, userPromptMap?: any) {
+        customFormId?: string, userPromptMap?: any) {
         console.log("[PropertyServices] createProperty");
         var params: any = {
             propertyType: propertyType,
@@ -299,7 +299,7 @@ export class PropertyServices {
             stResp => {
                 var newProp = Deserializer.createURI(stResp);
                 newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.subPropertyCreatedEvent.emit({subProperty: newProp, superProperty: superProperty});
+                this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: newProp, superProperty: superProperty });
                 return newProp;
             }
         );
@@ -342,7 +342,7 @@ export class PropertyServices {
                 // subProperty.setAdditionalProperty(ResAttribute.CHILDREN, property.getAdditionalProperty(ResAttribute.CHILDREN));
                 // subProperty.setAdditionalProperty(ResAttribute.EXPLICIT, property.getAdditionalProperty(ResAttribute.EXPLICIT));
                 // subProperty.setAdditionalProperty(ResAttribute.MORE, property.getAdditionalProperty(ResAttribute.MORE));
-                this.eventHandler.superPropertyAddedEvent.emit({subProperty: subProperty, superProperty: superProperty});
+                this.eventHandler.superPropertyAddedEvent.emit({ subProperty: subProperty, superProperty: superProperty });
                 return stResp;
             }
         );
@@ -362,7 +362,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removeSuperProperty", params, true).map(
             stResp => {
-                this.eventHandler.superPropertyRemovedEvent.emit({property: property, superProperty: superProperty});
+                this.eventHandler.superPropertyRemovedEvent.emit({ property: property, superProperty: superProperty });
                 return stResp;
             }
         );
@@ -381,7 +381,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doPost(this.serviceName, "addPropertyDomain", params, true);
     }
-    
+
     /**
      * Removes the domain of a property
      * @param property property to which remove the domain
@@ -395,7 +395,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removePropertyDomain", params, true);
     }
-    
+
     /**
      * Adds a class as range of a property
      * @param property property to which add the domain
@@ -423,7 +423,25 @@ export class PropertyServices {
         };
         return this.httpMgr.doPost(this.serviceName, "removePropertyRange", params, true);
     }
-    
+
+    /**
+     * Set a list of literals as datarange of a property
+     * @param property 
+     * @param literals 
+     * @param predicate (optional subproperty of rdfs:range)
+     */
+    setDataRange(property: ARTURIResource, literals: ARTLiteral[], predicate?: ARTURIResource) {
+        console.log("[PropertyServices] setDataRange");
+        var params: any = {
+            property: property,
+            literals: literals,
+        };
+        if (predicate != null) {
+            params.predicate = predicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "setDataRange", params, true);
+    }
+
 }
 
 type RangeType = "resource" | "plainLiteral" | "typedLiteral" | "literal" | "undetermined" | "inconsistent";

@@ -46,6 +46,14 @@ export class EditableResourceComponent {
 	//======== "edit" HANDLER ========
 
 	private edit() {
+		//don't edit inline dataranges
+		if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
+			this.rvModalService.editDataRange(this.resource).then(
+				ok => { this.update.emit(); },
+				() => {}
+			);
+			return;
+		}
 		if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
 			this.propService.getRange(this.predicate).subscribe(
 				range => {

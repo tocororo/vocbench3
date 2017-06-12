@@ -1,21 +1,22 @@
-import {Injectable} from '@angular/core';
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
-import {ClassListCreatorModal, ClassListCreatorModalData} from "./classListCreatorModal";
-import {InstanceListCreatorModal, InstanceListCreatorModalData} from "./instanceListCreatorModal";
-import {EnrichPropertyModal, EnrichPropertyModalData} from "./enrichPropertyModal";
-import {AddPropertyValueModal, AddPropertyValueModalData} from "./addPropertyValueModal";
-import {CustomFormModal, CustomFormModalData} from "../../customForms/customForm/customFormModal";
-import {ARTResource, ARTURIResource} from '../../models/ARTResources';
+import { Injectable } from '@angular/core';
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
+import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
+import { EnrichPropertyModal, EnrichPropertyModalData } from "./enrichPropertyModal";
+import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
+import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
+import { CustomFormModal, CustomFormModalData } from "../../customForms/customForm/customFormModal";
+import { ARTResource, ARTBNode, ARTURIResource, ARTLiteral } from '../../models/ARTResources';
 
 /**
  * Service to open modals that allow to create a classes list or instances list
  */
 @Injectable()
 export class ResViewModalServices {
-    
-    constructor(private modal: Modal) {}
-    
+
+    constructor(private modal: Modal) { }
+
     /**
      * Opens a modal to create a list of classes (useful for class axioms)
      * @param title the title of the modal
@@ -33,7 +34,7 @@ export class ResViewModalServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal to create a list of instance (useful for class axioms)
      * @param title the title of the modal
@@ -50,7 +51,7 @@ export class ResViewModalServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal to select a resource to set as value of a property with range "resource"
      * @param title the title of the modal
@@ -69,7 +70,7 @@ export class ResViewModalServices {
             dialog => dialog.result
         );
     }
-    
+
     /**
      * Opens a modal with a custom form to enrich a property with a custom range.
      * @param title title of the dialog
@@ -100,12 +101,27 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<AddPropertyValueModalData>(
             modalData, undefined, AddPropertyValueModalData
         );
-        // builder.size("lg").keyboard(null);
         builder.keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(AddPropertyValueModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
-    
+
+    /**
+     * Opens a modal that allows to edit an existing datarange
+     * @param datarangeNode node that represents the datarange
+     */
+    editDataRange(datarangeNode: ARTBNode) {
+        var modalData = new DataRangeEditorModalData(datarangeNode);
+        const builder = new BSModalContextBuilder<DataRangeEditorModalData>(
+            modalData, undefined, DataRangeEditorModalData
+        );
+        builder.keyboard(null);
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(DataRangeEditorModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
 }

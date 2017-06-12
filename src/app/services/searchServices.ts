@@ -59,7 +59,7 @@ export class SearchServices {
         searchMode: string, lang?: string): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
-            cls: cls.getURI(),
+            cls: cls,
             searchString: searchString,
             useLocalName: useLocalName,
             useURI: useURI,
@@ -68,7 +68,7 @@ export class SearchServices {
         if (lang != undefined) {
             params.lang = lang;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params).map(
+        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

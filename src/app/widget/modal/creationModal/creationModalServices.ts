@@ -115,7 +115,7 @@ export class CreationModalServices {
      * @param allowedDatatypes datatypes allowed in the datatype selection list
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newTypedLiteral(title: string, allowedDatatypes?: string[]) {
+    newTypedLiteral(title: string, allowedDatatypes?: ARTURIResource[]) {
         var modalData = new NewTypedLiteralModalData(title, allowedDatatypes);
         const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
             modalData, undefined, NewTypedLiteralModalData

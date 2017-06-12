@@ -23,6 +23,8 @@ export class ExportDataComponent {
     private exportFormats: RDFFormat[];
     private selectedExportFormat: RDFFormat;
 
+    private includeInferred: boolean;
+
     //graph selection
     private baseURI: string;
     private exportGraphs: GraphStruct[] = [];
@@ -310,7 +312,7 @@ export class ExportDataComponent {
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat).subscribe(
+        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat).subscribe(
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var exportLink = window.URL.createObjectURL(blob);
@@ -321,7 +323,7 @@ export class ExportDataComponent {
                 this.basicModals.confirm("Warning", err + " Do you want to force the export?", "warning").then(
                     yes => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.selectedExportFormat, true).subscribe(
+                        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat, true).subscribe(
                             blob => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                                 var exportLink = window.URL.createObjectURL(blob);

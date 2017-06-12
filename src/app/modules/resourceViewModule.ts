@@ -37,6 +37,9 @@ import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCr
 import { EnrichPropertyModal } from '../resourceView/resViewModals/enrichPropertyModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
 import { AddPropertyValueModal } from '../resourceView/resViewModals/addPropertyValueModal';
+import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
+//this is only used in addPropertyValueModal, if it will be usefull somewhere else, move this in sharedModules
+import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 
 @NgModule({
     imports: [
@@ -56,14 +59,15 @@ import { AddPropertyValueModal } from '../resourceView/resViewModals/addProperty
         TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer,
         PredicateObjectsRenderer,
         //modals
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
+        DataRangeEditor
     ],
     exports: [
         ResourceViewPanelComponent
     ],
     providers: [ResViewModalServices],
     entryComponents: [
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal
     ]
 })
 export class ResourceViewModule { }

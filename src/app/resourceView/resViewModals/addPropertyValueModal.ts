@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { ARTURIResource, ARTResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from '../../models/ARTResources';
+import { ARTURIResource, ARTResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
 import { VBPreferences } from '../../utils/VBPreferences';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
@@ -12,7 +12,7 @@ import { PropertyServices } from "../../services/propertyServices";
 /**
  * This modal allow the user to create a property-value relation and can be open throght a ResView partition.
  * (NOTE: this modal allow only to create a property-value relation by picking a resource/value pre-existing, this not
- * allows to create a value, indeed it is opened only from the partition that "don't create",
+ * allows to create a value, indeed it is opened only from the partition that "doesn't create",
  * e.g. notes and lexicalizations allow to create, not to pick existing label or notes)
  * The property is passed to the modal by the calling partition and tells to the modal that it should allow to enrich
  * that property or its subProperties.
@@ -26,6 +26,11 @@ import { PropertyServices } from "../../services/propertyServices";
  *      - a list (scheme,...)
  *      - an input field for a manchester expression
  * Depending on the range of the enriching property
+ * 
+ * This modal returns an object {property, value} where value could be:
+ * - resource: ARTResource
+ * - manchester expression: string
+ * - datarange: ARTLiteral[]
  */
 
 export class AddPropertyValueModalData extends BSModalContext {
@@ -53,7 +58,6 @@ export class AddPropertyValueModalData extends BSModalContext {
 export class AddPropertyValueModal implements ModalComponent<AddPropertyValueModalData> {
     context: AddPropertyValueModalData;
 
-    private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
     private selectedProperty: ARTURIResource;
 
@@ -69,8 +73,17 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
     private rootsForClsTree: ARTURIResource[];
 
-    private manchExprEnabled: boolean = false; //useful to switch between tree selection or manchester expression input field
+    private showAspectSelector: boolean = false;
+    private treeListAspectSelector: string = "Existing Resource";
+    private manchExprAspectSelector: string = "Manchester Expression";
+    private dataRangeAspectSelector: string = "DataRange";
+    private aspectSelectors: string[];
+    private selectedAspectSelector: string = this.treeListAspectSelector;
+
+    //available returned data
+    private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
     private manchExpr: string;
+    private datarange: ARTLiteral[];
 
     //datatype to show in a list in case the modal allow to add range to a datatype property
     private datatypes: ARTURIResource[] = [XmlSchema.boolean, XmlSchema.date,
@@ -92,13 +105,17 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
-                this.selectedProperty = selectedProp;
+                if (this.selectedProperty.getURI() != selectedProp.getURI()) {
+                    this.selectedProperty = selectedProp;
+                    this.updateRange(this.selectedProperty);
+                }
             },
             () => { }
         );
     }
 
     private updateRange(property: ARTURIResource) {
+        this.updateShowAspectSelector();
         // special hard-coded cases:
         if (this.rootProperty.getURI() == SKOS.member.getURI()) {
             /**
@@ -180,13 +197,19 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
 
     /**
-     * Tells if the interface should show the selector to switch between class tree or manchester expression input.
-     * This depends on the property that should be enriched, if it accept as value a manchester expression.
+     * Updates the showAspectSelector that determines if the interface should show the selector to switch between:
+     * - tree/list view
+     * - manchester expression input
+     * - data range creation
+     * 
+     * This depends on the property that should be enriched:
+     * - if it accept as value a manchester expression.
+     * - if it accept a datarange as range (and the resource is a datatype property)
      * Considers only the root property of the resource view partitions
      */
-    private showClassManchSelector() {
-        return (
-            //partition domains
+    private updateShowAspectSelector() {
+        //machester expression selector
+        if (//partition domains
             this.rootProperty.getURI() == RDFS.domain.getURI() ||
             //partition ranges
             (this.rootProperty.getURI() == RDFS.range.getURI() &&
@@ -196,11 +219,31 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.rootProperty.getURI() == OWL.equivalentClass.getURI() ||
             this.rootProperty.getURI() == OWL.complementOf.getURI() ||
             this.rootProperty.getURI() == OWL.disjointWith.getURI()
-        );
+        ) {
+            this.showAspectSelector = true;
+            this.aspectSelectors = [this.treeListAspectSelector, this.manchExprAspectSelector];
+            this.selectedAspectSelector = this.aspectSelectors[0]; //select as default tree and list selector
+            return;
+        }
+        //datarange expression selector
+        if (this.rootProperty.getURI() == RDFS.range.getURI() && 
+            this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty
+        ) {
+            this.showAspectSelector = true;
+            this.aspectSelectors = [this.treeListAspectSelector, this.dataRangeAspectSelector];
+            this.selectedAspectSelector = this.aspectSelectors[0]; //select as default tree and list selector
+            return;
+        }
+
+        this.showAspectSelector = false;
     }
 
     private onResourceSelected(resource: ARTURIResource) {
         this.selectedResource = resource;
+    }
+
+    private onDatarangeChanged(datarange: ARTLiteral[]) {
+        this.datarange = datarange;
     }
 
     /**
@@ -208,8 +251,10 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * or if there is a resource selected in the tree
      */
     private isOkEnabled() {
-        if (this.manchExprEnabled) {
+        if (this.selectedAspectSelector == this.manchExprAspectSelector) {
             return (this.manchExpr && this.manchExpr.trim() != "");
+        } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
+            return (this.datarange != null && this.datarange.length > 0);
         } else {
             return this.selectedResource != null;
         }
@@ -218,7 +263,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        if (this.manchExprEnabled) {
+        if (this.selectedAspectSelector == this.manchExprAspectSelector) {
             this.manchService.checkExpression(this.manchExpr).subscribe(
                 valid => {
                     if (valid) {
@@ -228,6 +273,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                     }
                 }
             );
+        } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
+            this.dialog.close({ property: this.selectedProperty, value: this.datarange });
         } else {
             this.selectedResource.deleteAdditionalProperty(ResAttribute.SELECTED);
             this.dialog.close({ property: this.selectedProperty, value: this.selectedResource });

@@ -102,7 +102,12 @@
         </div>
         
         <div class="panel-footer">
-            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="export()">Submit</button>
+            <div class="pull-right">
+                <div class="checkbox" style="display: inline-block; margin-right: 20px;">
+                    <label><input type="checkbox" [(ngModel)]="includeInferred">Include inferred</label>
+                </div>
+                <button type="submit" class="btn btn-default btn-sm" (click)="export()">Submit</button>
+            </div>
             <span class="clearfix"></span> <!--To fix UI bug-->
         </div>
     </div>

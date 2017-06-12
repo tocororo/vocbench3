@@ -469,7 +469,7 @@ export class ResourceUtils {
 					// Get datatype
 					let datatype: string = nTriplesLiteral.substring(startDtIdx + 2);
                     let dtURI: ARTURIResource = this.parseURI(datatype);
-                    return new ARTLiteral(label, datatype);
+                    return new ARTLiteral(label, dtURI.getURI());
 				}
 				else {
 					return new ARTLiteral(label);

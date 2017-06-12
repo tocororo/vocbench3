@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS, XmlSchema } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
@@ -42,22 +42,45 @@ export class RangesPartitionRenderer extends AbstractPredObjListRenderer {
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
-
-                if (typeof value == "string") {
-                    this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //value is an ARTURIResource (a class selected from the tree or a datatype)
-                    if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
-                        this.propService.addPropertyRange(<ARTURIResource>this.resource, value).subscribe(
+                /** If the rerource is a datatype property, value could be a:
+                 * - datatype (ARTURIResource)
+                 * - datarange (array of ARTLiteral)
+                 * Otherwise, if the resource is a object/annotation/ontologyProperty, value could be a:
+                 * - resource
+                 * - manchester expression
+                 */
+                if (this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
+                    if (value instanceof Array) { // datarange
+                        this.propService.setDataRange(<ARTURIResource>this.resource, value).subscribe(
+                            stResp => this.update.emit(null)
+                        )
+                    } else if (value instanceof ARTURIResource) { //datatype
+                        if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
+                            this.propService.addPropertyRange(<ARTURIResource>this.resource, value).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else { //it's using a subProperty of rdfs:range
+                            this.resourcesService.addValue(this.resource, prop, value).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        }
+                    }
+                } else {
+                    if (typeof value == "string") {
+                        this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value).subscribe(
                             stResp => this.update.emit(null)
                         );
-                    } else { //it's using a subProperty of rdfs:range
-                        this.resourcesService.addValue(this.resource, prop, value).subscribe(
-                            stResp => {
-                                this.update.emit(null);
-                            }
-                        );
+                    } else { //value is an ARTURIResource (a class selected from the tree)
+                        if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
+                            this.propService.addPropertyRange(<ARTURIResource>this.resource, value).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else { //it's using a subProperty of rdfs:range
+                            this.resourcesService.addValue(this.resource, prop, value).subscribe(
+                                stResp => this.update.emit(null)
+                                
+                            );
+                        }
                     }
                 }
             },

@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h3 class="modal-title">Edit datarange</h3>
+</div>
+<div class="modal-body vbox" style="max-height:70vh;">
+    <div class="hbox">
+        <data-range-editor [datarange]="datarange" (datarangeChange)="onDatarangeChanged($event)"></data-range-editor>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="datarange.length == 0">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

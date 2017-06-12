@@ -6,18 +6,16 @@
     <div style="margin-bottom: 4px;">
         <label>Property:</label>
         <rdf-resource [resource]="selectedProperty"></rdf-resource>
-        <!-- TODO this button should be disabled if the rootProperty is just one and it has no subProperties.
-            This requires Property service to know if a property has subProperties -->
         <button *ngIf="context.propChangeable" class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()">Change</button>
 
-        <div *ngIf="showClassManchSelector()" class="btn-group btn-group-xs pull-right">
-            <button class="btn btn-default" [ngClass]="{active: !manchExprEnabled}" (click)="manchExprEnabled = false">Existing class</button>
-            <button class="btn btn-default" [ngClass]="{active: manchExprEnabled}" (click)="manchExprEnabled = true">Manchester expression</button>
+        <div *ngIf="showAspectSelector" class="btn-group btn-group-xs pull-right">
+            <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspectSelector == selector}"
+                (click)="selectedAspectSelector = selector">{{selector}}</button>
         </div>
     </div>
 
     <!--Alternative views-->
-    <div *ngIf="!manchExprEnabled" class="vbox">
+    <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
         <class-tree-panel *ngIf="viewType == 'classTree'" (nodeSelected)="onResourceSelected($event)" [roots]="rootsForClsTree"
             [editable]="false"></class-tree-panel>
 
@@ -37,8 +35,11 @@
         </class-individual-tree>
     </div>
 
-    <input *ngIf="manchExprEnabled" type="text" class="form-control input-sm" style="margin-top: 5px;"
+    <input *ngIf="selectedAspectSelector == manchExprAspectSelector" type="text" class="form-control input-sm" style="margin-top: 5px;"
         [(ngModel)]="manchExpr" placeholder="Manchester expression">
+
+    <data-range-editor *ngIf="selectedAspectSelector == dataRangeAspectSelector" (datarangeChange)="onDatarangeChanged($event)">
+    </data-range-editor>
 
 </div>
 <div class="modal-footer">
