@@ -552,6 +552,14 @@ export class Deserializer {
         return resourceArray;
     }
 
+    public static createLiteralArray(result: Array<any>): ARTLiteral[] {
+        var literalArray: ARTLiteral[] = new Array();
+        for (var i = 0; i < result.length; i++) {
+            literalArray.push(this.createLiteralJSON(result[i]));
+        }
+        return literalArray;
+    }
+
     private static createRDFNodeArrayJSON(nodeArray: any) {
         var collectionArray: ARTNode[] = new Array();
         for (var i = 0; i < nodeArray.length; i++) {

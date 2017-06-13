@@ -25,14 +25,12 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
     }
 
     ngOnInit() {
-        var dtShow: string = this.context.datarangeNode.getShow();
-        dtShow = dtShow.substring(1, dtShow.length-1); //remove the opening and closing curly brackets {}
-        var splitted: string[] = dtShow.split(",");
-        for (var i = 0; i < splitted.length; i++) {
-            let literal: ARTLiteral = ResourceUtils.parseLiteral(splitted[i].trim());
-            this.datarange.push(literal);
-            this.datarangePristine.push(literal);
-        }
+        this.propertyService.getDatarangeLiterals(this.context.datarangeNode).subscribe(
+            datarange => {
+                this.datarange = datarange;
+                this.datarangePristine = datarange.slice(); //clone
+            }
+        )
     }
 
     onDatarangeChanged(datarange: ARTLiteral[]) {
@@ -58,12 +56,13 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
         }
         if (changed) {
             //invoke service to update the datarange
-            // this.propertyService.
-            console.log("updating datarange with list", this.context.datarangeNode, this.datarange);
-
-            event.stopPropagation();
-            event.preventDefault();
-            this.dialog.close();
+            this.propertyService.updateDataranges(this.context.datarangeNode, this.datarange).subscribe(
+                stResp => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    this.dialog.close();
+                }
+            )
         } else {
             this.cancel();
         }

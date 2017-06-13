@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS, XmlSchema } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
@@ -96,6 +96,10 @@ export class RangesPartitionRenderer extends AbstractPredObjListRenderer {
         } else {
             if (object.getShow().startsWith("(") && object.getShow().startsWith(")") && object.isBNode()) { //class axiom
                 this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            } else if (object instanceof ARTBNode && object.getRole() == RDFResourceRolesEnum.dataRange) { //datarange
+                this.propService.removeDataranges(<ARTURIResource>this.resource, object).subscribe(
                     stResp => this.update.emit(null)
                 );
             } else { //removing a range class or datatype

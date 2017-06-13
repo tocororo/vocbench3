@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTLiteral, ARTBNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
 import { RDF, OWL } from "../models/Vocabulary";
 import { FormCollection, CustomForm, CustomFormType } from "../models/CustomForms";
 
@@ -440,6 +440,50 @@ export class PropertyServices {
             params.predicate = predicate;
         }
         return this.httpMgr.doPost(this.serviceName, "setDataRange", params, true);
+    }
+
+    /**
+     * Removes the datarange of a property
+     * @param property 
+     * @param datarange 
+     */
+    removeDataranges(property: ARTURIResource, datarange: ARTBNode) {
+        console.log("[PropertyServices] removeDataranges");
+        var params: any = {
+            property: property,
+            datarange: datarange,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeDataranges", params, true);
+    }
+
+    /**
+     * Updates the literals of a datarange
+     * @param property 
+     * @param literals 
+     */
+    updateDataranges(datarange: ARTBNode, literals: ARTLiteral[]) {
+        console.log("[PropertyServices] updateDataranges");
+        var params: any = {
+            datarange: datarange,
+            literals: literals,
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateDataranges", params, true);
+    }
+
+    /**
+     * Returns the enumeration of the literals that compose a datarange
+     * @param datarange 
+     */
+    getDatarangeLiterals(datarange: ARTBNode): Observable<ARTLiteral[]> {
+        console.log("[PropertyServices] getDatarangeLiterals");
+        var params: any = {
+            datarange: datarange
+        };
+        return this.httpMgr.doGet(this.serviceName, "getDatarangeLiterals", params, true).map(
+            stResp => {
+                return Deserializer.createLiteralArray(stResp);
+            }
+        );
     }
 
 }
