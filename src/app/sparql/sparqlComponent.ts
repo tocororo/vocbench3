@@ -50,6 +50,8 @@ export class SparqlComponent {
     private doQuery(tab: Tab) {
         var initTime = new Date().getTime();
         tab.queryResult = null;
+        tab.resultsPage = 0;
+        tab.resultsTotPage = 0;
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (tab.queryMode == "query") {
             this.sparqlService.evaluateQuery(tab.query, tab.inferred).subscribe(
@@ -82,7 +84,6 @@ export class SparqlComponent {
             if (tab.queryResult.length % this.resultsLimit > 0) {
                 tab.resultsTotPage++;
             }
-            console.log(tab);
         } else if (stResp.resultType == "boolean") {
             tab.headers = ["boolean"];
             tab.queryResult = Boolean(stResp.sparql.boolean);
@@ -259,6 +260,23 @@ export class SparqlComponent {
                 millisec = "0" + millisec;
             }
             return sec + "," + millisec + " sec";
+        }
+    }
+
+    private getBindingShow(binding: any) {
+        if (binding.type == "uri") {
+            return "<" + binding.value + ">";
+        } else if (binding.type == "bnode") {
+            return "_:" + binding.value;
+        } else if (binding.type == "literal") {
+            var show = binding.value;
+            if (binding['xml:lang']) {
+                show += "@" + binding['xml:lang'];
+            }
+            if (binding.datatype) {
+                show += "^^<" + binding.datatype + ">";
+            }
+            return show;
         }
     }
 

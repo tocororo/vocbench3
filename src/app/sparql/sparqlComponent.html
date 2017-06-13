@@ -71,8 +71,9 @@
                                     <tr *ngFor="let bindings of t.queryResult; let i=index">
                                         <template [ngIf]="i >= t.resultsPage*resultsLimit && i < t.resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
                                             <td *ngFor="let h of t.headers">
+                                                <!--{{bindings[h] | json }}-->
                                                 <template [ngIf]="bindings[h]">
-                                                    {{bindings[h].value}}
+                                                    {{getBindingShow(bindings[h])}}
                                                 </template>
                                             </td>
                                         </template>
