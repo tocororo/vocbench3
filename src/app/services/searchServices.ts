@@ -23,7 +23,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
-        searchMode: string, lang?: string, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
+        searchMode: string, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -32,9 +32,6 @@ export class SearchServices {
             useURI: useURI,
             searchMode: searchMode,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
         if (schemes != undefined) {
             params.scheme = schemes;
         }
@@ -56,7 +53,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean,
-        searchMode: string, lang?: string): Observable<ARTURIResource[]> {
+        searchMode: string): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
             cls: cls,
@@ -65,9 +62,6 @@ export class SearchServices {
             useURI: useURI,
             searchMode: searchMode,
         };
-        if (lang != undefined) {
-            params.lang = lang;
-        }
         return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);

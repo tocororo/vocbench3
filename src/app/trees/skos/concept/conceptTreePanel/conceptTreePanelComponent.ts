@@ -162,8 +162,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 searchingScheme = this.workingSchemes;
             }
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", 
-                this.preferences.getDefaultLanguage(), searchingScheme).subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", searchingScheme).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
