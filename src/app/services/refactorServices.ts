@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBContext } from "../utils/VBContext";
 import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
 
 @Injectable()
@@ -77,6 +78,10 @@ export class RefactorServices {
         }
         return this.httpMgr.doGet("Refactor", "replaceBaseURI", params).map(
             stResp => {
+                //if the project baseURI was replaced, update it
+                if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
+                    VBContext.getWorkingProject().setBaseURI(targetBaseURI);
+                }
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
         );

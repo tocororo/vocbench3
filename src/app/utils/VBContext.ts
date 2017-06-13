@@ -13,9 +13,6 @@ class ProjectContext {
     setProject(project: Project) { this.project = project; }
     getProject(): Project { return this.project; }
 
-    setDefaultNamespace(namespace: string) { this.defaultNamespace = namespace; }
-    getDefaultNamespace(): string { return this.defaultNamespace; }
-
     setPrefixMappings(mappings: PrefixMapping[]) { this.prefixMappings = mappings; }
     getPrefixMappings(): PrefixMapping[] { return this.prefixMappings; }
 
@@ -65,14 +62,6 @@ export class VBContext {
     }
     static isProjectChanged() {
         return this.projectChanged;
-    }
-
-    //there is no removeDefaultNamespace since it is remove with the working project (see removeWorkingProject)
-    static setDefaultNamespace(ns: string) {
-        this.workingProjectCtx.setDefaultNamespace(ns);
-    }
-    static getDefaultNamespace(): string {
-        return this.workingProjectCtx.getDefaultNamespace();
     }
 
     static setPrefixMappings(prefixMappings: PrefixMapping[]) {

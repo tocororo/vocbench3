@@ -45,6 +45,8 @@ export class ProjectServices {
                 for (var i = 0; i < projCollJson.length; i++) {
                     var proj = new Project();
                     proj.setName(projCollJson[i].name);
+                    proj.setBaseURI(projCollJson[i].baseURI);
+                    proj.setDefaultNamespace(projCollJson[i].defaultNamespace);
                     proj.setAccessible(projCollJson[i].accessible);
                     proj.setHistoryEnabled(projCollJson[i].historyEnabled);
                     proj.setValidationEnabled(projCollJson[i].validationEnabled);

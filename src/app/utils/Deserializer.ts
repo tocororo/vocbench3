@@ -463,9 +463,9 @@ export class Deserializer {
              * explicit is true if the resource is defined in the main graph
              */
             if (resource.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                var ns = VBContext.getDefaultNamespace();
+                var baseURI = VBContext.getWorkingProject().getBaseURI();
                 for (var i = 0; i < graphs.length; i++) {
-                    if (graphs[i].getURI() == ns) {
+                    if (graphs[i].getURI() == baseURI) {
                         resource.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                         break;
                     }

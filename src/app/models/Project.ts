@@ -2,6 +2,8 @@ import { RDFS, OWL, SKOS, SKOSXL } from "./Vocabulary";
 
 export class Project {
     private name: string;
+    private baseURI: string;
+    private defaultNamespace: string;
     private accessible: boolean;
     private historyEnabled: boolean;
     private validationEnabled: boolean;
@@ -25,6 +27,22 @@ export class Project {
     
     public getName(): string {
         return this.name;
+    }
+
+    public setBaseURI(baseURI: string) {
+        this.baseURI = baseURI;
+    }
+    
+    public getBaseURI(): string {
+        return this.baseURI;
+    }
+
+    public setDefaultNamespace(defaultNamespace: string) {
+        this.defaultNamespace = defaultNamespace;
+    }
+    
+    public getDefaultNamespace(): string {
+        return this.defaultNamespace;
     }
     
     public setAccessible(accessible: boolean) {

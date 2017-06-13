@@ -27,7 +27,7 @@ export class EditableNsInput implements ControlValueAccessor {
     constructor() { }
 
     ngOnInit() {
-        this.namespace = VBContext.getDefaultNamespace();
+        this.namespace = VBContext.getWorkingProject().getDefaultNamespace();
         this.namespacePristine = this.namespace;
     }
 

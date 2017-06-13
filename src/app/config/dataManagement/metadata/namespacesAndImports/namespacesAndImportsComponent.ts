@@ -66,7 +66,6 @@ export class NamespacesAndImportsComponent {
             ns => {
                 this.pristineNamespace = ns;
                 this.namespace = ns;
-                VBContext.setDefaultNamespace(ns);
             }
         );
     }

@@ -55,10 +55,6 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                 Observable.forkJoin(
                     //init the project preferences for the project
                     this.preferences.initUserProjectPreferences(),
-                    //get default namespace of the project and set it to the vbContext
-                    this.metadataService.getDefaultNamespace().map(
-                        ns => { VBContext.setDefaultNamespace(ns); }
-                    ),
                     this.metadataService.getNamespaceMappings().map(
                         mappings => { VBContext.setPrefixMappings(mappings); }
                     )

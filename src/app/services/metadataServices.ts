@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBContext } from "../utils/VBContext";
 import { ARTURIResource } from "../models/ARTResources";
 import { PrefixMapping } from "../models/PrefixMapping";
 import { RDFFormat } from "../models/RDFFormat";
@@ -246,7 +247,12 @@ export class MetadataServices {
         var params = {
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params, true).map(
+            stResp => {
+                VBContext.getWorkingProject().setDefaultNamespace(namespace);
+                return stResp;
+            }
+        );
     }
 
     /**
