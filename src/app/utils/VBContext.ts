@@ -45,7 +45,7 @@ export class VBContext {
      * Gets the working project (the one set as ctx_project requests parameter)
      */
     static getWorkingProject(): Project {
-        return this.workingProjectCtx.getProject()
+        return this.workingProjectCtx.getProject();
     }
     /**
      * Removes the working project (the one set as ctx_project requests parameter)

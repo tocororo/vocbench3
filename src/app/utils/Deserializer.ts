@@ -2,6 +2,7 @@ import {
     ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
 } from "../models/ARTResources";
 import { User } from "../models/User";
+import { VBContext } from "../utils/VBContext";
 
 export class Deserializer {
 
@@ -457,6 +458,23 @@ export class Deserializer {
             }
             resource.setAdditionalProperty(ResAttribute.NATURE_CLASSES, classes);
             resource.setAdditionalProperty(ResAttribute.NATURE_GRAPHS, graphs);
+            /**
+             * if the explicit attribute is not defined, infer it from the graphs in the nature:
+             * explicit is true if the resource is defined in the main graph
+             */
+            if (resource.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
+                var ns = VBContext.getDefaultNamespace();
+                for (var i = 0; i < graphs.length; i++) {
+                    if (graphs[i].getURI() == ns) {
+                        resource.setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                        break;
+                    }
+                }
+            }
+            //if explicit is still null, set it to false
+            if (resource.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
+                resource.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+            }
         }
     }
 
