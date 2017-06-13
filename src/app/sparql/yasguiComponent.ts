@@ -70,6 +70,8 @@ export class YasguiComponent {
             }
         );
 
+        this.yasqe.collapsePrefixes(true);
+
         //called on changes in yasqe editor
         this.yasqe.on('change', (yasqe: any) => {
             //update query in parent component
