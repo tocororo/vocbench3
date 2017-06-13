@@ -269,7 +269,7 @@ export class SparqlComponent {
         } else if (binding.type == "bnode") {
             return "_:" + binding.value;
         } else if (binding.type == "literal") {
-            var show = binding.value;
+            var show = "\"" + binding.value + "\"";
             if (binding['xml:lang']) {
                 show += "@" + binding['xml:lang'];
             }
