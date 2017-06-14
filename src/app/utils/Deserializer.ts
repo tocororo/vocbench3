@@ -375,11 +375,9 @@ export class Deserializer {
      * Creates an ARTURIResource from a Json Object {"@id": string, "show": string, "role": string, ...other optional attributes}
      */
     private static createURIJSON(uri: any): ARTURIResource {
-
         var id: string = uri['@id'];
         var show: string = uri[ResAttribute.SHOW];
-        var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>uri[ResAttribute.ROLE];
-        var uriRes: ARTURIResource = new ARTURIResource(id, show, role);
+        var uriRes: ARTURIResource = new ARTURIResource(id, show);
         //other properties
         this.parseResourceOptionalProperties(uri, uriRes);
 
@@ -398,6 +396,10 @@ export class Deserializer {
     }
 
     private static parseResourceOptionalProperties(resJson: any, resource: ARTResource) {
+        var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
+        if (role != undefined) {
+            resource.setRole(role);
+        }
         var qname: string = resJson[ResAttribute.QNAME];
         if (qname != undefined) {
             resource.setAdditionalProperty(ResAttribute.QNAME, qname);
@@ -426,9 +428,14 @@ export class Deserializer {
         if (lang != undefined) {
             resource.setAdditionalProperty(ResAttribute.LANG, lang);
         }
-        var graphs: string = resJson[ResAttribute.GRAPHS];
-        if (graphs != undefined) {
-            resource.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
+        var graphsAttr: string = resJson[ResAttribute.GRAPHS];
+        if (graphsAttr != undefined) {
+            let splittedGraph: string[] = graphsAttr.split(",");
+            let graphs: ARTURIResource[] = []
+            for (var i = 0; i < splittedGraph.length; i++) {
+                graphs.push(new ARTURIResource(splittedGraph[0].trim()));
+            }
+            resource.setGraphs(graphs);
         }
         var members: any[] = resJson[ResAttribute.MEMBERS];
         if (members != undefined) {
@@ -444,28 +451,25 @@ export class Deserializer {
         }
         var nature: string = resJson[ResAttribute.NATURE];
         if (nature != undefined && nature != "") {
-            let classes: ARTURIResource[] = [];
-            let graphs: ARTURIResource[] = [];
+            let natureRole: RDFResourceRolesEnum;
+            let natureDeprecated: boolean = false;
             let splitted: string[] = nature.split("|_|");
             for (var i = 0; i < splitted.length; i++) {
-                let classGraphDeprecated: string[] = splitted[i].split(",");
-                let cls: ARTURIResource = new ARTURIResource(classGraphDeprecated[0]);
-                classes.push(cls);
-                let graph: ARTURIResource = new ARTURIResource(classGraphDeprecated[1]);
-                graphs.push(graph);
-                let deprecated: boolean = classGraphDeprecated[2] == "true";
-                resource.setAdditionalProperty(ResAttribute.DEPRECATED, deprecated);
+                let roleGraphDeprecated: string[] = splitted[i].split(",");
+                resource.setRole(<RDFResourceRolesEnum>roleGraphDeprecated[0]); //in this way I set the last role encountered in the nature
+                resource.addGraph(new ARTURIResource(roleGraphDeprecated[1]));
+                resource.setAdditionalProperty(ResAttribute.DEPRECATED, roleGraphDeprecated[2] == "true");
             }
-            resource.setAdditionalProperty(ResAttribute.NATURE_CLASSES, classes);
-            resource.setAdditionalProperty(ResAttribute.NATURE_GRAPHS, graphs);
+            
             /**
-             * if the explicit attribute is not defined, infer it from the graphs in the nature:
+             * if explicit is null => explicit attribute was missing => infer it from the graphs in the nature:
              * explicit is true if the resource is defined in the main graph
              */
             if (resource.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
                 var baseURI = VBContext.getWorkingProject().getBaseURI();
-                for (var i = 0; i < graphs.length; i++) {
-                    if (graphs[i].getURI() == baseURI) {
+                let resGraphs: ARTURIResource[] = resource.getGraphs();
+                for (var i = 0; i < resGraphs.length; i++) {
+                    if (resGraphs[i].getURI() == baseURI) {
                         resource.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                         break;
                     }
@@ -500,9 +504,14 @@ export class Deserializer {
         if (explicit != undefined) {
             artLiteralRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
         }
-        var graphs = literal[ResAttribute.GRAPHS];//contains comma separated graphs
-        if (graphs != undefined) {
-            artLiteralRes.setAdditionalProperty(ResAttribute.GRAPHS, graphs);
+        var graphsAttr = literal[ResAttribute.GRAPHS];//contains comma separated graphs
+        if (graphsAttr != undefined) {
+            let splittedGraph: string[] = graphsAttr.split(",");
+            let graphs: ARTURIResource[] = []
+            for (var i = 0; i < splittedGraph.length; i++) {
+                graphs.push(new ARTURIResource(splittedGraph[0].trim()));
+            }
+            artLiteralRes.setGraphs(graphs);
         }
 
         return artLiteralRes;

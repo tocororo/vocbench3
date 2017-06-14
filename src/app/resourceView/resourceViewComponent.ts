@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
-import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { VersionInfo } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
@@ -232,7 +232,8 @@ export class ResourceViewComponent {
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
-                    if (objList[j].getAdditionalProperty(ResAttribute.GRAPHS).includes("http://semanticturkey/inference-graph")) {
+                    let objGraphs: ARTURIResource[] = objList[j].getGraphs();
+                    if (ResourceUtils.containsResource(objGraphs, new ARTURIResource("http://semanticturkey/inference-graph"))) {
                         objList.splice(j, 1);
                         j--;
                     }

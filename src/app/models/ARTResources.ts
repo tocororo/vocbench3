@@ -2,6 +2,8 @@ import { PrefixMapping } from "./PrefixMapping";
 
 export abstract class ARTNode {
 
+    protected graphs: ARTURIResource[] = [];
+
     constructor() {};
 
     isResource(): boolean {
@@ -20,24 +22,25 @@ export abstract class ARTNode {
     abstract getNominalValue(): string;
     abstract getShow(): string;
     
+    setGraphs(graphs: ARTURIResource[]) {
+        this.graphs = graphs;
+    }
+    addGraphs(graphsToAdd: ARTURIResource[]) {
+        for (var i = 0; i < graphsToAdd.length; i++) {
+            this.addGraph(graphsToAdd[i]);
+        }
+    }
+    addGraph(graphToAdd: ARTURIResource) {
+        for (var i = 0; i < this.graphs.length; i++) {
+            if (graphToAdd.getURI() == this.graphs[i].getURI()) {
+                return; //graph is already in graphs array => do not add the graph
+            }
+        }
+        //graphToAdd not found in graphs array => add it
+        this.graphs.push(graphToAdd);
+    }
     getGraphs(): ARTURIResource[] {
-        //graphs could be in "graphs" attribute...
-        let graphs: ARTURIResource[] = [];
-        let graphsAttr: string = this[ResAttribute.GRAPHS];
-        if (graphsAttr != null) {
-            let splitted: string[] = graphsAttr.split(",");
-            for (var i = 0; i < splitted.length; i++) {
-                graphs.push(new ARTURIResource(splitted[i]));
-            }
-        }
-        //... and in "nature"
-        let natureGraphs: ARTURIResource[] = this[ResAttribute.NATURE_GRAPHS];
-        if (natureGraphs != null) {
-            for (var i = 0; i < natureGraphs.length; i++) {
-                graphs.push(natureGraphs[i]);
-            }
-        }
-        return graphs;
+        return this.graphs;
     }
     
     abstract toNT(): string;
@@ -59,7 +62,7 @@ export abstract class ARTResource extends ARTNode {
     
     protected show: string;
     protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
-    
+
     constructor(show?: string, role?: RDFResourceRolesEnum) {
         super();
         this.show = show;
@@ -289,8 +292,6 @@ export class ResAttribute {
     public static NATURE = "nature"; //content is a triple separated by "-": <uri of class of resource> - <graph of ???> - <deprecated true/false>
 
     //never in st responses, result of nature parsing
-    public static NATURE_CLASSES = "res_class"; //class of the resource
-    public static NATURE_GRAPHS = "res_graph"; //graph where the resource is defined
     public static DEPRECATED = "deprecated";
     
     //never in st responses, added because are util for tree
