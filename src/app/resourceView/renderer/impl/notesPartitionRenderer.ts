@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -16,9 +16,9 @@ import { SKOS } from "../../../models/Vocabulary"
     selector: "notes-renderer",
     templateUrl: "../predicateObjectsListRenderer.html",
 })
-export class NotesPartitionRenderer extends AbstractPredObjListRenderer {
+export class NotesPartitionRenderer extends PredObjListRenderer {
 
-    //inherited from AbstractPredObjListRenderer
+    //inherited from PredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

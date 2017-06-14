@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SKOSXL } from "../../../models/Vocabulary";
 
@@ -15,9 +15,9 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
     selector: "label-relations-renderer",
     templateUrl: "../predicateObjectsListRenderer.html",
 })
-export class LabelRelationsPartitionRenderer extends AbstractPredObjListRenderer {
+export class LabelRelationsPartitionRenderer extends PredObjListRenderer {
 
-    //inherited from AbstractPredObjListRenderer
+    //inherited from PredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

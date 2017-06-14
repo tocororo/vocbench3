@@ -64,8 +64,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
                 this.selectedNode = null;
                 this.nodeSelected.emit(this.selectedNode);
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            },
-            err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
+            }
         );
     }
 

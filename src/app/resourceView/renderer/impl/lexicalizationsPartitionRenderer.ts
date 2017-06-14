@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { AbstractPredObjListMultirootRenderer } from "../abstractPredObjListMultirootRenderer";
+import { PredObjListMultirootRenderer } from "../predicateObjectsListMultirootRenderer";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
@@ -14,9 +14,9 @@ import { BrowsingModalServices } from '../../../widget/modal/browsingModal/brows
     selector: "lexicalizations-renderer",
     templateUrl: "../predicateObjectsListRenderer.html",
 })
-export class LexicalizationsPartitionRenderer extends AbstractPredObjListMultirootRenderer {
+export class LexicalizationsPartitionRenderer extends PredObjListMultirootRenderer {
 
-    //inherited from AbstractPredicateValuesListRenderer
+    //inherited from PredObjListMultirootRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

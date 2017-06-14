@@ -84,8 +84,7 @@ export class InstanceListComponent {
                         }
                     }
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
+                }
             );
         }
     }
@@ -117,10 +116,11 @@ export class InstanceListComponent {
             //Input cls has already bound and it is the type of the searched instance
             for (var i = 0; i < this.instanceList.length; i++) {//look for the searched instance and select it
                 if (this.instanceList[i].getURI() == instance.getURI()) {
+                    //given the paging mechanism, check if instance is visible
+                    if (!this.showInstance(i)) { //if currently index is not shown...
+                        this.openPages = i/this.pagingLimit; //update openPages
+                    }
                     this.selectInstance(this.instanceList[i]);
-                    // this.pendingSearch.pending = false;
-                    // this.pendingSearch.cls = null;
-                    // this.pendingSearch.instance = null;
                     break;
                 }
             }
@@ -164,6 +164,19 @@ export class InstanceListComponent {
                 this.instanceList[i]['uri'] = newResource.getURI();
             }
         }
+    }
+
+    // PAGING
+    private pagingLimit: number = 50;
+    private openPages: number = 0;
+    private showInstance(index: number) {
+        return (index < this.openPages * this.pagingLimit + this.pagingLimit);
+    }
+    private showMoreButton() {
+        return (this.openPages * this.pagingLimit + this.pagingLimit < this.instanceList.length);
+    }
+    private showMore() {
+        this.openPages++;
     }
 
 }

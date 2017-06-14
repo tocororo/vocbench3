@@ -2,14 +2,26 @@
 
     <div class="panel-body vbox">
 
-        <div class="scrollableContainer">
-            <rdf-resource *ngFor="let i of instanceList" [resource]="i" [rendering]="rendering"
-                (click)="selectInstance(i)" class="listItem"
-                [ngClass]="{selectedResource : i.getAdditionalProperty('selected')}">
-            </rdf-resource>
-            <div *ngIf="instanceList && instanceList.length==0">
-                No instances
+        <div *ngIf="instanceList && instanceList.length > 0" class="scrollableContainer">
+            
+            <template ngFor let-instance [ngForOf]="instanceList" let-idx="index">
+                <template [ngIf]="showInstance(idx)"> <!-- paging filter -->
+                    <rdf-resource [resource]="instance" [rendering]="rendering" (click)="selectInstance(instance)"
+                        class="listItem" [ngClass]="{selectedResource : instance.getAdditionalProperty('selected')}">
+                    </rdf-resource>
+                </template>
+            </template>
+
+            <div *ngIf="showMoreButton()">
+                <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showMore()">
+                    Show more...
+                </button>
             </div>
+
+        </div>
+
+        <div *ngIf="instanceList && instanceList.length==0">
+            No instances
         </div>
 
         <div #blockDivInstanceList class="blockingDiv" style="display:none">

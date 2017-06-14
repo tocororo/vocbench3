@@ -16,7 +16,7 @@ import { FormCollection, CustomForm } from "../../models/CustomForms";
     selector: "pred-obj-list-renderer",
     templateUrl: "./predicateObjectsListRenderer.html",
 })
-export abstract class AbstractPredObjListRenderer {
+export abstract class PredObjListRenderer {
 
     /**
      * INPUTS / OUTPUTS

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
@@ -16,9 +16,9 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
     selector: "domains-renderer",
     templateUrl: "../predicateObjectsListRenderer.html",
 })
-export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
+export class DomainsPartitionRenderer extends PredObjListRenderer {
 
-    //inherited from AbstractPredObjListRenderer
+    //inherited from PredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

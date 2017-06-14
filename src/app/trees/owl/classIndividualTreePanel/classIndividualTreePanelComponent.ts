@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
 import { DomSanitizer, SafeStyle } from "@angular/platform-browser"
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
 import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
@@ -7,6 +7,7 @@ import { IndividualsServices } from "../../../services/individualsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
+import { UIUtils } from "../../../utils/UIUtils";
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot
@@ -17,11 +18,14 @@ import { RDF, OWL } from "../../../models/Vocabulary";
 @Component({
     selector: "class-individual-tree-panel",
     templateUrl: "./classIndividualTreePanelComponent.html",
+    host: { class: "blockingDivHost" }
 })
 export class ClassIndividualTreePanelComponent {
     @Input() readonly: boolean;
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
+
+    @ViewChild('blockDivClsIndList') public blockDivElement: ElementRef;
 
     @ViewChild(ClassTreePanelComponent) viewChildTree: ClassTreePanelComponent;
     @ViewChild(InstanceListPanelComponent) viewChildInstanceList: InstanceListPanelComponent;
@@ -46,8 +50,10 @@ export class ClassIndividualTreePanelComponent {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual], true, true, "contain").subscribe(
                 searchResult => {
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results

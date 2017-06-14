@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListMultirootRenderer } from "../abstractPredObjListMultirootRenderer";
+import { PredObjListMultirootRenderer } from "../predicateObjectsListMultirootRenderer";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ClassesServices } from "../../../services/classesServices";
@@ -13,9 +13,9 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
     selector: "class-axiom-renderer",
     templateUrl: "../predicateObjectsListRenderer.html",
 })
-export class ClassAxiomPartitionPartitionRenderer extends AbstractPredObjListMultirootRenderer {
+export class ClassAxiomPartitionPartitionRenderer extends PredObjListMultirootRenderer {
 
-    //inherited from AbstractPredicateValuesListRenderer
+    //inherited from PredObjListMultirootRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update

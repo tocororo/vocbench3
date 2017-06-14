@@ -86,4 +86,20 @@ export class PredicateObjectsRenderer {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
 
+
+
+    // PAGING
+    private pagingLimit: number = 20;
+    private openPages: number = 0;
+    private showObject(index: number) {
+        return (index < this.openPages * this.pagingLimit + this.pagingLimit);
+    }
+    private showMoreButton() {
+        return (this.openPages * this.pagingLimit + this.pagingLimit < this.predicateObjects.getObjects().length);
+    }
+    private showMore() {
+        this.openPages++;
+    }
+
+
 }

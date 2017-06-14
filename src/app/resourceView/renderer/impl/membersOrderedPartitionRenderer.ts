@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
+import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { SkosServices } from "../../../services/skosServices";
 import {
     ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
@@ -19,9 +19,9 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
     selector: "members-ordered-renderer",
     templateUrl: "./membersOrderedPartitionRenderer.html",
 })
-export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer {
+export class MembersOrderedPartitionRenderer extends PredObjListRenderer {
 
-    //inherited from AbstractPredObjListRenderer
+    //inherited from PredObjListRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
@@ -50,7 +50,7 @@ export class MembersOrderedPartitionRenderer extends AbstractPredObjListRenderer
         }
     }
 
-    //needed to be implemented since this Component extends abstractPredObjListRenderer, but not used.
+    //needed to be implemented since this Component extends PredObjListRenderer, but not used.
     //Use addFirst addLast addBefore and addAfter instead
     add() { }
 

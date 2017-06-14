@@ -9,19 +9,33 @@
     </div>
     
     <div class="subPanel-body">
-        <div *ngFor="let obj of predicateObjects.getObjects()" class="listItem">
-            <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1"
-                [resource]="obj" [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly"
-                (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"></editable-resource>
-            <template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
-                <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
-                    (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
-                <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
-                    (click)="removeValue(obj)" [disabled]="!obj.getAdditionalProperty('explicit') || readonly">
-                    <span>-</span>
-                </button>
+
+        <template ngFor let-obj [ngForOf]="predicateObjects.getObjects()" let-i="index">
+            <template [ngIf]="showObject(i)"> <!-- paging filter -->
+
+                <div class="listItem">
+                    <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1"
+                        [resource]="obj" [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly"
+                        (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"></editable-resource>
+                    <template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
+                        <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
+                            (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
+                        <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
+                            (click)="removeValue(obj)" [disabled]="!obj.getAdditionalProperty('explicit') || readonly">
+                            <span>-</span>
+                        </button>
+                    </template>
+                </div>
+
             </template>
-        </div>
+        </template>
+
+        <template [ngIf]="showMoreButton()">
+            <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showMore()">
+                Show more...
+            </button>
+        </template>
+
     </div>
 
 </div>
