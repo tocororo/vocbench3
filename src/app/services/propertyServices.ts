@@ -387,7 +387,7 @@ export class PropertyServices {
      * @param property property to which remove the domain
      * @param domain the domain class of the property
      */
-    removePropertyDomain(property: ARTURIResource, domain: ARTURIResource) {
+    removePropertyDomain(property: ARTURIResource, domain: ARTResource) {
         console.log("[PropertyServices] removePropertyDomain");
         var params: any = {
             property: property,
@@ -415,7 +415,7 @@ export class PropertyServices {
      * @param property property to which remove the range
      * @param range the range class of the property
      */
-    removePropertyRange(property: ARTURIResource, range: ARTURIResource) {
+    removePropertyRange(property: ARTURIResource, range: ARTResource) {
         console.log("[PropertyServices] removePropertyRange");
         var params: any = {
             property: property,

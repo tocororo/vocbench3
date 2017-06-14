@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS, XmlSchema } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
@@ -94,25 +94,46 @@ export class RangesPartitionRenderer extends AbstractPredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         } else {
-            if (object.getShow().startsWith("(") && object.getShow().startsWith(")") && object.isBNode()) { //class axiom
-                this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            } else if (object instanceof ARTBNode && object.getRole() == RDFResourceRolesEnum.dataRange) { //datarange
-                this.propService.removeDataranges(<ARTURIResource>this.resource, object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            } else { //removing a range class or datatype
-                if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdfs:range relation
-                    this.propService.removePropertyRange(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
+            /**
+             * An object in this partition could be:
+             * - Class (type: URI, role: cls)
+             * - Datatype (type: URI, role: individual)
+             * - Manchester expression (type: BNode, role: cls)
+             * - DataRange (type: BNode, role: dataRange)
+             */
+            if (object instanceof ARTBNode) { //object is manchExpr or dataRange
+                if (object.getRole() == RDFResourceRolesEnum.dataRange) {
+                    this.propService.removeDataranges(<ARTURIResource>this.resource, object).subscribe(
                         stResp => this.update.emit(null)
                     );
-                } else { //removing subProperty of rdfs:range
-                    this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                        stResp => this.update.emit(null)
+                } else { //role cls => manchester expression or simple class
+                    this.manchService.isClassAxiom(object).subscribe(
+                        isClassAxiom => {
+                            if (isClassAxiom) {
+                                this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                            } else {
+                                this.removeRangeClass(predicate, object);
+                            }
+                        }
                     );
                 }
+            } else { //object instanceof ARTURIResource => object is class or datatype
+                this.removeRangeClass(predicate, <ARTResource>object);
             }
+        }
+    }
+
+    private removeRangeClass(predicate: ARTURIResource, object: ARTResource) {
+        if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdfs:range relation
+            this.propService.removePropertyRange(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        } else { //removing subProperty of rdfs:range
+            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
         }
     }
 

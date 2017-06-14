@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPredObjListRenderer } from "../abstractPredObjListRenderer";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTURIResource, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
 
 import { PropertyServices } from "../../../services/propertyServices";
@@ -71,21 +71,38 @@ export class DomainsPartitionRenderer extends AbstractPredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         } else {
-            if (object.getShow().startsWith("(") && object.getShow().startsWith(")") && object.isBNode()) { //class axiom
-                this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null)
-                );
+            /**
+             * An object in this partition could be:
+             * - Class (type: URI or BNode, isClassAxiom: false)
+             * - Manchester expression (type: BNode, isClassAxiom: true)
+             */
+            if (object instanceof ARTBNode) { //class axiom
+                this.manchService.isClassAxiom(object).subscribe(
+                    isClassAxiom => {
+                        if (isClassAxiom) {
+                            this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else {
+                            this.removeDomainClass(predicate, object);
+                        }
+                    }
+                )
             } else { //removing a domain class
-                if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdfs:domain relation
-                    this.propService.removePropertyDomain(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //removing subProperty of rdfs:domain
-                    this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                }
+                this.removeDomainClass(predicate, <ARTResource>object);   
             }
+        }
+    }
+
+    private removeDomainClass(predicate: ARTURIResource, object: ARTResource) {
+        if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdfs:domain relation
+            this.propService.removePropertyDomain(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
+                stResp => this.update.emit(null)
+            );
+        } else { //removing subProperty of rdfs:domain
+            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
+                stResp => this.update.emit(null)
+            );
         }
     }
 

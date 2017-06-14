@@ -122,7 +122,6 @@ export class EditableResourceComponent {
 					newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
 				} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
 					newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
-					// } else if (this.resource.isBNode() && this.resourceStringValue.startsWith("(") && this.resourceStringValue.endsWith(")")) {
 				} else if (this.resource.isBNode() && this.isClassAxiom) {
 					/** If the editing resource is a bnode, if it is represent class axiom and the previous check failed,
 					 * I can assume that the user has typed a new manchester expression to represent a class axiom */
