@@ -32,8 +32,12 @@ export abstract class AbstractTreePanel extends AbstractPanel {
      */
 
     abstract createRoot(role?: RDFResourceRolesEnum): void;
-
     abstract createChild(role?: RDFResourceRolesEnum): void;
+
+    //the following determines if the create button is disabled in the UI. It could be overriden in the extending components
+    isCreateChildDisabled(): boolean {
+        return (!this.selectedNode || this.readonly || !this.createAuthorized);
+    }
 
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)

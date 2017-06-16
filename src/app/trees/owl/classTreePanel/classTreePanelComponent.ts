@@ -9,6 +9,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "class-tree-panel",
@@ -25,6 +26,15 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
+    }
+
+    ngOnInit() {
+        this.initBtnAuthState();
+    }
+
+    initBtnAuthState() {
+        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_CLASS);
     }
 
     //Top Bar commands handlers

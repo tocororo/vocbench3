@@ -9,6 +9,7 @@ import { CreationModalServices } from "../../../../widget/modal/creationModal/cr
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { CustomForm } from "../../../../models/CustomForms";
 import { SKOS } from "../../../../models/Vocabulary";
@@ -29,7 +30,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
     private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
-
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
         private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
@@ -62,6 +62,20 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 this.workingSchemes = this.schemes;
             }
         }
+        this.initBtnAuthState();
+    }
+
+    initBtnAuthState() {
+        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_CONCEPT);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_CONCEPT);
+    }
+    //@Override
+    isCreateDisabled(): boolean {
+        return (this.isNoSchemeMode() || this.readonly || !this.createAuthorized);
+    }
+    //@Override
+    isCreateChildDisabled(): boolean {
+        return (!this.selectedNode || this.isNoSchemeMode() || this.readonly || !this.createAuthorized);
     }
 
     //top bar commands handlers

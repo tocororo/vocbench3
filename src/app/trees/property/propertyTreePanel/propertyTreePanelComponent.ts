@@ -9,6 +9,7 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "property-tree-panel",
@@ -24,6 +25,15 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     constructor(private propService: PropertyServices, private searchService: SearchServices,
         private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
+    }
+
+    ngOnInit() {
+        this.initBtnAuthState();
+    }
+
+    initBtnAuthState() {
+        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY);
     }
 
     createRoot(role: RDFResourceRolesEnum) {

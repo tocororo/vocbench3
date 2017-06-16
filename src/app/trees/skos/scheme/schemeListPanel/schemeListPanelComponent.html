@@ -2,10 +2,10 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div class="btn-group btn-group-xs" role="group" style="flex: 1">
-            <button class="btn btn-default" title="Create Concept Scheme" (click)="create()" [disabled]="readonly">
+            <button class="btn btn-default" title="Create Concept Scheme" (click)="create()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Concept Scheme" (click)="delete()" [disabled]="!selectedNode || readonly">
+            <button class="btn btn-default" title="Delete Concept Scheme" (click)="delete()" [disabled]="isDeleteDisabled()">
                 <img src="../../../../../assets/images/icons/actions/conceptScheme_delete.png" class="panelButtonImg"/>
             </button>
         </div>

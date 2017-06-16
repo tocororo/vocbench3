@@ -9,6 +9,7 @@ import { CreationModalServices } from "../../../../widget/modal/creationModal/cr
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "collection-tree-panel",
@@ -22,6 +23,15 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
+    }
+
+    ngOnInit() {
+        this.initBtnAuthState();
+    }
+
+    initBtnAuthState() {
+        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_COLLECTION);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_COLLECTION);
     }
 
     //top bar commands handlers

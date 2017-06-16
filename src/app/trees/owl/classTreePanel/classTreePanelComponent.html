@@ -2,14 +2,13 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group" style="margin-right: 4px;">
-            <button class="btn btn-default" title="Create Class" (click)="createRoot()" [disabled]="readonly">
+            <button class="btn btn-default" title="Create Class" (click)="createRoot()" [disabled]="isCreateDisabled()">
                 <img src="../../../../assets/images/icons/actions/class_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Create SubClass" (click)="createChild()" [disabled]="!selectedNode || readonly">
+            <button class="btn btn-default" title="Create SubClass" (click)="createChild()" [disabled]="isCreateChildDisabled()">
                 <img src="../../../../assets/images/icons/actions/class_addSubClass.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Class" (click)="delete()"
-                    [disabled]="!selectedNode || !selectedNode.getAdditionalProperty('explicit') || readonly">
+            <button class="btn btn-default" title="Delete Class" (click)="delete()" [disabled]="isDeleteDisabled()">
                 <img src="../../../../assets/images/icons/actions/class_delete.png" class="panelButtonImg"/>
             </button>
         </div>

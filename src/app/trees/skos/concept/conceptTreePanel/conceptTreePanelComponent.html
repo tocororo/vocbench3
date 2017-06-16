@@ -2,13 +2,13 @@
     <!-- Commands -->
     <div class="panel-heading">  
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="isNoSchemeMode() || readonly">
+            <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/concept_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="!selectedNode || isNoSchemeMode() || readonly">
+            <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="isCreateChildDisabled()">
                 <img src="../../../../../assets/images/icons/actions/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="!selectedNode || readonly">
+            <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="isDeleteDisabled()">
                 <img src="../../../../../assets/images/icons/actions/concept_delete.png" class="panelButtonImg"/>
             </button>
         </div>

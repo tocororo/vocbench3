@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
 import { CustomFormsServices } from "../services/customFormsServices";
-import { ARTURIResource } from "../models/ARTResources";
+import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
@@ -27,6 +27,10 @@ export abstract class AbstractPanel {
     eventSubscriptions: any[] = [];
     selectedNode: ARTURIResource;
 
+    //attributes for authorization state of command buttons
+    createAuthorized: boolean = true;
+    deleteAuthorized: boolean = true;
+
     /**
      * CONSTRUCTOR
      */
@@ -42,8 +46,24 @@ export abstract class AbstractPanel {
      */
 
     abstract refresh(): void;
-
     abstract delete(): void;
+
+    //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
+    isCreateDisabled(): boolean {
+        return (this.readonly || !this.createAuthorized);
+    }
+    isDeleteDisabled(): boolean {
+        return (
+            !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            this.readonly || !this.deleteAuthorized
+        );
+    }
+
+    /**
+     * Used to initialize the "authorized" state of the buttons (add/delete/...) according to the user capabilities.
+     * NB this needs to be called in the ngOnInit() (or ngAfterViewInit()) of every panel component
+     */
+    abstract initBtnAuthState(): void;
 
     /**
      * Handles the keydown event in search text field (when enter key is pressed execute the search)

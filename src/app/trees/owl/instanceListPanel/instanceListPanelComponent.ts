@@ -6,8 +6,9 @@ import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "instance-list-panel",
@@ -24,6 +25,26 @@ export class InstanceListPanelComponent extends AbstractPanel {
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
+    }
+
+    ngOnInit() {
+        this.initBtnAuthState();
+    }
+
+    initBtnAuthState() {
+        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_INDIVIDUAL);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_INDIVIDUAL);
+    }
+    //@Override
+    isCreateDisabled(): boolean {
+        return (!this.cls || this.readonly || !this.createAuthorized);
+    }
+    //@Override
+    isDeleteDisabled(): boolean {
+        return (
+            !this.cls || !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+            this.readonly || !this.deleteAuthorized
+        );
     }
 
     private create() {

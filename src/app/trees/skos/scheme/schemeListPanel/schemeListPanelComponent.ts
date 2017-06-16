@@ -7,6 +7,7 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { VBPreferences } from '../../../../utils/VBPreferences';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
 
@@ -27,6 +28,12 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     ngOnInit() {
         this.initList();
+        this.initBtnAuthState()
+    }
+
+    initBtnAuthState() {
+        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_SCHEME);
+        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_SCHEME);
     }
 
     private initList() {
