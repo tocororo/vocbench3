@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { ProjectServices } from "../services/projectServices";
+import { UserServices } from "../services/userServices";
 import { MetadataServices } from "../services/metadataServices";
 import { Project } from '../models/Project';
 import { VBContext } from '../utils/VBContext';
@@ -22,7 +23,7 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>, private projectService: ProjectServices, private metadataService: MetadataServices,
-        private preferences: VBPreferences, private router: Router) {
+        private userService: UserServices, private preferences: VBPreferences, private router: Router) {
         this.context = dialog.context;
     }
 
@@ -55,9 +56,8 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                 Observable.forkJoin(
                     //init the project preferences for the project
                     this.preferences.initUserProjectPreferences(),
-                    this.metadataService.getNamespaceMappings().map(
-                        mappings => { VBContext.setPrefixMappings(mappings); }
-                    )
+                    this.userService.listUserCapabilities(),
+                    this.metadataService.getNamespaceMappings()
                 ).subscribe(
                     res => {
                         VBContext.setProjectChanged(true);

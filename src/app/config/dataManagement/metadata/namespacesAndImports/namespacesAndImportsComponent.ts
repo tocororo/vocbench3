@@ -85,7 +85,6 @@ export class NamespacesAndImportsComponent {
             mappings => {
                 this.nsPrefMappingList = mappings;
                 this.selectedMapping = null;
-                VBContext.setPrefixMappings(mappings);
             }
         );
     }

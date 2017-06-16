@@ -37,7 +37,8 @@ export class AuthorizationEvaluator {
     };
     
     public static isAuthorized(action: Actions): boolean {
-        console.log("evaluating", this.actionAuthGoalMap[action]);
+        // console.log("evaluating", this.actionAuthGoalMap[action]);
+        // console.log("user capabilities", VBContext.getLoggedUser().getCapabilities());
         var user: User = VBContext.getLoggedUser()
         if (user.isAdmin()) {
             return true;

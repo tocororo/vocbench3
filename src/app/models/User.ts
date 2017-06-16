@@ -16,6 +16,9 @@ export class User {
     private status: UserStatusEnum;
     private admin: boolean = false;
 
+    private capabilities: string[] = [];
+
+
     constructor(email: string, givenName: string, familyName: string, iri: ARTURIResource) {
         this.email = email;
         this.givenName = givenName;
@@ -117,6 +120,14 @@ export class User {
 
     isAdmin(): boolean {
         return this.admin;
+    }
+
+    setCapabilities(capabilities: string[]) {
+        this.capabilities = capabilities;
+    }
+
+    getCapabilities(): string[] {
+        return this.capabilities;
     }
 
 }

@@ -35,6 +35,7 @@ export class MetadataServices {
                     };
                     mappings.push(m);
                 }
+                VBContext.setPrefixMappings(mappings);
                 return mappings;
             }
         );

@@ -49,6 +49,21 @@ export class UserServices {
     }
 
     /**
+     * Returns the capabilities of the current logged user in according the roles he has in the current project.
+     * Note: this is used just in projectListModal and not in projectComponent,
+     * since the latter is accessed only by the admin that doesn't require authorization check and has no capabilities
+     */
+    listUserCapabilities(): Observable<string[]> {
+        console.log("[UserServices] listUserCapabilities");
+        return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", null, true).map(
+            stResp => {
+                VBContext.getLoggedUser().setCapabilities(stResp);
+                return stResp;
+            }
+        );
+    }
+
+    /**
      * Lists the users that have at least a role assigned in the given project
      * @param projectName
      */

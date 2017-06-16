@@ -123,11 +123,7 @@ export class ProjectComponent implements OnInit {
                 //init the project preferences for the project
                 this.preferences.initUserProjectPreferences().subscribe();
                 //get default namespace of the project and set it to the vbContext
-                this.metadataService.getNamespaceMappings().subscribe(
-                    mappings => {
-                        VBContext.setPrefixMappings(mappings);
-                    }
-                )
+                this.metadataService.getNamespaceMappings().subscribe();
             }
         );
     }
