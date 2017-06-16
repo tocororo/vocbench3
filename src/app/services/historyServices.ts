@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { CommitInfo, CommitOperation } from "../models/History";
+import { CommitInfo, CommitOperation, SortingDirection } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
@@ -12,64 +12,104 @@ export class HistoryServices {
 
     constructor(private httpMgr: HttpManager) { }
 
+
     /**
-     * Returns the last commits
-     * @param parentCommit if provided, it will return the commits performed after the parentCommit
-     * @param limit limit number of commits returned (default 100)
+     * 
+     * @param operationFilter 
+     * @param timeLowerBound 
+     * @param timeUpperBound 
+     * @param limit 
      */
-    getCommits(parentCommit?: ARTURIResource, limit?: number): Observable<{ items: CommitInfo[], next: boolean }> {
-        console.log("[HistoryServices] getCommits");
+    getCommitSummary(operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
+        console.log("[HistoryServices] getCommitSummary");
         var params: any = {};
-        if (parentCommit != null) {
-            params.parentCommit = parentCommit;
+        if (operationFilter != null) {
+            params.operationFilter = operationFilter;
+        }
+        if (timeLowerBound != null) {
+            params.timeLowerBound = timeLowerBound;
+        }
+        if (timeUpperBound != null) {
+            params.timeUpperBound = timeUpperBound;
         }
         if (limit != null) {
             params.limit = limit;
         }
-        
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params, true).map(
             stResp => {
-                var items: CommitInfo[] = [];
-                var itemsJsonArray: any[] = stResp.items;
-                for (var i = 0; i < itemsJsonArray.length; i++) {
-                    let itemJson: any = itemsJsonArray[i];
+                return stResp;
+            }
+        );
+    }
 
-                    let commit: ARTURIResource = new ARTURIResource(itemJson.commit);
+    /**
+     * 
+     * @param tipRevisionNumber 
+     * @param operationFilter 
+     * @param timeLowerBound 
+     * @param timeUpperBound 
+     * @param operationSorting 
+     * @param timeSorting 
+     * @param page 
+     * @param limit 
+     */
+    getCommits2(tipRevisionNumber: number, operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string,
+            operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
+        console.log("[HistoryServices] getCommits2");
+        var params: any = {
+            tipRevisionNumber: tipRevisionNumber
+        };
+        if (operationFilter != null) { params.operationFilter = operationFilter; }
+        if (timeLowerBound != null) { params.timeLowerBound = timeLowerBound; }
+        if (timeUpperBound != null) { params.timeUpperBound = timeUpperBound; }
+        if (operationSorting != null) { params.operationSorting = operationSorting; }
+        if (timeSorting != null) { params.timeSorting = timeSorting; }
+        if (page != null) { params.page = page; }
+        if (limit != null) { params.limit = limit; }
+        
+        return this.httpMgr.doGet(this.serviceName, "getCommits2", params, true).map(
+            stResp => {
+                var commits: CommitInfo[] = [];
+                var commitsJsonArray: any[] = stResp;
+                for (var i = 0; i < commitsJsonArray.length; i++) {
+                    let commitJson: any = commitsJsonArray[i];
+
+                    let commitUri: ARTURIResource = new ARTURIResource(commitJson.commit);
                     
                     let user: ARTURIResource;
-                    let userJson = itemJson.user;
+                    let userJson = commitJson.user;
                     if (userJson != null) {
                         user = new ARTURIResource(userJson['@id'], userJson.show);
                     }
 
                     let operation: ARTURIResource;
-                    let operationJson = itemJson.operation;
+                    let operationJson = commitJson.operation;
                     if (operationJson != null) {
                         operation = new ARTURIResource(operationJson['@id']);
                     }
 
                     let subject: ARTURIResource;
-                    if (itemJson.subject != null) {
-                        subject = new ARTURIResource(itemJson.subject['@id']);
+                    if (commitJson.subject != null) {
+                        subject = new ARTURIResource(commitJson.subject['@id']);
                     }
 
                     let startTime: Date;
-                    let startTimeJson = itemJson.startTime;
+                    let startTimeJson = commitJson.startTime;
                     if (startTimeJson != null) {
                         startTime = new Date(startTimeJson);
                     }
 
                     let endTime: Date;
-                    let endTimeJson = itemJson.endTime;
+                    let endTimeJson = commitJson.endTime;
                     if (endTimeJson != null) {
                         endTime = new Date(endTimeJson);
                     }
                     
-                    let item: CommitInfo = new CommitInfo(new ARTURIResource(itemJson.commit), user, operation, subject, startTime, endTime);
+                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, subject, startTime, endTime);
 
-                    items.push(item);
+                    commits.push(commit);
                 }
-                return { items: items, next: stResp.next };
+                return commits;
             }
         );
     }

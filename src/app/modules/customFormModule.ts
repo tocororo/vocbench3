@@ -7,6 +7,7 @@ import {SharedModule} from './sharedModule';
 import {BasicModalServices} from "../widget/modal/basicModal/basicModalServices";
 import {BrowsingModalServices} from "../widget/modal/browsingModal/browsingModalServices";
 
+import {CustomFormConfigComponent} from '../customForms/customFormConfComponent';
 import {CustomFormModal} from '../customForms/customForm/customFormModal';
 import {CustomForm} from '../customForms/customForm/customFormComponent';
 import {ConverterPickerModal} from '../customForms/customFormConfigModals/converterPickerModal';
@@ -20,12 +21,12 @@ import {ImportCfModal} from '../customForms/customFormConfigModals/importCfModal
     imports: [CommonModule, FormsModule, SharedModule],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
-        CustomForm,
+        CustomFormConfigComponent, CustomForm,
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
         CustomFormModal, ConverterPickerModal, SignaturePickerModal,
         ImportCfModal
     ],
-    exports: [CustomForm], //exported since is used in vbModalModule as well in newResourceCfModal
+    exports: [CustomFormConfigComponent, CustomForm], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
         CustomFormModal, ConverterPickerModal, SignaturePickerModal,

@@ -52,10 +52,6 @@ import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResou
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 import { SchemeSelectionComponent } from '../widget/modal/creationModal/newResourceModal/schemeSelectionComponent';
 
-//metadata modals
-import { ImportOntologyModal } from '../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
-import { PrefixNamespaceModal } from '../config/dataManagement/metadata/namespacesAndImports/prefixNamespaceModal';
-
 //alignment modals
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
 import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
@@ -63,24 +59,9 @@ import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
 
-//project config modal
-import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
-import { ProjectACLModal } from "../project/projectACL/projectACLModal";
-import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
-import { ProjectListModal } from "../project/projectListModal";
-
-//administration modal
-import { UserProjBindingModal } from "../administration/administrationModals/userProjBindingModal";
-import { CapabilityEditorModal } from "../administration/administrationModals/capabilityEditorModal";
-import { ImportRoleModal } from "../administration/administrationModals/importRoleModal";
-import { UserCreateModal } from "../administration/administrationModals/userCreateModal";
-
 //config modals
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
-
-//history modals
-import { CommitDeltaModal } from "../historyValidation/commitDeltaModal";
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -91,12 +72,9 @@ import { CommitDeltaModal } from "../historyValidation/commitDeltaModal";
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
-        ImportOntologyModal, PrefixNamespaceModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
-        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
+        RemoteAccessConfigModal, RemoteRepoSelectionModal, 
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        CommitDeltaModal,
         EditableNsInput, SchemeSelectionComponent
     ],
     exports: [],
@@ -116,12 +94,9 @@ import { CommitDeltaModal } from "../historyValidation/commitDeltaModal";
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
-        ImportOntologyModal, PrefixNamespaceModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
-        RemoteAccessConfigModal, RemoteRepoSelectionModal, ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal,
-        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal,
-        PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        CommitDeltaModal
+        RemoteAccessConfigModal, RemoteRepoSelectionModal, 
+        PluginConfigModal, FilterGraphsModal, DumpCreationModal
     ]
 })
 export class VBModalModule { }

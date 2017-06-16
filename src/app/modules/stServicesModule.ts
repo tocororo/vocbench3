@@ -26,6 +26,7 @@ import { RepositoriesServices } from "../services/repositoriesServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { SearchServices } from "../services/searchServices";
+import { ServicesServices } from "../services/servicesServices";
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
@@ -62,6 +63,7 @@ import { VersionsServices } from "../services/versionsServices";
         ResourcesServices,
         ResourceViewServices,
         SearchServices,
+        ServicesServices,
         SkosServices,
         SkosxlServices,
         SparqlServices,

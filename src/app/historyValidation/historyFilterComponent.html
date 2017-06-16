@@ -1,0 +1,62 @@
+<div class="panel panel-default vbox">
+    <div class="panel-body hbox">
+
+        <div class="subPanel vbox" style="margin-right: 4px">
+            <div class="subPanel-heading">
+                <label style="flex: 1;">Operations</label>
+                <button class="btn btn-xs btn-default" (click)="selectOperationFilter()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+            <div class="subPanel-body scrollableContainer">
+                <div *ngFor="let op of operations" class="listItem">
+                    <span style="flex: 1;">{{op.getShow()}}</span>
+                    <button class="btn btn-xs btn-default" (click)="removeOperationFilter(op)">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="subPanel vbox" style="margin-right: 4px">
+            <div class="subPanel-heading">
+                <label>Time</label>
+            </div>
+            <div class="subPanel-body scrollableContainer">
+                <table class="table table-condensed table-borderless">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col>
+                        <col>
+                        <col style="width: 1%">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td><label>From:</label></td>
+                            <td><input type="datetime-local" class="form-control input-xs" [(ngModel)]="fromTime"></td>
+                            <td><input class="form-control input-xs" [ngModel]="fromTime" readonly></td>
+                            <td>
+                                <button class="btn btn-xs btn-default" (click)="fromTime=null" title="Reset" [disabled]="!fromTime">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label>To:</label></td>
+                            <td><input type="datetime-local" class="form-control input-xs" [(ngModel)]="toTime"></td>
+                            <td><input class="form-control input-xs" [ngModel]="toTime" readonly></td>
+                            <td>
+                                <button class="btn btn-xs btn-default" (click)="toTime=null" title="Reset" [disabled]="!toTime">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <button class="btn btn-sm btn-primary" style="align-self: center" (click)="applyFilter()">Apply</button>
+
+    </div>
+</div>

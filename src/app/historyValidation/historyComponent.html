@@ -1,65 +1,106 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
-        <label>Commits</label>
+        <label style="flex: 1">Commits</label>
+
+        <div class="btn-group btn-group-xs" style="margin-right: 4px;" role="group">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span>Operation sort</span>
+                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li *ngFor="let sd of sortingDirectionList" style="position: relative;">
+                    <a (click)="sortOperation(sd)" style="margin-right: 18px;">{{sd}}</a>
+                    <span *ngIf="sd == operationSorting" class="glyphicon glyphicon-ok pull-right"
+                        style="position: absolute; right: 4px;"></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="btn-group btn-group-xs" style="margin-right: 4px;" role="group">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span>Time sort</span>
+                <span class="glyphicon glyphicon-sort-by-order"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li *ngFor="let sd of sortingDirectionList" style="position: relative;">
+                    <a (click)="sortTime(sd)" style="margin-right: 18px;">{{sd}}</a>
+                    <span *ngIf="sd == timeSorting" class="glyphicon glyphicon-ok pull-right"
+                        style="position: absolute; right: 4px;"></span>
+                </li>
+            </ul>
+        </div>
+
+        <button class="btn btn-xs btn-default" [ngClass]="{active: showFilterBox}" (click)="showFilterBox = !showFilterBox">
+            <span *ngIf="!showFilterBox">Show filters</span>
+            <span *ngIf="showFilterBox">Hide filters</span>
+            <span class="glyphicon glyphicon-filter"></span>
+        </button>
     </div>
     
-    <div class="panel-body vbox scrollableContainer">
+    <div class="panel-body vbox">
 
-        <table class="table table-condensed table-hoverable">
-            <colgroup>
-                <col style="width: 1%">
-                <col>
-                <col>
-                <col>
-                <col>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th class="text-center">Commit</th>
-                    <th class="text-center">Subject</th>
-                    <th class="text-center">Action</th>
-                    <th class="text-center">User</th>
-                    <th class="text-center">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of commits">
-                    <td class="text-center" nowrap>
-                        <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
-                    </td>
-                    <td class="text-center">
-                        <span *ngIf="item.subject">
-                            {{item.subject.getURI()}}
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <span *ngIf="item.operation" [title]="item.operation.getURI()">
-                            {{item.operation.getShow()}}
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        <span *ngIf="item.user" [title]="item.user.getURI()">
-                            {{item.user.getShow()}}
-                        </span>
-                    </td>
-                    <td class="text-center">
-                        {{item.endTimeLocal}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <history-filter *ngIf="showFilterBox" class="vbox" style="margin-bottom: 6px" (apply)="onFilterApplied($event)"
+            [operations]="operations" [fromTime]="fromTime" [toTime]="toTime"></history-filter>
+
+        <div class="scrollableContainer" style="flex: 3;">
+
+            <table class="table table-condensed table-hoverable">
+                <colgroup>
+                    <col style="width: 1%">
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center">Commit</th>
+                        <th class="text-center">Subject</th>
+                        <th class="text-center">Action</th>
+                        <th class="text-center">User</th>
+                        <th class="text-center">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of commits">
+                        <td class="text-center" nowrap>
+                            <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="item.subject">
+                                {{item.subject.getURI()}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="item.operation" [title]="item.operation.getURI()">
+                                {{item.operation.getShow()}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="item.user" [title]="item.user.getURI()">
+                                {{item.user.getShow()}}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            {{item.endTimeLocal}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
     
     </div>
 
     <div class="panel-footer">
         <div class="btn-group btn-group-xs pull-right" role="group">
-            <button class="btn btn-default" title="Previous" (click)="getPreviousCommits()" [disabled]="'true'">
+            <button class="btn btn-default" title="Previous" (click)="getPreviousCommits()" [disabled]="page <= 0">
                 <span class="glyphicon glyphicon-triangle-left"></span>
             </button>
-            <!--<button class="btn btn-default" style="cursor: auto" disabled>
-                <span>{{t.resultsPage+1}} of {{t.resultsTotPage}}</span>
-            </button>-->
-            <button class="btn btn-default" title="Next" (click)="getNextCommits()" [disabled]="!hasNext">
+            <button class="btn btn-default" style="cursor: auto" disabled>
+                <span>{{page+1}} of {{pageCount}}</span>
+            </button>
+            <button class="btn btn-default" title="Next" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
                 <span class="glyphicon glyphicon-triangle-right"></span>
             </button>
         </div>

@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h3 class="modal-title">Add operation to filter</h3>
+</div>
+<div class="modal-body vbox" style="height:75vh;">
+
+    <table class="table table-condensed table-borderless">
+        <tbody>
+            <tr>
+                <td nowrap><label>Extension path:</label></td>
+                <td style="padding: 3px;">
+                    <select class="form-control input-sm" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
+                        <option *ngFor="let path of extensionPaths">{{path}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Service class:</label></td>
+                <td style="padding: 3px;">
+                    <select class="form-control input-sm" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
+                        <option *ngFor="let sc of serviceClasses">{{sc}}</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="panel panel-default vbox" style="margin-bottom: 3px;">
+        <div class="panel-heading">
+            <label>Operations:</label>
+        </div>
+        <div class="panel-body scrollableContainer">
+            <div class="checkbox" style="margin-left: 12px;" *ngFor="let op of operations">
+                <label>
+                    <input type="checkbox" [(ngModel)]="op.checked">{{getOperationShow(op.service)}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-xs btn-default" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
+        Add<span class="glyphicon glyphicon-chevron-down"></span>
+    </button>
+
+    <div class="panel panel-default vbox">
+        <div class="panel-body scrollableContainer">
+            <div *ngFor="let op of operationsToAdd" class="listItem">
+                <span style="flex: 1;">{{getOperationShow(op, true)}}</span>
+                <button class="btn btn-xs btn-default" (click)="removeOperation(op)">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="operationsToAdd.lenght == 0">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

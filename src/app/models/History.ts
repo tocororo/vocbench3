@@ -67,3 +67,10 @@ export class VersionInfo {
         }
     }
 }
+
+export type SortingDirection = "Ascending" | "Descending" | "Unordered";
+export const SortingDirection = {
+    Ascending: "Ascending" as SortingDirection,
+    Descending: "Descending" as SortingDirection,
+    Unordered: "Unordered" as SortingDirection
+}
