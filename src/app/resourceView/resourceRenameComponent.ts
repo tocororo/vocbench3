@@ -1,30 +1,33 @@
-import {Component, Input, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
-import {Modal} from 'angular2-modal/plugins/bootstrap';
-import {ARTResource, ARTURIResource} from "../models/ARTResources";
-import {BasicModalServices} from "../widget/modal/basicModal/basicModalServices";
-import {RefactorServices} from "../services/refactorServices";
+import { Component, Input, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { RefactorServices } from "../services/refactorServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator"
 
 @Component({
     selector: "resource-rename",
     templateUrl: "./resourceRenameComponent.html",
 })
 export class ResourceRenameComponent {
-    
+
     @Input() resource: ARTResource;
     @Input() readonly: boolean;
-    
+
     @ViewChild('localrenameinput') localRenameInput: ElementRef;
     @ViewChild('totalrenameinput') totalRenameInput: ElementRef;
-    
+
+    private renameAuthorized: boolean = true;
+ 
     private localName: string;
     private pristineNamespace: string;
     private pristineLocalName: string;
-    
+
     private renameLocked = true;
     private namespaceLocked = true;
-    
-    constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) {}
-    
+
+    constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) { }
+
     ngOnInit() {
         if (this.resource.isURIResource()) {
             this.localName = (<ARTURIResource>this.resource).getLocalName();
@@ -36,17 +39,18 @@ export class ResourceRenameComponent {
             if (this.resource.isURIResource()) {
                 this.localName = (<ARTURIResource>this.resource).getLocalName();
             }
+            this.renameAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_CHANGE_RESOURCE_URI, this.resource);
         }
     }
-    
+
     /** 
      * Enable and focus the input text to rename the resource 
-     */  
+     */
     private startRename() {
         this.localRenameInput.nativeElement.focus();
         this.renameLocked = false;
     }
-    
+
     /**
      * Cancel the renaming of the resource and restore the original UI
      */
@@ -56,11 +60,11 @@ export class ResourceRenameComponent {
         this.renameLocked = true;
         this.namespaceLocked = true;
     }
-    
+
     private blockNamespace() {
         this.namespaceLocked = !this.namespaceLocked;
     }
-    
+
     /**
      * Apply the renaming of the resource and restore the original UI
      */
@@ -96,7 +100,7 @@ export class ResourceRenameComponent {
             this.cancelRename();
         }
     }
-    
+
     /**
      * Since URI of URIResource is splitted in namespace and localName, this method allows
      * to copy the complete URI in the clipboard. It uses a workaround described here
@@ -118,5 +122,5 @@ export class ResourceRenameComponent {
             document.body.removeChild(textArea);
         }
     }
-    
+
 }

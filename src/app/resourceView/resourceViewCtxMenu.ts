@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { AlignmentServices } from "../services/alignmentServices";
@@ -8,6 +8,7 @@ import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "res-view-menu",
@@ -19,8 +20,20 @@ export class ResourceViewContextMenu {
     @Input() readonly: boolean;
     @Output() update = new EventEmitter();
 
+    private alignAuthorized: boolean = true;
+    private setDeprecatedAuthorized: boolean = true;
+    private spawnConceptAuthorized: boolean = true;
+
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices,
         private resourcesService: ResourcesServices, private creationModals: CreationModalServices, private modal: Modal) { }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource'] && changes['resource'].currentValue) {
+            this.alignAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_ADD_ALIGNMENT, this.resource);
+            this.setDeprecatedAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_SET_DEPRECATED, this.resource);
+            this.spawnConceptAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL);
+        }
+    }
 
     private alignResource() {
         this.openAlignmentModal().then(
