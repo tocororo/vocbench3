@@ -24,6 +24,9 @@ export abstract class PredObjListMultirootRenderer {
     //to handle partition collapsed/expanded
     partitionCollapsed: boolean = false;
 
+    //to enabled/disable the add button
+    addAuthorized: boolean = true;
+
     /**
      * Root properties described in the partition.
      * Note that this differs from wellKnownProperties from because this should only contains root properties
@@ -124,6 +127,15 @@ export abstract class PredObjListMultirootRenderer {
      */
     private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
+    }
+
+    /**
+     * Initializes the addAuthorized value in order to enable/disable the add button
+     */
+    abstract initAddAuthorization(): void;
+
+    isAddDisabled(): boolean {
+        return (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || !this.addAuthorized);
     }
 
 }

@@ -3,15 +3,16 @@ import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
+import { VBPreferences } from "../utils/VBPreferences";
 import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
 
 @Injectable()
 export class RefactorServices {
 
-    private serviceName = "Refactor2";
+    private serviceName = "Refactor";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBPreferences) { }
 
     /**
      * Refactors SKOS data (labels and notes) into SKOSXL
@@ -71,16 +72,18 @@ export class RefactorServices {
     replaceBaseURI(targetBaseURI: string, sourceBaseURI?: string) {
         console.log("[RefactorServices] replaceBaseURI");
         var params: any = {
-            targetBaseURI: targetBaseURI
+            targetBaseURI: new ARTURIResource(targetBaseURI)
         }
         if (sourceBaseURI != undefined) {
-            params.sourceBaseURI = sourceBaseURI;
+            params.sourceBaseURI = new ARTURIResource(sourceBaseURI);
         }
-        return this.httpMgr.doGet("Refactor", "replaceBaseURI", params).map(
+        return this.httpMgr.doPost(this.serviceName, "replaceBaseURI", params, true).map(
             stResp => {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
                     VBContext.getWorkingProject().setBaseURI(targetBaseURI);
+                    this.preferences.setActiveSchemes(null);
+                    this.eventHandler.schemeChangedEvent.emit(null);
                 }
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }

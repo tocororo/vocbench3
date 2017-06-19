@@ -49,12 +49,19 @@ export abstract class PredObjListRenderer {
         this.browsingModals = browsingModals;
     }
 
+    ngOnInit() {
+        this.initAddAuthorization();
+    }
+
     /**
      * ATTRIBUTES
      */
 
     //to handle partition collapsed/expanded
     partitionCollapsed: boolean = false;
+
+    //to enabled/disable the add button
+    addAuthorized: boolean = true;
 
     /**
      * Root property described in the partition
@@ -284,6 +291,15 @@ export abstract class PredObjListRenderer {
             },
             () => { }
         );
+    }
+
+    /**
+     * Initializes the addAuthorized value in order to enable/disable the add button
+     */
+    abstract initAddAuthorization(): void;
+
+    isAddDisabled(): boolean {
+        return (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || !this.addAuthorized);
     }
 
 }

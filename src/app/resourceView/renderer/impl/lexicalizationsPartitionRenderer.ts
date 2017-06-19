@@ -9,6 +9,7 @@ import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFType
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -200,6 +201,10 @@ export class LexicalizationsPartitionRenderer extends PredObjListMultirootRender
                     );
                 break;
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_LEXICALIZATION, this.resource);
     }
 
 }

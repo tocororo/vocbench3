@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { SkosServices } from "../../../services/skosServices";
-import { VBEventHandler } from "../../../utils/VBEventHandler"
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary"
-
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -36,7 +36,6 @@ export class BroadersPartitionRenderer extends PredObjListRenderer {
         rvModalService: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
         super(propService, resourceService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
-    
 
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
@@ -80,6 +79,10 @@ export class BroadersPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_BROADER_CONCEPT);
     }
 
 }

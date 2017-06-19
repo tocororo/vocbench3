@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SKOSXL } from "../../../models/Vocabulary";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -59,6 +59,10 @@ export class LabelRelationsPartitionRenderer extends PredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { IndividualsServices } from "../../../services/individualsServices";
-import { VBEventHandler } from "../../../utils/VBEventHandler"
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { RDF } from "../../../models/Vocabulary"
-
+import { RDF } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -79,6 +79,10 @@ export class TypesPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INDIVIDUALS_ADD_TYPE);
     }
 
 

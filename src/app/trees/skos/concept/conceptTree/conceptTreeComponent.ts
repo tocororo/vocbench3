@@ -25,9 +25,7 @@ export class ConceptTreeComponent extends AbstractTree {
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
         eventHandler: VBEventHandler) {
-
         super(eventHandler);
-
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: {concept: ARTURIResource, schemes: ARTURIResource[]}) => this.onTopConceptCreated(data.concept, data.schemes)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(

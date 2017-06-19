@@ -4,7 +4,7 @@ import { SkosServices } from "../../../services/skosServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -82,6 +82,10 @@ export class SchemesPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_CONCEPT_TO_SCHEME);
     }
 
 }

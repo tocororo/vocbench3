@@ -3,7 +3,7 @@ import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../../models/CustomForms";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
@@ -118,4 +118,9 @@ export class PropertiesPartitionRenderer extends PredObjListRenderer {
             );
         }
     }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
+    }
+
 }

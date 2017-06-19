@@ -6,7 +6,7 @@ import {
     RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
 } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -144,6 +144,10 @@ export class MembersOrderedPartitionRenderer extends PredObjListRenderer {
      */
     private getRemovePropImgTitle(predicate: ARTURIResource): string {
         return "Remove " + predicate.getShow();
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION);
     }
 
 }

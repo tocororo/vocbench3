@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -34,6 +34,10 @@ export class PropertyFacetsPartitionRenderer extends PredObjListRenderer {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         rvModalService: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+    }
+
+    ngOnInit() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_BROADER_CONCEPT);
     }
 
     add(predicate?: ARTURIResource) {
@@ -90,6 +94,10 @@ export class PropertyFacetsPartitionRenderer extends PredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

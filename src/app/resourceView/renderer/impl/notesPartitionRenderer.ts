@@ -9,6 +9,7 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary"
 
@@ -61,6 +62,10 @@ export class NotesPartitionRenderer extends PredObjListRenderer {
                 }
             );
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

@@ -3,7 +3,7 @@ import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
 import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -79,6 +79,10 @@ export class SuperPropertiesPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_SUPERPROPERTY);
     }
 
 }

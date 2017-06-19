@@ -2,9 +2,9 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { SkosServices } from "../../../services/skosServices";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { SKOS } from "../../../models/Vocabulary"
-import { VBEventHandler } from "../../../utils/VBEventHandler"
-
+import { SKOS } from "../../../models/Vocabulary";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -80,6 +80,10 @@ export class TopConceptsPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TOP_CONCEPT);
     }
 
 }

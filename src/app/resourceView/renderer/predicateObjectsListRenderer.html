@@ -9,7 +9,7 @@
         </span>
         <span class="groupPanel-heading-content">
             <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
-                (click)="add()" [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
+                (click)="add()" [disabled]="isAddDisabled()">
         </span>
     </div>
 

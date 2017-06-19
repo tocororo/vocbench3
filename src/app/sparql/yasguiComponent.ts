@@ -70,7 +70,10 @@ export class YasguiComponent {
             }
         );
 
-        this.yasqe.collapsePrefixes(true);
+        //collapse prefixes declaration if any
+        if (Object.keys(this.yasqe.getPrefixesFromQuery()).length != 0) {
+            this.yasqe.collapsePrefixes(true);
+        }
 
         //called on changes in yasqe editor
         this.yasqe.on('change', (yasqe: any) => {

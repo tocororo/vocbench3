@@ -8,6 +8,7 @@ import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute } from ".
 import { RDFS, OWL } from "../../../models/Vocabulary";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "class-axiom-renderer",
@@ -187,6 +188,11 @@ export class ClassAxiomPartitionPartitionRenderer extends PredObjListMultirootRe
                 stResp => this.update.emit(null)
             );
         }
+    }
+
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

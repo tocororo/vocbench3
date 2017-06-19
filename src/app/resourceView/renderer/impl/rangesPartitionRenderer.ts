@@ -3,7 +3,7 @@ import { PredObjListRenderer } from "../predicateObjectsListRenderer";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFS, XmlSchema } from "../../../models/Vocabulary";
-
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -135,6 +135,10 @@ export class RangesPartitionRenderer extends PredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         }
+    }
+
+    initAddAuthorization() {
+        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_RANGE);
     }
 
 }
