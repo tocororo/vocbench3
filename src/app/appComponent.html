@@ -15,7 +15,7 @@
                 <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active">
                     <a [routerLink]="['/Data']">Data</a>
                 </li>
-				<li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active">
+				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" routerLinkActive="active">
@@ -30,8 +30,8 @@
                     </a>
                     <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
                         <li><a [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a></li>
-                        <li><a [routerLink]="['/AlignmentValidation']">Alignment Validation</a></li>
-                        <li><a [routerLink]="['/CustomForm']">Custom Form configuration</a></li>
+                        <li *ngIf="isAlignValidationAuthorized()"><a [routerLink]="['/AlignmentValidation']">Alignment Validation</a></li>
+                        <li *ngIf="isCustomFormAuthorized()"><a [routerLink]="['/CustomForm']">Custom Form configuration</a></li>
                     </ul>
                 </li>
             </ul>

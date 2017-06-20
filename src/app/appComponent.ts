@@ -2,6 +2,7 @@ import { Component, ViewContainerRef } from "@angular/core";
 import { Overlay } from "angular2-modal";
 import { Project } from "./models/Project";
 import { VBContext } from "./utils/VBContext";
+import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 
 import '../assets/styles/style.css';
 
@@ -57,6 +58,19 @@ export class AppComponent {
             return wProj.isValidationEnabled();
         }
         return false;
+    }
+
+    /**
+     * Authorizations
+     */
+    private isSparqlAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EXECUTE_QUERY);
+    }
+    private isCustomFormAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_READ);
+    }
+    private isAlignValidationAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_LOAD_ALIGNMENT);
     }
 
 }

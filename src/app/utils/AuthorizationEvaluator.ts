@@ -6,12 +6,14 @@ import { ResViewPartition } from "../models/ResourceView";
 
 enum Actions {
     ALIGNMENT_ADD_ALIGNMENT,
+    ALIGNMENT_LOAD_ALIGNMENT,
     CLASSES_CREATE_CLASS,
     CLASSES_CREATE_CLASS_AXIOM,
     CLASSES_CREATE_INDIVIDUAL,
     CLASSES_DELETE_CLASS,
     CLASSES_DELETE_INDIVIDUAL,
     CLASSES_REMOVE_CLASS_AXIOM,
+    CUSTOM_FORMS_READ, //represents the generic "read" of the CustomForm aspects (used to access to CF page)
     INDIVIDUALS_ADD_TYPE,
     INDIVIDUALS_REMOVE_TYPE,
     PROPERTIES_ADD_PROPERTY_DOMAIN,
@@ -43,7 +45,8 @@ enum Actions {
     SKOS_REMOVE_FROM_COLLECTION,
     SKOS_REMOVE_CONCEPT_FROM_SCHEME,
     SKOS_REMOVE_LEXICALIZATION,
-    SKOS_REMOVE_TOP_CONCEPT
+    SKOS_REMOVE_TOP_CONCEPT,
+    SPARQL_EXECUTE_QUERY
 }
 
 export class AuthorizationEvaluator {
@@ -54,12 +57,14 @@ export class AuthorizationEvaluator {
 
     private static actionAuthGoalMap: { [key: number ]: string } = {
         [Actions.ALIGNMENT_ADD_ALIGNMENT] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", alignment)', 'C').",
+        [Actions.ALIGNMENT_LOAD_ALIGNMENT] : "auth('rdf(resource, alignment)', 'R').",
         [Actions.CLASSES_CREATE_CLASS] :  "auth('rdf(cls)', 'C').",
         [Actions.CLASSES_CREATE_CLASS_AXIOM] :  "auth('rdf(cls, taxonomy)', 'C').", //@PreAuthorize of addOneOf/UnionOf/IntersectionOf...
         [Actions.CLASSES_CREATE_INDIVIDUAL] :  "auth('rdf(individual)', 'C').",
         [Actions.CLASSES_DELETE_CLASS] :  "auth('rdf(cls)', 'D').",
         [Actions.CLASSES_DELETE_INDIVIDUAL] :  "auth('rdf(individual)', 'D').",
         [Actions.CLASSES_REMOVE_CLASS_AXIOM] :  "auth('rdf(cls, taxonomy)', 'D').", //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
+        [Actions.CUSTOM_FORMS_READ] :  "auth('cform(formCollection)', 'R').", //@PreAuthorize of getCustomFormConfigMap
         [Actions.INDIVIDUALS_ADD_TYPE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ")', 'U').",
         [Actions.INDIVIDUALS_REMOVE_TYPE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ")', 'D').",
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : "auth('rdf(property)', 'C').",
@@ -92,6 +97,7 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_REMOVE_FROM_COLLECTION] : "auth('rdf(skosCollection)', 'U').", //TODO is it ok? or add values
         [Actions.SKOS_REMOVE_LEXICALIZATION] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", lexicalization)', 'D').",
         [Actions.SKOS_REMOVE_TOP_CONCEPT] : "auth('rdf(concept, schemes)', 'D').",
+        [Actions.SPARQL_EXECUTE_QUERY] : "auth('rdf(sparql)', 'RU').",
     };
 
     private static authCache: { [goal: string]: boolean } = {}
