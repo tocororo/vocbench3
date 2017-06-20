@@ -20,7 +20,7 @@ export class IcvServices {
     listDanglingConcepts(scheme: ARTURIResource, limit?: number) {
         console.log("[IcvServices] listDanglingConcepts");
         var params: any = {
-            scheme: scheme.getURI()
+            scheme: scheme
         };
         if (limit != undefined) {
             params.limit = limit;
@@ -338,7 +338,7 @@ export class IcvServices {
     setAllDanglingAsTopConcept(scheme: ARTURIResource) {
         console.log("[IcvServices] setAllDanglingAsTopConcept");
         var params: any = {
-            scheme: scheme.getURI()
+            scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "setAllDanglingAsTopConcept", params);
     }
@@ -352,8 +352,8 @@ export class IcvServices {
         console.log("[IcvServices] setBroaderForAllDangling");
         var conceptsUri: string[] = []
         var params: any = {
-            scheme: scheme.getURI(),
-            broader: broader.getURI()
+            scheme: scheme,
+            broader: broader
         };
         return this.httpMgr.doGet(this.serviceName, "setBroaderForAllDangling", params);
     }
@@ -365,7 +365,7 @@ export class IcvServices {
     removeAllDanglingFromScheme(scheme: ARTURIResource) {
         console.log("[IcvServices] removeAllDanglingFromScheme");
         var params: any = {
-            scheme: scheme.getURI()
+            scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "removeAllDanglingFromScheme", params);
     }
@@ -377,7 +377,7 @@ export class IcvServices {
     deleteAllDanglingConcepts(scheme: ARTURIResource) {
         console.log("[IcvServices] deleteAllDanglingConcepts");
         var params: any = {
-            scheme: scheme.getURI()
+            scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingConcepts", params);
     }
@@ -389,7 +389,7 @@ export class IcvServices {
     addAllConceptsToScheme(scheme: ARTURIResource) {
         console.log("[IcvServices] addAllConceptsToScheme");
         var params: any = {
-            scheme: scheme.getURI()
+            scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "addAllConceptsToScheme", params);
     }
@@ -402,8 +402,8 @@ export class IcvServices {
     removeBroadersToConcept(concept: ARTURIResource, scheme: ARTURIResource) {
         console.log("[IcvServices] removeBroadersToConcept");
         var params: any = {
-            concept: concept.getURI(),
-            scheme: scheme.getURI()
+            concept: concept,
+            scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "removeBroadersToConcept", params);
     }
@@ -454,9 +454,9 @@ export class IcvServices {
     setDanglingXLabel(concept: ARTURIResource, xlabelPred: ARTURIResource, xlabel: ARTResource) {
         console.log("[IcvServices] setDanglingXLabel");
         var params: any = {
-            concept: concept.getURI(),
-            xlabelPred: xlabelPred.getURI(),
-            xlabel: xlabel.getNominalValue()
+            concept: concept,
+            xlabelPred: xlabelPred,
+            xlabel: xlabel
         };
         return this.httpMgr.doGet(this.serviceName, "setDanglingXLabel", params);
     }
