@@ -18,20 +18,13 @@ import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator
 export class CollectionTreePanelComponent extends AbstractTreePanel {
     @ViewChild(CollectionTreeComponent) viewChildTree: CollectionTreeComponent
 
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.skosCollection;
+
     private searchInputPlaceholder: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
-    }
-
-    ngOnInit() {
-        this.initBtnAuthState();
-    }
-
-    initBtnAuthState() {
-        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_COLLECTION);
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_COLLECTION);
     }
 
     //top bar commands handlers

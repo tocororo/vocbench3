@@ -4,6 +4,7 @@ import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "panel",
@@ -36,7 +37,7 @@ export abstract class AbstractTreePanel extends AbstractPanel {
 
     //the following determines if the create button is disabled in the UI. It could be overriden in the extending components
     isCreateChildDisabled(): boolean {
-        return (!this.selectedNode || this.readonly || !this.createAuthorized);
+        return (!this.selectedNode || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
     }
 
     /**

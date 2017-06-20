@@ -6,10 +6,14 @@
             <span>&#9662;</span>
         </button>
         <ul class="dropdown-menu">
-            <li><a (click)="edit()">Edit</a></li>
-            <li *ngIf="resource.isResource()"><a (click)="replace()">Replace with existing resource</a></li>
-            <li *ngIf="isSpawnWithLabelAvailable()"><a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a></li>
-            <li><a (click)="delete()">Delete</a></li>
+            <li [ngClass]="{ disabled: isEditDisabled() }"><a (click)="edit()">Edit</a></li>
+            <li *ngIf="resource.isResource()" [ngClass]="{ disabled: isEditDisabled() }">
+                <a (click)="replace()">Replace with existing resource</a>
+            </li>
+            <li *ngIf="isSpawnWithLabelAvailable()"  [ngClass]="{ disabled: isSpawnFromLabelDisabled() }">
+                <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
+            </li>
+            <li [ngClass]="{ disabled: isDeleteDisabled() }"><a (click)="delete()">Delete</a></li>
         </ul>
     </div>
 </template>

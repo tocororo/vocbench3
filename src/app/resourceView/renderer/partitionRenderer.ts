@@ -105,7 +105,7 @@ export abstract class PartitionRenderer {
     private isAddDisabled(): boolean {
         return (
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
-            !AuthorizationEvaluator.isAddAuthorized(this.partition, this.resource)
+            !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
         );
     }
 

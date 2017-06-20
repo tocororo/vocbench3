@@ -95,7 +95,14 @@ export class PredicateObjectsRenderer {
     private isAddDisabled() {
         return (
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
-            !AuthorizationEvaluator.isAddAuthorized(this.partition, this.resource)
+            !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
+        );
+    }
+
+    private isRemoveReifiedObjDisabled(object: ARTResource): boolean {
+        return (
+            !object.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
+            !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
         );
     }
 

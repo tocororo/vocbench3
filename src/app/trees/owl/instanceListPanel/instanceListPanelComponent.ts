@@ -6,7 +6,7 @@ import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
@@ -20,6 +20,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
 
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
@@ -27,23 +28,15 @@ export class InstanceListPanelComponent extends AbstractPanel {
         super(cfService, basicModals);
     }
 
-    ngOnInit() {
-        this.initBtnAuthState();
-    }
-
-    initBtnAuthState() {
-        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_INDIVIDUAL);
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_INDIVIDUAL);
-    }
     //@Override
     isCreateDisabled(): boolean {
-        return (!this.cls || this.readonly || !this.createAuthorized);
+        return (!this.cls || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
     }
     //@Override
     isDeleteDisabled(): boolean {
         return (
             !this.cls || !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-            this.readonly || !this.deleteAuthorized
+            this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
         );
     }
 

@@ -14,6 +14,7 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "members-ordered-renderer",
@@ -145,6 +146,13 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      */
     private getRemovePropImgTitle(predicate: ARTURIResource): string {
         return "Remove " + predicate.getShow();
+    }
+
+    private isRemoveReifiedObjDisabled(object: ARTResource): boolean {
+        return (
+            !object.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
+            !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition)
+        );
     }
 
 }

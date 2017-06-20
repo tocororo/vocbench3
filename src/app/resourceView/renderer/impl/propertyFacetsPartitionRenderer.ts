@@ -10,6 +10,7 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "property-facets-renderer",
@@ -17,7 +18,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 })
 export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    @Input('facets') facets: any[]; // array of data structure {name: string, explicit: boolean, value: boolean}
+    @Input('facets') facets: Facet[];
     //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
@@ -93,4 +94,14 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         }
     }
 
+    private isChangeFacetDisabled(facet: Facet) {
+        return (!facet.explicit || this.readonly || AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource));
+    }
+
+}
+
+class Facet {
+    name: string;
+    explicit: boolean;
+    value: boolean;
 }

@@ -25,6 +25,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.concept;
+
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
@@ -62,20 +64,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 this.workingSchemes = this.schemes;
             }
         }
-        this.initBtnAuthState();
     }
-
-    initBtnAuthState() {
-        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_CONCEPT);
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_CONCEPT);
-    }
+    
     //@Override
     isCreateDisabled(): boolean {
-        return (this.isNoSchemeMode() || this.readonly || !this.createAuthorized);
+        return (this.isNoSchemeMode() || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
     }
     //@Override
     isCreateChildDisabled(): boolean {
-        return (!this.selectedNode || this.isNoSchemeMode() || this.readonly || !this.createAuthorized);
+        return (!this.selectedNode || this.isNoSchemeMode() || this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole));
     }
 
     //top bar commands handlers

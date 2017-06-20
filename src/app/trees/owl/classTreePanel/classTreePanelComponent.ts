@@ -21,20 +21,12 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
 
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.cls;
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
-    }
-
-    ngOnInit() {
-        this.initBtnAuthState();
-    }
-
-    initBtnAuthState() {
-        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS);
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_CLASS);
     }
 
     //Top Bar commands handlers

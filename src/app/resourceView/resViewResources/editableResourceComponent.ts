@@ -4,6 +4,7 @@ import {
 	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
 } from "../../models/ARTResources";
 import { SKOSXL, SKOS } from "../../models/Vocabulary";
+import { ResViewPartition } from "../../models/ResourceView";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ManchesterServices } from "../../services/manchesterServices";
@@ -12,6 +13,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 @Component({
 	selector: "editable-resource",
@@ -23,6 +25,7 @@ export class EditableResourceComponent {
 	@Input() predicate: ARTURIResource; //property of the triple which the "resource" represents the object
 	@Input() resource: ARTNode; //resource shown in the component. Represents the object of a triple shown in a ResourceView partition
 	@Input() readonly: boolean;
+	@Input() partition: ResViewPartition;
 	@Output('delete') deleteOutput = new EventEmitter();
 	@Output() update = new EventEmitter();
 	@Output() dblClick = new EventEmitter();
@@ -241,12 +244,10 @@ export class EditableResourceComponent {
 	 * (so avoid "spawn new concept..." from xlabel of scheme/collection... and from xLabel in labelRelation partition of an xLabel ResView)
 	 */
 	private isSpawnWithLabelAvailable() {
-		if (this.resource.isResource()) {
-			return ((<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel &&
-				this.subject.getRole() == RDFResourceRolesEnum.concept);
-		} else {
-			return false;
-		}
+		return (
+			this.partition == ResViewPartition.lexicalizations &&
+			this.resource.isResource() && (<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel
+		);
 	}
 
 	private spawnNewConceptWithLabel() {
@@ -277,6 +278,18 @@ export class EditableResourceComponent {
 		if (this.resource.isResource()) {
 			this.dblClick.emit(<ARTResource>this.resource);
 		}
+	}
+
+
+	//menu item authorizations
+	private isEditDisabled(): boolean {
+		return !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.subject);
+	}
+	private isDeleteDisabled(): boolean {
+		return !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
+	}
+	private isSpawnFromLabelDisabled(): boolean {
+		return !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL);
 	}
 
 }

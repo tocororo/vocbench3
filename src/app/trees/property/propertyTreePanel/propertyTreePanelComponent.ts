@@ -22,18 +22,11 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.property;
+
     constructor(private propService: PropertyServices, private searchService: SearchServices,
         private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
-    }
-
-    ngOnInit() {
-        this.initBtnAuthState();
-    }
-
-    initBtnAuthState() {
-        this.createAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY);
-        this.deleteAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY);
     }
 
     createRoot(role: RDFResourceRolesEnum) {

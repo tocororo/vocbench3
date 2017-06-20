@@ -3,14 +3,14 @@
         <span>&#9662;</span>
     </button>
     <ul class="dropdown-menu">
-        <li [ngClass]="{disabled : !resource.getAdditionalProperty('explicit') || !alignAuthorized}">
+        <li [ngClass]="{ disabled : isAlignDisabled() }">
             <a (click)="alignResource()">Align with external resource</a>
         </li>
-        <li *ngIf="isURIResource()" [ngClass]="{disabled : !resource.getAdditionalProperty('explicit') || !setDeprecatedAuthorized}">
+        <li *ngIf="isURIResource()" [ngClass]="{ disabled : isSetDeprecatedDisabled() }">
             <a (click)="setAsDeprecated()">Set as deprecated</a>
         </li>
         <li *ngIf="resource.getRole() == 'xLabel'"
-            [ngClass]="{disabled : !resource.getAdditionalProperty('explicit') || !spawnConceptAuthorized}">
+            [ngClass]="{ disabled : isSpawnFromLabelDisabled() }">
             <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
         </li>
     </ul>
