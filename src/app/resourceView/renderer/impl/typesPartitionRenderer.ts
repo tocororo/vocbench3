@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDF } from "../../../models/Vocabulary";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -15,16 +15,17 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 
 @Component({
     selector: "types-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class TypesPartitionRenderer extends PredObjListRenderer {
+export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.types;
     rootProperty: ARTURIResource = RDF.type;
     label = "Types";
     addBtnImgTitle = "Add a type";
@@ -80,10 +81,5 @@ export class TypesPartitionRenderer extends PredObjListRenderer {
             }
         }
     }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INDIVIDUALS_ADD_TYPE);
-    }
-
 
 }

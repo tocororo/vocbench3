@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
+import { ResViewPartition } from "../../models/ResourceView";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator"
 
 @Component({
     selector: "pred-obj-renderer",
@@ -14,6 +16,7 @@ export class PredicateObjectsRenderer {
     @Input('pred-obj') predicateObjects: ARTPredicateObjects;
     @Input() resource: ARTResource; //resource described
     @Input() readonly: boolean;
+    @Input() partition: ResViewPartition;
     @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>();
     @Output() update = new EventEmitter();
@@ -86,6 +89,15 @@ export class PredicateObjectsRenderer {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
 
+    /**
+     * Determines if the add button is disabled
+     */
+    private isAddDisabled() {
+        return (
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
+            !AuthorizationEvaluator.isAddAuthorized(this.partition, this.resource)
+        );
+    }
 
 
     // PAGING

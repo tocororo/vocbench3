@@ -1,20 +1,20 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListMultirootRenderer } from "../predicateObjectsListMultirootRenderer";
+import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
 import { RDFS, OWL } from "../../../models/Vocabulary";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "class-axiom-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class ClassAxiomPartitionPartitionRenderer extends PredObjListMultirootRenderer {
+export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMultiRoot {
 
     //inherited from PredObjListMultirootRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
@@ -22,6 +22,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PredObjListMultirootRe
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.classaxioms;
     rootProperties: ARTURIResource[] = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
@@ -188,11 +189,6 @@ export class ClassAxiomPartitionPartitionRenderer extends PredObjListMultirootRe
                 stResp => this.update.emit(null)
             );
         }
-    }
-
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

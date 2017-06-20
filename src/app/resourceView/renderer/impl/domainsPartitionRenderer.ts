@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -14,16 +14,17 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 
 @Component({
     selector: "domains-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class DomainsPartitionRenderer extends PredObjListRenderer {
+export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.domains;
     rootProperty: ARTURIResource = RDFS.domain;
     label = "Domains";
     addBtnImgTitle = "Add a domain";
@@ -104,10 +105,6 @@ export class DomainsPartitionRenderer extends PredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_DOMAIN);
     }
 
 }

@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import {
     ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
     RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
 } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -19,14 +19,15 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
     selector: "members-ordered-renderer",
     templateUrl: "./membersOrderedPartitionRenderer.html",
 })
-export class MembersOrderedPartitionRenderer extends PredObjListRenderer {
+export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.membersOrdered;
     rootProperty = SKOS.memberList;
     membersProperty = SKOS.member;
     label = "Members";
@@ -50,7 +51,7 @@ export class MembersOrderedPartitionRenderer extends PredObjListRenderer {
         }
     }
 
-    //needed to be implemented since this Component extends PredObjListRenderer, but not used.
+    //needed to be implemented since this Component extends PartitionRenderSingleRoot, but not used.
     //Use addFirst addLast addBefore and addAfter instead
     add() { }
 
@@ -144,10 +145,6 @@ export class MembersOrderedPartitionRenderer extends PredObjListRenderer {
      */
     private getRemovePropImgTitle(predicate: ARTURIResource): string {
         return "Remove " + predicate.getShow();
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION);
     }
 
 }

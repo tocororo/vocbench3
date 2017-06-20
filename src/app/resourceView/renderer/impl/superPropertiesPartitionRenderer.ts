@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
 import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDFS } from "../../../models/Vocabulary";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -14,16 +14,17 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 
 @Component({
     selector: "superproperties-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class SuperPropertiesPartitionRenderer extends PredObjListRenderer {
+export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.superproperties;
     rootProperty: ARTURIResource = RDFS.subPropertyOf;
     label = "Superproperties";
     addBtnImgTitle = "Add a superproperty";
@@ -79,10 +80,6 @@ export class SuperPropertiesPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_SUPERPROPERTY);
     }
 
 }

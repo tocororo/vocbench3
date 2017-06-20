@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../../models/CustomForms";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
@@ -16,16 +16,17 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 
 @Component({
     selector: "properties-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class PropertiesPartitionRenderer extends PredObjListRenderer {
+export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.properties;
     rootProperty: ARTURIResource = null; //there is no root property for this partition
     label = "Properties";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
@@ -117,10 +118,6 @@ export class PropertiesPartitionRenderer extends PredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

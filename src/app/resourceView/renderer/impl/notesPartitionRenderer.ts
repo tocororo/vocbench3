@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -9,22 +9,23 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary"
+import { ResViewPartition } from "../../../models/ResourceView";
 
 @Component({
     selector: "notes-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class NotesPartitionRenderer extends PredObjListRenderer {
+export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
 
+    partition = ResViewPartition.notes;
     rootProperty: ARTURIResource = SKOS.note;
     label = "Notes";
     addBtnImgTitle = "Add a note";
@@ -62,10 +63,6 @@ export class NotesPartitionRenderer extends PredObjListRenderer {
                 }
             );
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

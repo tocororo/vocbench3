@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
+import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
+import { ResViewPartition } from "../../models/ResourceView";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 @Component({
-    selector: "pred-obj-list-roots-renderer",
-    templateUrl: "./predicateObjectsListRenderer.html",
+    selector: "partition-renderer",
+    templateUrl: "./partitionRenderer.html",
 })
-export abstract class PredObjListMultirootRenderer {
+export abstract class PartitionRenderer {
 
     /**
      * INPUTS / OUTPUTS
@@ -14,31 +16,26 @@ export abstract class PredObjListMultirootRenderer {
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource: ARTResource; //resource described
     @Input() readonly: boolean;
-    @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
+    @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
+
+    constructor() { }
 
     /**
      * ATTRIBUTES
      */
 
-    //to handle partition collapsed/expanded
+    abstract partition: ResViewPartition;
+
+    /**
+     * to handle partition collapsed/expanded
+     */
     partitionCollapsed: boolean = false;
 
-    //to enabled/disable the add button
+    /**
+     * to enabled/disable the add button
+     */
     addAuthorized: boolean = true;
-
-    /**
-     * Root properties described in the partition.
-     * Note that this differs from wellKnownProperties from because this should only contains root properties
-     * (those properties that has no super properties among the known properties) not all the known properties
-     * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
-     */
-    abstract rootProperties: ARTURIResource[];
-    /**
-     * Properties described in the partition for which exists dedicated add/remove services
-     * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
-     */
-    abstract knownProperties: ARTURIResource[];
 
     /**
      * Label of the partition
@@ -70,7 +67,7 @@ export abstract class PredObjListMultirootRenderer {
      * or hen the "+" button of a specific property panel is clicked (placed in the subPanel heading) with the property provided.
      * If property is provided (add fired from specific property panel) the modal won't allow to change it allowing so
      * to enrich just that property, otherwise, if property is not provided (add fired from the generic partition panel),
-     * a modal will allow to choose the property to enrich.
+     * the modal allow to change property to enrich.
      * @param predicate property to enrich.
      */
     abstract add(predicate?: ARTURIResource): void;
@@ -79,36 +76,12 @@ export abstract class PredObjListMultirootRenderer {
      * This is fired when the "-" button is clicked (near an object).
      */
     abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
-    //used in removePredicateObject to know if the removing object is about a well known property
-    isKnownProperty(predicate: ARTURIResource): boolean {
-        for (var i = 0; i < this.knownProperties.length; i++) {
-            if (this.knownProperties[i].getURI() == predicate.getURI()) {
-                return true;
-            }
-        }
-        return false;
-    }
     
     /**
      * When the object is edited or replaced requires update of res view
      */
     private onObjectUpdate() {
         this.update.emit();
-    }
-    
-    /**
-     * Returns the title of the "+" button placed in a subPanel heading.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getAddPropImgTitle(predicate: ARTURIResource): string {
-        return "Add a " + predicate.getShow();
-    }
-    /**
-     * Returns the title of the "-" button placed near an object in a subPanel body.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getRemovePropImgTitle(predicate: ARTURIResource): string {
-        return "Remove " + predicate.getShow();
     }
     /**
      * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
@@ -129,13 +102,11 @@ export abstract class PredObjListMultirootRenderer {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
 
-    /**
-     * Initializes the addAuthorized value in order to enable/disable the add button
-     */
-    abstract initAddAuthorization(): void;
-
-    isAddDisabled(): boolean {
-        return (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || !this.addAuthorized);
+    private isAddDisabled(): boolean {
+        return (
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
+            !AuthorizationEvaluator.isAddAuthorized(this.partition, this.resource)
+        );
     }
 
 }

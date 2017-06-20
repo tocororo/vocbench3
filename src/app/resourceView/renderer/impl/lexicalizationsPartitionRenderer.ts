@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { PredObjListMultirootRenderer } from "../predicateObjectsListMultirootRenderer";
+import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
@@ -7,15 +7,15 @@ import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "lexicalizations-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class LexicalizationsPartitionRenderer extends PredObjListMultirootRenderer {
+export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot {
 
     //inherited from PredObjListMultirootRenderer
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
@@ -23,6 +23,7 @@ export class LexicalizationsPartitionRenderer extends PredObjListMultirootRender
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.lexicalizations;
     rootProperties: ARTURIResource[] = [];
     knownProperties: ARTURIResource[] = [
         RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
@@ -201,10 +202,6 @@ export class LexicalizationsPartitionRenderer extends PredObjListMultirootRender
                     );
                 break;
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_LEXICALIZATION, this.resource);
     }
 
 }

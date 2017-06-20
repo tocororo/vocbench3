@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -15,15 +15,16 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
     selector: "property-facets-renderer",
     templateUrl: "./propertyFacetsPartitionRenderer.html",
 })
-export class PropertyFacetsPartitionRenderer extends PredObjListRenderer {
+export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
     @Input('facets') facets: any[]; // array of data structure {name: string, explicit: boolean, value: boolean}
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
+    partition = ResViewPartition.facets;
     rootProperty: ARTURIResource = OWL.inverseOf;
     label = "Property facets";
     addBtnImgTitle = "Add a inverse property";
@@ -34,10 +35,6 @@ export class PropertyFacetsPartitionRenderer extends PredObjListRenderer {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         rvModalService: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
-    }
-
-    ngOnInit() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_BROADER_CONCEPT);
     }
 
     add(predicate?: ARTURIResource) {
@@ -94,10 +91,6 @@ export class PropertyFacetsPartitionRenderer extends PredObjListRenderer {
                 stResp => this.update.emit(null)
             );
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.resource);
     }
 
 }

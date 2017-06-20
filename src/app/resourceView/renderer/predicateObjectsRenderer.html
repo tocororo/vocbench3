@@ -2,8 +2,8 @@
     
     <div class="subPanel-heading">
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
-        <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(predicateObjects.getPredicate())" 
-            (click)="addValue()" [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
+        <button class="resViewPartitionBtn" [title]="getAddPropImgTitle(predicateObjects.getPredicate())" (click)="addValue()"
+            [disabled]="isAddDisabled()">
             <span>+</span>
         </button>
     </div>

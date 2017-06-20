@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary"
+import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -15,16 +15,17 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 
 @Component({
     selector: "broaders-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class BroadersPartitionRenderer extends PredObjListRenderer {
+export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from predicateObjectsListRenderer
+    //inherited from partitionRendererSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
 
+    partition = ResViewPartition.broaders;
     rootProperty: ARTURIResource = SKOS.broader;
     label = "Broaders";
     addBtnImgTitle = "Add broader";
@@ -79,10 +80,6 @@ export class BroadersPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_BROADER_CONCEPT);
     }
 
 }

@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PredObjListRenderer } from "../predicateObjectsListRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary";
+import { ResViewPartition } from "../../../models/ResourceView";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -15,16 +15,17 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 
 @Component({
     selector: "top-concepts-renderer",
-    templateUrl: "../predicateObjectsListRenderer.html",
+    templateUrl: "../partitionRenderer.html",
 })
-export class TopConceptsPartitionRenderer extends PredObjListRenderer {
+export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PredObjListRenderer
+    //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource: ARTURIResource;
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
 
+    partition = ResViewPartition.topconceptof;
     rootProperty: ARTURIResource = SKOS.topConceptOf;
     label = "Top Concept of";
     addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
@@ -80,10 +81,6 @@ export class TopConceptsPartitionRenderer extends PredObjListRenderer {
                 );
             }
         }
-    }
-
-    initAddAuthorization() {
-        this.addAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TOP_CONCEPT);
     }
 
 }
