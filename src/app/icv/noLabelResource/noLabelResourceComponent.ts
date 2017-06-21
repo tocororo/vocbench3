@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, ARTLiteral, RDFTypesEnum } from "../../models/ARTResources";
+import { ARTURIResource, ARTResource, ARTLiteral, RDFTypesEnum } from "../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { IcvServices } from "../../services/icvServices";
@@ -16,14 +16,30 @@ import { SkosxlServices } from "../../services/skosxlServices";
 })
 export class NoLabelResourceComponent {
 
-    private brokenResourceList: Array<ARTURIResource>;
+    private brokenResourceList: Array<ARTResource>;
     private lexicalizationModel: string;
+    private title: string;
+    private message: string;
+    private actionLabel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private resourcesService: ResourcesServices, private propService: PropertyServices, private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
+        if (this.lexicalizationModel == SKOS.uri) {
+            this.title = "No skos:prefLabel resource";
+            this.message = "skos:Concept(s), skos:ConceptScheme(s) and skos:Collection(s) that don't have a skos:prefLabel."
+            this.actionLabel = "Add skos:prefLabel";
+        } else if (this.lexicalizationModel == SKOSXL.uri) {
+            this.title = "No skosxl:prefLabel resource";
+            this.message = "skos:Concept(s), skos:ConceptScheme(s) and skos:Collection(s) that don't have a skos:prefLabel."
+            this.actionLabel = "Add skosxl:prefLabel";
+        } else if (this.lexicalizationModel == RDFS.uri) {
+            this.title = "No rdfs:label resource";
+            this.message = "owl:Class(es) and instances that don't have a rdfs:label."
+            this.actionLabel = "Add rdfs:label";
+        }
     }
 
     /**

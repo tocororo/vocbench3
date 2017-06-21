@@ -30,16 +30,10 @@ export class NoTopConceptSchemeComponent {
         //TODO check when service will be refactored
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listConceptSchemesWithNoTopConcept().subscribe(
-            stResp => {
-                this.brokenSchemeList = new Array();
-                var schemeColl = stResp.getElementsByTagName("conceptScheme");
-                for (var i = 0; i < schemeColl.length; i++) {
-                    var s = new ARTURIResource(schemeColl[i].textContent, schemeColl[i].textContent, RDFResourceRolesEnum.conceptScheme);
-                    this.brokenSchemeList.push(s);
-                }
+            schemes => {
+                this.brokenSchemeList = schemes;
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-            },
-            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
+            }
         );
     }
 

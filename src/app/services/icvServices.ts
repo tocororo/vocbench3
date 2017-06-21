@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { ARTURIResource, ARTResource, ARTNode, ARTLiteral } from "../models/ARTResources";
+import { ARTURIResource, ARTResource, ARTNode, ARTLiteral, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
 
 @Injectable()
@@ -11,21 +11,24 @@ export class IcvServices {
 
     constructor(private httpMgr: HttpManager) { }
 
+    //=================================
+    //======= STRUCTURAL CHECKS =======
+    //=================================
+
     /**
-     * Returns a list of records <concept>, where concept is a dangling skos:Concept in the given
-     * skos:ConceptScheme 
+     * Returns a list of dangling skos:Concept in the given skos:ConceptScheme 
      * @param scheme scheme where to get the dangling concept
-     * @param limit max number of results to return
      */
-    listDanglingConcepts(scheme: ARTURIResource, limit?: number) {
+    listDanglingConcepts(scheme: ARTURIResource): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listDanglingConcepts");
         var params: any = {
             scheme: scheme
         };
-        if (limit != undefined) {
-            params.limit = limit;
-        }
-        return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params);
+        return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
 
     /**
@@ -41,32 +44,56 @@ export class IcvServices {
     /**
      * Returns a list of skos:ConceptScheme that have no top concept
      */
-    listConceptSchemesWithNoTopConcept() {
+    listConceptSchemesWithNoTopConcept(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listConceptSchemesWithNoTopConcept");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params);
+        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
 
     /**
      * Returns a list of skos:Concept that don't belong to any scheme 
-     * @param limit max number of results to return
      */
-    listConceptsWithNoScheme(limit?: number) {
+    listConceptsWithNoScheme(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listConceptsWithNoScheme");
         var params: any = {};
-        if (limit != undefined) {
-            params.limit = limit;
-        }
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params);
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
 
     /**
      * Returns a list of skos:Concept that are topConcept but have a broader 
      */
-    listTopConceptsWithBroader() {
+    listTopConceptsWithBroader(): Observable<{concept: ARTURIResource, scheme: ARTURIResource}[]> {
         console.log("[IcvServices] listTopConceptsWithBroader");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params);
+        return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params, true).map(
+            stResp => {
+                var records: {concept: ARTURIResource, scheme: ARTURIResource}[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    records.push({
+                        concept: new ARTURIResource(stResp[i].concept, stResp[i].concept, RDFResourceRolesEnum.concept),
+                        scheme: new ARTURIResource(stResp[i].scheme, stResp[i].scheme, RDFResourceRolesEnum.conceptScheme),
+                    });
+                }
+                return records;
+            }
+        );
+    }
+
+    /**
+     * Returns a list of skos:Concept that have redundant hierarchical relations
+     */
+    listHierarchicallyRedundantConcepts() {
+        console.log("[IcvServices] listHierarchicallyRedundantConcepts");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params);
     }
 
     //=============================
@@ -142,12 +169,12 @@ export class IcvServices {
     /**
      * Returns a list of concepts or scheme that have no skos:prefLabel
      */
-    listResourcesWithNoSKOSPrefLabel() {
+    listResourcesWithNoSKOSPrefLabel(): Observable<ARTResource[]> {
         console.log("[IcvServices] listResourcesWithNoSKOSPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params, true).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                return Deserializer.createResourceArray(stResp);
             }
         );
     }
@@ -155,12 +182,12 @@ export class IcvServices {
     /**
      * Returns a list of concepts or scheme that have no skosxl:prefLabel
      */
-    listResourcesWithNoSKOSXLPrefLabel() {
+    listResourcesWithNoSKOSXLPrefLabel(): Observable<ARTResource[]> {
         console.log("[IcvServices] listResourcesWithNoSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params, true).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                return Deserializer.createResourceArray(stResp);
             }
         );
     }
@@ -295,35 +322,27 @@ export class IcvServices {
     /**
      * Returns a list of dangling skosxl:Label, namely the skosxl:Label not linked with any concept
      */
-    listDanglingXLabels() {
+    listDanglingXLabels(): Observable<ARTResource[]> {
         console.log("[IcvServices] listDanglingXLabels");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params).map(
+        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params, true).map(
             stResp => {
-                return <ARTResource[]>Deserializer.createRDFNodeArray(stResp);
+                return Deserializer.createResourceArray(stResp);
             }
         );
     }
 
-    /**
-     * Returns a list of skos:Concept that have redundant hierarchical relations
-     */
-    listHierarchicallyRedundantConcepts() {
-        console.log("[IcvServices] listHierarchicallyRedundantConcepts");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params);
-    }
+    //==============================
+    //======= GENERIC CHECKS =======
+    //==============================
 
     /**
      * Returns resources which URI contains white spaces
      * @param limit max number of results to return
      */
-    listResourcesURIWithSpace(limit?: number) {
+    listResourcesURIWithSpace() {
         console.log("[IcvServices] listResourcesURIWithSpace");
         var params: any = {};
-        if (limit != undefined) {
-            params.limit = limit;
-        }
         return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params);
     }
 
@@ -340,7 +359,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "setAllDanglingAsTopConcept", params);
+        return this.httpMgr.doPost(this.serviceName, "setAllDanglingAsTopConcept", params, true);
     }
 
     /**
@@ -355,7 +374,7 @@ export class IcvServices {
             scheme: scheme,
             broader: broader
         };
-        return this.httpMgr.doGet(this.serviceName, "setBroaderForAllDangling", params);
+        return this.httpMgr.doPost(this.serviceName, "setBroaderForAllDangling", params, true);
     }
 
     /**
@@ -367,7 +386,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "removeAllDanglingFromScheme", params);
+        return this.httpMgr.doPost(this.serviceName, "removeAllDanglingFromScheme", params, true);
     }
 
     /**
@@ -379,7 +398,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingConcepts", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingConcepts", params, true);
     }
 
     /**
@@ -391,7 +410,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "addAllConceptsToScheme", params);
+        return this.httpMgr.doPost(this.serviceName, "addAllConceptsToScheme", params, true);
     }
 
     /**
@@ -405,7 +424,7 @@ export class IcvServices {
             concept: concept,
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "removeBroadersToConcept", params);
+        return this.httpMgr.doPost(this.serviceName, "removeBroadersToConcept", params, true);
     }
 
     /**
@@ -415,7 +434,7 @@ export class IcvServices {
     removeBroadersToAllConcepts() {
         console.log("[IcvServices] removeBroadersToAllConcepts");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "removeBroadersToAllConcepts", params);
+        return this.httpMgr.doPost(this.serviceName, "removeBroadersToAllConcepts", params, true);
     }
 
     /**
@@ -424,7 +443,7 @@ export class IcvServices {
     removeAllAsTopConceptsWithBroader() {
         console.log("[IcvServices] removeAllAsTopConceptsWithBroader");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "removeAllAsTopConceptsWithBroader", params);
+        return this.httpMgr.doPost(this.serviceName, "removeAllAsTopConceptsWithBroader", params, true);
     }
 
     /**
@@ -433,7 +452,7 @@ export class IcvServices {
     removeAllHierarchicalRedundancy() {
         console.log("[IcvServices] removeAllHierarchicalRedundancy");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "removeAllHierarchicalRedundancy", params);
+        return this.httpMgr.doPost(this.serviceName, "removeAllHierarchicalRedundancy", params, true);
     }
 
     /**
@@ -442,7 +461,7 @@ export class IcvServices {
     deleteAllDanglingXLabel() {
         console.log("[IcvServices] deleteAllDanglingXLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "deleteAllDanglingXLabel", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingXLabel", params, true);
     }
 
     /**
@@ -458,7 +477,7 @@ export class IcvServices {
             xlabelPred: xlabelPred,
             xlabel: xlabel
         };
-        return this.httpMgr.doGet(this.serviceName, "setDanglingXLabel", params);
+        return this.httpMgr.doPost(this.serviceName, "setDanglingXLabel", params, true);
     }
 
 }

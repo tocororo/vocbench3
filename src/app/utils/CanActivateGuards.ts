@@ -126,7 +126,12 @@ export class CanDeactivateModalGuard implements CanDeactivate<any> {
     constructor(private modal: Modal) { }
     canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if (this.modal.overlay.stackLength > 0) { //if there is any modal open deactivate only if navigation is enabled
-            return ModalContext.isNavigationEnabled();
+            /**
+             * disabled temporarly. This is hard to handle since if a modal is open,
+             * this code prevent to navigate even if I navigate programmatically (e.g. error not logged in => redirect home)
+             */
+            // return ModalContext.isNavigationEnabled(); 
+            return true;
         }
         return true;
     }

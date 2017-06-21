@@ -48,16 +48,10 @@ export class DanglingConceptComponent {
     private runIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listDanglingConcepts(this.selectedScheme).subscribe(
-            stResp => {
-                this.brokenConceptList = new Array();
-                var recordColl = stResp.getElementsByTagName("record");
-                for (var i = 0; i < recordColl.length; i++) {
-                    var dc = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), RDFResourceRolesEnum.concept);
-                    this.brokenConceptList.push(dc);
-                }
+            concept => {
+                this.brokenConceptList = concept;
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
-            },
-            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
+            }
         );
     }
 

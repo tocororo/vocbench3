@@ -11,7 +11,7 @@ import { SkosServices } from "../../services/skosServices";
 })
 export class TopConceptWithBroaderComponent {
 
-    private brokenRecordList: Array<any>;
+    private brokenRecordList: {concept: ARTURIResource, scheme: ARTURIResource}[];
 
     constructor(private icvService: IcvServices, private skosService: SkosServices) { }
 
@@ -21,17 +21,10 @@ export class TopConceptWithBroaderComponent {
     runIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listTopConceptsWithBroader().subscribe(
-            stResp => {
-                this.brokenRecordList = new Array();
-                var recordColl = stResp.getElementsByTagName("record");
-                for (var i = 0; i < recordColl.length; i++) {
-                    var c = new ARTURIResource(recordColl[i].getAttribute("concept"), recordColl[i].getAttribute("concept"), RDFResourceRolesEnum.concept);
-                    var s = new ARTURIResource(recordColl[i].getAttribute("scheme"), recordColl[i].getAttribute("scheme"), RDFResourceRolesEnum.conceptScheme);
-                    this.brokenRecordList.push({ concept: c, scheme: s });
-                }
+            records => {
+                this.brokenRecordList = records;
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-            },
-            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
+            }
         );
     }
 

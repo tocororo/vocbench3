@@ -23,16 +23,10 @@ export class NoSchemeConceptComponent {
     runIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listConceptsWithNoScheme().subscribe(
-            stResp => {
-                this.brokenConceptList = new Array();
-                var conceptColl = stResp.getElementsByTagName("concept");
-                for (var i = 0; i < conceptColl.length; i++) {
-                    var c = new ARTURIResource(conceptColl[i].textContent, conceptColl[i].textContent, RDFResourceRolesEnum.concept);
-                    this.brokenConceptList.push(c);
-                }
+            concepts => {
+                this.brokenConceptList = concepts;
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-            },
-            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
+            }
         );
     }
 

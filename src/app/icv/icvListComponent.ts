@@ -31,14 +31,14 @@ export class IcvListComponent {
                 name: "TopConcept with broader", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/TopConceptWithBroader",
                 description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept"
             },
-            {
-                name: "Hierarchical redundancy", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/HierarchicalRedundancy",
-                description: "skos:Concept(s) that have redundant hierarchical relations"
-            },
-            {
-                name: "Cyclic hierarchical concepts", lexicalizationModel: [SKOS.uri, SKOSXL.uri],
-                description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"
-            },
+            // {
+            //     name: "Hierarchical redundancy", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/HierarchicalRedundancy",
+            //     description: "skos:Concept(s) that have redundant hierarchical relations"
+            // },
+            // {
+            //     name: "Cyclic hierarchical concepts", lexicalizationModel: [SKOS.uri, SKOSXL.uri],
+            //     description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"
+            // },
         ]
     };
 
@@ -53,62 +53,62 @@ export class IcvListComponent {
                 name: "No skosxl:prefLabel resource", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLabelResource",
                 description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel"
             },
-            {
-                name: "No rdfs:label resource", lexicalizationModel: [RDFS.uri], // routeName: "/Icv/NoLabelResource", 
-                description: "Classes or instances that have no rdfs:label"
-            },
-            {
-                name: "Only skos:altLabel resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/OnlyAltLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language"
-            },
-            {
-                name: "Only skosxl:altLabel resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OnlyAltLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language"
-            },
-            {
-                name: "No language tag skos label", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLangLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS label without language tag"
-            },
-            {
-                name: "No language tag skosxl label", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLangLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS-XL label without language tag"
-            },
-            {
-                name: "Same skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
-                description: "skos:Concept(s) that have the same skos:prefLabel in the same language"
-            },
-            {
-                name: "Same skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
-                description: "skos:Concept(s) that have the same skosxl:prefLabel in the same language"
-            },
-            {
-                name: "Overlapped skos label resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/OverlappedLabelResource",
-                description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skos:prefLabel and skos:altLabel in the same language"
-            },
-            {
-                name: "Overlapped skosxl label resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OverlappedLabelResource",
-                description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skosxl:prefLabel and skosxl:altLabel in the same language"
-            },
-            {
-                name: "Extra whitespace skos label concepts", lexicalizationModel: [SKOS.uri],
-                description: "skos:Concept(s) that have some extra whitespace in a SKOS label"
-            },
-            {
-                name: "Extra whitespace skosxl label concepts", lexicalizationModel: [SKOSXL.uri],
-                description: "skos:Concept(s) that have some extra whitespace in a SKOS-XL label"
-            },
-            {
-                name: "Multiple skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
-                description: "skos:Concept(s) that have multiple skos:prefLabel in the same language"
-            },
-            {
-                name: "Multiple skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
-                description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"
-            },
-            {
-                name: "skosxl:Label without skos:literalForm", lexicalizationModel: [SKOSXL.uri],
-                description: "skosxl:Label(s) that don't specify a literal form"
-            },
+            // {
+            //     name: "No rdfs:label resource", lexicalizationModel: [RDFS.uri], // routeName: "/Icv/NoLabelResource", 
+            //     description: "Classes or instances that have no rdfs:label"
+            // },
+            // {
+            //     name: "Only skos:altLabel resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/OnlyAltLabelResource",
+            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language"
+            // },
+            // {
+            //     name: "Only skosxl:altLabel resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OnlyAltLabelResource",
+            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language"
+            // },
+            // {
+            //     name: "No language tag skos label", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLangLabelResource",
+            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS label without language tag"
+            // },
+            // {
+            //     name: "No language tag skosxl label", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLangLabelResource",
+            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS-XL label without language tag"
+            // },
+            // {
+            //     name: "Same skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
+            //     description: "skos:Concept(s) that have the same skos:prefLabel in the same language"
+            // },
+            // {
+            //     name: "Same skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
+            //     description: "skos:Concept(s) that have the same skosxl:prefLabel in the same language"
+            // },
+            // {
+            //     name: "Overlapped skos label resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/OverlappedLabelResource",
+            //     description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skos:prefLabel and skos:altLabel in the same language"
+            // },
+            // {
+            //     name: "Overlapped skosxl label resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OverlappedLabelResource",
+            //     description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skosxl:prefLabel and skosxl:altLabel in the same language"
+            // },
+            // {
+            //     name: "Extra whitespace skos label concepts", lexicalizationModel: [SKOS.uri],
+            //     description: "skos:Concept(s) that have some extra whitespace in a SKOS label"
+            // },
+            // {
+            //     name: "Extra whitespace skosxl label concepts", lexicalizationModel: [SKOSXL.uri],
+            //     description: "skos:Concept(s) that have some extra whitespace in a SKOS-XL label"
+            // },
+            // {
+            //     name: "Multiple skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
+            //     description: "skos:Concept(s) that have multiple skos:prefLabel in the same language"
+            // },
+            // {
+            //     name: "Multiple skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
+            //     description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"
+            // },
+            // {
+            //     name: "skosxl:Label without skos:literalForm", lexicalizationModel: [SKOSXL.uri],
+            //     description: "skosxl:Label(s) that don't specify a literal form"
+            // },
             {
                 name: "Dangling skosxl:Label(s)", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/DanglingXLabel",
                 description: "skosxl:Label(s) that are not linked with any skos:Concept"
