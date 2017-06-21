@@ -16,8 +16,6 @@ import { VBContext } from "../utils/VBContext";
 })
 export class RolesAdministrationComponent {
 
-    private project: Project;
-
     //Role list panel
     private roleList: Role[];
     private selectedRole: Role;
@@ -29,12 +27,11 @@ export class RolesAdministrationComponent {
     constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
-        this.project = VBContext.getWorkingProject();
         this.initRoles();
     }
 
     private initRoles() {
-        this.adminService.listRoles(this.project).subscribe(
+        this.adminService.listRoles(VBContext.getWorkingProject()).subscribe(
             roles => {
                 this.roleList = roles;
                 this.selectedRole = null;
@@ -44,12 +41,16 @@ export class RolesAdministrationComponent {
     }
 
     private initCapabilities() {
-        this.adminService.listCapabilities(this.selectedRole, this.project).subscribe(
+        this.adminService.listCapabilities(this.selectedRole, VBContext.getWorkingProject()).subscribe(
             capabilities => {
                 this.capabilityList = capabilities;
                 this.selectedCapability = null;
             }
         );
+    }
+
+    private isProjectOpen(): boolean {
+        return VBContext.getWorkingProject() != null;
     }
 
     private selectRole(role: Role) {

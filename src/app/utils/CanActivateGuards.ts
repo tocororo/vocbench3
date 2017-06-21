@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanDeactivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { VBContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UserServices } from '../services/userServices';
@@ -101,10 +102,10 @@ export class UnsavedChangesGuard implements CanDeactivate<CanDeactivateOnChanges
             if (component.hasUnsavedChanges()) {
                 return Observable.fromPromise(
                     this.basicModals.confirm("Warning", "There could be unsaved changes. Do you want to leave this page and discard the changes",
-                            "warning").then(
+                        "warning").then(
                         yes => { return true },
                         no => { return false }
-                    )
+                        )
                 );
             } else {
                 return true;
@@ -113,7 +114,20 @@ export class UnsavedChangesGuard implements CanDeactivate<CanDeactivateOnChanges
             return true;
         }
     }
-
 }
 
-export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard];
+/**
+ * Prevents the page with this guard to deactivate
+ */
+@Injectable()
+export class CanDeactivateModalGuard implements CanDeactivate<any> {
+    constructor(private modal: Modal) { }
+    canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        if (this.modal.overlay.stackLength > 0) { //if there is any modal open do not deactivate
+            return false;
+        }
+        return true;
+    }
+}
+
+export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard, CanDeactivateModalGuard];

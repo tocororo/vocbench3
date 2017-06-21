@@ -11,14 +11,14 @@
                 <div class="subPanel-heading">
                     <label style="flex: 1;">Roles:</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="createRole()" title="Create role" [disabled]="!project">
+                        <button class="btn btn-default" (click)="createRole()" title="Create role" [disabled]="!isProjectOpen()">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                         <button class="btn btn-default" (click)="deleteRole()" title="Delete role"
                              [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
-                        <button class="btn btn-default" (click)="importRole()" title="Import role" [disabled]="!project">
+                        <button class="btn btn-default" (click)="importRole()" title="Import role" [disabled]="!isProjectOpen()">
                             <span class="glyphicon glyphicon-open"></span>
                         </button>
                         <button class="btn btn-default" (click)="exportRole()" title="Export role" [disabled]="!selectedRole">

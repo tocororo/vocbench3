@@ -89,34 +89,12 @@ export class UsersAdministrationComponent {
                     this.selectedUser.setStatus(UserStatusEnum.INACTIVE);
                 }
             );
-            // this.basicModals.confirm("Disable user", "You are disabling user "
-            //     + this.selectedUser.getGivenName() + " " + this.selectedUser.getFamilyName() + ". Are you sure?").then(
-            //     result => {
-            //         this.userService.enableUser(this.selectedUser.getEmail(), false).subscribe(
-            //             user => {
-            //                 this.selectedUser.setStatus(UserStatusEnum.INACTIVE);
-            //             }
-            //         )
-            //     },
-            //     () => {}
-            // );
         } else {
             this.userService.enableUser(this.selectedUser.getEmail(), true).subscribe(
                 user => {
                     this.selectedUser.setStatus(UserStatusEnum.ACTIVE);
                 }
             )
-            // this.basicModals.confirm("Enable user", "You are enabling user "
-            //     + this.selectedUser.getGivenName() + " " + this.selectedUser.getFamilyName() + ". Are you sure?", "warning").then(
-            //     result => {
-            //         this.userService.enableUser(this.selectedUser.getEmail(), true).subscribe(
-            //             user => {
-            //                 this.selectedUser.setStatus(UserStatusEnum.ACTIVE);
-            //             }
-            //         )
-            //     },
-            //     () => {}
-            // );
         }
     }
 
