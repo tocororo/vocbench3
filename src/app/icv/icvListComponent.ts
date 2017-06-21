@@ -12,7 +12,7 @@ export class IcvListComponent {
 
     private lexicalizationModel: string;
 
-    private structuralIcv = {
+    private structuralIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
             {
@@ -42,7 +42,7 @@ export class IcvListComponent {
         ]
     };
 
-    private labelIcv = {
+    private labelIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
             {
@@ -116,13 +116,13 @@ export class IcvListComponent {
         ]
     };
 
-    private genericIcv = {
+    private genericIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
-            {
-                name: "Whitespace URI Resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri, RDFS.uri],
-                description: "URI Resources that have a whitespace in the URI"
-            }
+            // {
+            //     name: "Whitespace URI Resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri, RDFS.uri],
+            //     description: "URI Resources that have a whitespace in the URI"
+            // }
         ]
     };
 
@@ -162,4 +162,11 @@ export class IcvListComponent {
         return icvStruct.lexicalizationModel.indexOf(this.lexicalizationModel) != -1;
     }
 
+}
+
+interface ICVElement {
+    name: string,
+    lexicalizationModel: string[],
+    routeName: string,
+    description: string
 }
