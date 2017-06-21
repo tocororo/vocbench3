@@ -55,11 +55,11 @@
                             </div>
                             <div class="subPanel-body vbox" style="padding: 0px;">
                                 <div class="scrollableContainer">
-                                    <template [ngIf]="puBinding">
+                                    <ng-template [ngIf]="puBinding">
                                         <div *ngFor="let r of puBinding.getRoles()" class="listItem" [ngClass]="{active: r == selectedUserRole}" (click)="selectUserRole(r)">
                                             {{r}}
                                         </div>
-                                    </template>
+                                    </ng-template>
                                 </div>
                             </div>
                         </div>

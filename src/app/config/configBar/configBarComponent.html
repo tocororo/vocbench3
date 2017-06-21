@@ -67,12 +67,12 @@
             <label style="margin-right: 2px;">Current project:</label>
             <div class="btn-group btn-group-xs" role="group">
                 <a href="#" class="btn btn-default disabled" style="pointer-events: none; opacity: initial" role="button">
-                    <template [ngIf]="isProjectAccessed()">
+                    <ng-template [ngIf]="isProjectAccessed()">
                         {{currentProject.getName()}}
-                    </template>
-                    <template [ngIf]="!isProjectAccessed()">
+                    </ng-template>
+                    <ng-template [ngIf]="!isProjectAccessed()">
                         ------
-                    </template>
+                    </ng-template>
                 </a>
                 <button class="btn btn-default" style="padding-left: 2px;" (click)="changeProject()" title="Change project">
                     <span class="glyphicon glyphicon-list-alt" style="line-height: 1"></span>

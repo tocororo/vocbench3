@@ -25,7 +25,9 @@ export class UserCreateComponent {
     constructor() { }
 
     ngAfterViewInit() {
-        this.propagateChange(this.form);
+        setTimeout(() => {
+            this.propagateChange(this.form);
+        });
     }
 
     private onGenderChange() {

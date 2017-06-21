@@ -23,13 +23,13 @@
     </div>
 
     <div class="groupPanel-body">
-        <template [ngIf]="!partitionCollapsed">
+        <ng-template [ngIf]="!partitionCollapsed">
             <div class="subPanel" *ngFor="let po of predicateObjectList">
                 <div class="subPanel-heading">
                     <label>{{po.getPredicate().getShow()}}</label>
                 </div>
                 <div class="subPanel-body">
-                    <template ngFor let-obj [ngForOf]="po.getObjects()">
+                    <ng-template ngFor let-obj [ngForOf]="po.getObjects()">
                         <!-- Member list -->
                         <div class="listItem">
                             
@@ -38,14 +38,14 @@
                                 [partition]="partition" (dblClick)="objectDblClick($event)" (update)="onObjectUpdate()"
                                 (delete)="removePredicateObject(po.getPredicate(), obj)">
                             </editable-resource>
-                            <template [ngIf]="renderAsReified(po.getPredicate(), obj)">
+                            <ng-template [ngIf]="renderAsReified(po.getPredicate(), obj)">
                                 <reified-resource [resource]="obj" [predicate]="po.getPredicate()"
                                     (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
                                 <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(po.getPredicate())" 
                                     (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="isRemoveReifiedObjDisabled(obj)">
                                     <span>-</span>
                                 </button>
-                            </template>
+                            </ng-template>
 
                         </div>
                         <!-- Members -->
@@ -75,10 +75,10 @@
                                 </div>
                             </div>
                         </div>
-                    </template>
+                    </ng-template>
                 </div>
             </div>
-        </template>
+        </ng-template>
     </div>
 
 </div>

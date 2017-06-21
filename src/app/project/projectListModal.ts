@@ -10,6 +10,7 @@ import { Project } from '../models/Project';
 import { VBContext } from '../utils/VBContext';
 import { VBPreferences } from '../utils/VBPreferences';
 import { UIUtils } from '../utils/UIUtils';
+import { ModalContext } from '../widget/modal/ModalContext';
 
 @Component({
     selector: "project-list-modal",
@@ -28,7 +29,6 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     }
 
     ngOnInit() {
-        //TODO this should consider the user and thus should return only project which the user has access
         this.projectService.listProjects(null, true).subscribe(
             projects => {
                 for (var i = 0; i < projects.length; i++) {
@@ -62,9 +62,14 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                     res => {
                         VBContext.setProjectChanged(true);
                         var currentRoute = this.router.url;
+                        ModalContext.enableNavigation();
                         this.router.navigate(['/Home']).then(
                             success => {
-                                this.router.navigate([currentRoute]);
+                                this.router.navigate([currentRoute]).then(
+                                    success => {
+                                        ModalContext.disableNavigation();
+                                    }
+                                );
                             }
                         );
                     }

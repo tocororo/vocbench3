@@ -39,8 +39,8 @@
             <tbody>
                 <tr *ngFor="let p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
                     <td class="text-center">
-                        <input #input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="accessProject(input.value)"
-                            [checked]="isWorkingProject(input.value)" [disabled]="!p.isOpen()"/>
+                        <input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="accessProject(p)"
+                            [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
                     </td>
                     <td class="text-center">
                         <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 

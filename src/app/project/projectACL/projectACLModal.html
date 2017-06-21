@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <template ngFor let-map [ngForOf]="tableModel">
+                <ng-template ngFor let-map [ngForOf]="tableModel">
                     <tr>
                         <td style="font-weight: bold; vertical-align: middle" class="firstCol" rowspan="2">
                             <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{map.project}}</span>
@@ -23,7 +23,7 @@
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                         </td>
-                        <template ngFor let-acl [ngForOf]="map.consumerACLs">
+                        <ng-template ngFor let-acl [ngForOf]="map.consumerACLs">
                             <td [class]="getCellClass(map.project, acl.consumer)"
                                  [title]="getTitleAvailableAccessLevel(map.project, acl.consumer, acl.availableAccessLevel)">
                                 {{ acl.availableAccessLevel }}
@@ -32,10 +32,10 @@
                                 [title]="getTitleAcquiredAccessLevel(map.project, acl.consumer, acl.acquiredAccessLevel)">
                                 {{ acl.acquiredAccessLevel }}
                             </td>
-                        </template>
+                        </ng-template>
                     </tr>
                     <tr>
-                        <template ngFor let-acl [ngForOf]="map.consumerACLs">
+                        <ng-template ngFor let-acl [ngForOf]="map.consumerACLs">
                             <td [class]="getCellClass(map.project, acl.consumer)"
                                 [title]="getTitleAvailableLock(map.project, acl.availableLockLevel)">
                                 {{ acl.availableLockLevel }}
@@ -44,9 +44,9 @@
                                 [title]="getTitleAcquiredLock(map.project, acl.consumer, acl.acquiredLockLevel)">
                                 {{ acl.acquiredLockLevel }}
                             </td>
-                        </template>
+                        </ng-template>
                     </tr>
-                </template>
+                </ng-template>
             </tbody>
         </table>
 

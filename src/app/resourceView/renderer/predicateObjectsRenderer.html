@@ -10,31 +10,31 @@
     
     <div class="subPanel-body">
 
-        <template ngFor let-obj [ngForOf]="predicateObjects.getObjects()" let-i="index">
-            <template [ngIf]="showObject(i)"> <!-- paging filter -->
+        <ng-template ngFor let-obj [ngForOf]="predicateObjects.getObjects()" let-i="index">
+            <ng-template [ngIf]="showObject(i)"> <!-- paging filter -->
 
                 <div class="listItem">
                     <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1" [resource]="obj"
                         [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly" [partition]="partition"
                         (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"></editable-resource>
-                    <template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
+                    <ng-template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
                         <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
                             (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
                         <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
                             (click)="removeValue(obj)" [disabled]="isRemoveReifiedObjDisabled(obj)">
                             <span>-</span>
                         </button>
-                    </template>
+                    </ng-template>
                 </div>
 
-            </template>
-        </template>
+            </ng-template>
+        </ng-template>
 
-        <template [ngIf]="showMoreButton()">
+        <ng-template [ngIf]="showMoreButton()">
             <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showMore()">
                 Show more...
             </button>
-        </template>
+        </ng-template>
 
     </div>
 

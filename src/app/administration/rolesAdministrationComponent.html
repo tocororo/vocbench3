@@ -56,13 +56,13 @@
                 </div>
                 <div class="subPanel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
-                        <template [ngIf]="selectedRole">
+                        <ng-template [ngIf]="selectedRole">
                             <div *ngFor="let c of capabilityList" class="listItem"
                                 [ngClass]="{active: c == selectedCapability, greyText: (selectedRole && selectedRole.getLevel() == 'system')}"
                                 (click)="selectCapability(c)">
                                 {{c}}
                             </div>
-                        </template>
+                        </ng-template>
                     </div>
                 </div>
             </div>

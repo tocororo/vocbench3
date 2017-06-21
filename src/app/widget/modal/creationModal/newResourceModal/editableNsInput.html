@@ -1,6 +1,6 @@
 <div class="input-group input-group-sm">
 
-    <template [ngIf]="namespaceLocked">
+    <ng-template [ngIf]="namespaceLocked">
         <span class="input-group-addon" style="padding-right: 5px;">
             {{namespace}}
         </span>
@@ -8,14 +8,14 @@
             (ngModelChange)="onModelChanged()" [placeholder]="placeholder" sanitized>
         <input #lnWithoutPH *ngIf="!placeholder" type="text" class="form-control" [(ngModel)]="localName"
             (ngModelChange)="onModelChanged()" sanitized>
-    </template>
+    </ng-template>
     
-    <template [ngIf]="!namespaceLocked">
+    <ng-template [ngIf]="!namespaceLocked">
         <input *ngIf="placeholder" type="text" class="form-control" [(ngModel)]="uri" (ngModelChange)="onModelChanged()"
             [placeholder]="placeholder" sanitized>
         <input *ngIf="!placeholder" type="text" class="form-control" [(ngModel)]="uri" (ngModelChange)="onModelChanged()"
             sanitized>
-    </template>
+    </ng-template>
     
     <div class="input-group-btn">
         <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"

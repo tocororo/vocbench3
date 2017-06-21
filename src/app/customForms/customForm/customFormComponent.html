@@ -5,7 +5,7 @@
         <col style="width: 1%;">
     </colgroup>
     <tbody>
-        <template ngFor let-field [ngForOf]="formFields">
+        <ng-template ngFor let-field [ngForOf]="formFields">
             <tr *ngIf="!field.isDependency()">
                 <!--Form entry label-->
                 <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
@@ -101,6 +101,6 @@
                     </div>
                 </td>
             </tr>
-        </template>
+        </ng-template>
     </tbody>
 </table>

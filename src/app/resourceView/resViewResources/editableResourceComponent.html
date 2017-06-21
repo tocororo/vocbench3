@@ -1,4 +1,4 @@
-<template [ngIf]="!editInProgress">
+<ng-template [ngIf]="!editInProgress">
     <rdf-resource [resource]="resource" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
     <div class="dropdown pull-right" title="Edit">
         <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown"
@@ -16,9 +16,9 @@
             <li [ngClass]="{ disabled: isDeleteDisabled() }"><a (click)="delete()">Delete</a></li>
         </ul>
     </div>
-</template>
+</ng-template>
 
-<template [ngIf]="editInProgress">
+<ng-template [ngIf]="editInProgress">
     <div class="input-group input-group-xs">
         <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
         <div class="input-group-btn">
@@ -30,6 +30,6 @@
             </button>
         </div>
     </div>
-</template>
+</ng-template>
 
 

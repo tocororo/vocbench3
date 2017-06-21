@@ -23,14 +23,13 @@
                             <col style="width: 1%;">
                         </colgroup>
                         <tbody>
-                            <!--why template? see https://github.com/angular/angular/issues/4792-->
-                            <template ngFor let-icv [ngForOf]="structuralIcv.list">
+                            <ng-template ngFor let-icv [ngForOf]="structuralIcv.list">
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
                                     <td><i>{{icv.description}}</i></td>
                                     <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
                                 </tr>
-                            </template>
+                            </ng-template>
                         </tbody>
                     </table>
                 </div>
@@ -51,14 +50,14 @@
                             <col style="width: 1%;">
                         </colgroup>
                         <tbody>
-                            <!--why template? see https://github.com/angular/angular/issues/4792-->
-                            <template ngFor let-icv [ngForOf]="labelIcv.list">
+                            <!--why ng-template? see https://github.com/angular/angular/issues/4792-->
+                            <ng-template ngFor let-icv [ngForOf]="labelIcv.list">
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
                                     <td><i>{{icv.description}}</i></td>
                                     <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
                                 </tr>
-                            </template>
+                            </ng-template>
                         </tbody>
                     </table>
                 </div>
@@ -79,14 +78,14 @@
                             <col style="width: 1%;">
                         </colgroup>
                         <tbody>
-                            <!--why template? see https://github.com/angular/angular/issues/4792-->
-                            <template ngFor let-icv [ngForOf]="genericIcv.list">
+                            <!--why ng-template? see https://github.com/angular/angular/issues/4792-->
+                            <ng-template ngFor let-icv [ngForOf]="genericIcv.list">
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
                                     <td><i>{{icv.description}}</i></td>
                                     <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
                                 </tr>
-                            </template>
+                            </ng-template>
                         </tbody>
                     </table>
                 </div>

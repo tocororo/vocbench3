@@ -31,7 +31,7 @@ export class CyclicConceptComponent {
     /**
      * 
      */
-    fix(concept) {//concept could be the topCyclicConcept with whom retrieve the cycle record
+    fix(concept: any) {//concept could be the topCyclicConcept with whom retrieve the cycle record
         //TODO the fix should remove the broader/narrower relation of the topCyclicConcept
     }
     
@@ -42,7 +42,7 @@ export class CyclicConceptComponent {
     quickFix() {
     }
     
-    showGraph(concept) {//concept could be the topCyclicConcept with whom retrieve the cycle record
+    showGraph(concept: any) {//concept could be the topCyclicConcept with whom retrieve the cycle record
         //TODO
     }
     

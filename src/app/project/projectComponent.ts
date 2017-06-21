@@ -42,10 +42,10 @@ export class ProjectComponent implements OnInit {
         }
     }
 
-    private accessProject(projectName: string) {
+    private accessProject(project: Project) {
         var workingProj = VBContext.getWorkingProject();
-        if (workingProj == undefined || workingProj.getName() != projectName) {
-            this.openProject(this.getProjectObjectFromName(projectName));
+        if (workingProj == undefined || workingProj.getName() != project.getName()) {
+            this.openProject(project);
         }
     }
 
@@ -197,27 +197,9 @@ export class ProjectComponent implements OnInit {
     /**
      * Useful to set as selected the radio button of the working project
      */
-    private isWorkingProject(projectName: string): boolean {
+    private isWorkingProject(project: Project): boolean {
         var workingProj = VBContext.getWorkingProject();
-        return (workingProj != undefined && workingProj.getName() == projectName);
-    }
-
-    /**
-     * Useful to enable/disable the "Close all projects" button
-     */
-    private existOpenProject(): boolean {
-        var foundOpen = false;
-        for (var i = 0; i < this.projectList.length; i++) {
-            if (this.projectList[i].isOpen()) {
-                foundOpen = true;
-                break;
-            }
-        }
-        return foundOpen;
-    }
-
-    private getProjectObjectFromName(projectName: string): Project {
-        return this.projectList.find(proj => proj.getName() == projectName);
+        return (workingProj != undefined && workingProj.getName() == project.getName());
     }
 
 }

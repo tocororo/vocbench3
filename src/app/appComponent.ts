@@ -1,5 +1,4 @@
-import { Component, ViewContainerRef } from "@angular/core";
-import { Overlay } from "angular2-modal";
+import { Component } from "@angular/core";
 import { Project } from "./models/Project";
 import { VBContext } from "./utils/VBContext";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
@@ -12,12 +11,6 @@ import '../assets/styles/style.css';
 })
 
 export class AppComponent {
-
-    constructor(viewContainer: ViewContainerRef, overlay: Overlay) {
-        /* A Default view container ref, usually the app root container ref.
-         * Has to be set manually until we can find a way to get it automatically. */
-        overlay.defaultViewContainer = viewContainer;
-    }
 
     /**
      * Returns true if the user is logged (an authentication token is stored)

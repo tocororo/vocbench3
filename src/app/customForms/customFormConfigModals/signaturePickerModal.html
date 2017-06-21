@@ -8,22 +8,22 @@
         
     <div class="scrollableContainer" style="border: 1px solid #ddd; margin-top: 5px; max-height: 60vh;">
         
-        <template ngFor let-s [ngForOf]="context.signatures">
+        <ng-template ngFor let-s [ngForOf]="context.signatures">
 
             <div class="listItem vbox" style="margin: 2px; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" (click)="selectSignature(s)"
                 [ngClass]="{active: selectedSignature == s}">
                 
                     <div *ngIf="s.getParameters().length == 0">No parameters</div>
-                    <template [ngIf]="s.getParameters().length > 0">
+                    <ng-template [ngIf]="s.getParameters().length > 0">
                         <div *ngFor="let p of s.getParameters()" style="margin-top: 3px;">
                             <span style="color: #101094; font-family: Courier New, Courier, monospace">{{p.type}}</span>
                             <span style="font-weight: bolder; font-family: Courier New, Courier, monospace">{{p.name}}</span>
                             <span *ngIf="p.getDescription().length > 0" class="greyText"> ({{p.getDescription()}})</span>
                         </div>
-                    </template>
+                    </ng-template>
             </div>
         
-        </template>
+        </ng-template>
 
     </div>
 

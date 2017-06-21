@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanDeactivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { DialogRef } from "angular2-modal";
 import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { VBContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalContext } from "../widget/modal/ModalContext";
 import { UserServices } from '../services/userServices';
 
 /**
@@ -123,8 +125,8 @@ export class UnsavedChangesGuard implements CanDeactivate<CanDeactivateOnChanges
 export class CanDeactivateModalGuard implements CanDeactivate<any> {
     constructor(private modal: Modal) { }
     canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (this.modal.overlay.stackLength > 0) { //if there is any modal open do not deactivate
-            return false;
+        if (this.modal.overlay.stackLength > 0) { //if there is any modal open deactivate only if navigation is enabled
+            return ModalContext.isNavigationEnabled();
         }
         return true;
     }

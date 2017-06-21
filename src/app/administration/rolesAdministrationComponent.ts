@@ -148,7 +148,8 @@ export class RolesAdministrationComponent {
                             this.initCapabilities();
                         }
                     );
-                }
+                },
+                () => {}
             )
         );
     }
@@ -182,7 +183,8 @@ export class RolesAdministrationComponent {
                             this.initCapabilities();
                         }
                     );
-                }
+                },
+                () => {}
             )
         );
     }

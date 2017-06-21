@@ -25,7 +25,7 @@ module.exports = {
     - .ts extension.
      */
     resolve: {
-        extensions: ['', '.js', '.ts']
+        extensions: ['.js', '.ts']
     },
 
     //Specify which loader processes which file
@@ -44,33 +44,33 @@ module.exports = {
             //html - for component templates
             {
                 test: /\.html$/,
-                loader: 'html'
+                loader: 'html-loader'
             },
             //css files outside src/app/ (application-wide styles)
             //style and css loaders 
             {
                 test: /\.css$/,
                 exclude: helpers.root('src', 'app'),
-                loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
+                loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap' })
             },
             //css files in src/app/ (component-scoped styles specified in a styleUrls metadata property)
             //raw loader loads them as strings (raw content of a file (as utf-8))
             {
                 test: /\.css$/,
                 include: helpers.root('src', 'app'),
-                loader: 'raw'
+                loader: 'raw-loader'
             },
             //images files
             //file loader copies them in assets/images/ folder
             {
                 test: /\.(png|jpe?g|gif|svg|ico)$/,
-                loader: 'file?name=assets/images/[name].[ext]'
+                loader: 'file-loader?name=assets/images/[name].[ext]'
             },
             //fonts files
             //file loader copies them in assets/fonts/ folder
             {
                 test: /\.(woff|woff2|ttf|eot)$/,
-                loader: 'file?name=assets/fonts/[name].[ext]'
+                loader: 'file-loader?name=assets/fonts/[name].[ext]'
             },
         ]
     },
@@ -83,6 +83,14 @@ module.exports = {
             $: 'jquery',
             jquery: 'jquery'
         }),
+
+        // Workaround for https://github.com/angular/angular/issues/11580 (see https://angular.io/guide/webpack#common-configuration)
+        new webpack.ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)@angular/,
+            helpers.root('./src'), // location of your src
+            {} // a map of your routes
+        ),
 
         /*
         We want the app.js bundle to contain only app code and the vendor.js bundle to contain only the vendor code.

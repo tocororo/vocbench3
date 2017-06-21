@@ -45,7 +45,7 @@
                 <label>Settings</label>
             </div>
             <div class="subPanel-body scrollableContainer">
-                <template [ngIf]="selectedExporterSettings">
+                <ng-template [ngIf]="selectedExporterSettings">
 
                     <table class="table table-condensed table-borderless">
                         <colgroup>
@@ -54,7 +54,7 @@
                             <col>
                         </colgroup>
                         <tbody>
-                            <template [ngIf]="selectedExporterSettings.extensionPointSettings.params">
+                            <ng-template [ngIf]="selectedExporterSettings.extensionPointSettings.params">
                                 <tr *ngIf="selectedExporterSettings.extensionPointSettings.params.length > 0">
                                     <td colspan="3" class="text-center">
                                         <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
@@ -72,8 +72,8 @@
                                     </td>
                                     <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
                                 </tr>
-                            </template>
-                            <template [ngIf]="selectedExporterSettings.pluginSettings.params">
+                            </ng-template>
+                            <ng-template [ngIf]="selectedExporterSettings.pluginSettings.params">
                                 <tr>
                                     <td colspan="3" class="text-center">
                                         <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
@@ -91,11 +91,11 @@
                                     </td>
                                     <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
                                 </tr>
-                            </template>
+                            </ng-template>
                         </tbody>
                     </table>
 
-                </template>
+                </ng-template>
             </div>
         </div>
 

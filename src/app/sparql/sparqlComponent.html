@@ -22,7 +22,7 @@
     <!--Tabs content-->
     <div class="tab-content">
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
-            <template [ngIf]="t.active">
+            <ng-template [ngIf]="t.active">
                 
                 <yasgui [query]="t.query" (querychange)="onQueryChange(t, $event)"></yasgui>
                 
@@ -67,27 +67,27 @@
                                 </tr>
                             </thead>
                             <tbody style="overflow: auto;">
-                                <template [ngIf]="t.resultType != 'boolean'">
-                                    <template ngFor let-bindings [ngForOf]="t.queryResult" let-i="index">
-                                        <template [ngIf]="i >= t.resultsPage*resultsLimit && i < t.resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
+                                <ng-template [ngIf]="t.resultType != 'boolean'">
+                                    <ng-template ngFor let-bindings [ngForOf]="t.queryResult" let-i="index">
+                                        <ng-template [ngIf]="i >= t.resultsPage*resultsLimit && i < t.resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
                                             <tr>
                                                 <td *ngFor="let h of t.headers">
                                                     <!--{{bindings[h] | json }}-->
-                                                    <template [ngIf]="bindings[h]">
+                                                    <ng-template [ngIf]="bindings[h]">
                                                         {{getBindingShow(bindings[h])}}
-                                                    </template>
+                                                    </ng-template>
                                                 </td>
                                             </tr>
-                                        </template>
-                                    </template>
-                                </template>
-                                <template [ngIf]="t.resultType == 'boolean'">
+                                        </ng-template>
+                                    </ng-template>
+                                </ng-template>
+                                <ng-template [ngIf]="t.resultType == 'boolean'">
                                     <tr>
                                         <td>
                                             {{t.queryResult}}
                                         </td>
                                     </tr>
-                                </template>
+                                </ng-template>
                             </tbody>
                         </table>
                     </div>
@@ -108,7 +108,7 @@
 
 
                 </div>
-            </template>
+            </ng-template>
         </div>
         
     </div>

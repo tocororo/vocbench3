@@ -50,7 +50,9 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
     }
 
     private onLangChange(newLang: string) {
-        this.lang = newLang;
+        setTimeout(() => {
+            this.lang = newLang;
+        });
     }
 
     changeClass() {

@@ -11,7 +11,7 @@
             <table class="table table-condensed table-borderless table-hoverable">
                 <tbody>
                     
-                    <template ngFor let-predObj [ngForOf]="predicateObjectList">
+                    <ng-template ngFor let-predObj [ngForOf]="predicateObjectList">
                         <tr *ngFor="let obj of predObj.getObjects()">
                             <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
                             <td>
@@ -19,7 +19,7 @@
                                     (dblclick)="objectDblClick(obj)" readonly>
                             </td>
                         </tr>
-                    </template>
+                    </ng-template>
                     
                 </tbody>
             </table>

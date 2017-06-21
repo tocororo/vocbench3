@@ -6,7 +6,7 @@
                 Class
             </a>
         </li>
-        <template [ngIf]="isProjectSKOS()">
+        <ng-template [ngIf]="isProjectSKOS()">
             <li [ngClass]="{active : activeTab == 'concept'}">
                 <a href (click)="selectTab('concept')">
                     Concept
@@ -22,7 +22,7 @@
                     Collection
                 </a>
             </li>
-        </template>      
+        </ng-template>      
         <li [ngClass]="{active : activeTab == 'property'}">
             <a href (click)="selectTab('property')">
                 Property
@@ -39,7 +39,7 @@
                 </class-individual-tree-panel>
             </div>
         </div>
-        <template [ngIf]="isProjectSKOS()">
+        <ng-template [ngIf]="isProjectSKOS()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
                 <concept-tree-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></concept-tree-panel>
             </div>
@@ -49,7 +49,7 @@
             <div [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">
                 <collection-tree-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></collection-tree-panel>
             </div>
-        </template>
+        </ng-template>
         <div [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
             <property-tree-panel (nodeSelected)="onNodeSelected($event)" [readonly]="readonly"></property-tree-panel>
         </div>

@@ -38,14 +38,12 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
         this.context = dialog.context;
-        console.log("constructor newConcept");
     }
 
     ngOnInit() {
         this.lang = this.context.lang;
         this.resourceClass = SKOS.concept;
         this.selectCustomForm();
-        console.log("onInit newConcept");
     }
 
     ngAfterViewInit() {
@@ -53,7 +51,9 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
     }
 
     private onLangChange(newLang: string) {
-        this.lang = newLang;
+        setTimeout(() => {
+            this.lang = newLang;
+        });
     }
 
     private onSchemesChanged(schemes: ARTURIResource[]) {
