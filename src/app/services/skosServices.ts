@@ -5,13 +5,14 @@ import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
+import { ResourcesServices } from "./resourcesServices"
 
 @Injectable()
 export class SkosServices {
 
     private serviceName = "SKOS";
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private resourceService: ResourcesServices) { }
 
     //====== Concept services ====== 
 
@@ -94,10 +95,17 @@ export class SkosServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
             stResp => {
-                var newConc = Deserializer.createURI(stResp);
-                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topConceptCreatedEvent.emit({ concept: newConc, schemes: conceptSchemes });
-                return { concept: newConc, scheme: conceptSchemes };
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            concept => {
+                return this.resourceService.getResourceDescription(concept).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.topConceptCreatedEvent.emit({ concept: <ARTURIResource>resource, schemes: conceptSchemes });
+                        return { concept: resource, scheme: conceptSchemes };
+                    }
+                );
             }
         );
     }
@@ -189,10 +197,17 @@ export class SkosServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
             stResp => {
-                var newConc = Deserializer.createURI(stResp);
-                newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.narrowerCreatedEvent.emit({ narrower: newConc, broader: broaderConcept });
-                return newConc;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            concept => {
+                return this.resourceService.getResourceDescription(concept).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
+                        return <ARTURIResource>resource;
+                    }
+                );
             }
         );
     }
@@ -299,8 +314,8 @@ export class SkosServices {
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new scheme
      */
-    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource,
-        customFormId?: string, userPromptMap?: any) {
+    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource, customFormId?: string, 
+            userPromptMap?: any): Observable<ARTURIResource> {
         console.log("[SkosServices] createConceptScheme");
         var params: any = {
             label: label
@@ -317,8 +332,15 @@ export class SkosServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, true).map(
             stResp => {
-                var newScheme = Deserializer.createURI(stResp);
-                return newScheme;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            scheme => {
+                return this.resourceService.getResourceDescription(scheme).map(
+                    resource => {
+                        return resource;
+                    }
+                );
             }
         );
     }
@@ -537,10 +559,17 @@ export class SkosServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
             stResp => {
-                var newColl = Deserializer.createURI(stResp);
-                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.rootCollectionCreatedEvent.emit(newColl);
-                return newColl;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            collection => {
+                return this.resourceService.getResourceDescription(collection).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.rootCollectionCreatedEvent.emit(resource);
+                        return resource;
+                    }
+                );
             }
         );
     }
@@ -575,10 +604,17 @@ export class SkosServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
             stResp => {
-                var newColl = Deserializer.createURI(stResp);
-                newColl.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: newColl, container: containingCollection });
-                return newColl;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            collection => {
+                return this.resourceService.getResourceDescription(collection).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: resource, container: containingCollection });
+                        return resource;
+                    }
+                );
             }
         );
     }

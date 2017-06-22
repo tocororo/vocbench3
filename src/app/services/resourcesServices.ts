@@ -1,6 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpManager} from "../utils/HttpManager";
-import {ARTResource, ARTURIResource, ARTNode} from "../models/ARTResources";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { HttpManager } from "../utils/HttpManager";
+import { Deserializer } from "../utils/Deserializer";
+import { ARTResource, ARTURIResource, ARTNode } from "../models/ARTResources";
 
 @Injectable()
 export class ResourcesServices {
@@ -19,12 +21,12 @@ export class ResourcesServices {
     updateTriple(subject: ARTResource, property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
         console.log("[ResourcesServices] updateTriple");
         var params: any = {
-            subject : subject,
-            property : property,
-            value : value,
+            subject: subject,
+            property: property,
+            value: value,
             newValue: newValue
         };
-        return this.httpMgr.doGet(this.serviceName, "updateTriple", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateTriple", params, true);
     }
 
     /**
@@ -36,11 +38,11 @@ export class ResourcesServices {
     removeValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
         console.log("[ResourcesServices] removeValue");
         var params: any = {
-            subject : subject,
-            property : property,
-            value : value
+            subject: subject,
+            property: property,
+            value: value
         };
-        return this.httpMgr.doGet(this.serviceName, "removeValue", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeValue", params, true);
     }
 
     /**
@@ -50,9 +52,9 @@ export class ResourcesServices {
     setDeprecated(resource: ARTResource) {
         console.log("[ResourcesServices] setDeprecated");
         var params: any = {
-            resource : resource,
+            resource: resource,
         };
-        return this.httpMgr.doGet(this.serviceName, "setDeprecated", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params, true);
     }
 
     /**
@@ -64,11 +66,27 @@ export class ResourcesServices {
     addValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
         console.log("[ResourcesServices] addValue");
         var params: any = {
-            subject : subject,
-            property : property,
-            value : value
+            subject: subject,
+            property: property,
+            value: value
         };
-        return this.httpMgr.doGet(this.serviceName, "addValue", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addValue", params, true);
+    }
+
+    /**
+     * Returns the description (nature show and qname) of the given resource
+     * @param resource 
+     */
+    getResourceDescription(resource: ARTResource): Observable<ARTResource> {
+        console.log("[ResourcesServices] getResourceDescription");
+        var params: any = {
+            resource: resource
+        };
+        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params, true).map(
+            stResp => {
+                return Deserializer.createRDFResource(stResp);
+            }
+        );
     }
 
 }

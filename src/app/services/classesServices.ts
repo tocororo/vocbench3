@@ -4,13 +4,14 @@ import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute } from "../models/ARTResources";
+import { ResourcesServices } from "./resourcesServices"
 
 @Injectable()
 export class ClassesServices {
 
     private serviceName = "Classes";
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private resourceService: ResourcesServices) { }
 
     /**
      * takes a list of classes and return their description as if they were roots for a tree
@@ -90,10 +91,17 @@ export class ClassesServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createClass", params, true).map(
             stResp => {
-                var newCls = Deserializer.createURI(stResp);
-                newCls.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.subClassCreatedEvent.emit({ subClass: newCls, superClass: superClass });
-                return stResp;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            cls => {
+                return this.resourceService.getResourceDescription(cls).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.subClassCreatedEvent.emit({ subClass: resource, superClass: superClass });
+                        return resource;
+                    }
+                );
             }
         );
     }
@@ -135,9 +143,16 @@ export class ClassesServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createInstance", params, true).map(
             stResp => {
-                var instance = Deserializer.createURI(stResp);
-                this.eventHandler.instanceCreatedEvent.emit({cls: cls, instance: instance});
-                return stResp;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            instance => {
+                return this.resourceService.getResourceDescription(instance).map(
+                    resource => {
+                        this.eventHandler.instanceCreatedEvent.emit({ cls: cls, instance: resource });
+                        return resource;
+                    }
+                );
             }
         );
     }

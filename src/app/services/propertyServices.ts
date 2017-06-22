@@ -6,13 +6,14 @@ import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTLiteral, ARTBNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
 import { RDF, OWL } from "../models/Vocabulary";
 import { FormCollection, CustomForm, CustomFormType } from "../models/CustomForms";
+import { ResourcesServices } from "./resourcesServices"
 
 @Injectable()
 export class PropertyServices {
 
     private serviceName = "Properties";
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private resourceService: ResourcesServices) { }
 
     /**
      * Returns a list of top properties (properties which have not a superProperty)
@@ -263,10 +264,17 @@ export class PropertyServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createProperty", params, true).map(
             stResp => {
-                var newProp = Deserializer.createURI(stResp);
-                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.topPropertyCreatedEvent.emit(newProp);
-                return newProp;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            property => {
+                return this.resourceService.getResourceDescription(property).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.topPropertyCreatedEvent.emit(<ARTURIResource>resource);
+                        return resource;
+                    }
+                );
             }
         );
     }
@@ -297,10 +305,17 @@ export class PropertyServices {
         }
         return this.httpMgr.doPost(this.serviceName, "createProperty", params, true).map(
             stResp => {
-                var newProp = Deserializer.createURI(stResp);
-                newProp.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: newProp, superProperty: superProperty });
-                return newProp;
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            property => {
+                return this.resourceService.getResourceDescription(property).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: <ARTURIResource>resource, superProperty: superProperty });
+                        return resource;
+                    }
+                );
             }
         );
     }
