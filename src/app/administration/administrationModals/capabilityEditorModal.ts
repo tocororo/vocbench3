@@ -104,9 +104,9 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
             }
         }
         if (this.subjectScope != null && this.subjectScope.trim() != "") {
-            this.extendedCapability = "capability(" + this.area + "(" + this.subjectScope + "),'" + printCrudv + "')";
+            this.extendedCapability = 'capability(' + this.area + '(' + this.subjectScope + '),"' + printCrudv + '")';
         } else {
-            this.extendedCapability = "capability(" + this.area + ",'" + printCrudv + "')";
+            this.extendedCapability = 'capability(' + this.area + ',"' + printCrudv + '")';
         }
         
     }

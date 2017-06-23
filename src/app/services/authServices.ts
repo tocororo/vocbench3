@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { User } from "../models/User";
 
 @Injectable()
@@ -42,6 +43,7 @@ export class AuthServices {
             stResp => {
                 VBContext.removeLoggedUser();
                 VBContext.removeWorkingProject();
+                AuthorizationEvaluator.reset();
                 return stResp;
             }
         );

@@ -3,6 +3,7 @@ import { VBContext } from "./VBContext";
 import { User } from "../models/User";
 import { ARTResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { ResViewPartition } from "../models/ResourceView";
+import Prolog from 'jsprolog';
 
 enum Actions {
     ALIGNMENT_ADD_ALIGNMENT,
@@ -51,56 +52,72 @@ enum Actions {
 
 export class AuthorizationEvaluator {
 
-    private static resRole: string = "%resource_role%";
-
     public static Actions = Actions;
 
+    private static prologEngine: any;
+    private static resRole: string = "%resource_role%";
+    private static authCache: { [goal: string]: boolean } = {}
+
     private static actionAuthGoalMap: { [key: number ]: string } = {
-        [Actions.ALIGNMENT_ADD_ALIGNMENT] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", alignment)', 'C').",
-        [Actions.ALIGNMENT_LOAD_ALIGNMENT] : "auth('rdf(resource, alignment)', 'R').",
-        [Actions.CLASSES_CREATE_CLASS] :  "auth('rdf(cls)', 'C').",
-        [Actions.CLASSES_CREATE_CLASS_AXIOM] :  "auth('rdf(cls, taxonomy)', 'C').", //@PreAuthorize of addOneOf/UnionOf/IntersectionOf...
-        [Actions.CLASSES_CREATE_INDIVIDUAL] :  "auth('rdf(individual)', 'C').",
-        [Actions.CLASSES_DELETE_CLASS] :  "auth('rdf(cls)', 'D').",
-        [Actions.CLASSES_DELETE_INDIVIDUAL] :  "auth('rdf(individual)', 'D').",
-        [Actions.CLASSES_REMOVE_CLASS_AXIOM] :  "auth('rdf(cls, taxonomy)', 'D').", //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
-        [Actions.CUSTOM_FORMS_READ] :  "auth('cform(formCollection)', 'R').", //@PreAuthorize of getCustomFormConfigMap
-        [Actions.INDIVIDUALS_ADD_TYPE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ")', 'U').",
-        [Actions.INDIVIDUALS_REMOVE_TYPE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ")', 'D').",
-        [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : "auth('rdf(property)', 'C').",
-        [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : "auth('rdf(property)', 'C').",
-        [Actions.PROPERTIES_ADD_SUPERPROPERTY] : "auth('rdf(property, taxonomy)', 'C').",
-        [Actions.PROPERTIES_CREATE_PROPERTY] : "auth('rdf(property)', 'C').", 
-        [Actions.PROPERTIES_DELETE_PROPERTY] : "auth('rdf(property)', 'D').",
-        [Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN] : "auth('rdf(property)', 'D').",
-        [Actions.PROPERTIES_REMOVE_PROPERTY_RANGE] : "auth('rdf(property)', 'D').",
-        [Actions.PROPERTIES_REMOVE_SUPERPROPERTY] : "auth('rdf(property, taxonomy)', 'C').",
-        [Actions.REFACTOR_CHANGE_RESOURCE_URI] : "auth('rdf(" + AuthorizationEvaluator.resRole + ")', 'U').",
-        [Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL] : "auth('rdf(concept)', 'C').", 
-        [Actions.RESOURCES_ADD_VALUE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", values)', 'C')", 
-        [Actions.RESOURCES_REMOVE_VALUE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", values)', 'D')", 
-        [Actions.RESOURCES_SET_DEPRECATED] : "auth('rdf(" + AuthorizationEvaluator.resRole + ")', 'U')",
-        [Actions.RESOURCES_UPDATE_TRIPLE] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", values)', 'U')", 
-        [Actions.SKOS_ADD_BROADER_CONCEPT] : "auth('rdf(concept, taxonomy)', 'C').", 
-        [Actions.SKOS_ADD_CONCEPT_TO_SCHEME] : "auth('rdf(concept, schemes)', 'C').", 
-        [Actions.SKOS_ADD_LEXICALIZATION] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", lexicalization)', 'C').",
-        [Actions.SKOS_ADD_TO_COLLECTION] : "auth('rdf(skosCollection)', 'U').", //TODO is it ok? or add values (add)
-        [Actions.SKOS_ADD_TOP_CONCEPT] : "auth('rdf(concept, schemes)', 'C').",
-        [Actions.SKOS_CREATE_COLLECTION] : "auth('rdf(skosCollection)', 'C').", 
-        [Actions.SKOS_CREATE_CONCEPT] : "auth('rdf(concept)', 'C').", 
-        [Actions.SKOS_CREATE_SCHEME] : "auth('rdf(conceptScheme)', 'C').", 
-        [Actions.SKOS_DELETE_COLLECTION] : "auth('rdf(skosCollection)', 'D').", 
-        [Actions.SKOS_DELETE_CONCEPT] : "auth('rdf(concept)', 'D').", 
-        [Actions.SKOS_DELETE_SCHEME] : "auth('rdf(conceptScheme)', 'D').", 
-        [Actions.SKOS_REMOVE_BROADER_CONCEPT] : "auth('rdf(concept, taxonomy)', 'D').",
-        [Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME] : "auth('rdf(concept, schemes)', 'D').",
-        [Actions.SKOS_REMOVE_FROM_COLLECTION] : "auth('rdf(skosCollection)', 'U').", //TODO is it ok? or add values
-        [Actions.SKOS_REMOVE_LEXICALIZATION] : "auth('rdf(" + AuthorizationEvaluator.resRole + ", lexicalization)', 'D').",
-        [Actions.SKOS_REMOVE_TOP_CONCEPT] : "auth('rdf(concept, schemes)', 'D').",
-        [Actions.SPARQL_EXECUTE_QUERY] : "auth('rdf(sparql)', 'RU').",
+        [Actions.ALIGNMENT_ADD_ALIGNMENT] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', alignment), "C").',
+        [Actions.ALIGNMENT_LOAD_ALIGNMENT] : 'auth(rdf(resource, alignment), "R").',
+        [Actions.CLASSES_CREATE_CLASS] :  'auth(rdf(cls), "C").',
+        [Actions.CLASSES_CREATE_CLASS_AXIOM] :  'auth(rdf(cls, taxonomy), "C").', //@PreAuthorize of addOneOf/UnionOf/IntersectionOf...
+        [Actions.CLASSES_CREATE_INDIVIDUAL] :  'auth(rdf(individual), "C").',
+        [Actions.CLASSES_DELETE_CLASS] :  'auth(rdf(cls), "D").',
+        [Actions.CLASSES_DELETE_INDIVIDUAL] :  'auth(rdf(individual), "D").',
+        [Actions.CLASSES_REMOVE_CLASS_AXIOM] :  'auth(rdf(cls, taxonomy), "D").', //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
+        [Actions.CUSTOM_FORMS_READ] :  'auth(cform(formCollection), "R").', //@PreAuthorize of getCustomFormConfigMap
+        [Actions.INDIVIDUALS_ADD_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
+        [Actions.INDIVIDUALS_REMOVE_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "D").',
+        [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
+        [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
+        [Actions.PROPERTIES_ADD_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
+        [Actions.PROPERTIES_CREATE_PROPERTY] : 'auth(rdf(property), "C").', 
+        [Actions.PROPERTIES_DELETE_PROPERTY] : 'auth(rdf(property), "D").',
+        [Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN] : 'auth(rdf(property), "D").',
+        [Actions.PROPERTIES_REMOVE_PROPERTY_RANGE] : 'auth(rdf(property), "D").',
+        [Actions.PROPERTIES_REMOVE_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
+        [Actions.REFACTOR_CHANGE_RESOURCE_URI] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
+        [Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL] : 'auth(rdf(concept), "C").', 
+        [Actions.RESOURCES_ADD_VALUE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "C").', 
+        [Actions.RESOURCES_REMOVE_VALUE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "D").', 
+        [Actions.RESOURCES_SET_DEPRECATED] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
+        [Actions.RESOURCES_UPDATE_TRIPLE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").', 
+        [Actions.SKOS_ADD_BROADER_CONCEPT] : 'auth(rdf(concept, taxonomy), "C").', 
+        [Actions.SKOS_ADD_CONCEPT_TO_SCHEME] : 'auth(rdf(concept, schemes), "C").', 
+        [Actions.SKOS_ADD_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
+        [Actions.SKOS_ADD_TO_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (add)
+        [Actions.SKOS_ADD_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "C").',
+        [Actions.SKOS_CREATE_COLLECTION] : 'auth(rdf(skosCollection), "C").', 
+        [Actions.SKOS_CREATE_CONCEPT] : 'auth(rdf(concept), "C").', 
+        [Actions.SKOS_CREATE_SCHEME] : 'auth(rdf(conceptScheme), "C").', 
+        [Actions.SKOS_DELETE_COLLECTION] : 'auth(rdf(skosCollection), "D").', 
+        [Actions.SKOS_DELETE_CONCEPT] : 'auth(rdf(concept), "D").', 
+        [Actions.SKOS_DELETE_SCHEME] : 'auth(rdf(conceptScheme), "D").', 
+        [Actions.SKOS_REMOVE_BROADER_CONCEPT] : 'auth(rdf(concept, taxonomy), "D").',
+        [Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME] : 'auth(rdf(concept, schemes), "D").',
+        [Actions.SKOS_REMOVE_FROM_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values
+        [Actions.SKOS_REMOVE_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
+        [Actions.SKOS_REMOVE_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "D").',
+        [Actions.SPARQL_EXECUTE_QUERY] : 'auth(rdf(sparql), "RU").',
     };
 
-    private static authCache: { [goal: string]: boolean } = {}
+    public static initEvalutator(capabilityList: string[]) {
+        let db: string = this.tbox;
+        if (capabilityList.length > 0) {
+            let capabilities = capabilityList.join(". ") + ".";
+            db += capabilities;
+        }
+        console.log(db);
+        AuthorizationEvaluator.prologEngine = Prolog.Parser.parse(db);
+    }
+
+    public static reset() {
+        AuthorizationEvaluator.prologEngine = null;
+        AuthorizationEvaluator.authCache = {}
+    }
+
     
     /**
      * @param action 
@@ -111,6 +128,9 @@ export class AuthorizationEvaluator {
         if (user.isAdmin()) {
             return true;
         } else {
+            if (AuthorizationEvaluator.prologEngine == null) { //engine not yet initialized
+                return false;
+            }
             //evaluate if the user capabilities satisfy the authorization requirement
             let goal: string = this.actionAuthGoalMap[action];
             if (goal.includes(AuthorizationEvaluator.resRole)) {//dynamic goal (depending on resource role)
@@ -133,9 +153,9 @@ export class AuthorizationEvaluator {
     }
 
     private static evaulatePrologGoal(goal: string): boolean {
-        // console.log("evaluating", goal);
-        // console.log("user capabilities", VBContext.getLoggedUser().getCapabilities());
-        return true;
+        let query = Prolog.Parser.parseQuery(goal);
+        let iter = Prolog.Solver.query(AuthorizationEvaluator.prologEngine, query);
+        return iter.next();
     }
 
     //AUTHORIZATIONS FOR ADD/UPDATE/REMOVE IN RESOURCE VIEW PARTITION
@@ -206,5 +226,104 @@ export class AuthorizationEvaluator {
             );
         }
     }
+
+
+
+    private static tbox = `auth(TOPIC, CRUDVRequest) :-
+    chk_capability(TOPIC, CRUDV),
+    resolveCRUDV(CRUDVRequest, CRUDV).
+ 
+chk_capability(TOPIC, CRUDV) :-
+    capability(TOPIC, CRUDV).
+ 
+chk_capability(rdf(_), CRUDV) :-              
+    chk_capability(rdf, CRUDV).  
+ 
+chk_capability(rdf(_,_), CRUDV) :-          
+   chk_capability(rdf, CRUDV).
+ 
+chk_capability(rdf(Subject), CRUDV) :-
+    capability(rdf(AvailableSubject), CRUDV),
+    covered(Subject, AvailableSubject).  
+ 
+chk_capability(rdf(Subject,Scope), CRUDV) :-
+    capability(rdf(AvailableSubject,Scope), CRUDV),
+    covered(Subject, AvailableSubject).
+ 
+chk_capability(rdf(Subject,lexicalization(LANG)), CRUDV) :-
+    capability(rdf(AvailableSubject,lexicalization(LANGCOVERAGE)), CRUDV),
+    covered(Subject, AvailableSubject),
+    resolveLANG(LANG, LANGCOVERAGE).
+   
+chk_capability(rdf(_,lexicalization(LANG)), CRUDV) :-
+    capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
+    resolveLANG(LANG, LANGCOVERAGE).
+ 
+chk_capability(rdf(xLabel(LANG)), CRUDV) :-
+    capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
+    resolveLANG(LANG, LANGCOVERAGE).
+ 
+chk_capability(rdf(xLabel(LANG),_), CRUDV) :-
+    capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
+    resolveLANG(LANG, LANGCOVERAGE).
+ 
+chk_capability(rdf(_,lexicalization(_)), CRUDV) :-
+    capability(rdf(lexicalization), CRUDV).
+ 
+chk_capability(rdf(xLabel(_)), CRUDV) :-
+    capability(rdf(lexicalization), CRUDV).
+ 
+chk_capability(rdf(xLabel(_),_), CRUDV) :-
+    capability(rdf(lexicalization), CRUDV).
+   
+chk_capability(rdf(_,lexicalization), CRUDV) :-
+    capability(rdf(lexicalization), CRUDV).
+ 
+chk_capability(rdf(xLabel), CRUDV) :-
+    capability(rdf(lexicalization), CRUDV).
+ 
+chk_capability(rdf(xLabel,_), CRUDV) :-
+    capability(rdf(lexicalization), CRUDV).              
+ 
+resolveCRUDV(CRUDVRequest, CRUDV) :-
+    subset(CRUDVRequest, CRUDV).
+   
+ 
+covered(Subj,resource) :- role(Subj).
+covered(objectProperty, property).
+covered(datatypeProperty, property).
+covered(annotationProperty, property).
+covered(ontologyProperty, property).
+covered(skosOrderedCollection, skosCollection).
+covered(Role, Role).
+ 
+role(cls).
+role(individual).
+role(property).
+role(objectProperty).
+role(datatypeProperty).
+role(annotationProperty).
+role(ontologyProperty).
+role(ontology).
+role(dataRange).
+role(concept).
+role(conceptScheme).
+role(xLabel).
+role(xLabel(_)).
+role(skosCollection).
+role(skosOrderedCollection).
+   
+getCapabilities(FACTLIST) :- findall(capability(A,CRUD),capability(A,CRUD),FACTLIST).    
+   
+subset([],_).
+ 
+subset([H|R],L) :-
+    member(H,L),
+    subset(R,L).
+  
+member(E,[E|_]).
+member(E,[_|T]) :-
+member(E,T).
+`;
 
 }

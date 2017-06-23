@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { User, UserStatusEnum } from "../models/User";
 import { ARTURIResource } from "../models/ARTResources";
 
@@ -57,7 +58,7 @@ export class UserServices {
         console.log("[UserServices] listUserCapabilities");
         return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", null, true).map(
             stResp => {
-                VBContext.getLoggedUser().setCapabilities(stResp);
+                AuthorizationEvaluator.initEvalutator(stResp);
                 return stResp;
             }
         );
