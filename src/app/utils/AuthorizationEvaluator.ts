@@ -124,7 +124,10 @@ export class AuthorizationEvaluator {
      * @param resource If provided, is used to get its role 
      */
     public static isAuthorized(action: Actions, resource?: ARTResource): boolean {
-        var user: User = VBContext.getLoggedUser()
+        var user: User = VBContext.getLoggedUser();
+        if (user == null) {
+            return false;    
+        }
         if (user.isAdmin()) {
             return true;
         } else {

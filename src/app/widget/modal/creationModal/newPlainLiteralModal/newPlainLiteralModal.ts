@@ -54,7 +54,9 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
     }
 
     private onLangChange(newLang: string) {
-        this.lang = newLang;
+        setTimeout(() => {
+            this.lang = newLang;
+        });
     }
 
     private isInputValid(): boolean {
