@@ -30,24 +30,24 @@ module.exports = {
 
     //Specify which loader processes which file
     module: {
-        // preLoaders: [
-        //     { test: /\.json$/, exclude: /node_modules/, loader: 'json'},
-        // ],
-
-        loaders: [
+        rules: [
+            //awesome-typescript-loader loader to transpile the Typescript code to ES5, guided by the tsconfig.json file.
             //angular2-template-loader loads angular components' template and styles
             {
                 test: /\.ts$/,
-                loaders: ['awesome-typescript-loader', 'angular2-template-loader']
+                loaders: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: { configFileName: helpers.root('src', 'tsconfig.json') }
+                    } , 'angular2-template-loader'
+                ]
             },
-            //.html files
-            //html - for component templates
+            //html-loader for component template
             {
                 test: /\.html$/,
                 loader: 'html-loader'
             },
             //css files outside src/app/ (application-wide styles)
-            //style and css loaders 
             {
                 test: /\.css$/,
                 exclude: helpers.root('src', 'app'),

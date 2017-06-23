@@ -21,21 +21,17 @@ module.exports = webpackMerge(commonConfig, {
         chunkFilename: '[id].[hash].chunk.js'
     },
 
-    htmlLoader: {
-        minimize: false // workaround for ng2
-    },
-
     plugins: [
         //stops the build if there is any error.
-        new webpack.NoErrorsPlugin(),
-        //detects identical (and nearly identical) files and removes them from the output
-        new webpack.optimize.DedupePlugin(),
-        // minifies the bundles. https://github.com/angular/angular/issues/10618
-        // new webpack.optimize.UglifyJsPlugin({
-        //     mangle: {
-        //         keep_fnames: true
-        //     }
-        // }),
+        new webpack.NoEmitOnErrorsPlugin(),
+
+        //minifies the bundles. https://github.com/angular/angular/issues/10618
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: {
+                keep_fnames: true
+            }
+        }),
+
         //extracts embedded css as external files, adding cache-busting hash to the filename
         new ExtractTextPlugin('[name].[hash].css'),
        
@@ -50,6 +46,13 @@ module.exports = webpackMerge(commonConfig, {
         new webpack.DefinePlugin({
             'process.env': {
                 'ENV': JSON.stringify(ENV),
+            }
+        }),
+
+        //to override options of certain loaders.
+        new webpack.LoaderOptionsPlugin({
+            htmlLoader: {
+                minimize: false // workaround for ng2
             }
         })
     ]

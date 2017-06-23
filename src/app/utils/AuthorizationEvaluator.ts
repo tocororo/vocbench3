@@ -109,7 +109,7 @@ export class AuthorizationEvaluator {
             let capabilities = capabilityList.join(". ") + ".";
             db += capabilities;
         }
-        console.log(db);
+        // console.log(db);
         AuthorizationEvaluator.prologEngine = Prolog.Parser.parse(db);
     }
 
