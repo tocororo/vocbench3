@@ -517,6 +517,9 @@ export class ResourceUtils {
     static isQName(nTripleQName: string, prefixMapping: PrefixMapping[]): boolean {
         let colonIdx: number = nTripleQName.indexOf(":");
         if (colonIdx != -1) {
+            if (nTripleQName.includes(" ")) { //QName cannot contains whitespace (nTripleQName could represent a manch expr)
+                return false;
+            }
             let prefix: string = nTripleQName.substring(0, colonIdx);
             for (var i = 0; i < prefixMapping.length; i++) {
                 if (prefixMapping[i].prefix == prefix) {
