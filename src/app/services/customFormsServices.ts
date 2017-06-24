@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResourceUtils, RDFResourceRolesEnum } from "../models/ARTResources";
 import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, FormFieldType, CustomFormLevel } from "../models/CustomForms";
 
 @Injectable()
@@ -263,21 +263,26 @@ export class CustomFormsServices {
             stResp => {
                 var formColl: FormCollection;
                 var fcId = stResp.id;
+                formColl = new FormCollection(fcId);
                 var forms: CustomForm[] = [];
                 for (var i = 0; i < stResp.forms.length; i++) {
                     let cf: CustomForm = new CustomForm(stResp.forms[i].id);
                     cf.setLevel(stResp.forms[i].level);
                     forms.push(cf);
                 }
-                formColl = new FormCollection(fcId);
                 forms.sort(
                     function (a: CustomForm, b: CustomForm) {
                         if (a.getId() < b.getId()) return -1;
                         if (a.getId() > b.getId()) return 1;
                         return 0;
                     }
-                )
+                );
                 formColl.setForms(forms);
+
+                var suggestions: ARTURIResource[] = Deserializer.createURIArray(stResp.suggestions);
+                ResourceUtils.sortResources(suggestions, "value");
+                formColl.setSuggestions(suggestions);
+                
                 return formColl;
             }
         );
@@ -350,31 +355,19 @@ export class CustomFormsServices {
     }
 
     /**
-     * Adds a CustomForm to a FormCollection
-     * @param formCollectionId
-     * @param customFormId
+     * Updates a FormCollection
+     * @param formCollectionId 
+     * @param customFormIds 
+     * @param suggestions 
      */
-    addFormToCollection(formCollectionId: string, customFormId: string) {
-        console.log("[CustomFormsServices] addFormToCollection");
+    updateFromCollection(formCollectionId: string, customFormIds: string[], suggestions: ARTURIResource[]) {
+        console.log("[CustomFormsServices] updateFromCollection");
         var params: any = {
             formCollectionId: formCollectionId,
-            customFormId: customFormId
+            customFormIds: customFormIds,
+            suggestions: suggestions
         };
-        return this.httpMgr.doGet(this.serviceName, "addFormToCollection", params, true);
-    }
-
-    /**
-     * Removes a CustomForm from the entries of a FormCollection
-     * @param formCollectionId
-     * @param customFormId
-     */
-    removeFormFromCollection(formCollectionId: string, customFormId: string) {
-        console.log("[CustomFormsServices] removeFormFromCollection");
-        var params: any = {
-            formCollectionId: formCollectionId,
-            customFormId: customFormId
-        };
-        return this.httpMgr.doGet(this.serviceName, "removeFormFromCollection", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateFromCollection", params, true);
     }
 
     /**

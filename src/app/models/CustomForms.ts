@@ -32,6 +32,7 @@ export class FormCollection {
     
     private id: string;
     private forms: CustomForm[];
+    private suggestions: ARTURIResource[];
     private level: CustomFormLevel;
     
     constructor(id: string) {
@@ -48,6 +49,14 @@ export class FormCollection {
     
     public setForms(forms: CustomForm[]) {
         this.forms = forms;
+    }
+
+    public getSuggestions(): ARTURIResource[] {
+        return this.suggestions;
+    }
+    
+    public setSuggestions(suggestions: ARTURIResource[]) {
+        this.suggestions = suggestions;
     }
 
     public getLevel(): CustomFormLevel {

@@ -3,24 +3,31 @@
 </div>
 <div class="modal-body vbox" style="height: 40vh;">
     
-    <div style="display: flex; margin-bottom: 4px;">
-        <div class="form-control input-sm" style="margin-right: 4px;">
+    <div style="display: flex; margin-bottom: 4px; align-items: center;">
+        <label>Resource:</label>
+        <div class="form-control input-sm" style="margin: 0px 4px;">
             <rdf-resource *ngIf="selectedResource" [resource]="selectedResource"></rdf-resource>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
-                Select Resource
+                Select
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li>
                     <a (click)="selectClass()">
-                        <img src="../../../assets/images/icons/actions/class_create.png" /> Select class
+                        <img src="../../../assets/images/icons/res/class.png" /> Select class
                     </a>
                 </li>
                 <li>
                     <a (click)="selectProperty()">
-                        <img src="../../../assets/images/icons/actions/prop_create.png" /> Select property
+                        <img src="../../../assets/images/icons/res/prop.png" /> Select property
+                    </a>
+                </li>
+                <li *ngIf="selectedFormColl">
+                    <a (click)="selectSuggested()">
+                        <span class="glyphicon glyphicon-star" style="width: 16px; padding-left: 3px;"></span>
+                        Select suggested for FormCollection
                     </a>
                 </li>
             </ul>

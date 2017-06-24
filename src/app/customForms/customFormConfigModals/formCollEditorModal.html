@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Custom Range Editor</h3>
 </div>
-<div class="modal-body vbox" style="height: 50vh;">
+<div class="modal-body vbox" style="min-height: 50vh; max-height: 75vh;">
     
     <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
         <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
@@ -59,9 +59,44 @@
             </div>
         </div>
     </div>
-    
-    <div *ngIf="submitted && !isDataValid()" class="alert alert-danger" style="margin-top: 6px;">
-        {{errorMsg}}
+
+    <div class="panel panel-default vbox" style="margin-top: 5px;">
+        <div class="panel-heading">
+            <label style="flex: 1">
+                Suggestions:
+                <span class="" title="Property/Classes suggested to use with this FormCollection"></span>
+            </label>
+            <div class="btn-group btn-group-xs" role="group">
+                <div class="btn-group btn-group-xs" role="group" title="Add suggestion">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="context.readOnly">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a (click)="addSuggestionClass()">
+                                <img src="../../../assets/images/icons/actions/class_create.png" /> Select class
+                            </a>
+                        </li>
+                        <li>
+                            <a (click)="addSuggestionProperty()">
+                                <img src="../../../assets/images/icons/actions/prop_create.png" /> Select property
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn btn-default" title="Remove suggestion" (click)="removeSuggestion()"
+                    [disabled]="!selectedSuggestion || context.readOnly">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="panel-body vbox">
+            <div class="scrollableContainer">
+                <div *ngFor="let s of suggestions" class="listItem" [ngClass]="{active: s == selectedSuggestion}" (click)="selectSuggestion(s)">
+                    <rdf-resource [resource]="s"></rdf-resource>
+                </div>
+            </div>
+        </div>
     </div>
     
 </div>

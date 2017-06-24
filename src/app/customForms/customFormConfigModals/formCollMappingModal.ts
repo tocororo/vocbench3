@@ -3,6 +3,7 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource } from "../../models/ARTResources";
 import { FormCollection } from "../../models/CustomForms";
 import { RDF, OWL } from "../../models/Vocabulary";
@@ -18,7 +19,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     private selectedResource: ARTURIResource;
     private selectedFormColl: FormCollection;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices,
+    constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices, private basicModals: BasicModalServices,
         private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
@@ -27,6 +28,23 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         this.cfService.getAllFormCollections().subscribe(
             fcList => {
                 this.formCollectionList = fcList;
+            }
+        );
+    }
+
+    private selectSuggested() {
+        this.cfService.getFormCollection(this.selectedFormColl.getId()).subscribe(
+            fc => {
+                var suggestions: ARTURIResource[] = fc.getSuggestions();
+                if (suggestions.length == 0) {
+                    this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId, "warning");
+                } else {
+                    this.basicModals.selectResource("Suggested resources", null, suggestions).then(
+                        res => {
+                            this.selectedResource = res;
+                        }
+                    );
+                }
             }
         );
     }
