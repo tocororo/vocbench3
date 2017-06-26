@@ -67,7 +67,8 @@ export class PluginsServices {
                         let name = parColl[j].name;
                         let required = parColl[j].required;
                         let value = parColl[j].value;
-                        params.push(new PluginConfigParam(name, description, required, value));
+                        let enumeration = parColl[j].enumeration;
+                        params.push(new PluginConfigParam(name, description, required, value, enumeration));
                     }
                     configurations.push(new PluginConfiguration(shortName, type, editRequired, params));
                 }

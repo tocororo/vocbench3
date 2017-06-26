@@ -18,7 +18,12 @@
                         {{p.name}}
                         <span *ngIf="p.required">*</span>
                     </td>
-                    <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
+                    <td>
+                        <input *ngIf="!p.enumeration" type="text" class="form-control input-sm" [(ngModel)]="p.value">
+                        <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                            <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
+                        </select>
+                    </td>
                     <td>
                         <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
                     </td>
