@@ -38,6 +38,10 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
+    ngOnInit() {
+        console.log("facets", this.facets);
+    }
+
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
         this.rvModalService.addPropertyValue("Add an inverse property", this.resource, this.rootProperty, propChangeable).then(
@@ -95,7 +99,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     private isChangeFacetDisabled(facet: Facet) {
-        return (!facet.explicit || this.readonly || AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource));
+        return (!facet.explicit || this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource));
     }
 
 }
