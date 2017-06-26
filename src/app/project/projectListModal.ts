@@ -51,25 +51,20 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessProject(this.selectedProject).subscribe(
             stResp => {
+                this.preferences.initUserProjectPreferences();
                 VBContext.setWorkingProject(this.selectedProject);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 Observable.forkJoin(
                     //init the project preferences for the project
-                    this.preferences.initUserProjectPreferences(),
                     this.userService.listUserCapabilities(),
                     this.metadataService.getNamespaceMappings()
                 ).subscribe(
                     res => {
                         VBContext.setProjectChanged(true);
                         var currentRoute = this.router.url;
-                        ModalContext.enableNavigation();
                         this.router.navigate(['/Home']).then(
                             success => {
-                                this.router.navigate([currentRoute]).then(
-                                    success => {
-                                        ModalContext.disableNavigation();
-                                    }
-                                );
+                                this.router.navigate([currentRoute]);
                             }
                         );
                     }

@@ -19,7 +19,7 @@ export class VocbenchSettingsComponent {
     constructor(private preferences: VBPreferences, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
-        this.preferences.initUserProjectPreferences().subscribe();
+        this.preferences.initUserProjectPreferences();
         //res view mode
         this.resViewMode = this.preferences.getResourceViewMode();
 
