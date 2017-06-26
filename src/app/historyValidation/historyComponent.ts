@@ -43,11 +43,14 @@ export class HistoryComponent {
     }
 
     init() {
+        this.commits = [];
         this.historyService.getCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
                 this.pageCount = stResp.pageCount;
                 this.tipRevisionNumber = stResp.tipRevisionNumber;
-                this.listCommits();
+                if (this.tipRevisionNumber != null) {
+                    this.listCommits();
+                }
             }
         );
     }

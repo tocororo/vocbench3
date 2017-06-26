@@ -60,7 +60,7 @@
                         <th class="text-center">User</th>
                         <th class="text-center">Date</th>
                         <th class="text-center">Validate</th>
-                        <th class="text-center">Notes</th>
+                        <!--<th class="text-center">Notes</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -91,9 +91,9 @@
                                 <option *ngFor="let act of validationActions" [ngValue]="act.value">{{act.show}}</option>
                             </select>
                         </td>
-                        <td>
+                        <!--<td>
                             <input class="form-control input-xs" [(ngModel)]="item.notes">
-                        </td>
+                        </td>-->
                     </tr>
                 </tbody>
             </table>

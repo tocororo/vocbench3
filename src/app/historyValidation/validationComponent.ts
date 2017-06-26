@@ -52,11 +52,14 @@ export class ValidationComponent {
     }
 
     private init() {
+        this.commits = [];
         this.validationService.getStagedCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
                 this.pageCount = stResp.pageCount;
                 this.tipTime = stResp.tipTime;
-                this.listCommits();
+                if (this.tipTime != null) {
+                    this.listCommits();
+                }
             }
         );
     }
