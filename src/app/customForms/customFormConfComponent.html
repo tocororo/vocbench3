@@ -13,26 +13,28 @@
                     <div class="subPanel-heading">
                         <label style="flex: 1">Custom Forms:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-default" title="Create Custom Form" (click)="createCustomForm()">
+                            <button class="btn btn-default" title="Create Custom Form" (click)="createCustomForm()"
+                                [disabled]="!isCreateFormAuthorized()">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                             <button class="btn btn-default" title="Delete Custom Form" (click)="deleteCustomForm()"
-                                [disabled]="!selectedCustomForm || selectedCustomForm.level == 'system'">
+                                [disabled]="!selectedCustomForm || selectedCustomForm.level == 'system' || !isDeleteFormAuthorized()">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                             <button class="btn btn-default" title="Change Custom Form" (click)="editCustomForm()"
-                                [disabled]="!selectedCustomForm">
+                                [disabled]="!selectedCustomForm || !isUpdateFormAuthorized()">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             <button class="btn btn-default" title="Clone Custom Form" (click)="cloneCustomForm()"
-                                [disabled]="!selectedCustomForm">
+                                [disabled]="!selectedCustomForm || !isCreateFormAuthorized()">
                                 <span class="glyphicon glyphicon-duplicate"></span>
                             </button>
                             <button class="btn btn-default" title="Export Custom Form" (click)="exportCustomForm()"
                                 [disabled]="!selectedCustomForm">
                                 <span class="glyphicon glyphicon-save"></span>
                             </button>
-                            <button class="btn btn-default" title="Import Custom Form" (click)="importCustomForm()">
+                            <button class="btn btn-default" title="Import Custom Form" (click)="importCustomForm()"
+                                [disabled]="!isCreateFormAuthorized()">
                                 <span class="glyphicon glyphicon-open"></span>
                             </button>
                         </div>
@@ -55,26 +57,28 @@
                     <div class="subPanel-heading">
                         <label style="flex: 1">Form Collections:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-default" title="Create Form Collection" (click)="createFormCollection()">
+                            <button class="btn btn-default" title="Create Form Collection" (click)="createFormCollection()"
+                                [disabled]="!isCreateCollectionAuthorized()">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
                             <button class="btn btn-default" title="Delete Form Collection" (click)="deleteFormCollection()"
-                                [disabled]="!selectedFormColl || selectedFormColl.level == 'system'">
+                                [disabled]="!selectedFormColl || selectedFormColl.level == 'system' || !isDeleteCollectionAuthorized()">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                             <button class="btn btn-default" title="Change Form Collection" (click)="editFormCollection()"
-                                [disabled]="!selectedFormColl">
+                                [disabled]="!selectedFormColl || !isUpdateCollectionAuthorized()">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             <button class="btn btn-default" title="Clone Form Collection" (click)="cloneFormCollection()"
-                                [disabled]="!selectedFormColl">
+                                [disabled]="!selectedFormColl || !isCreateCollectionAuthorized()">
                                 <span class="glyphicon glyphicon-duplicate"></span>
                             </button>
                             <button class="btn btn-default" title="Export Form Collection" (click)="exportFormCollection()"
                                 [disabled]="!selectedCustomForm">
                                 <span class="glyphicon glyphicon-save"></span>
                             </button>
-                            <button class="btn btn-default" title="Import Form Collection" (click)="importFormCollection()">
+                            <button class="btn btn-default" title="Import Form Collection" (click)="importFormCollection()"
+                                [disabled]="!isCreateCollectionAuthorized()">
                                 <span class="glyphicon glyphicon-open"></span>
                             </button>
                         </div>
@@ -100,11 +104,12 @@
                 <div class="subPanel-heading">
                     <label style="flex: 1">Forms mapping:</label>
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()">
+                        <button class="btn btn-default" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()"
+                            [disabled]="!isCreateMappingAuthorized()">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                         <button class="btn btn-default" title="Remove Resource - FormCollection mapping" (click)="removeFormCollMapping()"
-                            [disabled]="!selectedFormCollMapping">
+                            [disabled]="!selectedFormCollMapping || !isDeleteMappingAuthorized()">
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
                     </div>
@@ -131,7 +136,8 @@
                                         {{formCollMap.getFormCollection().getId()}}
                                     </td>
                                     <td class="text-center">
-                                        <input type="checkbox" [ngModel]="formCollMap.getReplace()" (ngModelChange)="changeReplaceToMapping($event, formCollMap)">
+                                        <input type="checkbox" [ngModel]="formCollMap.getReplace()" (ngModelChange)="changeReplaceToMapping($event, formCollMap)"
+                                            [disabled]="!isUpdateMappingAuthorized()">
                                     </td>
                                 </tr>
                             </tbody>
