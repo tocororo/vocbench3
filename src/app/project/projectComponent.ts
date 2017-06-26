@@ -121,9 +121,7 @@ export class ProjectComponent implements OnInit {
                 project.setOpen(true);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 //get default namespace of the project and set it to the vbContext
-                this.metadataService.getNamespaceMappings().subscribe(
-
-                );
+                this.metadataService.getNamespaceMappings().subscribe();
                 //init the project preferences for the project
                 this.preferences.initUserProjectPreferences();
             }

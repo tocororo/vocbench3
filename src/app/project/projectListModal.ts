@@ -51,9 +51,9 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.accessProject(this.selectedProject).subscribe(
             stResp => {
-                this.preferences.initUserProjectPreferences();
                 VBContext.setWorkingProject(this.selectedProject);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.preferences.initUserProjectPreferences();
                 Observable.forkJoin(
                     //init the project preferences for the project
                     this.userService.listUserCapabilities(),
