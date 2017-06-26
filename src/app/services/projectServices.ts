@@ -54,7 +54,6 @@ export class ProjectServices {
                     proj.setLexicalizationModelType(projCollJson[i].lexicalizationModel);
                     proj.setOpen(projCollJson[i].open);
                     proj.setStatus(projCollJson[i].status);
-                    proj.setType(projCollJson[i].type);
                     projectList.push(proj);
                 }
                 return projectList;
@@ -189,18 +188,6 @@ export class ProjectServices {
             projectName: project.getName()
         };
         return this.httpMgr.downloadFile(this.serviceName_old, "exportProject", params);
-    }
-
-    /**
-     * Saves the given (not persistent) project
-     * @param project the project to save
-     */
-    saveProject(project: Project) {
-        console.log("[ProjectServices] saveProject");
-        var params = {
-            project: project.getName()
-        };
-        return this.httpMgr.doGet(this.serviceName_old, "saveProject", params);
     }
 
     /**

@@ -63,30 +63,13 @@ export class ConfigBarComponent {
                 this.inOutService.clearData().subscribe(
                     stResp => {
                         this.basicModals.alert("Clear data", "All data cleared successfully!");
-                        //if project is not-persistent save it before closing
-                        if (VBContext.getWorkingProject().getType() == ProjectTypesEnum.saveToStore) {
-                            this.projectService.saveProject(VBContext.getWorkingProject()).subscribe(
-                                stResp => {
-                                    //then close project
-                                    this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
-                                        stResp => {
-                                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                            //then redirect to home page
-                                            this.router.navigate(['/Projects']);
-                                        }
-                                    );
-                                }
-                            )
-                        } else {
-                            //project is presistent, it doesn't need to be saved, just close the project
-                            this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
-                                stResp => {
-                                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                    //then redirect to home page
-                                    this.router.navigate(['/Projects']);
-                                }
-                            );
-                        }
+                        this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
+                            stResp => {
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                                //then redirect to home page
+                                this.router.navigate(['/Projects']);
+                            }
+                        );
                     }
                 );
             },

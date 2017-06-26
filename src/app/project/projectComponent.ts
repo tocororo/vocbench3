@@ -128,47 +128,15 @@ export class ProjectComponent implements OnInit {
         );
     }
 
-    private closeProject(project: Project) {
-        if (project.getType() == ProjectTypesEnum.saveToStore) {
-            //if closing project is non-persistent ask to save
-            this.basicModals.confirm("Save project", "You're closing a non-persistent project " + project.getName()
-                + ". Do you want to save changes?", "warning").then(
-                confirm => {//save then disconnect
-                    this.projectService.saveProject(project).subscribe(
-                        stResp => {
-                            this.disconnectFromProject(project);
-                        }
-                    );
-                },
-                () => {//disconnect without saving
-                    this.disconnectFromProject(project);
-                }
-                );
-        } else {//persistent project => just disconnect
-            this.disconnectFromProject(project);
-        }
-    }
-
     /**
      * Calls the proper service in order to disconnect from the given project.
-     * Returns an observable so I can disconnect and connect to a new project in synchronous way
      */
-    private disconnectFromProject(project: Project) {
+    private closeProject(project: Project) {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.disconnectFromProject(project).subscribe(
             stResp => {
                 project.setOpen(false);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-            }
-        );
-    }
-
-    private saveProject(project: Project) {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.projectService.saveProject(project).subscribe(
-            stResp => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert("Save project", "Project " + project.getName() + " saved successfully");
             }
         );
     }
