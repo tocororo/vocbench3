@@ -104,7 +104,7 @@ export class AuthorizationEvaluator {
     };
 
     public static initEvalutator(capabilityList: string[]) {
-        let db: string = this.tbox;
+        let db: string = this.tbox + this.jsPrologSupport;
         if (capabilityList.length > 0) {
             let capabilities = capabilityList.join(". ") + ".";
             db += capabilities;
@@ -230,103 +230,104 @@ export class AuthorizationEvaluator {
         }
     }
 
+    private static tbox = `
+        auth(TOPIC, CRUDVRequest) :-
+            chk_capability(TOPIC, CRUDV),
+            resolveCRUDV(CRUDVRequest, CRUDV).
+        
+        chk_capability(TOPIC, CRUDV) :-
+            capability(TOPIC, CRUDV).
+        
+        chk_capability(rdf(_), CRUDV) :-              
+            chk_capability(rdf, CRUDV).  
+        
+        chk_capability(rdf(_,_), CRUDV) :-          
+        chk_capability(rdf, CRUDV).
+        
+        chk_capability(rdf(Subject), CRUDV) :-
+            capability(rdf(AvailableSubject), CRUDV),
+            covered(Subject, AvailableSubject).  
+        
+        chk_capability(rdf(Subject,Scope), CRUDV) :-
+            capability(rdf(AvailableSubject,Scope), CRUDV),
+            covered(Subject, AvailableSubject).
+        
+        chk_capability(rdf(Subject,lexicalization(LANG)), CRUDV) :-
+            capability(rdf(AvailableSubject,lexicalization(LANGCOVERAGE)), CRUDV),
+            covered(Subject, AvailableSubject),
+            resolveLANG(LANG, LANGCOVERAGE).
+        
+        chk_capability(rdf(_,lexicalization(LANG)), CRUDV) :-
+            capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
+            resolveLANG(LANG, LANGCOVERAGE).
+        
+        chk_capability(rdf(xLabel(LANG)), CRUDV) :-
+            capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
+            resolveLANG(LANG, LANGCOVERAGE).
+        
+        chk_capability(rdf(xLabel(LANG),_), CRUDV) :-
+            capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
+            resolveLANG(LANG, LANGCOVERAGE).
+        
+        chk_capability(rdf(_,lexicalization(_)), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(xLabel(_)), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(xLabel(_),_), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(_,lexicalization), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(xLabel), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(xLabel,_), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).              
+        
+        resolveCRUDV(CRUDVRequest, CRUDV) :-
+            subset(CRUDVRequest, CRUDV).
+        
+        
+        covered(Subj,resource) :- role(Subj).
+        covered(objectProperty, property).
+        covered(datatypeProperty, property).
+        covered(annotationProperty, property).
+        covered(ontologyProperty, property).
+        covered(skosOrderedCollection, skosCollection).
+        covered(Role, Role).
+        
+        role(cls).
+        role(individual).
+        role(property).
+        role(objectProperty).
+        role(datatypeProperty).
+        role(annotationProperty).
+        role(ontologyProperty).
+        role(ontology).
+        role(dataRange).
+        role(concept).
+        role(conceptScheme).
+        role(xLabel).
+        role(xLabel(_)).
+        role(skosCollection).
+        role(skosOrderedCollection).
+        
+        getCapabilities(FACTLIST) :- findall(capability(A,CRUD),capability(A,CRUD),FACTLIST).    
+        `;
 
-
-    private static tbox = `auth(TOPIC, CRUDVRequest) :-
-    chk_capability(TOPIC, CRUDV),
-    resolveCRUDV(CRUDVRequest, CRUDV).
+    private static jsPrologSupport = `
+        subset([],_).
  
-chk_capability(TOPIC, CRUDV) :-
-    capability(TOPIC, CRUDV).
- 
-chk_capability(rdf(_), CRUDV) :-              
-    chk_capability(rdf, CRUDV).  
- 
-chk_capability(rdf(_,_), CRUDV) :-          
-   chk_capability(rdf, CRUDV).
- 
-chk_capability(rdf(Subject), CRUDV) :-
-    capability(rdf(AvailableSubject), CRUDV),
-    covered(Subject, AvailableSubject).  
- 
-chk_capability(rdf(Subject,Scope), CRUDV) :-
-    capability(rdf(AvailableSubject,Scope), CRUDV),
-    covered(Subject, AvailableSubject).
- 
-chk_capability(rdf(Subject,lexicalization(LANG)), CRUDV) :-
-    capability(rdf(AvailableSubject,lexicalization(LANGCOVERAGE)), CRUDV),
-    covered(Subject, AvailableSubject),
-    resolveLANG(LANG, LANGCOVERAGE).
-   
-chk_capability(rdf(_,lexicalization(LANG)), CRUDV) :-
-    capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
-    resolveLANG(LANG, LANGCOVERAGE).
- 
-chk_capability(rdf(xLabel(LANG)), CRUDV) :-
-    capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
-    resolveLANG(LANG, LANGCOVERAGE).
- 
-chk_capability(rdf(xLabel(LANG),_), CRUDV) :-
-    capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
-    resolveLANG(LANG, LANGCOVERAGE).
- 
-chk_capability(rdf(_,lexicalization(_)), CRUDV) :-
-    capability(rdf(lexicalization), CRUDV).
- 
-chk_capability(rdf(xLabel(_)), CRUDV) :-
-    capability(rdf(lexicalization), CRUDV).
- 
-chk_capability(rdf(xLabel(_),_), CRUDV) :-
-    capability(rdf(lexicalization), CRUDV).
-   
-chk_capability(rdf(_,lexicalization), CRUDV) :-
-    capability(rdf(lexicalization), CRUDV).
- 
-chk_capability(rdf(xLabel), CRUDV) :-
-    capability(rdf(lexicalization), CRUDV).
- 
-chk_capability(rdf(xLabel,_), CRUDV) :-
-    capability(rdf(lexicalization), CRUDV).              
- 
-resolveCRUDV(CRUDVRequest, CRUDV) :-
-    subset(CRUDVRequest, CRUDV).
-   
- 
-covered(Subj,resource) :- role(Subj).
-covered(objectProperty, property).
-covered(datatypeProperty, property).
-covered(annotationProperty, property).
-covered(ontologyProperty, property).
-covered(skosOrderedCollection, skosCollection).
-covered(Role, Role).
- 
-role(cls).
-role(individual).
-role(property).
-role(objectProperty).
-role(datatypeProperty).
-role(annotationProperty).
-role(ontologyProperty).
-role(ontology).
-role(dataRange).
-role(concept).
-role(conceptScheme).
-role(xLabel).
-role(xLabel(_)).
-role(skosCollection).
-role(skosOrderedCollection).
-   
-getCapabilities(FACTLIST) :- findall(capability(A,CRUD),capability(A,CRUD),FACTLIST).    
-   
-subset([],_).
- 
-subset([H|R],L) :-
-    member(H,L),
-    subset(R,L).
-  
-member(E,[E|_]).
-member(E,[_|T]) :-
-member(E,T).
-`;
+        subset([H|R],L) :-
+            member(H,L),
+            subset(R,L).
+        
+        member(E,[E|_]).
+        member(E,[_|T]) :-
+        member(E,T).
+        `;
 
 }

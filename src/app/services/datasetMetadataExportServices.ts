@@ -19,10 +19,10 @@ export class DatasetMetadataExportServices {
         var params = {
             exporterId: exporterId
         };
-        return this.httpMgr.doGet(this.serviceName, "getExporterSettings", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getExporterSettings2", params, true).map(
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
-                let extPointParamsJson: any[] = extPointSettingsJson.parameters;
+                let extPointParamsJson: any[] = extPointSettingsJson.properties;
                 let extPointParams: PluginConfigParam[] = [];
                 for (var i = 0; i < extPointParamsJson.length; i++) {
                     let param: PluginConfigParam = new PluginConfigParam(
@@ -33,12 +33,11 @@ export class DatasetMetadataExportServices {
                     );
                     extPointParams.push(param);
                 }
-                let extPointEditRequired: boolean = extPointSettingsJson.editRequired != null ? extPointSettingsJson.editRequired : false;
                 let extensionPointSettings: PluginConfiguration = new PluginConfiguration(
-                    extPointSettingsJson.shortName, extPointSettingsJson.type, extPointEditRequired, extPointParams);
+                    extPointSettingsJson.shortName, extPointSettingsJson['@type'], extPointSettingsJson.editRequired, extPointParams);
 
                 let pluginSettingsJson = stResp.pluginSettings;
-                let pluginParamsJson: any[] = pluginSettingsJson.parameters;
+                let pluginParamsJson: any[] = pluginSettingsJson.properties;
                 let pluginParams: PluginConfigParam[] = [];
                 for (var i = 0; i < pluginParamsJson.length; i++) {
                     let param: PluginConfigParam = new PluginConfigParam(
@@ -51,13 +50,12 @@ export class DatasetMetadataExportServices {
                 }
                 let pluginEditRequired: boolean = pluginSettingsJson.editRequired != null ? pluginSettingsJson.editRequired : false;
                 let pluginSettings: PluginConfiguration = new PluginConfiguration(
-                    pluginSettingsJson.shortName, pluginSettingsJson.type, pluginEditRequired, pluginParams);
+                    pluginSettingsJson.shortName, pluginSettingsJson['@type'], pluginSettingsJson.editRequired, pluginParams);
 
                 return { extensionPointSettings: extensionPointSettings, pluginSettings: pluginSettings };
             }
         );
     }
-
 
     /**
      * @param exporterId

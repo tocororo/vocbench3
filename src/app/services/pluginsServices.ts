@@ -6,7 +6,7 @@ import {Plugin, PluginConfiguration, PluginConfigParam} from "../models/Plugins"
 @Injectable()
 export class PluginsServices {
 
-    private serviceName = "Plugins";
+    private serviceName = "Plugins2";
 
     constructor(private httpMgr: HttpManager) { }
     
@@ -19,12 +19,12 @@ export class PluginsServices {
         var params = {
             extensionPoint: extensionPoint
         };
-        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params, true).map(
             stResp => {
-                var pluginColl = stResp.getElementsByTagName("plugin");
+                var pluginColl: any[] = stResp;
                 var plugins: Plugin[] = [];
                 for (var j = 0; j < pluginColl.length; j++) {
-                    var pluginId = pluginColl[j].getAttribute("factoryID");
+                    var pluginId = pluginColl[j].factoryID;
                     plugins.push(new Plugin(pluginId));
                 }
                 //sort plugins by factoryID
@@ -51,22 +51,22 @@ export class PluginsServices {
         var params = {
             factoryID: factoryID
         };
-        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params, true).map(
             stResp => {
+                var configColl: any[] = stResp;
                 var configurations: PluginConfiguration[] = [];
-                var configColl = stResp.getElementsByTagName("configuration");
                 for (var i = 0; i < configColl.length; i++) {
-                    let shortName = configColl[i].getAttribute("shortName");
-                    let editRequired = configColl[i].getAttribute("editRequired") == "true";
-                    let type = configColl[i].getAttribute("type");
+                    let shortName = configColl[i].shortName;
+                    let editRequired = configColl[i].editRequired;
+                    let type = configColl[i]['@type'];
                     
                     var params: PluginConfigParam[] = [];
-                    var parColl = configColl[i].getElementsByTagName("par");
+                    var parColl: any[] = configColl[i].properties;
                     for (var j = 0; j < parColl.length; j++) {
-                        let description = parColl[j].getAttribute("description");
-                        let name = parColl[j].getAttribute("name");
-                        let required = parColl[j].getAttribute("required") == "true";
-                        let value = parColl[j].textContent;
+                        let description = parColl[j].description;
+                        let name = parColl[j].name;
+                        let required = parColl[j].required;
+                        let value = parColl[j].value;
                         params.push(new PluginConfigParam(name, description, required, value));
                     }
                     configurations.push(new PluginConfiguration(shortName, type, editRequired, params));

@@ -276,8 +276,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Modification date:</label>
                                     <div class="col-sm-11">
-                                        <select class="form-control input-sm" [(ngModel)]="modificationDateProp" name="modificationDateProp">
-                                            <option *ngFor="let p of modificationDatePropList" [ngValue]="p">{{p.getShow()}}</option>
+                                        <select class="form-control input-sm" [(ngModel)]="modificationDateProp" name="modificationDateProp" [title]="modificationDateProp.getURI()">
+                                            <option *ngFor="let p of modificationDatePropList" [ngValue]="p" [title]="p.getURI()">{{p.getShow()}}</option>
                                         </select>
                                     </div>
                                 </div>
