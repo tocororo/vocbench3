@@ -9,8 +9,8 @@ import { PluginSpecification } from '../models/Plugins';
 @Injectable()
 export class ProjectServices {
 
-    private serviceName_old = "Projects";
-    private serviceName = "Projects2";
+//    private serviceName_old = "Projects";
+    private serviceName = "Projects";
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -79,7 +79,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName_old, "disconnectFromProject", params).map(
+        return this.httpMgr.doPost(this.serviceName, "disconnectFromProject", params, true).map(
             stResp => {
                 return stResp;
             }
@@ -98,7 +98,7 @@ export class ProjectServices {
             requestedAccessLevel: "RW",
             requestedLockLevel: "NO"
         };
-        return this.httpMgr.doGet(this.serviceName_old, "accessProject", params);
+        return this.httpMgr.doPost(this.serviceName, "accessProject", params, true);
     }
 
     /**
@@ -161,7 +161,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName(),
         };
-        return this.httpMgr.doGet(this.serviceName_old, "deleteProject", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteProject", params, true);
     }
 
     /**
@@ -175,7 +175,7 @@ export class ProjectServices {
             newProjectName: projectName,
             importPackage: projectFile
         };
-        return this.httpMgr.uploadFile(this.serviceName_old, "importProject", data);
+        return this.httpMgr.uploadFile(this.serviceName, "importProject", data, true);
     }
 
     /**
@@ -187,7 +187,7 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.downloadFile(this.serviceName_old, "exportProject", params);
+        return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, true);
     }
 
     /**
@@ -199,14 +199,14 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName_old, "getProjectPropertyMap", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params, true).map(
             stResp => {
+                var propCollJson: any[] = stResp;
                 var propertyList: Array<any> = [];
-                var propertyElemColl: HTMLCollection = stResp.getElementsByTagName("property");
-                for (var i = 0; i < propertyElemColl.length; i++) {
+                for (var i = 0; i < propCollJson.length; i++) {
                     var prop: any = {};
-                    prop.name = propertyElemColl[i].getAttribute("name");
-                    prop.value = propertyElemColl[i].getAttribute("value");
+                    prop.name = propCollJson[i].name;
+                    prop.value = propCollJson[i].value;
                     propertyList.push(prop);
                 }
                 return propertyList;
@@ -348,7 +348,7 @@ export class ProjectServices {
             projectName: project.getName(),
             lockLevel: lockLevel,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "updateLockLevel", params);
+        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params, true);
     }
 
 }
