@@ -9,7 +9,6 @@ import { PluginSpecification } from '../models/Plugins';
 @Injectable()
 export class ProjectServices {
 
-//    private serviceName_old = "Projects";
     private serviceName = "Projects";
 
     constructor(private httpMgr: HttpManager) { }
@@ -213,56 +212,6 @@ export class ProjectServices {
             }
         );
     }
-
-    /**
-     * 
-     */
-    // getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
-    //     console.log("[ProjectServices] getAccessStatusMap");
-    //     var params = { };
-    //     return this.httpMgr.doGet(this.serviceName_old, "getAccessStatusMap", params).map(
-    //         stResp => {
-    //             var aclMap: {name: string, consumers: any[], lock: any}[] = [];
-
-    //             var projectElemColl: NodeListOf<Element> = stResp.getElementsByTagName("project");
-    //             for (var i = 0; i < projectElemColl.length; i++) {
-
-    //                 let name = projectElemColl[i].getAttribute("name");
-                    
-    //                 //<consumer> elements
-    //                 let consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[] = [];
-
-    //                 let consumerElemColl: NodeListOf<Element> = projectElemColl[i].getElementsByTagName("consumer");
-    //                 for (var j = 0; j < consumerElemColl.length; j++) {
-    //                     let consumer: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel};
-    //                     consumer = {
-    //                         name: consumerElemColl[j].getAttribute("name"),
-    //                         availableACLLevel: <AccessLevel> consumerElemColl[j].getAttribute("availableACLLevel"),
-    //                         acquiredACLLevel: <AccessLevel> consumerElemColl[j].getAttribute("acquiredACLLevel")
-    //                     }
-    //                     consumers.push(consumer);
-    //                 }
-    //                 //<lock> element
-    //                 let projectLock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
-
-    //                 let lockElem: Element = projectElemColl[i].getElementsByTagName("lock")[0];
-    //                 projectLock = {
-    //                     availableLockLevel: <LockLevel> lockElem.getAttribute("availableLockLevel"),
-    //                     lockingConsumer: lockElem.getAttribute("lockingConsumer"),
-    //                     acquiredLockLevel: <LockLevel> lockElem.getAttribute("acquiredLockLevel")
-    //                 };
-
-    //                 aclMap.push({
-    //                     name: name,
-    //                     consumers: consumers,
-    //                     lock: projectLock
-    //                 });
-    //             }
-
-    //             return aclMap;
-    //         }
-    //     );
-    // }
 
     getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
         console.log("[ProjectServices] getAccessStatusMap");
