@@ -16,10 +16,12 @@
                 <div class="listItem">
                     <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1" [resource]="obj"
                         [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly" [partition]="partition"
-                        (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"></editable-resource>
+                        (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"
+                        [ngClass]="{ clickable: obj.isResource() }"></editable-resource>
                     <ng-template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
                         <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
-                            (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
+                            [ngClass]="{ clickable: obj.isResource() }" style="flex:1"
+                            (dblClick)="objectDblClick($event)"></reified-resource>
                         <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
                             (click)="removeValue(obj)" [disabled]="isRemoveReifiedObjDisabled(obj)">
                             <span>-</span>

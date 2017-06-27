@@ -53,9 +53,9 @@ export class HistoryServices {
      * @param page 
      * @param limit 
      */
-    getCommits2(tipRevisionNumber: number, operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string,
+    getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
-        console.log("[HistoryServices] getCommits2");
+        console.log("[HistoryServices] getCommits");
         var params: any = {
             tipRevisionNumber: tipRevisionNumber
         };
@@ -67,7 +67,7 @@ export class HistoryServices {
         if (page != null) { params.page = page; }
         if (limit != null) { params.limit = limit; }
         
-        return this.httpMgr.doGet(this.serviceName, "getCommits2", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
             stResp => {
                 var commits: CommitInfo[] = [];
                 var commitsJsonArray: any[] = stResp;

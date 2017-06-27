@@ -6,7 +6,7 @@ import { RDFFormat } from "../models/RDFFormat";
 @Injectable()
 export class InputOutputServices {
 
-    private serviceName = "InputOutput2";
+    private serviceName = "InputOutput";
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 

@@ -21,7 +21,8 @@
                 <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" routerLinkActive="active">
                     <a [routerLink]="['/History']">History</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" routerLinkActive="active">
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" [ngClass]="{ disabled : !isValidationAuthorized() }"
+                    routerLinkActive="active">
                     <a [routerLink]="['/Validation']">Validation</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">

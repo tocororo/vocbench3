@@ -6,7 +6,7 @@ import {Plugin, PluginConfiguration, PluginConfigParam} from "../models/Plugins"
 @Injectable()
 export class PluginsServices {
 
-    private serviceName = "Plugins2";
+    private serviceName = "Plugins";
 
     constructor(private httpMgr: HttpManager) { }
     

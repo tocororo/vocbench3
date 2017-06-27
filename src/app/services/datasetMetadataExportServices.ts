@@ -19,7 +19,7 @@ export class DatasetMetadataExportServices {
         var params = {
             exporterId: exporterId
         };
-        return this.httpMgr.doGet(this.serviceName, "getExporterSettings2", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getExporterSettings", params, true).map(
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
                 let extPointParamsJson: any[] = extPointSettingsJson.properties;

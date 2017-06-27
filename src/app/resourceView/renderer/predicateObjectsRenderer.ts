@@ -6,6 +6,7 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator"
 @Component({
     selector: "pred-obj-renderer",
     templateUrl: "./predicateObjectsRenderer.html",
+    styles: ['.clickable:hover { cursor: pointer; }']
 })
 export class PredicateObjectsRenderer {
 

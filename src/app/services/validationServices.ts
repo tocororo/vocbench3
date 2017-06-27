@@ -53,9 +53,9 @@ export class ValidationServices {
      * @param page 
      * @param limit 
      */
-    getCommits2(timeUpperBound: string, operationFilter?: ARTURIResource[], timeLowerBound?: string,
+    getCommits(timeUpperBound: string, operationFilter?: ARTURIResource[], timeLowerBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
-        console.log("[ValidationServices] getCommits2");
+        console.log("[ValidationServices] getCommits");
         var params: any = {
             timeUpperBound: timeUpperBound
         };
@@ -66,7 +66,7 @@ export class ValidationServices {
         if (page != null) { params.page = page; }
         if (limit != null) { params.limit = limit; }
         
-        return this.httpMgr.doGet(this.serviceName, "getCommits2", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
             stResp => {
                 var commits: CommitInfo[] = [];
                 var commitsJsonArray: any[] = stResp;

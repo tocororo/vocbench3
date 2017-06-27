@@ -58,7 +58,8 @@ enum Actions {
     SKOS_REMOVE_CONCEPT_FROM_SCHEME,
     SKOS_REMOVE_LEXICALIZATION,
     SKOS_REMOVE_TOP_CONCEPT,
-    SPARQL_EXECUTE_QUERY
+    SPARQL_EXECUTE_QUERY,
+    VALIDATION //generic for the validation operation
 }
 
 export class AuthorizationEvaluator {
@@ -123,6 +124,7 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_REMOVE_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
         [Actions.SKOS_REMOVE_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "D").',
         [Actions.SPARQL_EXECUTE_QUERY] : 'auth(rdf(sparql), "RU").',
+        [Actions.VALIDATION] : 'auth(rdf, "V").',
     };
 
     public static initEvalutator(capabilityList: string[]) {
@@ -278,6 +280,14 @@ export class AuthorizationEvaluator {
             capability(rdf(AvailableSubject,lexicalization(LANGCOVERAGE)), CRUDV),
             covered(Subject, AvailableSubject),
             resolveLANG(LANG, LANGCOVERAGE).
+
+        chk_capability(rdf(SKOSELEMENT), CRUDV) :-
+            capability(rdf(skos), CRUDV),
+            vocabulary(SKOSELEMENT, skos).
+	
+        chk_capability(rdf(SKOSELEMENT,_), CRUDV) :-
+            capability(rdf(skos), CRUDV),
+            vocabulary(SKOSELEMENT, skos).
         
         chk_capability(rdf(_,lexicalization(LANG)), CRUDV) :-
             capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
@@ -307,10 +317,21 @@ export class AuthorizationEvaluator {
             capability(rdf(lexicalization), CRUDV).
         
         chk_capability(rdf(xLabel,_), CRUDV) :-
-            capability(rdf(lexicalization), CRUDV).              
+            capability(rdf(lexicalization), CRUDV).        
+
+        chk_capability(rbac(_), CRUDV) :-	
+            chk_capability(rbac, CRUDV).	
+
+        chk_capability(rbac(_,_), CRUDV) :-	
+            chk_capability(rbac, CRUDV).      
         
         resolveCRUDV(CRUDVRequest, CRUDV) :-
-            subset(CRUDVRequest, CRUDV).
+            char_subset(CRUDVRequest, CRUDV).
+
+        resolveLANG(LANG, LANGCOVERAGE) :-
+            split_string(LANG,",","",LANGList),
+            split_string(LANGCOVERAGE,",","",LANGCOVERAGEList),
+                subset(LANGList, LANGCOVERAGEList).
         
         
         covered(Subj,resource) :- role(Subj).
@@ -336,6 +357,10 @@ export class AuthorizationEvaluator {
         role(xLabel(_)).
         role(skosCollection).
         role(skosOrderedCollection).
+
+        vocabulary(concept, skos).
+        vocabulary(conceptScheme, skos).
+        vocabulary(skosCollection, skos).
         
         getCapabilities(FACTLIST) :- findall(capability(A,CRUD),capability(A,CRUD),FACTLIST).    
         `;

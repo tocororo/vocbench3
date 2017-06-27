@@ -65,7 +65,7 @@ export class ValidationComponent {
     }
 
     private listCommits() {
-        this.validationService.getCommits2(this.tipTime, this.operations, this.getFormattedFromTime(), 
+        this.validationService.getCommits(this.tipTime, this.operations, this.getFormattedFromTime(), 
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;

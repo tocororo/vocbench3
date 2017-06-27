@@ -56,7 +56,7 @@ export class HistoryComponent {
     }
 
     private listCommits() {
-        this.historyService.getCommits2(this.tipRevisionNumber, this.operations, this.getFormattedFromTime(), this.getFormattedToTime(),
+        this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getFormattedFromTime(), this.getFormattedToTime(),
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;

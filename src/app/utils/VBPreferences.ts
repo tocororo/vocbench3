@@ -18,11 +18,11 @@ export class VBPreferences {
      * To call each time the user change project
      */
     initUserProjectPreferences() {
+        this.activeSchemes = [];
         return this.prefService.getProjectPreferences().subscribe(
             prefs => {
                 this.languages = prefs.languages;
                 let activeSchemesPref = prefs.active_schemes;
-                this.activeSchemes = [];
                 if (activeSchemesPref != null) {
                     for (var i = 0; i < activeSchemesPref.length; i++) {
                         this.activeSchemes.push(new ARTURIResource(activeSchemesPref[i], null, RDFResourceRolesEnum.conceptScheme));
