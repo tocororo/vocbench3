@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { SKOS, RDFS, SKOSXL } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "icv-list",
@@ -17,19 +18,23 @@ export class IcvListComponent {
         list: [
             {
                 name: "Dangling concepts", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/DanglingConcept",
-                description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong"
+                description: "skos:Concept(s) that have no skos:broader or are not skos:topConceptOf in the skos:ConceptScheme where they belong",
+                authAction: AuthorizationEvaluator.Actions.ICV_DANGLING_CONCEPT
             },
             {
                 name: "Omitted topConcept", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/NoTopConceptScheme",
-                description: "skos:ConceptScheme(s) that have no top concept"
+                description: "skos:ConceptScheme(s) that have no top concept",
+                authAction: AuthorizationEvaluator.Actions.ICV_SCHEME_WITHOUT_TOP_CONCEPT
             },
             {
                 name: "Concepts in no scheme", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/NoSchemeConcept",
-                description: "skos:Concept(s) that doesn't belong to any scheme"
+                description: "skos:Concept(s) that doesn't belong to any scheme",
+                authAction: AuthorizationEvaluator.Actions.ICV_CONCEPT_WITHOUT_SCHEME
             },
             {
                 name: "TopConcept with broader", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/TopConceptWithBroader",
-                description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept"
+                description: "skos:Concept(s) that are skos:topConceptOf some scheme and have some skos:broader concept",
+                authAction: AuthorizationEvaluator.Actions.ICV_TOP_CONCEPT_WITH_BROADER
             },
             // {
             //     name: "Hierarchical redundancy", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/HierarchicalRedundancy",
@@ -47,11 +52,13 @@ export class IcvListComponent {
         list: [
             {
                 name: "No skos:prefLabel resource", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel"
+                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel", 
+                authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_WITHOUT_PREFLABEL
             },
             {
                 name: "No skosxl:prefLabel resource", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel"
+                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel", 
+                authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_WITHOUT_PREFLABEL
             },
             // {
             //     name: "No rdfs:label resource", lexicalizationModel: [RDFS.uri], // routeName: "/Icv/NoLabelResource", 
@@ -111,7 +118,8 @@ export class IcvListComponent {
             // },
             {
                 name: "Dangling skosxl:Label(s)", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/DanglingXLabel",
-                description: "skosxl:Label(s) that are not linked with any skos:Concept"
+                description: "skosxl:Label(s) that are not linked with any skos:Concept", 
+                authAction: AuthorizationEvaluator.Actions.ICV_DANGLING_XLABEL
             }
         ]
     };
@@ -135,7 +143,7 @@ export class IcvListComponent {
     /**
      * Listener of the "Go" button. It redirect to the page of the requested ICV.
      */
-    goToIcv(icvStruct: any) {
+    private goToIcv(icvStruct: any) {
         if (icvStruct.routeName == undefined) {
             alert(icvStruct.name + " still not available");
             return;
@@ -145,6 +153,10 @@ export class IcvListComponent {
         } else {
             this.router.navigate([icvStruct.routeName]);
         }
+    }
+
+    private isIcvAuthorized(icv: ICVElement): boolean {
+        return AuthorizationEvaluator.isAuthorized(icv.authAction);
     }
 
     /**
@@ -164,9 +176,10 @@ export class IcvListComponent {
 
 }
 
-interface ICVElement {
-    name: string,
-    lexicalizationModel: string[],
-    routeName: string,
-    description: string
+class ICVElement {
+    name: string;
+    lexicalizationModel: string[];
+    routeName: string;
+    description: string;
+    authAction: number;
 }
