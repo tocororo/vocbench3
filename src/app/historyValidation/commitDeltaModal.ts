@@ -2,8 +2,9 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { HistoryServices } from "../services/historyServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CommitOperation } from "../models/History";
-import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral, ResourceUtils } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ResourceUtils } from "../models/ARTResources";
 import { VBContext } from "../utils/VBContext";
 
 export class CommitDeltaModalData extends BSModalContext {
@@ -15,6 +16,7 @@ export class CommitDeltaModalData extends BSModalContext {
 @Component({
     selector: "commit-modal",
     templateUrl: "./commitDeltaModal.html",
+    styles: ['.clickable:hover { cursor: pointer; }']
 })
 export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
     context: CommitDeltaModalData;
@@ -23,7 +25,7 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
     private additions: CommitOperation[];
     private removals: CommitOperation[];
 
-    constructor(public dialog: DialogRef<CommitDeltaModalData>, private historyService: HistoryServices) {
+    constructor(public dialog: DialogRef<CommitDeltaModalData>, private historyService: HistoryServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
 
@@ -58,6 +60,14 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
             } else { //plain
                 return res.toNT();
             }
+        }
+    }
+
+
+
+    private openResource(resource: ARTNode) {
+        if (resource.isResource()) {
+            this.sharedModals.openResourceView(<ARTResource>resource);
         }
     }
 

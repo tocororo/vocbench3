@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
+import { ARTResource } from "../../../models/ARTResources";
 import { PluginConfiguration } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
+import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
 
 @Injectable()
 export class SharedModalServices {
@@ -57,6 +59,21 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
         return this.modal.open(RemoteRepoSelectionModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a resource view in a modal
+     * @param resource 
+     */
+    openResourceView(resource: ARTResource) {
+        var modalData = new ResourceViewModalData(resource);
+        const builder = new BSModalContextBuilder<ResourceViewModalData>(
+            modalData, undefined, ResourceViewModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        return this.modal.open(ResourceViewModal, overlayConfig).then(
             dialog => dialog.result
         );
     }

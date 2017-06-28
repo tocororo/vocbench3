@@ -4,8 +4,9 @@ import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
 import { ValidationServices } from "../services/validationServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CommitInfo, SortingDirection } from "../models/History";
-import { ARTURIResource } from "../models/ARTResources";
+import { ARTURIResource, ARTResource } from "../models/ARTResources";
 import { UIUtils } from "../utils/UIUtils";
 
 @Component({
@@ -45,7 +46,7 @@ export class ValidationComponent {
         this.ACTION_REJECT
     ];
 
-    constructor(private validationService: ValidationServices, private modal: Modal) { }
+    constructor(private validationService: ValidationServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.init();
@@ -71,6 +72,12 @@ export class ValidationComponent {
                 this.commits = commits;
             }
         );
+    }
+
+    private openResource(resource: ARTResource) {
+        if (resource.isResource()) {
+            this.sharedModals.openResourceView(resource);
+        }
     }
 
     private getPreviousCommits() {

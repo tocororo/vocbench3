@@ -69,7 +69,7 @@
                             <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="item.subject">
+                            <span *ngIf="item.subject" onmouseover="this.style.cursor = 'pointer'" (click)="openResource(item.subject)">
                                 {{item.subject.getURI()}}
                             </span>
                         </td>

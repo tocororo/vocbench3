@@ -28,13 +28,13 @@
                     <td class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
                         <span class="glyphicon glyphicon-plus" style="color: green" title="Added"></span>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center clickable" (click)="openResource(add.subject)">
                         {{getShow(add.subject)}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center clickable" (click)="openResource(add.predicate)">
                         {{getShow(add.predicate)}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" [ngClass]="{ clickable: add.object.isResource() }" (click)="openResource(add.object)">
                         {{getShow(add.object)}}
                     </td>
                     <td class="text-center">
@@ -45,13 +45,13 @@
                     <td class="text-center" style="background: lightpink !important; padding: 3px 6px;">
                         <span class="glyphicon glyphicon-minus" style="color: red" title="Removed"></span>
                     </td>
-                    <td class="text-center">
+                    <td class="text-center clickable" (click)="openResource(rem.subject)">
                         {{getShow(rem.subject)}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center clickable" (click)="openResource(rem.predicate)">
                         {{getShow(rem.predicate)}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center" [ngClass]="{ clickable: rem.object.isResource() }" (click)="openResource(rem.object)">
                         {{getShow(rem.object)}}
                     </td>
                     <td class="text-center">

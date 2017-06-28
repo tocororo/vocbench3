@@ -6,6 +6,7 @@ import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
 
 import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
+import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
 import { ResourceViewPanelComponent } from '../resourceView/resourceViewPanel/resourceViewPanelComponent';
@@ -47,7 +48,7 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         SharedModule, TreeAndListModule
     ],
     declarations: [
-        ResourceViewComponent, ResourceViewPanelComponent,
+        ResourceViewComponent, ResourceViewPanelComponent, ResourceViewModal,
         ResourceViewSplittedComponent, ResourceViewTabbedComponent,
         ResourceRenameComponent, ResourceViewContextMenu,
         ReifiedResourceComponent, EditableResourceComponent,
@@ -63,11 +64,11 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         DataRangeEditor
     ],
     exports: [
-        ResourceViewPanelComponent
+        ResourceViewPanelComponent, ResourceViewModal
     ],
     providers: [ResViewModalServices],
     entryComponents: [
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, ResourceViewModal
     ]
 })
 export class ResourceViewModule { }
