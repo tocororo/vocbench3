@@ -13,6 +13,7 @@ enum Actions {
     CLASSES_CREATE_INDIVIDUAL,
     CLASSES_DELETE_CLASS,
     CLASSES_DELETE_INDIVIDUAL,
+    CLASSES_GET_CLASS_TAXONOMY, //valid for getClassesInfo and getSubClasses
     CLASSES_REMOVE_CLASS_AXIOM,
     CUSTOM_FORMS_CREATE_FORM_MAPPING,
     CUSTOM_FORMS_CREATE_COLLECTION,
@@ -27,12 +28,14 @@ enum Actions {
     CUSTOM_FORMS_UPDATE_COLLECTION, 
     CUSTOM_FORMS_UPDATE_FORM,
     INDIVIDUALS_ADD_TYPE,
+    INDIVIDUALS_GET_INSTANCES,
     INDIVIDUALS_REMOVE_TYPE,
     PROPERTIES_ADD_PROPERTY_DOMAIN,
     PROPERTIES_ADD_PROPERTY_RANGE,
     PROPERTIES_ADD_SUPERPROPERTY,
     PROPERTIES_CREATE_PROPERTY,
     PROPERTIES_DELETE_PROPERTY,
+    PROPERTIES_GET_PROPERTY_TAXONOMY, //valid for getTopProperties and getSubProperties
     PROPERTIES_REMOVE_PROPERTY_DOMAIN,
     PROPERTIES_REMOVE_PROPERTY_RANGE,
     PROPERTIES_REMOVE_SUPERPROPERTY,
@@ -53,12 +56,16 @@ enum Actions {
     SKOS_DELETE_COLLECTION,
     SKOS_DELETE_CONCEPT,
     SKOS_DELETE_SCHEME,
+    SKOS_GET_COLLECTION_TAXONOMY, //valid for getRootCollections and getNestedCollections
+    SKOS_GET_CONCEPT_TAXONOMY, //valid for getTopConcepts and getNarrowerConcepts
+    SKOS_GET_SCHEMES, 
     SKOS_REMOVE_BROADER_CONCEPT,
     SKOS_REMOVE_FROM_COLLECTION,
     SKOS_REMOVE_CONCEPT_FROM_SCHEME,
     SKOS_REMOVE_LEXICALIZATION,
     SKOS_REMOVE_TOP_CONCEPT,
-    SPARQL_EXECUTE_QUERY,
+    SPARQL_EVALUATE_QUERY,
+    SPARQL_EXECUTE_UPDATE,
     VALIDATION //generic for the validation operation
 }
 
@@ -78,6 +85,7 @@ export class AuthorizationEvaluator {
         [Actions.CLASSES_CREATE_INDIVIDUAL] :  'auth(rdf(individual), "C").',
         [Actions.CLASSES_DELETE_CLASS] :  'auth(rdf(cls), "D").',
         [Actions.CLASSES_DELETE_INDIVIDUAL] :  'auth(rdf(individual), "D").',
+        [Actions.CLASSES_GET_CLASS_TAXONOMY] :  'auth(rdf(cls, taxonomy), "R").',
         [Actions.CLASSES_REMOVE_CLASS_AXIOM] :  'auth(rdf(cls, taxonomy), "D").', //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
         [Actions.CUSTOM_FORMS_CREATE_FORM_MAPPING] :  'auth(cform(form, mapping), "C").', 
         [Actions.CUSTOM_FORMS_CREATE_COLLECTION] :  'auth(cform(formCollection), "C").', 
@@ -92,12 +100,14 @@ export class AuthorizationEvaluator {
         [Actions.CUSTOM_FORMS_UPDATE_COLLECTION] :  'auth(cform(formCollection), "U").', 
         [Actions.CUSTOM_FORMS_UPDATE_FORM] :  'auth(cform(form), "U").', 
         [Actions.INDIVIDUALS_ADD_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
+        [Actions.INDIVIDUALS_GET_INSTANCES] : 'auth(rdf(cls, instances), "R").',
         [Actions.INDIVIDUALS_REMOVE_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "D").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
         [Actions.PROPERTIES_CREATE_PROPERTY] : 'auth(rdf(property), "C").', 
         [Actions.PROPERTIES_DELETE_PROPERTY] : 'auth(rdf(property), "D").',
+        [Actions.PROPERTIES_GET_PROPERTY_TAXONOMY] : 'auth(rdf(property, taxonomy), "R").',
         [Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_PROPERTY_RANGE] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
@@ -118,12 +128,16 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_DELETE_COLLECTION] : 'auth(rdf(skosCollection), "D").', 
         [Actions.SKOS_DELETE_CONCEPT] : 'auth(rdf(concept), "D").', 
         [Actions.SKOS_DELETE_SCHEME] : 'auth(rdf(conceptScheme), "D").', 
+        [Actions.SKOS_GET_COLLECTION_TAXONOMY] : 'auth(rdf(collection, taxonomy), "R").', 
+        [Actions.SKOS_GET_CONCEPT_TAXONOMY] : 'auth(rdf(concept, taxonomy), "R").', 
+        [Actions.SKOS_GET_SCHEMES] : 'auth(rdf(conceptScheme), "R").', 
         [Actions.SKOS_REMOVE_BROADER_CONCEPT] : 'auth(rdf(concept, taxonomy), "D").',
         [Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME] : 'auth(rdf(concept, schemes), "D").',
         [Actions.SKOS_REMOVE_FROM_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values
         [Actions.SKOS_REMOVE_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
         [Actions.SKOS_REMOVE_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "D").',
-        [Actions.SPARQL_EXECUTE_QUERY] : 'auth(rdf(sparql), "RU").',
+        [Actions.SPARQL_EVALUATE_QUERY] : 'auth(rdf(sparql), "R").',
+        [Actions.SPARQL_EXECUTE_UPDATE] : 'auth(rdf(sparql), "U").',
         [Actions.VALIDATION] : 'auth(rdf, "V").',
     };
 
@@ -366,6 +380,9 @@ export class AuthorizationEvaluator {
         `;
 
     private static jsPrologSupport = `
+        char_subset(A,B) :-
+            subset(A,B).
+
         subset([],_).
  
         subset([H|R],L) :-

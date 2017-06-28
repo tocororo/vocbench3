@@ -12,7 +12,7 @@
                 <li *ngIf="isUserLogged() && isUserAdmin()" routerLinkActive="active">
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active">
+                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Data']">Data</a>
                 </li>
 				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
