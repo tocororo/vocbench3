@@ -82,6 +82,10 @@ export class AppComponent {
             );
         }
     }
+
+    private isHistoryAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.HISTORY);
+    }
     
     private isValidationAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VALIDATION);
