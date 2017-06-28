@@ -29,16 +29,16 @@
                         <span class="glyphicon glyphicon-plus" style="color: green" title="Added"></span>
                     </td>
                     <td class="text-center">
-                        {{add.subject.toNT()}}
+                        {{getShow(add.subject)}}
                     </td>
                     <td class="text-center">
-                        {{add.predicate.toNT()}}
+                        {{getShow(add.predicate)}}
                     </td>
                     <td class="text-center">
-                        {{add.object.toNT()}}
+                        {{getShow(add.object)}}
                     </td>
                     <td class="text-center">
-                        {{add.context.toNT()}}
+                        {{getShow(add.context)}}
                     </td>
                 </tr>
                 <tr *ngFor="let rem of removals">
@@ -46,16 +46,16 @@
                         <span class="glyphicon glyphicon-minus" style="color: red" title="Removed"></span>
                     </td>
                     <td class="text-center">
-                        {{rem.subject.toNT()}}
+                        {{getShow(rem.subject)}}
                     </td>
                     <td class="text-center">
-                        {{rem.predicate.toNT()}}
+                        {{getShow(rem.predicate)}}
                     </td>
                     <td class="text-center">
-                        {{rem.object.toNT()}}
+                        {{getShow(rem.object)}}
                     </td>
                     <td class="text-center">
-                        {{rem.context.toNT()}}
+                        {{getShow(rem.context)}}
                     </td>
                 </tr>
             </tbody>
