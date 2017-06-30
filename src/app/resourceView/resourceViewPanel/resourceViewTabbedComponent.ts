@@ -122,12 +122,10 @@ export class ResourceViewTabbedComponent {
      * so that the header of the tab shows the updated resource.
      * NB this udpate affects also the resource in the tree (since resource stored the object passed from the tree)
      */
-    private onResourceUpdate(resource: ARTResource) {
-        for (var i = 0; i < this.tabs.length; i++) {
-            if (this.tabs[i].resource.getNominalValue() == resource.getNominalValue()) {
-                this.tabs[i].resource[ResAttribute.SHOW] = resource.getShow();
-                this.tabs[i].resource[ResAttribute.ROLE] = resource.getRole();
-            }
+    private onResourceUpdate(resource: ARTResource, tab: Tab) {
+        let props: string[] = Object.getOwnPropertyNames(resource);
+        for (var i = 0; i < props.length; i++) {
+            tab.resource[props[i]] = resource[props[i]];
         }
     }
 

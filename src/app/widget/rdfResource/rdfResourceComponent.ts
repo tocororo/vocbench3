@@ -31,6 +31,8 @@ export class RdfResourceComponent {
 				} else if (graphs[i].getURI().startsWith(stagingRemoveGraph)) {
 					this.renderingClass = "stagingRemove";
 					break;
+				} else {
+					this.renderingClass = "";
 				}
 			}
 		}

@@ -96,6 +96,8 @@ export class UIUtils {
 
         var xLabelImgSrc = require("../../assets/images/icons/res/xLabel.png");
         var xLabelImportedImgSrc = require("../../assets/images/icons/res/xLabel_imported.png");
+        var xLabelDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_deprecated.png");
+        var xLabelImportedDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_imported_deprecated.png");
         
         var ontologyImgSrc = require("../../assets/images/icons/res/ontology.png");
         
@@ -247,10 +249,14 @@ export class UIUtils {
                 if (lang != null) {
                     imgSrc = this.getFlagImgSrc(lang);
                 } else {
+                    imgSrc = xLabelImgSrc;
                     if (!explicit) {
                         imgSrc = xLabelImportedImgSrc;
-                    } else {
-                        imgSrc = xLabelImgSrc;
+                        if (deprecated) {
+                            imgSrc = xLabelImportedDeprecatedImgSrc;
+                        }
+                    } else if (deprecated) {
+                        imgSrc = xLabelDeprecatedImgSrc;
                     }
                 }
             }
