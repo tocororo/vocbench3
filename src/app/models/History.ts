@@ -6,14 +6,13 @@ export class CommitInfo {
     public user: ARTURIResource;
     public operation: ARTURIResource;
     public operationParameters: ParameterInfo[];
-    public subject: ARTURIResource;
     public startTime: Date;
     public startTimeLocal: string;
     public endTime: Date;
     public endTimeLocal: string;
 
     constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, operationParameters: ParameterInfo[],
-            subject: ARTURIResource, startTime: Date, endTime: Date) {
+            startTime: Date, endTime: Date) {
         this.commit = commit;
         this.user = user;
 
@@ -30,7 +29,6 @@ export class CommitInfo {
 
         this.operationParameters = operationParameters;
         
-        this.subject = subject;
         this.startTime = startTime;
         if (startTime != null) {
             this.startTimeLocal = Deserializer.parseDateTime(startTime);

@@ -1,0 +1,36 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        {{context.commit.operation.getShow()}} parameters
+    </h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh">
+
+    <div class="scrollableContainer">
+        <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let param of context.commit.operationParameters">
+                    <td class="text-center">
+                        <label>{{param.name}}</label>
+                    </td>
+                    <td class="text-center">
+                        {{param.value}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

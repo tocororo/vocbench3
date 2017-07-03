@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
+import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";
 import { OperationSelectModal } from "./operationSelectModal";
 import { HistoryServices } from "../services/historyServices";
 import { CommitInfo, SortingDirection } from "../models/History";
@@ -74,6 +75,17 @@ export class HistoryComponent {
         this.listCommits();
     }
 
+    private inspectParams(item: CommitInfo) {
+        var modalData = new OperationParamsModalData(item);
+        const builder = new BSModalContextBuilder<OperationParamsModalData>(
+            modalData, undefined, OperationParamsModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(OperationParamsModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
     private getCommitDelta(item: CommitInfo) {
         var modalData = new CommitDeltaModalData(item.commit);
         const builder = new BSModalContextBuilder<CommitDeltaModalData>(
@@ -122,6 +134,19 @@ export class HistoryComponent {
             return null;
         } else {
             return new Date(this.toTime).toISOString();
+        }
+    }
+
+    //Utility
+    private isLargeWidth(): boolean {
+        return window.innerWidth > 1440;
+    }
+
+    private showOtherParamButton(item: CommitInfo): boolean {
+        if (this.isLargeWidth()) {
+            return item.operationParameters.length > 2;
+        } else {
+            return item.operationParameters.length > 1;
         }
     }
 

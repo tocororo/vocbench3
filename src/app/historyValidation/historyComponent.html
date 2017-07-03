@@ -55,9 +55,10 @@
                 <thead>
                     <tr>
                         <th class="text-center">Commit</th>
-                        <th class="text-center">Subject</th>
                         <th class="text-center">Action</th>
-                        <!--<th class="text-center">Params</th>-->
+                        <th class="text-center">1st Param</th>
+                        <th class="text-center" *ngIf="isLargeWidth()">2nd Param</th>
+                        <th class="text-center">Other params</th>
                         <th class="text-center">User</th>
                         <th class="text-center">Date</th>
                     </tr>
@@ -68,44 +69,25 @@
                             <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="item.subject">
-                                {{item.subject.getURI()}}
-                            </span>
-                        </td>
-                        <td class="text-center">
                             <span *ngIf="item.operation" [title]="item.operation.getURI()">
                                 {{item.operation.getShow()}}
                             </span>
-
-                            <div *ngIf="item.operationParameters.length != 0" class="btn-group">
-                                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
-                                    <span class="glyphicon glyphicon-info-sign"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <ng-template ngFor let-par [ngForOf]="item.operationParameters">
-                                        <li *ngIf="par.value">
-                                            <div style="padding: 1px 3px; white-space: nowrap">
-                                                <span style="font-weight: bold;">{{par.name}}: </span>
-                                                <span>{{par.value}}</span>
-                                            </div>
-                                        </li>
-                                    </ng-template>
-                                </ul>
-                            </div>
-
                         </td>
-                        <!--<td class="text-center">
-                            <table class="table table-condensed table-borderless">
-                                <tbody>
-                                    <ng-template ngFor let-par [ngForOf]="item.operationParameters">
-                                        <tr *ngIf="par.value">
-                                            <td class="col-sm-4 text-right">{{par.name}}:</td>
-                                            <td class="col-sm-8 text-left">{{par.value}}</td>
-                                        </tr>
-                                    </ng-template>
-                                </tbody>
-                            </table>
-                        </td>-->
+                        <td class="text-center">
+                            <ng-template [ngIf]="item.operationParameters.length != 0">
+                                <label>{{item.operationParameters[0].name}}: </label>{{item.operationParameters[0].value}}
+                            </ng-template>
+                        </td>
+                        <td class="text-center" *ngIf="isLargeWidth()">
+                            <ng-template [ngIf]="item.operationParameters.length > 1">
+                                <label>{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                            </ng-template>
+                        </td>
+                        <td class="text-center">
+                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-default" (click)="inspectParams(item)">
+                                <span class="glyphicon glyphicon-option-horizontal"></span>
+                            </button>
+                        </td>
                         <td class="text-center">
                             <span *ngIf="item.user" [title]="item.user.getURI()">
                                 {{item.user.getShow()}}

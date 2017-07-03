@@ -55,7 +55,6 @@
                 <thead>
                     <tr>
                         <th class="text-center">Commit</th>
-                        <th class="text-center">Subject</th>
                         <th class="text-center">Action</th>
                         <th class="text-center">User</th>
                         <th class="text-center">Date</th>
@@ -67,11 +66,6 @@
                     <tr *ngFor="let item of commits">
                         <td class="text-center" nowrap>
                             <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
-                        </td>
-                        <td class="text-center">
-                            <span *ngIf="item.subject" onmouseover="this.style.cursor = 'pointer'" (click)="openResource(item.subject)">
-                                {{item.subject.getURI()}}
-                            </span>
                         </td>
                         <td class="text-center">
                             <span *ngIf="item.operation" [title]="item.operation.getURI()">

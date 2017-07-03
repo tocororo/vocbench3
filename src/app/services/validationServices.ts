@@ -91,13 +91,10 @@ export class ValidationServices {
                     let operationParamsJson: any[] = commitJson.operationParameters;
                     if (operationParamsJson != null) {
                         operationParamsJson.forEach(element => {
-                            operationParameters.push(new ParameterInfo(element.name, element.value));
+                            if (element.value != null) {
+                                operationParameters.push(new ParameterInfo(element.name, element.value));
+                            }
                         });
-                    }
-
-                    let subject: ARTURIResource;
-                    if (commitJson.subject != null) {
-                        subject = new ARTURIResource(commitJson.subject['@id']);
                     }
 
                     let startTime: Date;
@@ -112,7 +109,7 @@ export class ValidationServices {
                         endTime = new Date(endTimeJson);
                     }
                     
-                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, subject, startTime, endTime);
+                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
 
                     commits.push(commit);
                 }
