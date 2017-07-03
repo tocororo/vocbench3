@@ -123,6 +123,11 @@ export class ResourceViewTabbedComponent {
      * NB this udpate affects also the resource in the tree (since resource stored the object passed from the tree)
      */
     private onResourceUpdate(resource: ARTResource, tab: Tab) {
+        /**
+         * here I copy the attributes of the resource, instead of replacing the resource, so that I prevent
+         * that the resource-view component detectes the change of the input [resource] and makes starting
+         * a loop (resource updated -> getResourceView() -> response parsed and resource in RV updated -> resource updated -> ...)
+         */
         let props: string[] = Object.getOwnPropertyNames(resource);
         for (var i = 0; i < props.length; i++) {
             tab.resource[props[i]] = resource[props[i]];

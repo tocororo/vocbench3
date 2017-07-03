@@ -98,6 +98,7 @@ export class ClassesServices {
                 return this.resourceService.getResourceDescription(cls).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.subClassCreatedEvent.emit({ subClass: resource, superClass: superClass });
                         return resource;
                     }
@@ -149,6 +150,7 @@ export class ClassesServices {
             instance => {
                 return this.resourceService.getResourceDescription(instance).map(
                     resource => {
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.instanceCreatedEvent.emit({ cls: cls, instance: resource });
                         return resource;
                     }

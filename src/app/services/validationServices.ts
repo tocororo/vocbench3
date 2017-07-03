@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { CommitInfo, SortingDirection } from "../models/History";
+import { CommitInfo, ParameterInfo, SortingDirection } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
@@ -87,6 +87,14 @@ export class ValidationServices {
                         operation = new ARTURIResource(operationJson['@id']);
                     }
 
+                    let operationParameters: ParameterInfo[] = [];
+                    let operationParamsJson: any[] = commitJson.operationParameters;
+                    if (operationParamsJson != null) {
+                        operationParamsJson.forEach(element => {
+                            operationParameters.push(new ParameterInfo(element.name, element.value));
+                        });
+                    }
+
                     let subject: ARTURIResource;
                     if (commitJson.subject != null) {
                         subject = new ARTURIResource(commitJson.subject['@id']);
@@ -104,7 +112,7 @@ export class ValidationServices {
                         endTime = new Date(endTimeJson);
                     }
                     
-                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, subject, startTime, endTime);
+                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, subject, startTime, endTime);
 
                     commits.push(commit);
                 }

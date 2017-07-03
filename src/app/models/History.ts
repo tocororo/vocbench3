@@ -5,14 +5,15 @@ export class CommitInfo {
     public commit: ARTURIResource;
     public user: ARTURIResource;
     public operation: ARTURIResource;
+    public operationParameters: ParameterInfo[];
     public subject: ARTURIResource;
     public startTime: Date;
     public startTimeLocal: string;
     public endTime: Date;
     public endTimeLocal: string;
 
-    constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, subject: ARTURIResource, 
-            startTime: Date, endTime: Date) {
+    constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, operationParameters: ParameterInfo[],
+            subject: ARTURIResource, startTime: Date, endTime: Date) {
         this.commit = commit;
         this.user = user;
 
@@ -26,6 +27,8 @@ export class CommitInfo {
             }
             this.operation.setShow(operationShow);
         }
+
+        this.operationParameters = operationParameters;
         
         this.subject = subject;
         this.startTime = startTime;
@@ -36,6 +39,15 @@ export class CommitInfo {
         if (endTime != null) {
             this.endTimeLocal = Deserializer.parseDateTime(endTime);
         }
+    }
+}
+
+export class ParameterInfo {
+    public name: string;
+    public value: string;
+    constructor(name: string, value: string) {
+        this.name = name;
+        this.value = value;
     }
 }
 

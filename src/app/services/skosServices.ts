@@ -102,6 +102,7 @@ export class SkosServices {
                 return this.resourceService.getResourceDescription(concept).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.topConceptCreatedEvent.emit({ concept: <ARTURIResource>resource, schemes: conceptSchemes });
                         return { concept: resource, scheme: conceptSchemes };
                     }
@@ -204,6 +205,7 @@ export class SkosServices {
                 return this.resourceService.getResourceDescription(concept).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
                         return <ARTURIResource>resource;
                     }
@@ -338,6 +340,7 @@ export class SkosServices {
             scheme => {
                 return this.resourceService.getResourceDescription(scheme).map(
                     resource => {
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         return resource;
                     }
                 );
@@ -566,6 +569,7 @@ export class SkosServices {
                 return this.resourceService.getResourceDescription(collection).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.rootCollectionCreatedEvent.emit(resource);
                         return resource;
                     }
@@ -611,6 +615,7 @@ export class SkosServices {
                 return this.resourceService.getResourceDescription(collection).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: resource, container: containingCollection });
                         return resource;
                     }

@@ -12,7 +12,7 @@ export abstract class AbstractTreeNode {
      * VIEWCHILD, INPUTS / OUTPUTS
      */
 
-    @Input() node:ARTURIResource;
+    @Input() node: ARTURIResource;
     @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
@@ -61,6 +61,11 @@ export abstract class AbstractTreeNode {
                 }
             }
         );
+        //if the resource is new (just created), make it visible in the view
+        if (this.node.getAdditionalProperty(ResAttribute.NEW)) {
+            this.treeNodeElement.nativeElement.scrollIntoView();
+            this.node.deleteAdditionalProperty(ResAttribute.NEW);
+        }
     }
 
     ngOnDestroy() {

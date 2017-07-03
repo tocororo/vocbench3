@@ -86,7 +86,7 @@ export class ConceptTreeComponent extends AbstractTree {
     //EVENT LISTENERS
 
     private onTopConceptCreated(concept: ARTURIResource, schemes: ARTURIResource[]) {
-        if (this.schemes == undefined) {//in no-scheme mode add to the root if doesn't already in
+        if (this.schemes == undefined) {//in no-scheme mode add to the root if it isn't already in
             if (!ResourceUtils.containsResource(this.roots, concept)) {
                 this.roots.push(concept);
             }
@@ -95,7 +95,7 @@ export class ConceptTreeComponent extends AbstractTree {
                 for (var i = 0; i < schemes.length; i++) {
                     if (ResourceUtils.containsResource(this.schemes, schemes[i])) {
                         this.roots.push(concept);
-                        return;
+                        break;
                     }
                 }
             }

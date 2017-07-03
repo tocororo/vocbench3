@@ -271,6 +271,7 @@ export class PropertyServices {
                 return this.resourceService.getResourceDescription(property).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.topPropertyCreatedEvent.emit(<ARTURIResource>resource);
                         return resource;
                     }
@@ -312,6 +313,7 @@ export class PropertyServices {
                 return this.resourceService.getResourceDescription(property).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: <ARTURIResource>resource, superProperty: superProperty });
                         return resource;
                     }
