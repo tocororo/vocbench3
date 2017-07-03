@@ -18,7 +18,7 @@
 				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()"  [ngClass]="{ disabled : !isHistoryAuthorized() }"
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" [ngClass]="{ disabled : !isHistoryAuthorized() }"
                     routerLinkActive="active">
                     <a [routerLink]="['/History']">History</a>
                 </li>

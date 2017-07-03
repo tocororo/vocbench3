@@ -26,24 +26,23 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li>
+                <li [ngClass]="{ disabled : !isLoadDataAuthorized() }">
                     <a [routerLink]="['/Config/LoadData']">
                         <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load data
                     </a>
                 </li>
-                <li>
+                <li [ngClass]="{ disabled : !isExportDataAuthorized() }">
                     <a [routerLink]="['/Config/ExportData']">
                         <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
                     </a>
                 </li>
-                <li>
+                <li [ngClass]="{ disabled : !isClearDataAuthorized() }">
                     <a (click)="clearData()">
                         <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
                     </a>
                 </li>
-                <li>
+                <li [ngClass]="{ disabled : !isVersioningAuthorized() }">
                     <a [routerLink]="['/Config/Versioning']">
-                        <!--<span class="glyphicon glyphicon-tasks" style="margin-right: 5px"></span>Versioning-->
                         <span class="glyphicon glyphicon-time" style="margin-right: 5px"></span>Versioning
                     </a>
                 </li>

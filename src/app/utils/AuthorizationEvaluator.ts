@@ -27,6 +27,7 @@ enum Actions {
     CUSTOM_FORMS_UPDATE_FORM_MAPPING, 
     CUSTOM_FORMS_UPDATE_COLLECTION, 
     CUSTOM_FORMS_UPDATE_FORM,
+    EXPORT_EXPORT,
     HISTORY,
     ICV_CONCEPT_WITHOUT_SCHEME,
     ICV_DANGLING_CONCEPT,
@@ -37,6 +38,8 @@ enum Actions {
     INDIVIDUALS_ADD_TYPE,
     INDIVIDUALS_GET_INSTANCES,
     INDIVIDUALS_REMOVE_TYPE,
+    INPUT_OUTPUT_CLEAR_DATA,
+    INPUT_OUTPUT_LOAD_DATA,
     PROPERTIES_ADD_PROPERTY_DOMAIN,
     PROPERTIES_ADD_PROPERTY_RANGE,
     PROPERTIES_ADD_SUPERPROPERTY,
@@ -73,7 +76,8 @@ enum Actions {
     SKOS_REMOVE_TOP_CONCEPT,
     SPARQL_EVALUATE_QUERY,
     SPARQL_EXECUTE_UPDATE,
-    VALIDATION //generic for the validation operation
+    VALIDATION, //generic for the validation operation
+    VERSIONS_GET_VERSIONS
 }
 
 export class AuthorizationEvaluator {
@@ -106,6 +110,7 @@ export class AuthorizationEvaluator {
         [Actions.CUSTOM_FORMS_UPDATE_FORM_MAPPING] :  'auth(cform(form, mapping), "U").', 
         [Actions.CUSTOM_FORMS_UPDATE_COLLECTION] :  'auth(cform(formCollection), "U").', 
         [Actions.CUSTOM_FORMS_UPDATE_FORM] :  'auth(cform(form), "U").', 
+        [Actions.EXPORT_EXPORT] : 'auth(rdf, "R").',
         [Actions.HISTORY] :  'auth(rdf, "R").',
         [Actions.ICV_CONCEPT_WITHOUT_SCHEME] : 'auth(rdf(concept), "R").',
         [Actions.ICV_DANGLING_CONCEPT] : 'auth(rdf(concept), "R").',
@@ -116,6 +121,8 @@ export class AuthorizationEvaluator {
         [Actions.INDIVIDUALS_ADD_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
         [Actions.INDIVIDUALS_GET_INSTANCES] : 'auth(rdf(cls, instances), "R").',
         [Actions.INDIVIDUALS_REMOVE_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "D").',
+        [Actions.INPUT_OUTPUT_CLEAR_DATA] : 'auth(rdf, "D").',
+        [Actions.INPUT_OUTPUT_LOAD_DATA] : 'auth(rdf, "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
@@ -153,6 +160,7 @@ export class AuthorizationEvaluator {
         [Actions.SPARQL_EVALUATE_QUERY] : 'auth(rdf(sparql), "R").',
         [Actions.SPARQL_EXECUTE_UPDATE] : 'auth(rdf(sparql), "U").',
         [Actions.VALIDATION] : 'auth(rdf, "V").',
+        [Actions.VERSIONS_GET_VERSIONS] : 'auth(rdf, "V").', //TODO
     };
 
     public static initEvalutator(capabilityList: string[]) {

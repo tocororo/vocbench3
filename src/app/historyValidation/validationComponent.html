@@ -82,7 +82,7 @@
                         </td>
                         <td>
                             <select class="form-control input-xs" [(ngModel)]="item.validationAction">
-                                <option *ngFor="let act of validationActions" [ngValue]="act.value">{{act.show}}</option>
+                                <option *ngFor="let act of validationActions" [ngValue]="act">{{act.show}}</option>
                             </select>
                         </td>
                         <!--<td>
@@ -110,10 +110,11 @@
                 </button>
             </div>
 
-            <div class="btn-group btn-group-xs" role="group" style="margin-right: 12px;">
+            <!-- Temporarly disabled -->
+            <!--<div class="btn-group btn-group-xs" role="group" style="margin-right: 12px;">
                 <button class="btn btn-xs btn-default" (click)="acceptAll()">Accept all</button>
                 <button class="btn btn-xs btn-default" (click)="rejectAll()">Reject all</button>
-            </div>
+            </div>-->
 
             <button type="submit" class="btn btn-default btn-sm pull-right" (click)="validate()">Validate</button>
         </div>

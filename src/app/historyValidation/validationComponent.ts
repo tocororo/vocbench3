@@ -40,8 +40,9 @@ export class ValidationComponent {
 
     private ACTION_ACCEPT = { value: "accept", show: "Accept" };
     private ACTION_REJECT = { value: "reject", show: "Reject" };
+    private ACTION_NONE = { value: "------", show: "------" };
     private validationActions: { value: string, show: string }[] = [
-        { value: null, show: "------" },
+        this.ACTION_NONE,
         this.ACTION_ACCEPT,
         this.ACTION_REJECT
     ];
@@ -70,6 +71,7 @@ export class ValidationComponent {
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;
+                this.commits.forEach(c => c['validationAction'] = this.ACTION_NONE);
             }
         );
     }
@@ -114,23 +116,36 @@ export class ValidationComponent {
     }
 
     private validate() {
-        var validationFnArray: any[] = []; //all commits to accept or reject
-        //collect commits to accept and reject
-        for (var i = 0; i < this.commits.length; i++) {
-            if (this.commits[i]['validationAction'] == this.ACTION_ACCEPT.value) {
-                validationFnArray.push(this.validationService.accept(this.commits[i].commit));
-            }
-            if (this.commits[i]['validationAction'] == this.ACTION_REJECT.value) {
-                validationFnArray.push(this.validationService.reject(this.commits[i].commit));//this is undefined....WHY???????????
-            }
-        }
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        Observable.forkJoin(validationFnArray).subscribe(
-            res => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.init();
+        this.validateCommitsRecursively(this.commits);
+    }
+
+    /**
+     * Accept or reject commits one after the other
+     * @param commits 
+     */
+    private validateCommitsRecursively(commits: CommitInfo[]) {
+        var validationFunctions: any;
+        if (commits.length == 0) {
+            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+            this.init();
+        } else {
+            if (commits[0]['validationAction'] == this.ACTION_ACCEPT) {
+                validationFunctions = this.validationService.accept(commits[0].commit);
+            } else if (commits[0]['validationAction'] == this.ACTION_REJECT) {
+                validationFunctions = this.validationService.reject(commits[0].commit);
+            } else {
+                commits.shift();
+                this.validateCommitsRecursively(commits);
+                return;
             }
-        );
+            validationFunctions.subscribe(
+                (stResp: any) => {
+                    commits.shift();
+                    this.validateCommitsRecursively(commits);
+                }
+            );
+        }
     }
 
     //SORT HANDLER

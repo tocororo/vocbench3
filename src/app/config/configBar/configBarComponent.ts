@@ -9,6 +9,7 @@ import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
@@ -43,6 +44,19 @@ export class ConfigBarComponent {
      */
     private getCtxVersion(): VersionInfo {
         return VBContext.getContextVersion();
+    }
+
+    private isLoadDataAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INPUT_OUTPUT_LOAD_DATA);
+    }
+    private isExportDataAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.EXPORT_EXPORT);
+    }
+    private isClearDataAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INPUT_OUTPUT_CLEAR_DATA);
+    }
+    private isVersioningAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VERSIONS_GET_VERSIONS);
     }
 
     /**

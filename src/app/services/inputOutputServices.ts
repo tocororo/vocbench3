@@ -17,15 +17,18 @@ export class InputOutputServices {
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      * @param format the serialization format of the file
      */
-    loadRDF(file: File, baseURI: string, transitiveImportAllowance: string, format?: RDFFormat) {
+    loadRDF(file: File, baseURI: string, transitiveImportAllowance: string, format?: RDFFormat, validateImplicitly?: boolean) {
         console.log("[InputOutputServices] loadRDF");
         var data: any = {
             inputFile: file,
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance
         }
-        if (format != undefined) {
+        if (format != null) {
             data.rdfFormat = format.name;
+        }
+        if (validateImplicitly != null) {
+            data.validateImplicitly = validateImplicitly;
         }
         return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, true).map(
             stResp => {

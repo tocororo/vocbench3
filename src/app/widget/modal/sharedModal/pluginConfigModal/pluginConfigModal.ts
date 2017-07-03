@@ -34,7 +34,7 @@ export class PluginConfigModal implements ModalComponent<PluginConfigModalData> 
     private isOkClickable(): boolean {
         var result = true;
         for (var i = 0; i < this.config.params.length; i++) {
-            if (this.config.params[i].required && (this.config.params[i].value.trim() == "" || this.config.params[i].value == null)) {
+            if (this.config.params[i].required && (this.config.params[i].value == null || this.config.params[i].value.trim() == "")) {
                 result = false;
             }
         }

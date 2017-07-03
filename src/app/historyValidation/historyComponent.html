@@ -75,12 +75,12 @@
                         </td>
                         <td class="text-center">
                             <ng-template [ngIf]="item.operationParameters.length != 0">
-                                <label>{{item.operationParameters[0].name}}: </label>{{item.operationParameters[0].value}}
+                                <label style="white-space: pre;">{{item.operationParameters[0].name}}: </label>{{item.operationParameters[0].value}}
                             </ng-template>
                         </td>
                         <td class="text-center" *ngIf="isLargeWidth()">
                             <ng-template [ngIf]="item.operationParameters.length > 1">
-                                <label>{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
                             </ng-template>
                         </td>
                         <td class="text-center">

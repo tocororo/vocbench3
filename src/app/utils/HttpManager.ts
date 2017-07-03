@@ -412,10 +412,7 @@ export class HttpManager {
           "statusText": "", "headers": {}, "type": 3, "url": null }
         */
         if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
-            this.basicModals.alert("Error",
-                "No SemanticTurkey server found! Please check that a server is listening on "
-                + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
-                + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
+            this.basicModals.alert("Error", "Connection with ST server has failed; please check your internet connection", "error");
         } else if (err.status == 401 || err.status == 403) {
             //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
