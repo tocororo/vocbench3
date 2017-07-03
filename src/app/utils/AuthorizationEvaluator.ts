@@ -77,6 +77,7 @@ enum Actions {
     SPARQL_EVALUATE_QUERY,
     SPARQL_EXECUTE_UPDATE,
     VALIDATION, //generic for the validation operation
+    VERSIONS_CREATE_VERSION_DUMP,
     VERSIONS_GET_VERSIONS
 }
 
@@ -160,6 +161,7 @@ export class AuthorizationEvaluator {
         [Actions.SPARQL_EVALUATE_QUERY] : 'auth(rdf(sparql), "R").',
         [Actions.SPARQL_EXECUTE_UPDATE] : 'auth(rdf(sparql), "U").',
         [Actions.VALIDATION] : 'auth(rdf, "V").',
+        [Actions.VERSIONS_CREATE_VERSION_DUMP] : 'auth(rdf, "V").', //TODO
         [Actions.VERSIONS_GET_VERSIONS] : 'auth(rdf, "V").', //TODO
     };
 

@@ -67,11 +67,13 @@ export class ValidationComponent {
     }
 
     private listCommits() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.validationService.getCommits(this.tipTime, this.operations, this.getFormattedFromTime(), 
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;
                 this.commits.forEach(c => c['validationAction'] = this.ACTION_NONE);
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
             }
         );
     }
@@ -94,13 +96,13 @@ export class ValidationComponent {
 
     private acceptAll() {
         for (var i = 0; i < this.commits.length; i++) {
-            this.commits[i]['validationAction'] = this.ACTION_ACCEPT.value;
+            this.commits[i]['validationAction'] = this.ACTION_ACCEPT;
         }
     }
 
     private rejectAll() {
         for (var i = 0; i < this.commits.length; i++) {
-            this.commits[i]['validationAction'] = this.ACTION_REJECT.value;
+            this.commits[i]['validationAction'] = this.ACTION_REJECT;
         }
     }
 
@@ -117,7 +119,7 @@ export class ValidationComponent {
 
     private validate() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.validateCommitsRecursively(this.commits);
+        this.validateCommitsRecursively(this.commits.slice());
     }
 
     /**
