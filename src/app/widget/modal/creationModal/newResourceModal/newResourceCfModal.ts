@@ -54,13 +54,9 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal implement
 
         var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
             uriResource: new ARTURIResource(this.uri),
-            cls: null,
+            cls: this.resourceClass,
             cfId: this.customFormId,
             cfValueMap: entryMap
-        }
-        //set class only if not the default
-        if (this.resourceClass.getURI() != this.context.cls.getURI()) {
-            returnedData.cls = this.resourceClass;
         }
         this.dialog.close(returnedData);
     }
