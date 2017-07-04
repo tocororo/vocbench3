@@ -4,15 +4,15 @@
         <div class="subPanel-heading">
             <label style="flex: 1">Namespace management:</label>
             <div class="btn-group btn-group-xs" role="group">
-                <button class="btn btn-default" title="Add mapping" (click)="addMapping()">
+                <button class="btn btn-default" title="Add mapping" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
                 <button class="btn btn-default" title="Remove mapping" (click)="removeMapping()"
-                    [disabled]="!selectedMapping || !selectedMapping.explicit">
+                    [disabled]="!selectedMapping || !selectedMapping.explicit || !isRemoveNsPrefixMappingAuthorized()">
                     <span class="glyphicon glyphicon-minus"></span>
                 </button>
                 <button class="btn btn-default" title="Change prefix" (click)="changeMapping()"
-                    [disabled]="!selectedMapping || !selectedMapping.explicit">
+                    [disabled]="!selectedMapping || !selectedMapping.explicit || !isChangeNsPrefixMappingAuthorized()">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </div>
@@ -32,8 +32,8 @@
                                 <td><label>BaseURI:</label></td>
                                 <td>
                                     <input type="text" class="form-control input-xs"
-                                        [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isBaseURIValid() }"
-                                        [ngModel]="baseURI" (ngModelChange)="onBaseURIChanged($event)">
+                                        [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isBaseURIValid() }" [ngModel]="baseURI"
+                                        (ngModelChange)="onBaseURIChanged($event)" [disabled]="!isBaseuriNsEditAuthorized()">
                                 </td>
                                 <td rowspan="2">
                                     <div class="btn-group-sm btn-group-vertical">
@@ -43,7 +43,7 @@
                                         </button>
                                         <button class="btn btn-default" title="Apply namespace baseURI changes"
                                             [ngClass]="{'btn-primary': areNamespaceBaseURIChanged(), 'btn-default': !areNamespaceBaseURIChanged()}"
-                                            (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged()">
+                                            (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged() || !isBaseuriNsEditAuthorized()">
                                             <span class="glyphicon glyphicon-ok"></span>
                                         </button>
                                     </div>
@@ -53,8 +53,8 @@
                                 <td><label>Namespace:</label></td>
                                 <td>
                                     <input type="text" class="form-control input-xs"
-                                        [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isNamespaceValid() }"
-                                        [ngModel]="namespace" (ngModelChange)="onNamespaceChanged($event)">
+                                        [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isNamespaceValid() }" [ngModel]="namespace"
+                                        (ngModelChange)="onNamespaceChanged($event)" [disabled]="!isBaseuriNsEditAuthorized()" >
                                 </td>
                             </tr>
                         </tbody>
@@ -89,7 +89,7 @@
             <div class="subPanel-heading">
                 <label style="flex: 1">Imports:</label>
                 <div class="dropdown pull-right">
-                    <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+                    <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" [disabled]="!isAddImportAuthorized()">
                         Add import from <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
@@ -133,7 +133,8 @@
                                 <td>{{m.file}}</td>
                                 <td>
                                     <div class="dropdown pull-right">
-                                        <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" title="Update mirror from...">
+                                        <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown"
+                                            title="Update mirror from..." [disabled]="!isUpdateMirrorAuthorized()">
                                             <span class="glyphicon glyphicon-pencil"></span>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -144,7 +145,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <button class="btn btn-default btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror">
+                                    <button class="btn btn-default btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror"
+                                        [disabled]="!isDeleteMirrorAuthorized()">
                                         <span class="glyphicon glyphicon-trash"></span>
                                     </button>
                                 </td>

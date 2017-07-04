@@ -46,6 +46,11 @@ export class VersioningComponent {
 
     private swithcToVersion() {
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
+            // this.versionsService.closeVersion(VBContext.getContextVersion().versionId).subscribe(
+            //     stResp => {
+            //         VBContext.removeContextVersion();
+            //     }
+            // );
             VBContext.removeContextVersion();
         } else {
             VBContext.setContextVersion(this.selectedVersion);

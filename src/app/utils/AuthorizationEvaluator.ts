@@ -27,6 +27,8 @@ enum Actions {
     CUSTOM_FORMS_UPDATE_FORM_MAPPING, 
     CUSTOM_FORMS_UPDATE_COLLECTION, 
     CUSTOM_FORMS_UPDATE_FORM,
+    DATASET_METADATA_EXPORT,
+    DATASET_METADATA_GET_METADATA,
     EXPORT_EXPORT,
     HISTORY,
     ICV_CONCEPT_WITHOUT_SCHEME,
@@ -40,6 +42,15 @@ enum Actions {
     INDIVIDUALS_REMOVE_TYPE,
     INPUT_OUTPUT_CLEAR_DATA,
     INPUT_OUTPUT_LOAD_DATA,
+    METADATA_ADD_IMPORT, 
+    METADATA_CHANGE_NS_PREFIX_MAPPING, 
+    METADATA_REMOVE_IMPORT, 
+    METADATA_REMOVE_NS_PREFIX_MAPPING,
+    METADATA_SET_DEFAULT_NS,
+    METADATA_SET_NS_PREFIX_MAPPING,
+    ONT_MANAGER_DELETE_ONTOLOGY_MIRROR,
+    ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR,
+    PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
     PROPERTIES_ADD_PROPERTY_DOMAIN,
     PROPERTIES_ADD_PROPERTY_RANGE,
     PROPERTIES_ADD_SUPERPROPERTY,
@@ -50,6 +61,7 @@ enum Actions {
     PROPERTIES_REMOVE_PROPERTY_RANGE,
     PROPERTIES_REMOVE_SUPERPROPERTY,
     REFACTOR_CHANGE_RESOURCE_URI,
+    REFACTOR_REPLACE_BASEURI,
     REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL,
     RESOURCES_ADD_VALUE,
     RESOURCES_REMOVE_VALUE,
@@ -110,7 +122,9 @@ export class AuthorizationEvaluator {
         [Actions.CUSTOM_FORMS_GET_FORMS] :  'auth(cform(form), "R").',
         [Actions.CUSTOM_FORMS_UPDATE_FORM_MAPPING] :  'auth(cform(form, mapping), "U").', 
         [Actions.CUSTOM_FORMS_UPDATE_COLLECTION] :  'auth(cform(formCollection), "U").', 
-        [Actions.CUSTOM_FORMS_UPDATE_FORM] :  'auth(cform(form), "U").', 
+        [Actions.CUSTOM_FORMS_UPDATE_FORM] :  'auth(cform(form), "U").',
+        [Actions.DATASET_METADATA_EXPORT] : 'auth(rdf(dataset, metadata), "CU").', //export require to set the metadata, so requires CU
+        [Actions.DATASET_METADATA_GET_METADATA] : 'auth(rdf(dataset, metadata), "R").',
         [Actions.EXPORT_EXPORT] : 'auth(rdf, "R").',
         [Actions.HISTORY] :  'auth(rdf, "R").',
         [Actions.ICV_CONCEPT_WITHOUT_SCHEME] : 'auth(rdf(concept), "R").',
@@ -124,6 +138,15 @@ export class AuthorizationEvaluator {
         [Actions.INDIVIDUALS_REMOVE_TYPE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "D").',
         [Actions.INPUT_OUTPUT_CLEAR_DATA] : 'auth(rdf, "D").',
         [Actions.INPUT_OUTPUT_LOAD_DATA] : 'auth(rdf, "C").',
+        [Actions.METADATA_ADD_IMPORT] : 'auth(rdf(import), "C").',
+        [Actions.METADATA_CHANGE_NS_PREFIX_MAPPING] : 'auth(pm(project, prefixMapping), "U").',
+        [Actions.METADATA_REMOVE_IMPORT] : 'auth(rdf(import), "D").',
+        [Actions.METADATA_REMOVE_NS_PREFIX_MAPPING] : 'auth(pm(project, prefixMapping), "D").',
+        [Actions.METADATA_SET_DEFAULT_NS] : 'auth(pm(project, defnamespace), "U").',
+        [Actions.METADATA_SET_NS_PREFIX_MAPPING] : 'auth(pm(project, prefixMapping), "U").',
+        [Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "D").',
+        [Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "CU").',
+        [Actions.PLUGINS_GET_PLUGINS] : 'auth(sys(plugins), "R").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
@@ -134,6 +157,7 @@ export class AuthorizationEvaluator {
         [Actions.PROPERTIES_REMOVE_PROPERTY_RANGE] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
         [Actions.REFACTOR_CHANGE_RESOURCE_URI] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
+        [Actions.REFACTOR_REPLACE_BASEURI] : 'auth(rdf, "CRUD").',
         [Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL] : 'auth(rdf(concept), "C").', 
         [Actions.RESOURCES_ADD_VALUE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "C").', 
         [Actions.RESOURCES_REMOVE_VALUE] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "D").', 
@@ -142,7 +166,7 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_ADD_BROADER_CONCEPT] : 'auth(rdf(concept, taxonomy), "C").', 
         [Actions.SKOS_ADD_CONCEPT_TO_SCHEME] : 'auth(rdf(concept, schemes), "C").', 
         [Actions.SKOS_ADD_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
-        [Actions.SKOS_ADD_TO_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (add)
+        [Actions.SKOS_ADD_TO_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
         [Actions.SKOS_ADD_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "C").',
         [Actions.SKOS_CREATE_COLLECTION] : 'auth(rdf(skosCollection), "C").', 
         [Actions.SKOS_CREATE_CONCEPT] : 'auth(rdf(concept), "C").', 
@@ -150,19 +174,19 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_DELETE_COLLECTION] : 'auth(rdf(skosCollection), "D").', 
         [Actions.SKOS_DELETE_CONCEPT] : 'auth(rdf(concept), "D").', 
         [Actions.SKOS_DELETE_SCHEME] : 'auth(rdf(conceptScheme), "D").', 
-        [Actions.SKOS_GET_COLLECTION_TAXONOMY] : 'auth(rdf(collection, taxonomy), "R").', 
+        [Actions.SKOS_GET_COLLECTION_TAXONOMY] : 'auth(rdf(skosCollection, taxonomy), "R").', 
         [Actions.SKOS_GET_CONCEPT_TAXONOMY] : 'auth(rdf(concept, taxonomy), "R").', 
         [Actions.SKOS_GET_SCHEMES] : 'auth(rdf(conceptScheme), "R").', 
         [Actions.SKOS_REMOVE_BROADER_CONCEPT] : 'auth(rdf(concept, taxonomy), "D").',
         [Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME] : 'auth(rdf(concept, schemes), "D").',
-        [Actions.SKOS_REMOVE_FROM_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values
+        [Actions.SKOS_REMOVE_FROM_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
         [Actions.SKOS_REMOVE_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
         [Actions.SKOS_REMOVE_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "D").',
         [Actions.SPARQL_EVALUATE_QUERY] : 'auth(rdf(sparql), "R").',
         [Actions.SPARQL_EXECUTE_UPDATE] : 'auth(rdf(sparql), "U").',
         [Actions.VALIDATION] : 'auth(rdf, "V").',
-        [Actions.VERSIONS_CREATE_VERSION_DUMP] : 'auth(rdf, "V").', //TODO
-        [Actions.VERSIONS_GET_VERSIONS] : 'auth(rdf, "V").', //TODO
+        [Actions.VERSIONS_CREATE_VERSION_DUMP] : 'auth(rdf(dataset, version), "C").',
+        [Actions.VERSIONS_GET_VERSIONS] : 'auth(rdf(dataset, version), "R").',
     };
 
     public static initEvalutator(capabilityList: string[]) {
@@ -172,6 +196,7 @@ export class AuthorizationEvaluator {
             db += capabilities;
         }
         // console.log(db);
+        AuthorizationEvaluator.reset();
         AuthorizationEvaluator.prologEngine = Prolog.Parser.parse(db);
     }
 
@@ -220,7 +245,10 @@ export class AuthorizationEvaluator {
     private static evaulatePrologGoal(goal: string): boolean {
         let query = Prolog.Parser.parseQuery(goal);
         let iter = Prolog.Solver.query(AuthorizationEvaluator.prologEngine, query);
-        return iter.next();
+        let next: boolean = iter.next();
+        // console.log("evaluating goal", goal);
+        // console.log("next", next);
+        return next;
     }
 
     //AUTHORIZATIONS FOR ADD/UPDATE/REMOVE IN RESOURCE VIEW PARTITION

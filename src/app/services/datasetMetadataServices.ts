@@ -5,21 +5,21 @@ import { PluginSpecification, PluginConfiguration, PluginConfigParam } from "../
 import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
-export class DatasetMetadataExportServices {
+export class DatasetMetadataServices {
 
-    private serviceName = "DatasetMetadataExport";
+    private serviceName = "DatasetMetadata";
 
     constructor(private httpMgr: HttpManager) { }
 
     /**
      * @param exporterId
      */
-    getExporterSettings(exporterId: string): Observable<{extensionPointSettings: PluginConfiguration, pluginSettings: PluginConfiguration}> {
-        console.log("[DatasetMetadataExportServices] getExporterSettings");
+    getDatasetMetadata(exporterId: string): Observable<{extensionPointSettings: PluginConfiguration, pluginSettings: PluginConfiguration}> {
+        console.log("[DatasetMetadataExportServices] getDatasetMetadata");
         var params = {
             exporterId: exporterId
         };
-        return this.httpMgr.doGet(this.serviceName, "getExporterSettings", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params, true).map(
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
                 let extPointParamsJson: any[] = extPointSettingsJson.properties;
@@ -62,14 +62,14 @@ export class DatasetMetadataExportServices {
      * @param extensionPointProperties json map object of key - value
      * @param pluginProperties json map object of key - value
      */
-    setExporterSettings(exporterId: string, extensionPointProperties: any, pluginProperties: any) {
-        console.log("[DatasetMetadataExportServices] setExporterSettings");
+    setDatasetMetadata(exporterId: string, extensionPointProperties: any, pluginProperties: any) {
+        console.log("[DatasetMetadataExportServices] setDatasetMetadata");
         var params = {
             exporterId: exporterId,
             extensionPointProperties: JSON.stringify(extensionPointProperties),
             pluginProperties: JSON.stringify(pluginProperties)
         };
-        return this.httpMgr.doPost(this.serviceName, "setExporterSettings", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setDatasetMetadata", params, true);
     }
 
     /**

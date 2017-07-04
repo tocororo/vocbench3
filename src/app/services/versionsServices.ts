@@ -67,5 +67,17 @@ export class VersionsServices {
         return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, true);
     }
 
+    /**
+     * 
+     * @param versionId 
+     */
+    closeVersion(versionId: string) {
+        console.log("[VersionsServices] closeVersion");
+        var params: any = {
+            versionId: versionId
+        };
+        return this.httpMgr.doPost(this.serviceName, "closeVersion", params, true);
+    }
+
 
 }

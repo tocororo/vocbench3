@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-
 import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { OntoManagerServices } from '../../../../services/ontoManagerServices';
 import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { PrefixMapping } from "../../../../models/PrefixMapping";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
@@ -503,6 +503,32 @@ export class NamespacesAndImportsComponent {
                 this.refreshOntoMirror();
             }
         );
+    }
+
+    //Authorizations
+
+    private isAddNsPrefixMappingAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_SET_NS_PREFIX_MAPPING);
+    }
+    private isRemoveNsPrefixMappingAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REMOVE_NS_PREFIX_MAPPING);
+    }
+    private isChangeNsPrefixMappingAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_CHANGE_NS_PREFIX_MAPPING);   
+    }
+    private isBaseuriNsEditAuthorized(): boolean {
+        return (
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_SET_DEFAULT_NS) &&
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_REPLACE_BASEURI));
+    }
+    private isAddImportAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_ADD_IMPORT);
+    }
+    private isUpdateMirrorAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR);
+    }
+    private isDeleteMirrorAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR);
     }
 
 }
