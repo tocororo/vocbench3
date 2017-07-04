@@ -17,12 +17,12 @@
                         Note: this is <strong>not</strong> a loss-less operation,
                         all the information related to the SKOS labels and notes will be lost.
                     </div>
-                    <div class="checkbox">
+                </div>
+                <div class="subPanel-footer hbox" style="align-items: center; justify-content: flex-end">
+                    <div class="checkbox" style="margin: 0px 10px; display: inline-block">
                         <label><input type="checkbox" [(ngModel)]="reifyNotes">Reify SKOS notes</label>
                     </div>
-                </div>
-                <div class="subPanel-footer">
-                    <button class="btn btn-sm btn-default pull-right" (click)="skosToSkosxl()">Refactor</button>
+                    <button class="btn btn-sm btn-default pull-right" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="subPanel-footer">
-                    <button class="btn btn-sm btn-default pull-right" (click)="skosxlToSkos()">Refactor</button>
+                    <button class="btn btn-sm btn-default pull-right" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="subPanel-footer">
-                    <button class="btn btn-sm btn-default pull-right" (click)="migrateData()">Migrate</button>
+                    <button class="btn btn-sm btn-default pull-right" (click)="migrateData()" [disabled]="!isMigrateAuthorized()">Migrate</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
