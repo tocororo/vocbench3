@@ -1,12 +1,7 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
-import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
-import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";
-import { OperationSelectModal } from "./operationSelectModal";
+import { Modal } from 'angular2-modal/plugins/bootstrap';
 import { HistoryServices } from "../services/historyServices";
-import { CommitInfo, SortingDirection } from "../models/History";
-import { ARTURIResource } from "../models/ARTResources";
+import { UIUtils } from "../utils/UIUtils";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 
 @Component({
@@ -24,9 +19,11 @@ export class HistoryComponent extends AbstractHistValidComponent {
     }
 
     init() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.commits = [];
         this.historyService.getCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
                 this.tipRevisionNumber = stResp.tipRevisionNumber;
                 if (this.tipRevisionNumber != null) {
@@ -37,10 +34,12 @@ export class HistoryComponent extends AbstractHistValidComponent {
     }
 
     listCommits() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getFormattedFromTime(), this.getFormattedToTime(),
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
             }
         );
     }

@@ -128,9 +128,9 @@ export abstract class AbstractHistValidComponent {
 
     showOtherParamButton(item: CommitInfo): boolean {
         if (this.isLargeWidth()) {
-            return item.operationParameters.length > 2;
+            return item.operationParameters.length > 3;
         } else {
-            return item.operationParameters.length > 1;
+            return item.operationParameters.length > 2;
         }
     }
 

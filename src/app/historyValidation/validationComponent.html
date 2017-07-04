@@ -60,7 +60,7 @@
                         <th class="text-center">Action</th>
                         <th class="text-center">1st Param</th>
                         <th class="text-center" *ngIf="isLargeWidth()">2nd Param</th>
-                        <th class="text-center">Other params</th>
+                        <th class="text-center">Other param(s)</th>
                         <th class="text-center">User</th>
                         <th class="text-center">Date</th>
                         <th class="text-center">Validate</th>
@@ -88,7 +88,14 @@
                             </ng-template>
                         </td>
                         <td class="text-center">
-                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-default" (click)="inspectParams(item)">
+                            <ng-template [ngIf]="!isLargeWidth() && item.operationParameters.length > 1">
+                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                            </ng-template>
+                            <ng-template [ngIf]="isLargeWidth() && item.operationParameters.length > 2">
+                                <label style="white-space: pre;">{{item.operationParameters[2].name}}: </label>{{item.operationParameters[2].value}}
+                            </ng-template>
+                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-default" (click)="inspectParams(item)"
+                                title="Show all parameters">
                                 <span class="glyphicon glyphicon-option-horizontal"></span>
                             </button>
                         </td>

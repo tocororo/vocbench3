@@ -1,12 +1,7 @@
 import { Component } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
-import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
 import { ValidationServices } from "../services/validationServices";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { CommitInfo, SortingDirection } from "../models/History";
-import { ARTURIResource, ARTResource } from "../models/ARTResources";
+import { CommitInfo } from "../models/History";
 import { UIUtils } from "../utils/UIUtils";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 
@@ -29,14 +24,16 @@ export class ValidationComponent extends AbstractHistValidComponent {
         this.ACTION_REJECT
     ];
 
-    constructor(private validationService: ValidationServices, private sharedModals: SharedModalServices, modal: Modal) {
+    constructor(private validationService: ValidationServices, modal: Modal) {
         super(modal);
     }
 
     init() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.commits = [];
         this.validationService.getStagedCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
                 this.tipTime = stResp.tipTime;
                 if (this.tipTime != null) {
