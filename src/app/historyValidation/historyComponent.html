@@ -2,9 +2,10 @@
     <div class="panel-heading">
         <label style="flex: 1">Commits</label>
 
-        <div class="btn-group btn-group-xs" style="margin-right: 4px;" role="group">
+        <label style="white-space: pre">Operation sort: </label>
+        <div class="btn-group btn-group-xs" style="margin-right: 8px;" role="group">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span>Operation sort</span>
+                <span>{{operationSorting}}</span>
                 <span class="glyphicon glyphicon-sort-by-alphabet"></span>
             </button>
             <ul class="dropdown-menu pull-right">
@@ -16,9 +17,10 @@
             </ul>
         </div>
 
-        <div class="btn-group btn-group-xs" style="margin-right: 4px;" role="group">
+        <label style="white-space: pre">Time sort: </label>
+        <div class="btn-group btn-group-xs" style="margin-right: 8px;" role="group">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span>Time sort</span>
+                <span>{{timeSorting}}</span>
                 <span class="glyphicon glyphicon-sort-by-order"></span>
             </button>
             <ul class="dropdown-menu pull-right">
@@ -47,10 +49,10 @@
             <table class="table table-condensed table-hoverable">
                 <colgroup>
                     <col style="width: 1%">
+                    <!--<col>
                     <col>
                     <col>
-                    <col>
-                    <col>
+                    <col>-->
                 </colgroup>
                 <thead>
                     <tr>

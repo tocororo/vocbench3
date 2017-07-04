@@ -8,35 +8,17 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 import { CommitInfo, SortingDirection } from "../models/History";
 import { ARTURIResource, ARTResource } from "../models/ARTResources";
 import { UIUtils } from "../utils/UIUtils";
+import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 
 @Component({
     selector: "validation-component",
     templateUrl: "./validationComponent.html",
     host: { class: "pageComponent" }
 })
-export class ValidationComponent {
-
-    //Sorting
-    private sortingDirectionList: SortingDirection[] = [SortingDirection.Unordered, SortingDirection.Ascending, SortingDirection.Descending];
-    private operationSorting: SortingDirection = this.sortingDirectionList[0]; //unordered default
-    private timeSorting: SortingDirection = this.sortingDirectionList[2]; //descending default
-
-    //Filters
-    private showFilterBox: boolean = false;
-    //operation
-    private operations: ARTURIResource[] = [];
-    //time
-    private fromTime: any;
-    private toTime: any;
+export class ValidationComponent extends AbstractHistValidComponent {
 
     //paging
-    private limit: number = 100;
-    private page: number = 0;
-    private pageCount: number;
-    private revisionNumber: number = 0;
     private tipTime: string;
-
-    private commits: CommitInfo[];
 
     private ACTION_ACCEPT = { value: "accept", show: "Accept" };
     private ACTION_REJECT = { value: "reject", show: "Reject" };
@@ -47,13 +29,11 @@ export class ValidationComponent {
         this.ACTION_REJECT
     ];
 
-    constructor(private validationService: ValidationServices, private sharedModals: SharedModalServices, private modal: Modal) { }
-
-    ngOnInit() {
-        this.init();
+    constructor(private validationService: ValidationServices, private sharedModals: SharedModalServices, modal: Modal) {
+        super(modal);
     }
 
-    private init() {
+    init() {
         this.commits = [];
         this.validationService.getStagedCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
@@ -66,7 +46,7 @@ export class ValidationComponent {
         );
     }
 
-    private listCommits() {
+    listCommits() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.validationService.getCommits(this.tipTime, this.operations, this.getFormattedFromTime(), 
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
@@ -76,22 +56,6 @@ export class ValidationComponent {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
             }
         );
-    }
-
-    private openResource(resource: ARTResource) {
-        if (resource.isResource()) {
-            this.sharedModals.openResourceView(resource);
-        }
-    }
-
-    private getPreviousCommits() {
-        this.page--;
-        this.listCommits();
-    }
-
-    private getNextCommits() {
-        this.page++;
-        this.listCommits();
     }
 
     private acceptAll() {
@@ -104,17 +68,6 @@ export class ValidationComponent {
         for (var i = 0; i < this.commits.length; i++) {
             this.commits[i]['validationAction'] = this.ACTION_REJECT;
         }
-    }
-
-    private getCommitDelta(item: CommitInfo) {
-        var modalData = new CommitDeltaModalData(item.commit);
-        const builder = new BSModalContextBuilder<CommitDeltaModalData>(
-            modalData, undefined, CommitDeltaModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(CommitDeltaModal, overlayConfig).then(
-            dialog => dialog.result
-        );
     }
 
     private validate() {
@@ -147,46 +100,6 @@ export class ValidationComponent {
                     this.validateCommitsRecursively(commits);
                 }
             );
-        }
-    }
-
-    //SORT HANDLER
-    private sortOperation(direction: SortingDirection) {
-        this.operationSorting = direction;
-        this.init();
-    }
-
-    private sortTime(direction: SortingDirection) {
-        this.timeSorting = direction;
-        this.init();
-    }
-
-    //FILTERS HANDLER
-
-    private toggleFilterBox() {
-        this.showFilterBox = !this.showFilterBox;
-    }
-
-    private onFilterApplied(filters: { operations: ARTURIResource[], fromTime: string, toTime: string }) {
-        this.operations = filters.operations;
-        this.fromTime = filters.fromTime;
-        this.toTime = filters.toTime;
-        this.init();
-    }
-
-    private getFormattedFromTime(): string {
-        if (this.fromTime == null) {
-            return null;
-        } else {
-            return new Date(this.fromTime).toISOString();
-        }
-    }
-
-    private getFormattedToTime(): string {
-        if (this.toTime == null) {
-            return null;
-        } else {
-            return new Date(this.toTime).toISOString();
         }
     }
 

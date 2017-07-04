@@ -91,7 +91,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
             uriResource: null,
             broader: null,
-            cls: this.resourceClass,
+            cls: null,
             schemes: this.schemes,
             cfId: this.customFormId,
             cfValueMap: entryMap
@@ -103,6 +103,10 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         //set broader only if position in "Child of existing Concept"
         if (this.isPositionNarrower()) {
             returnedData.broader = this.broader;
+        }
+        //set class only if not the default
+        if (this.resourceClass.getURI() != this.context.cls.getURI()) {
+            returnedData.cls = this.resourceClass;
         }
         this.dialog.close(returnedData);
     }

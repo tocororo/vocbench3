@@ -78,7 +78,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
-            cls: this.resourceClass,
+            cls: null,
             schemes: this.schemes,
             cfId: this.customFormId,
             cfValueMap: entryMap
@@ -86,6 +86,10 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
+        }
+        //set class only if not the default
+        if (this.resourceClass.getURI() != SKOS.concept.getURI()) {
+            returnedData.cls = this.resourceClass;
         }
         this.dialog.close(returnedData);
     }

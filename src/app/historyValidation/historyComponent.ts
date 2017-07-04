@@ -7,40 +7,20 @@ import { OperationSelectModal } from "./operationSelectModal";
 import { HistoryServices } from "../services/historyServices";
 import { CommitInfo, SortingDirection } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
+import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 
 @Component({
     selector: "history-component",
     templateUrl: "./historyComponent.html",
     host: { class: "pageComponent" }
 })
-export class HistoryComponent {
-
-    //Sorting
-    private sortingDirectionList: SortingDirection[] = [SortingDirection.Unordered, SortingDirection.Ascending, SortingDirection.Descending];
-    private operationSorting: SortingDirection = this.sortingDirectionList[0]; //unordered default
-    private timeSorting: SortingDirection = this.sortingDirectionList[2]; //descending default
-
-    //Filters
-    private showFilterBox: boolean = false;
-    //operation
-    private operations: ARTURIResource[] = [];
-    //time
-    private fromTime: any;
-    private toTime: any;
+export class HistoryComponent extends AbstractHistValidComponent {
 
     //paging
-    private limit: number = 100;
-    private page: number = 0;
-    private pageCount: number;
-    private revisionNumber: number = 0;
     private tipRevisionNumber: number;
 
-    private commits: CommitInfo[];
-
-    constructor(private historyService: HistoryServices, private modal: Modal) {}
-
-    ngOnInit() {
-        this.init();
+    constructor(private historyService: HistoryServices, modal: Modal) {
+        super(modal);
     }
 
     init() {
@@ -56,98 +36,13 @@ export class HistoryComponent {
         );
     }
 
-    private listCommits() {
+    listCommits() {
         this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getFormattedFromTime(), this.getFormattedToTime(),
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;
             }
         );
-    }
-
-    private getPreviousCommits() {
-        this.page--;
-        this.listCommits();
-    }
-
-    private getNextCommits() {
-        this.page++;
-        this.listCommits();
-    }
-
-    private inspectParams(item: CommitInfo) {
-        var modalData = new OperationParamsModalData(item);
-        const builder = new BSModalContextBuilder<OperationParamsModalData>(
-            modalData, undefined, OperationParamsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(OperationParamsModal, overlayConfig).then(
-            dialog => dialog.result
-        );
-    }
-
-    private getCommitDelta(item: CommitInfo) {
-        var modalData = new CommitDeltaModalData(item.commit);
-        const builder = new BSModalContextBuilder<CommitDeltaModalData>(
-            modalData, undefined, CommitDeltaModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(CommitDeltaModal, overlayConfig).then(
-            dialog => dialog.result
-        );
-    }
-
-    //SORT HANDLER
-    private sortOperation(direction: SortingDirection) {
-        this.operationSorting = direction;
-        this.init();
-    }
-
-    private sortTime(direction: SortingDirection) {
-        this.timeSorting = direction;
-        this.init();
-    }
-
-    //FILTERS HANDLER
-
-    private toggleFilterBox() {
-        this.showFilterBox = !this.showFilterBox;
-    }
-
-    private onFilterApplied(filters: { operations: ARTURIResource[], fromTime: string, toTime: string }) {
-        this.operations = filters.operations;
-        this.fromTime = filters.fromTime;
-        this.toTime = filters.toTime;
-        this.init();
-    }
-
-    private getFormattedFromTime(): string {
-        if (this.fromTime == null) {
-            return null;
-        } else {
-            return new Date(this.fromTime).toISOString();
-        }
-    }
-
-    private getFormattedToTime(): string {
-        if (this.toTime == null) {
-            return null;
-        } else {
-            return new Date(this.toTime).toISOString();
-        }
-    }
-
-    //Utility
-    private isLargeWidth(): boolean {
-        return window.innerWidth > 1440;
-    }
-
-    private showOtherParamButton(item: CommitInfo): boolean {
-        if (this.isLargeWidth()) {
-            return item.operationParameters.length > 2;
-        } else {
-            return item.operationParameters.length > 1;
-        }
     }
 
 }
