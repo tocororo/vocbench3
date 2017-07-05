@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { HistoryServices } from "../services/historyServices";
@@ -6,6 +6,7 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 import { CommitOperation } from "../models/History";
 import { ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral, ResourceUtils } from "../models/ARTResources";
 import { VBContext } from "../utils/VBContext";
+import { UIUtils } from "../utils/UIUtils";
 
 export class CommitDeltaModalData extends BSModalContext {
     constructor(public commit: ARTURIResource) {
@@ -21,6 +22,8 @@ export class CommitDeltaModalData extends BSModalContext {
 export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
     context: CommitDeltaModalData;
 
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+
 
     private additions: CommitOperation[];
     private removals: CommitOperation[];
@@ -30,10 +33,12 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
     }
 
     ngOnInit() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.historyService.getCommitDelta(this.context.commit).subscribe(
             delta => {
                 this.additions = delta.additions;
                 this.removals = delta.removals;
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
             }
         );
     }
