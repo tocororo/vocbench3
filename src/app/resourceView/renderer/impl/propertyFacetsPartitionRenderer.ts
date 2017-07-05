@@ -38,10 +38,6 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
-    ngOnInit() {
-        console.log("facets", this.facets);
-    }
-
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
         this.rvModalService.addPropertyValue("Add an inverse property", this.resource, this.rootProperty, propChangeable).then(

@@ -1,15 +1,17 @@
 import { Component } from "@angular/core";
 import { SparqlServices } from "../services/sparqlServices";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { PrefixMapping } from "../models/PrefixMapping";
+import { ARTURIResource, ARTResource, ARTBNode } from "../models/ARTResources";
 
 @Component({
     selector: "sparql-component",
     templateUrl: "./sparqlComponent.html",
-    host: { class: "pageComponent" }
+    host: { class: "pageComponent" },
 })
 export class SparqlComponent {
 
@@ -18,7 +20,7 @@ export class SparqlComponent {
 
     private resultsLimit: number = 100;
 
-    constructor(private sparqlService: SparqlServices, private basicModals: BasicModalServices) { }
+    constructor(private sparqlService: SparqlServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         //collect the prefix namespace mappings
@@ -335,6 +337,22 @@ export class SparqlComponent {
                 return this.tabs[i];
             }
         }
+    }
+
+    private onBindingClick(binding: any) {
+        if (this.isBindingResource(binding)) {
+            let res: ARTResource;
+            if (binding.type == "uri") {
+                res = new ARTURIResource(binding.value);
+            } else {
+                res = new ARTBNode("_:" + binding.value);
+            }
+            this.sharedModals.openResourceView(res);
+        }
+    }
+
+    private isBindingResource(binding: any): boolean {
+        return (binding.type == "uri" || binding.type == "bnode");
     }
 }
 
