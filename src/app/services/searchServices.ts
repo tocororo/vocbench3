@@ -33,7 +33,7 @@ export class SearchServices {
             searchMode: searchMode,
         };
         if (schemes != undefined) {
-            params.scheme = schemes;
+            params.schemes = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, true).map(
             stResp => {
