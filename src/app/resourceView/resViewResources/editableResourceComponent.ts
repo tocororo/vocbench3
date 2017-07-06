@@ -3,7 +3,7 @@ import {
 	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
 	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
 } from "../../models/ARTResources";
-import { SKOSXL, SKOS } from "../../models/Vocabulary";
+import { SKOSXL, SKOS, RDFS } from "../../models/Vocabulary";
 import { ResViewPartition } from "../../models/ResourceView";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -168,8 +168,9 @@ export class EditableResourceComponent {
 					let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 					this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
 					//case new value has a nature not compliant with the range type
-				} else if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
-					this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
+				// } else if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
+				// 	this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
+				} else if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
 					let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
 						+ ". The change may cause an inconsistency. Do you want to apply the change? ";
 					this.basicModals.confirm("Warning", warningMsg, "warning").then(
@@ -186,6 +187,24 @@ export class EditableResourceComponent {
 		} else {
 			this.editInProgress = false;
 		}
+	}
+
+	private isPropertyRangeInconsistentWithNewValue(newValue: ARTNode): boolean {
+		if (this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) {
+			return true;
+		} else if (this.rangeType == RDFTypesEnum.resource) {
+			/**
+			 * special case: if range of property is resource, it is still compliant with literal newValue in case 
+			 * in rangeCollection there is rdfs:Literal
+			 */
+			if (ResourceUtils.containsResource(this.ranges.rangeCollection, RDFS.literal) && newValue.isLiteral()) {
+				return false;
+			}
+			if (!newValue.isResource()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private applyUpdate(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {

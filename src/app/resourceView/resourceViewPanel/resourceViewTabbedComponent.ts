@@ -128,10 +128,13 @@ export class ResourceViewTabbedComponent {
          * that the resource-view component detectes the change of the input [resource] and makes starting
          * a loop (resource updated -> getResourceView() -> response parsed and resource in RV updated -> resource updated -> ...)
          */
-        let props: string[] = Object.getOwnPropertyNames(resource);
-        for (var i = 0; i < props.length; i++) {
-            tab.resource[props[i]] = resource[props[i]];
-        }
+        // let props: string[] = Object.getOwnPropertyNames(resource);
+        // for (var i = 0; i < props.length; i++) {
+        //     tab.resource[props[i]] = resource[props[i]];
+        // }
+
+        // Solved the previous problem simply cheching in ngOnChanges of ResourceView if the nominalValue of the resource has changed
+        tab.resource = resource;
     }
 
 }

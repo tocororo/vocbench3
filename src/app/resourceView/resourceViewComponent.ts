@@ -21,7 +21,7 @@ export class ResourceViewComponent {
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
-    private viewInitialized: boolean = false;
+    private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
     private versionList: VersionInfo[];
     private activeVersion: VersionInfo;
@@ -58,6 +58,13 @@ export class ResourceViewComponent {
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.preferences.getInferenceInResourceView();
         if (changes['resource'] && changes['resource'].currentValue) {
+            //if not the first change, avoid to refresh res view if resource is not changed
+            if (!changes['resource'].firstChange) { 
+                let prevRes: ARTResource = changes['resource'].previousValue;
+                if (prevRes.getNominalValue() == this.resource.getNominalValue()) {
+                    return;
+                }
+            }
             if (this.viewInitialized) {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }

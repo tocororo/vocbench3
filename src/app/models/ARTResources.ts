@@ -3,6 +3,7 @@ import { PrefixMapping } from "./PrefixMapping";
 export abstract class ARTNode {
 
     protected graphs: ARTURIResource[] = [];
+    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
 
     constructor() { };
 
@@ -43,6 +44,13 @@ export abstract class ARTNode {
         return this.graphs;
     }
 
+    setRole(role: RDFResourceRolesEnum) {
+        this.role = role;
+    }
+    getRole(): RDFResourceRolesEnum {
+        return this.role;
+    }
+
     abstract toNT(): string;
 
     setAdditionalProperty(propName: string, propValue: any): void {
@@ -61,7 +69,6 @@ export abstract class ARTNode {
 export abstract class ARTResource extends ARTNode {
 
     protected show: string;
-    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
 
     constructor(show?: string, role?: RDFResourceRolesEnum) {
         super();
@@ -71,13 +78,6 @@ export abstract class ARTResource extends ARTNode {
 
     isResource(): boolean {
         return true;
-    }
-
-    setRole(role: RDFResourceRolesEnum) {
-        this.role = role;
-    }
-    getRole(): RDFResourceRolesEnum {
-        return this.role;
     }
 
     setShow(show: string) {

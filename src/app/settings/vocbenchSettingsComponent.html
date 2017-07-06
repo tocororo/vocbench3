@@ -85,10 +85,10 @@
                                     <td>
                                         <!--<img [src]="getFlagImgSrc(l.lang.tag)">-->
                                         <img *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(l.lang.tag)">
-                                        <div *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
+                                        <span *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
                                             <img [src]="getFlagImgSrc(l.lang.tag)">
                                             <span>{{l.lang.tag}}</span>
-                                        </div>
+                                        </span>
                                         {{l.lang.name}}
                                     </td>
                                 </tr>

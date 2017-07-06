@@ -379,7 +379,7 @@ export class Deserializer {
         var show: string = uri[ResAttribute.SHOW];
         var uriRes: ARTURIResource = new ARTURIResource(id, show);
         //other properties
-        this.parseResourceOptionalProperties(uri, uriRes);
+        this.parseNodeOptionalProperties(uri, uriRes);
 
         return uriRes;
     }
@@ -390,64 +390,64 @@ export class Deserializer {
         var role = RDFResourceRolesEnum[bnode[ResAttribute.ROLE]];
         var bNodeRes = new ARTBNode(id, show, role);
         //other properties
-        this.parseResourceOptionalProperties(bnode, bNodeRes);
+        this.parseNodeOptionalProperties(bnode, bNodeRes);
 
         return bNodeRes;
     }
 
-    private static parseResourceOptionalProperties(resJson: any, resource: ARTResource) {
+    private static parseNodeOptionalProperties(resJson: any, node: ARTNode) {
         var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
         if (role != undefined) {
-            resource.setRole(role);
+            node.setRole(role);
         }
         var qname: string = resJson[ResAttribute.QNAME];
         if (qname != undefined) {
-            resource.setAdditionalProperty(ResAttribute.QNAME, qname);
+            node.setAdditionalProperty(ResAttribute.QNAME, qname);
         }
         var explicit: boolean = resJson[ResAttribute.EXPLICIT];
         if (explicit != undefined) {
-            resource.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
+            node.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
         }
         var more: boolean = resJson[ResAttribute.MORE];
         if (more != undefined) {
-            resource.setAdditionalProperty(ResAttribute.MORE, more);
+            node.setAdditionalProperty(ResAttribute.MORE, more);
         }
         var numInst: number = resJson[ResAttribute.NUM_INST];
         if (numInst != undefined) {
-            resource.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
+            node.setAdditionalProperty(ResAttribute.NUM_INST, numInst);
         }
         var hasCustomRange: boolean = resJson[ResAttribute.HAS_CUSTOM_RANGE];
         if (hasCustomRange != undefined) {
-            resource.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
+            node.setAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE, hasCustomRange);
         }
         var resourcePosition: string = resJson[ResAttribute.RESOURCE_POSITION];
         if (resourcePosition != undefined) {
-            resource.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
+            node.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
         var lang: string = resJson[ResAttribute.LANG];
         if (lang != undefined) {
-            resource.setAdditionalProperty(ResAttribute.LANG, lang);
+            node.setAdditionalProperty(ResAttribute.LANG, lang);
         }
         var graphsAttr: string = resJson[ResAttribute.GRAPHS];
         if (graphsAttr != undefined) {
             let splittedGraph: string[] = graphsAttr.split(",");
             let graphs: ARTURIResource[] = []
             for (var i = 0; i < splittedGraph.length; i++) {
-                graphs.push(new ARTURIResource(splittedGraph[0].trim()));
+                graphs.push(new ARTURIResource(splittedGraph[i].trim()));
             }
-            resource.setGraphs(graphs);
+            node.setGraphs(graphs);
         }
         var members: any[] = resJson[ResAttribute.MEMBERS];
         if (members != undefined) {
-            resource.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
+            node.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArrayJSON(members));
         }
         var index: any = resJson[ResAttribute.INDEX];
         if (index != undefined) {
-            resource.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
+            node.setAdditionalProperty(ResAttribute.INDEX, this.createLiteralJSON(index));
         }
         var inScheme: string = resJson[ResAttribute.IN_SCHEME];
         if (inScheme != undefined) {
-            resource.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
+            node.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
         }
         var nature: string = resJson[ResAttribute.NATURE];
         if (nature != undefined && nature != "") {
@@ -456,28 +456,28 @@ export class Deserializer {
             let splitted: string[] = nature.split("|_|");
             for (var i = 0; i < splitted.length; i++) {
                 let roleGraphDeprecated: string[] = splitted[i].split(",");
-                resource.setRole(<RDFResourceRolesEnum>roleGraphDeprecated[0]); //in this way I set the last role encountered in the nature
-                resource.addGraph(new ARTURIResource(roleGraphDeprecated[1]));
-                resource.setAdditionalProperty(ResAttribute.DEPRECATED, roleGraphDeprecated[2] == "true");
+                node.setRole(<RDFResourceRolesEnum>roleGraphDeprecated[0]); //in this way I set the last role encountered in the nature
+                node.addGraph(new ARTURIResource(roleGraphDeprecated[1]));
+                node.setAdditionalProperty(ResAttribute.DEPRECATED, roleGraphDeprecated[2] == "true");
             }
             
             /**
              * if explicit is null => explicit attribute was missing => infer it from the graphs in the nature:
              * explicit is true if the resource is defined in the main graph
              */
-            if (resource.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
+            if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
                 var baseURI = VBContext.getWorkingProject().getBaseURI();
-                let resGraphs: ARTURIResource[] = resource.getGraphs();
+                let resGraphs: ARTURIResource[] = node.getGraphs();
                 for (var i = 0; i < resGraphs.length; i++) {
                     if (resGraphs[i].getURI() == baseURI) {
-                        resource.setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                        node.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                         break;
                     }
                 }
             }
             //if explicit is still null, set it to false
-            if (resource.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                resource.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+            if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
+                node.setAdditionalProperty(ResAttribute.EXPLICIT, false);
             }
         }
     }
@@ -500,19 +500,7 @@ export class Deserializer {
         }
         
         //optional properties
-        var explicit = literal[ResAttribute.EXPLICIT];
-        if (explicit != undefined) {
-            artLiteralRes.setAdditionalProperty(ResAttribute.EXPLICIT, explicit);
-        }
-        var graphsAttr = literal[ResAttribute.GRAPHS];//contains comma separated graphs
-        if (graphsAttr != undefined) {
-            let splittedGraph: string[] = graphsAttr.split(",");
-            let graphs: ARTURIResource[] = []
-            for (var i = 0; i < splittedGraph.length; i++) {
-                graphs.push(new ARTURIResource(splittedGraph[0].trim()));
-            }
-            artLiteralRes.setGraphs(graphs);
-        }
+        this.parseNodeOptionalProperties(literal, artLiteralRes)
 
         return artLiteralRes;
     }
