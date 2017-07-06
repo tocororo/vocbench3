@@ -79,12 +79,12 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                                 );
                                 break;
                             case SKOS.prefLabel.getURI():
-                                this.skosService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
+                                this.skosService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
                                     stResp => this.update.emit(null)
                                 );
                                 break;
                             case SKOS.altLabel.getURI():
-                                this.skosService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
+                                this.skosService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
                                     stResp => this.update.emit(null)
                                 );
                                 break;
