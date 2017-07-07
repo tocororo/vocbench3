@@ -45,12 +45,6 @@ export class VersioningComponent {
     }
 
     private swithcToVersion() {
-        //close previous open version (if any)
-        // let prevVersion = VBContext.getContextVersion();
-        // if (prevVersion != null && prevVersion.status == RepositoryStatus.INITIALIZED) {
-        //     this.versionsService.closeVersion(VBContext.getContextVersion().versionId).subscribe();
-        // }
-
         //update current version
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
             VBContext.removeContextVersion();
@@ -110,6 +104,14 @@ export class VersioningComponent {
         } else {
             return VBContext.getContextVersion().versionId == version.versionId;
         }
+    }
+
+    private closeVersion(version: VersionInfo) {
+        this.versionsService.closeVersion(version.versionId).subscribe(
+            stResp => {
+                this.initVersions();
+            }
+        );
     }
 
 }
