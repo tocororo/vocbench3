@@ -73,7 +73,7 @@ export class ResourceViewComponent {
 
     ngOnInit() {
         this.activeVersion = VBContext.getContextVersion();
-        this.readonly = this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
+        this.readonly = this.readonly || this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
     }
 
     ngAfterViewInit() {

@@ -6,6 +6,7 @@ import { Cookie } from "../../utils/Cookie";
 import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource } from "../../models/ARTResources";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { AlignmentCell } from "./AlignmentCell";
 import { ValidationSettingsModal } from "./alignmentValidationModals/validationSettingsModal"
 import { ValidationReportModal, ValidationReportModalData } from "./alignmentValidationModals/validationReportModal"
@@ -57,7 +58,8 @@ export class AlignmentValidationComponent {
         { relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of" }
     ];
 
-    constructor(private alignmentService: AlignmentServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private alignmentService: AlignmentServices, private basicModals: BasicModalServices,
+        private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.sessionToken = this.generateSessionRandomToken();
@@ -430,4 +432,7 @@ export class AlignmentValidationComponent {
             c.getEntity1().getURI() == cell.getEntity1().getURI() && c.getEntity2().getURI() == cell.getEntity2().getURI());
     }
 
+    private openResView(resource: ARTURIResource) {
+        this.sharedModals.openResourceView(resource);
+    }
 }

@@ -134,7 +134,7 @@
                         <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
                             <div class="panel-body">
                                 <label>Project theme
-                                    <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar of the project"></span>
+                                    <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar for the current project"></span>
                                 </label>
                                 <label *ngFor="let t of themes" class="checkbox-inline" style="margin-left: 12px;">
                                     <input type="checkbox" style="margin-left: -18px;" [checked]="t == selectedTheme" (click)="changeTheme(t)">

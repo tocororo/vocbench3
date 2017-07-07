@@ -51,8 +51,16 @@
                     </thead>
                     <tbody class="text-center">
                         <tr *ngFor="let a of alignmentCellList; let i=index;">
-                            <td style="border: 0px 1px 1px solid #ddd">{{a.getEntity1().getShow()}}</td>
-                            <td>{{a.getEntity2().getShow()}}</td>
+                            <td>
+                                <span class="clickable" (click)="openResView(a.getEntity1())">
+                                    {{a.getEntity1().getShow()}}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="clickable" (click)="openResView(a.getEntity2())">
+                                    {{a.getEntity2().getShow()}}
+                                </span>
+                            </td>
                             <td style="position: relative"
                                 (mouseover)="editRel.style.display='initial'" (mouseout)="editRel.style.display='none'">
                                 <div class="progress" [ngClass]="{ 'large-progress' : unknownRelation }">
