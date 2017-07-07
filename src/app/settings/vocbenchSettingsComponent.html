@@ -105,22 +105,45 @@
 
                     <div class="subPanel-body scrollableContainer">
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Determines if the flags icon are shown in place of the language ISO code">
-                            </span>
+                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                            <div class="panel-body">
+                                <div class="checkbox-inline">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
+                                    </label>
+                                    <span class="glyphicon glyphicon-info-sign"
+                                        title="Determines if the flags icon are shown in place of the language ISO code">
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="showInstNumb" (ngModelChange)="onShowInstNumbChange()"> Show instances number
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Determines if the amount of instances of a class are shown in the class tree">
-                            </span>
+                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                            <div class="panel-body">
+                                <div class="checkbox-inline">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="showInstNumb" (ngModelChange)="onShowInstNumbChange()"> Show instances number
+                                    </label>
+                                    <span class="glyphicon glyphicon-info-sign"
+                                        title="Determines if the amount of instances of a class are shown in the class tree">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                            <div class="panel-body">
+                                <label>Project theme
+                                    <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar of the project"></span>
+                                </label>
+                                <label *ngFor="let t of themes" class="checkbox-inline" style="margin-left: 12px;">
+                                    <input type="checkbox" style="margin-left: -18px;" [checked]="t == selectedTheme" (click)="changeTheme(t)">
+                                    <div style="border: 1px solid black; display: inline-block">
+                                        <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.mainColor}"></div>
+                                        <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.altColor}"></div>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
 
                     </div>

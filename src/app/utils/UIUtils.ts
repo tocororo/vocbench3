@@ -328,4 +328,77 @@ export class UIUtils {
         return imgSrc;
     }
 
+
+    public static themes: Theme[] = [
+        { id: 0, mainColor: "#1e4387", altColor: "#7486ab" }, //default
+        { id: 1, mainColor: "#283e4a", altColor: "#7aa2b8" },
+        { id: 2, mainColor: "#1da1f2", altColor: "#75c6f7" },
+        { id: 3, mainColor: "#367c36", altColor: "#5cb85c" },
+        { id: 4, mainColor: "#5f5f5f", altColor: "#b3b3b3" },
+        { id: 5, mainColor: "#cc181e", altColor: "#ec5f64" },
+        { id: 6, mainColor: "#6f5499", altColor: "#a08cc0" }
+    ]
+    public static resetNavbarTheme() {
+        UIUtils.changeNavbarTheme();
+    }
+    public static changeNavbarTheme(themeId: number = 0) {
+        let theme: Theme = UIUtils.themes[0];
+        UIUtils.themes.forEach(t => {
+            if (t.id == themeId) { theme = t; return };
+        });
+        var cssRuleCode = document.all ? 'rules' : 'cssRules';
+        var sheets: StyleSheetList = document.styleSheets;
+        var sheet: StyleSheet;
+
+        for (var i = 0; i < sheets.length; i++) {
+            if (sheets.item(i).href.endsWith("app.css")) {
+                sheet = sheets.item(i);
+                break;
+            }
+        }
+
+        let rules: CSSRuleList = sheet[cssRuleCode];
+        for (var j = 0; j < rules.length; j++) {
+            let rule: CSSRule = rules.item(j);
+            // console.log(rule['selectorText']);
+            if (rule instanceof CSSStyleRule) {
+                if (rule.selectorText.includes(".navbar-default")) {
+                    if (rule.selectorText == ".navbar-default" || 
+                        rule.selectorText == ".navbar-default .navbar-collapse, .navbar-default .navbar-form" ||
+                        rule.selectorText == ".navbar-default .navbar-brand" ||
+                        rule.selectorText == ".navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav > li > a" ||
+                        rule.selectorText == ".navbar-default .navbar-toggle"
+                    ) {
+                        rule.style.backgroundColor = theme.mainColor;
+                    } else if (
+                        rule.selectorText == ".navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav > .active > a, " +
+                            ".navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-link:hover" ||
+                        // rule.selectorText == ".navbar-default .navbar-nav > .disabled > a, " + 
+                        //     ".navbar-default .navbar-nav > .disabled > a:hover, .navbar-default .navbar-nav > .disabled > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav > .open > a, " + 
+                            ".navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, " + 
+                            ".navbar-default .navbar-nav .open .dropdown-menu > li > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > .active > a, " + 
+                            ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, " + 
+                            ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus"
+                    ) {
+                        rule.style.backgroundColor = theme.altColor;
+                    }
+                }
+            }
+            
+        }
+    }
+
+}
+
+export class Theme {
+    id: number;
+    mainColor: string;
+    altColor: string
 }

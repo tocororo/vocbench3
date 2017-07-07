@@ -99,7 +99,6 @@ config-bar {
 
 resource-view-panel {
     display: flex;
-    flex: 3;
 }
 
 resource-view-splitted, resource-view-tabbed {
@@ -492,6 +491,10 @@ button.resViewPartitionBtn:disabled  {
     transform: rotate(270deg);
 }
 
+.clickable:hover {
+    cursor: pointer;
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/
@@ -509,9 +512,19 @@ nav {
     border: 0;
 }
 
-.navbar-default {
-    background: #1E4387;
+/*.navbar-default, .navbar-collapse,
+.navbar-default .navbar-form {
+	background-color: #1b3671;
+    border-color: #152956;
 }
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+	background-color: #7486ab;
+}*/
 
 .navbar-brand {
     font-size: 18px;

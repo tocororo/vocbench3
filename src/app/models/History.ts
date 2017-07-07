@@ -62,25 +62,34 @@ export class CommitOperation {
     }
 }
 
-export class VersionInfo {
-    public versionId: string;
-    public repositoryId: string;
-    public dateTime: Date;
-    public dateTimeLocal: string;
-
-    constructor(versionId: string, repositoryId: string, dateTime: Date) {
-        this.versionId = versionId;
-        this.repositoryId = repositoryId;
-        this.dateTime = dateTime;
-        if (dateTime != null) {
-            this.dateTimeLocal = Deserializer.parseDateTime(dateTime);
-        }
-    }
-}
-
 export type SortingDirection = "Ascending" | "Descending" | "Unordered";
 export const SortingDirection = {
     Ascending: "Ascending" as SortingDirection,
     Descending: "Descending" as SortingDirection,
     Unordered: "Unordered" as SortingDirection
 }
+
+export class VersionInfo {
+    public versionId: string;
+    public repositoryId: string;
+    public dateTime: Date;
+    public dateTimeLocal: string;
+    public status: RepositoryStatus;
+
+    constructor(versionId: string, repositoryId: string, dateTime: Date, status: RepositoryStatus) {
+        this.versionId = versionId;
+        this.repositoryId = repositoryId;
+        this.dateTime = dateTime;
+        if (dateTime != null) {
+            this.dateTimeLocal = Deserializer.parseDateTime(dateTime);
+        }
+        this.status = status;
+    }
+}
+
+export type RepositoryStatus = "INITIALIZED" | "UNITIALIZED";
+export const RepositoryStatus = {
+    INITIALIZED: "INITIALIZED" as RepositoryStatus,
+    UNITIALIZED: "UNITIALIZED" as RepositoryStatus
+}
+

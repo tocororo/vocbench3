@@ -5,9 +5,7 @@ import { OverlayConfig } from 'angular2-modal';
 import { ProjectListModal } from './project/projectListModal';
 import { VBContext } from "./utils/VBContext";
 import { VBPreferences } from "./utils/VBPreferences";
-import { UIUtils } from "./utils/UIUtils";
 import { User } from "./models/User";
-import { Project } from "./models/Project";
 
 @Component({
     selector: "home-component",

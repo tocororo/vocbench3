@@ -3,6 +3,7 @@ import { PreferencesServices } from '../services/preferencesServices';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
+import { UIUtils } from '../utils/UIUtils';
 
 @Injectable()
 export class VBPreferences {
@@ -11,6 +12,7 @@ export class VBPreferences {
     private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
+    private projectThemeId: number = null;
 
     constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) {}
 
@@ -30,6 +32,12 @@ export class VBPreferences {
                 }
                 this.showFlags = prefs.show_flags;
                 this.showInstancesNumber = prefs.show_instances_number;
+                
+                let projThemePref = prefs.project_theme;
+                if (projThemePref != this.projectThemeId) {//update projectTheme only if changed
+                    this.projectThemeId = prefs.project_theme;
+                    UIUtils.changeNavbarTheme(this.projectThemeId);
+                }
             }
         )
     }
@@ -80,6 +88,15 @@ export class VBPreferences {
     setLanguages(langs: string[]) {
         this.languages = langs;
         this.prefService.setLanguages(langs).subscribe()
+    }
+
+    getProjectTheme(): number {
+        return this.projectThemeId;
+    }
+    setProjectTheme(theme: number) {
+        this.projectThemeId = theme;
+        UIUtils.changeNavbarTheme(this.projectThemeId);
+        this.prefService.setProjectTheme(theme).subscribe();
     }
 
     /**

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { UIUtils } from "../utils/UIUtils";
+import { UIUtils, Theme } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBPreferences, ResourceViewMode } from "../utils/VBPreferences";
 import { Languages } from "../models/LanguagesCountries";
@@ -15,6 +15,8 @@ export class VocbenchSettingsComponent {
     private renderingLangs: LanguageItem[] = [];
     private showFlags: boolean;
     private showInstNumb: boolean;
+    private themes: Theme[] = UIUtils.themes;
+    private selectedTheme: Theme = this.themes[0];
 
     constructor(private preferences: VBPreferences, private eventHandler: VBEventHandler) { }
 
@@ -51,6 +53,12 @@ export class VocbenchSettingsComponent {
 
         //show_instances_number
         this.showInstNumb = this.preferences.getShowInstancesNumber();
+
+        //project_theme
+        let themeId = this.preferences.getProjectTheme();
+        this.themes.forEach(t => {
+            if (t.id == themeId) { this.selectedTheme = t; }
+        });
     }
 
     //res view mode handler
@@ -157,6 +165,13 @@ export class VocbenchSettingsComponent {
     private onShowInstNumbChange() {
         this.preferences.setShowInstancesNumber(this.showInstNumb);
     }
+
+    //theme handler
+    private changeTheme(theme: Theme) {
+        this.selectedTheme = theme;
+        this.preferences.setProjectTheme(this.selectedTheme.id);
+    }
+    
 
 }
 

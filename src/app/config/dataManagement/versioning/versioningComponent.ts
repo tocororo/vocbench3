@@ -8,7 +8,7 @@ import { VBContext } from '../../../utils/VBContext';
 import { VBEventHandler } from '../../../utils/VBEventHandler';
 import { UIUtils } from '../../../utils/UIUtils';
 import { RepositoryAccess, RepositoryAccessType } from '../../../models/Project';
-import { VersionInfo } from '../../../models/History';
+import { VersionInfo, RepositoryStatus } from '../../../models/History';
 
 @Component({
     selector: "versioning-component",
@@ -30,7 +30,7 @@ export class VersioningComponent {
     private initVersions() {
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: "---" } ];
+                this.versionList = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: "---", status: RepositoryStatus.INITIALIZED } ];
                 this.versionList = this.versionList.concat(versions);
             }
         );
@@ -45,12 +45,14 @@ export class VersioningComponent {
     }
 
     private swithcToVersion() {
+        //close previous open version (if any)
+        // let prevVersion = VBContext.getContextVersion();
+        // if (prevVersion != null && prevVersion.status == RepositoryStatus.INITIALIZED) {
+        //     this.versionsService.closeVersion(VBContext.getContextVersion().versionId).subscribe();
+        // }
+
+        //update current version
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
-            // this.versionsService.closeVersion(VBContext.getContextVersion().versionId).subscribe(
-            //     stResp => {
-            //         VBContext.removeContextVersion();
-            //     }
-            // );
             VBContext.removeContextVersion();
         } else {
             VBContext.setContextVersion(this.selectedVersion);

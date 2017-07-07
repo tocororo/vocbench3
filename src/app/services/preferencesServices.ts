@@ -7,7 +7,7 @@ import { Deserializer } from "../utils/Deserializer";
 @Injectable()
 export class PreferencesServices {
 
-    private serviceName = "Preferences";
+    private serviceName = "PreferencesSettings";
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -59,6 +59,18 @@ export class PreferencesServices {
             params.schemes = schemes;
         }
         return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params, true);
+    }
+
+    /**
+     * 
+     * @param themeId 
+     */
+    setProjectTheme(themeId: number) {
+        console.log("[PreferencesServices] setProjectTheme");
+        var params: any = {
+            themeId: themeId
+        }
+        return this.httpMgr.doPost(this.serviceName, "setProjectTheme", params, true);
     }
 
     /**

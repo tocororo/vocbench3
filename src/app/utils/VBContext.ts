@@ -3,6 +3,7 @@ import { Project } from '../models/Project';
 import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/PrefixMapping';
 import { User } from '../models/User';
+import { UIUtils } from "./UIUtils";
 import { Cookie } from "./Cookie";
 
 class ProjectContext {
@@ -49,6 +50,7 @@ export class VBContext {
      */
     static removeWorkingProject() {
         this.workingProjectCtx.reset();
+        UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
     }
 
     /**
