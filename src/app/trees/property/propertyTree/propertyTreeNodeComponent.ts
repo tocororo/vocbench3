@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
@@ -13,8 +14,8 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
     //PropertyTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
-    constructor(private propService: PropertyServices, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private propService: PropertyServices, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
+        super(eventHandler, basicModals);
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superProperty, data.subProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(

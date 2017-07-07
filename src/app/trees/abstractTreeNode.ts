@@ -1,5 +1,6 @@
 import { Component, Input, Output, ViewChild, QueryList, ElementRef, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ResAttribute } from "../models/ARTResources";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
@@ -40,8 +41,10 @@ export abstract class AbstractTreeNode {
      * CONSTRUCTOR
      */
     protected eventHandler: VBEventHandler;
-    constructor(eventHandler: VBEventHandler) {
+    protected basicModals: BasicModalServices;
+    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices) {
         this.eventHandler = eventHandler;
+        this.basicModals = basicModals;
     }
 
     /**
@@ -123,6 +126,8 @@ export abstract class AbstractTreeNode {
                     break;
                 }
             }
+            //if this line is reached it means that the first node of the path has not been found
+            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree");
         }
     }
 
