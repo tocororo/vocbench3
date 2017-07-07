@@ -197,6 +197,9 @@ export abstract class AbstractTreeNode {
             if (this.open) { //if node is open, show the child with its children
                 let children: ARTResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
                 children.push(child);
+            } else {
+                this.expandNode();
+                // this.treeNodeElement.nativeElement.scrollIntoView();
             }
         }
     }
