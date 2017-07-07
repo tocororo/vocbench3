@@ -113,6 +113,7 @@ export abstract class AbstractTreeNode {
                 //save pending search so it can resume when the children are initialized
                 this.pendingSearch.pending = true;
                 this.pendingSearch.path = path;
+                return;
             } else if (this.pendingSearch.pending) {
                 //the tree expansion is resumed, reset the pending search
                 this.pendingSearch.pending = false;
@@ -123,11 +124,11 @@ export abstract class AbstractTreeNode {
                     //let the child node expand the remaining path
                     path.splice(0, 1);
                     nodeChildren[i].expandPath(path);
-                    break;
+                    return;
                 }
             }
             //if this line is reached it means that the first node of the path has not been found
-            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree");
+            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree(node)");
         }
     }
 
