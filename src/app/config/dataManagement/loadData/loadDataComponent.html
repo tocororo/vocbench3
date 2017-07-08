@@ -31,8 +31,17 @@
 
                 <div class="form-group">
                     <label class="control-label col-sm-1">Base URI:</label>
-                    <div class="col-sm-11">
-                        <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI" placeholder="http://example.baseuri.com/">
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI"
+                            placeholder="http://example.baseuri.com/" [disabled]="useProjectBaseURI">
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="useProjectBaseURI" (ngModelChange)="onBaseUriChecboxChange()"
+                                    name="uriCheckbox">Use project baseURI
+                            </label>
+                        </div>
                     </div>
                 </div>
 

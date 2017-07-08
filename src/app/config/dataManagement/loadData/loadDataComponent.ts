@@ -16,6 +16,7 @@ import { RDFFormat } from "../../../models/RDFFormat";
 export class LoadDataComponent {
 
     private baseURI: string;
+    private useProjectBaseURI: boolean = true;
 
     private fileToUpload: File;
 
@@ -42,7 +43,14 @@ export class LoadDataComponent {
                 }
             }
         );
+        this.baseURI = VBContext.getWorkingProject().getBaseURI();
         this.selectedImportAllowance = "web";
+    }
+
+    private onBaseUriChecboxChange() {
+        if (this.useProjectBaseURI) {
+            this.baseURI = VBContext.getWorkingProject().getBaseURI();
+        }
     }
 
     private fileChangeEvent(file: File) {
