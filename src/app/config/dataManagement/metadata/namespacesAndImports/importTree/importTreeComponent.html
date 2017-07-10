@@ -1,3 +1,3 @@
 <div class="scrollableContainer">
-    <import-tree-node *ngFor="let i of imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)"></import-tree-node>
+    <import-tree-node *ngFor="let i of imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)" (update)="onUpdated()"></import-tree-node>
 </div>

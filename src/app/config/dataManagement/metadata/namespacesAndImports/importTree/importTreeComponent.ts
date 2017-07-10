@@ -1,12 +1,14 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { OntologyImport } from "../../../../../models/Metadata"
 
 @Component({
     selector: "import-tree",
     templateUrl: "./importTreeComponent.html"
 })
 export class ImportTreeComponent {
-    @Input() imports: {id: string, status: string, imports: any[]}[];
-    @Output() nodeRemoved = new EventEmitter<{id: string, status: string, imports: any[]}>();
+    @Input() imports: OntologyImport[];
+    @Output() nodeRemoved = new EventEmitter<OntologyImport>();
+    @Output() update = new EventEmitter();
 
     constructor() { }
 
@@ -18,22 +20,12 @@ export class ImportTreeComponent {
         }
     }
 
-    private onNodeRemoved(node: {id: string, status: string, imports: any[]}) {
+    private onNodeRemoved(node: OntologyImport) {
         this.nodeRemoved.emit(node);
     }
 
-    //EVENT LISTENERS
-
-    // private onClassDeleted(cls: ARTURIResource) {
-    //     //check if the class to delete is a root
-    //     for (var i = 0; i < this.roots.length; i++) {
-    //         if (this.roots[i].getURI() == cls.getURI()) {
-    //             this.roots.splice(i, 1);
-    //             break;
-    //         }
-    //     }
-    //     //reset the selected node
-    //     this.nodeSelected.emit(undefined);
-    // }
+    private onUpdate() {
+        this.update.emit();
+    }
 
 }

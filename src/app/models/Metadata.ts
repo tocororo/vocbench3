@@ -18,3 +18,11 @@ export const ImportStatus = {
     STAGED_REMOVAL: "STAGED_REMOVAL" as ImportStatus,
     LOOP: "LOOP" as ImportStatus
 }
+
+export type ImportType = "fromWeb" | "fromWebToMirror" | "fromLocalFile" | "fromOntologyMirror";
+export const ImportType = {
+    fromWeb: "fromWeb" as ImportType,
+    fromWebToMirror: "fromWebToMirror" as ImportType,
+    fromLocalFile: "fromLocalFile" as ImportType,
+    fromOntologyMirror: "fromOntologyMirror" as ImportType
+};

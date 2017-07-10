@@ -231,6 +231,77 @@ export class MetadataServices {
     }
 
     /**
+     * Retrieves an ontology that is a failed import from a local file and copies it to the ontology mirror
+     * @param baseURI 
+     * @param localFile 
+     * @param mirrorFile 
+     * @param transitiveImportAllowance 
+     */
+    getFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: string) {
+        console.log("[MetadataServices] getFromLocalFile");
+        var data = {
+            baseURI: baseURI,
+            localFile: localFile,
+            mirrorFile: mirrorFile,
+            transitiveImportAllowance: transitiveImportAllowance
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "getFromLocalFile", data, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Downloads an ontology that is a failed import from the web
+     * @param baseURI 
+     * @param transitiveImportAllowance 
+     * @param altURL 
+     */
+    downloadFromWeb(baseURI: string, transitiveImportAllowance: string, altURL?: string) {
+        console.log("[MetadataServices] downloadFromWeb");
+        var params: any = {
+            baseURI: baseURI,
+            transitiveImportAllowance: transitiveImportAllowance
+        };
+        if (altURL != undefined) {
+            params.alturl = altURL;
+        }
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Downloads an ontology that is a failed import from the web to the ontology mirror
+     * @param baseURI 
+     * @param mirrorFile 
+     * @param transitiveImportAllowance 
+     * @param altURL 
+     */
+    downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: string, altURL?: string) {
+        console.log("[MetadataServices] downloadFromWebToMirror");
+        var params: any = {
+            baseURI: baseURI,
+            mirrorFile: mirrorFile,
+            transitiveImportAllowance: transitiveImportAllowance
+        };
+        if (altURL != undefined) {
+            params.alturl = altURL;
+        }
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
+    }
+
+    /**
      * Returns the default namespace of the currently open project
      */
     getDefaultNamespace(): Observable<string> {

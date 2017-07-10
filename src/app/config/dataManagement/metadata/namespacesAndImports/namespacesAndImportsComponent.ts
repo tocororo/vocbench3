@@ -8,10 +8,10 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { PrefixMapping, OntologyImport, ImportStatus } from "../../../../models/Metadata";
+import { PrefixMapping, OntologyImport, ImportStatus, ImportType } from "../../../../models/Metadata";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
-import { ImportOntologyModal, ImportOntologyModalData, ImportType } from "./importOntologyModal";
+import { ImportOntologyModal, ImportOntologyModalData } from "./importOntologyModal";
 
 @Component({
     selector: "namespaces-imports-component",
@@ -362,7 +362,7 @@ export class NamespacesAndImportsComponent {
         this.openImportModal("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance,).subscribe(
+                this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //Refreshes the imports and the namespace prefix mapping
@@ -431,6 +431,11 @@ export class NamespacesAndImportsComponent {
         return this.modal.open(ImportOntologyModal, overlayConfig).then(
             dialog => dialog.result
         );
+    }
+
+    private onInportTreeUpdate() {
+        this.refreshImports();
+        this.refreshOntoMirror();
     }
 
 

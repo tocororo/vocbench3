@@ -109,7 +109,7 @@
                 </div>
             </div>
             <div class="subPanel-body vbox">
-                <import-tree [imports]="importTree" (nodeRemoved)="removeImport($event)"></import-tree>
+                <import-tree [imports]="importTree" (nodeRemoved)="removeImport($event)" (update)="onInportTreeUpdate()"></import-tree>
             </div>
         </div>
 
