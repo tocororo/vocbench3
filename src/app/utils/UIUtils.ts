@@ -4,6 +4,7 @@ import {
 } from "../models/ARTResources";
 import { Languages } from "../models/LanguagesCountries"
 import { XmlSchema } from "../models/Vocabulary"
+import { VBContext } from "../utils/VBContext"
 
 
 export class UIUtils {
@@ -126,9 +127,11 @@ export class UIUtils {
         var propOntologyDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_deprecated.png");
         var propOntologyImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_imported_deprecated.png");
 
+        var mentionImgSrc = require("../../assets/images/icons/res/mention.png");
+
         var imgSrc: string;
         if (rdfResource.isResource()) {
-            var role = (<ARTResource>rdfResource).getRole().toLowerCase();
+            var role = rdfResource.getRole().toLowerCase();
             var deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
                 rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
@@ -259,6 +262,16 @@ export class UIUtils {
                         imgSrc = xLabelDeprecatedImgSrc;
                     }
                 }
+            } else if (role == RDFResourceRolesEnum.mention.toLocaleLowerCase()) {
+                imgSrc = mentionImgSrc;
+                // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
+                if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
+                    imgSrc = mentionImgSrc; //it is a mentrion
+                } else { //else set individual image as default
+                    imgSrc = individualImgSrc;
+                }
+            } else { //unknown role (none of the previous roles)
+                imgSrc = individualImgSrc;
             }
         } else if (rdfResource.isLiteral()) {
             let lang: string = (<ARTLiteral>rdfResource).getLang();

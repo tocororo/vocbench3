@@ -3,7 +3,7 @@ import { PrefixMapping } from "./PrefixMapping";
 export abstract class ARTNode {
 
     protected graphs: ARTURIResource[] = [];
-    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
+    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.mention; //default, so node without role are considered mention
 
     constructor() { };
 
@@ -315,6 +315,7 @@ export type RDFResourceRolesEnum =
     "dataRange" |
     "datatypeProperty" |
     "individual" |
+    "mention" |
     "objectProperty" |
     "ontology" |
     "ontologyProperty" |
@@ -332,6 +333,7 @@ export const RDFResourceRolesEnum = {
     dataRange: "dataRange" as RDFResourceRolesEnum,
     datatypeProperty: "datatypeProperty" as RDFResourceRolesEnum,
     individual: "individual" as RDFResourceRolesEnum,
+    mention: "mention" as RDFResourceRolesEnum,
     objectProperty: "objectProperty" as RDFResourceRolesEnum,
     ontology: "ontology" as RDFResourceRolesEnum,
     ontologyProperty: "ontologyProperty" as RDFResourceRolesEnum,

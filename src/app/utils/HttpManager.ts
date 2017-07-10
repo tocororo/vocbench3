@@ -421,6 +421,7 @@ export class HttpManager {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
                         VBContext.resetContext();
+                        UIUtils.resetNavbarTheme();
                         this.router.navigate(['/Home']);
                     }
                 }
