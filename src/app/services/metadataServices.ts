@@ -4,7 +4,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
 import { ARTURIResource } from "../models/ARTResources";
-import { PrefixMapping } from "../models/PrefixMapping";
+import { PrefixMapping, OntologyImport, ImportStatus } from "../models/Metadata";
 import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
@@ -88,12 +88,12 @@ export class MetadataServices {
      * "@id": the uri of the ontology
      * "imports": array of recursive imports
      */
-    getImports(): Observable<{ id: string, status: string, imports: any[] }[]> {
+    getImports(): Observable<OntologyImport[]> {
         console.log("[MetadataServices] getImports");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params, true).map(
             stResp => {
-                var importedOntologies: any[] = [];
+                var importedOntologies: OntologyImport[] = [];
 
                 for (var i = 0; i < stResp.length; i++) {
                     importedOntologies.push(this.parseImport(stResp[i]));
@@ -103,10 +103,10 @@ export class MetadataServices {
         );
     }
 
-    private parseImport(importNode: any): { id: string, status: string, imports: any[] } {
-        var id = importNode['@id'];
-        var status = importNode.status;
-        var imports: any[] = [];
+    private parseImport(importNode: any): OntologyImport {
+        var id: string = importNode['@id'];
+        var status: ImportStatus = importNode.status;
+        var imports: OntologyImport[] = [];
         if (importNode.imports != null) {
             for (var i = 0; i < importNode.imports.length; i++) {
                 imports.push(this.parseImport(importNode.imports[i]));

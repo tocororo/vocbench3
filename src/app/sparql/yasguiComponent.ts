@@ -1,7 +1,7 @@
 import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { VBContext } from '../utils/VBContext';
 import { ARTURIResource } from '../models/ARTResources';
-import { PrefixMapping } from '../models/PrefixMapping';
+import { PrefixMapping } from '../models/Metadata';
 import { MetadataServices } from '../services/metadataServices';
 import { SearchServices } from '../services/searchServices';
 import * as JQueryStatic from 'jquery';

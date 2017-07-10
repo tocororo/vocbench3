@@ -1,7 +1,7 @@
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Project } from '../models/Project';
 import { VersionInfo } from '../models/History';
-import { PrefixMapping } from '../models/PrefixMapping';
+import { PrefixMapping } from '../models/Metadata';
 import { User } from '../models/User';
 import { UIUtils } from "./UIUtils";
 import { Cookie } from "./Cookie";

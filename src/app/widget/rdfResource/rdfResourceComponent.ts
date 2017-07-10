@@ -5,11 +5,7 @@ import { VBPreferences } from "../../utils/VBPreferences";
 
 @Component({
 	selector: "rdf-resource",
-	templateUrl: "./rdfResourceComponent.html",
-	styles: [`
-		.stagingAdd { color: green; font-style: italic; }
-		.stagingRemove { color: darkred; text-decoration: line-through; }`
-	]
+	templateUrl: "./rdfResourceComponent.html"
 })
 export class RdfResourceComponent {
 	@Input() resource: ARTNode;

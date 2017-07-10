@@ -3,7 +3,7 @@
         <img *ngIf="import.imports.length > 0" src="../../../../../../assets/images/icons/arrow.png" (click)="open = !open"
             [ngClass]="{'arrow-right': !open}">
 	</div>
-    <div style="flex: 1;">
+    <div style="flex: 1;" [ngClass]="{ stagingAdd: import.status == 'STAGED_ADDITION', stagingRemove: import.status == 'STAGED_REMOVAL' }">
         {{import.id}}
     </div>
     <span *ngIf="import.status == 'LOOP'" class="glyphicon glyphicon-repeat" style="margin-right: 6px;" title="Loop of imports"></span>

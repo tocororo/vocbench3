@@ -1,4 +1,4 @@
-import { PrefixMapping } from "./PrefixMapping";
+import { PrefixMapping } from "./Metadata";
 
 export abstract class ARTNode {
 

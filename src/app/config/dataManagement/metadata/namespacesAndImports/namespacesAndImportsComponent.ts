@@ -8,7 +8,7 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBPreferences } from "../../../../utils/VBPreferences";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { PrefixMapping } from "../../../../models/PrefixMapping";
+import { PrefixMapping, OntologyImport, ImportStatus } from "../../../../models/Metadata";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 import { ImportOntologyModal, ImportOntologyModalData, ImportType } from "./importOntologyModal";
@@ -33,7 +33,7 @@ export class NamespacesAndImportsComponent {
     private selectedMapping: any; //the currently selected mapping {namespace: string, prefix: string}
 
     // Imports params section
-    private importTree: {id: string, status: string, imports: any[]}[]; //{status:string, uri:string, localfile: string}
+    private importTree: OntologyImport[];
 
     // Ontology mirror management section
     private mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}

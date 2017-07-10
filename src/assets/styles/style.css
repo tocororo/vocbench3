@@ -142,6 +142,15 @@ rdf-resource > .rdfResourceIcon {
     margin-right: 5px;
 }
 
+.stagingAdd {
+    color: green; font-style: italic;
+}
+
+.stagingRemove {
+    color: darkred;
+    text-decoration: line-through; 
+}
+
 .flagIcon {
     position: relative;
 }

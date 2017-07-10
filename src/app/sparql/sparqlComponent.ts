@@ -5,7 +5,7 @@ import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServ
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { PrefixMapping } from "../models/PrefixMapping";
+import { PrefixMapping } from "../models/Metadata";
 import { ARTURIResource, ARTResource, ARTBNode } from "../models/ARTResources";
 
 @Component({
