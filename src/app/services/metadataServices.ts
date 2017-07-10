@@ -4,7 +4,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
 import { ARTURIResource } from "../models/ARTResources";
-import { PrefixMapping, OntologyImport, ImportStatus } from "../models/Metadata";
+import { PrefixMapping, OntologyImport, ImportStatus, TransitiveImportMethodAllowance } from "../models/Metadata";
 import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
@@ -138,7 +138,7 @@ export class MetadataServices {
      * @param altURL alternative URL (???)
      * @param rdfFormat force the format to read the ontology file to import
      */
-    addFromWeb(baseURI: string, transitiveImportAllowance: string, altURL?: string, rdfFormat?: RDFFormat) {
+    addFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
         console.log("[MetadataServices] addFromWeb");
         var params: any = {
             baseURI: baseURI,
@@ -165,7 +165,7 @@ export class MetadataServices {
      * @param altURL alternative URL (???)
      * @param rdfFormat force the format to read the ontology file to import
      */
-    addFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: string, altURL?: string, rdfFormat?: RDFFormat) {
+    addFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
         console.log("[MetadataServices] addFromWebToMirror");
         var params: any = {
             baseURI: baseURI,
@@ -193,7 +193,7 @@ export class MetadataServices {
     * @param mirrorFile the name of the mirror file
     * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
     */
-    addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: string) {
+    addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
         console.log("[MetadataServices] addFromLocalFile");
         var data = {
             baseURI: baseURI,
@@ -215,7 +215,7 @@ export class MetadataServices {
      * @param mirrorFile the name of the mirror file
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      */
-    addFromMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: string) {
+    addFromMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
         console.log("[MetadataServices] addFromMirror");
         var params = {
             baseURI: baseURI,
@@ -237,7 +237,7 @@ export class MetadataServices {
      * @param mirrorFile 
      * @param transitiveImportAllowance 
      */
-    getFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: string) {
+    getFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
         console.log("[MetadataServices] getFromLocalFile");
         var data = {
             baseURI: baseURI,
@@ -259,7 +259,7 @@ export class MetadataServices {
      * @param transitiveImportAllowance 
      * @param altURL 
      */
-    downloadFromWeb(baseURI: string, transitiveImportAllowance: string, altURL?: string) {
+    downloadFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string) {
         console.log("[MetadataServices] downloadFromWeb");
         var params: any = {
             baseURI: baseURI,
@@ -283,7 +283,7 @@ export class MetadataServices {
      * @param transitiveImportAllowance 
      * @param altURL 
      */
-    downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: string, altURL?: string) {
+    downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string) {
         console.log("[MetadataServices] downloadFromWebToMirror");
         var params: any = {
             baseURI: baseURI,

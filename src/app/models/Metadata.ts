@@ -19,10 +19,19 @@ export const ImportStatus = {
     LOOP: "LOOP" as ImportStatus
 }
 
-export type ImportType = "fromWeb" | "fromWebToMirror" | "fromLocalFile" | "fromOntologyMirror";
+export type ImportType = "fromWeb" | "fromWebToMirror" | "fromLocalFile" | "toOntologyMirror";
 export const ImportType = {
     fromWeb: "fromWeb" as ImportType,
     fromWebToMirror: "fromWebToMirror" as ImportType,
     fromLocalFile: "fromLocalFile" as ImportType,
-    fromOntologyMirror: "fromOntologyMirror" as ImportType
+    fromOntologyMirror: "fromOntologyMirror" as ImportType,
+    toOntologyMirror: "toOntologyMirror" as ImportType
 };
+
+export type TransitiveImportMethodAllowance = "web" | "webFallbackToMirror" | "mirrorFallbackToWeb" | "mirror";
+export const TransitiveImportMethodAllowance = {
+    web: "web" as TransitiveImportMethodAllowance,
+    webFallbackToMirror: "webFallbackToMirror" as TransitiveImportMethodAllowance,
+    mirrorFallbackToWeb: "mirrorFallbackToWeb" as TransitiveImportMethodAllowance,
+    mirror: "mirror" as TransitiveImportMethodAllowance,
+}

@@ -4,7 +4,7 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { OntoManagerServices } from '../../../../services/ontoManagerServices';
 import { ExportServices } from '../../../../services/exportServices';
 import { RDFFormat } from '../../../../models/RDFFormat';
-import { ImportType } from '../../../../models/Metadata';
+import { ImportType, TransitiveImportMethodAllowance } from '../../../../models/Metadata';
 
 export class ImportOntologyModalData extends BSModalContext {
     /**
@@ -41,7 +41,13 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     private mirrorList: Array<{ file: string, baseURI: string }>; //used for type "fromOntologyMirror"
     private selectedMirror: { file: string, baseURI: string }; //used for type "fromOntologyMirror"
 
-    private selectedImportAllowance: string = "web"; //used for all
+    private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+        { allowance: TransitiveImportMethodAllowance.web, show: "Web" },
+        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Web with fallback to Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirror, show: "Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Ontology Mirror with fallback to Web" }
+    ];
+    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
 
     constructor(public dialog: DialogRef<ImportOntologyModalData>, public ontoMgrService: OntoManagerServices, public exportService: ExportServices) {
         this.context = dialog.context;

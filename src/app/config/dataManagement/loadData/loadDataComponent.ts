@@ -7,6 +7,7 @@ import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { RDFFormat } from "../../../models/RDFFormat";
+import { TransitiveImportMethodAllowance } from "../../../models/Metadata";
 
 @Component({
     selector: "load-data-component",
@@ -20,11 +21,16 @@ export class LoadDataComponent {
 
     private fileToUpload: File;
 
-    private inferFormatFromFile: boolean = true;
     private formats: RDFFormat[];
     private selectedFormat: RDFFormat;
 
-    private selectedImportAllowance: string;
+    private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+        { allowance: TransitiveImportMethodAllowance.web, show: "Web" },
+        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Web with fallback to Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirror, show: "Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Ontology Mirror with fallback to Web" }
+    ];
+    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
 
     private validateImplicitly: boolean = false;
 
@@ -44,7 +50,6 @@ export class LoadDataComponent {
             }
         );
         this.baseURI = VBContext.getWorkingProject().getBaseURI();
-        this.selectedImportAllowance = "web";
     }
 
     private onBaseUriChecboxChange() {
@@ -55,6 +60,20 @@ export class LoadDataComponent {
 
     private fileChangeEvent(file: File) {
         this.fileToUpload = file;
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.inOutService.getParserFormatForFileName(file.name).subscribe(
+            format => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                if (format != null) {
+                    for (var i = 0; i < this.formats.length; i++) {
+                        if (this.formats[i].name == format) {
+                            this.selectedFormat = this.formats[i];
+                            return;
+                        }
+                    }
+                }
+            }
+        );
     }
 
     private isValidationEnabled(): boolean {
@@ -80,10 +99,7 @@ export class LoadDataComponent {
             this.basicModals.alert("Load Data", "BaseURI required", "warning");
         } else {
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-            var formatParam: RDFFormat = null;
-            if (!this.inferFormatFromFile) {
-                formatParam = this.selectedFormat;
-            }
+            var formatParam: RDFFormat = this.selectedFormat;
             this.inOutService.loadRDF(this.fileToUpload, this.baseURI, this.selectedImportAllowance, formatParam, this.validateImplicitly).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
