@@ -25,6 +25,6 @@
 </div>
 
 <div class="subTree" *ngIf="import.imports.length > 0 && open">
-    <import-tree-node *ngFor="let i of import.imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)" (update)="onUpdated()">
+    <import-tree-node *ngFor="let i of import.imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)" (update)="onUpdate()">
     </import-tree-node>
 </div>

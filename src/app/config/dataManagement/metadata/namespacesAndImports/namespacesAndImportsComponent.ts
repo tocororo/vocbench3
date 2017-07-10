@@ -368,6 +368,7 @@ export class NamespacesAndImportsComponent {
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
+                        this.refreshOntoMirror();
                     }
                 )
             },
