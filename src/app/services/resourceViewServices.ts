@@ -17,11 +17,14 @@ export class ResourceViewServices {
      * Returns the resource view of the given resource
      * @param resource
      */
-    getResourceView(resource: ARTResource, version?: VersionInfo) {
+    getResourceView(resource: ARTResource, includeInferred: boolean, version?: VersionInfo) {
         console.log("[resourceViewServices] getResourceView");
         var params: any = {
             resource: resource,
         };
+        if (includeInferred != null) {
+            params.includeInferred = includeInferred;
+        }
         var options: VBRequestOptions;
         if (version != null) {
             options = new VBRequestOptions({ versionId : version.versionId });

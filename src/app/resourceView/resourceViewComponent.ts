@@ -26,7 +26,8 @@ export class ResourceViewComponent {
     private versionList: VersionInfo[];
     private activeVersion: VersionInfo;
 
-    private showInferred = false;
+    private showInferredPristine: boolean = false;
+    private showInferred: boolean = false;
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
@@ -95,8 +96,9 @@ export class ResourceViewComponent {
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
     private buildResourceView(res: ARTResource) {
+        this.showInferredPristine = this.showInferred;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resViewService.getResourceView(res, this.activeVersion).subscribe(
+        this.resViewService.getResourceView(res, this.showInferred, this.activeVersion).subscribe(
             stResp => {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
@@ -290,7 +292,12 @@ export class ResourceViewComponent {
     private showHideInferred() {
         this.showInferred = !this.showInferred;
         this.preferences.setInferenceInResourceView(this.showInferred);
-        this.fillPartitions();
+        if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
+            this.buildResourceView(this.resource);
+        } else { //resource view has been initialized with showInferred to true, so there's no need to repeat the request
+            this.fillPartitions();
+        }
+        
     }
 
 
