@@ -42,7 +42,7 @@ export class ImportTreeNodeComponent {
         this.openImportModal("Repair failed import from web", ImportType.fromWeb).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.metadataService.downloadFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL).subscribe(
+                this.metadataService.downloadFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
@@ -57,7 +57,8 @@ export class ImportTreeNodeComponent {
         this.openImportModal("Repair failed import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.metadataService.downloadFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL).subscribe(
+                this.metadataService.downloadFromWebToMirror(
+                    data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();

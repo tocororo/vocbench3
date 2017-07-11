@@ -259,7 +259,7 @@ export class MetadataServices {
      * @param transitiveImportAllowance 
      * @param altURL 
      */
-    downloadFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string) {
+    downloadFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
         console.log("[MetadataServices] downloadFromWeb");
         var params: any = {
             baseURI: baseURI,
@@ -267,6 +267,9 @@ export class MetadataServices {
         };
         if (altURL != undefined) {
             params.alturl = altURL;
+        }
+        if (rdfFormat != undefined) {
+            params.rdfFormat = rdfFormat.name;
         }
         return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params, true).map(
             stResp => {
@@ -283,7 +286,8 @@ export class MetadataServices {
      * @param transitiveImportAllowance 
      * @param altURL 
      */
-    downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string) {
+    downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance,
+        altURL?: string, rdfFormat?: RDFFormat) {
         console.log("[MetadataServices] downloadFromWebToMirror");
         var params: any = {
             baseURI: baseURI,
@@ -292,6 +296,9 @@ export class MetadataServices {
         };
         if (altURL != undefined) {
             params.alturl = altURL;
+        }
+        if (rdfFormat != undefined) {
+            params.rdfFormat = rdfFormat.name;
         }
         return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params, true).map(
             stResp => {

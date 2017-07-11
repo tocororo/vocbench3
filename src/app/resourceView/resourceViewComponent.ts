@@ -26,7 +26,7 @@ export class ResourceViewComponent {
     private versionList: VersionInfo[];
     private activeVersion: VersionInfo;
 
-    private showInferredPristine: boolean = false;
+    private showInferredPristine: boolean = false; //useful to decide whether repeat the getResourceView request once the includeInferred changes
     private showInferred: boolean = false;
 
     //partitions
