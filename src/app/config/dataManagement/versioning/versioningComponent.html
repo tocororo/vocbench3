@@ -64,7 +64,8 @@
                                     </ng-template>
                                     <ng-template [ngIf]="idx > 0">
                                         {{v.status | lowercase}}
-                                        <button class="btn btn-xs btn-default" (click)="closeVersion(v)" [disabled]="v.status != 'INITIALIZED'">
+                                        <button class="btn btn-xs btn-default" (click)="closeVersion(v)"
+                                            [disabled]="v.status != 'INITIALIZED' || isActiveVersion(v)">
                                             Close
                                         </button>
                                     </ng-template>
