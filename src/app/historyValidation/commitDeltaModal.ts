@@ -16,8 +16,7 @@ export class CommitDeltaModalData extends BSModalContext {
 
 @Component({
     selector: "commit-modal",
-    templateUrl: "./commitDeltaModal.html",
-    styles: ['.clickable:hover { cursor: pointer; }']
+    templateUrl: "./commitDeltaModal.html"
 })
 export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
     context: CommitDeltaModalData;

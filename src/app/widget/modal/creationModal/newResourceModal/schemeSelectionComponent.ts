@@ -12,6 +12,7 @@ export class SchemeSelectionComponent {
     @Input() concept: ARTURIResource; //useful to limit the schemeList to the only schemes of a concept
     @Output() update = new EventEmitter<ARTURIResource[]>();
 
+    private addBtnImgSrc = require("../../../../../assets/images/icons/actions/conceptScheme_create.png");
 
     private collapsed: boolean = false;
 

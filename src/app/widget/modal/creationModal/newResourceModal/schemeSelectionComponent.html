@@ -8,7 +8,7 @@
             <label class="groupPanel-heading-content">Schemes:</label>
         </span>
         <span *ngIf="!collapsed" class="groupPanel-heading-content">
-            <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" (click)="addScheme()">
+            <input type="image" [src]="addBtnImgSrc" (click)="addScheme()">
         </span>
     </div>
     <div class="groupPanel-body vbox">

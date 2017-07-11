@@ -270,6 +270,8 @@ export class UIUtils {
                 } else { //else set individual image as default
                     imgSrc = individualImgSrc;
                 }
+            } else if (role == RDFResourceRolesEnum.dataRange.toLocaleLowerCase()) {
+                imgSrc = classImgSrc;
             } else { //unknown role (none of the previous roles)
                 imgSrc = individualImgSrc;
             }
