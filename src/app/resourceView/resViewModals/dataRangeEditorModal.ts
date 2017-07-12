@@ -40,18 +40,26 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
     ok(event: Event) {
         //check if the datarange list is changed
         var changed: boolean = false;
-        for (var i = 0; i < this.datarange.length; i++) {
-            let found: boolean = false;
-            for (var j = 0; j < this.datarangePristine.length; j++) {
-                let dtPristine: ARTLiteral = this.datarange[i];
-                let dtUpdated: ARTLiteral = this.datarangePristine[j];
-                if (dtPristine.getValue() == dtUpdated.getValue() && dtPristine.getDatatype() == dtUpdated.getDatatype()) {
-                    found = true;
-                    break; //value not changed (found also in the pristine) => go to the next
+
+        if (this.datarange.length != this.datarangePristine.length) { //different length => there was a change for sure
+            changed = true;
+        } else { //same length => there could be a replace
+            //two checks:
+            //if every final list element is in pristine...
+            for (var i = 0; i < this.datarange.length; i++) {
+                if (!ResourceUtils.containsNode(this.datarangePristine, this.datarange[i])) {
+                    changed = true;
+                    break;
                 }
             }
-            if (!found) {
-                changed = true;
+            if (!changed) {
+                //...and if every pristine list element is in final
+                for (var i = 0; i < this.datarangePristine.length; i++) {
+                    if (!ResourceUtils.containsNode(this.datarange, this.datarangePristine[i])) {
+                        changed = true;
+                        break;
+                    }
+                }
             }
         }
         if (changed) {

@@ -202,7 +202,7 @@ export class EditableResourceComponent {
 			 * special case: if range of property is resource, it is still compliant with literal newValue in case 
 			 * in rangeCollection there is rdfs:Literal
 			 */
-			if (ResourceUtils.containsResource(this.ranges.rangeCollection.resources, RDFS.literal) && newValue.isLiteral()) {
+			if (ResourceUtils.containsNode(this.ranges.rangeCollection.resources, RDFS.literal) && newValue.isLiteral()) {
 				return false;
 			}
 			if (!newValue.isResource()) {

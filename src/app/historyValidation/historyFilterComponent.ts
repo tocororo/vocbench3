@@ -31,7 +31,7 @@ export class HistoryFilterComponent {
                 (operations: any) => {
                     //for each operation to add, add it only if not already in operations array
                     operations.forEach((op: ARTURIResource) => {
-                        if (!ResourceUtils.containsResource(this.operations, op)) {
+                        if (!ResourceUtils.containsNode(this.operations, op)) {
                             this.operations.push(op);
                         }
                     });

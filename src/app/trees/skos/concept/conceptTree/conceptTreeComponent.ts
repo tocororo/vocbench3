@@ -89,13 +89,13 @@ export class ConceptTreeComponent extends AbstractTree {
 
     private onTopConceptCreated(concept: ARTURIResource, schemes: ARTURIResource[]) {
         if (this.schemes == undefined) {//in no-scheme mode add to the root if it isn't already in
-            if (!ResourceUtils.containsResource(this.roots, concept)) {
+            if (!ResourceUtils.containsNode(this.roots, concept)) {
                 this.roots.push(concept);
             }
         } else { //otherwise add the top concept only if it is added in a scheme currently active in the tree
             if (this.schemes != null) {
                 for (var i = 0; i < schemes.length; i++) {
-                    if (ResourceUtils.containsResource(this.schemes, schemes[i])) {
+                    if (ResourceUtils.containsNode(this.schemes, schemes[i])) {
                         this.roots.push(concept);
                         break;
                     }

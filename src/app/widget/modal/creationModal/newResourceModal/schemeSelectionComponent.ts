@@ -71,7 +71,7 @@ export class SchemeSelectionComponent {
         this.browsingModals.browseSchemeList("Add skos:ConceptScheme").then(
             (scheme: any) => {
                 //add the chosen scheme only if not already in list
-                if (!ResourceUtils.containsResource(this.schemeList, scheme)) {
+                if (!ResourceUtils.containsNode(this.schemeList, scheme)) {
                     this.schemeList.push(scheme);
                     this.update.emit(this.schemeList);
                 }

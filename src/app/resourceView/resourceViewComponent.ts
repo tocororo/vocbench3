@@ -242,7 +242,7 @@ export class ResourceViewComponent {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
                     let objGraphs: ARTURIResource[] = objList[j].getGraphs();
-                    if (ResourceUtils.containsResource(objGraphs, new ARTURIResource("http://semanticturkey/inference-graph"))) {
+                    if (ResourceUtils.containsNode(objGraphs, new ARTURIResource("http://semanticturkey/inference-graph"))) {
                         objList.splice(j, 1);
                         j--;
                     }

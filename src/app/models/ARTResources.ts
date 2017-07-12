@@ -394,11 +394,11 @@ export class ResourceUtils {
     }
 
     /**
-     * Tells if a list contains a given resource
+     * Tells if a list contains a given node
      */
-    static containsResource(list: ARTResource[], resource: ARTResource) {
+    static containsNode(list: ARTNode[], node: ARTNode): boolean {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].getNominalValue() == resource.getNominalValue()) {
+            if (list[i].getNominalValue() == node.getNominalValue()) {
                 return true;
             }
         }
