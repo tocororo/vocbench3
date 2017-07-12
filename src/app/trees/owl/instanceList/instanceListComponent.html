@@ -5,11 +5,13 @@
         <div *ngIf="instanceList && instanceList.length > 0" class="scrollableContainer">
             
             <ng-template ngFor let-instance [ngForOf]="instanceList" let-idx="index">
-                <ng-template [ngIf]="showInstance(idx)"> <!-- paging filter -->
-                    <rdf-resource [resource]="instance" [rendering]="rendering" (click)="selectInstance(instance)"
-                        class="listItem" [ngClass]="{selectedResource : instance.getAdditionalProperty('selected')}">
-                    </rdf-resource>
-                </ng-template>
+                <div *ngIf="showInstance(idx)"> <!-- paging filter -->
+                    <div class="listItem"> 
+                        <rdf-resource [resource]="instance" [rendering]="rendering" (click)="selectInstance(instance)"
+                            [ngClass]="{selectedResource : instance.getAdditionalProperty('selected')}">
+                        </rdf-resource>
+                    </div> 
+                </div>
             </ng-template>
 
             <div *ngIf="showMoreButton()">
