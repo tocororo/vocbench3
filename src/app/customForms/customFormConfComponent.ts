@@ -94,7 +94,6 @@ export class CustomFormConfigComponent {
     }
 
     private changeReplaceToMapping(checked: boolean, fcMap: FormCollectionMapping) {
-        console.log("update replace")
         this.customFormsService.updateReplace(fcMap.getResource(), checked).subscribe();
     }
 

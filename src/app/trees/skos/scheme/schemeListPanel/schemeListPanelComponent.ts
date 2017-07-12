@@ -52,7 +52,6 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private create() {
         this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
             (res: any) => {
-                console.log("returned data ", res);
                 this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                     newScheme => { this.schemeList.push({ checked: false, scheme: newScheme }); },
                     err => { }
@@ -126,7 +125,6 @@ export class SchemeListPanelComponent extends AbstractPanel {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            console.log("1 result");
                             this.selectSchemeItem(this.getSchemeToSelectFromList(searchResult[0]));
                         } else { //multiple results, ask the user which one select
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(

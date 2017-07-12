@@ -65,12 +65,12 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 if (ranges != undefined && formCollection == undefined) { //just "classic" range
                     //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                     if (ranges.type == RDFTypesEnum.resource) {
-                        this.enrichWithResource(predicate, ranges.rangeCollection);
+                        this.enrichWithResource(predicate, ranges.rangeCollection.resources);
                     } else if (ranges.type == RDFTypesEnum.plainLiteral) {
                         this.enrichWithPlainLiteral(predicate);
                     } else if (ranges.type == RDFTypesEnum.typedLiteral) {
                         //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
-                        this.enrichWithTypedLiteral(predicate, ranges.rangeCollection);
+                        this.enrichWithTypedLiteral(predicate, ranges.rangeCollection.resources, ranges.rangeCollection.dataRanges);
                     } else if (ranges.type == RDFTypesEnum.literal) {
                         var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                         this.basicModals.select("Select range type", null, options).then(
@@ -128,7 +128,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                                 }
                             }
                             if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.resource) {
-                                this.enrichWithResource(predicate, ranges.rangeCollection);
+                                this.enrichWithResource(predicate, ranges.rangeCollection.resources);
                             } else if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.typedLiteral) {
                                 this.enrichWithTypedLiteral(predicate);
                             } else if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.plainLiteral) {
@@ -189,8 +189,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     /**
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
-    private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[]) {
-        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes).then(
+    private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
+        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes, dataRanges).then(
             (literal: any) => {
                 this.resourcesService.addValue(this.resource, predicate, <ARTLiteral>literal).subscribe(
                     stResp => this.update.emit(null)

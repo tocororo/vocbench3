@@ -86,8 +86,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private datarange: ARTLiteral[];
 
     //datatype to show in a list in case the modal allow to add range to a datatype property
-    private datatypes: ARTURIResource[] = [XmlSchema.boolean, XmlSchema.date,
-        XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
+    private datatypes: ARTURIResource[] = XmlSchema.DATATYPES;
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
         private propService: PropertyServices, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices,
@@ -151,7 +150,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                     this.viewType = "classAndIndividual";
                 } else if (ranges.type == RDFTypesEnum.resource) {
                     //class, concept, conceptScheme, collection, resourcelist, instance, class individual
-                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection;
+                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection.resources;
                     if (rangeCollection != null) {
                         if (rangeCollection.length == 1) {
                             var rangeClass: ARTURIResource = rangeCollection[0];

@@ -196,37 +196,58 @@ export class PropertyServices {
      *              or typedLiteral, then represent the admitted datatypes);
      * - formCollection, an optional FormCollection object only if the property has form collection associated
      */
-    getRange(property: ARTURIResource): Observable<{ ranges: { type: RangeType, rangeCollection: ARTURIResource[] }, formCollection: FormCollection }> {
+    // getRange(property: ARTURIResource): Observable<{ ranges: { type: RangeType, rangeCollection: ARTURIResource[] }, formCollection: FormCollection }> {
+    getRange(property: ARTURIResource): Observable<RangeResponse> {
         console.log("[PropertyServices] getRange");
         var params: any = {
             property: property,
         };
         return this.httpMgr.doGet(this.serviceName, "getRange", params, true).map(
             stResp => {
+                let range: RangeResponse = { ranges: null, formCollection: null };
+                
                 let ranges: any;
-                let formCollection: FormCollection;
-
                 if (stResp.ranges) {
+                    let respRanges = stResp.ranges;
                     ranges = {};
-                    ranges.type = stResp.ranges.type;
-                    if (stResp.ranges.rangeCollection) {
-                        //cannot use Deserializer since rangeCollection contains just the URIs
-                        // ranges.rangeCollection = Deserializer.createURIArray(stResp.ranges.rangeCollection);
-                        var rangeColl: ARTURIResource[] = [];
-                        for (var i = 0; i < stResp.ranges.rangeCollection.length; i++) {
-                            rangeColl.push(new ARTURIResource(stResp.ranges.rangeCollection[i], null, null));
+                    ranges.type = respRanges.type;
+                    if (respRanges.rangeCollection) {
+                        var rangeCollection: { resources: ARTURIResource[], dataRanges: (ARTLiteral[])[]} = {
+                            resources: null,
+                            dataRanges: null
+                        };
+                        let rangeResources: ARTURIResource[] = [];
+                        let rangeDataRanges: (ARTLiteral[])[] = [];
+                        for (var i = 0; i < respRanges.rangeCollection.length; i++) {
+                            let rngCollElem = respRanges.rangeCollection[i];
+                            if (typeof rngCollElem == "string") {
+                                rangeResources.push(new ARTURIResource(rngCollElem, null, null));    
+                            } else if (rngCollElem.oneOf != null) { //typeof rngCollElem == "object" => is a datarange
+                                let dataRange: ARTLiteral[] = Deserializer.createLiteralArray(rngCollElem.oneOf);
+                                rangeDataRanges.push(dataRange);
+                            }
                         }
-                        ranges.rangeCollection = rangeColl;
+                        if (rangeResources.length > 0) {
+                            rangeCollection.resources = rangeResources;
+                        }
+                        if (rangeDataRanges.length > 0) {
+                            rangeCollection.dataRanges = rangeDataRanges;
+                        }
+                        ranges.rangeCollection = rangeCollection;
                     }
+                    range.ranges = ranges;
                 }
+
+                let formCollection: FormCollection;
                 if (stResp.formCollection) {
-                    formCollection = new FormCollection(stResp.formCollection.id);
+                    let respFormColl = stResp.formCollection;
+                    formCollection = new FormCollection(respFormColl.id);
                     var forms: CustomForm[] = [];
-                    for (var i = 0; i < stResp.formCollection.forms.length; i++) {
-                        let cf: CustomForm = new CustomForm(stResp.formCollection.forms[i].id);
-                        cf.setName(stResp.formCollection.forms[i].name);
-                        cf.setType(stResp.formCollection.forms[i].type);
-                        cf.setDescription(stResp.formCollection.forms[i].description);
+                    for (var i = 0; i < respFormColl.forms.length; i++) {
+                        let cf: CustomForm = new CustomForm(respFormColl.forms[i].id);
+                        cf.setName(respFormColl.forms[i].name);
+                        cf.setType(respFormColl.forms[i].type);
+                        cf.setDescription(respFormColl.forms[i].description);
                         forms.push(cf);
                     }
                     forms.sort(
@@ -237,8 +258,11 @@ export class PropertyServices {
                         }
                     )
                     formCollection.setForms(forms);
+
+                    range.formCollection = formCollection;
                 }
-                return { ranges: ranges, formCollection: formCollection };
+
+                return range;
             }
         );
     }
@@ -506,3 +530,14 @@ export class PropertyServices {
 }
 
 type RangeType = "resource" | "plainLiteral" | "typedLiteral" | "literal" | "undetermined" | "inconsistent";
+
+class RangeResponse {
+    ranges: {
+        type: RangeType,
+        rangeCollection: { 
+            resources: ARTURIResource[],
+            dataRanges: (ARTLiteral[])[]
+        }
+    };
+    formCollection: FormCollection;
+}

@@ -32,15 +32,11 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     }
 
     ngOnInit() {
-        console.log("newResource onInit");
         this.lang = this.context.lang;
-        console.log("onInit end");
     }
 
     ngAfterViewInit() {
-        console.log("mewRes after Init");
         this.inputToFocus.nativeElement.focus();
-        console.log("mewRes after Init 2");
     }
 
     private onKeydown(event: KeyboardEvent) {

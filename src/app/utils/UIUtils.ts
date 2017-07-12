@@ -375,7 +375,6 @@ export class UIUtils {
         let rules: CSSRuleList = sheet[cssRuleCode];
         for (var j = 0; j < rules.length; j++) {
             let rule: CSSRule = rules.item(j);
-            // console.log(rule['selectorText']);
             if (rule instanceof CSSStyleRule) {
                 if (rule.selectorText.includes(".navbar-default")) {
                     if (rule.selectorText == ".navbar-default" || 
@@ -391,8 +390,6 @@ export class UIUtils {
                         rule.selectorText == ".navbar-default .navbar-nav > .active > a, " +
                             ".navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus" ||
                         rule.selectorText == ".navbar-default .navbar-link:hover" ||
-                        // rule.selectorText == ".navbar-default .navbar-nav > .disabled > a, " + 
-                        //     ".navbar-default .navbar-nav > .disabled > a:hover, .navbar-default .navbar-nav > .disabled > a:focus" ||
                         rule.selectorText == ".navbar-default .navbar-nav > .open > a, " + 
                             ".navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus" ||
                         rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, " + 

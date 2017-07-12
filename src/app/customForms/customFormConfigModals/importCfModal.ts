@@ -44,7 +44,6 @@ export class ImportCfModal implements ModalComponent<ImportCfModalData> {
 
     fileChangeEvent(file: File) {
         this.file = file;
-        console.log("file :", this.file);
     }
     
     ok(event: Event) {

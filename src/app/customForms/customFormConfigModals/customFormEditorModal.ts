@@ -99,7 +99,6 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private addPropToChain(where?: "before" | "after") {
         this.browsingModals.browsePropertyTree("Add property").then(
             (prop: any) => {
-                console.log("adding " + prop.getURI() + " " + where);
                 if (where == null) {
                     this.showPropertyChain.push(prop);
                 } else if (where == "before") {

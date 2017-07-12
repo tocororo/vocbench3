@@ -203,6 +203,10 @@ export class XmlSchema { //all resources here have role "individual" (don't know
     public static unsignedLong = new ARTURIResource(XmlSchema.namespace + "unsignedLong", "xsd:unsignedLong", RDFResourceRolesEnum.individual);
 	public static unsignedShort = new ARTURIResource(XmlSchema.namespace + "unsignedShort", "xsd:unsignedShort", RDFResourceRolesEnum.individual);
 
+    public static DATATYPES: ARTURIResource[] = [
+        XmlSchema.boolean, XmlSchema.date, XmlSchema.dateTime, XmlSchema.float,
+        XmlSchema.integer, XmlSchema.string, XmlSchema.time
+    ];
 }
 
 

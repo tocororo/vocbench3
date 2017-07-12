@@ -397,7 +397,7 @@ export class CreateProjectComponent {
                 configType: this.selectedSupportRepoConf.configuration.type,
                 properties: supportRepoProps
             }
-            console.log("supportRepoSailConfigurerSpecification", supportRepoSailConfigurerSpecification);
+            // console.log("supportRepoSailConfigurerSpecification", supportRepoSailConfigurerSpecification);
         }
         
         /**
@@ -427,7 +427,7 @@ export class CreateProjectComponent {
                 configType: this.selectedUriGenPluginConf.type,
                 properties: uriGenPluginProps
             }
-            console.log("uriGeneratorSpecification", uriGeneratorSpecification);
+            // console.log("uriGeneratorSpecification", uriGeneratorSpecification);
         }
 
         /**
@@ -457,7 +457,7 @@ export class CreateProjectComponent {
                 configType: this.selectedRendEngPluginConf.type,
                 properties: rendEngPluginProps
             }
-            console.log("renderingEngineSpecification", renderingEngineSpecification);
+            // console.log("renderingEngineSpecification", renderingEngineSpecification);
         }
 
         /**

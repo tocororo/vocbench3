@@ -15,20 +15,12 @@ export class DataRangeEditor {
     private datatype: ARTURIResource;
 
     ngOnInit() {
-        console.log("data range editor", this.datarange);
-        console.log("data range editor 1");
         if (this.datarange === undefined) {
             this.datarange = [];
         }
-        console.log("data range editor 2");
-    }
-
-    ngAfterViewInit() {
-        console.log("data range editor 3");
     }
 
     private onDatatypeChange(dt: ARTURIResource) {
-        console.log("data range editor 4");
         this.datatype = dt;
     }
 

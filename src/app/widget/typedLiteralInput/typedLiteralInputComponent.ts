@@ -15,9 +15,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     @Input() allowedDatatypes: ARTURIResource[]; //the datatypes allowed by the component
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
 
-    private datatypeList: ARTURIResource[] = [
-        XmlSchema.boolean, XmlSchema.date, XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string, XmlSchema.time
-    ];
+    private datatypeList: ARTURIResource[] = XmlSchema.DATATYPES;
     private datatype: ARTURIResource;
 
     private value: string;

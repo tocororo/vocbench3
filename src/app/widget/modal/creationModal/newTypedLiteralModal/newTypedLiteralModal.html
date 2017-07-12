@@ -2,11 +2,38 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body">
-    <typed-literal-input [allowedDatatypes]="context.allowedDatatypes" [(ngModel)]="value" (datatypeChange)="onDatatypeChange($event)"></typed-literal-input>
-    <!--Error alert in case of invalid value-->
-    <div *ngIf="submitted && !isInputValid()" class="alert alert-danger" style="margin-top: 6px;">
-        The inserted value is not valid for the selected datatype
+
+    <div *ngIf="showAspectSelector" class="btn-group btn-group-xs pull-right" style="margin-bottom: 6px">
+        <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{ active: selectedAspectSelector == selector }"
+            (click)="selectedAspectSelector = selector">{{selector}}</button>
     </div>
+    
+    <div *ngIf="selectedAspectSelector == typedLiteralAspectSelector">
+        <typed-literal-input [allowedDatatypes]="context.allowedDatatypes" [(ngModel)]="value" (datatypeChange)="onDatatypeChange($event)"></typed-literal-input>
+
+        <!--Error alert in case of invalid value-->
+        <div *ngIf="submitted && !isInputValid()" class="alert alert-danger" style="margin-top: 6px;">
+            The inserted value is not valid for the selected datatype
+        </div>
+    </div>
+
+    <div *ngIf="selectedAspectSelector == dataRangeAspectSelector">
+        <select class="form-control input-sm" [(ngModel)]="selectedDataRange">
+            <option *ngFor="let dr of context.dataRanges" [ngValue]="dr">
+                {{getDataRangePreview(dr)}}
+            </option>
+        </select>
+        <select class="form-control input-sm" [(ngModel)]="selectedDrValue" style="margin-top: 6px;">
+            <option *ngFor="let v of selectedDataRange" [ngValue]="v">{{v.toNT()}}</option>
+        </select>
+
+        <!--Error alert in case of invalid value-->
+        <div *ngIf="submitted && !isInputValid()" class="alert alert-danger" style="margin-top: 6px;">
+            You should select one of the available value
+        </div>
+    </div>
+
+    
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="submitted && !isInputValid()">Ok</button>

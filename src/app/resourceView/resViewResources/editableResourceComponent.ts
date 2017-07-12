@@ -33,7 +33,13 @@ export class EditableResourceComponent {
 	//useful to perform a check on the type of the edited value.
 	//The check isn't too deep, it just distinguishes between resource, literal or any (undetermined)
 	private rangeType: RDFTypesEnum;
-	private ranges: { type: string, rangeCollection: ARTURIResource[] }; //stores response.ranges of getRange service
+	private ranges: {
+		type: string,
+		rangeCollection: {
+			resources: ARTURIResource[],
+			dataRanges: (ARTLiteral[])[] 
+		}
+	}; //stores response.ranges of getRange service
 
 	private isClassAxiom: boolean = false;
 
@@ -112,7 +118,6 @@ export class EditableResourceComponent {
 	}
 
 	private confirmEdit() {
-		console.log(this.resourceStringValue, this.resourceStringValuePristine);
 		if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
 			try {
 				let newValue: ARTNode;
@@ -197,7 +202,7 @@ export class EditableResourceComponent {
 			 * special case: if range of property is resource, it is still compliant with literal newValue in case 
 			 * in rangeCollection there is rdfs:Literal
 			 */
-			if (ResourceUtils.containsResource(this.ranges.rangeCollection, RDFS.literal) && newValue.isLiteral()) {
+			if (ResourceUtils.containsResource(this.ranges.rangeCollection.resources, RDFS.literal) && newValue.isLiteral()) {
 				return false;
 			}
 			if (!newValue.isResource()) {
@@ -273,7 +278,6 @@ export class EditableResourceComponent {
 		//here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
 		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept).then(
 			data => {
-				console.log(data);
 				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
 				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
 					data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(

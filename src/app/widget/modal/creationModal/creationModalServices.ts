@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { ARTURIResource, ARTResource } from "../../../models/ARTResources";
+import { ARTURIResource, ARTResource, ARTLiteral } from "../../../models/ARTResources";
 import { NewResourceModal, NewResourceModalData } from "./newResourceModal/newResourceModal";
 import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/newResourceCfModal";
 import { NewSkosResourceCfModal, NewSkosResourceCfModalData } from "./newResourceModal/newSkosResourceCfModal";
@@ -115,8 +115,8 @@ export class CreationModalServices {
      * @param allowedDatatypes datatypes allowed in the datatype selection list
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newTypedLiteral(title: string, allowedDatatypes?: ARTURIResource[]) {
-        var modalData = new NewTypedLiteralModalData(title, allowedDatatypes);
+    newTypedLiteral(title: string, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
+        var modalData = new NewTypedLiteralModalData(title, allowedDatatypes, dataRanges);
         const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
             modalData, undefined, NewTypedLiteralModalData
         );

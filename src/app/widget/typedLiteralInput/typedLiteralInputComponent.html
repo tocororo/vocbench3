@@ -1,6 +1,8 @@
 <div>
     <select class="form-control input-sm" [(ngModel)]="datatype" (ngModelChange)="onDatatypeChange()">
-        <option *ngFor="let dt of datatypeList" [ngValue]="dt" [title]="dt.getURI()" [disabled]="!isDatatypeAllowed(dt)">{{dt.getShow()}}</option>
+        <ng-template ngFor let-dt [ngForOf]="datatypeList">
+            <option *ngIf="isDatatypeAllowed(dt)" [ngValue]="dt" [title]="dt.getURI()">{{dt.getShow()}}</option>
+        </ng-template>
     </select>
     <!--input dedicated to some datatypes-->
     <ng-template [ngIf]="isDatatypeBound()">
@@ -30,9 +32,6 @@
             [(ngModel)]="value" (ngModelChange)="onValueChanged()" disabled>
     </ng-template>
     
-    
-    
-        
     <!--input for other datatypes-->
     <input *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#float'" type="number" step="any"
         class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value" (ngModelChange)="onValueChanged()">

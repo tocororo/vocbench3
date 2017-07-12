@@ -278,7 +278,6 @@ export class ResAttribute {
     public static SHOW = "show";
     public static QNAME = "qname";
     public static ROLE = "role";
-    public static TYPE = "type";
     public static EXPLICIT = "explicit";
     public static MORE = "more";
     public static NUM_INST = "numInst";

@@ -98,7 +98,6 @@ export class ProjectsAdministrationComponent {
     }
 
     private removeUserFromProject() {
-        console.log("remove user " + this.selectedUser.getFamilyName() + " from " + this.selectedProject.getName());
         this.adminService.removeAllRolesFromUser(this.selectedProject.getName(), this.selectedUser.getEmail()).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
