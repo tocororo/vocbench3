@@ -57,6 +57,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         } else { //both allowedDatatypes and dataRanges null
             this.selectedAspectSelector = this.typedLiteralAspectSelector;
         }
+
     }
 
     private getDataRangePreview(dataRange: ARTLiteral[]): string {
