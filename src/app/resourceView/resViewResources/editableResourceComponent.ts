@@ -3,7 +3,7 @@ import {
 	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
 	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
 } from "../../models/ARTResources";
-import { SKOSXL, SKOS, RDFS } from "../../models/Vocabulary";
+import { SKOSXL, SKOS, RDFS, SemanticTurkey } from "../../models/Vocabulary";
 import { ResViewPartition } from "../../models/ResourceView";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -42,7 +42,9 @@ export class EditableResourceComponent {
 	}; //stores response.ranges of getRange service
 
 	private isClassAxiom: boolean = false;
+	private isPlainLiteral: boolean = false;
 
+	private editMenuDisabled: boolean = false;
 	private editInProgress: boolean = false;
 	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
@@ -51,11 +53,25 @@ export class EditableResourceComponent {
 		private manchesterService: ManchesterServices, private refactorService: RefactorServices,
 		private basicModals: BasicModalServices, private creationModals: CreationModalServices, private rvModalService: ResViewModalServices) { }
 
+	ngOnInit() {
+		this.editMenuDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly);
+		this.resource.getGraphs().forEach((graph: ARTURIResource) => {
+			if (graph.getURI().startsWith(SemanticTurkey.stagingAddGraph) || graph.getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
+				this.editMenuDisabled = true;
+				return;
+			}
+		});
+
+		this.isPlainLiteral = (
+			(this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) || 
+			this.resource.getRole() == RDFResourceRolesEnum.xLabel
+		);
+	}
 
 	//======== "edit" HANDLER ========
 
 	private edit() {
-		//don't edit inline dataranges
+		//special case: resource is a data range => don't edit inline dataranges, but open the editor instead
 		if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
 			this.rvModalService.editDataRange(this.resource).then(
 				ok => { this.update.emit(); },
@@ -67,26 +83,53 @@ export class EditableResourceComponent {
 			this.propService.getRange(this.predicate).subscribe(
 				range => {
 					this.ranges = range.ranges;
-					this.computeResourceStringValue();
+					/**
+					 * special case:
+					 * if range is typed literal and range ha restriction (datarange or datatype), allow to edit only with enumeration of datarange
+					 */
+					if (this.ranges != null && this.ranges.type == RDFTypesEnum.typedLiteral) {
+						if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
+							this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(),
+								this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
+								newValue => {
+									this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+								},
+								() => { }
+							);
+						}
+					} else {
+						this.computeResourceStringValue();
+						this.editInProgress = true;
+					}
 				}
 			);
 		} else {
 			this.computeResourceStringValue();
+			this.editInProgress = true;
 		}
+	}
+
+	private editPlainLiteral() {
+		if (this.resource instanceof ARTLiteral) {
+			this.resourceStringValue = this.resource.getValue();
+		} else if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
+			this.resourceStringValue = this.resource.getShow()
+		}
+		this.resourceStringValuePristine = this.resourceStringValue;
 		this.editInProgress = true;
 	}
 
 	private computeResourceStringValue() {
+		this.resourceStringValue = this.resource.toNT();//default string value (in the follow if-else override it eventually)
 		if (this.ranges != null) { //check to avoid error in case the property has custom ranges that replace the "classic" range
 			let type: string = this.ranges.type;
-			if (type == "resource") {
+			if (type == RDFTypesEnum.resource) {
 				this.rangeType = RDFTypesEnum.resource;
 				// special case: if user is editing an xLabel, the widget should allow to edit the literal form, not the uri
-				if (this.resource.getAdditionalProperty(ResAttribute.ROLE) == RDFResourceRolesEnum.xLabel) {
+				if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
 					let literalForm: ARTLiteral = new ARTLiteral(
 						this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 					this.resourceStringValue = literalForm.toNT();
-					this.resourceStringValuePristine = this.resourceStringValue;
 				}
 				//special case: if user is editing a class restriction, the widget should allow to edit the manchester expression
 				else if (this.resource.isBNode()) {
@@ -95,99 +138,102 @@ export class EditableResourceComponent {
 							if (isClassAxiom) {
 								this.isClassAxiom = true;
 								this.resourceStringValue = this.resource.getShow();
-							} else {
-								this.resourceStringValue = this.resource.toNT();
 							}
-							this.resourceStringValuePristine = this.resourceStringValue;
 						}
 					)
-				} else {
-					this.resourceStringValue = this.resource.toNT();
-					this.resourceStringValuePristine = this.resourceStringValue;
 				}
 			} else if (type.toLowerCase().includes("literal")) {
 				this.rangeType = RDFTypesEnum.literal;
-				this.resourceStringValue = this.resource.toNT();
-				this.resourceStringValuePristine = this.resourceStringValue;
 			} else {
 				this.rangeType = RDFTypesEnum.undetermined; //default
-				this.resourceStringValue = this.resource.toNT();
-				this.resourceStringValuePristine = this.resourceStringValue;
 			}
+			this.resourceStringValuePristine = this.resourceStringValue;
 		}
 	}
 
 	private confirmEdit() {
 		if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
-			try {
-				let newValue: ARTNode;
-				//parse the string typed by the user
-				if (this.resourceStringValue.startsWith("<") && this.resourceStringValue.endsWith(">")) { //uri
-					newValue = ResourceUtils.parseURI(this.resourceStringValue);
-				} else if (this.resourceStringValue.startsWith("_:")) { //bnode
-					newValue = ResourceUtils.parseBNode(this.resourceStringValue);
-				} else if (this.resourceStringValue.startsWith("\"")) { //literal
-					newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
-				} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
-					newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
-				} else if (this.resource.isBNode() && this.isClassAxiom) {
-					/** If the editing resource is a bnode and if it represents class axiom,
-					 * I can assume that the user has typed a new manchester expression to represent a class axiom */
-					this.isClassAxiom = false;
-					this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
-					return;
-				} else {
-					throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
-				}
-
-				// let newValue: ARTNode = this.resource.clone(); //clone so the newValue maintain additional attributes of the old value
-				// if (this.resource.isURIResource()) {
-				// 	let uriRes: ARTURIResource = ResourceUtils.parseURI(this.resourceStringValue);
-				// 	(<ARTURIResource>newValue).setURI(uriRes.getURI());
-				// 	(<ARTURIResource>newValue).setShow(null);
-				// } else if (this.resource.isBNode()) {
-				// 	let bNodeRes: ARTBNode = ResourceUtils.parseBNode(this.resourceStringValue);
-				// 	(<ARTBNode>newValue).setId(bNodeRes.getId());
-				// 	(<ARTBNode>newValue).setShow(null);
-				// } else if (this.resource.isLiteral()) {
-				// 	let literal: ARTLiteral = ResourceUtils.parseLiteral(this.resourceStringValue);
-				// 	(<ARTLiteral>newValue).setValue(literal.getValue());
-				// 	(<ARTLiteral>newValue).setLang(literal.getLang());
-				// 	(<ARTLiteral>newValue).setDatatype(literal.getDatatype());
-				// }
-
-				// let newValue: ARTNode;
-				// if (this.resource.isURIResource()) {
-				// 	newValue = ResourceUtils.parseURI(this.resourceStringValue);
-				// 	(<ARTURIResource>newValue).setShow((<ARTURIResource>newValue).getURI());
-				// } else if (this.resource.isBNode()) {
-				// 	newValue = ResourceUtils.parseBNode(this.resourceStringValue);
-				// 	(<ARTBNode>newValue).setShow((<ARTBNode>newValue).getId());
-				// } else if (this.resource.isLiteral()) {
-				// 	newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
-				// }
-				// newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-
-				//special case: update of literal form of a skosxl label (role of value is xLabel && new value is a literal)
-				if (this.resource.getAdditionalProperty(ResAttribute.ROLE) == RDFResourceRolesEnum.xLabel && newValue.isLiteral()) {
+			if (this.isPlainLiteral) {
+				let newValue: ARTLiteral;
+				if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
 					let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+					let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 					this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
-					//case new value has a nature not compliant with the range type
-				// } else if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
-				// 	this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
-				} else if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
-					let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
-						+ ". The change may cause an inconsistency. Do you want to apply the change? ";
-					this.basicModals.confirm("Warning", warningMsg, "warning").then(
-						confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
-						reject => { this.editInProgress = false; }
-					);
-				} else {
+				} else if (this.resource instanceof ARTLiteral) {
+					newValue = new ARTLiteral(this.resourceStringValue, null, this.resource.getLang());
 					this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
 				}
-			} catch (err) {
-				this.basicModals.alert("Edit", err, "error");
-				this.editInProgress = false;
+			} else {
+				try {
+					let newValue: ARTNode;
+					//parse the string typed by the user
+					if (this.resourceStringValue.startsWith("<") && this.resourceStringValue.endsWith(">")) { //uri
+						newValue = ResourceUtils.parseURI(this.resourceStringValue);
+					} else if (this.resourceStringValue.startsWith("_:")) { //bnode
+						newValue = ResourceUtils.parseBNode(this.resourceStringValue);
+					} else if (this.resourceStringValue.startsWith("\"")) { //literal
+						newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
+					} else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
+						newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
+					} else if (this.resource.isBNode() && this.isClassAxiom) {
+						/** If the editing resource is a bnode and if it represents class axiom,
+						 * I can assume that the user has typed a new manchester expression to represent a class axiom */
+						this.isClassAxiom = false;
+						this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
+						return;
+					} else {
+						throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
+					}
+
+					// let newValue: ARTNode = this.resource.clone(); //clone so the newValue maintain additional attributes of the old value
+					// if (this.resource.isURIResource()) {
+					// 	let uriRes: ARTURIResource = ResourceUtils.parseURI(this.resourceStringValue);
+					// 	(<ARTURIResource>newValue).setURI(uriRes.getURI());
+					// 	(<ARTURIResource>newValue).setShow(null);
+					// } else if (this.resource.isBNode()) {
+					// 	let bNodeRes: ARTBNode = ResourceUtils.parseBNode(this.resourceStringValue);
+					// 	(<ARTBNode>newValue).setId(bNodeRes.getId());
+					// 	(<ARTBNode>newValue).setShow(null);
+					// } else if (this.resource.isLiteral()) {
+					// 	let literal: ARTLiteral = ResourceUtils.parseLiteral(this.resourceStringValue);
+					// 	(<ARTLiteral>newValue).setValue(literal.getValue());
+					// 	(<ARTLiteral>newValue).setLang(literal.getLang());
+					// 	(<ARTLiteral>newValue).setDatatype(literal.getDatatype());
+					// }
+
+					// let newValue: ARTNode;
+					// if (this.resource.isURIResource()) {
+					// 	newValue = ResourceUtils.parseURI(this.resourceStringValue);
+					// 	(<ARTURIResource>newValue).setShow((<ARTURIResource>newValue).getURI());
+					// } else if (this.resource.isBNode()) {
+					// 	newValue = ResourceUtils.parseBNode(this.resourceStringValue);
+					// 	(<ARTBNode>newValue).setShow((<ARTBNode>newValue).getId());
+					// } else if (this.resource.isLiteral()) {
+					// 	newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
+					// }
+					// newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
+
+					//special case: update of literal form of a skosxl label (role of value is xLabel && new value is a literal)
+					if (this.resource.getRole() == RDFResourceRolesEnum.xLabel && newValue.isLiteral()) {
+						let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+						this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
+						//case new value has a nature not compliant with the range type
+					// } else if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
+					// 	this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
+					} else if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
+						let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
+							+ ". The change may cause an inconsistency. Do you want to apply the change? ";
+						this.basicModals.confirm("Warning", warningMsg, "warning").then(
+							confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
+							reject => { this.editInProgress = false; }
+						);
+					} else {
+						this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+					}
+				} catch (err) {
+					this.basicModals.alert("Edit", err, "error");
+					this.editInProgress = false;
+				}
 			}
 		} else {
 			this.editInProgress = false;
@@ -305,14 +351,14 @@ export class EditableResourceComponent {
 
 
 	//menu item authorizations
-	private isEditDisabled(): boolean {
-		return !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.subject);
+	private isEditAuthorized(): boolean {
+		return AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.subject);
 	}
-	private isDeleteDisabled(): boolean {
-		return !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
+	private isDeleteAuthorized(): boolean {
+		return AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
 	}
-	private isSpawnFromLabelDisabled(): boolean {
-		return !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL);
+	private isSpawnFromLabelAuthorized(): boolean {
+		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL);
 	}
 
 }

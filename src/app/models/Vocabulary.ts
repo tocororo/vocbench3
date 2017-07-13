@@ -217,3 +217,9 @@ export class DC {
     public static created = new ARTURIResource(DC.namespace + "created", "dc:created", RDFResourceRolesEnum.property);
     public static modified = new ARTURIResource(DC.namespace + "modified", "dc:modified", RDFResourceRolesEnum.property);
 }
+
+
+export class SemanticTurkey {
+    public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
+    public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
+}

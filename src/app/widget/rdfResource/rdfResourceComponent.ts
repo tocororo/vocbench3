@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { SemanticTurkey } from "../../models/Vocabulary";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBPreferences } from "../../utils/VBPreferences";
 
@@ -18,13 +19,11 @@ export class RdfResourceComponent {
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes['resource'] && changes['resource'].currentValue) {
 			let graphs: ARTURIResource[] = this.resource.getGraphs();
-			let stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
-			let stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
 			for (var i = 0; i < graphs.length; i++) {
-				if (graphs[i].getURI().startsWith(stagingAddGraph)) {
+				if (graphs[i].getURI().startsWith(SemanticTurkey.stagingAddGraph)) {
 					this.renderingClass = "stagingAdd";
 					break;
-				} else if (graphs[i].getURI().startsWith(stagingRemoveGraph)) {
+				} else if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
 					this.renderingClass = "stagingRemove";
 					break;
 				} else {

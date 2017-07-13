@@ -18,7 +18,7 @@
     </div>
 
     <div *ngIf="selectedAspectSelector == dataRangeAspectSelector">
-        <select *ngIf="context.dataRanges.lenght > 1" class="form-control input-sm" [(ngModel)]="selectedDataRange">
+        <select *ngIf="context.dataRanges.length > 1" class="form-control input-sm" [(ngModel)]="selectedDataRange">
             <option *ngFor="let dr of context.dataRanges" [ngValue]="dr">
                 {{getDataRangePreview(dr)}}
             </option>
