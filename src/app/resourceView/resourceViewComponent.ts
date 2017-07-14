@@ -4,7 +4,7 @@ import { VersionInfo } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBPreferences } from "../utils/VBPreferences";
+import { VBProperties } from "../utils/VBProperties";
 import { VBContext } from "../utils/VBContext";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
@@ -50,7 +50,7 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private eventHandler: VBEventHandler, private preferences: VBPreferences) {
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private eventHandler: VBEventHandler, private preferences: VBProperties) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));

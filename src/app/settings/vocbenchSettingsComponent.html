@@ -44,7 +44,7 @@
                         <label style="flex: 1">Languages:</label>
                         <span *ngIf="getActiveLanguageItems().length == 0" class="greyText" style="margin-right: 5px;">
                             <span class="glyphicon glyphicon-warning-sign"></span>
-                            No language selected implicitly means all languages (and "en" as default)
+                            No language selected implicitly means all languages
                         </span>
                         <div class="btn-group btn-group-xs">
                             <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
@@ -73,7 +73,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let l of renderingLangs">
+                                <tr *ngFor="let l of renderingLanguages">
                                     <td class="text-center">
                                         <input type="radio" style="vertical-align: middle" name="defaultLang" [value]="l.lang.tag"
                                             (change)="onDefaultLangChanged(l)" [checked]="l.default" [disabled]="!l.active"/>

@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { PreferencesServices } from '../services/preferencesServices';
+import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { Language, LanguageUtils } from '../models/LanguagesCountries';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices'
 
 @Injectable()
-export class VBPreferences {
+export class VBProperties {
 
-    private languages: string[] = []; //contains langTag or a single element "*" that means all languages
+    private projectLanguages: Language[] = []; //all available languages in a project (settings)
+    private lexicalizationLangs: string[] = []; //languages used in the project (preferences: contains langTag or a single element "*" that means all languages)
     private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
     private projectThemeId: number = null;
 
-    constructor(private prefService: PreferencesServices, private eventHandler: VBEventHandler) {}
+    constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {}
 
     /**
      * To call each time the user change project
@@ -23,7 +26,7 @@ export class VBPreferences {
         this.activeSchemes = [];
         return this.prefService.getProjectPreferences().subscribe(
             prefs => {
-                this.languages = prefs.languages;
+                this.lexicalizationLangs = prefs.languages;
                 let activeSchemesPref = prefs.active_schemes;
                 if (activeSchemesPref != null) {
                     for (var i = 0; i < activeSchemesPref.length; i++) {
@@ -82,11 +85,30 @@ export class VBPreferences {
         this.prefService.setShowInstancesNumb(show).subscribe();
     }
 
-    getLanguages(): string[] {
-        return this.languages;
+    /**
+     * Returns the default language, used to select the language when creating a resource with lang
+     * Returns the first lang of languages array or "en" in case languages is *
+     */
+    getDefaultLexicalizationLang() {
+        var firstLang = this.lexicalizationLangs[0];
+        if (firstLang == "*") { //if preferred language is "all", return the first priority
+            for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) {
+                for (var j = 0; j < this.projectLanguages.length; j++) {
+                    if (LanguageUtils.priorityLangs[i] == this.projectLanguages[j].tag) {
+                        return LanguageUtils.priorityLangs[i];
+                    }
+                }
+            }
+            //if priority languages are not in the project languages, return the first project lang
+            return this.projectLanguages[0].tag;
+        }
+        return firstLang;
     }
-    setLanguages(langs: string[]) {
-        this.languages = langs;
+    getLexicalizationLangs(): string[] {
+        return this.lexicalizationLangs;
+    }
+    setLexicalizationLangs(langs: string[]) {
+        this.lexicalizationLangs = langs;
         this.prefService.setLanguages(langs).subscribe()
     }
 
@@ -97,18 +119,6 @@ export class VBPreferences {
         this.projectThemeId = theme;
         UIUtils.changeNavbarTheme(this.projectThemeId);
         this.prefService.setProjectTheme(theme).subscribe();
-    }
-
-    /**
-     * Returns the default language, used to select the language when creating a resource with lang
-     * Returns the first lang of languages array or "en" in case languages is *
-     */
-    getDefaultLanguage() {
-        var firstLang = this.languages[0];
-        if (firstLang == "*") {
-            return "en";
-        }
-        return firstLang;
     }
 
     //PREFERENCES STORED IN COOKIES
@@ -142,6 +152,37 @@ export class VBPreferences {
             this.setResourceViewMode(mode);
         }
         return mode;
+    }
+
+    //SETTINGS
+    initProjectSettings() {
+        var properties: string[] = ["languages"];
+        this.prefService.getProjectSettings(properties).subscribe(
+            settings => {
+                var langsValue: string = settings.languages;
+                try {
+                    this.projectLanguages = <Language[]>JSON.parse(langsValue);
+                    this.projectLanguages.sort(
+                        function (l1: Language, l2: Language) {
+                            if (l1.tag > l2.tag) return 1;
+                            if (l1.tag < l2.tag) return -1;
+                            return 0;
+                        }
+                    )
+                } catch (err) {
+                    this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
+                        "languages settings. Default languages will be set for this project.", "error");
+                    this.projectLanguages = [
+                        { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },
+                        { name: "French" , tag: "fr" }, { name: "Italian" , tag: "it" }
+                    ];
+                }
+            }
+        );
+    }
+
+    getLanguages(): Language[] {
+        return this.projectLanguages;
     }
 
 }

@@ -25,7 +25,7 @@ import { AppComponent } from "../appComponent";
 import { appRouting } from '../appRoutes';
 
 import { HttpManager } from "../utils/HttpManager";
-import { VBPreferences } from "../utils/VBPreferences";
+import { VBProperties } from "../utils/VBProperties";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
 import { UserResolver } from "../utils/UserResolver";
@@ -58,7 +58,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
       ],
       //services with application scope
       providers: [
-            HttpManager, VBEventHandler, VBPreferences, GUARD_PROVIDERS, UserResolver,
+            HttpManager, VBEventHandler, VBProperties, GUARD_PROVIDERS, UserResolver,
             { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
       ],
       declarations: [

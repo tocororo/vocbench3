@@ -8,7 +8,7 @@ import { UserServices } from "../services/userServices";
 import { MetadataServices } from "../services/metadataServices";
 import { Project } from '../models/Project';
 import { VBContext } from '../utils/VBContext';
-import { VBPreferences } from '../utils/VBPreferences';
+import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from '../utils/UIUtils';
 import { ModalContext } from '../widget/modal/ModalContext';
 
@@ -24,7 +24,7 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>, private projectService: ProjectServices, private metadataService: MetadataServices,
-        private userService: UserServices, private preferences: VBPreferences, private router: Router) {
+        private userService: UserServices, private preferences: VBProperties, private router: Router) {
         this.context = dialog.context;
     }
 

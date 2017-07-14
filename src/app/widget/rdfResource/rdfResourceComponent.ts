@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges } from "@angular/core";
 import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { UIUtils } from "../../utils/UIUtils";
-import { VBPreferences } from "../../utils/VBPreferences";
+import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
 	selector: "rdf-resource",
@@ -14,7 +14,7 @@ export class RdfResourceComponent {
 
 	private renderingClass: string = "";
 
-	constructor(private preferences: VBPreferences) { }
+	constructor(private preferences: VBProperties) { }
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes['resource'] && changes['resource'].currentValue) {

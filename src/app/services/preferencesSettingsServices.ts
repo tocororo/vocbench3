@@ -5,7 +5,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 
 @Injectable()
-export class PreferencesServices {
+export class PreferencesSettingsServices {
 
     private serviceName = "PreferencesSettings";
 
@@ -100,6 +100,17 @@ export class PreferencesServices {
         console.log("[PreferencesServices] getProjectPreferences");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true);
+    }
+
+    /**
+     * Gets the settings for the currently open project
+     */
+    getProjectSettings(properties: string[]) {
+        console.log("[PreferencesServices] getProjectSettings");
+        var params = {
+            properties: properties
+        };
+        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true);
     }
 
 }

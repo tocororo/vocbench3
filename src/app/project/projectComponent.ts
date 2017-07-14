@@ -8,7 +8,7 @@ import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectServices } from "../services/projectServices";
 import { MetadataServices } from "../services/metadataServices";
 import { VBContext } from '../utils/VBContext';
-import { VBPreferences } from '../utils/VBPreferences';
+import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -23,7 +23,7 @@ export class ProjectComponent implements OnInit {
     private selectedProject: Project; //project selected in the list
 
     constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private preferences: VBPreferences, private router: Router, private basicModals: BasicModalServices, private modal: Modal) {
+        private preferences: VBProperties, private router: Router, private basicModals: BasicModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -124,6 +124,7 @@ export class ProjectComponent implements OnInit {
                 this.metadataService.getNamespaceMappings().subscribe();
                 //init the project preferences for the project
                 this.preferences.initUserProjectPreferences();
+                this.preferences.initProjectSettings();
             }
         );
     }

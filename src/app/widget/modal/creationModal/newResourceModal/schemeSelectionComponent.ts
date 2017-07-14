@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { SkosServices } from "../../../../services/skosServices";
 import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
-import { VBPreferences } from "../../../../utils/VBPreferences";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { ARTURIResource, ResourceUtils, ResAttribute } from "../../../../models/ARTResources";
 
 @Component({
@@ -19,7 +19,7 @@ export class SchemeSelectionComponent {
     private schemeList: ARTURIResource[] = [];
     private selectedScheme: ARTURIResource;
 
-    constructor(private skosService: SkosServices, private preferences: VBPreferences, private browsingModals: BrowsingModalServices) {}
+    constructor(private skosService: SkosServices, private preferences: VBProperties, private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         // this.initSchemeList(); //init in ngOnChanges

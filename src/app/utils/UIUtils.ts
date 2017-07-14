@@ -2,7 +2,6 @@ import {
     ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
     ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
 } from "../models/ARTResources";
-import { Languages } from "../models/LanguagesCountries"
 import { XmlSchema } from "../models/Vocabulary"
 import { VBContext } from "../utils/VBContext"
 

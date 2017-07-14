@@ -5,7 +5,7 @@ import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { OntoManagerServices } from '../../../../services/ontoManagerServices';
 import { VBContext } from "../../../../utils/VBContext";
-import { VBPreferences } from "../../../../utils/VBPreferences";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { PrefixMapping, OntologyImport, ImportStatus, ImportType } from "../../../../models/Metadata";
@@ -39,7 +39,7 @@ export class NamespacesAndImportsComponent {
     private mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}
 
     constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
-        private refactorService: RefactorServices, private basicModals: BasicModalServices, private preferences: VBPreferences,
+        private refactorService: RefactorServices, private basicModals: BasicModalServices, private preferences: VBProperties,
         private modal: Modal) { }
 
     ngOnInit() {

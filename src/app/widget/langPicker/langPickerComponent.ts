@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { UIUtils } from "../../utils/UIUtils";
-import { VBPreferences } from "../../utils/VBPreferences";
-import { Languages } from "../../models/LanguagesCountries";
+import { VBProperties } from "../../utils/VBProperties";
+import { Language } from "../../models/LanguagesCountries";
 
 @Component({
     selector: 'lang-picker',
@@ -15,10 +15,10 @@ export class LangPickerComponent implements OnInit {
     @Output() langChange = new EventEmitter<any>();
 
     private selectClass: string = "form-control input-";
-    private languageList = Languages.languageList;
+    private languageList: Language[];
     private language: string;
 
-    constructor(private pref: VBPreferences) { }
+    constructor(private pref: VBProperties) { }
 
     ngOnInit() {
         if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
@@ -26,8 +26,10 @@ export class LangPickerComponent implements OnInit {
         } else {
             this.selectClass += "sm";
         }
+
+        this.languageList = this.pref.getLanguages();
         if (this.lang == undefined) {
-            this.language = this.pref.getDefaultLanguage();//if lang is not provided set the default language
+            this.language = this.pref.getDefaultLexicalizationLang();//if lang is not provided set the default language
             this.langChange.emit(this.language);//and emit langChange event
         } else {
             this.language = this.lang;

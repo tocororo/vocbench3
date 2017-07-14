@@ -4,7 +4,7 @@ import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { ProjectListModal } from './project/projectListModal';
 import { VBContext } from "./utils/VBContext";
-import { VBPreferences } from "./utils/VBPreferences";
+import { VBProperties } from "./utils/VBProperties";
 import { User } from "./models/User";
 
 @Component({

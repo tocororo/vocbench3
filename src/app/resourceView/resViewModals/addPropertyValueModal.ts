@@ -3,7 +3,7 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTURIResource, ARTResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
-import { VBPreferences } from '../../utils/VBPreferences';
+import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 import { ManchesterServices } from "../../services/manchesterServices";
@@ -90,7 +90,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
         private propService: PropertyServices, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices,
-        private preferences: VBPreferences) {
+        private preferences: VBProperties) {
         this.context = dialog.context;
     }
 

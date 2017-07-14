@@ -7,7 +7,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources"
 import { Project } from "../../models/Project";
 import { SKOS } from "../../models/Vocabulary";
 import { ProjectServices } from "../../services/projectServices";
-import { PreferencesServices } from "../../services/preferencesServices";
+import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 
 @Component({
     selector: "browse-external-resource-modal",
@@ -25,7 +25,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
 
 
     constructor(public dialog: DialogRef<BSModalContext>, public projService: ProjectServices,
-        private preferenceService: PreferencesServices) {
+        private preferenceService: PreferencesSettingsServices) {
         this.context = dialog.context;
     }
 

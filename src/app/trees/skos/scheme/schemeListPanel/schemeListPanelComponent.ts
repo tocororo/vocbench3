@@ -5,7 +5,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBPreferences } from '../../../../utils/VBPreferences';
+import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
@@ -22,7 +22,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private schemeList: SchemeListItem[];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
+        private eventHandler: VBEventHandler, private preferences: VBProperties, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));

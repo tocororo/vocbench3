@@ -18,7 +18,7 @@ import { ManchesterServices } from "../services/manchesterServices";
 import { MetadataServices } from "../services/metadataServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
 import { PluginsServices } from "../services/pluginsServices";
-import { PreferencesServices } from "../services/preferencesServices";
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
@@ -55,7 +55,7 @@ import { VersionsServices } from "../services/versionsServices";
         MetadataServices,
         OntoManagerServices,
         PluginsServices,
-        PreferencesServices,
+        PreferencesSettingsServices,
         ProjectServices,
         PropertyServices,
         RefactorServices,

@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ARTResource } from "../../models/ARTResources";
-import { VBPreferences, ResourceViewMode } from "../../utils/VBPreferences";
+import { VBProperties, ResourceViewMode } from "../../utils/VBProperties";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 
 @Component({
@@ -15,7 +15,7 @@ export class ResourceViewPanelComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private eventHandler: VBEventHandler, private preferences: VBPreferences) {
+    constructor(private eventHandler: VBEventHandler, private preferences: VBProperties) {
         this.eventHandler.resViewModeChangedEvent.subscribe(
             (resViewMode: ResourceViewMode) => { this.resViewMode = resViewMode; }
         );

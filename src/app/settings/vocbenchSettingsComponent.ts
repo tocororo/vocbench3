@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { UIUtils, Theme } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBPreferences, ResourceViewMode } from "../utils/VBPreferences";
-import { Languages } from "../models/LanguagesCountries";
+import { VBProperties, ResourceViewMode } from "../utils/VBProperties";
+import { Language, LanguageUtils } from "../models/LanguagesCountries";
 
 @Component({
     selector: "vb-settings-component",
@@ -12,70 +12,133 @@ import { Languages } from "../models/LanguagesCountries";
 export class VocbenchSettingsComponent {
 
     private resViewMode: ResourceViewMode;
-    private renderingLangs: LanguageItem[] = [];
+    private renderingLanguages: LanguageItem[] = [];
     private showFlags: boolean;
     private showInstNumb: boolean;
     private themes: Theme[] = UIUtils.themes;
     private selectedTheme: Theme = this.themes[0];
 
-    constructor(private preferences: VBPreferences, private eventHandler: VBEventHandler) { }
+    constructor(private properties: VBProperties, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
-        this.preferences.initUserProjectPreferences();
+        // this.preferences.initUserProjectPreferences();
         //res view mode
-        this.resViewMode = this.preferences.getResourceViewMode();
+        this.resViewMode = this.properties.getResourceViewMode();
+        var projectLanguages: Language[] = this.properties.getLanguages();
 
         //languages
-        var langs = this.preferences.getLanguages();
-        this.renderingLangs = [];
-        if (langs.length == 1 && langs[0] == "*") { //"*" stands for all languages
+        var preferredLanguages: string[] = this.properties.getLexicalizationLangs();
+        this.renderingLanguages = [];
+        if (preferredLanguages.length == 1 && preferredLanguages[0] == "*") { //"*" stands for all languages
             //set as selected renderingLangs all the available langs
-            for (var i = 0; i < Languages.languageList.length; i++) {
-                this.renderingLangs.push({
-                    lang: Languages.languageList[i],
+            for (var i = 0; i < projectLanguages.length; i++) {
+                this.renderingLanguages.push({
+                    lang: projectLanguages[i],
                     active: false,
-                    default: (Languages.languageList[i].tag == "en") //set english (en) as default
+                    default: false
                 });
             }
+            this.initDefaultLangItem(preferredLanguages);
         } else {
             //set as selected renderingLangs only the listed by the preference
-            for (var i = 0; i < Languages.languageList.length; i++) {
-                this.renderingLangs.push({
-                    lang: Languages.languageList[i],
-                    active: (langs.indexOf(Languages.languageList[i].tag) != -1),
-                    default: (langs.indexOf(Languages.languageList[i].tag) == 0) //set as default the first language of the preferences
+            for (var i = 0; i < projectLanguages.length; i++) {
+                this.renderingLanguages.push({
+                    lang: projectLanguages[i],
+                    active: (preferredLanguages.indexOf(projectLanguages[i].tag) != -1), //active if the language is among the listed in preferences
+                    default: false
                 });
             }
+            this.initDefaultLangItem(preferredLanguages);
         }
 
         //show_flags
-        this.showFlags = this.preferences.getShowFlags();
+        this.showFlags = this.properties.getShowFlags();
 
         //show_instances_number
-        this.showInstNumb = this.preferences.getShowInstancesNumber();
+        this.showInstNumb = this.properties.getShowInstancesNumber();
 
         //project_theme
-        let themeId = this.preferences.getProjectTheme();
+        let themeId = this.properties.getProjectTheme();
         this.themes.forEach(t => {
             if (t.id == themeId) { this.selectedTheme = t; }
         });
     }
 
+    private initDefaultLangItem(preferenceLangs?: string[]) {
+        if (preferenceLangs == null || (preferenceLangs.length == 1 && preferenceLangs[0] == "*")) {
+            //in case of all language for rendering, set the default language based on a priority list
+            defaultLangPriorityLoop: 
+            for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) { //iterate over the priority languages list
+                for (var j = 0; j < this.renderingLanguages.length; j++) { //then over the rendering languages
+                    //if the rendering lang is the priority, set it as default and break the iteration
+                    if (this.renderingLanguages[j].lang.tag == LanguageUtils.priorityLangs[i]) {
+                        this.renderingLanguages[j].default = true;
+                        break defaultLangPriorityLoop;
+                    }
+                }
+            }
+            //every language in priority lang is not among those available in project => set as the default the first lang in project
+            if (this.getDefaultLangItem() == null) {
+                this.renderingLanguages[0].default = true;
+            }
+        } else { //preferred languages specified
+            defaultLangPrefLoop: //based on preferences
+            for (var i = 0; i < preferenceLangs.length; i++) {
+                for (var j = 0; j < this.renderingLanguages.length; j++) { //iterate over the rendering languages
+                    //if the rendering lang is in the lexicalizationLangs, set it as default and break the iteration
+                    if (this.renderingLanguages[j].lang.tag == preferenceLangs[i]) {
+                        this.renderingLanguages[j].default = true;
+                        break defaultLangPrefLoop;
+                    }
+                }
+            }
+            //if default language is still not set => set the default lang based on priority list
+            if (this.getDefaultLangItem() == null) {
+                defaultLangPriorityLoop:
+                for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) { //iterate over the priority languages list
+                    for (var j = 0; j < this.renderingLanguages.length; j++) { //then over the rendering languages
+                        //if the rendering lang is the priority, set it as default and break the iteration
+                        if (this.renderingLanguages[j].lang.tag == LanguageUtils.priorityLangs[i]) {
+                            this.renderingLanguages[j].default = true;
+                            break defaultLangPriorityLoop;
+                        }
+                    }
+                }
+            }
+            //every language in preferences is not among those available in project => set as the default the first lang in project
+            if (this.getDefaultLangItem() == null) {
+                this.renderingLanguages[0].default = true;
+            }
+        }
+    }
+
+    /**
+     * Return the language item with default = true
+     */
+    private getDefaultLangItem(): LanguageItem {
+        for (var i = 0; i < this.renderingLanguages.length; i++) {
+            if (this.renderingLanguages[i].default) {
+                return this.renderingLanguages[i];
+            }
+        }
+        return null;
+    }
+
     //res view mode handler
 
     private onResViewModeChanged() {
-        this.preferences.setResourceViewMode(this.resViewMode);
+        this.properties.setResourceViewMode(this.resViewMode);
         this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
     }
 
     //languages handlers
 
     private changeAllLangStatus(checked: boolean) {
-        for (var i = 0; i < this.renderingLangs.length; i++) {
-            this.renderingLangs[i].active = checked;
+        for (var i = 0; i < this.renderingLanguages.length; i++) {
+            this.renderingLanguages[i].active = checked;
         }
         if (!checked) { //if it is deselecting all set en as default
-            this.setDefaultLang("en");
+            this.initDefaultLangItem();
         }
         this.updateLanguagesPref();
     }
@@ -96,8 +159,8 @@ export class VocbenchSettingsComponent {
      */
     private onActiveLangChanged(changedItem: LanguageItem) {
         var activeLangs: LanguageItem[] = this.getActiveLanguageItems();
-        if (activeLangs.length == 0) { //if now all language are not-active set "en" as default
-            this.setDefaultLang("en");
+        if (activeLangs.length == 0) { //if now all language are not-active init the default
+            this.initDefaultLangItem();
         } else if (activeLangs.length == 1) { //if now only one language is active set it as default
             this.setDefaultLang(activeLangs[0].lang.tag);
         } else { //if now more languages are active...
@@ -110,9 +173,9 @@ export class VocbenchSettingsComponent {
 
     private getActiveLanguageItems(): LanguageItem[] {
         var activeLangs: LanguageItem[] = [];
-        for (var i = 0; i < this.renderingLangs.length; i++) {
-            if (this.renderingLangs[i].active) {
-                activeLangs.push(this.renderingLangs[i]);
+        for (var i = 0; i < this.renderingLanguages.length; i++) {
+            if (this.renderingLanguages[i].active) {
+                activeLangs.push(this.renderingLanguages[i]);
             }
         }
         return activeLangs;
@@ -123,11 +186,11 @@ export class VocbenchSettingsComponent {
      * @param langTag
      */
     private setDefaultLang(langTag: string) {
-        for (var i = 0; i < this.renderingLangs.length; i++) {
-            if (this.renderingLangs[i].lang.tag == langTag) {
-                this.renderingLangs[i].default = true;
+        for (var i = 0; i < this.renderingLanguages.length; i++) {
+            if (this.renderingLanguages[i].lang.tag == langTag) {
+                this.renderingLanguages[i].default = true;
             } else {
-                this.renderingLangs[i].default = false;
+                this.renderingLanguages[i].default = false;
             }
         }
     }
@@ -147,7 +210,7 @@ export class VocbenchSettingsComponent {
         if (preferenceLangs.length == 0) {
             preferenceLangs = ["*"];
         }
-        this.preferences.setLanguages(preferenceLangs);
+        this.properties.setLexicalizationLangs(preferenceLangs);
     }
 
     private getFlagImgSrc(langTag: string): string {
@@ -157,19 +220,19 @@ export class VocbenchSettingsComponent {
     //show flags handlers
 
     private onShowFlagChange() {
-        this.preferences.setShowFlags(this.showFlags);
+        this.properties.setShowFlags(this.showFlags);
     }
 
     //show flags handlers
 
     private onShowInstNumbChange() {
-        this.preferences.setShowInstancesNumber(this.showInstNumb);
+        this.properties.setShowInstancesNumber(this.showInstNumb);
     }
 
     //theme handler
     private changeTheme(theme: Theme) {
         this.selectedTheme = theme;
-        this.preferences.setProjectTheme(this.selectedTheme.id);
+        this.properties.setProjectTheme(this.selectedTheme.id);
     }
     
 
@@ -179,7 +242,7 @@ export class VocbenchSettingsComponent {
  * Support class that represent a list item of the languages preference
  */
 class LanguageItem {
-    public lang: { name: string, tag: string };
+    public lang: Language;
     public active: boolean;
     public default: boolean;
 }
