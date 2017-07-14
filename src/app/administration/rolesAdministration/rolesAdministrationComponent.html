@@ -1,14 +1,11 @@
 <div class="vbox">
 
     <div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <label>Roles management</label>
-        </div>
 
         <div class="panel-body hbox">
 
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
+            <div class="panel panel-default vbox">
+                <div class="panel-heading">
                     <label style="flex: 1;">Roles:</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-default" (click)="createRole()" title="Create role" [disabled]="!isProjectOpen()">
@@ -26,7 +23,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body vbox" style="padding: 0px;">
+                <div class="panel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
                             [ngClass]="{active: r == selectedRole, greyText: r.getLevel() == 'system'}">
@@ -36,8 +33,8 @@
                 </div>
             </div>
 
-            <div class="subPanel vbox" style="margin-left: 5px;">
-                <div class="subPanel-heading">
+            <div class="panel panel-default vbox" style="margin-left: 5px;">
+                <div class="panel-heading">
                     <label style="flex: 1;">Role capabilities:</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-default" (click)="addCapability()" title="Add capability"
@@ -54,7 +51,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body vbox" style="padding: 0px;">
+                <div class="panel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <ng-template [ngIf]="selectedRole">
                             <div *ngFor="let c of capabilityList" class="listItem"

@@ -5,11 +5,11 @@ import { VBProperties, ResourceViewMode } from "../utils/VBProperties";
 import { Language, LanguageUtils } from "../models/LanguagesCountries";
 
 @Component({
-    selector: "vb-settings-component",
-    templateUrl: "./vocbenchSettingsComponent.html",
+    selector: "vb-preferences-component",
+    templateUrl: "./vocbenchPreferencesComponent.html",
     host: { class: "pageComponent" }
 })
-export class VocbenchSettingsComponent {
+export class VocbenchPreferencesComponent {
 
     private resViewMode: ResourceViewMode;
     private renderingLanguages: LanguageItem[] = [];

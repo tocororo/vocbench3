@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { AdministrationServices } from "../services/administrationServices";
-import { AuthServices } from "../services/authServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { AdministrationServices } from "../../services/administrationServices";
+import { AuthServices } from "../../services/authServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "config-admin-component",

@@ -560,7 +560,7 @@ nav {
 .panel-heading {
     display: flex;
     align-items: center;
-    min-height: 0px;
+    min-height: 30px;
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }

@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { UserCreateModal, UserCreateModalData } from "./administrationModals/userCreateModal"
-import { UserServices } from "../services/userServices";
-import { User, UserStatusEnum } from "../models/User";
-import { VBContext } from "../utils/VBContext";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { UserCreateModal, UserCreateModalData } from "./userCreateModal"
+import { UserServices } from "../../services/userServices";
+import { User, UserStatusEnum } from "../../models/User";
+import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "users-admin-component",

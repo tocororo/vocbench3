@@ -1,0 +1,43 @@
+<div class="vbox">
+
+    <div class="panel panel-default vbox">
+
+        <div class="panel-body hbox">
+
+            <div class="panel panel-default vbox">
+                <div class="panel-heading">
+                    <label>Projects:</label>
+                </div>
+                <div class="panel-body vbox" style="padding: 0px;">
+                    <div class="scrollableContainer">
+                        <div *ngFor="let p of projectList" class="listItem" [ngClass]="{active: p == selectedProject}" (click)="selectProject(p)">
+                            <span>{{p.getName()}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default vbox" style="margin-left: 5px; flex: 4;">
+
+                <div class="panel-heading" style="justify-content: flex-end">
+                    <div class="btn-group btn-group-xs">
+                        <button *ngFor="let aspect of aspectSelectors" class="btn btn-default" [ngClass]="{ active: selectedAspect == aspect }"
+                            (click)="changeAspect(aspect)">{{aspect}}</button>
+                    </div>
+                </div>
+
+                <div class="panel-body vbox">
+                    <project-users-manager *ngIf="selectedAspect == projUsersAspect" [project]="selectedProject" class="vbox">
+                    </project-users-manager>
+
+                    <project-settings *ngIf="selectedAspect == projSettingsAspect" [project]="selectedProject" class="vbox">
+                    </project-settings>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

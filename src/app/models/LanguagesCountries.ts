@@ -35,6 +35,25 @@ export class Countries {
 
 export class LanguageUtils {
     static priorityLangs = ["en", "fr", "it", "es", "de"];
+
+    static sortLanguages(languages: Language[]) {
+        languages.sort(
+            function (l1: Language, l2: Language) {
+                if (l1.tag > l2.tag) return 1;
+                if (l1.tag < l2.tag) return -1;
+                return 0;
+            }
+        );
+    }
+
+    static containsLanguage(languages: Language[], lang: Language) {
+        for (var i = 0; i < languages.length; i++) {
+            if (languages[i].tag == lang.tag) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 export class Language {

@@ -39,7 +39,7 @@ import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataCom
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
-import { VocbenchSettingsComponent } from "../settings/vocbenchSettingsComponent";
+import { VocbenchPreferencesComponent } from "../preferences/vocbenchPreferencesComponent";
 import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 
 @NgModule({
@@ -72,7 +72,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
             ExportDataComponent,
             RefactorComponent,
             VersioningComponent,
-            VocbenchSettingsComponent,
+            VocbenchPreferencesComponent,
       ],
       bootstrap: [AppComponent],
 })

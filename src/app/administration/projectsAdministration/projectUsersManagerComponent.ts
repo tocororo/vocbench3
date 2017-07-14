@@ -1,25 +1,19 @@
-import { Component } from "@angular/core";
+import { Component, Input, SimpleChanges } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-
-import { UserProjBindingModal, UserProjBindingModalData } from "./administrationModals/userProjBindingModal";
-
-import { User, Role, ProjectUserBinding } from "../models/User";
-import { Project } from "../models/Project";
-import { ProjectServices } from "../services/projectServices";
-import { UserServices } from "../services/userServices";
-import { AdministrationServices } from "../services/administrationServices";
-
+import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
+import { User, Role, ProjectUserBinding } from "../../models/User";
+import { Project } from "../../models/Project";
+import { UserServices } from "../../services/userServices";
+import { AdministrationServices } from "../../services/administrationServices";
 
 @Component({
-    selector: "projects-admin-component",
-    templateUrl: "./projectsAdministrationComponent.html",
-    host: { class: "pageComponent" }
+    selector: "project-users-manager",
+    templateUrl: "./projectUsersManagerComponent.html",
 })
-export class ProjectsAdministrationComponent {
+export class ProjectUsersManagerComponent {
 
-    private projectList: Project[];
-    private selectedProject: Project;
+    @Input() project: Project
 
     private usersBound: User[]; //list of User bound to selected project 
     private selectedUser: User; //user selected in the list of bound users
@@ -30,24 +24,11 @@ export class ProjectsAdministrationComponent {
     private roleList: Role[]; //all available roles
     private selectedRole: Role; //role selected in roleList
 
+    constructor(private userService: UserServices, private adminService: AdministrationServices, private modal: Modal) { }
 
-    constructor(private projectService: ProjectServices, private userService: UserServices, private adminService: AdministrationServices,
-        private modal: Modal) { }
-
-    ngOnInit() {
-        this.projectService.listProjects().subscribe(
-            projects => {
-                this.projectList = projects;
-            }
-        );
-    }
-
-    //==== PROJECT PANEL ====
-
-    private selectProject(project: Project) {
-        if (this.selectedProject != project) {
-            this.selectedProject = project;
-            this.userService.listUsersBoundToProject(this.selectedProject.getName()).subscribe(
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['project'] && changes['project'].currentValue) {
+            this.userService.listUsersBoundToProject(this.project.getName()).subscribe(
                 users => {
                     this.usersBound = users;
                     this.selectedUser = null;
@@ -55,7 +36,7 @@ export class ProjectsAdministrationComponent {
                     this.selectedUserRole = null;
                 }
             );
-            this.adminService.listRoles(this.selectedProject).subscribe(
+            this.adminService.listRoles(this.project).subscribe(
                 roles => {
                     this.roleList = roles;
                 }
@@ -67,7 +48,7 @@ export class ProjectsAdministrationComponent {
 
     private selectUser(user: User) {
         this.selectedUser = user;
-        this.adminService.getProjectUserBinding(this.selectedProject.getName(), this.selectedUser.getEmail()).subscribe(
+        this.adminService.getProjectUserBinding(this.project.getName(), this.selectedUser.getEmail()).subscribe(
             puBinding => {
                 this.puBinding = puBinding;
                 this.selectedUserRole = null;
@@ -76,7 +57,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private addUserToProject() {
-        var modalData = new UserProjBindingModalData("Add user to " + this.selectedProject.getName(), this.usersBound);
+        var modalData = new UserProjBindingModalData("Add user to " + this.project.getName(), this.usersBound);
         const builder = new BSModalContextBuilder<UserProjBindingModalData>(
             modalData, undefined, UserProjBindingModalData
         );
@@ -86,7 +67,7 @@ export class ProjectsAdministrationComponent {
                 data => {
                     var user: User = data.user;
                     var roles: string[] = data.roles;
-                    this.adminService.addRolesToUser(this.selectedProject.getName(), user.getEmail(), roles).subscribe(
+                    this.adminService.addRolesToUser(this.project.getName(), user.getEmail(), roles).subscribe(
                         stResp => {
                             this.usersBound.push(user);
                         }
@@ -98,7 +79,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private removeUserFromProject() {
-        this.adminService.removeAllRolesFromUser(this.selectedProject.getName(), this.selectedUser.getEmail()).subscribe(
+        this.adminService.removeAllRolesFromUser(this.project.getName(), this.selectedUser.getEmail()).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
                 this.selectedRole = null;
@@ -119,7 +100,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private addRole() {
-        this.adminService.addRolesToUser(this.selectedProject.getName(), this.selectedUser.getEmail(), [this.selectedRole.getName()]).subscribe(
+        this.adminService.addRolesToUser(this.project.getName(), this.selectedUser.getEmail(), [this.selectedRole.getName()]).subscribe(
             stResp => {
                 this.puBinding.addRole(this.selectedRole.getName());
                 this.selectedRole = null;
@@ -128,7 +109,7 @@ export class ProjectsAdministrationComponent {
     }
 
     private removeRole() {
-        this.adminService.removeRoleFromUser(this.selectedProject.getName(), this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
+        this.adminService.removeRoleFromUser(this.project.getName(), this.selectedUser.getEmail(), this.selectedUserRole).subscribe(
             stResp => {
                 this.puBinding.removeRole(this.selectedUserRole);
                 this.selectedUserRole = null;

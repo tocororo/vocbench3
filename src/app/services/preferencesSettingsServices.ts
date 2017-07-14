@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
+import { Project } from "../models/Project";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 
@@ -104,13 +105,48 @@ export class PreferencesSettingsServices {
 
     /**
      * Gets the settings for the currently open project
+     * @param properties 
+     * @param project 
      */
-    getProjectSettings(properties: string[]) {
+    getProjectSettings(properties: string[], project?: Project) {
         console.log("[PreferencesServices] getProjectSettings");
+        var params: any = {
+            properties: properties
+        };
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true);
+    }
+
+    /**
+     * @param property 
+     * @param project 
+     */
+    setProjectSetting(property: string, value?: string, project?: Project) {
+        console.log("[PreferencesServices] setProjectSetting");
+        var params: any = {
+            property: property,
+        };
+        if (value != null) {
+            params.value = value;
+        }
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        return this.httpMgr.doPost(this.serviceName, "setProjectSetting", params, true);
+    }
+
+    /**
+     * Gets the default project settings
+     * @param properties 
+     */
+    getDefaultProjectSettings(properties: string[]) {
+        console.log("[PreferencesServices] getDefaultProjectSettings");
         var params = {
             properties: properties
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params, true);
     }
 
 }

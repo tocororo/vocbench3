@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { CapabilityEditorModal, CapabilityEditorModalData } from "./administrationModals/capabilityEditorModal";
-import { ImportRoleModal, ImportRoleModalData } from "./administrationModals/importRoleModal";
-import { AdministrationServices } from "../services/administrationServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { Role } from "../models/User";
-import { Project } from "../models/Project";
-import { VBContext } from "../utils/VBContext";
+import { CapabilityEditorModal, CapabilityEditorModalData } from "./capabilityEditorModal";
+import { ImportRoleModal, ImportRoleModalData } from "./importRoleModal";
+import { AdministrationServices } from "../../services/administrationServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { Role } from "../../models/User";
+import { Project } from "../../models/Project";
+import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "roles-admin-component",

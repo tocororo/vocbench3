@@ -1,0 +1,65 @@
+<div class="hbox">
+    <div class="subPanel vbox">
+        <div class="subPanel-heading">
+            <label style="flex: 1;">Users:</label>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="addUserToProject()" [disabled]="!project" title="Add user to project">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" (click)="removeUserFromProject()" [disabled]="!selectedUser || !project" title="Remove user from project">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="subPanel-body vbox" style="padding: 0px;">
+            <div class="scrollableContainer">
+                <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                    <span>{{u.getGivenName()}} {{u.getFamilyName()}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="subPanel vbox" style="margin-left: 5px; flex: 3;">
+        <div class="subPanel-heading">
+            <label>Project-User properties:</label>
+        </div>
+        <div class="subPanel-body vbox">
+            <div class="hbox">
+                <div class="subPanel vbox">
+                    <div class="subPanel-heading">
+                        <label>Assigned Roles:</label>
+                    </div>
+                    <div class="subPanel-body vbox" style="padding: 0px;">
+                        <div class="scrollableContainer">
+                            <ng-template [ngIf]="puBinding">
+                                <div *ngFor="let r of puBinding.getRoles()" class="listItem" [ngClass]="{active: r == selectedUserRole}" (click)="selectUserRole(r)">
+                                    {{r}}
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+                <div style="align-self: center; margin: 5px;">
+                    <button class="btn btn-default btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
+                        <span class="glyphicon glyphicon-chevron-left"></span> Add
+                    </button>
+                    <button class="btn btn-default btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
+                        Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                </div>
+                <div class="subPanel vbox">
+                    <div class="subPanel-heading">
+                        <label>Available Roles:</label>
+                    </div>
+                    <div class="subPanel-body vbox" style="padding: 0px;">
+                        <div class="scrollableContainer">
+                            <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}" (click)="selectRole(r)">
+                                {{r.getName()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

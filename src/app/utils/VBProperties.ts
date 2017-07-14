@@ -162,13 +162,7 @@ export class VBProperties {
                 var langsValue: string = settings.languages;
                 try {
                     this.projectLanguages = <Language[]>JSON.parse(langsValue);
-                    this.projectLanguages.sort(
-                        function (l1: Language, l2: Language) {
-                            if (l1.tag > l2.tag) return 1;
-                            if (l1.tag < l2.tag) return -1;
-                            return 0;
-                        }
-                    )
+                    LanguageUtils.sortLanguages(this.projectLanguages);
                 } catch (err) {
                     this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
                         "languages settings. Default languages will be set for this project.", "error");
