@@ -13,6 +13,7 @@ export class User {
     private registrationDate: Date;
     private affiliation: string;
     private url: string;
+    private languageProficiencies: string[];
     private status: UserStatusEnum;
     private admin: boolean = false;
 
@@ -45,7 +46,7 @@ export class User {
         this.birthday = birthday;
     }
 
-    getBirthday() {
+    getBirthday(): Date {
         return this.birthday;
     }
 
@@ -53,7 +54,7 @@ export class User {
         this.phone = phone;
     }
 
-    getPhone() {
+    getPhone(): string {
         return this.phone;
     }
 
@@ -61,7 +62,7 @@ export class User {
         this.gender = gender;
     }
 
-    getGender() {
+    getGender(): string {
         return this.gender;
     }
 
@@ -69,7 +70,7 @@ export class User {
         this.country = country;
     }
 
-    getCountry() {
+    getCountry(): string {
         return this.country;
     }
 
@@ -77,7 +78,7 @@ export class User {
         this.address = address;
     }
 
-    getAddress() {
+    getAddress(): string {
         return this.address;
     }
 
@@ -85,7 +86,7 @@ export class User {
         this.registrationDate = registrationDate;
     }
 
-    getRegistrationDate() {
+    getRegistrationDate(): Date {
         return this.registrationDate;
     }
 
@@ -93,7 +94,7 @@ export class User {
         this.affiliation = affiliation;
     }
 
-    getAffiliation() {
+    getAffiliation(): string {
         return this.affiliation;
     }
 
@@ -101,8 +102,16 @@ export class User {
         this.url = url;
     }
 
-    getUrl() {
+    getUrl(): string {
         return this.url;
+    }
+
+    setLanguageProficiencies(languageProficiencies: string[]) {
+        this.languageProficiencies = languageProficiencies;
+    }
+
+    getLanguageProficiencies(): string[] {
+        return this.languageProficiencies;
     }
 
     setStatus(status: UserStatusEnum) {
@@ -230,6 +239,7 @@ export class UserForm {
     url: string;
     iri: string;
     urlAsIri: boolean;
+    languageProficiencies: string[];
 
     static emailRegexp = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}");
     static iriRegexp = new RegExp("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");

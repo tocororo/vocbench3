@@ -103,6 +103,22 @@
                         (ngModelChange)="onUrlChange()" [disabled]="form.urlAsIri">
                 </td>
             </tr>
+
+            <tr>
+                <td nowrap><label>Language proficiencies:</label></td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" [(ngModel)]="form.languageProficiencies" name="langs"
+                            placeholder="Language proficiencies" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" (click)="editLanguages()" placeholder="Edit">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+
         </tbody>
     </table>
 </form>

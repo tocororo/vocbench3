@@ -95,7 +95,8 @@ export class UserServices {
      * @param phone
      */
     registerUser(email: string, password: string, givenName: string, familyName: string, iri: ARTURIResource,
-        birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, phone: string) {
+        birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, phone: string,
+        languageProficiencies: string[]) {
         console.log("[UserServices] registerUser");
         var params: any = {
             email: email,
@@ -126,6 +127,9 @@ export class UserServices {
         }
         if (phone != undefined) {
             params.phone = phone;
+        }
+        if (languageProficiencies != null) {
+            params.languageProficiencies = languageProficiencies;
         }
         return this.httpMgr.doPost(this.serviceName, "registerUser", params, true);
     }
@@ -304,6 +308,24 @@ export class UserServices {
             url: url,
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params, true).map(
+            stResp => {
+                return Deserializer.createUser(stResp);
+            }
+        );
+    }
+
+    /**
+     * Updates url of the given user. Returns the updated user.
+     * @param email email of the user to update
+     * @param url
+     */
+    updateUserLanguageProficiencies(email: string, languageProficiencies: string[]): Observable<User> {
+        console.log("[UserServices] updateUserLanguageProficiencies");
+        var params: any = {
+            email: email,
+            languageProficiencies: languageProficiencies,
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }

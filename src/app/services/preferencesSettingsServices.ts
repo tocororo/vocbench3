@@ -149,4 +149,14 @@ export class PreferencesSettingsServices {
         return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params, true);
     }
 
+    /**
+     * Gets the default project settings
+     * @param properties 
+     */
+    getSystemLanguages() {
+        console.log("[PreferencesServices] getSystemLanguages");
+        var params = {};
+        return this.httpMgr.doGet(this.serviceName, "getSystemLanguages", params, true);
+    }
+
 }

@@ -48,6 +48,19 @@
                         <td nowrap><label>Personal Url:</label></td>
                         <td><input-editable [value]="user.getUrl()" (valueEdited)="updateUrl($event)"></input-editable></td>
                     </tr>
+                    <tr>
+                        <td nowrap><label>Language proficiencies:</label></td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" [ngModel]="user.getLanguageProficiencies()" name="langs" readonly>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" style="width:36px;" (click)="editLanguages()" placeholder="Edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

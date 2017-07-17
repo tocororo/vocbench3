@@ -3,6 +3,7 @@ import { VBContext } from "../utils/VBContext";
 import { UserServices } from "../services/userServices";
 import { Countries } from "../models/LanguagesCountries";
 import { User } from "../models/User";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "user-profile-component",
@@ -15,9 +16,13 @@ export class UserProfileComponent {
 
     private countries = Countries.countryList;
 
-    constructor(private userService: UserServices) { }
+    constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
+        this.initUser();
+    }
+
+    initUser() {
         this.user = VBContext.getLoggedUser();
     }
 
@@ -25,6 +30,7 @@ export class UserProfileComponent {
         this.userService.updateUserGivenName(this.user.getEmail(), newGivenName).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -33,6 +39,7 @@ export class UserProfileComponent {
         this.userService.updateUserFamilyName(this.user.getEmail(), newFamilyName).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -41,6 +48,7 @@ export class UserProfileComponent {
         this.userService.updateUserEmail(this.user.getEmail(), newEmail).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -49,6 +57,7 @@ export class UserProfileComponent {
         this.userService.updateUserPhone(this.user.getEmail(), newPhone).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -57,6 +66,7 @@ export class UserProfileComponent {
         this.userService.updateUserBirthday(this.user.getEmail(), newBirthday).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -65,6 +75,7 @@ export class UserProfileComponent {
         this.userService.updateUserGender(this.user.getEmail(), newGender).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -73,6 +84,7 @@ export class UserProfileComponent {
         this.userService.updateUserCountry(this.user.getEmail(), newCountry).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -81,6 +93,7 @@ export class UserProfileComponent {
         this.userService.updateUserAddress(this.user.getEmail(), newAddress).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -89,6 +102,7 @@ export class UserProfileComponent {
         this.userService.updateUserAffiliation(this.user.getEmail(), newAffiliation).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
     }
@@ -97,8 +111,23 @@ export class UserProfileComponent {
         this.userService.updateUserUrl(this.user.getEmail(), newUrl).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
+                this.initUser();
             }
         )
+    }
+
+    private editLanguages() {
+        this.sharedModals.selectLanguages("Language proficiencies", this.user.getLanguageProficiencies()).then(
+            langs => {
+                this.userService.updateUserLanguageProficiencies(this.user.getEmail(), langs).subscribe(
+                        user => {
+                            VBContext.setLoggedUser(user);
+                            this.initUser();
+                        }
+                    );
+            },
+            () => {}
+        );
     }
 
 

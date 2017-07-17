@@ -7,6 +7,7 @@ import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
+import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
 
 @Injectable()
@@ -74,6 +75,22 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
         return this.modal.open(ResourceViewModal, overlayConfig).then(
+            dialog => dialog.result
+        );
+    }
+
+    /**
+     * Opens a modal to select multiple languages
+     * @param title
+     * @param languages languages already selected
+     */
+    selectLanguages(title: string, languages: string[]) {
+        var modalData = new LanguageSelectorModalData(title, languages);
+        const builder = new BSModalContextBuilder<LanguageSelectorModalData>(
+            modalData, undefined, LanguageSelectorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(LanguageSelectorModal, overlayConfig).then(
             dialog => dialog.result
         );
     }
