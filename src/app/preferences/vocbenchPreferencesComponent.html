@@ -41,7 +41,7 @@
 
                 <div class="subPanel vbox">
                     <div class="subPanel-heading">
-                        <label style="flex: 1">Languages:</label>
+                        <label style="flex: 1">Rendering Languages:</label>
                         <span *ngIf="getActiveLanguageItems().length == 0" class="greyText" style="margin-right: 5px;">
                             <span class="glyphicon glyphicon-warning-sign"></span>
                             No language selected implicitly means all languages
@@ -61,12 +61,10 @@
                             <colgroup>
                                 <col style="width: 1%">
                                 <col style="width: 1%">
-                                <col style="width: 1%">
                                 <col>
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="padding: 0px 8px;">Default</th>
                                     <th class="text-center" style="padding: 0px 8px;">Active</th>
                                     <th class="text-center"  style="padding: 0px 8px;" nowrap>ISO code</th>
                                     <th class="text-center" style="padding: 0px 8px;">Language</th>
@@ -75,21 +73,11 @@
                             <tbody>
                                 <tr *ngFor="let l of renderingLanguages">
                                     <td class="text-center">
-                                        <input type="radio" style="vertical-align: middle" name="defaultLang" [value]="l.lang.tag"
-                                            (change)="onDefaultLangChanged(l)" [checked]="l.default" [disabled]="!l.active"/>
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="onActiveLangChanged(l)">
+                                        <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="updateLanguagesPref()">
                                     </td>
                                     <td class="text-center" nowrap>{{l.lang.tag}}</td>
-                                    <td>
-                                        <!--<img [src]="getFlagImgSrc(l.lang.tag)">-->
-                                        <img *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(l.lang.tag)">
-                                        <span *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
-                                            <img [src]="getFlagImgSrc(l.lang.tag)">
-                                            <span>{{l.lang.tag}}</span>
-                                        </span>
-                                        {{l.lang.name}}
+                                    <td class="text-center">
+                                        <lang-item [language]="l.lang"></lang-item>
                                     </td>
                                 </tr>
                             </tbody>

@@ -97,9 +97,15 @@ export class PreferencesSettingsServices {
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getProjectPreferences() {
+    getProjectPreferences(properties: string[], pluginID?: string) {
+        console.log("properties", properties);
         console.log("[PreferencesServices] getProjectPreferences");
-        var params = {};
+        var params: any = {
+            properties: properties
+        };
+        if (pluginID != null) {
+            params.pluginID = pluginID
+        }
         return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true);
     }
 

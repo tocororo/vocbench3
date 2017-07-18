@@ -136,15 +136,17 @@ export class ProjectUserBinding {
 
     private projectName: string;
     private userEmail: string;
-    private roles: string[];
+    private roles: string[] = [];
+    private languages: string[] = [];
 
-    constructor(projectName: string, userEmail: string, roles?: string[]) {
+    constructor(projectName: string, userEmail: string, roles?: string[], languages?: string[]) {
         this.projectName = projectName;
         this.userEmail = userEmail;
         if (roles != undefined) {
             this.roles = roles;
-        } else {
-            this.roles = [];
+        }
+        if (languages != undefined) {
+            this.languages = languages
         }
     }
 
@@ -178,6 +180,22 @@ export class ProjectUserBinding {
 
     removeRole(role: string) {
         this.roles.splice(this.roles.indexOf(role), 1);
+    }
+
+    setLanguages(languages: string[]) {
+        this.languages = languages;
+    }
+
+    getLanguages(): string[] {
+        return this.languages;
+    }
+
+    addLanguage(language: string) {
+        this.languages.push(language);
+    }
+
+    removeLanguage(language: string) {
+        this.languages.splice(this.languages.indexOf(language), 1);
     }
 }
 

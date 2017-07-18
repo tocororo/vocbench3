@@ -3,6 +3,7 @@ import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../mo
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
@@ -36,6 +37,10 @@ export class ClassTreeComponent extends AbstractTree {
     }
 
     initTree() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY)) {
+            return;
+        }
+        
         this.selectedNode = null;
         if (this.rootClasses == undefined || this.rootClasses.length == 0) {
             this.rootClasses = [OWL.thing];

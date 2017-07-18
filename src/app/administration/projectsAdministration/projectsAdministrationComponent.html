@@ -4,7 +4,7 @@
 
         <div class="panel-body hbox">
 
-            <div class="panel panel-default vbox">
+            <div *ngIf="isAdmin()" class="panel panel-default vbox">
                 <div class="panel-heading">
                     <label>Projects:</label>
                 </div>

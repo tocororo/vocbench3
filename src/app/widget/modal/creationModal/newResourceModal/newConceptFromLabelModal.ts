@@ -26,6 +26,8 @@ export class NewConceptFromLabelModalData extends BSModalContext {
 export class NewConceptFromLabelModal extends AbstractCustomConstructorModal implements ModalComponent<NewConceptFromLabelModalData> {
     context: NewConceptFromLabelModalData;
 
+    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+
     //standard form
     private uri: string;
 
@@ -44,6 +46,12 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     ngOnInit() {
         this.resourceClass = this.context.cls;
         this.selectCustomForm();
+    }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.viewInitialized = true;
+        });
     }
 
     changeClass() {

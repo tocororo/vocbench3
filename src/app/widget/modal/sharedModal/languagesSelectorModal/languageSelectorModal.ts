@@ -4,7 +4,6 @@ import { DialogRef, ModalComponent } from "angular2-modal";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { Language, LanguageUtils } from "../../../../models/LanguagesCountries";
-import { UIUtils } from "../../../../utils/UIUtils";
 
 export class LanguageSelectorModalData extends BSModalContext {
     /**
@@ -48,10 +47,6 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
                 }
             }
         );
-    }
-
-    private getFlagImgSrc(langTag: string): string {
-        return UIUtils.getFlagImgSrc(langTag);
     }
 
     ok(event: Event) {

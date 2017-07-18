@@ -6,7 +6,8 @@
                 <button class="btn btn-default" (click)="addUserToProject()" [disabled]="!project" title="Add user to project">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
-                <button class="btn btn-default" (click)="removeUserFromProject()" [disabled]="!selectedUser || !project" title="Remove user from project">
+                <button class="btn btn-default" (click)="removeUserFromProject()" 
+                    [disabled]="!selectedUser || selectedUser.isAdmin() || !project" title="Remove user from project">
                     <span class="glyphicon glyphicon-minus"></span>
                 </button>
             </div>
@@ -24,42 +25,97 @@
             <label>Project-User properties:</label>
         </div>
         <div class="subPanel-body vbox">
-            <div class="hbox">
-                <div class="subPanel vbox">
-                    <div class="subPanel-heading">
-                        <label>Assigned Roles:</label>
-                    </div>
-                    <div class="subPanel-body vbox" style="padding: 0px;">
-                        <div class="scrollableContainer">
-                            <ng-template [ngIf]="puBinding">
-                                <div *ngFor="let r of puBinding.getRoles()" class="listItem" [ngClass]="{active: r == selectedUserRole}" (click)="selectUserRole(r)">
-                                    {{r}}
+
+            <!-- Roles -->
+            <div class="panel panel-default vbox">
+                <div class="panel-body vbox">
+                    <div class="hbox">
+                        <div class="subPanel vbox" style="margin: 0px">
+                            <div class="subPanel-heading">
+                                <label>Assigned Roles:</label>
+                            </div>
+                            <div class="subPanel-body vbox" style="padding: 0px;">
+                                <div class="scrollableContainer">
+                                    <ng-template [ngIf]="puBinding">
+                                        <div *ngFor="let r of puBinding.getRoles()" class="listItem" [ngClass]="{active: r == selectedUserRole}" (click)="selectUserRole(r)">
+                                            {{r}}
+                                        </div>
+                                    </ng-template>
                                 </div>
-                            </ng-template>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div style="align-self: center; margin: 5px;">
-                    <button class="btn btn-default btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
-                        <span class="glyphicon glyphicon-chevron-left"></span> Add
-                    </button>
-                    <button class="btn btn-default btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
-                        Remove <span class="glyphicon glyphicon-chevron-right"></span>
-                    </button>
-                </div>
-                <div class="subPanel vbox">
-                    <div class="subPanel-heading">
-                        <label>Available Roles:</label>
-                    </div>
-                    <div class="subPanel-body vbox" style="padding: 0px;">
-                        <div class="scrollableContainer">
-                            <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}" (click)="selectRole(r)">
-                                {{r.getName()}}
+                        <div style="align-self: center; margin: 5px;">
+                            <button class="btn btn-default btn-sm btn-block" (click)="addRole()" [disabled]="isAddRoleDisabled()">
+                                <span class="glyphicon glyphicon-chevron-left"></span> Add
+                            </button>
+                            <button class="btn btn-default btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
+                                Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </div>
+                        <div class="subPanel vbox" style="margin: 0px">
+                            <div class="subPanel-heading">
+                                <label>Available Roles:</label>
+                            </div>
+                            <div class="subPanel-body vbox" style="padding: 0px;">
+                                <div class="scrollableContainer">
+                                    <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
+                                        [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r) || isAdmin()}" >
+                                        {{r.getName()}}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Languages -->
+            <div class="panel panel-default vbox" style="margin-top: 4px">
+                <div class="panel-body vbox">
+                    <div class="hbox">
+                        <div class="subPanel vbox" style="margin: 0px">
+                            <div class="subPanel-heading">
+                                <label>Assigned Languages:</label>
+                            </div>
+                            <div class="subPanel-body vbox" style="padding: 0px;">
+                                <div class="scrollableContainer">
+                                    <ng-template [ngIf]="puBinding">
+                                        <div *ngFor="let l of getPULanguages()" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
+                                            (click)="selectUserLang(l)">
+                                            <lang-item [language]="l" showTag="true"></lang-item>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="align-self: center; margin: 5px;">
+                            <button class="btn btn-default btn-sm btn-block" (click)="addLanguage()" [disabled]="!selectedLang || !puBinding">
+                                <span class="glyphicon glyphicon-chevron-left"></span> Add
+                            </button>
+                            <button class="btn btn-default btn-sm btn-block"  (click)="removeLanguage()" [disabled]="!selectedUserLang">
+                                Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </div>
+                        <div class="subPanel vbox" style="margin: 0px">
+                            <div class="subPanel-heading">
+                                <label>Available Languages:</label>
+                            </div>
+                            <div class="subPanel-body vbox" style="padding: 0px;">
+                                <div class="scrollableContainer">
+                                    <div *ngFor="let l of langList" class="listItem" [ngClass]="{active: l == selectedLang}"
+                                        (click)="selectLang(l)">
+                                        <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
+                                        <span *ngIf="isInUserLangProficiencies(l)" class="glyphicon glyphicon-star" 
+                                            title="This language is in the language proficiencies of the selected user">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

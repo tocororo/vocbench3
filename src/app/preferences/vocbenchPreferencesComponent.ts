@@ -3,6 +3,8 @@ import { UIUtils, Theme } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties, ResourceViewMode } from "../utils/VBProperties";
 import { Language, LanguageUtils } from "../models/LanguagesCountries";
+import { Properties } from "../models/Properties";
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 
 @Component({
     selector: "vb-preferences-component",
@@ -18,98 +20,52 @@ export class VocbenchPreferencesComponent {
     private themes: Theme[] = UIUtils.themes;
     private selectedTheme: Theme = this.themes[0];
 
-    constructor(private properties: VBProperties, private eventHandler: VBEventHandler) { }
+    constructor(private properties: VBProperties, private prefSettingService: PreferencesSettingsServices, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
-        // this.preferences.initUserProjectPreferences();
-        //res view mode
+        var properties: string[] = [
+            Properties.pref_show_flags, Properties.pref_show_instances_number, Properties.pref_project_theme
+        ];
+        this.prefSettingService.getProjectPreferences(properties).subscribe(
+            prefs => {
+                this.showFlags = prefs[Properties.pref_show_flags];
+
+                this.showInstNumb = prefs[Properties.pref_show_instances_number];
+
+                let projThemePref = prefs[Properties.pref_project_theme];
+                this.themes.forEach(t => {
+                    if (t.id == projThemePref) { this.selectedTheme = t; }
+                });
+            }
+        );
+
+        this.prefSettingService.getProjectPreferences([Properties.pref_languages], Properties.plugin_id_rendering_engine).subscribe(
+            prefs => {
+                let renderLangs = prefs[Properties.pref_languages];
+                if (renderLangs.length == 1 && renderLangs[0] == "*") { //"*" stands for all languages
+                    //set as selected renderingLangs all the available langs
+                    for (var i = 0; i < projectLanguages.length; i++) {
+                        this.renderingLanguages.push({
+                            lang: projectLanguages[i],
+                            active: false,
+                            default: false
+                        });
+                    }
+                } else {
+                    //set as selected renderingLangs only the listed by the preference
+                    for (var i = 0; i < projectLanguages.length; i++) {
+                        this.renderingLanguages.push({
+                            lang: projectLanguages[i],
+                            active: (renderLangs.indexOf(projectLanguages[i].tag) != -1), //active if the language is among the listed in preferences
+                            default: false
+                        });
+                    }
+                }
+            }
+        );
+
         this.resViewMode = this.properties.getResourceViewMode();
-        var projectLanguages: Language[] = this.properties.getLanguages();
-
-        //languages
-        var preferredLanguages: string[] = this.properties.getLexicalizationLangs();
-        this.renderingLanguages = [];
-        if (preferredLanguages.length == 1 && preferredLanguages[0] == "*") { //"*" stands for all languages
-            //set as selected renderingLangs all the available langs
-            for (var i = 0; i < projectLanguages.length; i++) {
-                this.renderingLanguages.push({
-                    lang: projectLanguages[i],
-                    active: false,
-                    default: false
-                });
-            }
-            this.initDefaultLangItem(preferredLanguages);
-        } else {
-            //set as selected renderingLangs only the listed by the preference
-            for (var i = 0; i < projectLanguages.length; i++) {
-                this.renderingLanguages.push({
-                    lang: projectLanguages[i],
-                    active: (preferredLanguages.indexOf(projectLanguages[i].tag) != -1), //active if the language is among the listed in preferences
-                    default: false
-                });
-            }
-            this.initDefaultLangItem(preferredLanguages);
-        }
-
-        //show_flags
-        this.showFlags = this.properties.getShowFlags();
-
-        //show_instances_number
-        this.showInstNumb = this.properties.getShowInstancesNumber();
-
-        //project_theme
-        let themeId = this.properties.getProjectTheme();
-        this.themes.forEach(t => {
-            if (t.id == themeId) { this.selectedTheme = t; }
-        });
-    }
-
-    private initDefaultLangItem(preferenceLangs?: string[]) {
-        if (preferenceLangs == null || (preferenceLangs.length == 1 && preferenceLangs[0] == "*")) {
-            //in case of all language for rendering, set the default language based on a priority list
-            defaultLangPriorityLoop: 
-            for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) { //iterate over the priority languages list
-                for (var j = 0; j < this.renderingLanguages.length; j++) { //then over the rendering languages
-                    //if the rendering lang is the priority, set it as default and break the iteration
-                    if (this.renderingLanguages[j].lang.tag == LanguageUtils.priorityLangs[i]) {
-                        this.renderingLanguages[j].default = true;
-                        break defaultLangPriorityLoop;
-                    }
-                }
-            }
-            //every language in priority lang is not among those available in project => set as the default the first lang in project
-            if (this.getDefaultLangItem() == null) {
-                this.renderingLanguages[0].default = true;
-            }
-        } else { //preferred languages specified
-            defaultLangPrefLoop: //based on preferences
-            for (var i = 0; i < preferenceLangs.length; i++) {
-                for (var j = 0; j < this.renderingLanguages.length; j++) { //iterate over the rendering languages
-                    //if the rendering lang is in the lexicalizationLangs, set it as default and break the iteration
-                    if (this.renderingLanguages[j].lang.tag == preferenceLangs[i]) {
-                        this.renderingLanguages[j].default = true;
-                        break defaultLangPrefLoop;
-                    }
-                }
-            }
-            //if default language is still not set => set the default lang based on priority list
-            if (this.getDefaultLangItem() == null) {
-                defaultLangPriorityLoop:
-                for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) { //iterate over the priority languages list
-                    for (var j = 0; j < this.renderingLanguages.length; j++) { //then over the rendering languages
-                        //if the rendering lang is the priority, set it as default and break the iteration
-                        if (this.renderingLanguages[j].lang.tag == LanguageUtils.priorityLangs[i]) {
-                            this.renderingLanguages[j].default = true;
-                            break defaultLangPriorityLoop;
-                        }
-                    }
-                }
-            }
-            //every language in preferences is not among those available in project => set as the default the first lang in project
-            if (this.getDefaultLangItem() == null) {
-                this.renderingLanguages[0].default = true;
-            }
-        }
+        var projectLanguages: Language[] = this.properties.getProjectLanguages();
     }
 
     /**
@@ -137,37 +93,6 @@ export class VocbenchPreferencesComponent {
         for (var i = 0; i < this.renderingLanguages.length; i++) {
             this.renderingLanguages[i].active = checked;
         }
-        if (!checked) { //if it is deselecting all set en as default
-            this.initDefaultLangItem();
-        }
-        this.updateLanguagesPref();
-    }
-
-    /**
-     * Listener of "default" language radio button
-     * @param changedItem
-     */
-    private onDefaultLangChanged(changedItem: LanguageItem) {
-        //set the default to true only to the selected lang
-        this.setDefaultLang(changedItem.lang.tag);
-        this.updateLanguagesPref();
-    }
-
-    /**
-     * Listener of "active" language checkbox state change
-     * @param changedItem
-     */
-    private onActiveLangChanged(changedItem: LanguageItem) {
-        var activeLangs: LanguageItem[] = this.getActiveLanguageItems();
-        if (activeLangs.length == 0) { //if now all language are not-active init the default
-            this.initDefaultLangItem();
-        } else if (activeLangs.length == 1) { //if now only one language is active set it as default
-            this.setDefaultLang(activeLangs[0].lang.tag);
-        } else { //if now more languages are active...
-            if (!changedItem.active && changedItem.default) { //...and the changed lang is now not-active and is the default
-                this.setDefaultLang(activeLangs[0].lang.tag); //set as the default the first available lang
-            }
-        }
         this.updateLanguagesPref();
     }
 
@@ -179,20 +104,6 @@ export class VocbenchPreferencesComponent {
             }
         }
         return activeLangs;
-    }
-
-    /**
-     * Set the given language tag as default
-     * @param langTag
-     */
-    private setDefaultLang(langTag: string) {
-        for (var i = 0; i < this.renderingLanguages.length; i++) {
-            if (this.renderingLanguages[i].lang.tag == langTag) {
-                this.renderingLanguages[i].default = true;
-            } else {
-                this.renderingLanguages[i].default = false;
-            }
-        }
     }
 
     private updateLanguagesPref() {
@@ -210,11 +121,7 @@ export class VocbenchPreferencesComponent {
         if (preferenceLangs.length == 0) {
             preferenceLangs = ["*"];
         }
-        this.properties.setLexicalizationLangs(preferenceLangs);
-    }
-
-    private getFlagImgSrc(langTag: string): string {
-        return UIUtils.getFlagImgSrc(langTag);
+        this.prefSettingService.setLanguages(preferenceLangs).subscribe()
     }
 
     //show flags handlers

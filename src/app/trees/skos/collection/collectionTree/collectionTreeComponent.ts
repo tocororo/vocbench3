@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from 
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
@@ -38,6 +39,10 @@ export class CollectionTreeComponent extends AbstractTree {
     }
 
     initTree() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY)) {
+            return;
+        }
+
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.skosService.getRootCollections().subscribe( //new service
             rootColl => {

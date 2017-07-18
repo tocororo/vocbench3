@@ -2,6 +2,7 @@ import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleCh
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ClassesServices } from "../../../services/classesServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -60,6 +61,10 @@ export class InstanceListComponent {
     }
 
     initList() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_INSTANCES)) {
+            return;
+        }
+
         this.selectedInstance = null;
         this.instanceList = [];
         if (this.cls != undefined) {

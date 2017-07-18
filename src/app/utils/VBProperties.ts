@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, LanguageUtils } from '../models/LanguagesCountries';
+import { Properties } from '../models/Properties';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
@@ -11,7 +12,6 @@ import { BasicModalServices } from '../widget/modal/basicModal/basicModalService
 export class VBProperties {
 
     private projectLanguages: Language[] = []; //all available languages in a project (settings)
-    private lexicalizationLangs: string[] = []; //languages used in the project (preferences: contains langTag or a single element "*" that means all languages)
     private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
@@ -23,26 +23,32 @@ export class VBProperties {
      * To call each time the user change project
      */
     initUserProjectPreferences() {
-        this.activeSchemes = [];
-        return this.prefService.getProjectPreferences().subscribe(
+        var properties: string[] = [
+            Properties.pref_active_schemes, Properties.pref_show_flags,
+            Properties.pref_show_instances_number, Properties.pref_project_theme
+        ];
+        this.prefService.getProjectPreferences(properties).subscribe(
             prefs => {
-                this.lexicalizationLangs = prefs.languages;
-                let activeSchemesPref = prefs.active_schemes;
+                this.activeSchemes = [];
+                let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
                 if (activeSchemesPref != null) {
-                    for (var i = 0; i < activeSchemesPref.length; i++) {
-                        this.activeSchemes.push(new ARTURIResource(activeSchemesPref[i], null, RDFResourceRolesEnum.conceptScheme));
+                    let skSplitted: string[] = activeSchemesPref.split(",");
+                    for (var i = 0; i < skSplitted.length; i++) {
+                        this.activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
                     }
                 }
-                this.showFlags = prefs.show_flags;
-                this.showInstancesNumber = prefs.show_instances_number;
+
+                this.showFlags = prefs[Properties.pref_show_flags];
+
+                this.showInstancesNumber = prefs[Properties.pref_show_instances_number];
                 
-                let projThemePref = prefs.project_theme;
+                let projThemePref = prefs[Properties.pref_project_theme];
                 if (projThemePref != this.projectThemeId) {//update projectTheme only if changed
                     this.projectThemeId = prefs.project_theme;
                     UIUtils.changeNavbarTheme(this.projectThemeId);
                 }
             }
-        )
+        );
     }
 
     getActiveSchemes(): ARTURIResource[] {
@@ -83,33 +89,6 @@ export class VBProperties {
     setShowInstancesNumber(show: boolean) {
         this.showInstancesNumber = show;
         this.prefService.setShowInstancesNumb(show).subscribe();
-    }
-
-    /**
-     * Returns the default language, used to select the language when creating a resource with lang
-     * Returns the first lang of languages array or "en" in case languages is *
-     */
-    getDefaultLexicalizationLang() {
-        var firstLang = this.lexicalizationLangs[0];
-        if (firstLang == "*") { //if preferred language is "all", return the first priority
-            for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) {
-                for (var j = 0; j < this.projectLanguages.length; j++) {
-                    if (LanguageUtils.priorityLangs[i] == this.projectLanguages[j].tag) {
-                        return LanguageUtils.priorityLangs[i];
-                    }
-                }
-            }
-            //if priority languages are not in the project languages, return the first project lang
-            return this.projectLanguages[0].tag;
-        }
-        return firstLang;
-    }
-    getLexicalizationLangs(): string[] {
-        return this.lexicalizationLangs;
-    }
-    setLexicalizationLangs(langs: string[]) {
-        this.lexicalizationLangs = langs;
-        this.prefService.setLanguages(langs).subscribe()
     }
 
     getProjectTheme(): number {
@@ -156,10 +135,10 @@ export class VBProperties {
 
     //SETTINGS
     initProjectSettings() {
-        var properties: string[] = ["languages"];
+        var properties: string[] = [Properties.setting_languages];
         this.prefService.getProjectSettings(properties).subscribe(
             settings => {
-                var langsValue: string = settings.languages;
+                var langsValue: string = settings[Properties.setting_languages];
                 try {
                     this.projectLanguages = <Language[]>JSON.parse(langsValue);
                     LanguageUtils.sortLanguages(this.projectLanguages);
@@ -175,8 +154,14 @@ export class VBProperties {
         );
     }
 
-    getLanguages(): Language[] {
+    /**
+     * Returns the language available in the project
+     */
+    getProjectLanguages(): Language[] {
         return this.projectLanguages;
+    }
+    setProjectLanguages(languages: Language[]) {
+        this.projectLanguages = languages;
     }
 
 }

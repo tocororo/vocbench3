@@ -39,7 +39,7 @@ export const routes: Routes = [
     { path: "Preferences", component: VocbenchPreferencesComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     //lazy loading of module with child route
     { path: "Metadata", loadChildren: "./modules/metadataModule#metadataModule", canLoad: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-    { path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AdminGuard], canDeactivate: [CanDeactivateModalGuard] },
+    { path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     // route config of config bar
     { path: "Config/LoadData", component: LoadDataComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },

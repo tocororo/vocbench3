@@ -6,6 +6,9 @@ import { ResViewPartition } from "../models/ResourceView";
 import Prolog from 'jsprolog';
 
 enum Actions {
+    ADMINISTRATION_PROJECT_MANAGEMENT, //generic for management of project
+    ADMINISTRATION_ROLE_MANAGEMENT, //generic for management of roles
+    ADMINISTRATION_USER_ROLE_MANAGEMENT, //generic for management of user-roles
     ALIGNMENT_ADD_ALIGNMENT,
     ALIGNMENT_LOAD_ALIGNMENT,
     CLASSES_CREATE_CLASS,
@@ -14,6 +17,7 @@ enum Actions {
     CLASSES_DELETE_CLASS,
     CLASSES_DELETE_INDIVIDUAL,
     CLASSES_GET_CLASS_TAXONOMY, //valid for getClassesInfo and getSubClasses
+    CLASSES_GET_INSTANCES,
     CLASSES_REMOVE_CLASS_AXIOM,
     CUSTOM_FORMS_CREATE_FORM_MAPPING,
     CUSTOM_FORMS_CREATE_COLLECTION,
@@ -105,6 +109,9 @@ export class AuthorizationEvaluator {
     private static authCache: { [goal: string]: boolean } = {}
 
     private static actionAuthGoalMap: { [key: number ]: string } = {
+        [Actions.ADMINISTRATION_PROJECT_MANAGEMENT] : 'auth(pm(project,_), "CRUDV").',
+        [Actions.ADMINISTRATION_ROLE_MANAGEMENT] : 'auth(rbac(_,_), "CRUDV").',
+        [Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT] : 'auth(rbac(user,_), "CRUDV").',
         [Actions.ALIGNMENT_ADD_ALIGNMENT] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', alignment), "C").',
         [Actions.ALIGNMENT_LOAD_ALIGNMENT] : 'auth(rdf(resource, alignment), "R").',
         [Actions.CLASSES_CREATE_CLASS] :  'auth(rdf(cls), "C").',
@@ -113,6 +120,7 @@ export class AuthorizationEvaluator {
         [Actions.CLASSES_DELETE_CLASS] :  'auth(rdf(cls), "D").',
         [Actions.CLASSES_DELETE_INDIVIDUAL] :  'auth(rdf(individual), "D").',
         [Actions.CLASSES_GET_CLASS_TAXONOMY] :  'auth(rdf(cls, taxonomy), "R").',
+        [Actions.CLASSES_GET_INSTANCES] :  'auth(rdf(cls, instances), "R").',
         [Actions.CLASSES_REMOVE_CLASS_AXIOM] :  'auth(rdf(cls, taxonomy), "D").', //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
         [Actions.CUSTOM_FORMS_CREATE_FORM_MAPPING] :  'auth(cform(form, mapping), "C").', 
         [Actions.CUSTOM_FORMS_CREATE_COLLECTION] :  'auth(cform(formCollection), "C").', 

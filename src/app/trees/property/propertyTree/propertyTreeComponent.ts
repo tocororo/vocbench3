@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -46,6 +47,10 @@ export class PropertyTreeComponent extends AbstractTree {
     }
 
     initTree() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)) {
+            return;
+        }
+
         this.roots = [];
         this.selectedNode = null;
 

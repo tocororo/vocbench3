@@ -7,6 +7,7 @@ import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPro
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectServices } from "../services/projectServices";
 import { MetadataServices } from "../services/metadataServices";
+import { AdministrationServices } from "../services/administrationServices";
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from "../utils/UIUtils";
@@ -22,7 +23,7 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
 
-    constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
+    constructor(private projectService: ProjectServices, private metadataService: MetadataServices, private adminService: AdministrationServices,
         private preferences: VBProperties, private router: Router, private basicModals: BasicModalServices, private modal: Modal) {
     }
 
@@ -125,6 +126,12 @@ export class ProjectComponent implements OnInit {
                 //init the project preferences for the project
                 this.preferences.initUserProjectPreferences();
                 this.preferences.initProjectSettings();
+                //init the Project-User binding
+                this.adminService.getProjectUserBinding(project.getName(), VBContext.getLoggedUser().getEmail()).subscribe(
+                    puBinding => {
+                        VBContext.setProjectUserBinding(puBinding);
+                    }
+                );
             }
         );
     }

@@ -2,7 +2,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Project } from '../models/Project';
 import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/Metadata';
-import { User } from '../models/User';
+import { User, ProjectUserBinding } from '../models/User';
 import { UIUtils } from "./UIUtils";
 import { Cookie } from "./Cookie";
 
@@ -32,6 +32,7 @@ export class VBContext {
     private static ctxVersion: VersionInfo; //version used
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     private static loggedUser: User;
+    private static puBinging: ProjectUserBinding;
 
     /**
      * Sets the working project (the one set as ctx_project requests parameter)
@@ -50,6 +51,7 @@ export class VBContext {
      */
     static removeWorkingProject() {
         this.workingProjectCtx.reset();
+        this.puBinging = null;
         UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
     }
 
@@ -111,13 +113,21 @@ export class VBContext {
         return this.loggedUser;
     }
     static removeLoggedUser() {
-        this.loggedUser = undefined;
+        this.loggedUser = null;
+        this.puBinging = null;
     }
     /**
      * Returns true if a user is logged in
      */
     static isLoggedIn(): boolean {
-        return this.loggedUser != undefined;
+        return this.loggedUser != null;
+    }
+
+    static setProjectUserBinding(puBinging: ProjectUserBinding) {
+        this.puBinging = puBinging;
+    }
+    static getProjectUserBinding(): ProjectUserBinding {
+        return this.puBinging;
     }
 
     /**
@@ -136,7 +146,7 @@ export class VBContext {
      * Removes a sessione token (to keep track of session in some tools/scenarios)
      */
     static removeSessionToken() {
-        this.sessionToken = undefined;
+        this.sessionToken = null;
     }
 
     /**
@@ -147,6 +157,7 @@ export class VBContext {
         this.ctxProject = null;
         this.sessionToken = null;
         this.loggedUser = null;
+        this.puBinging = null;
     }
 
 }

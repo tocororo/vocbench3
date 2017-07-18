@@ -210,12 +210,12 @@ export class XmlSchema { //all resources here have role "individual" (don't know
 }
 
 
-export class DC {
+export class DCT {
     public static uri = "http://purl.org/dc/terms";
-    public static namespace = DC.uri + "/";
+    public static namespace = DCT.uri + "/";
     //PROPERTIES
-    public static created = new ARTURIResource(DC.namespace + "created", "dc:created", RDFResourceRolesEnum.property);
-    public static modified = new ARTURIResource(DC.namespace + "modified", "dc:modified", RDFResourceRolesEnum.property);
+    public static created = new ARTURIResource(DCT.namespace + "created", "dct:created", RDFResourceRolesEnum.property);
+    public static modified = new ARTURIResource(DCT.namespace + "modified", "dct:modified", RDFResourceRolesEnum.property);
 }
 
 

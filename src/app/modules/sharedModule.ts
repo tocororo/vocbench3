@@ -10,6 +10,7 @@ import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
+import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
 
 import { YasguiComponent } from '../sparql/yasguiComponent';
 
@@ -18,12 +19,12 @@ import { YasguiComponent } from '../sparql/yasguiComponent';
     declarations: [
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
         YasguiComponent, CodemirrorComponent, InputEditableComponent, ResourceListComponent,
-        TypedLiteralInputComponent
+        TypedLiteralInputComponent, LanguageItemComponent
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
         YasguiComponent, CodemirrorComponent, InputEditableComponent, ResourceListComponent,
-        TypedLiteralInputComponent
+        TypedLiteralInputComponent, LanguageItemComponent
     ],
     providers: []
 })

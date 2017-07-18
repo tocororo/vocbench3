@@ -120,11 +120,11 @@ export class UserProfileComponent {
         this.sharedModals.selectLanguages("Language proficiencies", this.user.getLanguageProficiencies()).then(
             langs => {
                 this.userService.updateUserLanguageProficiencies(this.user.getEmail(), langs).subscribe(
-                        user => {
-                            VBContext.setLoggedUser(user);
-                            this.initUser();
-                        }
-                    );
+                    user => {
+                        VBContext.setLoggedUser(user);
+                        this.initUser();
+                    }
+                );
             },
             () => {}
         );

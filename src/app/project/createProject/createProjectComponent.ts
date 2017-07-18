@@ -6,7 +6,7 @@ import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
-import { RDFS, OWL, SKOS, SKOSXL, DC } from "../../models/Vocabulary";
+import { RDFS, OWL, SKOS, SKOSXL, DCT } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { UIUtils } from "../../utils/UIUtils";
@@ -87,9 +87,9 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
 
     private useProjMetadataProp: boolean = true;
-    private creationDatePropList: ARTURIResource[] = [DC.created];
+    private creationDatePropList: ARTURIResource[] = [DCT.created];
     private creationDateProp: ARTURIResource = this.creationDatePropList[0];
-    private modificationDatePropList: ARTURIResource[] = [DC.modified];
+    private modificationDatePropList: ARTURIResource[] = [DCT.modified];
     private modificationDateProp: ARTURIResource = this.modificationDatePropList[0];
 
     constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, private pluginService: PluginsServices,

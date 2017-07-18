@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -46,6 +47,10 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     initTree() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY)) {
+            return;
+        }
+
         this.roots = [];
         this.selectedNode = null;
 

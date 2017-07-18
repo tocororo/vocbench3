@@ -21,6 +21,7 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
 
     @ViewChild("toFocus") inputToFocus: ElementRef;
 
+    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
     private submitted: boolean = false;
 
     private label: string;
@@ -37,6 +38,9 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
 
     ngAfterViewInit() {
         this.inputToFocus.nativeElement.focus();
+        setTimeout(() => {
+            this.viewInitialized = true;
+        });
     }
 
     private onKeydown(event: KeyboardEvent) {
@@ -53,7 +57,7 @@ export class NewResourceModal implements ModalComponent<NewResourceModalData> {
     }
 
     private isInputValid(): boolean {
-        return (this.label != undefined && this.label.trim() != "");
+        return (this.label != undefined && this.label.trim() != "" && this.lang != null);
     }
 
     ok(event: Event) {

@@ -1,8 +1,11 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { Project } from "../../models/Project";
+import { Properties } from "../../models/Properties";
 import { Language, LanguageUtils } from "../../models/LanguagesCountries";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBProperties } from "../../utils/VBProperties";
+import { VBContext } from "../../utils/VBContext";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 
 @Component({
@@ -13,19 +16,18 @@ export class ProjectSettingsComponent {
 
     @Input() project: Project;
 
-    private languagesSettingName = "languages";
     private noLangActive: boolean = true;
 
     private languageItems: LanguageItem[];
 
-    constructor(private prefSetService: PreferencesSettingsServices, private basicModals: BasicModalServices) { }
+    constructor(private prefSetService: PreferencesSettingsServices, private vbProperties: VBProperties, private basicModals: BasicModalServices) { }
 
     ngOnChanges(changes: SimpleChanges) {
         //initialize the languageItems with the system languages
         if (this.languageItems == null) {
-            this.prefSetService.getDefaultProjectSettings([this.languagesSettingName]).subscribe(
+            this.prefSetService.getDefaultProjectSettings([Properties.setting_languages]).subscribe(
                 stResp => {
-                    var langsValue = stResp[this.languagesSettingName];
+                    var langsValue = stResp[Properties.setting_languages];
                     try {
                         var systemLanguages = <Language[]>JSON.parse(langsValue);
                         LanguageUtils.sortLanguages(systemLanguages);
@@ -34,13 +36,13 @@ export class ProjectSettingsComponent {
                             this.languageItems.push({ lang: systemLanguages[i], active: false });
                         }
 
-                        //in case the project is already set init the 'active' statuses
+                        //in case the project is already set, init the 'active' statuses
                         if (changes['project'] && changes['project'].currentValue) {
                             this.updateActiveLanguages();
                         }
                     } catch (err) {
                         this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
-                            "'" + this.languagesSettingName + "' property. Please, report this to the system administrator.", "error");
+                            "'" + Properties.setting_languages + "' property. Please, report this to the system administrator.", "error");
                     }
                 }
             );
@@ -51,9 +53,9 @@ export class ProjectSettingsComponent {
     }
 
     private updateActiveLanguages() {
-        this.prefSetService.getProjectSettings([this.languagesSettingName], this.project).subscribe(
+        this.prefSetService.getProjectSettings([Properties.setting_languages], this.project).subscribe(
             stResp => {
-                var langsValue = stResp[this.languagesSettingName];
+                var langsValue = stResp[Properties.setting_languages];
                 try {
                     var projectLanguages = <Language[]>JSON.parse(langsValue);
                     LanguageUtils.sortLanguages(projectLanguages);
@@ -67,7 +69,7 @@ export class ProjectSettingsComponent {
                     }
                 } catch (err) {
                     this.basicModals.alert("Error", "Initialization of languages for project '" + this.project.getName() + 
-                        "' has encountered a problem during parsing the '" + this.languagesSettingName + "' settings. " + 
+                        "' has encountered a problem during parsing the '" + Properties.setting_languages + "' settings. " + 
                         "Please, report this to the system administrator.", "error");
                 }
             }
@@ -91,15 +93,24 @@ export class ProjectSettingsComponent {
         }
         if (activeLangs.length == 0) { //if no language is active, set null as value, so the setting is removed
             this.noLangActive = true;
-            this.prefSetService.setProjectSetting(this.languagesSettingName, null, this.project).subscribe();
+            this.prefSetService.setProjectSetting(Properties.setting_languages, null, this.project).subscribe(
+                stResp => {
+                    /** Reinit the project setting because it cannot set activeLangs as projectLanguages
+                     * since being empty the project languages should be inherit from system setting.
+                     * This operation is performed only if the current open project is the working one. */
+                    if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
+                        this.vbProperties.initProjectSettings();
+                    }
+                }
+            );
         } else {
             this.noLangActive = false;
-            this.prefSetService.setProjectSetting(this.languagesSettingName, JSON.stringify(activeLangs), this.project).subscribe();
+            this.prefSetService.setProjectSetting(Properties.setting_languages, JSON.stringify(activeLangs), this.project).subscribe(
+                stResp => {
+                    this.vbProperties.setProjectLanguages(activeLangs);
+                }
+            );
         }
-    }
-
-    private getFlagImgSrc(langTag: string): string {
-        return UIUtils.getFlagImgSrc(langTag);
     }
 
 }
