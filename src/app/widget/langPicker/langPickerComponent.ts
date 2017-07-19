@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { VBContext } from "../../utils/VBContext";
-import { Language, LanguageUtils } from "../../models/LanguagesCountries";
+import { Language, Languages } from "../../models/LanguagesCountries";
 
 @Component({
     selector: 'lang-picker',
@@ -42,9 +42,9 @@ export class LangPickerComponent implements OnInit {
             if (this.lang == undefined) { //no language specified as @Input
                 //based on the priority list
                 selectedLangLoop: 
-                for (var i = 0; i < LanguageUtils.priorityLangs.length; i++) {
+                for (var i = 0; i < Languages.priorityLangs.length; i++) {
                     for (var j = 0; j < this.languageList.length; j++) {
-                        if (this.languageList[j].tag == LanguageUtils.priorityLangs[i]) {
+                        if (this.languageList[j].tag == Languages.priorityLangs[i]) {
                             this.language = this.languageList[j].tag;
                             break selectedLangLoop;
                         }

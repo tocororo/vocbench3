@@ -170,14 +170,6 @@ rdf-resource > .rdfResourceIcon {
     text-align: center;
 }
 
-.treeNode > rdf-resource {
-    min-height: 24px;
-}
-
-/*instance-list rdf-resource {
-    min-height: 24px;
-}*/
-
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
 collection-tree rdf-resource:hover, scheme-list rdf-resource:hover, property-tree rdf-resource:hover,
 scheme-list-panel rdf-resource:hover {
@@ -218,6 +210,7 @@ editable-resource {
 }
 .treeNode rdf-resource {
     flex: 1;
+    min-height: 24px;
 }
 
 .expandCollapseBtnContainer > img {
@@ -269,6 +262,7 @@ img.disabled  {
     width: 100%;
     min-height: 24px;
     display: flex;
+    align-items: center;
 }
 .listItem:hover {
     background-color: #e5f3ff;

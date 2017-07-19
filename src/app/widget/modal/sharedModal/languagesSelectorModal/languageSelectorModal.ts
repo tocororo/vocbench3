@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { Language, LanguageUtils } from "../../../../models/LanguagesCountries";
+import { Language, Languages } from "../../../../models/LanguagesCountries";
 
 export class LanguageSelectorModalData extends BSModalContext {
     /**
@@ -23,30 +22,19 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
 
     private languageItems: LanguageItem[];
 
-    constructor(public dialog: DialogRef<LanguageSelectorModalData>, private prefSettingService: PreferencesSettingsServices, 
-        private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<LanguageSelectorModalData>, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.prefSettingService.getSystemLanguages().subscribe(
-            stResp => {
-                try {
-                    var systemLanguages = <Language[]>JSON.parse(stResp);
-                    LanguageUtils.sortLanguages(systemLanguages);
-                    this.languageItems = [];
-                    for (var i = 0; i < systemLanguages.length; i++) {
-                        this.languageItems.push({
-                            lang: systemLanguages[i], 
-                            selected: this.context.languages.indexOf(systemLanguages[i].tag) != -1
-                        });
-                    }
-                } catch (err) {
-                    this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
-                        "'languages' property. Please, report this to the system administrator.", "error");
-                }
-            }
-        );
+        let systemLanguages: Language[] = Languages.getSystemLanguages();
+        this.languageItems = [];
+        for (var i = 0; i < systemLanguages.length; i++) {
+            this.languageItems.push({
+                lang: systemLanguages[i], 
+                selected: this.context.languages.indexOf(systemLanguages[i].tag) != -1
+            });
+        }
     }
 
     ok(event: Event) {

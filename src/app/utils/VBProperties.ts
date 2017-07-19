@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
-import { Language, LanguageUtils } from '../models/LanguagesCountries';
+import { Language, Languages } from '../models/LanguagesCountries';
 import { Properties } from '../models/Properties';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
@@ -141,7 +141,7 @@ export class VBProperties {
                 var langsValue: string = settings[Properties.setting_languages];
                 try {
                     this.projectLanguages = <Language[]>JSON.parse(langsValue);
-                    LanguageUtils.sortLanguages(this.projectLanguages);
+                    Languages.sortLanguages(this.projectLanguages);
                 } catch (err) {
                     this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
                         "languages settings. Default languages will be set for this project.", "error");

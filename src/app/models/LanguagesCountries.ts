@@ -1,3 +1,6 @@
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+
 export class Countries {
     
     static countryList = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
@@ -33,8 +36,18 @@ export class Countries {
     
 }
 
-export class LanguageUtils {
+export class Languages {
+
+    private static systemLanguages: Language[];
     static priorityLangs = ["en", "fr", "it", "es", "de"];
+    
+    static setSystemLanguages(langs: Language[]) {
+        this.systemLanguages = langs;
+    }
+
+    static getSystemLanguages(): Language[] {
+        return this.systemLanguages;
+    }
 
     static sortLanguages(languages: Language[]) {
         languages.sort(
@@ -53,6 +66,50 @@ export class LanguageUtils {
             }
         }
         return false;
+    }
+
+    static fromTagsToLanguages(tags: string[]): Language[] {
+        let languages: Language[] = [];
+        for (var i = 0; i < tags.length; i++) {
+            let lang: Language = Languages.getLanguageFromTag(tags[i]);
+            if (lang != null) {
+                languages.push(lang)
+            }
+        }
+        return languages;
+    }
+
+    static fromLanguagesToTags(languages: Language[]) {
+        let tags: string[] = [];
+        for (var i = 0; i < languages.length; i++) {
+            tags.push(languages[i].tag);
+        }
+        return tags;
+    }
+
+    static getLanguageFromTag(tag: string): Language {
+        for (var i = 0; i < Languages.systemLanguages.length; i++) {
+            if (Languages.systemLanguages[i].tag == tag) {
+                return Languages.systemLanguages[i];
+            }
+        }
+    }
+
+    static initSystemLanguage(prefSettingService: PreferencesSettingsServices, basicModals: BasicModalServices) {
+        if (Languages.getSystemLanguages() == null) {
+            prefSettingService.getSystemLanguages().subscribe(
+                stResp => {
+                    try {
+                        var systemLanguages = <Language[]>JSON.parse(stResp);
+                        Languages.sortLanguages(systemLanguages);
+                        Languages.systemLanguages = systemLanguages;
+                    } catch (err) {
+                        basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
+                            "'languages' property. Please, report this to the system administrator.", "error");
+                    }
+                }
+            );
+        }
     }
 }
 

@@ -1,8 +1,11 @@
 import { Component } from "@angular/core";
 import { Project } from "./models/Project";
 import { SKOS, OWL } from "./models/Vocabulary";
+import { Language, Languages } from "./models/LanguagesCountries";
 import { VBContext } from "./utils/VBContext";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
+import { BasicModalServices } from "./widget/modal/basicModal/basicModalServices";
+import { PreferencesSettingsServices } from "./services/preferencesSettingsServices";
 
 import '../assets/styles/style.css';
 
@@ -12,6 +15,14 @@ import '../assets/styles/style.css';
 })
 
 export class AppComponent {
+
+    constructor(private prefSettingService: PreferencesSettingsServices, private basicModals: BasicModalServices) {}
+
+    ngOnInit() {
+        if (Languages.getSystemLanguages() == null) {
+            Languages.initSystemLanguage(this.prefSettingService, this.basicModals);
+        }
+    }
 
     /**
      * Returns true if the user is logged (an authentication token is stored)

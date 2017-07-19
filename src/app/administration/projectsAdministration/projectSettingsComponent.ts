@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges } from "@angular/core";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { Project } from "../../models/Project";
 import { Properties } from "../../models/Properties";
-import { Language, LanguageUtils } from "../../models/LanguagesCountries";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { VBContext } from "../../utils/VBContext";
@@ -30,7 +30,7 @@ export class ProjectSettingsComponent {
                     var langsValue = stResp[Properties.setting_languages];
                     try {
                         var systemLanguages = <Language[]>JSON.parse(langsValue);
-                        LanguageUtils.sortLanguages(systemLanguages);
+                        Languages.sortLanguages(systemLanguages);
                         this.languageItems = [];
                         for (var i = 0; i < systemLanguages.length; i++) {
                             this.languageItems.push({ lang: systemLanguages[i], active: false });
@@ -58,9 +58,9 @@ export class ProjectSettingsComponent {
                 var langsValue = stResp[Properties.setting_languages];
                 try {
                     var projectLanguages = <Language[]>JSON.parse(langsValue);
-                    LanguageUtils.sortLanguages(projectLanguages);
+                    Languages.sortLanguages(projectLanguages);
                     for (var i = 0; i < this.languageItems.length; i++) {
-                        if (LanguageUtils.containsLanguage(projectLanguages, this.languageItems[i].lang)) {
+                        if (Languages.containsLanguage(projectLanguages, this.languageItems[i].lang)) {
                             this.languageItems[i].active = true;
                             this.noLangActive = false;
                         } else {

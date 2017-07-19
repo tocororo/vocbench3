@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { UIUtils, Theme } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties, ResourceViewMode } from "../utils/VBProperties";
-import { Language, LanguageUtils } from "../models/LanguagesCountries";
+import { Language } from "../models/LanguagesCountries";
 import { Properties } from "../models/Properties";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 
