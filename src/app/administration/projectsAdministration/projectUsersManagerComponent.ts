@@ -40,9 +40,24 @@ export class ProjectUsersManagerComponent {
             this.userService.listUsersBoundToProject(this.project.getName()).subscribe(
                 users => {
                     this.usersBound = users;
-                    this.selectedUser = null;
                     this.puBinding = null;
                     this.selectedUserRole = null;
+                    /* look among the users bound to the project whether there is the currently selected user (in any).
+                    In case, select it, otherwise reset the selected user */
+                    if (this.selectedUser != null) {
+                        let userFound: User = null;
+                        for (let i = 0; i < this.usersBound.length; i++) {
+                            if (this.selectedUser.getEmail() == this.usersBound[i].getEmail()) {
+                                userFound = this.usersBound[i];
+                                break;
+                            }
+                        }
+                        if (userFound != null) {//selected user found among the users bound to project, select it
+                            this.selectUser(userFound);
+                        } else {//selected user not found among the users bound to project, reset it
+                            this.selectedUser = null;
+                        }
+                    }
                 }
             );
             this.adminService.listRoles(this.project).subscribe(
