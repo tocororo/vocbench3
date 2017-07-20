@@ -5,7 +5,7 @@ import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
-import { VBContext } from "../utils/VBContext";
+import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 
@@ -73,7 +73,7 @@ export class ResourceViewComponent {
     }
 
     ngOnInit() {
-        this.activeVersion = VBContext.getContextVersion();
+        this.activeVersion = HttpServiceContext.getContextVersion();
         this.readonly = this.readonly || this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
     }
 
@@ -98,8 +98,12 @@ export class ResourceViewComponent {
     private buildResourceView(res: ARTResource) {
         this.showInferredPristine = this.showInferred;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resViewService.getResourceView(res, this.showInferred, this.activeVersion).subscribe(
+        if (this.activeVersion != null) {
+            HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
+        }
+        this.resViewService.getResourceView(res, this.showInferred).subscribe(
             stResp => {
+                HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.update.emit(this.resource);

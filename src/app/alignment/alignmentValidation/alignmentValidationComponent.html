@@ -3,12 +3,13 @@
     <div class="panel panel-default vbox">
         <div class="panel-heading" style="display: flex;">
             <label style="flex: 1">Alignment Validation:</label>
+            <button class="btn btn-default btn-xs" style="margin-right: 4px;" [ngClass]="{active: rendering}" title="Rendering"
+                (click)="rendering = !rendering">
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
             <button class="btn btn-default btn-xs" (click)="openSettings()">
                 Settings <span class="glyphicon glyphicon-cog"></span>
             </button>
-            <!--<a (click)="openOptions()">
-                <span class="glyphicon glyphicon-cog"></span>
-            </a>-->
         </div>
        
         <div class="panel-body vbox">
@@ -53,12 +54,12 @@
                         <tr *ngFor="let a of alignmentCellList; let i=index;">
                             <td>
                                 <span class="clickable" (click)="openResView(a.getEntity1())">
-                                    {{a.getEntity1().getShow()}}
+                                    <rdf-resource [resource]="a.getEntity1()" [rendering]="rendering"></rdf-resource>
                                 </span>
                             </td>
                             <td>
                                 <span class="clickable" (click)="openResView(a.getEntity2())">
-                                    {{a.getEntity2().getShow()}}
+                                    <rdf-resource [resource]="a.getEntity2()" [rendering]="rendering"></rdf-resource>
                                 </span>
                             </td>
                             <td style="position: relative"

@@ -9,6 +9,7 @@ import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
+import { HttpServiceContext } from "../../utils/HttpManager";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 
@@ -43,7 +44,7 @@ export class ConfigBarComponent {
      * Returns the current version of the project
      */
     private getCtxVersion(): VersionInfo {
-        return VBContext.getContextVersion();
+        return HttpServiceContext.getContextVersion();
     }
 
     private isLoadDataAuthorized(): boolean {

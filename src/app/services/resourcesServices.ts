@@ -89,4 +89,32 @@ export class ResourcesServices {
         );
     }
 
+    /**
+     * Returns the description of a set of resources
+     * @param resources 
+     */
+    getResourcesInfo(resources: ARTURIResource[]): Observable<ARTURIResource[]> {
+        console.log("[ResourcesServices] getResourcesInfo");
+        var params: any = {
+            resources: resources
+        };
+        return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns the position (local/remote/unknown) of the given resource
+     * @param resource
+     */
+    getResourcePosition(resource: ARTURIResource): Observable<string> {
+        console.log("[ResourcesServices] getResourcePosition");
+        var params: any = {
+            resource: resource
+        };
+        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params, true);
+    }
+
 }

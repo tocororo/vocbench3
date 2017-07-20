@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
-import { VBContext } from "../../utils/VBContext";
+import { HttpServiceContext } from "../../utils/HttpManager";
 import { Cookie } from "../../utils/Cookie";
 import { UIUtils } from "../../utils/UIUtils";
 import { ARTURIResource } from "../../models/ARTResources";
+import { Project } from "../../models/Project";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { AlignmentCell } from "./AlignmentCell";
@@ -12,6 +13,7 @@ import { ValidationSettingsModal } from "./alignmentValidationModals/validationS
 import { ValidationReportModal, ValidationReportModalData } from "./alignmentValidationModals/validationReportModal"
 import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from "./alignmentValidationModals/mappingPropertySelectionModal"
 import { AlignmentServices } from "../../services/alignmentServices";
+import { ResourcesServices } from "../../services/resourcesServices";
 
 @Component({
     selector: 'alignment-validation-component',
@@ -46,6 +48,7 @@ export class AlignmentValidationComponent {
     private showRelationType: string; //relation, dlSymbol or text
     private confOnMeter: boolean; //tells if relation confidence should be shown on meter
     private alignmentPerPage: number; //max alignments per page
+    private rendering: boolean = false;
 
     private unknownRelation: boolean = false; //keep trace if there is some unknown relation (not a symbol, e.g. a classname)
     private knownRelations: string[] = ["=", ">", "<", "%", "HasInstance", "InstanceOf"];
@@ -58,8 +61,8 @@ export class AlignmentValidationComponent {
         { relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of" }
     ];
 
-    constructor(private alignmentService: AlignmentServices, private basicModals: BasicModalServices,
-        private sharedModals: SharedModalServices, private modal: Modal) { }
+    constructor(private alignmentService: AlignmentServices, private resourceService: ResourcesServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.sessionToken = this.generateSessionRandomToken();
@@ -110,8 +113,7 @@ export class AlignmentValidationComponent {
                         relation: stResp.unknownRelations[i],
                         dlSymbol: stResp.unknownRelations[i],
                         text: stResp.unknownRelations[i]
-                    }
-                    );
+                    });
                 }
                 this.updateAlignmentCells();
             }
@@ -122,6 +124,7 @@ export class AlignmentValidationComponent {
      * Gets alignment cells so updates the tables 
      */
     private updateAlignmentCells() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.alignmentService.listCells(this.page, this.alignmentPerPage).subscribe(
             map => {
                 this.totPage = map.totPage;
@@ -136,6 +139,54 @@ export class AlignmentValidationComponent {
                         break;
                     }
                 }
+                //update the rendering of the entities
+                //source ontology
+                let sourceEntities: ARTURIResource[] = [];
+                for (var i = 0; i < this.alignmentCellList.length; i++) {
+                    sourceEntities.push(this.alignmentCellList[i].getEntity1());
+                }
+                this.resourceService.getResourcesInfo(sourceEntities).subscribe(
+                    resources => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        for (var i = 0; i < this.alignmentCellList.length; i++) {
+                            for (var j = 0; j < resources.length; j++) {
+                                if (this.alignmentCellList[i].getEntity1().getURI() == resources[j].getURI()) {
+                                    this.alignmentCellList[i].setEntity1(resources[j]);
+                                    break; //go to the next source entity
+                                }
+                            }           
+                        }
+                    }
+                );
+                //target ontology (only if is a local project)
+                this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).subscribe(
+                    position => {
+                        //if target entities are from a local project, get the information of them
+                        if (position.startsWith("local:")) {
+                            let targetProject: string = position.substring(position.indexOf(":")+1);
+
+                            let targetEntities: ARTURIResource[] = [];
+                            for (var i = 0; i < this.alignmentCellList.length; i++) {
+                                targetEntities.push(this.alignmentCellList[i].getEntity2());
+                            }
+
+                            HttpServiceContext.setContextProject(new Project(targetProject)); //set a temporary context project
+                            this.resourceService.getResourcesInfo(targetEntities).subscribe(
+                                resources => {
+                                    HttpServiceContext.removeContextProject();
+                                    for (var i = 0; i < this.alignmentCellList.length; i++) {
+                                        for (var j = 0; j < resources.length; j++) {
+                                            if (this.alignmentCellList[i].getEntity2().getURI() == resources[j].getURI()) {
+                                                this.alignmentCellList[i].setEntity2(resources[j]);
+                                                break; //go to the next source entity
+                                            }
+                                        }           
+                                    }
+                                }
+                            );
+                        }
+                    }
+                )
             }
         );
     }

@@ -365,7 +365,8 @@ export class UIUtils {
         var sheet: StyleSheet;
 
         for (var i = 0; i < sheets.length; i++) {
-            if (sheets.item(i).href.endsWith("app.css")) {
+            //look for something like http://<hostname>:<port>/app.<hash>.css (hash is optional)
+            if (sheets.item(i).href.includes("app.") && sheets.item(i).href.endsWith(".css")) {
                 sheet = sheets.item(i);
                 break;
             }
