@@ -45,14 +45,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         super();
     }
 
-    ngOnInit() {
-        this.resViewService.getLexicalizationProperties(this.resource).subscribe(
-            props => {
-                this.rootProperties = props;
-            }
-        );
-    }
-
     ngOnChanges(changes: SimpleChanges) {
         //if changes reguard predicateObjectList
         if (changes['predicateObjectList'] && changes['predicateObjectList'].currentValue) {
@@ -83,6 +75,23 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     add(predicate?: ARTURIResource) {
+        if (predicate == undefined) {
+            if (this.rootProperties.length == 0) {
+                this.resViewService.getLexicalizationProperties(this.resource).subscribe(
+                    props => {
+                        this.rootProperties = props;
+                        this.addPropWithRootInitialized(predicate);
+                    }
+                );
+            } else {
+                this.addPropWithRootInitialized(predicate);
+            }
+        } else {
+            this.addPropWithRootInitialized(predicate);
+        }
+    }
+
+    private addPropWithRootInitialized(predicate?: ARTURIResource) {
         if (predicate == undefined) {
             this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                 (selectedProp: any) => {

@@ -28,6 +28,8 @@ export class InstanceListComponent {
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
 
+    private instanceLimit: number = 10000;
+
     private instanceList: ARTURIResource[] = [];
     private selectedInstance: ARTURIResource;
 
@@ -50,7 +52,22 @@ export class InstanceListComponent {
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
             if (changes['cls']) {
-                this.initList();
+                console.log("cls", this.cls);
+                let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
+                if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
+                    this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                        + ") has too much instances (" + numInst + "). Retrieving them all could be a very long process "
+                        + "and it may cause server error. Do you want to continue anyway?", "warning").then(
+                        confirm => {
+                            this.initList();
+                        },
+                        cancel =>  {
+                            this.instanceList = [];
+                        }
+                    );
+                } else {
+                    this.initList();
+                }
             }
         }
     }
