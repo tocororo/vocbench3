@@ -17,6 +17,7 @@ export class HttpManager {
     private contentTypeXml: string = "application/xml";
     private contentTypeJson: string = "application/json";
 
+    private protocol: string;
     private serverhost: string;
     //new services url parts
     private serverpath: string = "semanticturkey";
@@ -32,6 +33,7 @@ export class HttpManager {
         require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
         let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
         let st_port: string = window['st_port'];
+        this.protocol = window['st_protocol'];
         if (dynamic_st_host_resolution) {
             this.serverhost = location.hostname + ":" + st_port;
         } else {
@@ -305,7 +307,7 @@ export class HttpManager {
      * 
      */
     private getRequestBaseUrl(service: string, request: string, oldType: boolean): string {
-        var url: string = "http://" + this.serverhost + "/" + this.serverpath + "/";
+        var url: string = this.protocol + "://" + this.serverhost + "/" + this.serverpath + "/";
         if (oldType) {
             url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
         } else {
