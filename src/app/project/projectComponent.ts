@@ -7,8 +7,9 @@ import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPro
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectServices } from "../services/projectServices";
 import { MetadataServices } from "../services/metadataServices";
+import { AdministrationServices } from "../services/administrationServices";
 import { VBContext } from '../utils/VBContext';
-import { VBPreferences } from '../utils/VBPreferences';
+import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from "../utils/UIUtils";
 import { Project, ProjectTypesEnum } from '../models/Project';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -22,8 +23,8 @@ export class ProjectComponent implements OnInit {
     private projectList: Project[];
     private selectedProject: Project; //project selected in the list
 
-    constructor(private projectService: ProjectServices, private metadataService: MetadataServices,
-        private preferences: VBPreferences, private router: Router, private basicModals: BasicModalServices, private modal: Modal) {
+    constructor(private projectService: ProjectServices, private metadataService: MetadataServices, private adminService: AdministrationServices,
+        private preferences: VBProperties, private router: Router, private basicModals: BasicModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -120,55 +121,30 @@ export class ProjectComponent implements OnInit {
                 VBContext.setProjectChanged(true);
                 project.setOpen(true);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                //init the project preferences for the project
-                this.preferences.initUserProjectPreferences().subscribe();
                 //get default namespace of the project and set it to the vbContext
                 this.metadataService.getNamespaceMappings().subscribe();
+                //init the project preferences for the project
+                this.preferences.initUserProjectPreferences();
+                this.preferences.initProjectSettings();
+                //init the Project-User binding
+                this.adminService.getProjectUserBinding(project.getName(), VBContext.getLoggedUser().getEmail()).subscribe(
+                    puBinding => {
+                        VBContext.setProjectUserBinding(puBinding);
+                    }
+                );
             }
         );
     }
 
-    private closeProject(project: Project) {
-        if (project.getType() == ProjectTypesEnum.saveToStore) {
-            //if closing project is non-persistent ask to save
-            this.basicModals.confirm("Save project", "You're closing a non-persistent project " + project.getName()
-                + ". Do you want to save changes?", "warning").then(
-                confirm => {//save then disconnect
-                    this.projectService.saveProject(project).subscribe(
-                        stResp => {
-                            this.disconnectFromProject(project);
-                        }
-                    );
-                },
-                () => {//disconnect without saving
-                    this.disconnectFromProject(project);
-                }
-                );
-        } else {//persistent project => just disconnect
-            this.disconnectFromProject(project);
-        }
-    }
-
     /**
      * Calls the proper service in order to disconnect from the given project.
-     * Returns an observable so I can disconnect and connect to a new project in synchronous way
      */
-    private disconnectFromProject(project: Project) {
+    private closeProject(project: Project) {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.disconnectFromProject(project).subscribe(
             stResp => {
                 project.setOpen(false);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-            }
-        );
-    }
-
-    private saveProject(project: Project) {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.projectService.saveProject(project).subscribe(
-            stResp => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert("Save project", "Project " + project.getName() + " saved successfully");
             }
         );
     }

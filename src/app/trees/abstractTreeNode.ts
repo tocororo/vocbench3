@@ -1,5 +1,6 @@
 import { Component, Input, Output, ViewChild, QueryList, ElementRef, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ResAttribute } from "../models/ARTResources";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
@@ -12,7 +13,7 @@ export abstract class AbstractTreeNode {
      * VIEWCHILD, INPUTS / OUTPUTS
      */
 
-    @Input() node:ARTURIResource;
+    @Input() node: ARTURIResource;
     @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
@@ -40,8 +41,10 @@ export abstract class AbstractTreeNode {
      * CONSTRUCTOR
      */
     protected eventHandler: VBEventHandler;
-    constructor(eventHandler: VBEventHandler) {
+    protected basicModals: BasicModalServices;
+    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices) {
         this.eventHandler = eventHandler;
+        this.basicModals = basicModals;
     }
 
     /**
@@ -61,6 +64,11 @@ export abstract class AbstractTreeNode {
                 }
             }
         );
+        //if the resource is new (just created), make it visible in the view
+        if (this.node.getAdditionalProperty(ResAttribute.NEW)) {
+            this.treeNodeElement.nativeElement.scrollIntoView();
+            this.node.deleteAdditionalProperty(ResAttribute.NEW);
+        }
     }
 
     ngOnDestroy() {
@@ -105,6 +113,7 @@ export abstract class AbstractTreeNode {
                 //save pending search so it can resume when the children are initialized
                 this.pendingSearch.pending = true;
                 this.pendingSearch.path = path;
+                return;
             } else if (this.pendingSearch.pending) {
                 //the tree expansion is resumed, reset the pending search
                 this.pendingSearch.pending = false;
@@ -115,9 +124,11 @@ export abstract class AbstractTreeNode {
                     //let the child node expand the remaining path
                     path.splice(0, 1);
                     nodeChildren[i].expandPath(path);
-                    break;
+                    return;
                 }
             }
+            //if this line is reached it means that the first node of the path has not been found
+            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree(node)");
         }
     }
 
@@ -187,6 +198,9 @@ export abstract class AbstractTreeNode {
             if (this.open) { //if node is open, show the child with its children
                 let children: ARTResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
                 children.push(child);
+            } else {
+                this.expandNode();
+                // this.treeNodeElement.nativeElement.scrollIntoView();
             }
         }
     }

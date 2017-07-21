@@ -46,9 +46,11 @@ export class NewPlainLiteralModal implements ModalComponent<NewPlainLiteralModal
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
-            this.submitted = true;
-            if (this.isInputValid()) {
-                this.ok(event);
+            if (!event.shiftKey && !event.altKey && !event.ctrlKey) {
+                this.submitted = true;
+                if (this.isInputValid()) {
+                    this.ok(event);
+                }
             }
         }
     }

@@ -3,12 +3,13 @@
     <div class="panel panel-default vbox">
         <div class="panel-heading" style="display: flex;">
             <label style="flex: 1">Alignment Validation:</label>
+            <button class="btn btn-default btn-xs" style="margin-right: 4px;" [ngClass]="{active: rendering}" title="Rendering"
+                (click)="rendering = !rendering">
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
             <button class="btn btn-default btn-xs" (click)="openSettings()">
                 Settings <span class="glyphicon glyphicon-cog"></span>
             </button>
-            <!--<a (click)="openOptions()">
-                <span class="glyphicon glyphicon-cog"></span>
-            </a>-->
         </div>
        
         <div class="panel-body vbox">
@@ -51,8 +52,16 @@
                     </thead>
                     <tbody class="text-center">
                         <tr *ngFor="let a of alignmentCellList; let i=index;">
-                            <td style="border: 0px 1px 1px solid #ddd">{{a.getEntity1().getShow()}}</td>
-                            <td>{{a.getEntity2().getShow()}}</td>
+                            <td>
+                                <span class="clickable" (click)="openResView(a.getEntity1())">
+                                    <rdf-resource [resource]="a.getEntity1()" [rendering]="rendering"></rdf-resource>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="clickable" (click)="openResView(a.getEntity2())">
+                                    <rdf-resource [resource]="a.getEntity2()" [rendering]="rendering"></rdf-resource>
+                                </span>
+                            </td>
                             <td style="position: relative"
                                 (mouseover)="editRel.style.display='initial'" (mouseout)="editRel.style.display='none'">
                                 <div class="progress" [ngClass]="{ 'large-progress' : unknownRelation }">

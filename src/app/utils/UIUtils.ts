@@ -2,8 +2,8 @@ import {
     ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
     ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
 } from "../models/ARTResources";
-import { Languages } from "../models/LanguagesCountries"
 import { XmlSchema } from "../models/Vocabulary"
+import { VBContext } from "../utils/VBContext"
 
 
 export class UIUtils {
@@ -56,9 +56,9 @@ export class UIUtils {
 
 
 
-    private static availableFlagLang = ["ar", "cs", "da", "de", "el", "en", "en-GB", "en-US",
-        "es", "fa", "fr", "hi", "hu", "it", "ja", "ko", "nl", "pl", "pt", "ro", "ru", "sk",
-        "sv", "th", "tr", "uk", "zh"];
+    private static availableFlagLang = ["ar", "bg", "cs", "da", "de", "el", "en", "en-GB", "en-US", "es", "et", "fa", "fr", "fi", "ga", 
+        "hi", "hr", "hu", "id", "it", "ja", "ka", "km", "ko", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr",
+        "uk", "vi", "zh"];
 
     static getImageSrc(rdfResource: ARTNode): string {
 
@@ -96,6 +96,8 @@ export class UIUtils {
 
         var xLabelImgSrc = require("../../assets/images/icons/res/xLabel.png");
         var xLabelImportedImgSrc = require("../../assets/images/icons/res/xLabel_imported.png");
+        var xLabelDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_deprecated.png");
+        var xLabelImportedDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_imported_deprecated.png");
         
         var ontologyImgSrc = require("../../assets/images/icons/res/ontology.png");
         
@@ -124,9 +126,11 @@ export class UIUtils {
         var propOntologyDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_deprecated.png");
         var propOntologyImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_imported_deprecated.png");
 
+        var mentionImgSrc = require("../../assets/images/icons/res/mention.png");
+
         var imgSrc: string;
         if (rdfResource.isResource()) {
-            var role = (<ARTResource>rdfResource).getRole().toLowerCase();
+            var role = rdfResource.getRole().toLowerCase();
             var deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
                 rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
@@ -247,12 +251,28 @@ export class UIUtils {
                 if (lang != null) {
                     imgSrc = this.getFlagImgSrc(lang);
                 } else {
+                    imgSrc = xLabelImgSrc;
                     if (!explicit) {
                         imgSrc = xLabelImportedImgSrc;
-                    } else {
-                        imgSrc = xLabelImgSrc;
+                        if (deprecated) {
+                            imgSrc = xLabelImportedDeprecatedImgSrc;
+                        }
+                    } else if (deprecated) {
+                        imgSrc = xLabelDeprecatedImgSrc;
                     }
                 }
+            } else if (role == RDFResourceRolesEnum.mention.toLocaleLowerCase()) {
+                imgSrc = mentionImgSrc;
+                // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
+                if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
+                    imgSrc = mentionImgSrc; //it is a mentrion
+                } else { //else set individual image as default
+                    imgSrc = individualImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.dataRange.toLocaleLowerCase()) {
+                imgSrc = classImgSrc;
+            } else { //unknown role (none of the previous roles)
+                imgSrc = individualImgSrc;
             }
         } else if (rdfResource.isLiteral()) {
             let lang: string = (<ARTLiteral>rdfResource).getLang();
@@ -322,4 +342,75 @@ export class UIUtils {
         return imgSrc;
     }
 
+
+    public static themes: Theme[] = [
+        { id: 0, mainColor: "#1e4387", altColor: "#7486ab" }, //default
+        { id: 1, mainColor: "#283e4a", altColor: "#7aa2b8" },
+        { id: 2, mainColor: "#1da1f2", altColor: "#75c6f7" },
+        { id: 3, mainColor: "#367c36", altColor: "#5cb85c" },
+        { id: 4, mainColor: "#5f5f5f", altColor: "#b3b3b3" },
+        { id: 5, mainColor: "#cc181e", altColor: "#ec5f64" },
+        { id: 6, mainColor: "#6f5499", altColor: "#a08cc0" }
+    ]
+    public static resetNavbarTheme() {
+        UIUtils.changeNavbarTheme();
+    }
+    public static changeNavbarTheme(themeId: number = 0) {
+        let theme: Theme = UIUtils.themes[0];
+        UIUtils.themes.forEach(t => {
+            if (t.id == themeId) { theme = t; return };
+        });
+        var cssRuleCode = document.all ? 'rules' : 'cssRules';
+        var sheets: StyleSheetList = document.styleSheets;
+        var sheet: StyleSheet;
+
+        for (var i = 0; i < sheets.length; i++) {
+            //look for something like http://<hostname>:<port>/app.<hash>.css (hash is optional)
+            if (sheets.item(i).href.includes("app.") && sheets.item(i).href.endsWith(".css")) {
+                sheet = sheets.item(i);
+                break;
+            }
+        }
+
+        let rules: CSSRuleList = sheet[cssRuleCode];
+        for (var j = 0; j < rules.length; j++) {
+            let rule: CSSRule = rules.item(j);
+            if (rule instanceof CSSStyleRule) {
+                if (rule.selectorText.includes(".navbar-default")) {
+                    if (rule.selectorText == ".navbar-default" || 
+                        rule.selectorText == ".navbar-default .navbar-collapse, .navbar-default .navbar-form" ||
+                        rule.selectorText == ".navbar-default .navbar-brand" ||
+                        rule.selectorText == ".navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav > li > a" ||
+                        rule.selectorText == ".navbar-default .navbar-toggle"
+                    ) {
+                        rule.style.backgroundColor = theme.mainColor;
+                    } else if (
+                        rule.selectorText == ".navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav > .active > a, " +
+                            ".navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-link:hover" ||
+                        rule.selectorText == ".navbar-default .navbar-nav > .open > a, " + 
+                            ".navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, " + 
+                            ".navbar-default .navbar-nav .open .dropdown-menu > li > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > .active > a, " + 
+                            ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, " + 
+                            ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus" ||
+                        rule.selectorText == ".navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus"
+                    ) {
+                        rule.style.backgroundColor = theme.altColor;
+                    }
+                }
+            }
+            
+        }
+    }
+
+}
+
+export class Theme {
+    id: number;
+    mainColor: string;
+    altColor: string
 }

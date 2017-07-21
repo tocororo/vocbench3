@@ -26,19 +26,28 @@
 
     <div class="panel panel-default vbox" style="margin-bottom: 3px;">
         <div class="panel-heading">
-            <label>Operations:</label>
+            <label style="flex:1;">Operations:</label>
+            <div class="input-group input-group-xs col-sm-4">
+                <input type="text" class="form-control" placeholder="Operation filter" [(ngModel)]="filterKey" 
+                    (ngModelChange)="onFilterChanged()" [disabled]="operations.length == 0">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-filter"></span>
+                </span>
+            </div>
         </div>
         <div class="panel-body scrollableContainer">
-            <div class="checkbox" style="margin-left: 12px;" *ngFor="let op of operations">
-                <label>
-                    <input type="checkbox" [(ngModel)]="op.checked">{{getOperationShow(op.service)}}
-                </label>
-            </div>
+            <ng-template ngFor let-op [ngForOf]="operations">
+                <div class="checkbox" style="margin-left: 12px;" *ngIf="!op.filtered">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="op.checked">{{getOperationShow(op.service)}}
+                    </label>
+                </div>
+            </ng-template>
         </div>
     </div>
 
     <button class="btn btn-xs btn-default" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
-        Add<span class="glyphicon glyphicon-chevron-down"></span>
+        Add <span class="glyphicon glyphicon-chevron-down"></span>
     </button>
 
     <div class="panel panel-default vbox">

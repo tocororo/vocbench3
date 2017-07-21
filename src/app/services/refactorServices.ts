@@ -3,7 +3,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
-import { VBPreferences } from "../utils/VBPreferences";
+import { VBProperties } from "../utils/VBProperties";
 import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
 
 @Injectable()
@@ -12,7 +12,7 @@ export class RefactorServices {
     private serviceName = "Refactor";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBPreferences) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBProperties) { }
 
     /**
      * Refactors SKOS data (labels and notes) into SKOSXL

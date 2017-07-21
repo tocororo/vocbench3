@@ -6,7 +6,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBPreferences } from "../../../../utils/VBPreferences";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -34,7 +34,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBPreferences, private creationModals: CreationModalServices,
+        private eventHandler: VBEventHandler, private preferences: VBProperties, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
 

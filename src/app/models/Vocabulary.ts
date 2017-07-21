@@ -203,13 +203,23 @@ export class XmlSchema { //all resources here have role "individual" (don't know
     public static unsignedLong = new ARTURIResource(XmlSchema.namespace + "unsignedLong", "xsd:unsignedLong", RDFResourceRolesEnum.individual);
 	public static unsignedShort = new ARTURIResource(XmlSchema.namespace + "unsignedShort", "xsd:unsignedShort", RDFResourceRolesEnum.individual);
 
+    public static DATATYPES: ARTURIResource[] = [
+        XmlSchema.boolean, XmlSchema.date, XmlSchema.dateTime, XmlSchema.float,
+        XmlSchema.integer, XmlSchema.string, XmlSchema.time
+    ];
 }
 
 
-export class DC {
+export class DCT {
     public static uri = "http://purl.org/dc/terms";
-    public static namespace = DC.uri + "/";
+    public static namespace = DCT.uri + "/";
     //PROPERTIES
-    public static created = new ARTURIResource(DC.namespace + "created", "dc:created", RDFResourceRolesEnum.property);
-    public static modified = new ARTURIResource(DC.namespace + "modified", "dc:modified", RDFResourceRolesEnum.property);
+    public static created = new ARTURIResource(DCT.namespace + "created", "dct:created", RDFResourceRolesEnum.property);
+    public static modified = new ARTURIResource(DCT.namespace + "modified", "dct:modified", RDFResourceRolesEnum.property);
+}
+
+
+export class SemanticTurkey {
+    public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
+    public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
 }

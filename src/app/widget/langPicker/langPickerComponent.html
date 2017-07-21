@@ -1,5 +1,7 @@
-<select [ngModel]="language" (ngModelChange)="onLangChange($event)" [class]="selectClass" style="margin-right: 4px;" 
-    [disabled]="disabled">
-    <option *ngFor="let l of languageList" [value]="l.tag">{{l.name}} ({{l.tag}})</option>
-</select>
-<img [src]="getFlagImgSrc()" />
+<span [title]="getMenuTitle()" style="display: flex; align-items: center;">
+    <select [ngModel]="language" (ngModelChange)="onLangChange($event)" [class]="selectClass" style="margin-right: 4px;" 
+        [disabled]="isDisabled()">
+        <option *ngFor="let l of languageList" [value]="l.tag">{{l.name}} ({{l.tag}})</option>
+    </select>
+    <img [src]="getFlagImgSrc()" [ngClass]="{ disabled : isDisabled() }"/>
+</span>

@@ -95,7 +95,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     private isChangeFacetDisabled(facet: Facet) {
-        return (!facet.explicit || this.readonly || AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource));
+        return (!facet.explicit || this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource));
     }
 
 }

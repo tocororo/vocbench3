@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
 import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
 import { OWL, RDFS } from "../../../models/Vocabulary";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBPreferences } from "../../../utils/VBPreferences";
+import { VBProperties } from "../../../utils/VBProperties";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
@@ -17,8 +18,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     @Input() root: boolean = false;
 
-    constructor(private clsService: ClassesServices, private pref: VBPreferences, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private clsService: ClassesServices, private pref: VBProperties, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
+        super(eventHandler, basicModals);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(

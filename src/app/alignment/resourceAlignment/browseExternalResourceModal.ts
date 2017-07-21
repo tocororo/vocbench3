@@ -3,11 +3,12 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
+import { HttpServiceContext } from "../../utils/HttpManager";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
 import { SKOS } from "../../models/Vocabulary";
 import { ProjectServices } from "../../services/projectServices";
-import { PreferencesServices } from "../../services/preferencesServices";
+import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 
 @Component({
     selector: "browse-external-resource-modal",
@@ -25,7 +26,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
 
 
     constructor(public dialog: DialogRef<BSModalContext>, public projService: ProjectServices,
-        private preferenceService: PreferencesServices) {
+        private preferenceService: PreferencesSettingsServices) {
         this.context = dialog.context;
     }
 
@@ -43,8 +44,8 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
     }
 
     private onProjectChange() {
-        VBContext.removeContextProject();
-        VBContext.setContextProject(this.project);
+        HttpServiceContext.removeContextProject();
+        HttpServiceContext.setContextProject(this.project);
         this.activeView = null;
         this.alignedObject = null;
         
@@ -84,13 +85,13 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
     }
 
     ok(event: Event) {
-        VBContext.removeContextProject();
+        HttpServiceContext.removeContextProject();
         event.stopPropagation();
         this.dialog.close(this.alignedObject);
     }
 
     cancel() {
-        VBContext.removeContextProject();
+        HttpServiceContext.removeContextProject();
         this.dialog.dismiss();
     }
 

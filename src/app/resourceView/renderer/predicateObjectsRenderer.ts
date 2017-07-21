@@ -5,7 +5,7 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator"
 
 @Component({
     selector: "pred-obj-renderer",
-    templateUrl: "./predicateObjectsRenderer.html",
+    templateUrl: "./predicateObjectsRenderer.html"
 })
 export class PredicateObjectsRenderer {
 

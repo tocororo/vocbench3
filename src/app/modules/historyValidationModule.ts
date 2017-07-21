@@ -8,6 +8,7 @@ import { HistoryComponent } from '../historyValidation/historyComponent';
 import { ValidationComponent } from '../historyValidation/validationComponent';
 import { HistoryFilterComponent } from '../historyValidation/historyFilterComponent';
 import { CommitDeltaModal } from '../historyValidation/commitDeltaModal';
+import { OperationParamsModal } from '../historyValidation/operationParamsModal';
 import { OperationSelectModal } from '../historyValidation/operationSelectModal';
 
 @NgModule({
@@ -17,14 +18,14 @@ import { OperationSelectModal } from '../historyValidation/operationSelectModal'
     declarations: [
         HistoryComponent, ValidationComponent, HistoryFilterComponent,
         //modals
-        OperationSelectModal, CommitDeltaModal
+        OperationSelectModal, CommitDeltaModal, OperationParamsModal
     ],
     exports: [
         HistoryComponent, ValidationComponent
     ],
     providers: [],
     entryComponents: [
-        OperationSelectModal, CommitDeltaModal
+        OperationSelectModal, CommitDeltaModal, OperationParamsModal
     ]
 })
 export class HistoryValidationModule { }

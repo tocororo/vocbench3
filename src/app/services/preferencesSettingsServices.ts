@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
+import { Project } from "../models/Project";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 
 @Injectable()
-export class PreferencesServices {
+export class PreferencesSettingsServices {
 
-    private serviceName = "Preferences";
+    private serviceName = "PreferencesSettings";
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -62,6 +63,18 @@ export class PreferencesServices {
     }
 
     /**
+     * 
+     * @param themeId 
+     */
+    setProjectTheme(themeId: number) {
+        console.log("[PreferencesServices] setProjectTheme");
+        var params: any = {
+            themeId: themeId
+        }
+        return this.httpMgr.doPost(this.serviceName, "setProjectTheme", params, true);
+    }
+
+    /**
      * Returns the active schemes for the given project
      * @param projectName 
      */
@@ -84,10 +97,72 @@ export class PreferencesServices {
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getProjectPreferences() {
+    getProjectPreferences(properties: string[], pluginID?: string) {
+        console.log("properties", properties);
         console.log("[PreferencesServices] getProjectPreferences");
-        var params = {};
+        var params: any = {
+            properties: properties
+        };
+        if (pluginID != null) {
+            params.pluginID = pluginID
+        }
         return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true);
+    }
+
+    /**
+     * Gets the settings for the currently open project
+     * @param properties 
+     * @param project 
+     */
+    getProjectSettings(properties: string[], project?: Project) {
+        console.log("[PreferencesServices] getProjectSettings");
+        var params: any = {
+            properties: properties
+        };
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true);
+    }
+
+    /**
+     * @param property 
+     * @param project 
+     */
+    setProjectSetting(property: string, value?: string, project?: Project) {
+        console.log("[PreferencesServices] setProjectSetting");
+        var params: any = {
+            property: property,
+        };
+        if (value != null) {
+            params.value = value;
+        }
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        return this.httpMgr.doPost(this.serviceName, "setProjectSetting", params, true);
+    }
+
+    /**
+     * Gets the default project settings
+     * @param properties 
+     */
+    getDefaultProjectSettings(properties: string[]) {
+        console.log("[PreferencesServices] getDefaultProjectSettings");
+        var params = {
+            properties: properties
+        };
+        return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params, true);
+    }
+
+    /**
+     * Gets the default project settings
+     * @param properties 
+     */
+    getSystemLanguages() {
+        console.log("[PreferencesServices] getSystemLanguages");
+        var params = {};
+        return this.httpMgr.doGet(this.serviceName, "getSystemLanguages", params, true);
     }
 
 }

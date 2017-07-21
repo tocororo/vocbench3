@@ -18,12 +18,14 @@ export class VersionsServices {
      */
     getVersions(): Observable<VersionInfo[]> {
         console.log("[VersionsServices] getVersions");
-        var params: any = {};
+        var params: any = {
+            setRepositoryStatus: true
+        };
         return this.httpMgr.doGet(this.serviceName, "getVersions", params, true).map(
             stResp => {
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime));
+                    let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime), stResp[i].repositoryStatus);
                     versions.push(v);
                 }
                 //sort by date
@@ -65,6 +67,18 @@ export class VersionsServices {
             params.repoConfigurerSpecification = JSON.stringify(repoConfigurerSpecification);
         }
         return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, true);
+    }
+
+    /**
+     * 
+     * @param versionId 
+     */
+    closeVersion(versionId: string) {
+        console.log("[VersionsServices] closeVersion");
+        var params: any = {
+            versionId: versionId
+        };
+        return this.httpMgr.doPost(this.serviceName, "closeVersion", params, true);
     }
 
 

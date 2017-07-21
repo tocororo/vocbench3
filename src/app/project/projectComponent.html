@@ -3,12 +3,12 @@
     <div style="margin-bottom: 10px;">
         <div class="btn-group btn-group-sm">
             <button type="button" class="btn btn-default" (click)="createProject()">Create</button>
-            <button type="button" class="btn btn-default" (click)="importProject()">Import</button>
-        </div>
-        <div class="btn-group btn-group-sm">
             <button type="button" class="btn btn-default" (click)="deleteProject()" [disabled]="!selectedProject">Delete</button>
-            <button type="button" class="btn btn-default" (click)="exportProject()" [disabled]="!selectedProject">Export</button>
         </div>
+        <!--<div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-default" (click)="importProject()">Import</button>
+            <button type="button" class="btn btn-default" (click)="exportProject()" [disabled]="!selectedProject">Export</button>
+        </div>-->
 
         <div class="btn-group btn-group-sm pull-right">
             <button type="button" class="btn btn-default" (click)="openPropertyModal()" title="Show project properties" [disabled]="!selectedProject">
@@ -28,7 +28,6 @@
                     <th class="text-center">Accessed</th>
                     <th class="text-center">Open/Close</th>
                     <th class="text-center">Project Name</th>
-                    <th class="text-center">Type</th>
                     <th class="text-center">Model</th>
                     <th class="text-center">Lexicalization Model</th>
                     <th class="text-center">History</th>
@@ -51,13 +50,6 @@
                     </td>
                     <td class="text-center">
                         {{p.getName()}}
-                    </td>
-                    <td class="text-center">
-                        {{p.getType()}}
-                        <button *ngIf="p.getType() == 'saveToStore'" class="btn btn-default btn-xs" (click)="saveProject(p)"
-                            title="Save project" [disabled]="!p.isOpen()">
-                            <span class="glyphicon glyphicon-floppy-disk"></span>
-                        </button>
                     </td>
                     <td class="text-center">{{p.getModelType(true)}}</td>
                     <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>

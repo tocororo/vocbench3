@@ -27,6 +27,8 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
     context: NewSkosResourceCfModalData;
 
     @ViewChild("toFocus") inputToFocus: ElementRef;
+    
+    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     //standard form
     private label: string;
@@ -47,6 +49,9 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
 
     ngAfterViewInit() {
         this.inputToFocus.nativeElement.focus();
+        setTimeout(() => {
+            this.viewInitialized = true;
+        });
     }
 
     private onLangChange(newLang: string) {
@@ -60,7 +65,7 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
     }
 
     isStandardFormDataValid(): boolean {
-        return (this.label != undefined && this.label.trim() != "");
+        return (this.label != undefined && this.label.trim() != "" && this.lang != null);
     }
 
     ok(event: Event) {
@@ -72,13 +77,17 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
         var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
-            cls: this.resourceClass,
+            cls: null,
             cfId: this.customFormId,
             cfValueMap: entryMap
         }
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
+        }
+        //set class only if not the default
+        if (this.resourceClass.getURI() != this.context.cls.getURI()) {
+            returnedData.cls = this.resourceClass;
         }
         this.dialog.close(returnedData);
     }

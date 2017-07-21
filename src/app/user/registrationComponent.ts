@@ -72,7 +72,7 @@ export class RegistrationComponent {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.birthday, this.userForm.gender, this.userForm.country, this.userForm.address, this.userForm.affiliation,
-            this.userForm.url, this.userForm.phone).subscribe(
+            this.userForm.url, this.userForm.phone, this.userForm.languageProficiencies).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var message: string;

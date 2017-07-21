@@ -23,6 +23,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     @ViewChild(PropertyTreeComponent) viewChildTree: PropertyTreeComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.property;
+    rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private propService: PropertyServices, private searchService: SearchServices,
         private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {

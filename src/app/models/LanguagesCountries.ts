@@ -1,3 +1,6 @@
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+
 export class Countries {
     
     static countryList = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
@@ -34,36 +37,83 @@ export class Countries {
 }
 
 export class Languages {
-    
-    static languageList: {name: string, tag: string}[] = [
-        { name: "Arabic", tag: "ar" },
-        { name: "Czech", tag: "cs" },
-        { name: "German", tag: "de" },
-        { name: "Greek", tag: "el" },
-        { name: "English", tag: "en" },
-        { name: "English American", tag: "en-US" },
-        { name: "English British", tag: "en-GB" },
-        { name: "Spanish", tag: "es" },
-        { name: "French", tag: "fr" },
-        { name: "Hindi", tag: "hi" },
-        { name: "Italian", tag: "it" },
-        { name: "Japanese", tag: "ja" },
-        { name: "Korean", tag: "ko" },
-        { name: "Dutch", tag: "nl" },
-        { name: "Portuguese", tag: "pt" },
-        { name: "Russian", tag: "ru" },
-        { name: "Thai", tag: "th" },
-        { name: "Turkish", tag: "tr" },
-        { name: "Ukrainian", tag: "uk" },
-        { name: "Chinese", tag: "zh" }
-    ];
 
-    static getLanguageTagList(): string[] {
-        var langTags: string[] = [];
-        for (var i = 0; i < Languages.languageList.length; i++) {
-            langTags.push(Languages.languageList[i].tag);
-        }
-        return langTags;
-    }
+    private static systemLanguages: Language[];
+    static priorityLangs = ["en", "fr", "it", "es", "de"];
     
+    static setSystemLanguages(langs: Language[]) {
+        this.systemLanguages = langs;
+    }
+
+    static getSystemLanguages(): Language[] {
+        return this.systemLanguages;
+    }
+
+    static sortLanguages(languages: Language[]) {
+        languages.sort(
+            function (l1: Language, l2: Language) {
+                if (l1.tag > l2.tag) return 1;
+                if (l1.tag < l2.tag) return -1;
+                return 0;
+            }
+        );
+    }
+
+    static containsLanguage(languages: Language[], lang: Language) {
+        for (var i = 0; i < languages.length; i++) {
+            if (languages[i].tag == lang.tag) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static fromTagsToLanguages(tags: string[]): Language[] {
+        let languages: Language[] = [];
+        for (var i = 0; i < tags.length; i++) {
+            let lang: Language = Languages.getLanguageFromTag(tags[i]);
+            if (lang != null) {
+                languages.push(lang)
+            }
+        }
+        return languages;
+    }
+
+    static fromLanguagesToTags(languages: Language[]) {
+        let tags: string[] = [];
+        for (var i = 0; i < languages.length; i++) {
+            tags.push(languages[i].tag);
+        }
+        return tags;
+    }
+
+    static getLanguageFromTag(tag: string): Language {
+        for (var i = 0; i < Languages.systemLanguages.length; i++) {
+            if (Languages.systemLanguages[i].tag == tag) {
+                return Languages.systemLanguages[i];
+            }
+        }
+    }
+
+    static initSystemLanguage(prefSettingService: PreferencesSettingsServices, basicModals: BasicModalServices) {
+        if (Languages.getSystemLanguages() == null) {
+            prefSettingService.getSystemLanguages().subscribe(
+                stResp => {
+                    try {
+                        var systemLanguages = <Language[]>JSON.parse(stResp);
+                        Languages.sortLanguages(systemLanguages);
+                        Languages.systemLanguages = systemLanguages;
+                    } catch (err) {
+                        basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
+                            "'languages' property. Please, report this to the system administrator.", "error");
+                    }
+                }
+            );
+        }
+    }
+}
+
+export class Language {
+    public name: string;
+    public tag: string;
 }

@@ -3,7 +3,7 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
-import { VBPreferences } from "../../utils/VBPreferences";
+import { VBProperties } from "../../utils/VBProperties";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { ClassesServices } from "../../services/classesServices";
@@ -18,7 +18,7 @@ export class DanglingXLabelComponent {
     private brokenLabelList: Array<ARTResource>;
 
     constructor(private icvService: IcvServices, private classesService: ClassesServices,
-        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBPreferences) { }
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) { }
 
     /**
      * Run the check

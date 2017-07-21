@@ -9,8 +9,7 @@ import { PluginSpecification } from '../models/Plugins';
 @Injectable()
 export class ProjectServices {
 
-    private serviceName_old = "Projects";
-    private serviceName = "Projects2";
+    private serviceName = "Projects";
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -54,7 +53,6 @@ export class ProjectServices {
                     proj.setLexicalizationModelType(projCollJson[i].lexicalizationModel);
                     proj.setOpen(projCollJson[i].open);
                     proj.setStatus(projCollJson[i].status);
-                    proj.setType(projCollJson[i].type);
                     projectList.push(proj);
                 }
                 return projectList;
@@ -80,7 +78,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName_old, "disconnectFromProject", params).map(
+        return this.httpMgr.doPost(this.serviceName, "disconnectFromProject", params, true).map(
             stResp => {
                 return stResp;
             }
@@ -99,7 +97,7 @@ export class ProjectServices {
             requestedAccessLevel: "RW",
             requestedLockLevel: "NO"
         };
-        return this.httpMgr.doGet(this.serviceName_old, "accessProject", params);
+        return this.httpMgr.doPost(this.serviceName, "accessProject", params, true);
     }
 
     /**
@@ -162,7 +160,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName(),
         };
-        return this.httpMgr.doGet(this.serviceName_old, "deleteProject", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteProject", params, true);
     }
 
     /**
@@ -176,7 +174,7 @@ export class ProjectServices {
             newProjectName: projectName,
             importPackage: projectFile
         };
-        return this.httpMgr.uploadFile(this.serviceName_old, "importProject", data);
+        return this.httpMgr.uploadFile(this.serviceName, "importProject", data, true);
     }
 
     /**
@@ -188,19 +186,7 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.downloadFile(this.serviceName_old, "exportProject", params);
-    }
-
-    /**
-     * Saves the given (not persistent) project
-     * @param project the project to save
-     */
-    saveProject(project: Project) {
-        console.log("[ProjectServices] saveProject");
-        var params = {
-            project: project.getName()
-        };
-        return this.httpMgr.doGet(this.serviceName_old, "saveProject", params);
+        return this.httpMgr.downloadFile(this.serviceName, "exportProject", params, true);
     }
 
     /**
@@ -212,70 +198,20 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName_old, "getProjectPropertyMap", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params, true).map(
             stResp => {
+                var propCollJson: any[] = stResp;
                 var propertyList: Array<any> = [];
-                var propertyElemColl: HTMLCollection = stResp.getElementsByTagName("property");
-                for (var i = 0; i < propertyElemColl.length; i++) {
+                for (var i = 0; i < propCollJson.length; i++) {
                     var prop: any = {};
-                    prop.name = propertyElemColl[i].getAttribute("name");
-                    prop.value = propertyElemColl[i].getAttribute("value");
+                    prop.name = propCollJson[i].name;
+                    prop.value = propCollJson[i].value;
                     propertyList.push(prop);
                 }
                 return propertyList;
             }
         );
     }
-
-    /**
-     * 
-     */
-    // getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
-    //     console.log("[ProjectServices] getAccessStatusMap");
-    //     var params = { };
-    //     return this.httpMgr.doGet(this.serviceName_old, "getAccessStatusMap", params).map(
-    //         stResp => {
-    //             var aclMap: {name: string, consumers: any[], lock: any}[] = [];
-
-    //             var projectElemColl: NodeListOf<Element> = stResp.getElementsByTagName("project");
-    //             for (var i = 0; i < projectElemColl.length; i++) {
-
-    //                 let name = projectElemColl[i].getAttribute("name");
-                    
-    //                 //<consumer> elements
-    //                 let consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[] = [];
-
-    //                 let consumerElemColl: NodeListOf<Element> = projectElemColl[i].getElementsByTagName("consumer");
-    //                 for (var j = 0; j < consumerElemColl.length; j++) {
-    //                     let consumer: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel};
-    //                     consumer = {
-    //                         name: consumerElemColl[j].getAttribute("name"),
-    //                         availableACLLevel: <AccessLevel> consumerElemColl[j].getAttribute("availableACLLevel"),
-    //                         acquiredACLLevel: <AccessLevel> consumerElemColl[j].getAttribute("acquiredACLLevel")
-    //                     }
-    //                     consumers.push(consumer);
-    //                 }
-    //                 //<lock> element
-    //                 let projectLock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
-
-    //                 let lockElem: Element = projectElemColl[i].getElementsByTagName("lock")[0];
-    //                 projectLock = {
-    //                     availableLockLevel: <LockLevel> lockElem.getAttribute("availableLockLevel"),
-    //                     lockingConsumer: lockElem.getAttribute("lockingConsumer"),
-    //                     acquiredLockLevel: <LockLevel> lockElem.getAttribute("acquiredLockLevel")
-    //                 };
-
-    //                 aclMap.push({
-    //                     name: name,
-    //                     consumers: consumers,
-    //                     lock: projectLock
-    //                 });
-    //             }
-
-    //             return aclMap;
-    //         }
-    //     );
-    // }
 
     getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
         console.log("[ProjectServices] getAccessStatusMap");
@@ -361,7 +297,7 @@ export class ProjectServices {
             projectName: project.getName(),
             lockLevel: lockLevel,
         };
-        return this.httpMgr.doGet(this.serviceName_old, "updateLockLevel", params);
+        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params, true);
     }
 
 }

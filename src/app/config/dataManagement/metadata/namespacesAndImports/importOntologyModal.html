@@ -75,10 +75,7 @@
                 <td><label>Resolve transitive imports from:</label></td>
                 <td>
                     <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance">
-                        <option value="web">Web</option>
-                        <option value="webFallbackToMirror">Web with fallback to Ontology Mirror</option>
-                        <option value="mirror">Ontology Mirror</option>
-                        <option value="mirrorFallbackToWeb">Ontology Mirror with fallback to Web</option>
+                        <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
                     </select>                    
                 </td>
             </tr>

@@ -2,7 +2,8 @@
 
     <div class="btn-group pull-right" style="margin-bottom: 5px">
         <button class="btn btn-default" [routerLink]="['/Metadata/Imports']" routerLinkActive="active">Namespaces and Imports</button>
-        <button class="btn btn-default" [routerLink]="['/Metadata/Vocabularies']" routerLinkActive="active">Metadata Vocabularies</button>
+        <button class="btn btn-default" [routerLink]="['/Metadata/Vocabularies']" [disabled]="!isMetadataVocAuthorized()"
+            routerLinkActive="active">Metadata Vocabularies</button>
     </div>
     <router-outlet></router-outlet>
 

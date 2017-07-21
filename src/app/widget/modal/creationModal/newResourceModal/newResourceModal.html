@@ -28,6 +28,10 @@
         </tbody>
     </table>
 
+    <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="margin-top: 5px;">
+        You cannot create resources. You have no language assigned for the current project.
+    </div>
+
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>

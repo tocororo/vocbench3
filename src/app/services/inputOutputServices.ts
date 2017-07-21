@@ -1,12 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpManager} from "../utils/HttpManager";
-import {VBEventHandler} from "../utils/VBEventHandler";
+import { Injectable } from '@angular/core';
+import { HttpManager } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { RDFFormat } from "../models/RDFFormat";
+import { TransitiveImportMethodAllowance } from "../models/Metadata";
 
 @Injectable()
 export class InputOutputServices {
 
-    private serviceName = "InputOutput2";
+    private serviceName = "InputOutput";
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
@@ -17,15 +18,18 @@ export class InputOutputServices {
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      * @param format the serialization format of the file
      */
-    loadRDF(file: File, baseURI: string, transitiveImportAllowance: string, format?: RDFFormat) {
+    loadRDF(file: File, baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, format?: RDFFormat, validateImplicitly?: boolean) {
         console.log("[InputOutputServices] loadRDF");
         var data: any = {
             inputFile: file,
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance
         }
-        if (format != undefined) {
+        if (format != null) {
             data.rdfFormat = format.name;
+        }
+        if (validateImplicitly != null) {
+            data.validateImplicitly = validateImplicitly;
         }
         return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, true).map(
             stResp => {
@@ -34,7 +38,31 @@ export class InputOutputServices {
             }
         );
     }
-    
+
+    /**
+     * Tries to match the extension of a file name against the list of RDF formats that can be parsed
+     * @param fileName 
+     */
+    getParserFormatForFileName(fileName: string) {
+        console.log("[InputOutputServices] getParserFormatForFileName");
+        var params: any = {
+            fileName: fileName
+        }
+        return this.httpMgr.doGet(this.serviceName, "getParserFormatForFileName", params, true);
+    }
+
+    /**
+     * Tries to match the extension of a file name against the list of RDF formats that can be written
+     * @param fileName 
+     */
+    getWriterFormatForFileName(fileName: string) {
+        console.log("[InputOutputServices] getWriterFormatForFileName");
+        var params: any = {
+            fileName: fileName
+        }
+        return this.httpMgr.doGet(this.serviceName, "getWriterFormatForFileName", params, true);
+    }
+
     /**
      * Deletes all the data of the current project model
      */

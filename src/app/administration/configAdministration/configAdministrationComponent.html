@@ -1,17 +1,14 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <label>VocBench Configuration</label>
-        </div>
+     <div class="panel panel-default vbox"> 
 
-        <div class="panel-body">
+         <div class="panel-body vbox"> 
 
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
-                    <label>Email properties:</label>
+            <div class="panel panel-default vbox">
+                <div class="panel-heading">
+                    <label>VocBench Configuration:</label>
                 </div>
-                <div class="subPanel-body" style="flex: 1;">
+                <div class="panel-body vbox" style="flex: 1;">
                     <table class="table table-condensed table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
@@ -78,13 +75,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="subPanel-footer">
+                <div class="panel-footer">
                     <button type="submit" class="btn btn-default btn-sm pull-right" (click)="submitChange()" [disabled]="!isConfigChanged()">Submit</button>
                 </div>
             </div>
 
-        </div>
+         </div>
 
-    </div>
+    </div> 
 
 </div>

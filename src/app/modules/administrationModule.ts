@@ -5,16 +5,18 @@ import { SharedModule } from './sharedModule';
 import { UserModule } from './userModule'; //just for UserCreateComponent
 
 import { AdministrationComponent } from "../administration/administrationComponent";
-import { UsersAdministrationComponent } from "../administration/usersAdministrationComponent";
-import { RolesAdministrationComponent } from "../administration/rolesAdministrationComponent";
-import { ConfigAdministrationComponent } from "../administration/configAdministrationComponent";
-import { ProjectsAdministrationComponent } from "../administration/projectsAdministrationComponent";
+import { UsersAdministrationComponent } from "../administration/usersAdministration/usersAdministrationComponent";
+import { RolesAdministrationComponent } from "../administration/rolesAdministration/rolesAdministrationComponent";
+import { ConfigAdministrationComponent } from "../administration/configAdministration/configAdministrationComponent";
+import { ProjectsAdministrationComponent } from "../administration/projectsAdministration/projectsAdministrationComponent";
+import { ProjectUsersManagerComponent } from "../administration/projectsAdministration/projectUsersManagerComponent";
+import { ProjectSettingsComponent } from "../administration/projectsAdministration/projectSettingsComponent";
 
 //modals
-import { UserProjBindingModal } from "../administration/administrationModals/userProjBindingModal";
-import { CapabilityEditorModal } from "../administration/administrationModals/capabilityEditorModal";
-import { ImportRoleModal } from "../administration/administrationModals/importRoleModal";
-import { UserCreateModal } from "../administration/administrationModals/userCreateModal";
+import { UserProjBindingModal } from "../administration/projectsAdministration/userProjBindingModal";
+import { CapabilityEditorModal } from "../administration/rolesAdministration/capabilityEditorModal";
+import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
+import { UserCreateModal } from "../administration/usersAdministration/userCreateModal";
 
 import { adminRouting } from "../administration/administrationRoutes";
 
@@ -23,6 +25,7 @@ import { adminRouting } from "../administration/administrationRoutes";
     declarations: [
         AdministrationComponent,
         UsersAdministrationComponent, RolesAdministrationComponent, ConfigAdministrationComponent, ProjectsAdministrationComponent,
+        ProjectUsersManagerComponent, ProjectSettingsComponent,
         //modals
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal
     ],

@@ -163,7 +163,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
     private addSuggestionClass() {
         this.browsingModals.browseClassTree("Add class as suggestion").then(
             cls => {
-                if (!ResourceUtils.containsResource(this.suggestions, cls)) {
+                if (!ResourceUtils.containsNode(this.suggestions, cls)) {
                     this.suggestions.push(cls);
                 }
             }
@@ -173,7 +173,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
     private addSuggestionProperty() {
         this.browsingModals.browsePropertyTree("Add property as suggestion").then(
             prop => {
-                if (!ResourceUtils.containsResource(this.suggestions, prop)) {
+                if (!ResourceUtils.containsNode(this.suggestions, prop)) {
                     this.suggestions.push(prop);
                 }
             }

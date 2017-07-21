@@ -99,7 +99,6 @@ config-bar {
 
 resource-view-panel {
     display: flex;
-    flex: 3;
 }
 
 resource-view-splitted, resource-view-tabbed {
@@ -109,7 +108,7 @@ resource-view-splitted, resource-view-tabbed {
 
 tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, instance-list-panel, property-tree-panel,
 collection-tree-panel, concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list,
-class-individual-tree, resource-view, scheme-selection, data-range-editor {
+class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
     min-height: 0;
@@ -143,6 +142,15 @@ rdf-resource > .rdfResourceIcon {
     margin-right: 5px;
 }
 
+.stagingAdd {
+    color: green; font-style: italic;
+}
+
+.stagingRemove {
+    color: darkred;
+    text-decoration: line-through; 
+}
+
 .flagIcon {
     position: relative;
 }
@@ -161,14 +169,6 @@ rdf-resource > .rdfResourceIcon {
     overflow: hidden;
     text-align: center;
 }
-
-.treeNode > rdf-resource {
-    min-height: 24px;
-}
-
-/*instance-list rdf-resource {
-    min-height: 24px;
-}*/
 
 class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
 collection-tree rdf-resource:hover, scheme-list rdf-resource:hover, property-tree rdf-resource:hover,
@@ -210,6 +210,7 @@ editable-resource {
 }
 .treeNode rdf-resource {
     flex: 1;
+    min-height: 24px;
 }
 
 .expandCollapseBtnContainer > img {
@@ -261,6 +262,7 @@ img.disabled  {
     width: 100%;
     min-height: 24px;
     display: flex;
+    align-items: center;
 }
 .listItem:hover {
     background-color: #e5f3ff;
@@ -383,11 +385,6 @@ input[type=number]::-webkit-outer-spin-button {
     min-width: 130px;
 }
  
-lang-picker {
-     display: flex; align-items: center;
-}
-
-
 codemirror .CodeMirror { 
     border: 1px solid #ddd; /*Border of textare of CodeMirror (just in codemirror, because in yasqe there is already)*/
     height: auto !important; 
@@ -492,6 +489,10 @@ button.resViewPartitionBtn:disabled  {
     transform: rotate(270deg);
 }
 
+.clickable:hover {
+    cursor: pointer;
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/
@@ -509,9 +510,19 @@ nav {
     border: 0;
 }
 
-.navbar-default {
-    background: #1E4387;
+/*.navbar-default, .navbar-collapse,
+.navbar-default .navbar-form {
+	background-color: #1b3671;
+    border-color: #152956;
 }
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+	background-color: #7486ab;
+}*/
 
 .navbar-brand {
     font-size: 18px;
@@ -538,7 +549,7 @@ nav {
 .panel-heading {
     display: flex;
     align-items: center;
-    min-height: 0px;
+    min-height: 30px;
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
 }

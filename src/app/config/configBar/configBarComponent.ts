@@ -9,6 +9,8 @@ import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
+import { HttpServiceContext } from "../../utils/HttpManager";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
@@ -42,7 +44,20 @@ export class ConfigBarComponent {
      * Returns the current version of the project
      */
     private getCtxVersion(): VersionInfo {
-        return VBContext.getContextVersion();
+        return HttpServiceContext.getContextVersion();
+    }
+
+    private isLoadDataAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INPUT_OUTPUT_LOAD_DATA);
+    }
+    private isExportDataAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.EXPORT_EXPORT);
+    }
+    private isClearDataAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INPUT_OUTPUT_CLEAR_DATA);
+    }
+    private isVersioningAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VERSIONS_GET_VERSIONS);
     }
 
     /**
@@ -63,30 +78,13 @@ export class ConfigBarComponent {
                 this.inOutService.clearData().subscribe(
                     stResp => {
                         this.basicModals.alert("Clear data", "All data cleared successfully!");
-                        //if project is not-persistent save it before closing
-                        if (VBContext.getWorkingProject().getType() == ProjectTypesEnum.saveToStore) {
-                            this.projectService.saveProject(VBContext.getWorkingProject()).subscribe(
-                                stResp => {
-                                    //then close project
-                                    this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
-                                        stResp => {
-                                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                            //then redirect to home page
-                                            this.router.navigate(['/Projects']);
-                                        }
-                                    );
-                                }
-                            )
-                        } else {
-                            //project is presistent, it doesn't need to be saved, just close the project
-                            this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
-                                stResp => {
-                                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                    //then redirect to home page
-                                    this.router.navigate(['/Projects']);
-                                }
-                            );
-                        }
+                        this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
+                            stResp => {
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                                //then redirect to home page
+                                this.router.navigate(['/Projects']);
+                            }
+                        );
                     }
                 );
             },

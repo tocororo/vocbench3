@@ -2,9 +2,10 @@
     <div class="panel-heading">
         <label style="flex: 1">Staged commits</label>
 
-        <div class="btn-group btn-group-xs" style="margin-right: 4px;" role="group">
+        <label style="white-space: pre">Operation sort: </label>
+        <div class="btn-group btn-group-xs" style="margin-right: 8px;" role="group">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span>Operation sort</span>
+                <span>{{operationSorting}}</span>
                 <span class="glyphicon glyphicon-sort-by-alphabet"></span>
             </button>
             <ul class="dropdown-menu pull-right">
@@ -16,9 +17,10 @@
             </ul>
         </div>
 
-        <div class="btn-group btn-group-xs" style="margin-right: 4px;" role="group">
+        <label style="white-space: pre">Time sort: </label>
+        <div class="btn-group btn-group-xs" style="margin-right: 8px;" role="group">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span>Time sort</span>
+                <span>{{timeSorting}}</span>
                 <span class="glyphicon glyphicon-sort-by-order"></span>
             </button>
             <ul class="dropdown-menu pull-right">
@@ -47,20 +49,22 @@
             <table class="table table-condensed table-hoverable">
                 <colgroup>
                     <col style="width: 1%">
+                    <!--<col>
                     <col>
                     <col>
-                    <col>
-                    <col>
+                    <col>-->
                 </colgroup>
                 <thead>
                     <tr>
                         <th class="text-center">Commit</th>
-                        <th class="text-center">Subject</th>
                         <th class="text-center">Action</th>
+                        <th class="text-center">1st Param</th>
+                        <th class="text-center" *ngIf="isLargeWidth()">2nd Param</th>
+                        <th class="text-center">Other param(s)</th>
                         <th class="text-center">User</th>
                         <th class="text-center">Date</th>
                         <th class="text-center">Validate</th>
-                        <th class="text-center">Notes</th>
+                        <!--<th class="text-center">Notes</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -69,14 +73,31 @@
                             <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="item.subject">
-                                {{item.subject.getURI()}}
-                            </span>
-                        </td>
-                        <td class="text-center">
                             <span *ngIf="item.operation" [title]="item.operation.getURI()">
                                 {{item.operation.getShow()}}
                             </span>
+                        </td>
+                        <td class="text-center">
+                            <ng-template [ngIf]="item.operationParameters.length != 0">
+                                <label style="white-space: pre;">{{item.operationParameters[0].name}}: </label>{{item.operationParameters[0].value}}
+                            </ng-template>
+                        </td>
+                        <td class="text-center" *ngIf="isLargeWidth()">
+                            <ng-template [ngIf]="item.operationParameters.length > 1">
+                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                            </ng-template>
+                        </td>
+                        <td class="text-center">
+                            <ng-template [ngIf]="!isLargeWidth() && item.operationParameters.length > 1">
+                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                            </ng-template>
+                            <ng-template [ngIf]="isLargeWidth() && item.operationParameters.length > 2">
+                                <label style="white-space: pre;">{{item.operationParameters[2].name}}: </label>{{item.operationParameters[2].value}}
+                            </ng-template>
+                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-default" (click)="inspectParams(item)"
+                                title="Show all parameters">
+                                <span class="glyphicon glyphicon-option-horizontal"></span>
+                            </button>
                         </td>
                         <td class="text-center">
                             <span *ngIf="item.user" [title]="item.user.getURI()">
@@ -88,12 +109,12 @@
                         </td>
                         <td>
                             <select class="form-control input-xs" [(ngModel)]="item.validationAction">
-                                <option *ngFor="let act of validationActions" [ngValue]="act.value">{{act.show}}</option>
+                                <option *ngFor="let act of validationActions" [ngValue]="act">{{act.show}}</option>
                             </select>
                         </td>
-                        <td>
+                        <!--<td>
                             <input class="form-control input-xs" [(ngModel)]="item.notes">
-                        </td>
+                        </td>-->
                     </tr>
                 </tbody>
             </table>

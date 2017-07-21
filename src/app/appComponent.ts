@@ -1,7 +1,11 @@
 import { Component } from "@angular/core";
 import { Project } from "./models/Project";
+import { SKOS, OWL } from "./models/Vocabulary";
+import { Language, Languages } from "./models/LanguagesCountries";
 import { VBContext } from "./utils/VBContext";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
+import { BasicModalServices } from "./widget/modal/basicModal/basicModalServices";
+import { PreferencesSettingsServices } from "./services/preferencesSettingsServices";
 
 import '../assets/styles/style.css';
 
@@ -11,6 +15,14 @@ import '../assets/styles/style.css';
 })
 
 export class AppComponent {
+
+    constructor(private prefSettingService: PreferencesSettingsServices, private basicModals: BasicModalServices) {}
+
+    ngOnInit() {
+        if (Languages.getSystemLanguages() == null) {
+            Languages.initSystemLanguage(this.prefSettingService, this.basicModals);
+        }
+    }
 
     /**
      * Returns true if the user is logged (an authentication token is stored)
@@ -56,12 +68,48 @@ export class AppComponent {
     /**
      * Authorizations
      */
+
     private isSparqlAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EXECUTE_QUERY);
+        return ( //authorized if one of update or query is authorized
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EVALUATE_QUERY) ||
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EXECUTE_UPDATE)
+        );
     }
+    
+    private isDataAuthorized() {
+        let modelType: string = VBContext.getWorkingProject().getModelType();
+        if (modelType == SKOS.uri) {
+            return (
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY) ||
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY) ||
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES) ||
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY) ||
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)
+            );
+        } else if (modelType == OWL.uri) {
+            return (
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY) ||
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)
+            );
+        }
+    }
+
+    private isHistoryAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.HISTORY);
+    }
+    
+    private isValidationAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VALIDATION);
+    }
+    
     private isCustomFormAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_READ);
+        return (
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_GET_FORM_MAPPINGS) &&
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_GET_COLLECTIONS) &&
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_GET_FORMS)
+        );
     }
+    
     private isAlignValidationAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_LOAD_ALIGNMENT);
     }

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
 import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
@@ -13,8 +14,8 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     //CollectionTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private skosService: SkosServices, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
+        super(eventHandler, basicModals);
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
             (deletedCollection: ARTResource) => this.onTreeNodeDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionCreatedEvent.subscribe(

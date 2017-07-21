@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
-import { VBContext } from "../utils/VBContext";
+import { HttpServiceContext } from "../utils/HttpManager";
 import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
 
 @Injectable()
@@ -349,7 +349,7 @@ export class AlignmentServices {
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "closeSession", params, true).map(
             stResp => {
-                VBContext.removeSessionToken();
+                HttpServiceContext.removeSessionToken();
                 return stResp;
             }
         );
@@ -388,7 +388,7 @@ export class AlignmentServices {
     }
 
     public setSessionToken(token: string) {
-        VBContext.setSessionToken(token);
+        HttpServiceContext.setSessionToken(token);
     }
 
 }

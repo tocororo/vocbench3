@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VBPreferences } from "../../utils/VBPreferences";
+import { VBProperties } from "../../utils/VBProperties";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -18,7 +18,7 @@ export class DanglingConceptComponent {
     private selectedScheme: ARTURIResource;
     private brokenConceptList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBPreferences,
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {

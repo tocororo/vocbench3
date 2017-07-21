@@ -1,32 +1,33 @@
-import {Component} from "@angular/core";
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
-import {CustomFormsServices} from "../services/customFormsServices";
-import {BasicModalServices} from "../widget/modal/basicModal/basicModalServices";
-import {FormCollMappingModal} from "./customFormConfigModals/formCollMappingModal"
-import {FormCollEditorModal, FormCollEditorModalData} from "./customFormConfigModals/formCollEditorModal"
-import {CustomFormEditorModal, CustomFormEditorModalData} from "./customFormConfigModals/customFormEditorModal"
-import {ImportCfModal, ImportCfModalData} from "./customFormConfigModals/importCfModal"
-import {ARTURIResource} from "../models/ARTResources";
-import {FormCollectionMapping, CustomForm, CustomFormLevel, FormCollection} from "../models/CustomForms";
+import { Component } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { OverlayConfig } from 'angular2-modal';
+import { CustomFormsServices } from "../services/customFormsServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingModal"
+import { FormCollEditorModal, FormCollEditorModalData } from "./customFormConfigModals/formCollEditorModal"
+import { CustomFormEditorModal, CustomFormEditorModalData } from "./customFormConfigModals/customFormEditorModal"
+import { ImportCfModal, ImportCfModalData } from "./customFormConfigModals/importCfModal"
+import { ARTURIResource } from "../models/ARTResources";
+import { FormCollectionMapping, CustomForm, CustomFormLevel, FormCollection } from "../models/CustomForms";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
-	selector: "custom-form-conf-component",
-	templateUrl: "./customFormConfComponent.html",
-    host: { class : "pageComponent" }
+    selector: "custom-form-conf-component",
+    templateUrl: "./customFormConfComponent.html",
+    host: { class: "pageComponent" }
 })
 export class CustomFormConfigComponent {
-    
+
     private cfConfigurationMap: Array<FormCollectionMapping>;
     private formCollectionList: Array<FormCollection>;
     private customFormList: Array<CustomForm>;
-    
+
     private selectedFormCollMapping: FormCollectionMapping;
     private selectedFormColl: FormCollection;
     private selectedCustomForm: CustomForm;
-    
-    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modal: Modal) {}
-    
+
+    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modal: Modal) { }
+
     ngOnInit() {
         this.initCFConfMap();
         this.initFormCollList();
@@ -36,10 +37,10 @@ export class CustomFormConfigComponent {
     /**
      * CF CONFIG MAP
      */
-    
+
     private initCFConfMap() {
         this.customFormsService.getCustomFormConfigMap().subscribe(
-            cfConfMap => { 
+            cfConfMap => {
                 this.cfConfigurationMap = cfConfMap;
                 this.selectedFormCollMapping = null;
             }
@@ -79,11 +80,11 @@ export class CustomFormConfigComponent {
                         }
                     )
                 },
-                () => {}                
+                () => { }
             )
         );
     }
-    
+
     private removeFormCollMapping() {
         this.customFormsService.removeFormCollectionOfResource(this.selectedFormCollMapping.getResource()).subscribe(
             stResp => {
@@ -93,14 +94,13 @@ export class CustomFormConfigComponent {
     }
 
     private changeReplaceToMapping(checked: boolean, fcMap: FormCollectionMapping) {
-        console.log("update replace")
         this.customFormsService.updateReplace(fcMap.getResource(), checked).subscribe();
     }
 
     /**
      * FORM COLLECTION
      */
-    
+
     private initFormCollList() {
         this.customFormsService.getAllFormCollections().subscribe(
             crList => {
@@ -110,7 +110,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-     private selectFormColl(fc: FormCollection) {
+    private selectFormColl(fc: FormCollection) {
         if (this.selectedFormColl == fc) {
             this.selectedFormColl = null;
         } else {
@@ -132,11 +132,11 @@ export class CustomFormConfigComponent {
         return this.modal.open(FormCollEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
                 res => this.initFormCollList(),
-                () => {}
+                () => { }
             )
         );
     }
-    
+
     private editFormCollection() {
         var modalData = new FormCollEditorModalData(this.selectedFormColl.getId(), [], (this.selectedFormColl.getLevel() == CustomFormLevel.system));
         const builder = new BSModalContextBuilder<FormCollEditorModalData>(
@@ -146,12 +146,12 @@ export class CustomFormConfigComponent {
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(FormCollEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
-                res => {},
-                () => {}
+                res => { },
+                () => { }
             )
         );
     }
-    
+
     private deleteFormCollection() {
         this.basicModals.confirm("Delete Form Collection", "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", "warning").then(
             confirm => {
@@ -162,7 +162,7 @@ export class CustomFormConfigComponent {
                     }
                 )
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -182,7 +182,7 @@ export class CustomFormConfigComponent {
                     }
                 )
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -210,7 +210,7 @@ export class CustomFormConfigComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             )
         );
     }
@@ -218,7 +218,7 @@ export class CustomFormConfigComponent {
     /**
      * CUSTOM FORM
      */
-    
+
     private initCustomFormList() {
         this.customFormsService.getAllCustomForms().subscribe(
             creList => {
@@ -227,7 +227,7 @@ export class CustomFormConfigComponent {
             }
         );
     }
-    
+
     private selectCustomForm(cf: CustomForm) {
         if (this.selectedCustomForm == cf) {
             this.selectedCustomForm = null;
@@ -235,7 +235,7 @@ export class CustomFormConfigComponent {
             this.selectedCustomForm = cf;
         }
     }
-    
+
     private createCustomForm() {
         var existingCustomFormIds: string[] = [];
         for (var i = 0; i < this.customFormList.length; i++) {
@@ -250,11 +250,11 @@ export class CustomFormConfigComponent {
         return this.modal.open(CustomFormEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
                 res => this.initCustomFormList(),
-                () => {}
+                () => { }
             )
         );
     }
-    
+
     private editCustomForm() {
         var modalData = new CustomFormEditorModalData(this.selectedCustomForm.getId(), [], (this.selectedCustomForm.getLevel() == CustomFormLevel.system));
         const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
@@ -264,8 +264,8 @@ export class CustomFormConfigComponent {
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(CustomFormEditorModal, overlayConfig).then(
             dialog => dialog.result.then(
-                res => {},
-                () => {}
+                res => { },
+                () => { }
             )
         );
     }
@@ -286,10 +286,10 @@ export class CustomFormConfigComponent {
                     }
                 )
             },
-            () => {}
+            () => { }
         );
     }
-    
+
     private deleteCustomForm() {
         this.customFormsService.isFormLinkedToCollection(this.selectedCustomForm.getId()).subscribe(
             result => {
@@ -307,10 +307,10 @@ export class CustomFormConfigComponent {
                                 }
                             );
                         },
-                        () => {}
-                    );
+                        () => { }
+                        );
                 } else { //selectedCustomForm does not belong to any FormCollection
-                    this.basicModals.confirm("Delete CustomForm", "You are deleting CustomForm " + this.selectedCustomForm.getId() + 
+                    this.basicModals.confirm("Delete CustomForm", "You are deleting CustomForm " + this.selectedCustomForm.getId() +
                         ". Are you sure?", "warning").then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(
@@ -319,8 +319,8 @@ export class CustomFormConfigComponent {
                                 }
                             );
                         },
-                        () => {}
-                    );
+                        () => { }
+                        );
                 }
             }
         )
@@ -350,9 +350,40 @@ export class CustomFormConfigComponent {
                         }
                     )
                 },
-                () => {}
+                () => { }
             )
         );
     }
-    
+
+    //Authorization handlers
+    private isCreateMappingAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_CREATE_FORM_MAPPING);
+    }
+    private isDeleteMappingAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_DELETE_FORM_MAPPING);
+    }
+    private isUpdateMappingAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_UPDATE_FORM_MAPPING);
+    }
+
+    private isCreateFormAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_CREATE_FORM);
+    }
+    private isDeleteFormAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_DELETE_FORM);
+    }
+    private isUpdateFormAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_UPDATE_FORM);
+    }
+
+    private isCreateCollectionAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_CREATE_COLLECTION);
+    }
+    private isDeleteCollectionAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_DELETE_COLLECTION);
+    }
+    private isUpdateCollectionAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_UPDATE_COLLECTION);
+    }
+
 }

@@ -1,0 +1,12 @@
+<span [title]="language.name + ' (' + language.tag + ')'">
+    <img *ngIf="getFlagImgSrc(language.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(language.tag)" 
+        [ngClass]="{ disabled : disabled }">
+    <span *ngIf="getFlagImgSrc(language.tag).indexOf('unknown') != -1" class="flagIcon">
+        <img [src]="getFlagImgSrc(language.tag)">
+        <span>{{language.tag}}</span>
+    </span>
+    {{language.name}} 
+    <span *ngIf="showTag">
+        ({{language.tag}})
+    </span>
+</span>    

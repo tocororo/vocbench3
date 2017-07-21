@@ -3,6 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UserForm } from "../models/User";
 import { Countries } from "../models/LanguagesCountries";
 import { UIUtils } from "../utils/UIUtils";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices"
 
 @Component({
     selector: "user-create",
@@ -22,7 +23,7 @@ export class UserCreateComponent {
 
     private form: UserForm = new UserForm();
 
-    constructor() { }
+    constructor(private sharedModals: SharedModalServices) { }
 
     ngAfterViewInit() {
         setTimeout(() => {
@@ -51,6 +52,16 @@ export class UserCreateComponent {
             this.form.iri = this.form.url;
         }
         this.propagateChange(this.form);
+    }
+
+    private editLanguages() {
+        this.sharedModals.selectLanguages("Language proficiencies", this.form.languageProficiencies).then(
+            langs => {
+                this.form.languageProficiencies = langs;
+                this.propagateChange(this.form);
+            },
+            () => {}
+        );
     }
 
     /**

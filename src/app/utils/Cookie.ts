@@ -1,13 +1,13 @@
 //https://github.com/BCJTI/ng2-cookies
 export class Cookie {
 	
-	public static VB_INFERENCE_IN_RES_VIEW = "inference_in_resource_view";
-	public static VB_RESOURCE_VIEW_MODE = "resource_view_mode";
+	public static VB_INFERENCE_IN_RES_VIEW = "resource_view.include_inference";
+	public static VB_RESOURCE_VIEW_MODE = "resource_view.mode";
 
-	public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_per_page";
-	public static ALIGNMENT_VALIDATION_RELATION_SHOW = "relation_show";
-	public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "show_confidence";
-	public static ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION = "rejected_alignment_action";
+	public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_validation.alignment_per_page";
+	public static ALIGNMENT_VALIDATION_RELATION_SHOW = "alignment_validation.relation_show";
+	public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "alignment_validation.show_confidence";
+	public static ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION = "alignment_validation.rejected_alignment_action";
 
 	/**
 	 * Retrieves a single cookie by it's name

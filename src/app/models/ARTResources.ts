@@ -1,10 +1,11 @@
-import { PrefixMapping } from "./PrefixMapping";
+import { PrefixMapping } from "./Metadata";
 
 export abstract class ARTNode {
 
     protected graphs: ARTURIResource[] = [];
+    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.mention; //default, so node without role are considered mention
 
-    constructor() {};
+    constructor() { };
 
     isResource(): boolean {
         return false;
@@ -15,13 +16,13 @@ export abstract class ARTNode {
     isLiteral(): boolean {
         return false;
     }
-    isBNode(): boolean{
+    isBNode(): boolean {
         return false;
     }
 
     abstract getNominalValue(): string;
     abstract getShow(): string;
-    
+
     setGraphs(graphs: ARTURIResource[]) {
         this.graphs = graphs;
     }
@@ -42,9 +43,16 @@ export abstract class ARTNode {
     getGraphs(): ARTURIResource[] {
         return this.graphs;
     }
-    
+
+    setRole(role: RDFResourceRolesEnum) {
+        this.role = role;
+    }
+    getRole(): RDFResourceRolesEnum {
+        return this.role;
+    }
+
     abstract toNT(): string;
-    
+
     setAdditionalProperty(propName: string, propValue: any): void {
         this[propName] = propValue;
     }
@@ -54,14 +62,13 @@ export abstract class ARTNode {
     getAdditionalProperty(propName: string) {
         return this[propName];
     }
-    
+
     abstract clone(): ARTNode;
 }
 
 export abstract class ARTResource extends ARTNode {
-    
+
     protected show: string;
-    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
 
     constructor(show?: string, role?: RDFResourceRolesEnum) {
         super();
@@ -71,13 +78,6 @@ export abstract class ARTResource extends ARTNode {
 
     isResource(): boolean {
         return true;
-    }
-
-    setRole(role: RDFResourceRolesEnum) {
-        this.role = role;
-    }
-    getRole(): RDFResourceRolesEnum {
-        return this.role;
     }
 
     setShow(show: string) {
@@ -114,17 +114,17 @@ export class ARTURIResource extends ARTResource {
 
     getBaseURI() {
         if (this.uri.lastIndexOf("#") > -1) {
-            return this.uri.substring(0, this.uri.lastIndexOf("#")+1);
+            return this.uri.substring(0, this.uri.lastIndexOf("#") + 1);
         } else {
-            return this.uri.substring(0, this.uri.lastIndexOf("/")+1);
+            return this.uri.substring(0, this.uri.lastIndexOf("/") + 1);
         }
     }
-    
+
     getLocalName() {
         if (this.uri.lastIndexOf("#") > -1) {
-            return this.uri.substring(this.uri.lastIndexOf("#")+1);
+            return this.uri.substring(this.uri.lastIndexOf("#") + 1);
         } else {
-            return this.uri.substring(this.uri.lastIndexOf("/")+1);
+            return this.uri.substring(this.uri.lastIndexOf("/") + 1);
         }
     }
 
@@ -274,11 +274,10 @@ export class ARTPredicateObjects {
 }
 
 export class ResAttribute {
-    
+
     public static SHOW = "show";
     public static QNAME = "qname";
     public static ROLE = "role";
-    public static TYPE = "type";
     public static EXPLICIT = "explicit";
     public static MORE = "more";
     public static NUM_INST = "numInst";
@@ -293,11 +292,12 @@ export class ResAttribute {
 
     //never in st responses, result of nature parsing
     public static DEPRECATED = "deprecated";
-    
+
     //never in st responses, added because are util for tree
-    public static CHILDREN = "children";
-    public static SELECTED = "selected";
-    
+    public static CHILDREN = "children"; //stores an array of children resources
+    public static SELECTED = "selected"; //if true, render the node as selected
+    public static NEW = "new"; //if true, the resource is made visible after the treeNodeComponent is initialized
+
 }
 
 
@@ -307,22 +307,23 @@ export class ResAttribute {
  */
 
 export type RDFResourceRolesEnum =
-    "annotationProperty" | 
+    "annotationProperty" |
     "cls" |
     "concept" |
     "conceptScheme" |
     "dataRange" |
     "datatypeProperty" |
     "individual" |
+    "mention" |
     "objectProperty" |
     "ontology" |
     "ontologyProperty" |
     "property" |
     "undetermined" |
-    "xLabel"|
+    "xLabel" |
     "skosCollection" |
     "skosOrderedCollection";
-    
+
 export const RDFResourceRolesEnum = {
     annotationProperty: "annotationProperty" as RDFResourceRolesEnum,
     cls: "cls" as RDFResourceRolesEnum,
@@ -331,6 +332,7 @@ export const RDFResourceRolesEnum = {
     dataRange: "dataRange" as RDFResourceRolesEnum,
     datatypeProperty: "datatypeProperty" as RDFResourceRolesEnum,
     individual: "individual" as RDFResourceRolesEnum,
+    mention: "mention" as RDFResourceRolesEnum,
     objectProperty: "objectProperty" as RDFResourceRolesEnum,
     ontology: "ontology" as RDFResourceRolesEnum,
     ontologyProperty: "ontologyProperty" as RDFResourceRolesEnum,
@@ -344,12 +346,12 @@ export const RDFResourceRolesEnum = {
 export type RDFTypesEnum =
     "bnode" |
     "literal" |
-    "plainLiteral" | 
+    "plainLiteral" |
     "resource" |
     "typedLiteral" |
     "undetermined" |
     "uri";
-    
+
 export const RDFTypesEnum = {
     bnode: "bnode" as RDFTypesEnum,
     literal: "literal" as RDFTypesEnum,
@@ -392,11 +394,11 @@ export class ResourceUtils {
     }
 
     /**
-     * Tells if a list contains a given resource
+     * Tells if a list contains a given node
      */
-    static containsResource(list: ARTResource[], resource: ARTResource) {
+    static containsNode(list: ARTNode[], node: ARTNode): boolean {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].getNominalValue() == resource.getNominalValue()) {
+            if (list[i].getNominalValue() == node.getNominalValue()) {
                 return true;
             }
         }
@@ -413,30 +415,30 @@ export class ResourceUtils {
      */
     static getRendering(resource: ARTNode, rendering: boolean) {
         if (rendering) {
-			return resource.getShow();	
-		} else {
-			if (resource.isURIResource()) {
-				let qname = resource.getAdditionalProperty(ResAttribute.QNAME);
-				if (qname != undefined) {
-					return qname;
-				} else {
-					return (<ARTURIResource>resource).getURI();
-				}
-			} else {
-				return resource.getShow();
-			}
-		}
+            return resource.getShow();
+        } else {
+            if (resource.isURIResource()) {
+                let qname = resource.getAdditionalProperty(ResAttribute.QNAME);
+                if (qname != undefined) {
+                    return qname;
+                } else {
+                    return (<ARTURIResource>resource).getURI();
+                }
+            } else {
+                return resource.getShow();
+            }
+        }
     }
 
     static parseURI(nTriplesURI: string): ARTURIResource {
         if (nTriplesURI.startsWith("<") && nTriplesURI.endsWith(">")) {
-			let uri: string = nTriplesURI.substring(1, nTriplesURI.length - 1);
-			uri = decodeURI(uri);
+            let uri: string = nTriplesURI.substring(1, nTriplesURI.length - 1);
+            uri = decodeURI(uri);
             return new ARTURIResource(uri);
-		}
-		else {
+        }
+        else {
             throw new Error("Not a legal N-Triples URI: " + nTriplesURI);
-		}
+        }
     }
 
     /**
@@ -446,37 +448,37 @@ export class ResourceUtils {
      */
     static parseLiteral(nTriplesLiteral: string): ARTLiteral {
         if (nTriplesLiteral.startsWith("\"")) {
-			// Find string separation points
-			let endLabelIdx: number = this.findEndOfLabel(nTriplesLiteral);
+            // Find string separation points
+            let endLabelIdx: number = this.findEndOfLabel(nTriplesLiteral);
 
-			if (endLabelIdx != -1) {
-				let startLangIdx: number = nTriplesLiteral.indexOf("@", endLabelIdx);
-				let startDtIdx: number = nTriplesLiteral.indexOf("^^", endLabelIdx);
+            if (endLabelIdx != -1) {
+                let startLangIdx: number = nTriplesLiteral.indexOf("@", endLabelIdx);
+                let startDtIdx: number = nTriplesLiteral.indexOf("^^", endLabelIdx);
 
-				if (startLangIdx != -1 && startDtIdx != -1) {
+                if (startLangIdx != -1 && startDtIdx != -1) {
                     throw new Error("Literals can not have both a language and a datatype");
-				}
+                }
 
-				// Get label
-				let label: string = nTriplesLiteral.substring(1, endLabelIdx);
+                // Get label
+                let label: string = nTriplesLiteral.substring(1, endLabelIdx);
                 label = label.replace(/\\"/g, '"');
 
-				if (startLangIdx != -1) {
-					// Get language
-					let language: string = nTriplesLiteral.substring(startLangIdx + 1);
-					return new ARTLiteral(label, null, language);
-				}
-				else if (startDtIdx != -1) {
-					// Get datatype
-					let datatype: string = nTriplesLiteral.substring(startDtIdx + 2);
+                if (startLangIdx != -1) {
+                    // Get language
+                    let language: string = nTriplesLiteral.substring(startLangIdx + 1);
+                    return new ARTLiteral(label, null, language);
+                }
+                else if (startDtIdx != -1) {
+                    // Get datatype
+                    let datatype: string = nTriplesLiteral.substring(startDtIdx + 2);
                     let dtURI: ARTURIResource = this.parseURI(datatype);
                     return new ARTLiteral(label, dtURI.getURI());
-				}
-				else {
-					return new ARTLiteral(label);
-				}
-			}
-		}
+                }
+                else {
+                    return new ARTLiteral(label);
+                }
+            }
+        }
         throw new Error("Not a legal N-Triples literal: " + nTriplesLiteral);
     }
 
@@ -487,31 +489,31 @@ export class ResourceUtils {
      * 
 	 * @return The index of the double quote ending the label, or <tt>-1</tt> if it could not be found.
 	 */
-	private static findEndOfLabel(nTriplesLiteral: string): number {
-		// First character of literal is guaranteed to be a double
-		// quote, start search at second character.
-		let previousWasBackslash: boolean = false;
-		for (var i = 1; i < nTriplesLiteral.length; i++) {
-			let c: string = nTriplesLiteral.charAt(i);
-			if (c == '"' && !previousWasBackslash) {
-				return i;
-			}
-			else if (c == '\\' && !previousWasBackslash) { 
-				previousWasBackslash = true; // start of escape
-			}
-			else if (previousWasBackslash) { 
-				previousWasBackslash = false; // c was escaped
-			}
-		}
-		return -1;
-	}
+    private static findEndOfLabel(nTriplesLiteral: string): number {
+        // First character of literal is guaranteed to be a double
+        // quote, start search at second character.
+        let previousWasBackslash: boolean = false;
+        for (var i = 1; i < nTriplesLiteral.length; i++) {
+            let c: string = nTriplesLiteral.charAt(i);
+            if (c == '"' && !previousWasBackslash) {
+                return i;
+            }
+            else if (c == '\\' && !previousWasBackslash) {
+                previousWasBackslash = true; // start of escape
+            }
+            else if (previousWasBackslash) {
+                previousWasBackslash = false; // c was escaped
+            }
+        }
+        return -1;
+    }
 
     static parseBNode(nTriplesBNode: string): ARTBNode {
         if (nTriplesBNode.startsWith("_:")) {
-			return new ARTBNode(nTriplesBNode);
-		} else {
-			 throw new Error("Not a legal N-Triples Blank Node: " + nTriplesBNode);
-		}
+            return new ARTBNode(nTriplesBNode);
+        } else {
+            throw new Error("Not a legal N-Triples Blank Node: " + nTriplesBNode);
+        }
     }
 
     static isQName(nTripleQName: string, prefixMapping: PrefixMapping[]): boolean {
@@ -534,7 +536,7 @@ export class ResourceUtils {
         let colonIdx: number = nTripleQName.indexOf(":");
         if (colonIdx != -1) {
             let prefix: string = nTripleQName.substring(0, colonIdx);
-            let localName: string = nTripleQName.substring(colonIdx+1);
+            let localName: string = nTripleQName.substring(colonIdx + 1);
             //resolve prefix
             let namespace: string;
             for (var i = 0; i < prefixMapping.length; i++) {
@@ -545,6 +547,20 @@ export class ResourceUtils {
         } else {
             throw new Error("Not a legal N-Triples QName: " + nTripleQName);
         }
+    }
+
+    /**
+     * Returns the qname of a IRI if the prefix-namespace is found, null otherwise
+     * @param resource
+     * @param prefixMapping 
+     */
+    static getQName(iri: string, prefixMapping: PrefixMapping[]): string {
+        for (var i = 0; i < prefixMapping.length; i++) {
+            if (iri.startsWith(prefixMapping[i].namespace)) {
+                return iri.replace(prefixMapping[i].namespace, prefixMapping[i].prefix + ":");
+            }
+        }
+        return null;
     }
 
 }

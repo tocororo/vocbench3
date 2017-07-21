@@ -4,10 +4,11 @@ import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
 import { OverlayConfig } from 'angular2-modal';
 import { ProjectListModal } from './project/projectListModal';
 import { VBContext } from "./utils/VBContext";
-import { VBPreferences } from "./utils/VBPreferences";
-import { UIUtils } from "./utils/UIUtils";
+import { VBProperties } from "./utils/VBProperties";
 import { User } from "./models/User";
-import { Project } from "./models/Project";
+import { Languages, Language } from "./models/LanguagesCountries";
+import { BasicModalServices } from "./widget/modal/basicModal/basicModalServices";
+import { PreferencesSettingsServices } from "./services/preferencesSettingsServices";
 
 @Component({
     selector: "home-component",
@@ -16,7 +17,14 @@ import { Project } from "./models/Project";
 })
 export class HomeComponent {
 
-    constructor(private router: Router, private modal: Modal) { }
+    constructor(private prefSettingService: PreferencesSettingsServices, private basicModals: BasicModalServices, 
+        private router: Router, private modal: Modal) { }
+
+    ngOnInit() {
+        if (Languages.getSystemLanguages() == null) {
+            Languages.initSystemLanguage(this.prefSettingService, this.basicModals);
+        }
+    }
 
     private isUserLogged(): boolean {
         return VBContext.isLoggedIn();
@@ -30,7 +38,6 @@ export class HomeComponent {
             const builder = new BSModalContextBuilder<any>();
             let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
             this.modal.open(ProjectListModal, overlayConfig);
-
         }
     }
 

@@ -5,13 +5,13 @@ export class CommitInfo {
     public commit: ARTURIResource;
     public user: ARTURIResource;
     public operation: ARTURIResource;
-    public subject: ARTURIResource;
+    public operationParameters: ParameterInfo[];
     public startTime: Date;
     public startTimeLocal: string;
     public endTime: Date;
     public endTimeLocal: string;
 
-    constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, subject: ARTURIResource, 
+    constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, operationParameters: ParameterInfo[],
             startTime: Date, endTime: Date) {
         this.commit = commit;
         this.user = user;
@@ -26,8 +26,9 @@ export class CommitInfo {
             }
             this.operation.setShow(operationShow);
         }
+
+        this.operationParameters = operationParameters;
         
-        this.subject = subject;
         this.startTime = startTime;
         if (startTime != null) {
             this.startTimeLocal = Deserializer.parseDateTime(startTime);
@@ -36,6 +37,15 @@ export class CommitInfo {
         if (endTime != null) {
             this.endTimeLocal = Deserializer.parseDateTime(endTime);
         }
+    }
+}
+
+export class ParameterInfo {
+    public name: string;
+    public value: string;
+    constructor(name: string, value: string) {
+        this.name = name;
+        this.value = value;
     }
 }
 
@@ -52,25 +62,34 @@ export class CommitOperation {
     }
 }
 
-export class VersionInfo {
-    public versionId: string;
-    public repositoryId: string;
-    public dateTime: Date;
-    public dateTimeLocal: string;
-
-    constructor(versionId: string, repositoryId: string, dateTime: Date) {
-        this.versionId = versionId;
-        this.repositoryId = repositoryId;
-        this.dateTime = dateTime;
-        if (dateTime != null) {
-            this.dateTimeLocal = Deserializer.parseDateTime(dateTime);
-        }
-    }
-}
-
 export type SortingDirection = "Ascending" | "Descending" | "Unordered";
 export const SortingDirection = {
     Ascending: "Ascending" as SortingDirection,
     Descending: "Descending" as SortingDirection,
     Unordered: "Unordered" as SortingDirection
 }
+
+export class VersionInfo {
+    public versionId: string;
+    public repositoryId: string;
+    public dateTime: Date;
+    public dateTimeLocal: string;
+    public status: RepositoryStatus;
+
+    constructor(versionId: string, repositoryId: string, dateTime: Date, status: RepositoryStatus) {
+        this.versionId = versionId;
+        this.repositoryId = repositoryId;
+        this.dateTime = dateTime;
+        if (dateTime != null) {
+            this.dateTimeLocal = Deserializer.parseDateTime(dateTime);
+        }
+        this.status = status;
+    }
+}
+
+export type RepositoryStatus = "INITIALIZED" | "UNITIALIZED";
+export const RepositoryStatus = {
+    INITIALIZED: "INITIALIZED" as RepositoryStatus,
+    UNITIALIZED: "UNITIALIZED" as RepositoryStatus
+}
+

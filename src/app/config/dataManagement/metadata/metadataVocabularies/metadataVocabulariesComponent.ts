@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { DatasetMetadataExportServices } from "../../../../services/datasetMetadataExportServices";
+import { DatasetMetadataServices } from "../../../../services/datasetMetadataServices";
 import { ExportServices } from "../../../../services/exportServices";
 import { PluginsServices } from "../../../../services/pluginsServices";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../../../models/Plugins";
@@ -26,7 +26,7 @@ export class MetadataVocabulariesComponent {
 
     private selectedExporterSettings: { extensionPointSettings: PluginConfiguration, pluginSettings: PluginConfiguration };
 
-    constructor(private metadataExporterService: DatasetMetadataExportServices, private exportService: ExportServices,
+    constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
         private pluginService: PluginsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
@@ -57,7 +57,7 @@ export class MetadataVocabulariesComponent {
                 this.selectedConfiguration = this.selectedExporterPluginConfigurations[0];
             }
         )
-        this.metadataExporterService.getExporterSettings(this.selectedExporterPlugin.factoryID).subscribe(
+        this.metadataExporterService.getDatasetMetadata(this.selectedExporterPlugin.factoryID).subscribe(
             config => {
                 this.selectedExporterSettings = config;
             }
@@ -72,7 +72,7 @@ export class MetadataVocabulariesComponent {
     private saveSettings() {
         var extPointProps: any = this.collectExtPointParams();
         var pluginProps: any = this.collectPluginParams();
-        this.metadataExporterService.setExporterSettings(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
+        this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
             stResp => {
                 this.basicModals.alert("Save settings", "Settings saved succesfully");
             }
@@ -83,7 +83,7 @@ export class MetadataVocabulariesComponent {
         //first set the exporter settings
         var extPointProps: any = this.collectExtPointParams();
         var pluginProps: any = this.collectPluginParams();
-        this.metadataExporterService.setExporterSettings(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
+        this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
             stResp => {
                 //export the metadata
                 let configurationProperties: any = {}

@@ -10,10 +10,11 @@
 
             <div class="subPanel">
                 <div class="subPanel-heading">
-                    <label style="flex: 1">Structural checks</label>
-                    <button type="button" class="close" (click)="togglePanel(structuralIcv)">
-                        <span>{{structuralIcv.open ? '-' : '+' }}</span>
-                    </button>
+                    <div class="expandCollapseBtnContainer">
+                        <img src="../../assets/images/icons/arrow.png" (click)="togglePanel(structuralIcv)"
+                            [ngClass]="{'arrow-right': !structuralIcv.open}">
+                    </div>
+                    <label>Structural checks</label>
                 </div>
                 <div class="subPanel-body" *ngIf="structuralIcv.open">
                     <table class="table table-condensed table-borderless table-hoverable">
@@ -27,7 +28,9 @@
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
                                     <td><i>{{icv.description}}</i></td>
-                                    <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
+                                    <td>
+                                        <button class="btn btn-default btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
+                                    </td>
                                 </tr>
                             </ng-template>
                         </tbody>
@@ -37,10 +40,11 @@
 
             <div class="subPanel">
                 <div class="subPanel-heading">
-                    <label style="flex: 1">Label checks</label>
-                    <button type="button" class="close" (click)="togglePanel(labelIcv)">
-                            <span>{{labelIcv.open ? '-' : '+' }}</span>
-                        </button>
+                    <div class="expandCollapseBtnContainer">
+                        <img src="../../assets/images/icons/arrow.png" (click)="togglePanel(labelIcv)"
+                            [ngClass]="{'arrow-right': !labelIcv.open}">
+                    </div>
+                    <label>Label checks</label>
                 </div>
                 <div class="subPanel-body" *ngIf="labelIcv.open">
                     <table class="table table-condensed table-borderless table-hoverable">
@@ -50,12 +54,13 @@
                             <col style="width: 1%;">
                         </colgroup>
                         <tbody>
-                            <!--why ng-template? see https://github.com/angular/angular/issues/4792-->
                             <ng-template ngFor let-icv [ngForOf]="labelIcv.list">
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
                                     <td><i>{{icv.description}}</i></td>
-                                    <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
+                                    <td>
+                                        <button class="btn btn-default btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
+                                    </td>
                                 </tr>
                             </ng-template>
                         </tbody>
@@ -65,10 +70,11 @@
 
             <div class="subPanel">
                 <div class="subPanel-heading">
-                    <label style="flex: 1">Generic checks</label>
-                    <button type="button" class="close" (click)="togglePanel(genericIcv)">
-                            <span>{{genericIcv.open ? '-' : '+' }}</span>
-                        </button>
+                    <div class="expandCollapseBtnContainer">
+                        <img src="../../assets/images/icons/arrow.png" (click)="togglePanel(genericIcv)"
+                            [ngClass]="{'arrow-right': !genericIcv.open}">
+                    </div>
+                    <label>Generic checks</label>
                 </div>
                 <div class="subPanel-body" *ngIf="genericIcv.open">
                     <table class="table table-condensed table-borderless table-hoverable">
@@ -78,12 +84,13 @@
                             <col style="width: 1%;">
                         </colgroup>
                         <tbody>
-                            <!--why ng-template? see https://github.com/angular/angular/issues/4792-->
                             <ng-template ngFor let-icv [ngForOf]="genericIcv.list">
                                 <tr *ngIf="isCompatibleWithProject(icv)">
                                     <td nowrap><strong>{{icv.name}}</strong></td>
                                     <td><i>{{icv.description}}</i></td>
-                                    <td><button class="btn btn-default btn-xs" (click)="goToIcv(icv)">Go</button></td>
+                                    <td>
+                                        <button class="btn btn-default btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
+                                    </td>
                                 </tr>
                             </ng-template>
                         </tbody>

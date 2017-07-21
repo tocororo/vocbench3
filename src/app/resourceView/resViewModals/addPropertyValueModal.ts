@@ -3,7 +3,7 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { ARTURIResource, ARTResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from '../../models/ARTResources';
 import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
-import { VBPreferences } from '../../utils/VBPreferences';
+import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 import { ManchesterServices } from "../../services/manchesterServices";
@@ -86,12 +86,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private datarange: ARTLiteral[];
 
     //datatype to show in a list in case the modal allow to add range to a datatype property
-    private datatypes: ARTURIResource[] = [XmlSchema.boolean, XmlSchema.date,
-        XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string];
+    private datatypes: ARTURIResource[] = XmlSchema.DATATYPES;
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
         private propService: PropertyServices, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices,
-        private preferences: VBPreferences) {
+        private preferences: VBProperties) {
         this.context = dialog.context;
     }
 
@@ -151,7 +150,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                     this.viewType = "classAndIndividual";
                 } else if (ranges.type == RDFTypesEnum.resource) {
                     //class, concept, conceptScheme, collection, resourcelist, instance, class individual
-                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection;
+                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection.resources;
                     if (rangeCollection != null) {
                         if (rangeCollection.length == 1) {
                             var rangeClass: ARTURIResource = rangeCollection[0];

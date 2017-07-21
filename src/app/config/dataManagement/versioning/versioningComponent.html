@@ -41,10 +41,11 @@
                                 <th class="text-center">Datetime</th>
                                 <th class="text-center">Repository ID</th>
                                 <th class="text-center">Active</th>
+                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let v of versionList" (click)="selectVersion(v)" [ngClass]="{active: v == selectedVersion}">
+                            <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{active: v == selectedVersion}">
                                 <td class="text-center">
                                     {{v.versionId}}
                                 </td>
@@ -56,6 +57,18 @@
                                 </td>
                                 <td class="text-center">
                                     <span *ngIf="isActiveVersion(v)" class="glyphicon glyphicon-ok"></span>
+                                </td>
+                                <td class="text-center">
+                                    <ng-template [ngIf]="idx == 0">
+                                        ---
+                                    </ng-template>
+                                    <ng-template [ngIf]="idx > 0">
+                                        {{v.status | lowercase}}
+                                        <button class="btn btn-xs btn-default" (click)="closeVersion(v)"
+                                            [disabled]="v.status != 'INITIALIZED' || isActiveVersion(v)">
+                                            Close
+                                        </button>
+                                    </ng-template>
                                 </td>
                             </tr>
                         </tbody>

@@ -61,7 +61,7 @@ export class AdministrationServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params, true).map(
             stResp => {
-                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles);
+                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, stResp.languages);
             }
         );
     }
@@ -111,6 +111,22 @@ export class AdministrationServices {
             email: email
         };
         return this.httpMgr.doGet(this.serviceName, "removeAllRolesFromUser", params, true);
+    }
+
+    /**
+     * Update a languages of a user in a project
+     * @param projectName
+     * @param email
+     * @param language
+     */
+    updateLanguagesOfUserInProject(projectName: string, email: string, languages: string[]) {
+        console.log("[AdministrationServices] updateLanguagesOfUserInProject");
+        var params: any = {
+            projectName: projectName,
+            email: email,
+            languages: languages
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateLanguagesOfUserInProject", params, true);
     }
 
     //ROLES

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { CommitInfo, CommitOperation, SortingDirection } from "../models/History";
+import { CommitInfo, ParameterInfo, CommitOperation, SortingDirection } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
@@ -53,9 +53,9 @@ export class HistoryServices {
      * @param page 
      * @param limit 
      */
-    getCommits2(tipRevisionNumber: number, operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string,
+    getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
-        console.log("[HistoryServices] getCommits2");
+        console.log("[HistoryServices] getCommits");
         var params: any = {
             tipRevisionNumber: tipRevisionNumber
         };
@@ -67,7 +67,7 @@ export class HistoryServices {
         if (page != null) { params.page = page; }
         if (limit != null) { params.limit = limit; }
         
-        return this.httpMgr.doGet(this.serviceName, "getCommits2", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
             stResp => {
                 var commits: CommitInfo[] = [];
                 var commitsJsonArray: any[] = stResp;
@@ -88,9 +88,14 @@ export class HistoryServices {
                         operation = new ARTURIResource(operationJson['@id']);
                     }
 
-                    let subject: ARTURIResource;
-                    if (commitJson.subject != null) {
-                        subject = new ARTURIResource(commitJson.subject['@id']);
+                    let operationParameters: ParameterInfo[] = [];
+                    let operationParamsJson: any[] = commitJson.operationParameters;
+                    if (operationParamsJson != null) {
+                        operationParamsJson.forEach(element => {
+                            if (element.value != null) {
+                                operationParameters.push(new ParameterInfo(element.name, element.value));
+                            }
+                        });
                     }
 
                     let startTime: Date;
@@ -105,7 +110,7 @@ export class HistoryServices {
                         endTime = new Date(endTimeJson);
                     }
                     
-                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, subject, startTime, endTime);
+                    let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime);
 
                     commits.push(commit);
                 }

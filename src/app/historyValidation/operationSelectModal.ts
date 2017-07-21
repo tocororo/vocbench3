@@ -17,8 +17,10 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
     private selectedExtensionPath: string;
     private serviceClasses: string[] = [this.NOT_SELECTED];
     private selectedServiceClasses: string;
-    private operations: { service: string, checked: boolean }[] = [];
+    private operations: { service: string, checked: boolean, filtered: boolean }[] = [];
     private operationsToAdd: string[] = [];
+
+    private filterKey: string;
 
     constructor(public dialog: DialogRef<BSModalContext>, private servicesService: ServicesServices) {
         this.context = dialog.context;
@@ -51,7 +53,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
                 operations => {
                     this.operations = [];
                     operations.forEach(op => {
-                        this.operations.push({ service: op, checked: false });
+                        this.operations.push({ service: op, checked: false, filtered: false });
                     });
                 }
             );
@@ -96,7 +98,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
      * http://semanticturkey.uniroma2.it/services/it.uniroma2.art.semanticturkey/st-core-services/<Class>/<ServiceName>
      * This method returns <Class>/<ServiceName> if includeClass is true, <ServiceName> otherwise
      * @param operation
-     * @param includeClass 
+     * @param includeClass default false
      */
     private getOperationShow(operation: string, includeClass?: boolean) {
         if (includeClass) {
@@ -111,13 +113,18 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
         
     }
 
+    private onFilterChanged() {
+        for (var i = 0; i < this.operations.length; i++) {
+            if (this.getOperationShow(this.operations[i].service).toLowerCase().includes(this.filterKey.toLowerCase())) {
+                this.operations[i].filtered = false;
+            } else {
+                this.operations[i].filtered = true;
+            }
+        }
+    }
+
     ok(event: Event) {
         var returnedOperations: ARTURIResource[] = [];
-        // this.operations.forEach(op => {
-        //     if (op.checked) {
-        //         returnedOperations.push(new ARTURIResource(op.service, this.getOperationShow(op.service, true)));
-        //     }
-        // });
 
         this.operationsToAdd.forEach(op => {
             returnedOperations.push(new ARTURIResource(op, this.getOperationShow(op, true)));

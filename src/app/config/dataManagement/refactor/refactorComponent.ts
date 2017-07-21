@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { RefactorServices } from "../../../services/refactorServices";
 import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
@@ -71,6 +72,17 @@ export class RefactorComponent {
             },
             () => {}
         );
+    }
+
+    //Authorizations
+    private isMigrateAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_MIGRATE_TO_BASEURI_GRAPH);
+    }
+    private isSkosToSkosxlAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SKOS_TO_SKOSXL);
+    }
+    private isSkoxlToSkosAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SKOSXL_TO_SKOS);
     }
 
 }

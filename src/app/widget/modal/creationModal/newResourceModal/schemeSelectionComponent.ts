@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { SkosServices } from "../../../../services/skosServices";
 import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
-import { VBPreferences } from "../../../../utils/VBPreferences";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { ARTURIResource, ResourceUtils, ResAttribute } from "../../../../models/ARTResources";
 
 @Component({
@@ -12,13 +12,14 @@ export class SchemeSelectionComponent {
     @Input() concept: ARTURIResource; //useful to limit the schemeList to the only schemes of a concept
     @Output() update = new EventEmitter<ARTURIResource[]>();
 
+    private addBtnImgSrc = require("../../../../../assets/images/icons/actions/conceptScheme_create.png");
 
     private collapsed: boolean = false;
 
     private schemeList: ARTURIResource[] = [];
     private selectedScheme: ARTURIResource;
 
-    constructor(private skosService: SkosServices, private preferences: VBPreferences, private browsingModals: BrowsingModalServices) {}
+    constructor(private skosService: SkosServices, private preferences: VBProperties, private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         // this.initSchemeList(); //init in ngOnChanges
@@ -70,7 +71,7 @@ export class SchemeSelectionComponent {
         this.browsingModals.browseSchemeList("Add skos:ConceptScheme").then(
             (scheme: any) => {
                 //add the chosen scheme only if not already in list
-                if (!ResourceUtils.containsResource(this.schemeList, scheme)) {
+                if (!ResourceUtils.containsNode(this.schemeList, scheme)) {
                     this.schemeList.push(scheme);
                     this.update.emit(this.schemeList);
                 }

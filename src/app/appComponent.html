@@ -12,16 +12,18 @@
                 <li *ngIf="isUserLogged() && isUserAdmin()" routerLinkActive="active">
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" routerLinkActive="active">
+                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Data']">Data</a>
                 </li>
 				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" routerLinkActive="active">
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" [ngClass]="{ disabled : !isHistoryAuthorized() }"
+                    routerLinkActive="active">
                     <a [routerLink]="['/History']">History</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" routerLinkActive="active">
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" [ngClass]="{ disabled : !isValidationAuthorized() }"
+                    routerLinkActive="active">
                     <a [routerLink]="['/Validation']">Validation</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">

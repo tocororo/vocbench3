@@ -7,13 +7,10 @@ export class Project {
     private accessible: boolean;
     private historyEnabled: boolean;
     private validationEnabled: boolean;
-    
     private model: string;
     private lexicalizationModel: string;
-
     private open: boolean;
     private status: { status: string, message?: string };
-    private type: string;
     
     constructor(name?: string) {
         if (name != undefined) {
@@ -115,12 +112,6 @@ export class Project {
         return this.status;
     }
     
-    public setType(type: string) {
-        this.type = type;
-    }
-    public getType(): string {
-        return this.type;
-    }
 }
 
 export type ProjectTypesEnum = "saveToStore" | "continuosEditing";

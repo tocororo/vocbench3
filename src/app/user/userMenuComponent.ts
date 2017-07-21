@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthServices } from "../services/authServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { User } from "../models/User";
 
@@ -44,8 +45,21 @@ export class UserMenuComponent {
         return VBContext.isLoggedIn();
     }
 
-    private isUserAdmin(): boolean {
-        return VBContext.getLoggedUser().isAdmin();
+    /**
+     * Determines whether the "Administration" menu item should be visible.
+     * It is visible if the user is adminsitrator or if the user has capabilities of project manager for the current project
+     */
+    private isAdministrationVisible(): boolean {
+        return (
+            VBContext.getLoggedUser().isAdmin() ||
+            this.isProjectOpen() && (
+                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_ROLE_MANAGEMENT) ||
+                (
+                    AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT) &&
+                    AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT)
+                )
+            )
+        );
     }
 
     /**

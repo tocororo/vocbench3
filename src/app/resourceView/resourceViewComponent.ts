@@ -4,8 +4,8 @@ import { VersionInfo } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBPreferences } from "../utils/VBPreferences";
-import { VBContext } from "../utils/VBContext";
+import { VBProperties } from "../utils/VBProperties";
+import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 
@@ -21,12 +21,13 @@ export class ResourceViewComponent {
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
-    private viewInitialized: boolean = false;
+    private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
     private versionList: VersionInfo[];
     private activeVersion: VersionInfo;
 
-    private showInferred = false;
+    private showInferredPristine: boolean = false; //useful to decide whether repeat the getResourceView request once the includeInferred changes
+    private showInferred: boolean = false;
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
@@ -49,7 +50,7 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private eventHandler: VBEventHandler, private preferences: VBPreferences) {
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private eventHandler: VBEventHandler, private preferences: VBProperties) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -58,6 +59,13 @@ export class ResourceViewComponent {
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.preferences.getInferenceInResourceView();
         if (changes['resource'] && changes['resource'].currentValue) {
+            //if not the first change, avoid to refresh res view if resource is not changed
+            if (!changes['resource'].firstChange) { 
+                let prevRes: ARTResource = changes['resource'].previousValue;
+                if (prevRes.getNominalValue() == this.resource.getNominalValue()) {
+                    return;
+                }
+            }
             if (this.viewInitialized) {
                 this.buildResourceView(this.resource);//refresh resource view when Input resource changes
             }
@@ -65,8 +73,8 @@ export class ResourceViewComponent {
     }
 
     ngOnInit() {
-        this.activeVersion = VBContext.getContextVersion();
-        this.readonly = this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
+        this.activeVersion = HttpServiceContext.getContextVersion();
+        this.readonly = this.readonly || this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
     }
 
     ngAfterViewInit() {
@@ -88,9 +96,14 @@ export class ResourceViewComponent {
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
     private buildResourceView(res: ARTResource) {
+        this.showInferredPristine = this.showInferred;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resViewService.getResourceView(res, this.activeVersion).subscribe(
+        if (this.activeVersion != null) {
+            HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
+        }
+        this.resViewService.getResourceView(res, this.showInferred).subscribe(
             stResp => {
+                HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.update.emit(this.resource);
@@ -233,7 +246,7 @@ export class ResourceViewComponent {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
                     let objGraphs: ARTURIResource[] = objList[j].getGraphs();
-                    if (ResourceUtils.containsResource(objGraphs, new ARTURIResource("http://semanticturkey/inference-graph"))) {
+                    if (ResourceUtils.containsNode(objGraphs, new ARTURIResource("http://semanticturkey/inference-graph"))) {
                         objList.splice(j, 1);
                         j--;
                     }
@@ -283,7 +296,12 @@ export class ResourceViewComponent {
     private showHideInferred() {
         this.showInferred = !this.showInferred;
         this.preferences.setInferenceInResourceView(this.showInferred);
-        this.fillPartitions();
+        if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
+            this.buildResourceView(this.resource);
+        } else { //resource view has been initialized with showInferred to true, so there's no need to repeat the request
+            this.fillPartitions();
+        }
+        
     }
 
 

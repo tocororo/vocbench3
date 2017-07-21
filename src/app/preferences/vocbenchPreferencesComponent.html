@@ -2,7 +2,7 @@
     
     <div class="panel panel-default vbox">
         <div class="panel-heading">
-            <label>Vocbench Settings</label>
+            <label>Vocbench Preferences</label>
         </div>
        
         <div class="panel-body vbox">
@@ -41,10 +41,10 @@
 
                 <div class="subPanel vbox">
                     <div class="subPanel-heading">
-                        <label style="flex: 1">Languages:</label>
+                        <label style="flex: 1">Rendering Languages:</label>
                         <span *ngIf="getActiveLanguageItems().length == 0" class="greyText" style="margin-right: 5px;">
                             <span class="glyphicon glyphicon-warning-sign"></span>
-                            No language selected implicitly means all languages (and "en" as default)
+                            No language selected implicitly means all languages
                         </span>
                         <div class="btn-group btn-group-xs">
                             <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
@@ -61,35 +61,23 @@
                             <colgroup>
                                 <col style="width: 1%">
                                 <col style="width: 1%">
-                                <col style="width: 1%">
                                 <col>
                             </colgroup>
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="padding: 0px 8px;">Default</th>
                                     <th class="text-center" style="padding: 0px 8px;">Active</th>
                                     <th class="text-center"  style="padding: 0px 8px;" nowrap>ISO code</th>
                                     <th class="text-center" style="padding: 0px 8px;">Language</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let l of renderingLangs">
+                                <tr *ngFor="let l of renderingLanguages">
                                     <td class="text-center">
-                                        <input type="radio" style="vertical-align: middle" name="defaultLang" [value]="l.lang.tag"
-                                            (change)="onDefaultLangChanged(l)" [checked]="l.default" [disabled]="!l.active"/>
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="onActiveLangChanged(l)">
+                                        <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="updateLanguagesPref()">
                                     </td>
                                     <td class="text-center" nowrap>{{l.lang.tag}}</td>
-                                    <td>
-                                        <!--<img [src]="getFlagImgSrc(l.lang.tag)">-->
-                                        <img *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') == -1" [src]="getFlagImgSrc(l.lang.tag)">
-                                        <div *ngIf="getFlagImgSrc(l.lang.tag).indexOf('unknown') != -1" class="flagIcon">
-                                            <img [src]="getFlagImgSrc(l.lang.tag)">
-                                            <span>{{l.lang.tag}}</span>
-                                        </div>
-                                        {{l.lang.name}}
+                                    <td class="text-center">
+                                        <lang-item [language]="l.lang"></lang-item>
                                     </td>
                                 </tr>
                             </tbody>
@@ -105,22 +93,45 @@
 
                     <div class="subPanel-body scrollableContainer">
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Determines if the flags icon are shown in place of the language ISO code">
-                            </span>
+                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                            <div class="panel-body">
+                                <div class="checkbox-inline">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
+                                    </label>
+                                    <span class="glyphicon glyphicon-info-sign"
+                                        title="Determines if the flags icon are shown in place of the language ISO code">
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="showInstNumb" (ngModelChange)="onShowInstNumbChange()"> Show instances number
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Determines if the amount of instances of a class are shown in the class tree">
-                            </span>
+                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                            <div class="panel-body">
+                                <div class="checkbox-inline">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="showInstNumb" (ngModelChange)="onShowInstNumbChange()"> Show instances number
+                                    </label>
+                                    <span class="glyphicon glyphicon-info-sign"
+                                        title="Determines if the amount of instances of a class are shown in the class tree">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                            <div class="panel-body">
+                                <label>Project theme
+                                    <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar for the current project"></span>
+                                </label>
+                                <label *ngFor="let t of themes" class="checkbox-inline" style="margin-left: 12px;">
+                                    <input type="checkbox" style="margin-left: -18px;" [checked]="t == selectedTheme" (click)="changeTheme(t)">
+                                    <div style="border: 1px solid black; display: inline-block">
+                                        <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.mainColor}"></div>
+                                        <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.altColor}"></div>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
 
                     </div>

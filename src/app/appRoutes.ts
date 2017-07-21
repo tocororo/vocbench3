@@ -17,7 +17,7 @@ import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComp
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
 import { RefactorComponent } from "./config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "./config/dataManagement/versioning/versioningComponent";
-import { VocbenchSettingsComponent } from "./settings/vocbenchSettingsComponent";
+import { VocbenchPreferencesComponent } from "./preferences/vocbenchPreferencesComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
 import { ResetPasswordComponent } from "./user/resetPasswordComponent";
@@ -36,10 +36,10 @@ export const routes: Routes = [
     { path: "Registration/:firstAccess", component: RegistrationComponent, canDeactivate: [CanDeactivateModalGuard] }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent, canDeactivate: [CanDeactivateModalGuard] },
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] },
-    { path: "Settings", component: VocbenchSettingsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+    { path: "Preferences", component: VocbenchPreferencesComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     //lazy loading of module with child route
     { path: "Metadata", loadChildren: "./modules/metadataModule#metadataModule", canLoad: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-    { path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AdminGuard], canDeactivate: [CanDeactivateModalGuard] },
+    { path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     // route config of config bar
     { path: "Config/LoadData", component: LoadDataComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },

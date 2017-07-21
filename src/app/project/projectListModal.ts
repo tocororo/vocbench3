@@ -5,10 +5,11 @@ import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
+import { AdministrationServices } from "../services/administrationServices";
 import { MetadataServices } from "../services/metadataServices";
 import { Project } from '../models/Project';
 import { VBContext } from '../utils/VBContext';
-import { VBPreferences } from '../utils/VBPreferences';
+import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from '../utils/UIUtils';
 import { ModalContext } from '../widget/modal/ModalContext';
 
@@ -24,7 +25,8 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>, private projectService: ProjectServices, private metadataService: MetadataServices,
-        private userService: UserServices, private preferences: VBPreferences, private router: Router) {
+        private adminService: AdministrationServices, private userService: UserServices, private preferences: VBProperties,
+        private router: Router) {
         this.context = dialog.context;
     }
 
@@ -53,23 +55,23 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
             stResp => {
                 VBContext.setWorkingProject(this.selectedProject);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.preferences.initUserProjectPreferences();
+                this.adminService.getProjectUserBinding(this.selectedProject.getName(), VBContext.getLoggedUser().getEmail()).subscribe(
+                    puBinding => {
+                        VBContext.setProjectUserBinding(puBinding);
+                    }
+                );
                 Observable.forkJoin(
                     //init the project preferences for the project
-                    this.preferences.initUserProjectPreferences(),
                     this.userService.listUserCapabilities(),
                     this.metadataService.getNamespaceMappings()
                 ).subscribe(
                     res => {
                         VBContext.setProjectChanged(true);
                         var currentRoute = this.router.url;
-                        ModalContext.enableNavigation();
                         this.router.navigate(['/Home']).then(
                             success => {
-                                this.router.navigate([currentRoute]).then(
-                                    success => {
-                                        ModalContext.disableNavigation();
-                                    }
-                                );
+                                this.router.navigate([currentRoute]);
                             }
                         );
                     }

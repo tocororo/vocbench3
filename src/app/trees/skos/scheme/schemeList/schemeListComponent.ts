@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -21,6 +22,10 @@ export class SchemeListComponent {
         private basicModals: BasicModalServices) { }
 
     ngOnInit() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES)) {
+            return;
+        }
+
         this.skosService.getAllSchemes().subscribe( //new service
             schemeList => {
                 //sort by show if rendering is active, uri otherwise

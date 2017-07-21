@@ -4,7 +4,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
 import { ARTURIResource } from "../models/ARTResources";
-import { PrefixMapping } from "../models/PrefixMapping";
+import { PrefixMapping, OntologyImport, ImportStatus, TransitiveImportMethodAllowance } from "../models/Metadata";
 import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
@@ -88,12 +88,12 @@ export class MetadataServices {
      * "@id": the uri of the ontology
      * "imports": array of recursive imports
      */
-    getImports(): Observable<{ id: string, status: string, imports: any[] }[]> {
+    getImports(): Observable<OntologyImport[]> {
         console.log("[MetadataServices] getImports");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params, true).map(
             stResp => {
-                var importedOntologies: any[] = [];
+                var importedOntologies: OntologyImport[] = [];
 
                 for (var i = 0; i < stResp.length; i++) {
                     importedOntologies.push(this.parseImport(stResp[i]));
@@ -103,10 +103,10 @@ export class MetadataServices {
         );
     }
 
-    private parseImport(importNode: any): { id: string, status: string, imports: any[] } {
-        var id = importNode['@id'];
-        var status = importNode.status;
-        var imports: any[] = [];
+    private parseImport(importNode: any): OntologyImport {
+        var id: string = importNode['@id'];
+        var status: ImportStatus = importNode.status;
+        var imports: OntologyImport[] = [];
         if (importNode.imports != null) {
             for (var i = 0; i < importNode.imports.length; i++) {
                 imports.push(this.parseImport(importNode.imports[i]));
@@ -138,7 +138,7 @@ export class MetadataServices {
      * @param altURL alternative URL (???)
      * @param rdfFormat force the format to read the ontology file to import
      */
-    addFromWeb(baseURI: string, transitiveImportAllowance: string, altURL?: string, rdfFormat?: RDFFormat) {
+    addFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
         console.log("[MetadataServices] addFromWeb");
         var params: any = {
             baseURI: baseURI,
@@ -165,7 +165,7 @@ export class MetadataServices {
      * @param altURL alternative URL (???)
      * @param rdfFormat force the format to read the ontology file to import
      */
-    addFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: string, altURL?: string, rdfFormat?: RDFFormat) {
+    addFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
         console.log("[MetadataServices] addFromWebToMirror");
         var params: any = {
             baseURI: baseURI,
@@ -193,7 +193,7 @@ export class MetadataServices {
     * @param mirrorFile the name of the mirror file
     * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
     */
-    addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: string) {
+    addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
         console.log("[MetadataServices] addFromLocalFile");
         var data = {
             baseURI: baseURI,
@@ -215,7 +215,7 @@ export class MetadataServices {
      * @param mirrorFile the name of the mirror file
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      */
-    addFromMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: string) {
+    addFromMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
         console.log("[MetadataServices] addFromMirror");
         var params = {
             baseURI: baseURI,
@@ -223,6 +223,84 @@ export class MetadataServices {
             transitiveImportAllowance: transitiveImportAllowance
         };
         return this.httpMgr.doPost(this.serviceName, "addFromMirror", params, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Retrieves an ontology that is a failed import from a local file and copies it to the ontology mirror
+     * @param baseURI 
+     * @param localFile 
+     * @param mirrorFile 
+     * @param transitiveImportAllowance 
+     */
+    getFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
+        console.log("[MetadataServices] getFromLocalFile");
+        var data = {
+            baseURI: baseURI,
+            localFile: localFile,
+            mirrorFile: mirrorFile,
+            transitiveImportAllowance: transitiveImportAllowance
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "getFromLocalFile", data, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Downloads an ontology that is a failed import from the web
+     * @param baseURI 
+     * @param transitiveImportAllowance 
+     * @param altURL 
+     */
+    downloadFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
+        console.log("[MetadataServices] downloadFromWeb");
+        var params: any = {
+            baseURI: baseURI,
+            transitiveImportAllowance: transitiveImportAllowance
+        };
+        if (altURL != undefined) {
+            params.alturl = altURL;
+        }
+        if (rdfFormat != undefined) {
+            params.rdfFormat = rdfFormat.name;
+        }
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params, true).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
+    }
+
+    /**
+     * Downloads an ontology that is a failed import from the web to the ontology mirror
+     * @param baseURI 
+     * @param mirrorFile 
+     * @param transitiveImportAllowance 
+     * @param altURL 
+     */
+    downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance,
+        altURL?: string, rdfFormat?: RDFFormat) {
+        console.log("[MetadataServices] downloadFromWebToMirror");
+        var params: any = {
+            baseURI: baseURI,
+            mirrorFile: mirrorFile,
+            transitiveImportAllowance: transitiveImportAllowance
+        };
+        if (altURL != undefined) {
+            params.alturl = altURL;
+        }
+        if (rdfFormat != undefined) {
+            params.rdfFormat = rdfFormat.name;
+        }
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params, true).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;

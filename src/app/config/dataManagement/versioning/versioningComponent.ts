@@ -5,10 +5,11 @@ import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
 import { VersionsServices } from "../../../services/versionsServices";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { VBContext } from '../../../utils/VBContext';
+import { HttpServiceContext } from "../../../utils/HttpManager";
 import { VBEventHandler } from '../../../utils/VBEventHandler';
 import { UIUtils } from '../../../utils/UIUtils';
 import { RepositoryAccess, RepositoryAccessType } from '../../../models/Project';
-import { VersionInfo } from '../../../models/History';
+import { VersionInfo, RepositoryStatus } from '../../../models/History';
 
 @Component({
     selector: "versioning-component",
@@ -30,7 +31,7 @@ export class VersioningComponent {
     private initVersions() {
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: "---" } ];
+                this.versionList = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: "---", status: RepositoryStatus.INITIALIZED } ];
                 this.versionList = this.versionList.concat(versions);
             }
         );
@@ -45,10 +46,11 @@ export class VersioningComponent {
     }
 
     private swithcToVersion() {
+        //update current version
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
-            VBContext.removeContextVersion();
+            HttpServiceContext.removeContextVersion();
         } else {
-            VBContext.setContextVersion(this.selectedVersion);
+            HttpServiceContext.setContextVersion(this.selectedVersion);
         }
         // this.eventHandler.refreshDataBroadcastEvent.emit(); //this doesn't reinitialize the RV, so ngOnInit and ngAfterViewInit doesn't fire
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
@@ -97,12 +99,20 @@ export class VersioningComponent {
     }
 
     private isActiveVersion(version: VersionInfo): boolean {
-        var activeVersion: VersionInfo = VBContext.getContextVersion();
+        var activeVersion: VersionInfo = HttpServiceContext.getContextVersion();
         if (activeVersion == null) {
             return this.versionList.indexOf(version) == 0;
         } else {
-            return VBContext.getContextVersion().versionId == version.versionId;
+            return HttpServiceContext.getContextVersion().versionId == version.versionId;
         }
+    }
+
+    private closeVersion(version: VersionInfo) {
+        this.versionsService.closeVersion(version.versionId).subscribe(
+            stResp => {
+                this.initVersions();
+            }
+        );
     }
 
 }

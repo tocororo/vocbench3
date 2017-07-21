@@ -1,19 +1,20 @@
 <ng-template [ngIf]="!editInProgress">
     <rdf-resource [resource]="resource" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
     <div class="dropdown pull-right" title="Edit">
-        <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown"
-            [disabled]="!resource.getAdditionalProperty('explicit') || readonly">
+        <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">
             <span>&#9662;</span>
         </button>
         <ul class="dropdown-menu">
-            <li [ngClass]="{ disabled: isEditDisabled() }"><a (click)="edit()">Edit</a></li>
-            <li *ngIf="resource.isResource()" [ngClass]="{ disabled: isEditDisabled() }">
+            <li *ngIf="!isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() }"><a (click)="edit()">Edit</a></li>
+            <li *ngIf="isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() }"><a (click)="editPlainLiteral()">Edit as literal</a></li>
+
+            <li *ngIf="resource.isResource()" [ngClass]="{ disabled: !isEditAuthorized() }">
                 <a (click)="replace()">Replace with existing resource</a>
             </li>
-            <li *ngIf="isSpawnWithLabelAvailable()"  [ngClass]="{ disabled: isSpawnFromLabelDisabled() }">
+            <li *ngIf="isSpawnWithLabelAvailable()"  [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
                 <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
             </li>
-            <li [ngClass]="{ disabled: isDeleteDisabled() }"><a (click)="delete()">Delete</a></li>
+            <li [ngClass]="{ disabled: !isDeleteAuthorized() }"><a (click)="delete()">Delete</a></li>
         </ul>
     </div>
 </ng-template>

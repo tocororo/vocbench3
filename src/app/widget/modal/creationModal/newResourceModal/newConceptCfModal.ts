@@ -28,6 +28,8 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
 
     @ViewChild("toFocus") inputToFocus: ElementRef;
 
+    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+
     //standard form
     private label: string;
     private lang: string;
@@ -48,6 +50,9 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
 
     ngAfterViewInit() {
         this.inputToFocus.nativeElement.focus();
+        setTimeout(() => {
+            this.viewInitialized = true;
+        });
     }
 
     private onLangChange(newLang: string) {
@@ -65,7 +70,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
     }
 
     isStandardFormDataValid(): boolean {
-        return (this.label != undefined && this.label.trim() != "" &&
+        return (this.label != undefined && this.label.trim() != "" && this.lang != null &&
             this.schemes != null && this.schemes.length > 0);
     }
 
@@ -78,7 +83,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
-            cls: this.resourceClass,
+            cls: null,
             schemes: this.schemes,
             cfId: this.customFormId,
             cfValueMap: entryMap
@@ -86,6 +91,10 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
+        }
+        //set class only if not the default
+        if (this.resourceClass.getURI() != SKOS.concept.getURI()) {
+            returnedData.cls = this.resourceClass;
         }
         this.dialog.close(returnedData);
     }

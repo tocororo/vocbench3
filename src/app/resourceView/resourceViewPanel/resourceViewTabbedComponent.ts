@@ -122,13 +122,19 @@ export class ResourceViewTabbedComponent {
      * so that the header of the tab shows the updated resource.
      * NB this udpate affects also the resource in the tree (since resource stored the object passed from the tree)
      */
-    private onResourceUpdate(resource: ARTResource) {
-        for (var i = 0; i < this.tabs.length; i++) {
-            if (this.tabs[i].resource.getNominalValue() == resource.getNominalValue()) {
-                this.tabs[i].resource[ResAttribute.SHOW] = resource.getShow();
-                this.tabs[i].resource[ResAttribute.ROLE] = resource.getRole();
-            }
-        }
+    private onResourceUpdate(resource: ARTResource, tab: Tab) {
+        /**
+         * here I copy the attributes of the resource, instead of replacing the resource, so that I prevent
+         * that the resource-view component detectes the change of the input [resource] and makes starting
+         * a loop (resource updated -> getResourceView() -> response parsed and resource in RV updated -> resource updated -> ...)
+         */
+        // let props: string[] = Object.getOwnPropertyNames(resource);
+        // for (var i = 0; i < props.length; i++) {
+        //     tab.resource[props[i]] = resource[props[i]];
+        // }
+
+        // Solved the previous problem simply cheching in ngOnChanges of ResourceView if the nominalValue of the resource has changed
+        tab.resource = resource;
     }
 
 }

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -46,6 +47,10 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     initTree() {
+        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY)) {
+            return;
+        }
+
         this.roots = [];
         this.selectedNode = null;
 
@@ -66,7 +71,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the tree");
+                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
                     return;
                 };
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
@@ -76,9 +81,11 @@ export class ConceptTreeComponent extends AbstractTree {
                         //let the found node expand itself and the remaining path
                         path.splice(0, 1);
                         childrenNodeComponent[i].expandPath(path);
-                        break;
+                        return;
                     }
                 }
+                //if this line is reached it means that the first node of the path has not been found
+                this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
             }
         );
     }
@@ -86,16 +93,16 @@ export class ConceptTreeComponent extends AbstractTree {
     //EVENT LISTENERS
 
     private onTopConceptCreated(concept: ARTURIResource, schemes: ARTURIResource[]) {
-        if (this.schemes == undefined) {//in no-scheme mode add to the root if doesn't already in
-            if (!ResourceUtils.containsResource(this.roots, concept)) {
+        if (this.schemes == undefined) {//in no-scheme mode add to the root if it isn't already in
+            if (!ResourceUtils.containsNode(this.roots, concept)) {
                 this.roots.push(concept);
             }
         } else { //otherwise add the top concept only if it is added in a scheme currently active in the tree
             if (this.schemes != null) {
                 for (var i = 0; i < schemes.length; i++) {
-                    if (ResourceUtils.containsResource(this.schemes, schemes[i])) {
+                    if (ResourceUtils.containsNode(this.schemes, schemes[i])) {
                         this.roots.push(concept);
-                        return;
+                        break;
                     }
                 }
             }

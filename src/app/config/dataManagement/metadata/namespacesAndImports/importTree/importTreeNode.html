@@ -3,17 +3,28 @@
         <img *ngIf="import.imports.length > 0" src="../../../../../../assets/images/icons/arrow.png" (click)="open = !open"
             [ngClass]="{'arrow-right': !open}">
 	</div>
-    <div style="flex: 1;">
+    <div style="flex: 1;" [ngClass]="{ stagingAdd: import.status == 'STAGED_ADDITION', stagingRemove: import.status == 'STAGED_REMOVAL' }">
         {{import.id}}
     </div>
     <span *ngIf="import.status == 'LOOP'" class="glyphicon glyphicon-repeat" style="margin-right: 6px;" title="Loop of imports"></span>
-    <span *ngIf="import.status == 'FAILED'" class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;" title="Failed import"></span>
+    
+    <div *ngIf="import.status == 'FAILED'" class="btn-group">
+        <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="Failed import">
+            <span class="glyphicon glyphicon-warning-sign"></span>
+        </button>
+        <ul class="dropdown-menu pull-right">
+            <li><a (click)="repairFromLocalFile()">Repair from local file</a></li>
+            <li><a (click)="repairFromWeb()">Repair from web</a></li>
+            <li><a (click)="repairFromWebToMirror()">Repair from web to mirror</a></li>
+        </ul>
+    </div>
+
     <button *ngIf="import.root" class="btn btn-default btn-xs" (click)="removeImport()">
         <span class="glyphicon glyphicon-trash" title="Remove import"></span>
     </button>
 </div>
 
 <div class="subTree" *ngIf="import.imports.length > 0 && open">
-    <import-tree-node *ngFor="let i of import.imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)">
+    <import-tree-node *ngFor="let i of import.imports" [import]="i" (nodeRemoved)="onNodeRemoved($event)" (update)="onUpdate()">
     </import-tree-node>
 </div>

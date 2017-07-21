@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { XmlSchema } from "../../models/Vocabulary";
+import { XmlSchema, RDFS } from "../../models/Vocabulary";
 import { ARTURIResource } from "../../models/ARTResources";
 
 @Component({
@@ -15,14 +15,16 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     @Input() allowedDatatypes: ARTURIResource[]; //the datatypes allowed by the component
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
 
-    private datatypeList: ARTURIResource[] = [
-        XmlSchema.boolean, XmlSchema.date, XmlSchema.dateTime, XmlSchema.float, XmlSchema.integer, XmlSchema.string, XmlSchema.time
-    ];
+    private datatypeList: ARTURIResource[] = XmlSchema.DATATYPES;
     private datatype: ARTURIResource;
 
     private value: string;
 
     ngOnInit() {
+        //re-initialize allowedDatatypes in case its sole element is rdfs:Literal
+        if (this.allowedDatatypes != undefined && this.allowedDatatypes[0].getURI() == RDFS.literal.getURI()) {
+            this.allowedDatatypes = undefined; //so it allows all the datatypes
+        }
         //initialize default datatype to xsd:string if allowed, to the first allowed otherwise
         if (this.allowedDatatypes == undefined) {
             this.datatype = XmlSchema.string;

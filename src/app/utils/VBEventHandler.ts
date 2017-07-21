@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ARTURIResource, ARTResource, ARTLiteral } from '../models/ARTResources';
-import { ResourceViewMode } from '../utils/VBPreferences';
+import { ResourceViewMode } from '../utils/VBProperties';
 import { VBContext } from '../utils/VBContext';
 
 /**

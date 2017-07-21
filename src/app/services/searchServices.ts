@@ -33,7 +33,7 @@ export class SearchServices {
             searchMode: searchMode,
         };
         if (schemes != undefined) {
-            params.scheme = schemes;
+            params.schemes = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, true).map(
             stResp => {
@@ -87,7 +87,15 @@ export class SearchServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, true).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                var shortestPath: ARTURIResource[] = [];
+                var paths: ARTURIResource[] = Deserializer.createURIArray(stResp);
+                for (var i = 0; i < paths.length; i++) {
+                    shortestPath.push(paths[i]);
+                    if (paths[i].getURI() == resource.getURI()) {
+                        break;
+                    }
+                }
+                return shortestPath;
             }
         );
     }

@@ -1,29 +1,29 @@
 <div class="vbox">
 
     <ul class="nav nav-tabs nav-tabs-xs" (click)="$event.preventDefault()">
-        <li [ngClass]="{active : activeTab == 'cls'}">
+        <li [ngClass]="{active : activeTab == 'cls', disabled: !isClassAuthorized() }">
             <a href (click)="selectTab('cls')">
                 Class
             </a>
         </li>
         <ng-template [ngIf]="isProjectSKOS()">
-            <li [ngClass]="{active : activeTab == 'concept'}">
+            <li [ngClass]="{active : activeTab == 'concept', disabled: !isConceptAuthorized() }">
                 <a href (click)="selectTab('concept')">
                     Concept
                 </a>
             </li>
-            <li [ngClass]="{active : activeTab == 'conceptScheme'}">
+            <li [ngClass]="{active : activeTab == 'conceptScheme', disabled: !isSchemeAuthorized() }">
                 <a href (click)="selectTab('conceptScheme')">
                     Scheme
                 </a>
             </li>
-            <li [ngClass]="{active : activeTab == 'skosCollection'}">
+            <li [ngClass]="{active : activeTab == 'skosCollection', disabled: !isCollectionAuthorized() }">
                 <a href (click)="selectTab('skosCollection')">
                     Collection
                 </a>
             </li>
         </ng-template>      
-        <li [ngClass]="{active : activeTab == 'property'}">
+        <li [ngClass]="{active : activeTab == 'property', disabled: !isPropertyAuthorized() }">
             <a href (click)="selectTab('property')">
                 Property
             </a>

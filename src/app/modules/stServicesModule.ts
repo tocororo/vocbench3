@@ -8,7 +8,7 @@ import { AuthServices } from "../services/authServices";
 import { ClassesServices } from "../services/classesServices";
 import { CODAServices } from "../services/codaServices";
 import { CustomFormsServices } from "../services/customFormsServices";
-import { DatasetMetadataExportServices } from "../services/datasetMetadataExportServices";
+import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { ExportServices } from "../services/exportServices";
 import { HistoryServices } from "../services/historyServices";
 import { IcvServices } from "../services/icvServices";
@@ -18,7 +18,7 @@ import { ManchesterServices } from "../services/manchesterServices";
 import { MetadataServices } from "../services/metadataServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
 import { PluginsServices } from "../services/pluginsServices";
-import { PreferencesServices } from "../services/preferencesServices";
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
@@ -45,7 +45,7 @@ import { VersionsServices } from "../services/versionsServices";
         ClassesServices,
         CODAServices,
         CustomFormsServices,
-        DatasetMetadataExportServices,
+        DatasetMetadataServices,
         ExportServices,
         HistoryServices,
         IcvServices,
@@ -55,7 +55,7 @@ import { VersionsServices } from "../services/versionsServices";
         MetadataServices,
         OntoManagerServices,
         PluginsServices,
-        PreferencesServices,
+        PreferencesSettingsServices,
         ProjectServices,
         PropertyServices,
         RefactorServices,

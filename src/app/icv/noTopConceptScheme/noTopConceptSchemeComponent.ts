@@ -5,7 +5,7 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../models/Vocabulary";
-import { VBPreferences } from "../../utils/VBPreferences";
+import { VBProperties } from "../../utils/VBProperties";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -19,7 +19,7 @@ export class NoTopConceptSchemeComponent {
 
     private brokenSchemeList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBPreferences,
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
         private creationModals: CreationModalServices) { }
 

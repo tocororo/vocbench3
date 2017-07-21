@@ -38,8 +38,6 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
     private onAccessLevelChange(consumer: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }, newLevel: AccessLevel) {
         var oldLevel: AccessLevel = consumer.availableACLLevel;
-        console.log("oldLevel", oldLevel);
-        console.log("newLevel", newLevel);
 
         var message: string;
         if (newLevel == this.nullAccessLevel) {

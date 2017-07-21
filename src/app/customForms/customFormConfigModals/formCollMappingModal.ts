@@ -42,7 +42,8 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
                     this.basicModals.selectResource("Suggested resources", null, suggestions).then(
                         res => {
                             this.selectedResource = res;
-                        }
+                        },
+                        () => {}
                     );
                 }
             }

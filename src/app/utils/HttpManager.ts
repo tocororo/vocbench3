@@ -6,6 +6,8 @@ import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { UIUtils } from "../utils/UIUtils";
 import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
+import { Project } from "../models/Project";
+import { VersionInfo } from "../models/History";
 import { VBContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
@@ -25,7 +27,7 @@ export class HttpManager {
     private oldServerpath: string = "resources/stserver/STServer";
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
-    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({ versionId: null, skipErrorAlert: false, oldTypeService: false });
+    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: false, oldTypeService: false });
 
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
@@ -355,21 +357,20 @@ export class HttpManager {
 
         var params: string = "";
 
-        //if a (temp) context project is set, use it
-        if (VBContext.getContextProject() != undefined) {
-            params += "ctx_project=" + encodeURIComponent(VBContext.getContextProject().getName()) + "&";
+        //give priority to ctx_project in VBRequestOptions over project in ctx
+        if (HttpServiceContext.getContextProject() != undefined) {
+            params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
+            params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
 
-        if (options.versionId != undefined) { //give priority to version in VBRequestOptions over version in ctx
-            params += "ctx_version=" + encodeURIComponent(options.versionId) + "&";
-        } else if (VBContext.getContextVersion() != undefined) {
-            params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
+        if (HttpServiceContext.getContextVersion() != undefined) { //give priority to version in VBRequestOptions over version in ctx
+            params += "ctx_version=" + encodeURIComponent(HttpServiceContext.getContextVersion().versionId) + "&";
         }
 
-        if (VBContext.getSessionToken() != undefined) {
-            params += "ctx_token=" + encodeURIComponent(VBContext.getSessionToken()) + "&";
+        if (HttpServiceContext.getSessionToken() != undefined) {
+            params += "ctx_token=" + encodeURIComponent(HttpServiceContext.getSessionToken()) + "&";
         }
         return params;
     }
@@ -414,10 +415,7 @@ export class HttpManager {
           "statusText": "", "headers": {}, "type": 3, "url": null }
         */
         if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
-            this.basicModals.alert("Error",
-                "No SemanticTurkey server found! Please check that a server is listening on "
-                + this.serverhost + ". Semantic Turkey server can be downloaded from here: "
-                + "https://bitbucket.org/art-uniroma2/semantic-turkey/downloads", "error");
+            this.basicModals.alert("Error", "Connection with ST server has failed; please check your internet connection", "error");
         } else if (err.status == 401 || err.status == 403) {
             //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
@@ -426,6 +424,8 @@ export class HttpManager {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
                         VBContext.resetContext();
+                        HttpServiceContext.resetContext();
+                        UIUtils.resetNavbarTheme();
                         this.router.navigate(['/Home']);
                     }
                 }
@@ -451,16 +451,75 @@ export class HttpManager {
 
 }
 
+export class HttpServiceContext {
+    private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
+    private static ctxVersion: VersionInfo; //version used
+    private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
+
+    /**
+     * Sets a contextual project (project temporarly used in some scenarios)
+     */
+    static setContextProject(project: Project) {
+        this.ctxProject = project;
+    }
+    /**
+     * Gets a contextual project (project temporarly used in some scenarios)
+     */
+    static getContextProject(): Project {
+        return this.ctxProject;
+    }
+    /**
+     * Removes a contextual project (project temporarly used in some scenarios)
+     */
+    static removeContextProject() {
+        this.ctxProject = null;
+    }
+
+
+    static setContextVersion(version: VersionInfo) {
+        this.ctxVersion = version;
+    }
+    static getContextVersion(): VersionInfo {
+        return this.ctxVersion;
+    }
+    static removeContextVersion() {
+        this.ctxVersion = null;
+    }
+
+    /**
+     * Sets a sessione token (to keep track of session in some tools/scenarios)
+     */
+    static setSessionToken(token: string) {
+        this.sessionToken = token
+    }
+    /**
+     * Gets a sessione token (to keep track of session in some tools/scenarios)
+     */
+    static getSessionToken(): string {
+        return this.sessionToken;
+    }
+    /**
+     * Removes a sessione token (to keep track of session in some tools/scenarios)
+     */
+    static removeSessionToken() {
+        this.sessionToken = null;
+    }
+
+    static resetContext() {
+        this.ctxProject = null;
+        this.ctxVersion = null;
+        this.sessionToken = null;
+    }
+}
+
 
 //inspired by angular RequestOptions
 export class VBRequestOptions {
 
     oldTypeService: boolean;
-    versionId: string;
     skipErrorAlert: boolean;
     
-    constructor({ versionId, oldTypeService, skipErrorAlert }: VBRequestOptionsArgs = {}) {
-        this.versionId = versionId != null ? versionId : null;
+    constructor({ oldTypeService, skipErrorAlert, }: VBRequestOptionsArgs = {}) {
         this.skipErrorAlert = skipErrorAlert != null ? skipErrorAlert : null;
         this.oldTypeService = oldTypeService != null ? oldTypeService : null;
     }
@@ -473,7 +532,6 @@ export class VBRequestOptions {
     merge(options?: VBRequestOptions): VBRequestOptions {
         //if options is provided and its parameters is not null, override the value of the current instance
         return new VBRequestOptions({
-            versionId: options && options.versionId != null ? options.versionId : this.versionId,
             skipErrorAlert: options && options.skipErrorAlert != null ? options.skipErrorAlert : this.skipErrorAlert,
             oldTypeService: options && options.oldTypeService != null ? options.oldTypeService : this.oldTypeService,
         });
@@ -488,12 +546,9 @@ interface VBRequestOptionsArgs {
     oldTypeService?: boolean;
 
     /**
-     * a one-time versionId: is used to switch to a given version only in a precise request
-     */
-    versionId?: string; 
-    /**
      * If true prevents an alert dialog to show up in case of error during requests.
      * Is useful to handle the error from the component that invokes the service
      */
-    skipErrorAlert?: boolean
+    skipErrorAlert?: boolean;
+
 }

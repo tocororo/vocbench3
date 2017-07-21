@@ -8,14 +8,14 @@
             <label class="groupPanel-heading-content">Schemes:</label>
         </span>
         <span *ngIf="!collapsed" class="groupPanel-heading-content">
-            <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" (click)="addScheme()">
+            <input type="image" [src]="addBtnImgSrc" (click)="addScheme()">
         </span>
     </div>
     <div class="groupPanel-body vbox">
         <div *ngIf="!collapsed" class="scrollableContainer" style="border: 1px solid #ccc; border-radius: 3px;">
             <div *ngFor="let s of schemeList" class="listItem hbox" [ngClass]="{active : s == selectedScheme}">
                 <rdf-resource [resource]="s" style="flex: 1;"></rdf-resource>
-                <button class="resViewPartitionBtn" title="Remove" (click)="removeScheme()">
+                <button class="resViewPartitionBtn" title="Remove" (click)="removeScheme(s)">
                     <span>-</span>
                 </button>
             </div>
