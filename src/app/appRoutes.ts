@@ -47,8 +47,8 @@ export const routes: Routes = [
     { path: "Config/Refactor", component: RefactorComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "Config/Versioning", component: VersioningComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     // route config for project management
-    { path: "Projects/ImportProject", component: ImportProjectComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] },
-    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] },
+    { path: "Projects/ImportProject", component: ImportProjectComponent, canActivate: [AdminGuard], canDeactivate: [CanDeactivateModalGuard] },
+    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AdminGuard], canDeactivate: [CanDeactivateModalGuard] },
 ];
 
 /*

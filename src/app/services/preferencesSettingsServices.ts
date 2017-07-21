@@ -98,7 +98,6 @@ export class PreferencesSettingsServices {
      * Gets the preferences of the currently logged user for the currently open project
      */
     getProjectPreferences(properties: string[], pluginID?: string) {
-        console.log("properties", properties);
         console.log("[PreferencesServices] getProjectPreferences");
         var params: any = {
             properties: properties
@@ -163,6 +162,34 @@ export class PreferencesSettingsServices {
         console.log("[PreferencesServices] getSystemLanguages");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getSystemLanguages", params, true);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param value 
+     */
+    setSystemSetting(property: string, value?: string) {
+        console.log("[PreferencesServices] setSystemSetting");
+        var params: any = {
+            property: property,
+        };
+        if (value != null) {
+            params.value = value;
+        }
+        return this.httpMgr.doPost(this.serviceName, "setSystemSetting", params, true);
+    }
+
+    /**
+     * 
+     * @param properties 
+     */
+    getSystemSettings(properties: string[]) {
+        console.log("[PreferencesServices] getSystemSettings");
+        var params = {
+            properties: properties
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSystemSettings", params, true);
     }
 
 }

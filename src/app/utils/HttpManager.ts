@@ -403,14 +403,13 @@ export class HttpManager {
 
     /**
      * Handler for error in requests to ST server. Called in catch clause of get/post requests.
-     * @param error error catched in catch clause
+     * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
      * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
      *      Is useful to handle the error from the component that invokes the service. See doGet method.
      */
-    private handleError(err: any, skipErrorAlert?: boolean) {
-        console.error(err);
+    private handleError(err: Response | any, skipErrorAlert?: boolean) {
         /* 
-        Handle errors in case ST server is down. In this case, the response (err) is an object like the following 
+        Handle errors in case ST server is down. In this case, the Response (err) is an object like the following 
         { "_body": { "isTrusted": true }, "status": 0, "ok": false,
           "statusText": "", "headers": {}, "type": 3, "url": null }
         */
@@ -430,7 +429,7 @@ export class HttpManager {
                     }
                 }
             );
-        } else if (!skipErrorAlert) {
+        } else if (!skipErrorAlert) { //server responded with a 200 tjat contains a description of an excpetion
             this.basicModals.alert("Error", err, "error");
         }
         UIUtils.stopAllLoadingDiv();

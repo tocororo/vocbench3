@@ -11,6 +11,7 @@ export class InputEditableComponent implements OnInit {
     @Input() options: string[]; //options of select element. Used only if type = "select"
     @Input() size: string = "sm"; //xs, sm (default), md, lg
     @Input() type: string; //text (default), email, date, select
+    @Input() allowEmpty: boolean = false; //if true allow the value to be replaced with empty string
 
     @Output() valueEdited = new EventEmitter<string>();
 
@@ -41,8 +42,9 @@ export class InputEditableComponent implements OnInit {
     }
 
     private confirmEdit() {
-        if (this.value == undefined || this.value.trim() == "" || (this.type == "email" && !UserForm.isValidEmail(this.value))) {
-            this.basicModals.alert("Invalid value", "The value inserted is not valid. Please check and retry.", "error");
+        if (((this.value == undefined || this.value.trim() == "") && !this.allowEmpty) || 
+            (this.type == "email" && !UserForm.isValidEmail(this.value))) {
+            this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "error");
             return;
         }
         this.editInProgress = false;

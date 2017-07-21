@@ -12,17 +12,27 @@
         <tbody>
             <tr>
                 <td nowrap>Server URL</td>
-                <td><input type="text" class="form-control input-sm" [(ngModel)]="config.serverURL" placeholder="http://serverurl"></td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <select class="form-control" [(ngModel)]="selectedConfig" name="selectedRepositoryAccess">
+                            <option *ngFor="let conf of savedConfigs" [ngValue]="conf">{{conf.serverURL}}</option>
+                            <option *ngIf="savedConfigs.length == 0" disabled>No Remote Store Configuration saved. Create a new one by clicking on 'Manage Config'</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-sm" (click)="changeRemoteConfig()">Manage Config</button>
+                        </span>
+                    </div>
+                </td>
                 <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="URL to the server of the rdf repository"></span></td>
             </tr>
             <tr>
                 <td nowrap>Username</td>
-                <td><input type="text" class="form-control input-sm" [(ngModel)]="config.username" placeholder="username"></td>
+                <td><input type="text" class="form-control input-sm" [ngModel]="selectedConfig.username" placeholder="username" readonly></td>
                 <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Identifier for the user connecting to the rdf repository"></span></td>
             </tr>
             <tr>
                 <td nowrap>Password</td>
-                <td><input type="text" class="form-control input-sm" [(ngModel)]="config.password" placeholder="password"></td>
+                <td><input type="text" class="form-control input-sm" [ngModel]="selectedConfig.password" placeholder="password" readonly></td>
                 <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Password for the user connecting to the rdf repository"></span></td>
             </tr>
         </tbody>
@@ -30,6 +40,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConfig.serverURL">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>
