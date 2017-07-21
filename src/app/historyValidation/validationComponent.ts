@@ -82,18 +82,28 @@ export class ValidationComponent extends AbstractHistValidComponent {
             UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
             this.init();
         } else {
-            if (commits[0]['validationAction'] == this.ACTION_ACCEPT) {
-                validationFunctions = this.validationService.accept(commits[0].commit);
-            } else if (commits[0]['validationAction'] == this.ACTION_REJECT) {
-                validationFunctions = this.validationService.reject(commits[0].commit);
+            //Iterate over commits (from the oldest to the most recent) validate (accept/reject) them
+
+            //get older commit
+            let olderCommit: CommitInfo = commits[0];
+            for (var i = 1; i < commits.length; i++) {
+                if (commits[i].endTime < olderCommit.endTime) {
+                    olderCommit = commits[i];
+                }
+            }
+
+            if (olderCommit['validationAction'] == this.ACTION_ACCEPT) {
+                validationFunctions = this.validationService.accept(olderCommit.commit);
+            } else if (olderCommit['validationAction'] == this.ACTION_REJECT) {
+                validationFunctions = this.validationService.reject(olderCommit.commit);
             } else {
-                commits.shift();
+                commits.splice(commits.indexOf(olderCommit), 1);
                 this.validateCommitsRecursively(commits);
                 return;
             }
             validationFunctions.subscribe(
                 (stResp: any) => {
-                    commits.shift();
+                    commits.splice(commits.indexOf(olderCommit), 1);
                     this.validateCommitsRecursively(commits);
                 }
             );

@@ -19,4 +19,4 @@ var st_port = "1979";
 /**
  * Protocol - either http or https
  */
-var st_protocol = "https";
+var st_protocol = "http";
