@@ -15,3 +15,8 @@ var st_host = "127.0.0.1";
  * Port where SemanticTurkey server is listening
  */
 var st_port = "1979";
+
+/**
+ * Protocol - either http or https
+ */
+var st_protocol = "https";
