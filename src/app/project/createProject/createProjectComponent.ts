@@ -63,13 +63,8 @@ export class CreateProjectComponent {
     private selectedSupportRepoConf: {factoryID: string, configuration: PluginConfiguration}; //chosen configuration for history/validation repository
     //backend types
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
-    private selectedCoreRepoBackendType: BackendTypesEnum;
-    private selectedSupportRepoBackendType: BackendTypesEnum;
-    private repoConfBackendTypeMap: { [key: string]: BackendTypesEnum[] } = { //cannot stores configuration as constant since they are provided from server
-        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration": [BackendTypesEnum.openrdf_NativeStore],
-        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JPersistentInMemorySailConfigurerConfiguration": [BackendTypesEnum.openrdf_MemoryStore],
-        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.GraphDBFreeConfigurerConfiguration": [BackendTypesEnum.graphdb_FreeSail],
-    }
+    private selectedCoreRepoBackendType: BackendTypesEnum = this.backendTypes[0];
+    private selectedSupportRepoBackendType: BackendTypesEnum = this.backendTypes[0];
 
     /**
      * OPTIONAL PROJECT SETTINGS
@@ -126,7 +121,7 @@ export class CreateProjectComponent {
                                     break;
                                 }
                             }
-                            this.updateRepoBackendType("data");
+                            
                             this.selectedSupportRepoConf = this.supportRepoConfList[0];
                             for (var i = 0; i < this.supportRepoConfList.length; i++) {
                                 if (this.supportRepoConfList[i].configuration.type == this.DEFAULT_REPO_CONFIGURER) {
@@ -134,7 +129,6 @@ export class CreateProjectComponent {
                                     break;
                                 }
                             }
-                            this.updateRepoBackendType("support");
                         }
                     );
                 }
@@ -259,28 +253,6 @@ export class CreateProjectComponent {
     }
 
     /**
-     * When the a repository configuration changes, update the selected backend type (choosing among the availables for that config)
-     */
-    private updateRepoBackendType(repoType: "data" | "support") {
-        if (repoType == "data") {
-            this.selectedCoreRepoBackendType = this.repoConfBackendTypeMap[this.selectedDataRepoConf.configuration.type][0];
-        } else { //support
-            this.selectedSupportRepoBackendType = this.repoConfBackendTypeMap[this.selectedSupportRepoConf.configuration.type][0];
-        }
-    }
-
-    private isBackendTypeCompliant(backendType: BackendTypesEnum, repoType: "data" | "support"): boolean {
-        if (this.selectedDataRepoConf == null || this.selectedSupportRepoConf == null) { //repo configurations not yet initialized
-            return true;
-        }
-        if (repoType == "data") {
-            return this.repoConfBackendTypeMap[this.selectedDataRepoConf.configuration.type].indexOf(backendType) != -1;
-        } else { //support
-            return this.repoConfBackendTypeMap[this.selectedSupportRepoConf.configuration.type].indexOf(backendType) != -1;
-        }
-    }
-
-    /**
      * URI GENERATOR PLUGIN
      */
 
@@ -376,7 +348,6 @@ export class CreateProjectComponent {
          * Prepare coreRepoSailConfigurerSpecification parameter
          */
         var coreRepoSailConfigurerSpecification: PluginSpecification
-        var coreRepoBackendType: BackendTypesEnum;
         //prepare config of core repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) { 
             //check if data repository configuration need to be configured
@@ -401,15 +372,12 @@ export class CreateProjectComponent {
                 configType: this.selectedDataRepoConf.configuration.type,
                 properties: coreRepoProps
             }
-
-            coreRepoBackendType = this.selectedCoreRepoBackendType;
         }
 
         /**
          * Prepare supportRepoSailConfigurerSpecification parameter
          */
         var supportRepoSailConfigurerSpecification: PluginSpecification
-        var supportRepoBackendType: BackendTypesEnum;
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
             //check if support repository configuration need to be configured
@@ -435,8 +403,16 @@ export class CreateProjectComponent {
                 properties: supportRepoProps
             }
             // console.log("supportRepoSailConfigurerSpecification", supportRepoSailConfigurerSpecification);
+        }
 
-            supportRepoBackendType = this.selectedSupportRepoBackendType;
+        //backend types
+        var coreRepoBackendType: BackendTypesEnum;
+        var supportRepoBackendType: BackendTypesEnum;
+        if (!this.isSelectedRepoAccessCreateMode()) {
+            coreRepoBackendType = this.selectedCoreRepoBackendType;
+            if (this.validation || this.history) {
+                supportRepoBackendType = this.selectedSupportRepoBackendType;
+            }
         }
         
         /**

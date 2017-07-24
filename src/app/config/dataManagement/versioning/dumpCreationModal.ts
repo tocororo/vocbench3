@@ -40,12 +40,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
 
     //backend types
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
-    private selectedRepoBackendType: BackendTypesEnum;
-    private repoConfBackendTypeMap: { [key: string]: BackendTypesEnum[] } = { //cannot stores configuration as constant since they are provided from server
-        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration": [BackendTypesEnum.openrdf_NativeStore],
-        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JPersistentInMemorySailConfigurerConfiguration": [BackendTypesEnum.openrdf_MemoryStore],
-        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.GraphDBFreeConfigurerConfiguration": [BackendTypesEnum.graphdb_FreeSail],
-    }
+    private selectedRepoBackendType: BackendTypesEnum = this.backendTypes[0];
 
     constructor(public dialog: DialogRef<DumpCreationModalData>, private pluginService: PluginsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
@@ -65,7 +60,6 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
                                 this.repoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
                             }
                             this.selectedRepoConf = this.repoConfList[0];
-                            this.updateRepoBackendType();
                         }
                     );
                 }
@@ -125,20 +119,6 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         );
     }
 
-    /**
-     * When the a repository configuration changes, update the selected backend type (choosing among the availables for that config)
-     */
-    private updateRepoBackendType() {
-        this.selectedRepoBackendType = this.repoConfBackendTypeMap[this.selectedRepoConf.configuration.type][0];
-    }
-
-    private isBackendTypeCompliant(backendType: BackendTypesEnum): boolean {
-        if (this.selectedRepoConf == null) { //repo configuration not yet initialized
-            return true;
-        }
-        return this.repoConfBackendTypeMap[this.selectedRepoConf.configuration.type].indexOf(backendType) != -1;
-    }
-
     ok(event: Event) {
         //check if all the data is ok
         //valid version id
@@ -191,13 +171,11 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
             repoConfigurerSpecification: null,
             backendType: null
         }
-        //specify repository id only if it's not in creation mode (access existing remote)
+        //specify repository id only if it's in access mode (access existing remote)
         if (!this.isSelectedRepoAccessCreateMode()) {
             returnedData.repositoryId = this.repositoryId;
             returnedData.backendType = this.selectedRepoBackendType;
-        }
-        //prepare config of repo only if it is in creation mode
-        if (this.isSelectedRepoAccessCreateMode()) { 
+        } else { //prepare config of repo only if it is in creation mode
             var repoConfigPluginSpecification: PluginSpecification;
             var repoProps: any = {};
             let repoConfigParams: PluginConfigParam[] = this.selectedRepoConf.configuration.params;

@@ -90,9 +90,10 @@
                             </div>
                         </div>
 
+                        <!-- Data repo -->
                         <div class="form-group">
-                            <label class="control-label col-sm-1">Data Repository ID</label>
-                            <div class="col-sm-3">
+                            <label class="control-label col-sm-2">Data Repository ID</label>
+                            <div class="col-sm-4">
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control" name="dataRepoId" [(ngModel)]="dataRepoId"
                                         placeholder="Data Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
@@ -104,36 +105,38 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="control-label col-sm-1">
-                                <label>Configuration</label>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="input-group" >
-                                    <select class="form-control input-sm" [(ngModel)]="selectedDataRepoConf" name="selectedDataRepoConf"
-                                        (ngModelChange)="updateRepoBackendType('data')" [disabled]="!isSelectedRepoAccessCreateMode()">
-                                        <option *ngFor="let rc of dataRepoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
-                                    </select>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default btn-sm" (click)="configureDataRepo()" [disabled]="!isSelectedRepoAccessCreateMode()">Configure</button>
-                                    </span>
+                            <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
+                                <div class="control-label col-sm-2">
+                                    <label>Configuration</label>
                                 </div>
-                            </div>
-                            <div class="control-label col-sm-1">
-                                <label>Backend type</label>
-                            </div>
-                            <div class="col-sm-3">
-                                <select class="form-control input-sm" [(ngModel)]="selectedCoreRepoBackendType" [disabled]="!isSelectedRepoAccessCreateMode()"
-                                    name="selectedCoreRepoBackendType">
-                                    <ng-template ngFor let-bt [ngForOf]="backendTypes">
-                                        <option *ngIf="isBackendTypeCompliant(bt, 'data')" [value]="bt">{{bt}}</option>
-                                    </ng-template>
-                                </select>
-                            </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group" >
+                                        <select class="form-control input-sm" [(ngModel)]="selectedDataRepoConf" name="selectedDataRepoConf">
+                                            <option *ngFor="let rc of dataRepoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-sm" (click)="configureDataRepo()">Configure</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+                                <div class="control-label col-sm-2">
+                                    <label>Backend type</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control input-sm" [(ngModel)]="selectedCoreRepoBackendType" name="selectedCoreRepoBackendType">
+                                        <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
+                                    </select>
+                                </div>
+                            </ng-template>
                         </div>
 
+                        <!-- Support repo -->
+
                         <div class="form-group">
-                            <label class="control-label col-sm-1">History/Validation Repository ID</label>
-                            <div class="col-sm-3">
+                            <label class="control-label col-sm-2">History/Validation Repository ID</label>
+                            <div class="col-sm-4">
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control" name="supportRepoId" [(ngModel)]="supportRepoId"
                                         placeholder="History/Validation Repository ID" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
@@ -145,35 +148,36 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="control-label col-sm-1" style="white-space: nowrap">
-                                <span class="glyphicon glyphicon-info-sign" title="It is highly recommended not to use inference and to use a native repository"></span>
-                                <label>Configuration</label>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="input-group">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedSupportRepoConf" name="selectedSupportRepoConf"
-                                        (ngModelChange)="updateRepoBackendType('support')"  [disabled]="!isSelectedRepoAccessCreateMode() || !(history || validation)">
-                                        <option *ngFor="let rc of supportRepoConfList" [ngValue]="rc">{{rc.configuration.shortName}}</option>
-                                    </select>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default btn-sm" (click)="configureSupportRepo()"
-                                            [disabled]="!isSelectedRepoAccessCreateMode() || !(history || validation)">
-                                            Configure
-                                        </button>
-                                    </span>
+                            <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
+                                <div class="control-label col-sm-2" style="white-space: nowrap">
+                                    <span class="glyphicon glyphicon-info-sign" title="It is highly recommended not to use inference and to use a native repository"></span>
+                                    <label>Configuration</label>
                                 </div>
-                            </div>
-                            <div class="control-label col-sm-1">
-                                <label>Backend type</label>
-                            </div>
-                            <div class="col-sm-3">
-                                <select class="form-control input-sm" [(ngModel)]="selectedSupportRepoBackendType" name="selectedSupportRepoBackendType"
-                                    [disabled]="!isSelectedRepoAccessCreateMode() || !(history || validation)">
-                                    <ng-template ngFor let-bt [ngForOf]="backendTypes">
-                                        <option *ngIf="isBackendTypeCompliant(bt, 'support')" [value]="bt">{{bt}}</option>
-                                    </ng-template>
-                                </select>
-                            </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <select class="form-control input-sm" [(ngModel)]="selectedSupportRepoConf" name="selectedSupportRepoConf"
+                                            [disabled]="!(history || validation)">
+                                            <option *ngFor="let rc of supportRepoConfList" [ngValue]="rc">{{rc.configuration.shortName}}</option>
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default btn-sm" (click)="configureSupportRepo()" [disabled]="!(history || validation)">
+                                                Configure
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+                                <div class="control-label col-sm-2">
+                                    <label>Backend type</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control input-sm" [(ngModel)]="selectedSupportRepoBackendType" name="selectedSupportRepoBackendType"
+                                        [disabled]="!(history || validation)">
+                                        <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
+                                    </select>
+                                </div>
+                            </ng-template>
                         </div>
 
                     </form>
