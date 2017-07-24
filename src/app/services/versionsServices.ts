@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { RepositoryAccess } from "../models/Project";
+import { RepositoryAccess, BackendTypesEnum } from "../models/Project";
 import { VersionInfo } from "../models/History";
 import { PluginSpecification } from "../models/Plugins";
 
@@ -49,9 +49,10 @@ export class VersionsServices {
      * @param repositoryAccess tells the location of the repository. If null, then the same location of the core repository is used
      * @param repositoryId tells the name of the version repository. If the repository is local, this paramater must be null
      * @param repoConfigurerSpecification 
+     * @param backendType 
      */
     createVersionDump(versionId: string, repositoryAccess?: RepositoryAccess, repositoryId?: string,
-        repoConfigurerSpecification?: PluginSpecification) {
+        repoConfigurerSpecification?: PluginSpecification, backendType?: BackendTypesEnum) {
 
         console.log("[VersionsServices] createVersionDump");
         var params: any = {
@@ -65,6 +66,9 @@ export class VersionsServices {
         }
         if (repoConfigurerSpecification != null) {
             params.repoConfigurerSpecification = JSON.stringify(repoConfigurerSpecification);
+        }
+        if (backendType != null) {
+            params.backendType = backendType;
         }
         return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, true);
     }

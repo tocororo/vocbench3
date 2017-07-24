@@ -1,77 +1,80 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body vbox" style="max-height: 50vh">
+<div class="modal-body" style="max-height: 70vh">
 
-    <div class="scrollableContainer">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-3">Version ID:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control input-sm" [(ngModel)]="versionId" placeholder="Version ID" name="versionID">
+            </div>
+        </div>
 
-        <table class="table table-condensed table-borderless">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-                <col>
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <td class="text-right" nowrap>
-                        <label>Version ID:</label>
-                    </td>
-                    <td colspan="3">
-                        <input type="text" class="form-control input-sm" [(ngModel)]="versionId" placeholder="Version ID">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right" nowrap>
-                        <label>Repository Access:</label>
-                    </td>
-                    <td colspan="3">
-                        <div class="input-group" style="width: 100%">
-                            <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess">
-                                <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">
-                                    {{repoAcc}}
-                                </option>
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-sm" (click)="configureRemoteRepositoryAccess()" [disabled]="!isSelectedRepoAccessRemote()">
-                                    Remote Access Config
-                                </button>
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right" nowrap>
-                        <label>Repository ID:</label>
-                    </td>
-                    <td>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" [(ngModel)]="repositoryId" placeholder="Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" (click)="changeRemoteRepository()"
-                                    title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
-                                    <span class="glyphicon glyphicon-folder-open"></span>
-                                </button>
-                            </span>
-                        </div>
-                    </td>
-                    <td colspan="2">
-                        <div class="input-group" style="width: 100%">
-                            <select class="form-control input-sm" [(ngModel)]="selectedRepoConf" [disabled]="!isSelectedRepoAccessCreateMode()">
-                                <option *ngFor="let rc of repoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-sm" (click)="configureRepo()" [disabled]="!isSelectedRepoAccessCreateMode()">
-                                    Configure
-                                </button>
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Repository Access:</label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
+                        <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">
+                            {{repoAcc}}
+                        </option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-sm" (click)="configureRemoteRepositoryAccess()" [disabled]="!isSelectedRepoAccessRemote()">
+                            Remote Access Config
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
 
-    </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Repository ID:</label>
+            <div class="col-sm-9">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" [(ngModel)]="repositoryId" placeholder="Repository ID"
+                        [disabled]="isSelectedRepoAccessCreateMode()" name="repositoryId">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" (click)="changeRemoteRepository()"
+                            title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-3">Repo Configuration:</label>
+            <div class="col-sm-9">
+                <div class="input-group" style="width: 100%">
+                    <select class="form-control input-sm" [(ngModel)]="selectedRepoConf" [disabled]="!isSelectedRepoAccessCreateMode()"
+                        name="selectedRepoConf">
+                        <option *ngFor="let rc of repoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-sm" (click)="configureRepo()" [disabled]="!isSelectedRepoAccessCreateMode()">
+                            Configure
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-3">Backend type</label>
+            <div class="col-sm-9">
+                <select class="form-control input-sm" [(ngModel)]="selectedRepoBackendType"  [disabled]="!isSelectedRepoAccessCreateMode()"
+                    name="selectedRepoBackendType">
+                    <ng-template ngFor let-bt [ngForOf]="backendTypes">
+                        <option *ngIf="isBackendTypeCompliant(bt)" [value]="bt">{{bt}}</option>
+                    </ng-template>
+                </select>
+            </div>
+        </div>
+
+    </form>
 
 </div>
 <div class="modal-footer">

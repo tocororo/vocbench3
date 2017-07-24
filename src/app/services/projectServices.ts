@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
-import { Project, AccessLevel, LockLevel, RepositoryAccess } from '../models/Project';
+import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum } from '../models/Project';
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginSpecification } from '../models/Plugins';
 
@@ -112,7 +112,8 @@ export class ProjectServices {
     createProject(projectName: string, baseURI: string, model: ARTURIResource, lexicalizationModel: ARTURIResource,
         historyEnabled: boolean, validationEnabled: boolean, repositoryAccess: RepositoryAccess,
         coreRepoID: string, supportRepoID: string,
-        coreRepoSailConfigurerSpecification?: PluginSpecification, supportRepoSailConfigurerSpecification?: PluginSpecification,
+        coreRepoSailConfigurerSpecification?: PluginSpecification, coreBackendType?: BackendTypesEnum,
+        supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
         creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource) {
         
@@ -132,8 +133,14 @@ export class ProjectServices {
         if (coreRepoSailConfigurerSpecification != undefined) {
             params.coreRepoSailConfigurerSpecification = JSON.stringify(coreRepoSailConfigurerSpecification);
         }
+        if (coreBackendType != undefined) {
+            params.coreBackendType = coreBackendType;
+        }
         if (supportRepoSailConfigurerSpecification != undefined) {
             params.supportRepoSailConfigurerSpecification = JSON.stringify(supportRepoSailConfigurerSpecification);
+        }
+        if (supportBackendType != undefined) {
+            params.supportBackendType = supportBackendType;
         }
         if (uriGeneratorSpecification != undefined) {
             params.uriGeneratorSpecification = JSON.stringify(uriGeneratorSpecification);

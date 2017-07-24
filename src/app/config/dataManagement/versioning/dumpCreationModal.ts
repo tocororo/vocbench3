@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
 import { PluginsServices } from "../../../services/pluginsServices";
-import { Repository, RemoteRepositoryAccessConfig, RepositoryAccess, RepositoryAccessType } from "../../../models/Project";
+import { Repository, RemoteRepositoryAccessConfig, RepositoryAccess, RepositoryAccessType, BackendTypesEnum } from "../../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../../models/Plugins";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -38,6 +38,15 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     private repoConfList: { factoryID: string, configuration: PluginConfiguration }[];
     private selectedRepoConf: { factoryID: string, configuration: PluginConfiguration }; //chosen configuration for data repository
 
+    //backend types
+    private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
+    private selectedRepoBackendType: BackendTypesEnum;
+    private repoConfBackendTypeMap: { [key: string]: BackendTypesEnum[] } = { //cannot stores configuration as constant since they are provided from server
+        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration": [BackendTypesEnum.openrdf_NativeStore],
+        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JPersistentInMemorySailConfigurerConfiguration": [BackendTypesEnum.openrdf_MemoryStore],
+        "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.GraphDBFreeConfigurerConfiguration": [BackendTypesEnum.graphdb_FreeSail],
+    }
+
     constructor(public dialog: DialogRef<DumpCreationModalData>, private pluginService: PluginsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
@@ -56,6 +65,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
                                 this.repoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
                             }
                             this.selectedRepoConf = this.repoConfList[0];
+                            this.updateRepoBackendType();
                         }
                     );
                 }
@@ -115,6 +125,20 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         );
     }
 
+    /**
+     * When the a repository configuration changes, update the selected backend type (choosing among the availables for that config)
+     */
+    private updateRepoBackendType() {
+        this.selectedRepoBackendType = this.repoConfBackendTypeMap[this.selectedRepoConf.configuration.type][0];
+    }
+
+    private isBackendTypeCompliant(backendType: BackendTypesEnum): boolean {
+        if (this.selectedRepoConf == null) { //repo configuration not yet initialized
+            return true;
+        }
+        return this.repoConfBackendTypeMap[this.selectedRepoConf.configuration.type].indexOf(backendType) != -1;
+    }
+
     ok(event: Event) {
         //check if all the data is ok
         //valid version id
@@ -160,15 +184,17 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         }
 
         var returnedData: { versionId: string, repositoryAccess: RepositoryAccess, 
-                repositoryId: string, repoConfigurerSpecification: PluginSpecification} = {
+                repositoryId: string, repoConfigurerSpecification: PluginSpecification, backendType: BackendTypesEnum} = {
             versionId: this.versionId,
             repositoryAccess: repositoryAccess,
             repositoryId: null,
             repoConfigurerSpecification: null,
+            backendType: null
         }
         //specify repository id only if it's not in creation mode (access existing remote)
         if (!this.isSelectedRepoAccessCreateMode()) {
             returnedData.repositoryId = this.repositoryId;
+            returnedData.backendType = this.selectedRepoBackendType;
         }
         //prepare config of repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) { 

@@ -76,7 +76,7 @@ export class VersioningComponent {
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.versionsService.createVersionDump(
-                    data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification).subscribe(
+                    data.versionId, data.repositoryAccess, data.repositoryId, data.repoConfigurerSpecification, data.backendType).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.initVersions();

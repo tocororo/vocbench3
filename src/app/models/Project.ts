@@ -120,6 +120,13 @@ export const ProjectTypesEnum = {
     continuosEditing: "continuosEditing" as ProjectTypesEnum
 }
 
+export type BackendTypesEnum = "graphdb:FreeSail" | "openrdf:NativeStore" | "openrdf:MemoryStore";
+export const BackendTypesEnum = {
+    graphdb_FreeSail: "graphdb:FreeSail" as BackendTypesEnum,
+    openrdf_NativeStore: "openrdf:NativeStore" as BackendTypesEnum,
+    openrdf_MemoryStore: "openrdf:MemoryStore" as BackendTypesEnum
+}
+
 export type AccessLevel = "R" | "RW";
 export const AccessLevel = {
     R: "R" as AccessLevel,
