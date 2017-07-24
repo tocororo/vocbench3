@@ -30,7 +30,7 @@ export abstract class AbstractTreeNode {
     open: boolean = false;
 
     //structure to support the tree opening
-    pendingSearch: any = {
+    pendingSearch: { pending: boolean, path: ARTURIResource[] } = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         path: [], //remaining path of the tree to open
     }
@@ -133,7 +133,7 @@ export abstract class AbstractTreeNode {
     }
 
     /**
-     * Called when a node in the tree is clicked. This function emit an event 
+     * Called when the node is clicked. This function emit an event 
      */
     private selectNode() {
         this.nodeSelected.emit(this.node);
@@ -150,6 +150,9 @@ export abstract class AbstractTreeNode {
     //     }
     // }
 
+    /**
+     * Listener to the nodeSelected @Output event, called when a node in the subTree is clicked
+     */
     private onNodeSelected(node: ARTURIResource) {
         this.nodeSelected.emit(node);
     }

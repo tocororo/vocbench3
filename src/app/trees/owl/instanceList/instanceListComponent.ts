@@ -1,4 +1,5 @@
-import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges } from "@angular/core";
+import { Component, ViewChild, ViewChildren, Input, Output, EventEmitter, ElementRef, QueryList, SimpleChanges } from "@angular/core";
+import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -20,7 +21,10 @@ export class InstanceListComponent {
     //get the element in the view referenced with #blockDivTree
     @ViewChild('blockDivInstanceList') public blockDivElement: ElementRef;
 
-    private pendingSearch: any = {
+    //InstanceListNodeComponent children of this Component (useful to select the instance during the search)
+    @ViewChildren(InstanceListNodeComponent) viewChildrenNode: QueryList<InstanceListNodeComponent>;
+
+    private pendingSearch: { pending: boolean, instance: ARTURIResource, cls: ARTURIResource } = {
         pending: false, //tells if there is a pending search waiting that children view are initialized 
         instance: null, //searched instance
         cls: null //class of the searched instance
@@ -52,7 +56,6 @@ export class InstanceListComponent {
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
             if (changes['cls']) {
-                console.log("cls", this.cls);
                 let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
                 if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
                     this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
@@ -75,6 +78,19 @@ export class InstanceListComponent {
     ngAfterViewInit() {
         this.viewInitialized = true;
         this.initList();
+
+        //when InstanceListNodeComponent children changes, looks for a pending search to resume
+        this.viewChildrenNode.changes.subscribe(
+            c => {
+                if (this.pendingSearch.pending) {//there is a pending search
+                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
+                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
+                    window.setTimeout(() => {
+                        this.selectSearchedInstance(this.pendingSearch.cls, this.pendingSearch.instance);
+                    });
+                }
+            }
+        );
     }
 
     initList() {
@@ -94,16 +110,7 @@ export class InstanceListComponent {
                     this.instanceList = instances;
                     //if there is some pending instance search and the searched instance is of the same type of the current class
                     if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
-                        for (var i = 0; i < this.instanceList.length; i++) { //look for the searched instance
-                            if (this.instanceList[i].getURI() == this.pendingSearch.instance.getURI()) {
-                                //select the instance and reset the pending search
-                                this.selectInstance(this.instanceList[i]);
-                                this.pendingSearch.pending = false;
-                                this.pendingSearch.cls = null;
-                                this.pendingSearch.instance = null;
-                                break;
-                            }
-                        }
+                        this.selectSearchedInstance(this.cls, this.pendingSearch.instance);
                     }
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }
@@ -134,15 +141,29 @@ export class InstanceListComponent {
             this.pendingSearch.pending = true;
             this.pendingSearch.instance = instance;
             this.pendingSearch.cls = cls;
-        } else if (this.cls.getURI() == cls.getURI()) {
-            //Input cls has already bound and it is the type of the searched instance
-            for (var i = 0; i < this.instanceList.length; i++) {//look for the searched instance and select it
+        } else if (this.cls.getURI() == cls.getURI()) { //Input cls has already bound and it is the type of the searched instance
+            //first ensure that the instance is not excluded by the paging mechanism
+            for (var i = 0; i < this.instanceList.length; i++) {//look for the searched instance
                 if (this.instanceList[i].getURI() == instance.getURI()) {
                     //given the paging mechanism, check if instance is visible
                     if (!this.showInstance(i)) { //if currently index is not shown...
                         this.openPages = i/this.pagingLimit; //update openPages
+                        break;
                     }
-                    this.selectInstance(this.instanceList[i]);
+                }
+            }
+            //then iterate over the visible instanceListNodes and select the searched
+            var childrenNodeComponent = this.viewChildrenNode.toArray();
+            for (var i = 0; i < childrenNodeComponent.length; i++) {
+                if (childrenNodeComponent[i].node.getURI() == instance.getURI()) {
+                    childrenNodeComponent[i].ensureVisible();
+                    if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
+                        childrenNodeComponent[i].selectNode();
+                    }
+                    //searched resource found, reset pending search and stop the iteration
+                    this.pendingSearch.pending = false;
+                    this.pendingSearch.cls = null;
+                    this.pendingSearch.instance = null;
                     break;
                 }
             }

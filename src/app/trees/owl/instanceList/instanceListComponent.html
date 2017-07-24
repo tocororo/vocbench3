@@ -6,11 +6,8 @@
             
             <ng-template ngFor let-instance [ngForOf]="instanceList" let-idx="index">
                 <div *ngIf="showInstance(idx)"> <!-- paging filter -->
-                    <div class="treeNode"> 
-                        <rdf-resource [resource]="instance" [rendering]="rendering" (click)="selectInstance(instance)"
-                            [ngClass]="{selectedResource : instance.getAdditionalProperty('selected')}">
-                        </rdf-resource>
-                    </div> 
+                    <instance-list-node [node]="instance" [rendering]="rendering" (nodeSelected)="selectInstance($event)">
+                    </instance-list-node>
                 </div>
             </ng-template>
 
