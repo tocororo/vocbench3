@@ -128,7 +128,7 @@ export abstract class AbstractTreeNode {
                 }
             }
             //if this line is reached it means that the first node of the path has not been found
-            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree(node)");
+            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree");
         }
     }
 

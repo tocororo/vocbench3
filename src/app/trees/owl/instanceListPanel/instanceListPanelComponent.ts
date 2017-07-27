@@ -7,6 +7,7 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
@@ -23,8 +24,8 @@ export class InstanceListPanelComponent extends AbstractPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+    constructor(private classesService: ClassesServices, private searchService: SearchServices, private vbProp: VBProperties,
+        private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }
 
@@ -73,7 +74,9 @@ export class InstanceListPanelComponent extends AbstractPanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchInstancesOfClass(this.cls, searchedText, true, true, "contain").subscribe(
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, searchSettings.useURI,
+                searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

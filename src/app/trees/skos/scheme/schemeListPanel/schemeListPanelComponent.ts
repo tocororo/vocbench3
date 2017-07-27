@@ -5,7 +5,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBProperties } from '../../../../utils/VBProperties';
+import { VBProperties, SearchSettings } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
@@ -22,7 +22,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private schemeList: SchemeListItem[];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBProperties, private creationModals: CreationModalServices,
+        private eventHandler: VBEventHandler, private vbProp: VBProperties, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
@@ -42,7 +42,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
                 ResourceUtils.sortResources(schemes, attribute);
 
                 for (var i = 0; i < schemes.length; i++) {
-                    let active: boolean = this.preferences.isActiveScheme(schemes[i]);
+                    let active: boolean = this.vbProp.isActiveScheme(schemes[i]);
                     this.schemeList.push({ checked: active, scheme: schemes[i] });
                 }
             }
@@ -96,7 +96,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
             }
         }
         //update the activeSchemes if the deleted was active
-        if (this.preferences.isActiveScheme(this.selectedNode)) {
+        if (this.vbProp.isActiveScheme(this.selectedNode)) {
             this.updateActiveSchemesPref();
             this.selectedNode = null;
             this.nodeSelected.emit(this.selectedNode);
@@ -119,7 +119,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain").subscribe(
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -168,7 +170,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private updateActiveSchemesPref() {
-        this.preferences.setActiveSchemes(this.collectCheckedSchemes());
+        this.vbProp.setActiveSchemes(this.collectCheckedSchemes());
     }
 
     refresh() {

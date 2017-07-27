@@ -44,15 +44,7 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
-        <div class="input-group input-group-xs">
-            <input #searchinput type="text" class="form-control" placeholder="Search..."
-                (keydown)="searchKeyHandler($event.which, searchinput.value)">
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </span>
-        </div>
+        <search-bar (search)="doSearch($event)" [roles]="[panelRole]"></search-bar>
     </div>
     
 </div>

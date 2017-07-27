@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -25,7 +26,7 @@ export class ConceptTreeComponent extends AbstractTree {
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
-        eventHandler: VBEventHandler) {
+        private vbProp: VBProperties, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: {concept: ARTURIResource, schemes: ARTURIResource[]}) => this.onTopConceptCreated(data.concept, data.schemes)));
@@ -68,7 +69,11 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes).subscribe(
+        let schemes: ARTURIResource[];
+        if (this.vbProp.getSearchSettings().restrictActiveScheme) {
+            schemes = this.schemes;
+        }
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, schemes).subscribe(
             path => {
                 if (path.length == 0) {
                     this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");

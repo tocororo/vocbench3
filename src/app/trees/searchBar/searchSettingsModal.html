@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h3 class="modal-title">Search settings</h3>
+</div>
+<div class="modal-body scrollableContainer" style="max-height: 75vh">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <label>String match mode</label>
+        </div>
+        <div class="panel-body">
+            <div *ngFor="let mode of stringMatchModes" class="radio" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
+                        (ngModelChange)="updateSettings()">{{mode.show}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" style="margin-top: 5px;">
+        <div class="panel-heading">
+            <label style="margin-right: 3px;">Search mode</label>
+            <span class="glyphicon glyphicon-info-sign" title="Search always looks for the input string among the lexicalizations"></span>
+        </div>
+        <div class="panel-body">
+            <div class="checkbox" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
+                    Search in URI
+                </label>
+            </div>
+            <div class="checkbox" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="checkbox" [(ngModel)]="useLocalName" (ngModelChange)="updateSettings()">
+                    Search in local name
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="settingsForConceptPanel" class="panel panel-default" style="margin-top: 5px;">
+        <div class="panel-heading">
+            <label>Concept search</label>
+        </div>
+        <div class="panel-body">
+            <div class="checkbox" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
+                    Restrict the search to the active skos:ConceptScheme(s)
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="settingsForClassPanel" class="panel panel-default" style="margin-top: 5px;">
+        <div class="panel-heading">
+            <label>Classes-Instances panel search</label>
+        </div>
+        <div class="panel-body">
+            <div *ngFor="let sm of clsIndSearchMode" class="radio" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="radio" name="clsIndSearchMode" [value]="sm.value" [(ngModel)]="activeClsIndSearchMode"
+                        (ngModelChange)="updateSettings()">{{sm.show}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

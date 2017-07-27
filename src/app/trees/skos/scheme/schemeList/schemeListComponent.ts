@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -18,7 +19,7 @@ export class SchemeListComponent {
     private schemeList: ARTURIResource[];
     private selectedScheme: ARTURIResource;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices) { }
 
     ngOnInit() {
@@ -53,7 +54,9 @@ export class SchemeListComponent {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], true, true, "contain").subscribe(
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -71,15 +74,6 @@ export class SchemeListComponent {
                     }
                 }
                 );
-        }
-    }
-
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
         }
     }
 

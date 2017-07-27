@@ -11,15 +11,7 @@
     [hideSearch]="true" [readonly]="readonly"></instance-list-panel>
 
 <div class="panel panel-default" style="margin-top: 4px;">
-    <div class="input-group input-group-xs">
-        <input #searchinput type="text" class="form-control" placeholder="Search..." 
-            (keydown)="searchKeyHandler($event.which, searchinput.value)">
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
-                <span class="glyphicon glyphicon-search"></span>
-            </button>
-        </span>
-    </div>
+    <search-bar (search)="doSearch($event)" [roles]="rolesForSearch"></search-bar>
 </div>
 
 <div #blockDivClsIndList class="blockingDiv" style="display:none">

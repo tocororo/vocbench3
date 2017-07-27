@@ -289,6 +289,7 @@ export class ResAttribute {
     public static INDEX = "index"; //used for members of ordered collections
     public static IN_SCHEME = "inScheme"; //used only in Skos.getSchemesMatrixPerConcept()
     public static NATURE = "nature"; //content is a triple separated by "-": <uri of class of resource> - <graph of ???> - <deprecated true/false>
+    public static SCHEMES = "schemes"; //attribute of concepts in searchResource response
 
     //never in st responses, result of nature parsing
     public static DEPRECATED = "deprecated";

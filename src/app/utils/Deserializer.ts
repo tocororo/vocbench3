@@ -84,6 +84,15 @@ export class Deserializer {
         if (inScheme != undefined) {
             node.setAdditionalProperty(ResAttribute.IN_SCHEME, inScheme);
         }
+        var schemesAttr: string = resJson[ResAttribute.SCHEMES];
+        if (schemesAttr != undefined) {
+            let splittedSchemes: string[] = schemesAttr.split(",");
+            let schemes: ARTURIResource[] = []
+            for (var i = 0; i < splittedSchemes.length; i++) {
+                schemes.push(new ARTURIResource(splittedSchemes[i].trim()));
+            }
+            node.setAdditionalProperty(ResAttribute.SCHEMES, schemes);
+        }
         var nature: string = resJson[ResAttribute.NATURE];
         if (nature != undefined && nature != "") {
             let natureRole: RDFResourceRolesEnum;

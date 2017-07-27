@@ -8,6 +8,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
+import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
@@ -25,7 +26,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }
 
@@ -82,8 +83,10 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], true, true, "contain").subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
+                searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

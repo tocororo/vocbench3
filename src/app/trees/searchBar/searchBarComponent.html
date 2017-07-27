@@ -1,0 +1,100 @@
+<div class="input-group input-group-xs">
+    <input #searchinput type="text" class="form-control" placeholder="Search..." 
+        (keydown)="searchKeyHandler($event.which, searchinput.value)">
+    <span class="input-group-btn dropup">
+        <button class="btn btn-default" type="button" (click)="doSearch(searchinput.value)">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+        <button class="btn btn-default" type="button" (click)="editSettings()">
+            <span class="glyphicon glyphicon-cog"></span>
+        </button>
+
+        <!--
+            The following commented code block enabled a dropup menu to customize the search. 
+            It was a nicer solution respect the modal dialog, but it had many troble with input radio (don't know the reason)
+        -->
+        <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-cog"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" (click)="$event.stopPropagation()">
+            <li class="dropdown-header">
+                String match
+            </li>
+            <li role="separator" class="divider"></li>
+            <li *ngFor="let mode of stringMatchModes">
+                 <a>
+                    <div class="radio" style="margin: 0px">
+                        <label>
+                             <input type="radio" name="stringMatchMode" [value]="mode.value" [checked]="mode.value == activeStringMatchMode"
+                                (click)="updateStringMatchMode(mode.value)">{{mode.show}} 
+                        </label>
+                    </div>
+                 </a>
+            </li>    
+
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">
+                Search mode
+                <span class="glyphicon glyphicon-info-sign" title="Search always looks for the input string among the lexicalizations"></span>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+                <a>
+                    <div class="checkbox" style="margin: 0px">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
+                            Search in URI
+                        </label>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <div class="checkbox" style="margin: 0px">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="useLocalName" (ngModelChange)="updateSettings()">
+                            Search in local name
+                        </label>
+                    </div>
+                </a>
+            </li>
+
+            <ng-template [ngIf]="inConceptPanel">
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">
+                    Concept panel search
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a>
+                        <div class="checkbox" style="margin: 0px">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
+                                Restrict search to active scheme(s)
+                            </label>
+                        </div>
+                    </a>
+                </li>   
+            </ng-template>
+
+            <ng-template [ngIf]="inClassPanel">
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">
+                    Classes-Intances panel search
+                </li>
+                <li role="separator" class="divider"></li>
+                <li *ngFor="let mode of clsIndSearchMode">
+                    <a>
+                        <div class="radio" style="margin: 0px" (click)="updateClsIndSearchMode(mode.value)">
+                            <label>
+                                <input type="radio" name="clsIndSearchMode" [checked]="mode.value == activeClsIndSearchMode"
+                                    (click)="updateClsIndSearchMode(mode.value)">{{mode.show}}
+                            </label>
+                        </div>
+                    </a>
+                </li>   
+            </ng-template>
+        </ul> -->
+
+    </span>
+</div>

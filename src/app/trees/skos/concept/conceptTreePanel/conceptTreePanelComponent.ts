@@ -6,7 +6,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBProperties } from "../../../../utils/VBProperties";
+import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -34,7 +34,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private preferences: VBProperties, private creationModals: CreationModalServices,
+        private eventHandler: VBEventHandler, private vbProp: VBProperties, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
 
@@ -44,7 +44,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
-            this.workingSchemes = this.preferences.getActiveSchemes();
+            this.workingSchemes = this.vbProp.getActiveSchemes();
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             if (this.schemeChangeable) {
                 if (this.schemes.length > 0) {
@@ -166,25 +166,31 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+
             let searchingScheme: ARTURIResource[] = [];
-            if (this.schemeChangeable) {
-                searchingScheme.push(this.getSchemeResourceFromUri(this.selectedSchemeUri));
-            } else {
-                searchingScheme = this.workingSchemes;
+            if (searchSettings.restrictActiveScheme) {
+                if (this.schemeChangeable) {
+                    searchingScheme.push(this.getSchemeResourceFromUri(this.selectedSchemeUri));
+                } else {
+                    searchingScheme = this.workingSchemes;
+                }
             }
+
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], true, true, "contain", searchingScheme).subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.stringMatchMode, searchingScheme).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            this.viewChildTree.openTreeAt(searchResult[0]);
+                            this.selectSearchResult(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
                                 (selectedResource: any) => {
-                                    this.viewChildTree.openTreeAt(selectedResource);
+                                    this.selectSearchResult(selectedResource);
                                 },
                                 () => { }
                             );
@@ -192,6 +198,29 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     }
                 }
             );
+        }
+    }
+
+    private selectSearchResult(resource: ARTURIResource) {
+        let schemes: ARTURIResource[] = resource.getAdditionalProperty(ResAttribute.SCHEMES);
+        let isInActiveSchemes: boolean = false;
+        for (var i = 0; i < schemes.length; i++) {
+            if (ResourceUtils.containsNode(this.workingSchemes, schemes[i])) {
+                isInActiveSchemes = true;
+                break;
+            }
+        }
+        if (isInActiveSchemes) {
+            this.viewChildTree.openTreeAt(resource);
+        } else {
+            let strSchemes: string = "<" + schemes.map(s => s.getURI()).join(">, <") + ">";
+            let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the ";
+            if (schemes.length == 1) {
+                message += "scheme " + strSchemes + " which is not currently active. Please, activate the previous scheme and retry."
+            } else {
+                message += "following schemes [" + strSchemes + "] which are not currently active. Please, activate one of them and retry."
+            }
+            this.basicModals.alert("Search", message, "warning");
         }
     }
 

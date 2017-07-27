@@ -17,7 +17,13 @@ export class VBProperties {
     private showInstancesNumber: boolean = true;
     private projectThemeId: number = null;
 
+    private searchSettings: SearchSettings = null;
+
     constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {}
+
+    /* =============================
+    ========= PREFERENCES ==========
+    ============================= */
 
     /**
      * To call each time the user change project
@@ -100,40 +106,10 @@ export class VBProperties {
         this.prefService.setProjectTheme(theme).subscribe();
     }
 
-    //PREFERENCES STORED IN COOKIES
+    /* =============================
+    =========== SETTINGS ===========
+    ============================= */
 
-    /**
-     * Sets the preference to show or hide the inferred information in resource view
-     */
-    setInferenceInResourceView(showInferred: boolean) {
-        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365 * 10);
-    }
-    /**
-     * Gets the preference to show or hide the inferred information in resource view
-     */
-    getInferenceInResourceView() {
-        return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
-    }
-
-    /**
-     * Sets the preference about the resource view mode
-     */
-    setResourceViewMode(mode: ResourceViewMode) {
-        Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, mode, 365 * 10);
-    }
-    /**
-     * Gets the preference about the resource view mode
-     */
-    getResourceViewMode(): ResourceViewMode {
-        let mode: ResourceViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);
-        if (mode != ResourceViewMode.splitted && mode != ResourceViewMode.tabbed) {
-            mode = ResourceViewMode.tabbed;
-            this.setResourceViewMode(mode);
-        }
-        return mode;
-    }
-
-    //SETTINGS
     initProjectSettings() {
         var properties: string[] = [Properties.setting_languages];
         this.prefService.getProjectSettings(properties).subscribe(
@@ -164,10 +140,112 @@ export class VBProperties {
         this.projectLanguages = languages;
     }
 
+
+    
+    /* =============================
+    ==== PREFERENCES IN COOKIES ====
+    ============================= */
+
+    /**
+     * Sets the preference to show or hide the inferred information in resource view
+     */
+    setInferenceInResourceView(showInferred: boolean) {
+        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365*10);
+    }
+    /**
+     * Gets the preference to show or hide the inferred information in resource view
+     */
+    getInferenceInResourceView() {
+        return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
+    }
+
+    /**
+     * Sets the preference about the resource view mode
+     */
+    setResourceViewMode(mode: ResourceViewMode) {
+        Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, mode, 365*10);
+    }
+    /**
+     * Gets the preference about the resource view mode
+     */
+    getResourceViewMode(): ResourceViewMode {
+        let mode: ResourceViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);
+        if (mode != ResourceViewMode.splitted && mode != ResourceViewMode.tabbed) {
+            mode = ResourceViewMode.tabbed;
+            this.setResourceViewMode(mode);
+        }
+        return mode;
+    }
+
+    getSearchSettings(): SearchSettings {
+        if (this.searchSettings == null) {
+            this.searchSettings = { 
+                stringMatchMode: StringMatchMode.contains,
+                useURI: true,
+                useLocalName: true,
+                restrictActiveScheme: true,
+                classIndividualSearchMode: ClassIndividualPanelSearchMode.all
+            }
+            let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
+            if (searchModeCookie != null) {
+                this.searchSettings.stringMatchMode = <StringMatchMode>searchModeCookie;
+            }
+            let useUriCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_URI);
+            if (useUriCookie != null) {
+                this.searchSettings.useURI = useUriCookie == "true";
+            }
+            let useLocalNameCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_LOCAL_NAME);
+            if (useLocalNameCookie != null) {
+                this.searchSettings.useLocalName = useLocalNameCookie == "true";
+            }
+            let restrictSchemesCookie: string = Cookie.getCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION);
+            if (restrictSchemesCookie != null) {
+                this.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
+            }
+            let clsIndPanelSearchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_CLS_IND_PANEL);
+            if (clsIndPanelSearchModeCookie != null) {
+                this.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
+            }
+        }
+        
+        return this.searchSettings;
+    }
+    setSearchSettings(settings: SearchSettings) {
+        this.searchSettings = settings;
+        Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, this.searchSettings.stringMatchMode, 365*10);
+        Cookie.setCookie(Cookie.SEARCH_USE_URI, this.searchSettings.useURI+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, this.searchSettings.useLocalName+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, this.searchSettings.restrictActiveScheme+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, this.searchSettings.classIndividualSearchMode, 365*10);
+    }
+
+
 }
 
 export type ResourceViewMode = "tabbed" | "splitted";
 export const ResourceViewMode = {
     tabbed: "tabbed" as ResourceViewMode,
     splitted: "splitted" as ResourceViewMode
+}
+
+export class SearchSettings {
+    public stringMatchMode: StringMatchMode;
+    public useURI: boolean;
+    public useLocalName: boolean;
+    public restrictActiveScheme: boolean;
+    public classIndividualSearchMode: ClassIndividualPanelSearchMode;
+}
+
+export type StringMatchMode = "startsWith" | "contains" | "endsWith";
+export const StringMatchMode = {
+    startsWith: "startsWith" as StringMatchMode,
+    contains: "contains" as StringMatchMode,
+    endsWith: "endsWith" as StringMatchMode
+}
+
+export type ClassIndividualPanelSearchMode = "onlyClasses" | "onlyInstances" | "all";
+export const ClassIndividualPanelSearchMode = {
+    onlyClasses: "onlyClasses" as ClassIndividualPanelSearchMode,
+    onlyInstances: "onlyInstances" as ClassIndividualPanelSearchMode,
+    all: "all" as ClassIndividualPanelSearchMode
 }

@@ -9,6 +9,12 @@ export class Cookie {
 	public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "alignment_validation.show_confidence";
 	public static ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION = "alignment_validation.rejected_alignment_action";
 
+	public static SEARCH_STRING_MATCH_MODE = "search.string_match_mode";
+	public static SEARCH_USE_URI = "search.use_uri";
+	public static SEARCH_USE_LOCAL_NAME = "search.use_local_name";
+	public static SEARCH_CONCEPT_SCHEME_RESTRICTION = "search.restrict_active_schemes";
+	public static SEARCH_CLS_IND_PANEL = "search.cls_ind_panel"; //tells if search classes, individuals or both
+
 	/**
 	 * Retrieves a single cookie by it's name
 	 * @param  {string} name Identification of the Cookie

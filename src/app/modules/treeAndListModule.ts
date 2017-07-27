@@ -33,6 +33,9 @@ import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/insta
 import { InstanceListComponent } from '../trees/owl/instanceList/instanceListComponent';
 import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceListNodeComponent';
 
+import { SearchBarComponent } from '../trees/searchBar/searchBarComponent'; //not exported, used just in this module
+import { SearchSettingsModal } from '../trees/searchBar/searchSettingsModal';
+
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule],
     declarations: [
@@ -42,7 +45,8 @@ import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceLis
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
-        ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent
+        ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
+        SearchBarComponent, SearchSettingsModal
     ],
     exports: [
         TreePanelComponent,
@@ -52,6 +56,7 @@ import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceLis
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent
-    ]
+    ],
+    entryComponents: [SearchSettingsModal]
 })
 export class TreeAndListModule { }

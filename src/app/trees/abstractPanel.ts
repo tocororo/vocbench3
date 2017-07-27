@@ -57,15 +57,6 @@ export abstract class AbstractPanel {
         );
     }
 
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
-        }
-    }
-
     abstract doSearch(searchedText: string): void;
 
 }

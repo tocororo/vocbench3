@@ -8,6 +8,7 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
+import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 
@@ -23,7 +24,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     private searchInputPlaceholder: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices) {
+        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }
 
@@ -125,8 +126,10 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], true, true, "contain").subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

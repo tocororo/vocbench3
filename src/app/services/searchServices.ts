@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
+import { StringMatchMode } from "../utils/VBProperties";
 import { ARTURIResource } from "../models/ARTResources";
 
 @Injectable()
@@ -23,7 +24,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
-        searchMode: string, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
+        searchMode: StringMatchMode, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -53,7 +54,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean,
-        searchMode: string): Observable<ARTURIResource[]> {
+        searchMode: StringMatchMode): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
             cls: cls,

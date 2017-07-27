@@ -7,6 +7,7 @@ import { IndividualsServices } from "../../../services/individualsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
+import { VBProperties, SearchSettings, ClassIndividualPanelSearchMode } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 
 /**
@@ -39,8 +40,10 @@ export class ClassIndividualTreePanelComponent {
     private selectedClass: ARTURIResource;
     private selectedInstance: ARTURIResource;
 
+    private rolesForSearch: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
+
     constructor(private individualService: IndividualsServices, private searchService: SearchServices,
-        private basicModals: BasicModalServices, private sanitizer: DomSanitizer) { }
+        private basicModals: BasicModalServices, private sanitizer: DomSanitizer, private vbProp: VBProperties) { }
 
     ngOnInit() {
         this.refreshTreeListStyles();
@@ -50,8 +53,16 @@ export class ClassIndividualTreePanelComponent {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            let searchRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
+            if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyInstances) {
+                searchRoles = [RDFResourceRolesEnum.individual];
+            } else if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyClasses) {
+                searchRoles = [RDFResourceRolesEnum.cls];
+            }
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual], true, true, "contain").subscribe(
+            this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
+                searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
@@ -90,15 +101,6 @@ export class ClassIndividualTreePanelComponent {
                     this.viewChildInstanceList.selectSearchedInstance(types[0], resource);
                 }
             )
-        }
-    }
-
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(key: number, searchedText: string) {
-        if (key == 13) {
-            this.doSearch(searchedText);
         }
     }
 

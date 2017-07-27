@@ -8,6 +8,7 @@ import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
@@ -25,8 +26,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.property;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private propService: PropertyServices, private searchService: SearchServices,
-        private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
+    constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
     }
 
@@ -76,8 +77,10 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         if (searchedText.trim() == "") {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
+            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], true, true, "contain").subscribe(
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.stringMatchMode).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
