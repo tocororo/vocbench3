@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
+import { VBEventHandler } from "../../utils/VBEventHandler";
 
 @Component({
     selector: "resource-view-tabbed",
@@ -10,9 +11,13 @@ export class ResourceViewTabbedComponent {
     @Input() resource: ARTResource;
 
     private tabs: Array<Tab> = [];
-    // private activeTab: Tab;
 
-    constructor() { }
+    private eventSubscriptions: any[] = [];
+
+    constructor(private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.resViewResyncEvent.subscribe(
+            (res: ARTResource) => this.selectTab(this.tabs[0])));
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource']) {
@@ -24,6 +29,10 @@ export class ResourceViewTabbedComponent {
                 this.setFirstTab(res);
             }
         }
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
     private objectDblClick(obj: ARTResource) {
