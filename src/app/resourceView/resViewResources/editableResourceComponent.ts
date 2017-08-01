@@ -10,9 +10,11 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 @Component({
@@ -51,7 +53,9 @@ export class EditableResourceComponent {
 
 	constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
 		private manchesterService: ManchesterServices, private refactorService: RefactorServices,
-		private basicModals: BasicModalServices, private creationModals: CreationModalServices, private rvModalService: ResViewModalServices) { }
+		private basicModals: BasicModalServices, private creationModals: CreationModalServices, 
+		private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices, 
+		private vbProp: VBProperties) { }
 
 	ngOnInit() {
 		this.editMenuDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly);
@@ -309,13 +313,15 @@ export class EditableResourceComponent {
 	//====== "Spawn new concept from this xLabel" HANDLER
 
 	/**
-	 * Determines if the menu item should be visible.
-	 * Visible only if the object is a xLabel and if the resource described in the ResView is a concept
-	 * (so avoid "spawn new concept..." from xlabel of scheme/collection... and from xLabel in labelRelation partition of an xLabel ResView)
+	 * Determines if the menu items about xlabels should be visible.
+	 * Visible only if:
+	 * the subject is a concept, the object is a xLabel and if it is in the lexicalizations partition
+	 * (so avoid "spawn new concept..." from xLabel in labelRelation partition of an xLabel ResView)
 	 */
-	private isSpawnWithLabelAvailable() {
+	private isXLabelMenuItemAvailable() {
 		return (
 			this.partition == ResViewPartition.lexicalizations &&
+			this.subject.getRole() == RDFResourceRolesEnum.concept &&
 			this.resource.isResource() && (<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel
 		);
 	}
@@ -334,6 +340,18 @@ export class EditableResourceComponent {
 			},
 			() => { }
 		);
+	}
+
+	private moveLabelToConcept() {
+		this.browsingModals.browseConceptTree("Select a concept", this.vbProp.getActiveSchemes(), false).then(
+			newConcept => {
+				this.refactorService.moveXLabelToResource(this.subject, this.predicate, <ARTResource>this.resource, newConcept).subscribe(
+					stResp => {
+						this.update.emit();
+					}
+				)
+			}
+		)
 	}
 
 	/**
@@ -359,6 +377,9 @@ export class EditableResourceComponent {
 	}
 	private isSpawnFromLabelAuthorized(): boolean {
 		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL);
+	}
+	private isMoveLabelAuthorized(): boolean {
+		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_MOVE_XLABEL_TO_RESOURCE);
 	}
 
 }

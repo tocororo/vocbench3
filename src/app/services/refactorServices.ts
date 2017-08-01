@@ -151,4 +151,23 @@ export class RefactorServices {
         );
     }
 
+    /**
+     * 
+     * @param sourceResource 
+     * @param predicate 
+     * @param xLabel 
+     * @param targetResource 
+     */
+    moveXLabelToResource(sourceResource: ARTResource, predicate: ARTURIResource, xLabel: ARTResource, 
+        targetResource: ARTResource) {
+        console.log("[RefactorServices] moveXLabelToResource");
+        var params: any = {
+            sourceResource: sourceResource,
+            predicate: predicate,
+            xLabel: xLabel,
+            targetResource: targetResource
+        }
+        return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, true);
+    }
+
 }

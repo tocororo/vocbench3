@@ -11,9 +11,14 @@
             <li *ngIf="resource.isResource()" [ngClass]="{ disabled: !isEditAuthorized() }">
                 <a (click)="replace()">Replace with existing resource</a>
             </li>
-            <li *ngIf="isSpawnWithLabelAvailable()"  [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
-                <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
-            </li>
+            <ng-template [ngIf]="isXLabelMenuItemAvailable()">
+                <li [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
+                    <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
+                </li>
+                <li [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
+                    <a (click)="moveLabelToConcept()">Move xLabel to another concept</a>
+                </li>
+            </ng-template>
             <li [ngClass]="{ disabled: !isDeleteAuthorized() }"><a (click)="delete()">Delete</a></li>
         </ul>
     </div>
