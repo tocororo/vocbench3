@@ -213,8 +213,11 @@ export class AlignmentValidationComponent {
     private acceptAlignment(cell: AlignmentCell) {
         this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation()).subscribe(
             resultCell => {
-                //replace the accepted alignment cell with the returned one
-                this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                //replace the accepted alignment cell with the returned one (keeping the "rendered" entities)
+                let cellToUpdateIdx = this.getIndexOfCell(cell);
+                resultCell.setEntity1(this.alignmentCellList[cellToUpdateIdx].getEntity1());
+                resultCell.setEntity2(this.alignmentCellList[cellToUpdateIdx].getEntity2());
+                this.alignmentCellList[cellToUpdateIdx] = resultCell;
                 if ((<AlignmentCell>resultCell).getStatus() == "error") {
                     this.selectMappingProperty(resultCell).then(
                         (data: any) => {
@@ -255,8 +258,11 @@ export class AlignmentValidationComponent {
     private rejectAlignment(cell: AlignmentCell) {
         this.alignmentService.rejectAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation()).subscribe(
             resultCell => {
-                //replace the rejected alignment cell with the returned one
-                this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                //replace the rejected alignment cell with the returned one (keeping the "rendered" entities)
+                let cellToUpdateIdx = this.getIndexOfCell(cell);
+                resultCell.setEntity1(this.alignmentCellList[cellToUpdateIdx].getEntity1());
+                resultCell.setEntity2(this.alignmentCellList[cellToUpdateIdx].getEntity2());
+                this.alignmentCellList[cellToUpdateIdx] = resultCell;
             }
         )
     }
@@ -398,7 +404,14 @@ export class AlignmentValidationComponent {
      */
     private updateAlignmentListAfterQuickAction(newAlignmentList: Array<AlignmentCell>) {
         for (var i = 0; i < newAlignmentList.length; i++) {
-            this.alignmentCellList[this.getIndexOfCell(newAlignmentList[i])] = newAlignmentList[i];
+            //replace the updated alignment cell with the returned (keeping the "rendered" entities)
+            let newCell = newAlignmentList[i];
+            let cellToUpdateIdx = this.getIndexOfCell(newCell);
+            if (cellToUpdateIdx != -1) { //cell available in the current page
+                newCell.setEntity1(this.alignmentCellList[cellToUpdateIdx].getEntity1());
+                newCell.setEntity2(this.alignmentCellList[cellToUpdateIdx].getEntity2());
+                this.alignmentCellList[cellToUpdateIdx] = newCell;
+            }
         }
     }
 
