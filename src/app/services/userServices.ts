@@ -370,7 +370,8 @@ export class UserServices {
         console.log("[UserServices] forgotPassword");
         var params: any = {
             email: email,
-            vbHostAddress: location.hostname + ":" + location.port
+            vbHostAddress: location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
+
         }
         return this.httpMgr.doPost(this.serviceName, "forgotPassword", params, true);
     }
