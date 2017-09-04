@@ -6,7 +6,7 @@
         </button>
         <ul class="dropdown-menu">
             <li *ngIf="!isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() }"><a (click)="edit()">Edit</a></li>
-            <li *ngIf="isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() }"><a (click)="editPlainLiteral()">Edit as literal</a></li>
+            <li *ngIf="isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() }"><a (click)="editPlainLiteral()">Edit literal content</a></li>
 
             <li *ngIf="resource.isResource()" [ngClass]="{ disabled: !isEditAuthorized() }">
                 <a (click)="replace()">Replace with existing resource</a>
