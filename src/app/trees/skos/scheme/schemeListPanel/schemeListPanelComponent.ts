@@ -155,6 +155,20 @@ export class SchemeListPanelComponent extends AbstractPanel {
         }
     }
 
+    private activateAllScheme() {
+        for (var i = 0; i < this.schemeList.length; i++) {
+            this.schemeList[i].checked = true;
+        }
+        this.vbProp.setActiveSchemes(this.collectCheckedSchemes());
+    }
+
+    private deactivateAllScheme() {
+        for (var i = 0; i < this.schemeList.length; i++) {
+            this.schemeList[i].checked = false;
+        }
+        this.vbProp.setActiveSchemes(this.collectCheckedSchemes());
+    }
+
     /**
      * Collects all the schemes checked
      */

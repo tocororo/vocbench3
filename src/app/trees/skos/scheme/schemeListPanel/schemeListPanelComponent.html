@@ -9,8 +9,16 @@
                 <img src="../../../../../assets/images/icons/actions/conceptScheme_delete.png" class="panelButtonImg"/>
             </button>
         </div>
+        <div class="btn-group btn-group-xs" role="group" style="margin-right: 5px;">
+            <button class="btn btn-default" title="Select all schemes" (click)="activateAllScheme()">
+                <span class="glyphicon glyphicon-check" style="width: 16px;"></span>
+            </button>
+            <button class="btn btn-default" title="Deselect all schemes" (click)="deactivateAllScheme()">
+                <span class="glyphicon glyphicon-unchecked" style="width: 16px;"></span>
+            </button>
+        </div>
         <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
-            style="margin: 0px 5px;" [ngClass]="{active: rendering}">
+            style="margin-right: 5px;" [ngClass]="{active: rendering}">
             <span class="glyphicon glyphicon-font"></span>
         </button>
         <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
