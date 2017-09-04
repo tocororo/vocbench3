@@ -55,6 +55,12 @@ export class ProjectServices {
                     proj.setStatus(projCollJson[i].status);
                     projectList.push(proj);
                 }
+                //sort by name
+                projectList.sort(
+                    function (p1: Project, p2: Project) {
+                        return p1.getName().toLowerCase().localeCompare(p2.getName().toLowerCase());
+                    }
+                )
                 return projectList;
             }
         );

@@ -5,7 +5,7 @@ import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPan
 import { SearchServices } from "../../../services/searchServices";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { VBProperties, SearchSettings, ClassIndividualPanelSearchMode } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -71,7 +71,8 @@ export class ClassIndividualTreePanelComponent {
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },

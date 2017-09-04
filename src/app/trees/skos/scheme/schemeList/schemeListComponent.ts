@@ -64,7 +64,8 @@ export class SchemeListComponent {
                         if (searchResult.length == 1) {
                             this.selectScheme(this.getSchemeToSelectFromList(searchResult[0]));
                         } else { //multiple results, ask the user which one select
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
                                 },

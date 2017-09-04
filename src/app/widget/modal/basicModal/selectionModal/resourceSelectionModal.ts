@@ -12,7 +12,8 @@ export class ResourceSelectionModalData extends BSModalContext {
     constructor(
         public title: string = 'Modal Title',
         public message: string,
-        public resourceList: Array<ARTNode>
+        public resourceList: Array<ARTNode>,
+        public rendering: boolean = true
     ) {
         super();
     }

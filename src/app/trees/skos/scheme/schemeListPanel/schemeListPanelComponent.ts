@@ -129,7 +129,8 @@ export class SchemeListPanelComponent extends AbstractPanel {
                         if (searchResult.length == 1) {
                             this.selectSchemeItem(this.getSchemeToSelectFromList(searchResult[0]));
                         } else { //multiple results, ask the user which one select
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSchemeItem(this.getSchemeToSelectFromList(selectedResource));
                                 },

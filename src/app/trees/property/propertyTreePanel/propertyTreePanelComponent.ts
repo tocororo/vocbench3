@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { AbstractTreePanel } from "../../abstractTreePanel"
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { OWL, RDF } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -89,7 +89,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
                         if (searchResult.length == 1) {
                             this.viewChildTree.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                            ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.viewChildTree.openTreeAt(selectedResource);
                                 },

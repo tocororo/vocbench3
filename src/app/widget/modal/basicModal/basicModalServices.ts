@@ -190,10 +190,11 @@ export class BasicModalServices {
      * @param title the title of the modal dialog
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
      * @param resourceList array of available resources
+     * @param rendering in case of array of resources, it tells whether the resources should be rendered
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
-    selectResource(title: string, message: string, resourceList: Array<ARTNode>) {
-        var modalData = new ResourceSelectionModalData(title, message, resourceList);
+    selectResource(title: string, message: string, resourceList: Array<ARTNode>, rendering?: boolean) {
+        var modalData = new ResourceSelectionModalData(title, message, resourceList, rendering);
         const builder = new BSModalContextBuilder<ResourceSelectionModalData>(
             modalData, undefined, ResourceSelectionModalData
         );

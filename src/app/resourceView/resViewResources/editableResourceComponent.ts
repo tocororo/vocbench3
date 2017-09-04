@@ -350,7 +350,8 @@ export class EditableResourceComponent {
 						this.update.emit();
 					}
 				)
-			}
+			},
+			() => {}
 		)
 	}
 
