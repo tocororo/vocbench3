@@ -23,21 +23,13 @@ export class VocbenchPreferencesComponent {
     constructor(private properties: VBProperties, private prefSettingService: PreferencesSettingsServices, private eventHandler: VBEventHandler) { }
 
     ngOnInit() {
-        var properties: string[] = [
-            Properties.pref_show_flags, Properties.pref_show_instances_number, Properties.pref_project_theme
-        ];
-        this.prefSettingService.getProjectPreferences(properties).subscribe(
-            prefs => {
-                this.showFlags = prefs[Properties.pref_show_flags];
-
-                this.showInstNumb = prefs[Properties.pref_show_instances_number];
-
-                let projThemePref = prefs[Properties.pref_project_theme];
-                this.themes.forEach(t => {
-                    if (t.id == projThemePref) { this.selectedTheme = t; }
-                });
-            }
-        );
+        //no need to call the service to get the following preferences, since they are already initialized when user accessed the project
+        this.showFlags = this.properties.getShowFlags()
+        this.showInstNumb = this.properties.getShowInstancesNumber();
+        let projThemePref = this.properties.getProjectTheme();
+        this.themes.forEach(t => {
+            if (t.id == projThemePref) { this.selectedTheme = t; }
+        });
 
         this.prefSettingService.getProjectPreferences([Properties.pref_languages], Properties.plugin_id_rendering_engine).subscribe(
             prefs => {

@@ -3,5 +3,5 @@
         [disabled]="isDisabled()">
         <option *ngFor="let l of languageList" [value]="l.tag">{{l.name}} ({{l.tag}})</option>
     </select>
-    <img [src]="getFlagImgSrc()" [ngClass]="{ disabled : isDisabled() }"/>
+    <img *ngIf="showFlag" [src]="getFlagImgSrc()" [ngClass]="{ disabled : isDisabled() }"/> 
 </span>

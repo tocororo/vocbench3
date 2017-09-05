@@ -18,6 +18,7 @@ export class LangPickerComponent implements OnInit {
     private selectClass: string = "form-control input-";
     private languageList: Language[];
     private language: string;
+    private showFlag: boolean = true;
 
     constructor(private pref: VBProperties) { }
 
@@ -27,6 +28,8 @@ export class LangPickerComponent implements OnInit {
         } else {
             this.selectClass += "sm";
         }
+
+        this.showFlag = this.pref.getShowFlags();
 
         //Init languages list considering only languages assigned to user and allowed in project
         this.languageList = []; //intersection between language available in project and language assigned to user.

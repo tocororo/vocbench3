@@ -44,9 +44,9 @@ export class VBProperties {
                     }
                 }
 
-                this.showFlags = prefs[Properties.pref_show_flags];
+                this.showFlags = prefs[Properties.pref_show_flags] == "true";
 
-                this.showInstancesNumber = prefs[Properties.pref_show_instances_number];
+                this.showInstancesNumber = prefs[Properties.pref_show_instances_number] == "true";
                 
                 let projThemePref = prefs[Properties.pref_project_theme];
                 if (projThemePref != this.projectThemeId) {//update projectTheme only if changed
