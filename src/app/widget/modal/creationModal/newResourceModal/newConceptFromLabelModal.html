@@ -36,7 +36,7 @@
                 <tr>
                     <td class="text-right"><label>Position:</label></td>
                     <td>
-                        <select class="form-control input-sm" [(ngModel)]="position">
+                        <select class="form-control input-sm" [(ngModel)]="position" (ngModelChange)="onPositionChange()">
                             <option *ngFor="let p of positionList">{{p}}</option>
                         </select>
                     </td>
@@ -50,9 +50,39 @@
                             </div>
                             <span class="input-group-btn">
                                 <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectBroader()">
-                                    <img src="../../../../../assets/images/icons/actions/class_create.png"/>
+                                    <img src="../../../../../assets/images/icons/actions/concept_create.png"/>
                                 </button>
                             </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionSibling()">
+                    <td class="text-right"><label>Sibling:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="form-control input-sm">
+                                <rdf-resource *ngIf="sibling" [resource]="sibling"></rdf-resource>
+                            </div>
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectSibling()">
+                                    <img src="../../../../../assets/images/icons/actions/concept_create.png"/>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionSibling() && multipleSiblingBroaders">
+                    <td class="text-right" style="white-space: nowrap">
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="Selected sibling concept has multiple broaders, select which one will be the broader of the spawning concept"></span>
+                        <label>Broader:</label>
+                    </td>
+                    <td>
+                        <div class="panel panel-default">
+                            <div class="panel-body scrollableContainer">
+                                <rdf-resource *ngFor="let b of siblingBroaders" [resource]="b" (click)="selectedSiblingBroader = b"
+                                    class="listItem" [ngClass]="{active : b == selectedSiblingBroader}"></rdf-resource>
+                            </div>
                         </div>
                     </td>
                 </tr>

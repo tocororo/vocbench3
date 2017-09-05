@@ -5,6 +5,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
+import { ResourcesServices } from "../services/resourcesServices";
 
 @Injectable()
 export class RefactorServices {
@@ -12,7 +13,8 @@ export class RefactorServices {
     private serviceName = "Refactor";
     private oldTypeService = false;
 
-    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBProperties) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBProperties, 
+        private resourceService: ResourcesServices) { }
 
     /**
      * Refactors SKOS data (labels and notes) into SKOSXL
@@ -136,17 +138,23 @@ export class RefactorServices {
         }
         return this.httpMgr.doGet(this.serviceName, "spawnNewConceptFromLabel", params, true).map(
             stResp => {
-                if (broaderConcept != null) { //created narrower
-                    var newConc = Deserializer.createURI(stResp);
-                    newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                    this.eventHandler.narrowerCreatedEvent.emit({narrower: newConc, broader: broaderConcept});
-                    return newConc;
-                } else { //created topConcept
-                    var newConc = Deserializer.createURI(stResp);
-                    newConc.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                    this.eventHandler.topConceptCreatedEvent.emit({concept: newConc, schemes: conceptSchemes});
-                    return {concept: newConc, schemes: conceptSchemes};
-                }
+                return Deserializer.createURI(stResp);
+            }
+        ).flatMap(
+            concept => {
+                return this.resourceService.getResourceDescription(concept).map(
+                    resource => {
+                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
+                        resource.setAdditionalProperty(ResAttribute.NEW, true);
+                        if (broaderConcept != null) { //created narrower
+                            this.eventHandler.narrowerCreatedEvent.emit({narrower: <ARTURIResource>resource, broader: broaderConcept});
+                            return resource;
+                        } else { //created topConcept
+                            this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>resource, schemes: conceptSchemes});
+                            return {concept: <ARTURIResource>resource, schemes: conceptSchemes};
+                        }
+                    }
+                );
             }
         );
     }

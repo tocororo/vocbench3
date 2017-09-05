@@ -47,8 +47,7 @@ export class SkosServices {
     getNarrowerConcepts(concept: ARTURIResource, schemes: ARTURIResource[]) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params: any = {
-            concept: concept,
-            treeView: true,
+            concept: concept
         };
         if (schemes != null) {
             params.schemes = schemes;
@@ -60,6 +59,27 @@ export class SkosServices {
                     narrower[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
                 }
                 return narrower;
+            }
+        );
+    }
+
+    /**
+     * Returns the broaders of the given concept
+     * @param concept
+     * @param schemes schemes where the broaders should belong
+     * @return an array of broaders
+     */
+    getBroaderConcepts(concept: ARTURIResource, schemes: ARTURIResource[]) {
+        console.log("[SkosServices] getBroaderConcepts");
+        var params: any = {
+            concept: concept
+        };
+        if (schemes != null) {
+            params.schemes = schemes;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getBroaderConcepts", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -341,7 +361,7 @@ export class SkosServices {
                 return this.resourceService.getResourceDescription(scheme).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        return resource;
+                        return <ARTURIResource>resource;
                     }
                 );
             }

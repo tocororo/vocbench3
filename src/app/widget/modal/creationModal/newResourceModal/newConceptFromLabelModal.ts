@@ -1,12 +1,14 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "angular2-modal";
-import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal"
-import { CustomFormsServices } from "../../../../services/customFormsServices"
-import { BasicModalServices } from "../../basicModal/basicModalServices"
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
-import { CustomForm, FormField } from "../../../../models/CustomForms"
-import { ARTLiteral, ARTURIResource, ARTResource } from "../../../../models/ARTResources"
+import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal";
+import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { SkosServices } from "../../../../services/skosServices";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
+import { CustomForm, FormField } from "../../../../models/CustomForms";
+import { ARTLiteral, ARTURIResource, ARTResource } from "../../../../models/ARTResources";
+import { VBProperties } from "../../../../utils/VBProperties";
 
 export class NewConceptFromLabelModalData extends BSModalContext {
     constructor(
@@ -29,14 +31,20 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     //standard form
     private uri: string;
 
-    private positionList: string[] = ["Top Concept", "Child of existing Concept"];
+    private positionList: string[] = [SpawnPosition.AS_TOP_CONCEPT, SpawnPosition.AS_NARROWER, SpawnPosition.AS_SIBLING];
     private position: string = this.positionList[0];
+    //param for position: AS_NARROWER
     private broader: ARTURIResource;
+    //param for position: AS_SIBLING
+    private sibling: ARTURIResource;
+    private siblingBroaders: ARTURIResource[];
+    private selectedSiblingBroader: ARTURIResource;
+    private multipleSiblingBroaders: boolean;
 
     private schemes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, cfService: CustomFormsServices,
-        basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
+    constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, private skosService: SkosServices, private vbProp: VBProperties,
+        cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals)
         this.context = dialog.context;
     }
@@ -60,10 +68,24 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
                 return false;
             }
         }
+        if (this.isPositionSibling()) {
+            if (this.sibling == null || (this.multipleSiblingBroaders && this.selectedSiblingBroader == null)) {
+                return false;
+            }
+        }
         if (this.schemes == null || this.schemes.length == 0) {
             return false;
         }
         return true;
+    }
+
+    //when position select changes, reset the parameters for broader/sibling...
+    private onPositionChange() {
+        this.broader = null;
+        this.sibling = null;
+        this.siblingBroaders = null;
+        this.selectedSiblingBroader = null;
+        this.multipleSiblingBroaders = false;
     }
 
     /**
@@ -71,14 +93,46 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
      * Useful to show in the view the broader selection field
      */
     private isPositionNarrower(): boolean {
-        return this.position == this.positionList[1];
+        return this.position == SpawnPosition.AS_NARROWER;
     }
 
     private selectBroader() {
         this.browsingModals.browseConceptTree("Select broader").then(
             (concept: any) => {
                 this.broader = concept;
-            }
+            },
+            () => {}
+        )
+    }
+
+    /**
+     * Tells if selected position option is "Sibling of existing Concept", so the modal is creating a sibling.
+     * Useful to show in the view the sibling selection field
+     */
+    private isPositionSibling(): boolean {
+        return this.position == SpawnPosition.AS_SIBLING;
+    }
+
+    private selectSibling() {
+        this.browsingModals.browseConceptTree("Select sibling").then(
+            (concept: any) => {
+                this.sibling = concept;
+                //check if sibling has multiple broader
+                this.skosService.getBroaderConcepts(this.sibling, this.vbProp.getActiveSchemes()).subscribe(
+                    broaders => {
+                        if (broaders.length == 0) { //sibling is top concept
+                            this.selectedSiblingBroader = null;
+                        } else if (broaders.length == 1) { //just one broader
+                            this.selectedSiblingBroader = broaders[0];
+                        } else { //multiple broaders
+                            this.multipleSiblingBroaders = true;
+                            this.siblingBroaders = broaders;
+                            this.selectedSiblingBroader = null;
+                        }
+                    }
+                )
+            },
+            () => {}
         )
     }
 
@@ -104,6 +158,9 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         if (this.isPositionNarrower()) {
             returnedData.broader = this.broader;
         }
+        if (this.isPositionSibling()) {
+            returnedData.broader = this.selectedSiblingBroader;
+        }
         //set class only if not the default
         if (this.resourceClass.getURI() != this.context.cls.getURI()) {
             returnedData.cls = this.resourceClass;
@@ -115,4 +172,10 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         this.dialog.dismiss();
     }
 
+}
+
+class SpawnPosition {
+    public static AS_TOP_CONCEPT: string = "Top Concept";
+    public static AS_NARROWER: string = "Child of existing Concept";
+    public static AS_SIBLING: string = "Sibling of existing Concept";
 }
