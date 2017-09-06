@@ -56,18 +56,22 @@ export class InstanceListComponent {
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
             if (changes['cls']) {
-                let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
-                if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
-                    this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
-                        + ") has too much instances (" + numInst + "). Retrieving them all could be a very long process "
-                        + "and it may cause server error. Do you want to continue anyway?", "warning").then(
-                        confirm => {
-                            this.initList();
-                        },
-                        cancel =>  {
-                            this.instanceList = [];
-                        }
-                    );
+                if (this.cls != undefined) {
+                    let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
+                    if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
+                        this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                            + ") has too much instances (" + numInst + "). Retrieving them all could be a very long process "
+                            + "and it may cause server error. Do you want to continue anyway?", "warning").then(
+                            confirm => {
+                                this.initList();
+                            },
+                            cancel =>  {
+                                this.instanceList = [];
+                            }
+                        );
+                    } else {
+                        this.initList();
+                    }
                 } else {
                     this.initList();
                 }
@@ -83,11 +87,7 @@ export class InstanceListComponent {
         this.viewChildrenNode.changes.subscribe(
             c => {
                 if (this.pendingSearch.pending) {//there is a pending search
-                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
-                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
-                    window.setTimeout(() => {
-                        this.selectSearchedInstance(this.pendingSearch.cls, this.pendingSearch.instance);
-                    });
+                    this.selectSearchedInstance(this.pendingSearch.cls, this.pendingSearch.instance);
                 }
             }
         );
@@ -100,6 +100,8 @@ export class InstanceListComponent {
 
         this.selectedInstance = null;
         this.instanceList = [];
+        this.openPages = 0;
+
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.clsService.getInstances(this.cls).subscribe(
@@ -152,21 +154,25 @@ export class InstanceListComponent {
                     }
                 }
             }
-            //then iterate over the visible instanceListNodes and select the searched
-            var childrenNodeComponent = this.viewChildrenNode.toArray();
-            for (var i = 0; i < childrenNodeComponent.length; i++) {
-                if (childrenNodeComponent[i].node.getURI() == instance.getURI()) {
-                    childrenNodeComponent[i].ensureVisible();
-                    if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
-                        childrenNodeComponent[i].selectNode();
+            setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
+                () => {
+                    //then iterate over the visible instanceListNodes and select the searched
+                    var childrenNodeComponent = this.viewChildrenNode.toArray();
+                    for (var i = 0; i < childrenNodeComponent.length; i++) {
+                        if (childrenNodeComponent[i].node.getURI() == instance.getURI()) {
+                            childrenNodeComponent[i].ensureVisible();
+                            if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
+                                childrenNodeComponent[i].selectNode();
+                            }
+                            //searched resource found, reset pending search and stop the iteration
+                            this.pendingSearch.pending = false;
+                            this.pendingSearch.cls = null;
+                            this.pendingSearch.instance = null;
+                            break;
+                        }
                     }
-                    //searched resource found, reset pending search and stop the iteration
-                    this.pendingSearch.pending = false;
-                    this.pendingSearch.cls = null;
-                    this.pendingSearch.instance = null;
-                    break;
                 }
-            }
+            );
         }
     }
 

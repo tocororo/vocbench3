@@ -14,6 +14,7 @@ export abstract class AbstractTree {
      */
 
     @ViewChild('blockDivTree') public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
+    @ViewChild('scrollableContainer') scrollableElement: ElementRef;
     @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
@@ -89,6 +90,32 @@ export abstract class AbstractTree {
         }
         //reset the selected node
         this.nodeSelected.emit(undefined);
+    }
+
+    //Root limitation management
+    initialRoots: number = 100;
+    rootLimit: number = this.initialRoots;
+    private increaseRate: number = this.initialRoots/5;
+    private onScroll() {
+        let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
+        if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
+            //bottom reached => increase max range if there are more roots to show
+            if (this.rootLimit < this.roots.length) { 
+                this.rootLimit = this.rootLimit + this.increaseRate;
+            }
+        } 
+    }
+    ensureRootVisibility(resource: ARTURIResource) {
+        for (var i = 0; i < this.roots.length; i++) {
+            if (this.roots[i].getURI() == resource.getURI()) {
+                if (i >= this.rootLimit) {
+                    //update rootLimit so that node at index i is within the range
+                    let scrollStep: number = ((i - this.rootLimit)/this.increaseRate)+1;
+                    this.rootLimit = this.rootLimit + this.increaseRate*scrollStep;
+                }
+                break;
+            }
+        }
     }
 
 }

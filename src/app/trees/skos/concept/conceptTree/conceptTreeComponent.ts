@@ -54,6 +54,7 @@ export class ConceptTreeComponent extends AbstractTree {
 
         this.roots = [];
         this.selectedNode = null;
+        this.rootLimit = this.initialRoots;
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.skosService.getTopConcepts(this.schemes).subscribe( //new service (whithout lang param)
@@ -79,18 +80,27 @@ export class ConceptTreeComponent extends AbstractTree {
                     this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
                     return;
                 };
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
+
                 //open tree from root to node
-                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
-                        //let the found node expand itself and the remaining path
-                        path.splice(0, 1);
-                        childrenNodeComponent[i].expandPath(path);
-                        return;
+
+                //first ensure that the first element of the path is not excluded by the paging mechanism
+                this.ensureRootVisibility(path[0]);
+
+                setTimeout( //apply timeout in order to wait that the children node is rendered (in case the visibile roots have been increased)
+                    () => {
+                        var childrenNodeComponent = this.viewChildrenNode.toArray();
+                        for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                            if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                                //let the found node expand itself and the remaining path
+                                path.splice(0, 1);
+                                childrenNodeComponent[i].expandPath(path);
+                                return;
+                            }
+                        }
+                        //if this line is reached it means that the first node of the path has not been found
+                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
                     }
-                }
-                //if this line is reached it means that the first node of the path has not been found
-                this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                );
             }
         );
     }

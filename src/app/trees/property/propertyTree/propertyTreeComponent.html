@@ -2,10 +2,12 @@
 
     <div class="panel-body vbox">
 
-        <div class="scrollableContainer">
-            <property-tree-node *ngFor="let p of roots" [node]="p" [rendering]="rendering"
-                (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
-            </property-tree-node>
+        <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+            <ng-template ngFor let-r [ngForOf]="roots" let-idx="index">
+                <property-tree-node *ngIf="idx < rootLimit" [node]="r" [rendering]="rendering"
+                    (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+                </property-tree-node>
+            </ng-template>
         </div>
 
         <div #blockDivTree class="blockingDiv" style="display:none">

@@ -38,10 +38,11 @@ export class ClassesServices {
      * Returns a list of ARTURIResource subClasses of the given class
      * @param superClass class of which retrieve its subClasses
 	 */
-    getSubClasses(superClass: ARTURIResource): Observable<ARTURIResource[]> {
+    getSubClasses(superClass: ARTURIResource, numInst: boolean): Observable<ARTURIResource[]> {
         console.log("[ClassesServices] getSubClasses");
         var params: any = {
-            superClass: superClass
+            superClass: superClass,
+            numInst: numInst
         };
         return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, true).map(
             stResp => {
