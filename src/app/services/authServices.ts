@@ -23,7 +23,7 @@ export class AuthServices {
             password: password,
             _spring_security_remember_me: rememberMe
         }
-        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        var options: VBRequestOptions = new VBRequestOptions({ errorAlertOpt: { show: false } });
         return this.httpMgr.doPost(this.serviceName, "login", params, true, options).map(
             stResp => {
                 var loggedUser: User = Deserializer.createUser(stResp);

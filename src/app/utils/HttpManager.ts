@@ -24,7 +24,10 @@ export class HttpManager {
     private oldServerpath: string = "resources/stserver/STServer";
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
-    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: false, oldTypeService: false });
+    private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({
+        errorAlertOpt: { show: true, exceptionsToSkip: [] },
+        oldTypeService: false 
+    });
 
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
@@ -77,7 +80,7 @@ export class HttpManager {
                 return this.handleOkOrErrorResponse(res); 
             })
             .catch(error => {
-                return this.handleError(error, options.skipErrorAlert);
+                return this.handleError(error, options.errorAlertOpt);
             });
     }
 
@@ -123,7 +126,7 @@ export class HttpManager {
                 return this.handleOkOrErrorResponse(res); 
             })
             .catch(error => {
-                return this.handleError(error, options.skipErrorAlert);
+                return this.handleError(error, options.errorAlertOpt);
             });
     }
 
@@ -172,7 +175,7 @@ export class HttpManager {
                 return this.handleOkOrErrorResponse(res); 
             })
             .catch(error => {
-                return this.handleError(error, options.skipErrorAlert);
+                return this.handleError(error, options.errorAlertOpt);
             });
     }
 
@@ -214,7 +217,7 @@ export class HttpManager {
                 .map(
                     res => { return this.arrayBufferRespHanlder(res); }
                 ).catch(
-                    error => { return this.handleError(error, options.skipErrorAlert) }
+                    error => { return this.handleError(error, options.errorAlertOpt) }
                 );
         } else { //GET
             //add parameters
@@ -234,7 +237,7 @@ export class HttpManager {
                 .map(
                     res => { return this.arrayBufferRespHanlder(res); }
                 ).catch(
-                    error => { return this.handleError(error, options.skipErrorAlert) }
+                    error => { return this.handleError(error, options.errorAlertOpt) }
                 );
         }
 
@@ -402,10 +405,9 @@ export class HttpManager {
     /**
      * Handler for error in requests to ST server. Called in catch clause of get/post requests.
      * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
-     * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
-     *      Is useful to handle the error from the component that invokes the service. See doGet method.
+     * @param errorAlertOpt tells wheter to show error alert. Is useful to handle the error from the component that invokes the service.
      */
-    private handleError(err: Response | any, skipErrorAlert?: boolean) {
+    private handleError(err: Response | any, errorAlertOpt: ErrorAlertOptions) {
         /** 
          * Handle errors in case ST server is down. In this case, the Response (err) is an object like the following 
          * { "_body": { "isTrusted": true }, "status": 0, "ok": false,
@@ -427,9 +429,13 @@ export class HttpManager {
                     }
                 }
             );
-        } else if (!skipErrorAlert) { //server responded with a 200 that contains a description of an excpetion
+        }
+        //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
+        else if (errorAlertOpt.show) { //if the alert should be shown
             let error = (<Error>err);
-            this.basicModals.alert("Error", error.message, "error", error.name);
+            if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
+                this.basicModals.alert("Error", error.message, "error", error.name);
+            }
         }
         UIUtils.stopAllLoadingDiv();
         return Observable.throw(err);
@@ -503,10 +509,10 @@ export class HttpServiceContext {
 export class VBRequestOptions {
 
     oldTypeService: boolean;
-    skipErrorAlert: boolean;
+    errorAlertOpt: ErrorAlertOptions;
     
-    constructor({ oldTypeService, skipErrorAlert, }: VBRequestOptionsArgs = {}) {
-        this.skipErrorAlert = skipErrorAlert != null ? skipErrorAlert : null;
+    constructor({ oldTypeService, errorAlertOpt }: VBRequestOptionsArgs = {}) {
+        this.errorAlertOpt = errorAlertOpt != null ? errorAlertOpt : null;
         this.oldTypeService = oldTypeService != null ? oldTypeService : null;
     }
 
@@ -518,7 +524,7 @@ export class VBRequestOptions {
     merge(options?: VBRequestOptions): VBRequestOptions {
         //if options is provided and its parameters is not null, override the value of the current instance
         return new VBRequestOptions({
-            skipErrorAlert: options && options.skipErrorAlert != null ? options.skipErrorAlert : this.skipErrorAlert,
+            errorAlertOpt: options && options.errorAlertOpt != null ? options.errorAlertOpt : this.errorAlertOpt,
             oldTypeService: options && options.oldTypeService != null ? options.oldTypeService : this.oldTypeService,
         });
     }
@@ -532,9 +538,13 @@ interface VBRequestOptionsArgs {
     oldTypeService?: boolean;
 
     /**
-     * If true prevents an alert dialog to show up in case of error during requests.
-     * Is useful to handle the error from the component that invokes the service
+     * To prevent an alert dialog to show up in case of error during requests.
+     * Is useful to handle the error from the component that invokes the service.
      */
-    skipErrorAlert?: boolean;
+    errorAlertOpt?: ErrorAlertOptions;
+}
 
+class ErrorAlertOptions {
+    show: boolean; //if true HttpManager show the error alert in case of error response, skip the show alert otherwise
+    exceptionsToSkip?: string[]; //if provided, tells for which exceptions the alert should be skipped (useful only if show is true)
 }

@@ -86,7 +86,7 @@ export class ExportServices {
         if (force != null) {
             params.force = force;
         }
-        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        var options: VBRequestOptions = new VBRequestOptions({ errorAlertOpt: { show: false } });
         return this.httpMgr.downloadFile(this.serviceName, "export", params, true, options);
     }   
 

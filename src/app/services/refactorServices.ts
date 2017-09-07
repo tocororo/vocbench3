@@ -180,7 +180,12 @@ export class RefactorServices {
         if (force != undefined) {
             params.force = force;
         }
-        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.AlreadyExistingLiteralFormForResourceException'] 
+            } 
+        });
         return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, true, options);
     }
 

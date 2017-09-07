@@ -61,7 +61,7 @@ export class CustomFormsServices {
         var params: any = {
             id: customFormId
         };
-        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        var options: VBRequestOptions = new VBRequestOptions({ errorAlertOpt: { show: false } });
         return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, true, options).map(
             stResp => {
                 /* this service could throw an error if Pearl is invalid
