@@ -343,12 +343,29 @@ export class EditableResourceComponent {
 	}
 
 	private moveLabelToConcept() {
-		this.browsingModals.browseConceptTree("Select a concept", this.vbProp.getActiveSchemes(), false).then(
-			newConcept => {
-				this.refactorService.moveXLabelToResource(this.subject, this.predicate, <ARTResource>this.resource, newConcept).subscribe(
-					stResp => {
-						this.update.emit();
-					}
+		this.browsingModals.browsePropertyTree("Select a lexicalization predicate", [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
+			predicate => {
+				this.browsingModals.browseConceptTree("Select a concept", this.vbProp.getActiveSchemes(), false).then(
+					newConcept => {
+						this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept).subscribe(
+							stResp => {
+								this.update.emit();
+							},
+							err => {
+								this.basicModals.confirm("Operation denied", err.message + ". Do you want to force the operation?", "warning").then(
+									confirm => {
+										this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
+											stResp => {
+												this.update.emit();
+											}
+										);			
+									},
+									() => {}
+								);
+							}
+						)
+					},
+					() => {}
 				)
 			},
 			() => {}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
@@ -160,14 +160,16 @@ export class RefactorServices {
     }
 
     /**
-     * 
+     * A refactoring service for moving xLabels to an existing concept
      * @param sourceResource 
      * @param predicate 
      * @param xLabel 
      * @param targetResource 
+     * @param force set to true to create a new prefLabel for the targetResource even if this creates a conflict 
+     * with another prefLabel belonging to a third resource
      */
     moveXLabelToResource(sourceResource: ARTResource, predicate: ARTURIResource, xLabel: ARTResource, 
-        targetResource: ARTResource) {
+        targetResource: ARTResource, force?: boolean) {
         console.log("[RefactorServices] moveXLabelToResource");
         var params: any = {
             sourceResource: sourceResource,
@@ -175,7 +177,11 @@ export class RefactorServices {
             xLabel: xLabel,
             targetResource: targetResource
         }
-        return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, true);
+        if (force != undefined) {
+            params.force = force;
+        }
+        var options: VBRequestOptions = new VBRequestOptions({ skipErrorAlert: true });
+        return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, true, options);
     }
 
 }

@@ -64,13 +64,13 @@
 
 export class STResponseUtils {
     
-    private static contentTypeXml: string = "application/xml";
-    private static contentTypeJson: string = "application/json";
+    public static contentTypeXml: string = "application/xml";
+    public static contentTypeJson: string = "application/json";
 
     /**
      * Returns the data content of the response
      */
-    static getResponseData(stResp: any) {
+    static getResponseData(stResp: any | Document) {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("data")[0];
         } else { //JSON
@@ -94,7 +94,7 @@ export class STResponseUtils {
      * To use only in case isErrorResponse returns true
      */
     static getErrorResponseMessage(stResp: any): string {
-        var msg: string;
+        let msg: string;
         if (this.isError(stResp)) {
             msg = this.getErrorMessage(stResp);
         } else if (this.isException(stResp)) {
@@ -103,6 +103,22 @@ export class STResponseUtils {
             msg = this.getFailMessage(stResp);
         }
         return msg;
+    }
+
+    static getErrorResponseExceptionName(stResp: any): string {
+        let name: string;
+        //07/09/2017 currently ST return only exception error response, so I get directly the message of an exception response
+        let errorMsg = this.getExceptionMessage(stResp);
+        name = errorMsg.substring(0, errorMsg.indexOf(":"));
+        return name;
+    }
+
+    static getErrorResponseExceptionMessage(stResp: any): string {
+        let message: string;
+        //07/09/2017 currently ST return only exception error response, so I get directly the message of an exception response
+        let errorMsg = this.getExceptionMessage(stResp);
+        message = errorMsg.substring(errorMsg.indexOf(":") + 2, errorMsg.length);
+        return message;
     }
     
     /**
@@ -134,7 +150,7 @@ export class STResponseUtils {
 	/**
 	 * Checks if the response is an exception response
 	 */
-    private static  isError(stResp: any): boolean {
+    private static isError(stResp: any): boolean {
         if (stResp instanceof Document) { //XML
             return stResp.getElementsByTagName("stresponse")[0].getAttribute("type") == "error";
         } else { //JSON

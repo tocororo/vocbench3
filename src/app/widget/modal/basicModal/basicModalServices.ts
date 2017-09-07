@@ -114,10 +114,11 @@ export class BasicModalServices {
      * @param message the message to show in the modal dialog body
      * @param type tells the type of the dialog. Determines the style of the message in the dialog.
      * Available values: info (default), error, warning
+     * @param details details showed in a expandable/collapsable panel
      */
-    alert(title: string, message: string, type?: ModalType) {
+    alert(title: string, message: string, type?: ModalType, details?: string) {
         var modalType = type ? type : "info"; //set default type to info if not defined
-        var modalData = new AlertModalData(title, message, modalType);
+        var modalData = new AlertModalData(title, message, modalType, details);
         const builder = new BSModalContextBuilder<AlertModalData>(
             modalData, undefined, AlertModalData
         );

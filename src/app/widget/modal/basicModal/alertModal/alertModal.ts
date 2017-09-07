@@ -8,11 +8,13 @@ export class AlertModalData extends BSModalContext {
      * @param message modal message
      * @param type type of the modal. Determines the style of the message alert.
      *      Available values: "info", "warning", "error"
+     * @param details futher details that will be shown in an expandable panel (useful to show Exception name)
      */
     constructor(
         public title: string = 'Modal Title',
         public message: string = 'Modal Body!',
-        public type: string = 'info'
+        public type: string = 'info',
+        public details: string
     ) {
         super();
     }
@@ -27,6 +29,8 @@ export class AlertModal implements ModalComponent<AlertModalData> {
 
     private headerStyle: string;
     private msgStyle: string;
+
+    private detailsCollapsed: boolean = true;
 
     constructor(public dialog: DialogRef<AlertModalData>) {
         this.context = dialog.context;

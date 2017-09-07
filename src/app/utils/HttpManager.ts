@@ -14,9 +14,6 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 @Injectable()
 export class HttpManager {
 
-    private contentTypeXml: string = "application/xml";
-    private contentTypeJson: string = "application/json";
-
     private protocol: string;
     private serverhost: string;
     //new services url parts
@@ -74,20 +71,10 @@ export class HttpManager {
         //execute request
         return this.http.get(url, requestOptions)
             .map(res => {
-                if (this.isResponseXml(res)) {
-                    var parser = new DOMParser();
-                    var stResp = parser.parseFromString(res.text(), "application/xml");
-                    return stResp;
-                } else if (this.isResponseJson(res)) {
-                    return res.json();
-                }
+                return this.handleJsonXmlResponse(res);
             })
-            .map(stResp => {
-                if (STResponseUtils.isErrorResponse(stResp)) {
-                    throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
-                } else {
-                    return STResponseUtils.getResponseData(stResp);
-                }
+            .map(res => { 
+                return this.handleOkOrErrorResponse(res); 
             })
             .catch(error => {
                 return this.handleError(error, options.skipErrorAlert);
@@ -130,20 +117,10 @@ export class HttpManager {
         //execute request
         return this.http.post(url, postData, requestOptions)
             .map(res => {
-                if (this.isResponseXml(res)) {
-                    var parser = new DOMParser();
-                    var stResp = parser.parseFromString(res.text(), "application/xml");
-                    return stResp;
-                } else if (this.isResponseJson(res)) {
-                    return res.json();
-                }
+                return this.handleJsonXmlResponse(res);
             })
-            .map(stResp => {
-                if (STResponseUtils.isErrorResponse(stResp)) {
-                    throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
-                } else {
-                    return STResponseUtils.getResponseData(stResp);
-                }
+            .map(res => { 
+                return this.handleOkOrErrorResponse(res); 
             })
             .catch(error => {
                 return this.handleError(error, options.skipErrorAlert);
@@ -189,20 +166,10 @@ export class HttpManager {
         //execute request
         return this.http.post(url, formData, requestOptions)
             .map(res => {
-                if (this.isResponseXml(res)) {
-                    var parser = new DOMParser();
-                    var stResp = parser.parseFromString(res.text(), "application/xml");
-                    return stResp;
-                } else if (this.isResponseJson(res)) {
-                    return res.json();
-                }
+                return this.handleJsonXmlResponse(res);
             })
-            .map(stResp => {
-                if (STResponseUtils.isErrorResponse(stResp)) {
-                    throw new Error(STResponseUtils.getErrorResponseMessage(stResp));
-                } else {
-                    return STResponseUtils.getResponseData(stResp);
-                }
+            .map(res => { 
+                return this.handleOkOrErrorResponse(res); 
             })
             .catch(error => {
                 return this.handleError(error, options.skipErrorAlert);
@@ -402,17 +369,48 @@ export class HttpManager {
     }
 
     /**
+     * First step of the "pipeline" of response management:
+     * Gets the response and parse it as Json or Xml data according the content type
+     * @return returns an object json (any) in case of json response, an xml Document in case of xml response
+     */
+    private handleJsonXmlResponse(res: Response): any | Document {
+        if (res.headers.get("Content-Type").indexOf(STResponseUtils.contentTypeXml) != -1) { //is response Xml?
+            var parser = new DOMParser();
+            var stResp = parser.parseFromString(res.text(), "application/xml");
+            return stResp;
+        } else if (res.headers.get("Content-Type").indexOf(STResponseUtils.contentTypeJson) != -1) { //is response json?
+            return res.json();
+        }
+    }
+
+    /**
+     * Second step of the "pipeline" of response management:
+     * Gets the json or xml response and detect whether it is an error response, in case throws an Error, otherwise return the
+     * response data content
+     * @param res response json or xml returned by handleJsonXmlResponse
+     */
+    private handleOkOrErrorResponse(res: any | Document) {
+        if (STResponseUtils.isErrorResponse(res)) {
+            let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(res));
+            err.name = STResponseUtils.getErrorResponseExceptionName(res);
+            throw err;
+        } else {
+            return STResponseUtils.getResponseData(res);
+        }
+    }
+
+    /**
      * Handler for error in requests to ST server. Called in catch clause of get/post requests.
      * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
      * @param skipErrorAlert If true prevents an alert dialog to show up in case of error.
      *      Is useful to handle the error from the component that invokes the service. See doGet method.
      */
     private handleError(err: Response | any, skipErrorAlert?: boolean) {
-        /* 
-        Handle errors in case ST server is down. In this case, the Response (err) is an object like the following 
-        { "_body": { "isTrusted": true }, "status": 0, "ok": false,
-          "statusText": "", "headers": {}, "type": 3, "url": null }
-        */
+        /** 
+         * Handle errors in case ST server is down. In this case, the Response (err) is an object like the following 
+         * { "_body": { "isTrusted": true }, "status": 0, "ok": false,
+         * "statusText": "", "headers": {}, "type": 3, "url": null } 
+         */
         if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
             this.basicModals.alert("Error", "Connection with ST server has failed; please check your internet connection", "error");
         } else if (err.status == 401 || err.status == 403) {
@@ -429,23 +427,12 @@ export class HttpManager {
                     }
                 }
             );
-        } else if (!skipErrorAlert) { //server responded with a 200 tjat contains a description of an excpetion
-            this.basicModals.alert("Error", err, "error");
+        } else if (!skipErrorAlert) { //server responded with a 200 that contains a description of an excpetion
+            let error = (<Error>err);
+            this.basicModals.alert("Error", error.message, "error", error.name);
         }
         UIUtils.stopAllLoadingDiv();
         return Observable.throw(err);
-    }
-
-    private isResponseXml(response: Response): boolean {
-        return response.headers.get("Content-Type").indexOf(this.contentTypeXml) != -1;
-    }
-
-    private isResponseJson(response: Response): boolean {
-        return response.headers.get("Content-Type").indexOf(this.contentTypeJson) != -1;
-    }
-
-    private mergeRequestOptions(providedOpts: VBRequestOptions) {
-
     }
 
 }

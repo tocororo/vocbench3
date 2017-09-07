@@ -4,6 +4,22 @@
 <div class="modal-body">
     <div [class]="msgStyle">
         {{context.message}}
+
+        <div *ngIf="context.details" style="margin-top: 5px;">
+            <div>
+                <div class="expandCollapseBtnContainer" style="display: inline">
+                    <img src="../../../../../assets/images/icons/arrow.png" (click)="detailsCollapsed = !detailsCollapsed"
+                        [ngClass]="{'arrow-right': detailsCollapsed}">
+                </div>
+                <label>Details:</label>
+            </div>
+            <div *ngIf="!detailsCollapsed" class="panel panel-default">
+                <div class="panel-body">
+                    {{context.details}}
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <div class="modal-footer">
