@@ -186,3 +186,9 @@ export class Repository {
     public readable: boolean;
     public writable: boolean;
 }
+
+export class ProjectTableColumnStruct {
+    public name: string;
+    public show: boolean;
+    public mandatory?: boolean;
+}

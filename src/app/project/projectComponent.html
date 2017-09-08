@@ -5,10 +5,6 @@
             <button type="button" class="btn btn-default" (click)="createProject()">Create</button>
             <button type="button" class="btn btn-default" (click)="deleteProject()" [disabled]="!selectedProject">Delete</button>
         </div>
-        <!--<div class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-default" (click)="importProject()">Import</button>
-            <button type="button" class="btn btn-default" (click)="exportProject()" [disabled]="!selectedProject">Export</button>
-        </div>-->
 
         <div class="btn-group btn-group-sm pull-right">
             <button type="button" class="btn btn-default" (click)="openPropertyModal()" title="Show project properties" [disabled]="!selectedProject">
@@ -18,56 +14,60 @@
                 ACL
             </button>
         </div>
-
     </div>
 
-    <div class="scrollableContainer">
-        <table class="table table-condensed table-hoverable" style="flex: 1">
-            <thead>
-                <tr>
-                    <th class="text-center">Accessed</th>
-                    <th class="text-center">Open/Close</th>
-                    <th class="text-center">Project Name</th>
-                    <th class="text-center">Model</th>
-                    <th class="text-center">Lexicalization Model</th>
-                    <th class="text-center">History</th>
-                    <th class="text-center">Validation</th>
-                    <th class="text-center">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
-                    <td class="text-center">
-                        <input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="accessProject(p)"
-                            [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
-                    </td>
-                    <td class="text-center">
-                        <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
-                            (click)="openOrCloseProject(p)">
-                            <img *ngIf="!p.isOpen()" src="../../assets/images/icons/folder.gif">
-                            <img *ngIf="p.isOpen()" src="../../assets/images/icons/folder-open.gif">
-                        </button>
-                    </td>
-                    <td class="text-center">
-                        {{p.getName()}}
-                    </td>
-                    <td class="text-center">{{p.getModelType(true)}}</td>
-                    <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
-                    <td class="text-center">
-                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
-                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
-                    </td>
-                    <td class="text-center">
-                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
-                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
-                    </td>
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label style="flex: 1;">Projects</label>
+            <button class="btn btn-xs btn-default" (click)="openTableConfig()" title="Table configuration">
+                <span class="glyphicon glyphicon-cog"></span>
+            </button>
+        </div>
+        <div class="panel-body scrollableContainer">
+            <table class="table table-condensed table-hoverable" style="flex: 1">
+                <thead>
+                    <tr>
+                        <ng-template ngFor let-col [ngForOf]="customColumnsOrder">
+                            <th class="text-center">
+                                {{col}}
+                            </th>
+                        </ng-template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
+                        <td class="text-center">
+                            <input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="accessProject(p)"
+                                [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
+                                (click)="openOrCloseProject(p)">
+                                <img *ngIf="!p.isOpen()" src="../../assets/images/icons/folder.gif">
+                                <img *ngIf="p.isOpen()" src="../../assets/images/icons/folder-open.gif">
+                            </button>
+                        </td>
+                        <td class="text-center">
+                            {{p.getName()}}
+                        </td>
+                        <td *ngIf="showColumn('Model')" class="text-center">{{p.getModelType(true)}}</td>
+                        <td *ngIf="showColumn('Lexicalization Model')" class="text-center">{{p.getLexicalizationModelType(true)}}</td>
+                        <td *ngIf="showColumn('History')" class="text-center">
+                            <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
+                            <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                        </td>
+                        <td *ngIf="showColumn('Validation')" class="text-center">
+                            <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
+                            <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                        </td>
+                        <td *ngIf="showColumn('Status')" class="text-center">
+                            <span *ngIf="p.getStatus().status != 'ok'" class="glyphicon glyphicon-exclamation-sign" [title]="p.getStatus().message"></span>
+                            <span *ngIf="p.getStatus().status == 'ok'" class="glyphicon glyphicon-ok-circle" title="ok"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-                    <td class="text-center">
-                        <span *ngIf="p.getStatus().status != 'ok'" class="glyphicon glyphicon-exclamation-sign" [title]="p.getStatus().message"></span>
-                        <span *ngIf="p.getStatus().status == 'ok'" class="glyphicon glyphicon-ok-circle" title="ok"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    <div>
 </div>

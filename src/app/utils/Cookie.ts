@@ -15,6 +15,8 @@ export class Cookie {
 	public static SEARCH_CONCEPT_SCHEME_RESTRICTION = "search.restrict_active_schemes";
 	public static SEARCH_CLS_IND_PANEL = "search.cls_ind_panel"; //tells if search classes, individuals or both
 
+	public static PROJECT_TABLE_ORDER = "project.table_columns_order";
+
 	/**
 	 * Retrieves a single cookie by it's name
 	 * @param  {string} name Identification of the Cookie

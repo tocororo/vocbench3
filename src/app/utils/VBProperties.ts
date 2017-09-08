@@ -3,6 +3,7 @@ import { PreferencesSettingsServices } from '../services/preferencesSettingsServ
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { Properties } from '../models/Properties';
+import { ProjectTableColumnStruct } from '../models/Project';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
@@ -219,6 +220,23 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, this.searchSettings.classIndividualSearchMode, 365*10);
     }
 
+    
+    getDefaultProjectTableColumns(): ProjectTableColumnStruct[] {
+        return [
+            { name: "Accessed", show: true, mandatory: true }, { name: "Open/Close", show: true, mandatory: true },
+            { name: "Project Name", show: true, mandatory: true }, { name: "Model", show: true },
+            { name: "Lexicalization Model", show: true }, { name: "History", show: true },
+            { name: "Validation", show: true }, { name: "Status", show: true }
+        ];
+    };
+    getCustomProjectTableColumns(): ProjectTableColumnStruct[] {
+        var columns: ProjectTableColumnStruct[] = this.getDefaultProjectTableColumns();
+        var value = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER);
+        if (value != null) {
+            columns = JSON.parse(value);
+        }
+        return columns;
+    }
 
 }
 

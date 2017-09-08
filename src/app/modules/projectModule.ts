@@ -11,6 +11,7 @@ import { CreateProjectComponent } from "../project/createProject/createProjectCo
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
+import { ProjectTableConfigModal } from "../project/projectTableConfig/projectTableConfigModal";
 import { ProjectListModal } from "../project/projectListModal";
 
 
@@ -19,10 +20,10 @@ import { ProjectListModal } from "../project/projectListModal";
     declarations: [
         ProjectComponent, ImportProjectComponent, CreateProjectComponent,
         //modals
-        ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal
+        ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal
     ],
     exports: [ProjectComponent],
     providers: [],
-    entryComponents: [ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectListModal]
+    entryComponents: [ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal]
 })
 export class ProjectModule { }
