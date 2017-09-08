@@ -3,7 +3,7 @@ import {
 	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
 	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
 } from "../../models/ARTResources";
-import { SKOSXL, SKOS, RDFS, SemanticTurkey } from "../../models/Vocabulary";
+import { SKOSXL, SKOS, RDFS } from "../../models/Vocabulary";
 import { ResViewPartition } from "../../models/ResourceView";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -58,14 +58,9 @@ export class EditableResourceComponent {
 		private vbProp: VBProperties) { }
 
 	ngOnInit() {
-		this.editMenuDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly);
-		this.resource.getGraphs().forEach((graph: ARTURIResource) => {
-			if (graph.getURI().startsWith(SemanticTurkey.stagingAddGraph) || graph.getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
-				this.editMenuDisabled = true;
-				return;
-			}
-		});
-
+		this.editMenuDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
+			(this.resource.isResource() && ResourceUtils.isReourceInStaging(<ARTResource>this.resource)));
+			
 		this.isPlainLiteral = (
 			(this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) || 
 			this.resource.getRole() == RDFResourceRolesEnum.xLabel

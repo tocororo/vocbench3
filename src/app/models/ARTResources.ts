@@ -564,4 +564,21 @@ export class ResourceUtils {
         return null;
     }
 
+    /**
+     * Returns true if the resource is in the staging (add or remove) graph, false otherwise
+     * @param resource 
+     */
+    static isReourceInStaging(resource: ARTResource): boolean {
+        let graphs: ARTURIResource[] = resource.getGraphs();
+        for (var i = 0; i < graphs.length; i++) {
+            //I can't figure out why cannot use SemanticTurkey.stagingAddGraph here (error "cannot read 'cls' of undefined")
+            // if (graphs[i].getURI() == SemanticTurkey.stagingAddGraph || graphs[i].getURI() == SemanticTurkey.stagingRemoveGraph) {
+            if (graphs[i].getURI().startsWith("http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/") ||
+                graphs[i].getURI().startsWith("http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

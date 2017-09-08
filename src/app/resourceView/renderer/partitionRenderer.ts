@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
+import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
@@ -104,8 +104,8 @@ export abstract class PartitionRenderer {
 
     private isAddDisabled(): boolean {
         return (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
-            !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
         );
     }
 

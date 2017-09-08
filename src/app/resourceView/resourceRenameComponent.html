@@ -9,8 +9,9 @@
         <input #totalrenameinput *ngIf="!namespaceLocked" type="text" class="form-control" [value]="resource.getURI()" sanitized>
         
         <div class="input-group-btn">
-            <button *ngIf="renameLocked" class="btn btn-default" style="width:72px" (click)="startRename()"
-                [disabled]="!resource.getAdditionalProperty('explicit') || readonly || !renameAuthorized">Rename</button>
+            <button *ngIf="renameLocked" class="btn btn-default" style="width:72px" (click)="startRename()" [disabled]="renameDisabled">
+                Rename
+            </button>
                 
             <button *ngIf="!renameLocked" class="btn btn-default" style="width:24px; padding: 1px 3px;"
                 (click)="renameResource()">

@@ -44,7 +44,7 @@ export class ResourceViewComponent {
     private membersColl: ARTPredicateObjects[] = null;
     private membersOrderedColl: ARTPredicateObjects[] = null;
     private propertiesColl: ARTPredicateObjects[] = null;
-    private propertyFacets: any[] = null;
+    private propertyFacets: { name: string, value: boolean }[] = null;
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
 
@@ -269,7 +269,7 @@ export class ResourceViewComponent {
         //init default facets
         this.propertyFacets = [];
         for (var i = 0; i < facetsName.length; i++) {
-            this.propertyFacets.push({ name: facetsName[i], explicit: this.resource.getAdditionalProperty(ResAttribute.EXPLICIT), value: false });
+            this.propertyFacets.push({ name: facetsName[i], value: false });
         }
         //look for facets in resource view
         for (var i = 0; i < facetsName.length; i++) {

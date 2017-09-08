@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
 import { Modal } from 'angular2-modal/plugins/bootstrap';
-import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { RefactorServices } from "../services/refactorServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator"
@@ -17,7 +17,7 @@ export class ResourceRenameComponent {
     @ViewChild('localrenameinput') localRenameInput: ElementRef;
     @ViewChild('totalrenameinput') totalRenameInput: ElementRef;
 
-    private renameAuthorized: boolean = true;
+    private renameDisabled: boolean = true;
  
     private localName: string;
     private pristineNamespace: string;
@@ -39,7 +39,10 @@ export class ResourceRenameComponent {
             if (this.resource.isURIResource()) {
                 this.localName = (<ARTURIResource>this.resource).getLocalName();
             }
-            this.renameAuthorized = AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_CHANGE_RESOURCE_URI, this.resource);
+            //rename disabled if resource is not explicit || resView is readOnly || user has not the authorization || resource is to validate
+            this.renameDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
+                !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_CHANGE_RESOURCE_URI, this.resource) ||
+			    ResourceUtils.isReourceInStaging(this.resource));
         }
     }
 

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -95,13 +95,15 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     private isChangeFacetDisabled(facet: Facet) {
-        return (!facet.explicit || this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource));
+        return (
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource)
+        );
     }
 
 }
 
 class Facet {
     name: string;
-    explicit: boolean;
     value: boolean;
 }

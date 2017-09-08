@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator"
 
@@ -94,8 +94,8 @@ export class PredicateObjectsRenderer {
      */
     private isAddDisabled() {
         return (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
-            !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
         );
     }
 
