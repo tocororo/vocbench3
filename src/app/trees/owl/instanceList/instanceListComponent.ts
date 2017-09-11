@@ -60,7 +60,7 @@ export class InstanceListComponent {
                     let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
                     if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
                         this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
-                            + ") has too much instances (" + numInst + "). Retrieving them all could be a very long process "
+                            + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
                             + "and it may cause server error. Do you want to continue anyway?", "warning").then(
                             confirm => {
                                 this.initList();
