@@ -108,7 +108,7 @@ export class PredicateObjectsRenderer {
 
 
     // PAGING
-    private pagingLimit: number = 20;
+    private pagingLimit: number = 10;
     private openPages: number = 0;
     private showObject(index: number) {
         return (index < this.openPages * this.pagingLimit + this.pagingLimit);
