@@ -159,7 +159,7 @@ export class AlignmentValidationComponent {
                     }
                 );
                 //target ontology (only if is a local project)
-                this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).subscribe(
+                this.resourceService.getResourcePosition(new ARTURIResource(this.targetBaseURI)).subscribe(
                     position => {
                         //if target entities are from a local project, get the information of them
                         if (position.startsWith("local:")) {
@@ -182,7 +182,8 @@ export class AlignmentValidationComponent {
                                             }
                                         }           
                                     }
-                                }
+                                },
+                                () => HttpServiceContext.removeContextProject()
                             );
                         }
                     }
