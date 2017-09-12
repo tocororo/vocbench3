@@ -4,6 +4,7 @@ import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
@@ -33,7 +34,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private resourceService: ResourcesServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices) {
         super(cfService, basicModals);
@@ -214,14 +215,24 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         if (isInActiveSchemes) {
             this.viewChildTree.openTreeAt(resource);
         } else {
-            let strSchemes: string = "<" + schemes.map(s => s.getURI()).join(">, <") + ">";
-            let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the ";
-            if (schemes.length == 1) {
-                message += "scheme " + strSchemes + " which is not currently active. Please, activate the previous scheme and retry."
+            let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
+            if (schemes.length > 1) {
+                message += " schemes. If you want to activate one of these schemes and continue the search, "
+                    + "please select the scheme you want to activate and press OK.";
             } else {
-                message += "following schemes [" + strSchemes + "] which are not currently active. Please, activate one of them and retry."
+                message += " scheme. If you want to activate the scheme and continue the search, please select it and press OK.";
             }
-            this.basicModals.alert("Search", message, "warning");
+            this.resourceService.getResourcesInfo(schemes).subscribe(
+                schemes => {
+                    this.basicModals.selectResource("Search", message, schemes).then(
+                        scheme => {
+                            this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
+                            this.viewChildTree.openTreeAt(resource); //then open the tree on the searched resource
+                        },
+                        () => {}
+                    );
+                }
+            );
         }
     }
 
