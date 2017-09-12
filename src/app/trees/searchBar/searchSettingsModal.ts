@@ -56,7 +56,6 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
             this.context.roles.indexOf(RDFResourceRolesEnum.individual) != -1);
 
         this.settings = this.vbProp.getSearchSettings();
-        console.log("settings", this.settings);
         this.activeStringMatchMode = this.settings.stringMatchMode;
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;

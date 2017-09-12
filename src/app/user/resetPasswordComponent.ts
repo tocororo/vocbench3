@@ -19,7 +19,6 @@ export class ResetPasswordComponent {
 
     ngOnInit() {
         this.token = this.activeRoute.snapshot.params['token'];
-        console.log("token", this.token);
     }
 
     private isEmailValid(): boolean {

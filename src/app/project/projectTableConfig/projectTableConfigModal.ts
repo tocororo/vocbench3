@@ -23,7 +23,6 @@ export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
 
     ngOnInit() {
         this.columns = this.vbProperties.getCustomProjectTableColumns();
-        console.log("columns at init", this.columns);
     }
 
     private selectColumn(col: ProjectTableColumnStruct) {

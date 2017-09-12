@@ -80,7 +80,6 @@ export class ClassTreeComponent extends AbstractTree {
                         var childrenNodeComponent = this.viewChildrenNode.toArray();
                 
                         for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-                            // console.log("looking for ", path[0].getURI());
                             if (path[0].getURI() != OWL.thing.getURI() && childrenNodeComponent[i].node.getURI() == OWL.thing.getURI()) {
                                 /* Workaround to resolve an issue:
                                 some classes (e.g. skos:Concept, skos:Collection,...) are visible in class tree of SKOS projects,

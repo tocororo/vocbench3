@@ -28,9 +28,6 @@ export class VBContext {
 
     private static workingProjectCtx: ProjectContext = new ProjectContext();
     private static projectChanged: boolean;
-    // private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
-    // private static ctxVersion: VersionInfo; //version used
-    // private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     private static loggedUser: User;
     private static puBinging: ProjectUserBinding;
 
@@ -75,37 +72,6 @@ export class VBContext {
         return this.workingProjectCtx.getPrefixMappings();
     }
 
-    // /**
-    //  * Sets a contextual project (project temporarly used in some scenarios)
-    //  */
-    // static setContextProject(project: Project) {
-    //     this.ctxProject = project;
-    // }
-    // /**
-    //  * Gets a contextual project (project temporarly used in some scenarios)
-    //  */
-    // static getContextProject(): Project {
-    //     return this.ctxProject;
-    // }
-    // /**
-    //  * Removes a contextual project (project temporarly used in some scenarios)
-    //  */
-    // static removeContextProject() {
-    //     this.ctxProject = null;
-    // }
-
-
-    // static setContextVersion(version: VersionInfo) {
-    //     this.ctxVersion = version;
-    // }
-    // static getContextVersion(): VersionInfo {
-    //     return this.ctxVersion;
-    // }
-    // static removeContextVersion() {
-    //     this.ctxVersion = null;
-    // }
-    
-
     static setLoggedUser(user: User) {
         this.loggedUser = user;
     }
@@ -129,25 +95,6 @@ export class VBContext {
     static getProjectUserBinding(): ProjectUserBinding {
         return this.puBinging;
     }
-
-    // /**
-    //  * Sets a sessione token (to keep track of session in some tools/scenarios)
-    //  */
-    // static setSessionToken(token: string) {
-    //     this.sessionToken = token
-    // }
-    // /**
-    //  * Gets a sessione token (to keep track of session in some tools/scenarios)
-    //  */
-    // static getSessionToken(): string {
-    //     return this.sessionToken;
-    // }
-    // /**
-    //  * Removes a sessione token (to keep track of session in some tools/scenarios)
-    //  */
-    // static removeSessionToken() {
-    //     this.sessionToken = null;
-    // }
 
     /**
      * Reset to null all the variable of the context

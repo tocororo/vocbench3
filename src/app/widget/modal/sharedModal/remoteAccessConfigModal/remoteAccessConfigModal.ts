@@ -36,11 +36,9 @@ export class RemoteAccessConfigModal implements ModalComponent<RemoteAccessConfi
     }
 
     private initConfigs() {
-        console.log("savedConfig", this.savedConfigs);
         this.prefSettingService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
             stResp => {
                 if (stResp[Properties.setting_remote_configs] != null) {
-                    console.log("savedConfig not null", stResp);
                     this.savedConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
                     /* initialize the configuration selected, this is usefull expecially when initConfigs()
                     is invoked in changeRemoteConfig() to avoid that deleted configuration are still selected */

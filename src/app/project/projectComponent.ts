@@ -245,7 +245,6 @@ export class ProjectComponent implements OnInit {
         for (var rowIdx = 0; rowIdx < this.projectList.length; rowIdx++) {
             let idxCellFrom = rowIdx*nColumn+idx;
             let idxCellTo = rowIdx*nColumn+idx-1;
-            // console.log("inserting idx", idxCellFrom, "(", td.item(idxCellFrom), ")", "before idx", idxCellTo, td.item(idxCellTo));
             td.item(idxCellFrom).parentNode.insertBefore(td.item(idxCellFrom), td.item(idxCellTo));
         }
     }
