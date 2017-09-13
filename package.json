@@ -6,7 +6,11 @@
     "start": "webpack-dev-server --inline --progress --port 8080",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
   },
-  "license": "MIT",
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "bitbucket",
+    "url": "https://bitbucket.org/art-uniroma2/vocbench3.git"
+  },
   "dependencies": {
     "@angular/common": "4.2.3",
     "@angular/compiler": "4.2.3",
