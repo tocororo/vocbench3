@@ -16,6 +16,7 @@ export class PredicateObjectsRenderer {
     @Input('pred-obj') predicateObjects: ARTPredicateObjects;
     @Input() resource: ARTResource; //resource described
     @Input() readonly: boolean;
+    @Input() rendering: boolean;
     @Input() partition: ResViewPartition;
     @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>();

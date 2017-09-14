@@ -56,9 +56,9 @@ export class UIUtils {
 
 
 
-    private static availableFlagLang = ["ar", "bg", "cs", "da", "de", "el", "en", "en-GB", "en-US", "es", "et", "fa", "fr", "fi", "ga", 
-        "hi", "hr", "hu", "id", "it", "ja", "ka", "km", "ko", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr",
-        "uk", "vi", "zh"];
+    private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "da", "de", "el", "en", "en-GB", "en-US", "es", "et", "fa", "fr", "fi", "ga", 
+        "hi", "hr", "hu", "hy", "id", "it", "ja", "ka", "km", "ko", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv",
+        "th", "tr", "uk", "vi", "zh"];
 
     static getImageSrc(rdfResource: ARTNode): string {
 

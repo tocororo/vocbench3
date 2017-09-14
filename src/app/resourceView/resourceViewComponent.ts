@@ -29,6 +29,8 @@ export class ResourceViewComponent {
     private showInferredPristine: boolean = false; //useful to decide whether repeat the getResourceView request once the includeInferred changes
     private showInferred: boolean = false;
 
+    private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
+
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTPredicateObjects[] = null;
@@ -58,6 +60,7 @@ export class ResourceViewComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.preferences.getInferenceInResourceView();
+        this.rendering = this.preferences.getRenderingInResourceView();
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
             if (!changes['resource'].firstChange) { 
@@ -293,7 +296,7 @@ export class ResourceViewComponent {
      * HEADING BUTTON HANDLERS
      */
 
-    private showHideInferred() {
+    private switchInferred() {
         this.showInferred = !this.showInferred;
         this.preferences.setInferenceInResourceView(this.showInferred);
         if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
@@ -301,7 +304,11 @@ export class ResourceViewComponent {
         } else { //resource view has been initialized with showInferred to true, so there's no need to repeat the request
             this.fillPartitions();
         }
-        
+    }
+
+    private switchRendering() {
+        this.rendering = !this.rendering;
+        this.preferences.setRenderingInResourceView(this.rendering);
     }
 
 

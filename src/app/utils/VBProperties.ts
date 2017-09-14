@@ -156,8 +156,22 @@ export class VBProperties {
     /**
      * Gets the preference to show or hide the inferred information in resource view
      */
-    getInferenceInResourceView() {
+    getInferenceInResourceView(): boolean {
         return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
+    }
+
+    /**
+     * Sets the preference to show the URI or the rendering of resources in resource view
+     */
+    setRenderingInResourceView(rendering: boolean) {
+        Cookie.setCookie(Cookie.VB_RENDERING_IN_RES_VIEW, rendering + "", 365*10);
+    }
+    /**
+     * Gets the preference to show the URI or the rendering of resources in resource view
+     */
+    getRenderingInResourceView(): boolean {
+        let cookieValue: string = Cookie.getCookie(Cookie.VB_RENDERING_IN_RES_VIEW);
+        return (cookieValue == null || cookieValue == "true"); //default true, so true if cookie is not defined
     }
 
     /**

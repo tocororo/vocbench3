@@ -15,6 +15,7 @@ export abstract class PartitionRenderer {
 
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource: ARTResource; //resource described
+    @Input() rendering: boolean;
     @Input() readonly: boolean;
     @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();

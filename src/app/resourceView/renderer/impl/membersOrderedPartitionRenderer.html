@@ -33,8 +33,8 @@
                         <!-- Member list -->
                         <div class="listItem">
                             
-                            <editable-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" style="flex: 1"
-                                [resource]="obj" [subject]="resource" [predicate]="po.getPredicate()" [readonly]="readonly"
+                            <editable-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" style="flex: 1" [resource]="obj"
+                                [rendering]="rendering" [subject]="resource" [predicate]="po.getPredicate()" [readonly]="readonly"
                                 [partition]="partition" (dblClick)="objectDblClick($event)" (update)="onObjectUpdate()"
                                 (delete)="removePredicateObject(po.getPredicate(), obj)">
                             </editable-resource>
@@ -68,8 +68,8 @@
                             <div class="subPanel-body">
                                 <div *ngFor="let memb of obj.members" class="listItem" (click)="selectMember(memb)"
                                     [ngClass]="{active: memb == selectedMember}">
-                                    <editable-resource style="flex: 1" [resource]="memb" [subject]="obj" [predicate]="membersProperty"
-                                        [readonly]="readonly" [partition]="partition" 
+                                    <editable-resource style="flex: 1" [resource]="memb" [rendering]="rendering"
+                                        [subject]="obj" [predicate]="membersProperty" [readonly]="readonly" [partition]="partition" 
                                         (dblClick)="objectDblClick(memb)" (delete)="removeMember(memb)" (update)="onObjectUpdate()">
                                     </editable-resource>
                                 </div>

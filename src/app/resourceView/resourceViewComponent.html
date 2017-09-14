@@ -21,9 +21,13 @@
             </div>
             
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: showInferred}"
-                title="Show/hide inferred information" (click)="showHideInferred()">
+                title="Show/hide inferred information" (click)="switchInferred()">
                 <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
                 <span *ngIf="!showInferred" class="glyphicon glyphicon-eye-close"></span>
+            </button>
+            <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: rendering}"
+                title="Rendering" (click)="switchRendering()">
+                <span class="glyphicon glyphicon-font"></span>
             </button>
             <button class="btn btn-default btn-xs" title="Refresh" (click)="buildResourceView(resource)" style="margin-left: 3px;">
                 <span class="glyphicon glyphicon-refresh"></span>
@@ -32,50 +36,50 @@
         </div>
     </div>
     <div class="panel-body scrollableContainer">
-        <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl" [resource]="resource" [readonly]="readonly"
+        <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
             (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </types-renderer>
-        <class-axiom-renderer *ngIf="classAxiomColl" [pred-obj-list]="classAxiomColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <class-axiom-renderer *ngIf="classAxiomColl" [pred-obj-list]="classAxiomColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </class-axiom-renderer>
-        <top-concepts-renderer *ngIf="topconceptofColl" [pred-obj-list]="topconceptofColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <top-concepts-renderer *ngIf="topconceptofColl" [pred-obj-list]="topconceptofColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </top-concepts-renderer>
-        <schemes-renderer *ngIf="schemesColl" [pred-obj-list]="schemesColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <schemes-renderer *ngIf="schemesColl" [pred-obj-list]="schemesColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </schemes-renderer>
-        <broaders-renderer *ngIf="broadersColl" [pred-obj-list]="broadersColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <broaders-renderer *ngIf="broadersColl" [pred-obj-list]="broadersColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </broaders-renderer>
-        <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </superproperties-renderer>
-        <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" [resource]="resource" [readonly]="readonly"
+        <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
             (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </domains-renderer>
-        <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl" [resource]="resource" [readonly]="readonly"
+        <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
             (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </ranges-renderer>
         <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
             [resource]="resource" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </property-facets-renderer>
-        <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </lexicalizations-renderer>
-        <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl" [resource]="resource" [readonly]="readonly"
+        <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
             (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </notes-renderer>
-        <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl" [resource]="resource" [readonly]="readonly"
+        <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
             (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </members-renderer>
-        <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </members-ordered-renderer>
-        <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </label-relations-renderer>
-        <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+        <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
+            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </properties-renderer>
     </div>
 
