@@ -25,7 +25,7 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>, private projectService: ProjectServices, private metadataService: MetadataServices,
-        private adminService: AdministrationServices, private userService: UserServices, private preferences: VBProperties,
+        private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties,
         private router: Router) {
         this.context = dialog.context;
     }
@@ -55,7 +55,8 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
             stResp => {
                 VBContext.setWorkingProject(this.selectedProject);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.preferences.initUserProjectPreferences();
+                this.vbProp.initUserProjectPreferences();
+                this.vbProp.initProjectSettings();
                 this.adminService.getProjectUserBinding(this.selectedProject.getName(), VBContext.getLoggedUser().getEmail()).subscribe(
                     puBinding => {
                         VBContext.setProjectUserBinding(puBinding);
