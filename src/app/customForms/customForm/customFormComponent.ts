@@ -52,7 +52,7 @@ export class CustomForm implements ControlValueAccessor {
             },
             err => {
                 this.basicModals.alert("Error", "Impossible to create the CustomForm (" + this.cfId
-                    + "). Its description may contains error. " + err, "error");
+                    + "). Its description may contains error.", "error", err);
             }
         );
     }

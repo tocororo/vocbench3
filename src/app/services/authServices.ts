@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from "@angular/router";
 import { Observable } from 'rxjs/Observable';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -11,7 +12,7 @@ export class AuthServices {
 
     private serviceName = "Auth";
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private router: Router) { }
 
     /**
      * Logs in and registers the logged user in the VBContext
@@ -41,6 +42,7 @@ export class AuthServices {
         console.log("[AuthServices] logout");
         return this.httpMgr.doGet(this.serviceName, "logout", null, true).map(
             stResp => {
+                this.router.navigate(["/Home"]);
                 VBContext.removeLoggedUser();
                 VBContext.removeWorkingProject();
                 AuthorizationEvaluator.reset();

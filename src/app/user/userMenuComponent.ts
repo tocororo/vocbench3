@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { Router } from '@angular/router';
 import { AuthServices } from "../services/authServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
@@ -16,8 +15,7 @@ export class UserMenuComponent {
 
     private currentUser: User;
 
-    constructor(private router: Router, private evtHandler: VBEventHandler,
-        private authService: AuthServices, private basicModals: BasicModalServices) { }
+    constructor(private evtHandler: VBEventHandler, private authService: AuthServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.currentUser = VBContext.getLoggedUser();
@@ -66,11 +64,7 @@ export class UserMenuComponent {
      * Removes the authentication token and redirect to home page
      */
     private logout() {
-        this.authService.logout().subscribe(
-            res => {
-                this.router.navigate(["/Home"]);
-            }
-        );
+        this.authService.logout().subscribe();
     }
 
 }

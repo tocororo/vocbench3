@@ -42,7 +42,7 @@ export class ProjectUsersManagerComponent {
                     this.usersBound = users;
                     this.puBinding = null;
                     this.selectedUserRole = null;
-                    /* look among the users bound to the project whether there is the currently selected user (in any).
+                    /* look among the users bound to the project whether there is the currently selected user (if any).
                     In case, select it, otherwise reset the selected user */
                     if (this.selectedUser != null) {
                         let userFound: User = null;
@@ -119,7 +119,13 @@ export class ProjectUsersManagerComponent {
     private removeUserFromProject() {
         this.adminService.removeAllRolesFromUser(this.project.getName(), this.selectedUser.getEmail()).subscribe(
             stResp => {
-                this.puBinding.addRole(this.selectedRole.getName());
+                for (var i = 0; i < this.usersBound.length; i++) {
+                    if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
+                        this.usersBound.splice(i, 1);
+                    }
+                }
+                this.puBinding.setRoles([]);
+                this.selectedUser = null;
                 this.selectedRole = null;
             }
         );

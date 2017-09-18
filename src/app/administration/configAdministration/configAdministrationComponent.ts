@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { Router } from "@angular/router";
 import { AdministrationServices } from "../../services/administrationServices";
 import { AuthServices } from "../../services/authServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -16,7 +15,7 @@ export class ConfigAdministrationComponent {
     private config: any = {};
 
     constructor(private adminService: AdministrationServices, private authService: AuthServices, 
-        private basicModals: BasicModalServices, private router: Router) {}
+        private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.adminService.getAdministrationConfig().subscribe(
@@ -34,11 +33,7 @@ export class ConfigAdministrationComponent {
                 result => {
                     this.updateAdminConfig().subscribe(
                         stResp => {
-                            this.authService.logout().subscribe(
-                                stResp => {
-                                    this.router.navigate(["/Home"]);
-                                }
-                            );
+                            this.authService.logout().subscribe();
                         }
                     );
                 },

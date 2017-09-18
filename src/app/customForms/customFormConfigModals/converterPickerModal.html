@@ -21,7 +21,7 @@
                     <td>{{c.getName()}}</td>
                     <td>{{c.getDescription()}}</td>
                     <td>{{c.getRDFCapability()}}
-                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes"></span>
+                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
                     </td>
                     <td>{{c.getURI()}}</td>
                 </tr>
