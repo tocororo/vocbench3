@@ -97,8 +97,8 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         if (this.selectedNode.getRole() == RDFResourceRolesEnum.skosCollection) {
             this.skosService.deleteCollection(this.selectedNode).subscribe(
                 stResp => {
+                    this.nodeDeleted.emit(this.selectedNode);
                     this.selectedNode = null;
-                    this.nodeSelected.emit(undefined);
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 },
                 err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
@@ -106,8 +106,8 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         } else { //skosOrderedCollection
             this.skosService.deleteOrderedCollection(this.selectedNode).subscribe(
                 stResp => {
+                    this.nodeDeleted.emit(this.selectedNode);
                     this.selectedNode = null;
-                    this.nodeSelected.emit(undefined);
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 },
                 err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }

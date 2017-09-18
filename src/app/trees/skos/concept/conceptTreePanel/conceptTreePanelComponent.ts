@@ -111,8 +111,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.skosService.deleteConcept(this.selectedNode).subscribe(
             stResp => {
+                this.nodeDeleted.emit(this.selectedNode);
                 this.selectedNode = null;
-                this.nodeSelected.emit(undefined);
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             }
         );

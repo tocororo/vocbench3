@@ -1,5 +1,6 @@
-<class-tree-panel [style]="classTreeStyle" (nodeSelected)="onClassSelected($event)" [hideSearch]="true" 
-    [readonly]="readonly"></class-tree-panel>
+<class-tree-panel [style]="classTreeStyle" (nodeSelected)="onClassSelected($event)" (nodeDeleted)="onClassDeleted($event)"
+    [hideSearch]="true"  [readonly]="readonly">
+</class-tree-panel>
 
 <!-- Splitter -->
 <div class="splitter">
@@ -8,7 +9,8 @@
 </div>
 
 <instance-list-panel [style]="instanceListStyle" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
-    [hideSearch]="true" [readonly]="readonly"></instance-list-panel>
+    (nodeDeleted)="onInstanceDeleted($event)" [hideSearch]="true" [readonly]="readonly">
+</instance-list-panel>
 
 <div class="panel panel-default" style="margin-top: 4px;">
     <search-bar (search)="doSearch($event)" [roles]="rolesForSearch"></search-bar>

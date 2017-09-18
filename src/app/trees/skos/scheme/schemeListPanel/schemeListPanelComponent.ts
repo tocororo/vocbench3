@@ -98,8 +98,8 @@ export class SchemeListPanelComponent extends AbstractPanel {
         //update the activeSchemes if the deleted was active
         if (this.vbProp.isActiveScheme(this.selectedNode)) {
             this.updateActiveSchemesPref();
+            this.nodeDeleted.emit(this.selectedNode);
             this.selectedNode = null;
-            this.nodeSelected.emit(this.selectedNode);
         }
     }
 

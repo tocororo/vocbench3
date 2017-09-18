@@ -11,6 +11,7 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 })
 export class TreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTResource>();
+    @Output() nodeDeleted = new EventEmitter<ARTResource>();
 
     private selectedResource: ARTResource;
 
@@ -54,6 +55,10 @@ export class TreePanelComponent {
 
     private onNodeSelected(node: ARTResource) {
         this.nodeSelected.emit(node);
+    }
+
+    private onNodeDeleted(node: ARTResource) {
+        this.nodeDeleted.emit(node);
     }
 
     /**

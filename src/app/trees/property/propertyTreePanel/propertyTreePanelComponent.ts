@@ -60,8 +60,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         }
         this.propService.deleteProperty(this.selectedNode).subscribe(
             stResp => {
+                this.nodeDeleted.emit(this.selectedNode);
                 this.selectedNode = null;
-                this.nodeSelected.emit(undefined);
             }
         )
     }

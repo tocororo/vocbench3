@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from "@angular/core";
+import { Component } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
 import { ResourceViewComponent } from "../resourceViewComponent";
 
@@ -8,18 +8,19 @@ import { ResourceViewComponent } from "../resourceViewComponent";
 })
 export class ResourceViewSplittedComponent {
 
-    @Input() resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
+    private resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
 
     private resStack: Array<ARTResource> = [];
     private object: ARTResource; //this represent a double clicked object in a resource view (to show in the 2nd RV)
 
-    constructor() { }
+    selectResource(resource: ARTResource) {
+        this.resource = resource;
+    }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['resource']) {
-            this.object = null;
-            this.resStack = [];
-        }
+    deleteResource(resource: ARTResource) {
+        this.resource = null;
+        this.object = null;
+        this.resStack = [];
     }
 
     private closeSecondaryResView() {

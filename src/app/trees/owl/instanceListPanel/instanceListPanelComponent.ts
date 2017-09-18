@@ -54,8 +54,8 @@ export class InstanceListPanelComponent extends AbstractPanel {
         UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
         this.classesService.deleteInstance(this.selectedNode, this.cls).subscribe(
             stResp => {
+                this.nodeDeleted.emit(this.selectedNode);
                 this.selectedNode = null;
-                this.nodeSelected.emit(this.selectedNode);
                 UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
             },
             err => { UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement); }
@@ -64,7 +64,6 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     refresh() {
         this.selectedNode = null;
-        this.nodeSelected.emit(this.selectedNode);
         this.viewChildInstanceList.initList();
     }
 

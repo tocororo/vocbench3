@@ -25,6 +25,8 @@ export class ClassIndividualTreePanelComponent {
     @Input() readonly: boolean;
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
+    @Output() classDeleted = new EventEmitter<ARTURIResource>();
+    @Output() instanceDeleted = new EventEmitter<ARTURIResource>();
 
     @ViewChild('blockDivClsIndList') public blockDivElement: ElementRef;
 
@@ -143,7 +145,9 @@ export class ClassIndividualTreePanelComponent {
             this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, false);
             this.selectedInstance = null;
         }
-        this.classSelected.emit(cls);
+        if (cls != null) { //cls could be null if the underlaying classTree has been refreshed
+            this.classSelected.emit(cls);
+        }
     }
 
     private onInstanceSelected(instance: ARTURIResource) {
@@ -152,6 +156,16 @@ export class ClassIndividualTreePanelComponent {
         if (instance != null) { //forward the event only if instance is not null
             this.instanceSelected.emit(instance);
         }
+    }
+
+    private onClassDeleted(cls: ARTURIResource) {
+        this.classDeleted.emit(cls);
+        this.selectedClass = null;
+    }
+
+    private onInstanceDeleted(instance: ARTURIResource) {
+        this.instanceDeleted.emit(instance);
+        this.selectedInstance = null;
     }
 
 }

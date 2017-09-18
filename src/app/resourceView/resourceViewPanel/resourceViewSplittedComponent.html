@@ -1,4 +1,4 @@
-<div class="vbox">
+<div class="vbox" *ngIf="resource">
     <resource-view [resource]="resource" (dblclickObj)="objectDblClick($event)" (update)="onMainResourceUpdate($event)"></resource-view>
 </div>
 
@@ -8,7 +8,7 @@
         <button type="button" class="close" (click)="closeSecondaryResView()" title="Close this resource view">
             <span class="glyphicon glyphicon-remove" style="font-size: 10px"></span>
         </button>
-        <button *ngIf="resStack.length>0" type="button" class="close" (click)="previousResView()" title="Previous resource">
+        <button *ngIf="resStack.length > 0" type="button" class="close" (click)="previousResView()" title="Previous resource">
             <span class="glyphicon glyphicon-chevron-left" style="font-size: 10px"></span>
         </button>
     </div>

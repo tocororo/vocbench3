@@ -88,8 +88,6 @@ export abstract class AbstractTree {
                 break;
             }
         }
-        //reset the selected node
-        this.nodeSelected.emit(undefined);
     }
 
     //Root limitation management

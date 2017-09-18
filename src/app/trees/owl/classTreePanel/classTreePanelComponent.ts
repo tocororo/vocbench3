@@ -64,8 +64,8 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
         this.classesService.deleteClass(this.selectedNode).subscribe(
             stResp => {
+                this.nodeDeleted.emit(this.selectedNode);
                 this.selectedNode = null;
-                this.nodeSelected.emit(this.selectedNode);
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             }
         );
@@ -73,7 +73,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     refresh() {
         this.selectedNode = null; //instance list refresh automatically after this since it listen for changes on cls
-        this.nodeSelected.emit(this.selectedNode);
+        this.nodeSelected.emit(this.selectedNode); //emit nodeSelected with node null, so classIndividualTreePanel reset the instance list
         this.viewChildTree.initTree();
     }
 

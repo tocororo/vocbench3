@@ -1,16 +1,11 @@
 <div class="hbox">
 
     <!-- Sidebar -->
-    <div class="vbox" [ngStyle]="{ 'flex': sidebarFlex }" [ngClass]="{ hidden : sidebarFlex == 0 }">
-        <tree-panel (nodeSelected)="onNodeSelected($event)"></tree-panel>
+    <div class="vbox" style="flex: 1;">
+        <tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)"></tree-panel>
     </div>
 
-    <!-- Splitter -->
-    <div *ngIf="selectedResource" class="splitter" style="margin: 2px;">
-        <span *ngIf="sidebarFlex > 0" class="glyphicon glyphicon-chevron-left" style="display: block" (click)="reduceSidebar()"></span>
-        <span *ngIf="sidebarFlex < 3" class="glyphicon glyphicon-chevron-right" (click)="expandSidebar()"></span>
-    </div>
-    
-    <!-- Res View -->
-    <resource-view-panel *ngIf="selectedResource" style="flex: 4" [resource]="selectedResource"></resource-view-panel>
+    <resource-view-panel [ngStyle]="{ 'flex': resViewPanelFlex }" [size]="resViewPanelFlex"
+        (resize)="onResize($event)">
+    </resource-view-panel>
 </div>
