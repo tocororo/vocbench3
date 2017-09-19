@@ -5,7 +5,9 @@
     <div class="alert alert-info" *ngIf="context.message">
         {{context.message}}
     </div>
-    <resource-list [resources]="context.resourceList" (nodeSelected)="onResourceSelected($event)" style="margin-top: 5px;"></resource-list>
+    <resource-list [resources]="context.resourceList" [rendering]="context.rendering" (nodeSelected)="onResourceSelected($event)"
+        style="margin-top: 5px;">
+    </resource-list>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!resourceSelected">Ok</button>

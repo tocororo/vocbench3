@@ -5,6 +5,7 @@ import { PluginsServices } from "../../../../services/pluginsServices";
 import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../../../models/Plugins";
 import { RDFFormat } from "../../../../models/RDFFormat";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { UIUtils } from "../../../../utils/UIUtils";
 
 @Component({
     selector: "metadata-vocabularies-component",
@@ -83,6 +84,7 @@ export class MetadataVocabulariesComponent {
         //first set the exporter settings
         var extPointProps: any = this.collectExtPointParams();
         var pluginProps: any = this.collectPluginParams();
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
             stResp => {
                 //export the metadata
@@ -99,6 +101,7 @@ export class MetadataVocabulariesComponent {
 
                 this.metadataExporterService.export(expoterSpecification, this.selectedExportFormat).subscribe(
                     blob => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         var exportLink = window.URL.createObjectURL(blob);
                         this.basicModals.downloadLink("Export Metadata", null, exportLink, "metadata_export." + this.selectedExportFormat.defaultFileExtension);
                     }

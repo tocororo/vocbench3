@@ -254,9 +254,11 @@ export class HttpManager {
         if (respContType.includes("application/xml;")) { //could be an error xml response
             //convert arrayBuffer to xml Document
             var respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
-            var xmlResp = new DOMParser().parseFromString(respContentAsString, "application/xml");
+            var xmlResp = new DOMParser().parseFromString(respContentAsString, STResponseUtils.contentTypeXml);
             if (STResponseUtils.isErrorResponse(xmlResp)) { //is an error
-                throw new Error(STResponseUtils.getErrorResponseMessage(xmlResp));
+                let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(xmlResp));
+                err.name = STResponseUtils.getErrorResponseExceptionName(xmlResp);
+                throw err;
             } else { //not an error => return a blob
                 var blobResp = new Blob([arrayBuffer], { type: respContType });
                 return blobResp;
@@ -379,7 +381,7 @@ export class HttpManager {
     private handleJsonXmlResponse(res: Response): any | Document {
         if (res.headers.get("Content-Type").indexOf(STResponseUtils.contentTypeXml) != -1) { //is response Xml?
             var parser = new DOMParser();
-            var stResp = parser.parseFromString(res.text(), "application/xml");
+            var stResp = parser.parseFromString(res.text(), STResponseUtils.contentTypeXml);
             return stResp;
         } else if (res.headers.get("Content-Type").indexOf(STResponseUtils.contentTypeJson) != -1) { //is response json?
             return res.json();
@@ -429,6 +431,10 @@ export class HttpManager {
                     }
                 }
             );
+        } else if (err.status == 500) { //in case of server error (e.g. out of memory)
+            this.basicModals.alert("Error", err.statusText, "error", err._body).then(
+                result => {}
+            )
         }
         //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
         else if (errorAlertOpt.show) { //if the alert should be shown

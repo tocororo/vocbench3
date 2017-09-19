@@ -224,7 +224,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             }
             this.resourceService.getResourcesInfo(schemes).subscribe(
                 schemes => {
-                    this.basicModals.selectResource("Search", message, schemes).then(
+                    this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
                         scheme => {
                             this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
                             this.viewChildTree.openTreeAt(resource); //then open the tree on the searched resource

@@ -7,6 +7,7 @@ import { ARTNode } from "../../models/ARTResources";
 })
 export class ResourceListComponent {
 	@Input() resources: ARTNode[];
+	@Input() rendering: boolean = true;
 	@Output() nodeSelected = new EventEmitter<ARTNode>();
 
 	@ViewChild('scrollableContainer') scrollableElement: ElementRef;

@@ -23,7 +23,7 @@ export class IndividualsServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params, true).map(
             stResp => {
-                var types = Deserializer.createResourceArray(stResp);
+                var types = Deserializer.createURIArray(stResp);
                 return types;
             }
         );
