@@ -128,6 +128,9 @@ export class MetadataVocabulariesComponent {
         var pluginParams: PluginConfigParam[] = this.selectedExporterSettings.pluginSettings.params;
         var pluginProps: any = {};
         for (var i = 0; i < pluginParams.length; i++) {
+            if (pluginParams[i].value == "") { //if user write then delete a value, the value is ""
+                pluginParams[i].value = undefined; //"clean" the value
+            }
             if (pluginParams[i].required && pluginParams[i].value == null) {
                 this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
                     this.selectedExporterSettings.pluginSettings.shortName + ")", "error");
