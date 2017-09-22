@@ -190,7 +190,8 @@ export class InstanceListComponent {
 
     private onInstanceCreated(instance: ARTURIResource, cls: ARTURIResource) {
         if (this.cls.getURI() == cls.getURI()) {
-            this.instanceList.push(instance);
+            // this.instanceList.push(instance);
+            this.instanceList.unshift(instance);
         }
     }
 

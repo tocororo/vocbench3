@@ -377,9 +377,10 @@ export class ResourceUtils {
         if (attribute == "show") {
             list.sort(
                 function (r1: ARTResource, r2: ARTResource) {
-                    if (r1.getShow().toLowerCase() > r2.getShow().toLowerCase()) return 1;
-                    if (r1.getShow().toLowerCase() < r2.getShow().toLowerCase()) return -1;
-                    return 0;
+                    return r1.getShow().toLowerCase().localeCompare(r2.getShow().toLowerCase());
+                    // if (r1.getShow().toLowerCase() > r2.getShow().toLowerCase()) return 1;
+                    // if (r1.getShow().toLowerCase() < r2.getShow().toLowerCase()) return -1;
+                    // return 0;
                 }
             );
         }

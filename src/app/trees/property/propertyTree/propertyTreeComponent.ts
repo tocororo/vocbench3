@@ -181,7 +181,8 @@ export class PropertyTreeComponent extends AbstractTree {
     //EVENT LISTENERS
 
     private onTopPropertyCreated(property: ARTURIResource) {
-        this.roots.push(property);
+        // this.roots.push(property);
+        this.roots.unshift(property);
     }
 
     private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {

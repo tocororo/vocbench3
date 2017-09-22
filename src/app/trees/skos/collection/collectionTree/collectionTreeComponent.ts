@@ -95,7 +95,8 @@ export class CollectionTreeComponent extends AbstractTree {
     //EVENT LISTENERS
 
     private onRootCollectionCreated(collection: ARTURIResource) {
-        this.roots.push(collection);
+        // this.roots.push(collection);
+        this.roots.unshift(collection);
     }
 
     private onNestedCollectionAdded(nested: ARTURIResource, container: ARTURIResource) {

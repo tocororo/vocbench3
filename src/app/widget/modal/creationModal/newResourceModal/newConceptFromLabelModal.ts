@@ -121,6 +121,8 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
                 this.skosService.getBroaderConcepts(this.sibling, this.vbProp.getActiveSchemes()).subscribe(
                     broaders => {
                         if (broaders.length == 0) { //sibling is top concept
+                            this.multipleSiblingBroaders = false;
+                            this.siblingBroaders = broaders;
                             this.selectedSiblingBroader = null;
                         } else if (broaders.length == 1) { //just one broader
                             this.selectedSiblingBroader = broaders[0];

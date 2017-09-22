@@ -53,7 +53,10 @@ export class SchemeListPanelComponent extends AbstractPanel {
         this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
             (res: any) => {
                 this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
-                    newScheme => { this.schemeList.push({ checked: false, scheme: newScheme }); },
+                    newScheme => { 
+                        // this.schemeList.push({ checked: false, scheme: newScheme });
+                        this.schemeList.unshift({ checked: false, scheme: newScheme });
+                    },
                     err => { }
                 );
             },
