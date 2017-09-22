@@ -7,6 +7,7 @@ import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingMo
 import { FormCollEditorModal, FormCollEditorModalData } from "./customFormConfigModals/formCollEditorModal"
 import { CustomFormEditorModal, CustomFormEditorModalData } from "./customFormConfigModals/customFormEditorModal"
 import { ImportCfModal, ImportCfModalData } from "./customFormConfigModals/importCfModal"
+import { BrokenCFStructReportModal } from "./customFormConfigModals/brokenCFStructReportModal"
 import { ARTURIResource } from "../models/ARTResources";
 import { FormCollectionMapping, CustomForm, CustomFormLevel, FormCollection } from "../models/CustomForms";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
@@ -32,6 +33,12 @@ export class CustomFormConfigComponent {
         this.initCFConfMap();
         this.initFormCollList();
         this.initCustomFormList();
+    }
+
+    private showBrokenCFS() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        return this.modal.open(BrokenCFStructReportModal, overlayConfig).then();
     }
 
     /**

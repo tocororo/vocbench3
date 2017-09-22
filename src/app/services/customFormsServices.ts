@@ -3,7 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResourceUtils, RDFResourceRolesEnum } from "../models/ARTResources";
-import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, FormFieldType, CustomFormLevel } from "../models/CustomForms";
+import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, BrokenCFStructure, 
+    FormFieldType, CustomFormLevel } from "../models/CustomForms";
 
 @Injectable()
 export class CustomFormsServices {
@@ -614,6 +615,88 @@ export class CustomFormsServices {
             formType: formType
         };
         return this.httpMgr.doPost(this.serviceName, "validatePearl", params, true);
+    }
+
+    /**
+     * Returns a list of BrokenCFStructure that represents the broken FormsMapping, FormCollection and CustomForm
+     */
+    getBrokenCustomForms(): Observable<BrokenCFStructure[]> {
+        console.log("[CustomFormsServices] getBrokenCustomForms");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getBrokenCustomForms", params, true).map(
+            stResp => {
+                let brokenCFS: BrokenCFStructure[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    brokenCFS.push({
+                        id: stResp[i].id,
+                        type: stResp[i].type,
+                        level: stResp[i].level,
+                        file: stResp[i].file,
+                        reason: stResp[i].reason
+                    }) 
+                }
+
+                //sort by: level then type
+                brokenCFS.sort((a: BrokenCFStructure, b: BrokenCFStructure) => {
+                    if (a.level == CustomFormLevel.system) {
+                        if (b.level == CustomFormLevel.system) {
+                            //same level, compare type
+                            if (a.type == "FormsMapping") {
+                                if (b.type == "FormsMapping") {
+                                    return 0;
+                                } else {
+                                    return -1;
+                                }
+                            } else if (a.type == "FormCollection") {
+                                if (b.type == "FormsMapping") {
+                                    return 1;
+                                } else if (b.type == "CustomForm") {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            } else { //type CustomForm
+                                if (b.type == "CustomForm") {
+                                    return 0;
+                                } else {
+                                    return 1;
+                                }
+                            }
+                        } else { //b level project
+                            return -1;
+                        }
+                    } else { // a level project
+                        if (b.level == CustomFormLevel.system) {
+                            return 1;
+                        } else { //same level, compare type
+                            if (a.type == "FormsMapping") {
+                                if (b.type == "FormsMapping") {
+                                    return 0;
+                                } else {
+                                    return -1;
+                                }
+                            } else if (a.type == "FormCollection") {
+                                if (b.type == "FormsMapping") {
+                                    return 1;
+                                } else if (b.type == "CustomForm") {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            } else { //type CustomForm
+                                if (b.type == "CustomForm") {
+                                    return 0;
+                                } else {
+                                    return 1;
+                                }
+                            }
+                        }
+                    }
+                });
+
+                return brokenCFS;
+            }
+        );
     }
 
 }
