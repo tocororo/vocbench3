@@ -1,11 +1,17 @@
 <div class="hbox">
 
-    <!-- Sidebar -->
-    <div class="vbox" style="flex: 1;">
+    <div #treePanel class="vbox" [ngStyle]="{ 'flex': treePanelFlex }">
         <tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)"></tree-panel>
     </div>
 
-    <resource-view-panel [ngStyle]="{ 'flex': resViewPanelFlex }" [size]="resViewPanelFlex"
-        (resize)="onResize($event)">
-    </resource-view-panel>
+    <ng-template [ngIf]="resViewPanelFlex > 0">
+        <div class="sliderX" (mousedown)="onMousedown($event);">
+            <div>
+                <span class="glyphicon glyphicon-chevron-right" style="display: block"></span>
+                <span class="glyphicon glyphicon-chevron-left" style="display: block"></span>
+            </div>
+        </div>
+        <resource-view-panel #resViewPanel [ngStyle]="{ 'flex': resViewPanelFlex }" (empty)="onResViewEmpty()"></resource-view-panel>
+    </ng-template>
+
 </div>

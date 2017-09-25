@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
-import { DomSanitizer, SafeStyle } from "@angular/platform-browser"
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
 import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
 import { SearchServices } from "../../../services/searchServices";
@@ -19,7 +18,12 @@ import { UIUtils } from "../../../utils/UIUtils";
 @Component({
     selector: "class-individual-tree-panel",
     templateUrl: "./classIndividualTreePanelComponent.html",
-    host: { class: "blockingDivHost" }
+    host: { 
+        class: "blockingDivHost",
+        '(mousemove)': 'onMousemove($event)',
+        '(mouseup)': 'onMouseup()',
+        '(mouseleave)': 'onMouseup()'
+    }
 })
 export class ClassIndividualTreePanelComponent {
     @Input() readonly: boolean;
@@ -29,15 +33,14 @@ export class ClassIndividualTreePanelComponent {
     @Output() instanceDeleted = new EventEmitter<ARTURIResource>();
 
     @ViewChild('blockDivClsIndList') public blockDivElement: ElementRef;
+    //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
+    @ViewChild('clsPanel', { read: ElementRef }) private classPanelRef: ElementRef; 
+    @ViewChild('instPanel',  { read: ElementRef }) private instancePanelRef: ElementRef;
 
     @ViewChild(ClassTreePanelComponent) viewChildTree: ClassTreePanelComponent;
     @ViewChild(InstanceListPanelComponent) viewChildInstanceList: InstanceListPanelComponent;
 
     private rendering: boolean = false; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-
-    private classTreeFlex = 3;
-    private classTreeStyle: SafeStyle;
-    private instanceListStyle: SafeStyle;
 
     private selectedClass: ARTURIResource;
     private selectedInstance: ARTURIResource;
@@ -45,11 +48,7 @@ export class ClassIndividualTreePanelComponent {
     private rolesForSearch: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
 
     constructor(private individualService: IndividualsServices, private searchService: SearchServices,
-        private basicModals: BasicModalServices, private sanitizer: DomSanitizer, private vbProp: VBProperties) { }
-
-    ngOnInit() {
-        this.refreshTreeListStyles();
-    }
+        private basicModals: BasicModalServices, private vbProp: VBProperties) { }
 
     private doSearch(searchedText: string) {
         if (searchedText.trim() == "") {
@@ -107,37 +106,6 @@ export class ClassIndividualTreePanelComponent {
         }
     }
 
-    private reduceClassTree() {
-        if (this.classTreeFlex > 1) {
-            this.classTreeFlex--;
-            this.refreshTreeListStyles()
-        }
-    }
-
-    private expandClassTree() {
-        if (this.classTreeFlex < 3) {
-            this.classTreeFlex++;
-            this.refreshTreeListStyles()
-        }
-    }
-
-    private refreshTreeListStyles() {
-        this.classTreeStyle = this.sanitizer.bypassSecurityTrustStyle("flex: " + this.classTreeFlex);
-        this.instanceListStyle = this.sanitizer.bypassSecurityTrustStyle("flex: " + (4 - this.classTreeFlex));
-    }
-
-    // private onMousedown() {
-    //     this.onMousemove = this.draggingHandler;
-    // }
-    // private onMouseup() {
-    //     this.onMousemove = (event: MouseEvent) => {};
-    // }
-    // private onMousemove(event: MouseEvent) {}
-    // private draggingHandler(event: MouseEvent) {
-    //     console.log(event.clientY);
-    //     //TODO change dimension of classtree and instancetree
-    // }
-
     //EVENT LISTENERS
     private onClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;
@@ -166,6 +134,62 @@ export class ClassIndividualTreePanelComponent {
     private onInstanceDeleted(instance: ARTURIResource) {
         this.instanceDeleted.emit(instance);
         this.selectedInstance = null;
+    }
+
+
+    //Draggable slider handler
+
+    /**
+     * There are two panel:
+     * - class tree panel to the top:
+     * The flex value varies between 16 and 4
+     * - instance list panel to the bottom:
+     * The flex value is fixed to 4
+     * 
+     * When resizing, it is changed just "classPanelFlex" between "minPanelSize" and "maxPanelSize"
+     * The "minPanelSize" and "maxPanelSize" determine the proportion between the two panels left:right that is between 
+     * minPanelSize:instancePanelFlex and maxPanelSize:instancePanelFlex (1:4 16:4)
+     */
+
+    private readonly maxPanelSize: number = 16;
+    private readonly minPanelSize: number = 1;
+
+    private classPanelFlex = this.maxPanelSize;
+    private readonly instancePanelFlex: number = 4;
+
+    private dragging: boolean = false;
+    private startMousedownY: number;
+
+    private onMousedown(event: MouseEvent) {
+        event.preventDefault();
+        this.dragging = true;
+        this.startMousedownY = event.clientY;
+        this.onMousemove = this.draggingHandler; //set listener on mousemove
+    }
+    private onMouseup() {
+        if (this.dragging) { //remove listener on mousemove
+            this.onMousemove = (event: MouseEvent) => {};
+            this.dragging = false;
+        }
+    }
+    private onMousemove(event: MouseEvent) {}
+    private draggingHandler(event: MouseEvent) {
+        let endMousedownY = event.clientY;
+        let diffY: number = this.startMousedownY - endMousedownY;
+        // console.log("startMousedownY", this.startMousedownY, "endMousedownY", endMousedownY, "diffY ", diffY);
+        let classPanelHeight: number = this.classPanelRef.nativeElement.offsetHeight;
+        let instancePanelHeight: number = this.instancePanelRef.nativeElement.offsetHeight;
+        /**
+         * Compute the classPanelFlex based on the following mathematical proportion:
+         *  classPanelHeight:instancePanelHeight = classPanelFlex:instancePanelFlex
+         */
+        this.classPanelFlex = (classPanelHeight-diffY)/(instancePanelHeight+diffY)*this.instancePanelFlex;
+
+        //ration between class and instance panel should be always  between 4:1 and 1:4
+        if (this.classPanelFlex > this.maxPanelSize) this.classPanelFlex = this.maxPanelSize;
+        else if (this.classPanelFlex < this.minPanelSize) this.classPanelFlex = this.minPanelSize;
+        //update the initial Y position of the cursor
+        this.startMousedownY = event.clientY;
     }
 
 }

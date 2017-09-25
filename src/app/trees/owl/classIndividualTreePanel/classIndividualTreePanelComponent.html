@@ -1,14 +1,15 @@
-<class-tree-panel [style]="classTreeStyle" (nodeSelected)="onClassSelected($event)" (nodeDeleted)="onClassDeleted($event)"
-    [hideSearch]="true"  [readonly]="readonly">
+<class-tree-panel #clsPanel [ngStyle]="{ 'flex': classPanelFlex }" (nodeSelected)="onClassSelected($event)" (nodeDeleted)="onClassDeleted($event)"
+    [hideSearch]="true" [readonly]="readonly">
 </class-tree-panel>
 
-<!-- Splitter -->
-<div class="splitter">
-    <span *ngIf="classTreeFlex > 1" class="glyphicon glyphicon-chevron-up" (click)="reduceClassTree()"></span>
-    <span *ngIf="classTreeFlex < 3" class="glyphicon glyphicon-chevron-down" (click)="expandClassTree()"></span>
+<div class="sliderY" (mousedown)="onMousedown($event);">
+    <div>
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        <span class="glyphicon glyphicon-chevron-down"></span>
+    </div>
 </div>
 
-<instance-list-panel [style]="instanceListStyle" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
+<instance-list-panel #instPanel [ngStyle]="{ 'flex': instancePanelFlex }" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
     (nodeDeleted)="onInstanceDeleted($event)" [hideSearch]="true" [readonly]="readonly">
 </instance-list-panel>
 
@@ -23,8 +24,3 @@
         </div>
     </div>
 </div>
-
-<!--<div style="font-size: 6px; align-self: center;" (mousedown)="onMousedown()" (mouseup)="onMouseup()"
-    (mousemove)="onMousemove($event)">
-    <span class="glyphicon glyphicon-chevron-up"></span><span class="glyphicon glyphicon-chevron-down"></span>
-</div>-->

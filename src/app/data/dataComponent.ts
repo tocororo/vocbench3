@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { ResourceViewPanelComponent } from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -6,26 +6,94 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 @Component({
     selector: "data-component",
     templateUrl: "./dataComponent.html",
-    host: { class: "pageComponent" },
+    host: { 
+        class: "pageComponent",
+        '(mousemove)': 'onMousemove($event)',
+        '(mouseup)': 'onMouseup()',
+        '(mouseleave)': 'onMouseup()'
+    },
 })
 export class DataComponent {
 
     @ViewChild(ResourceViewPanelComponent) resViewPanelChild: ResourceViewPanelComponent;
 
+    //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
+    @ViewChild('treePanel') private treePanelRef: ElementRef; 
+    @ViewChild('resViewPanel',  { read: ElementRef }) private resViewPanelRef: ElementRef;
+
     constructor(private eventHandler: VBEventHandler) { }
 
     private onNodeSelected(node: ARTResource) {
-        this.resViewPanelChild.selectResource(node);
+        if (this.resViewPanelFlex == 0) { //if the right panel is collapsed, open it
+            this.resViewPanelFlex = this.maxPanelSize;
+            this.treePanelFlex = 2;
+        }
+        //timeout is required in order to wait the next ng2 change detection round and so the resView panel is rendered
+        setTimeout(() => {
+            this.resViewPanelChild.selectResource(node);
+        });
     }
 
     private onNodeDeleted(node: ARTResource) {
         this.resViewPanelChild.deleteResource(node);
     }
 
+    //Draggable slider handler
+    /**
+     * There are two panel:
+     * - tree/list panel to the left:
+     * The flex value varies between "minPanelSize" and "maxPanelSize"
+     * - ResourceView panel to the right:
+     * The flex value admits just two value: 0 means that the panel is closed; "maxPanelSize" (fixed) when the panel is open.
+     * 
+     * When resizing, it is changed just "treePanelFlex" between "minPanelSize" and "maxPanelSize"
+     * The "minPanelSize" and "maxPanelSize" determine the proportion between the two panels left:right that is between 
+     * minPanelSize:maxPanelSize and maxPanelSize:maxPanelSize
+     */
 
-    private resViewPanelFlex: number = 0;
-    private onResize(size: number) {
-        this.resViewPanelFlex = size;
+    private readonly maxPanelSize: number = 5;
+    private readonly minPanelSize: number = 1;
+
+    private treePanelFlex: number = this.minPanelSize;
+    private resViewPanelFlex: number = 0; //initially 0 the res view panel is closed
+
+    private dragging: boolean = false;
+    private startMousedownX: number;
+
+    private onResViewEmpty() {
+        this.resViewPanelFlex = 0;   
+    }
+
+    private onMousedown(event: MouseEvent) {
+        event.preventDefault();
+        this.dragging = true;
+        this.startMousedownX = event.clientX;
+        this.onMousemove = this.draggingHandler; //set listener on mousemove
+    }
+    private onMouseup() {
+        if (this.dragging) { //remove listener on mousemove
+            this.onMousemove = (event: MouseEvent) => {};
+            this.dragging = false;
+        }
+    }
+    private onMousemove(event: MouseEvent) {}
+    private draggingHandler(event: MouseEvent) {
+        let endMousedownX = event.clientX;
+        let diffX: number = this.startMousedownX - endMousedownX;
+        // console.log("startMousedownX", this.startMousedownX, "endMousedownX", endMousedownX, "diffX ", diffX);
+        let classPanelHeight: number = this.treePanelRef.nativeElement.offsetWidth;
+        let instancePanelHeight: number = this.resViewPanelRef.nativeElement.offsetWidth;
+        /**
+         * Compute the classPanelFlex based on the following mathematical proportion:
+         *  classPanelHeight:instancePanelFlex = classPanelFlex:instancePanelFlex
+         */
+        this.treePanelFlex = (classPanelHeight-diffX)/(instancePanelHeight+diffX)*this.resViewPanelFlex;
+
+        //ration between class and instance panel should be always  between 4:1 and 1:4
+        if (this.treePanelFlex > this.maxPanelSize) this.treePanelFlex = this.maxPanelSize;
+        else if (this.treePanelFlex < this.minPanelSize) this.treePanelFlex = this.minPanelSize;
+        //update the initial X position of the cursor
+        this.startMousedownX = event.clientX;
     }
 
 }

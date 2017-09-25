@@ -1,7 +1,2 @@
-<div *ngIf="size > 0" class="splitter" style="margin: 2px;">
-    <span *ngIf="size > 2" class="glyphicon glyphicon-chevron-right" (click)="reducePanel()"></span>
-    <span *ngIf="size < 4" class="glyphicon glyphicon-chevron-left" style="display: block" (click)="expandPanel()"></span>
-</div>
-
 <resource-view-splitted *ngIf="resViewMode=='splitted'"></resource-view-splitted>
 <resource-view-tabbed *ngIf="resViewMode=='tabbed'" (empty)="onTabEmpty()"></resource-view-tabbed>

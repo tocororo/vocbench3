@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from "@angular/core";
+import { Component, ViewChild, Output, EventEmitter } from "@angular/core";
 import { ResourceViewTabbedComponent } from "./resourceViewTabbedComponent";
 import { ResourceViewSplittedComponent } from "./resourceViewSplittedComponent";
 import { ARTResource } from "../../models/ARTResources";
@@ -14,9 +14,7 @@ export class ResourceViewPanelComponent {
     @ViewChild(ResourceViewTabbedComponent) resViewTabbedChild: ResourceViewTabbedComponent;
     @ViewChild(ResourceViewSplittedComponent) resViewSplittedChild: ResourceViewSplittedComponent;
 
-    @Input() size: number;
-
-    @Output() resize: EventEmitter<number> = new EventEmitter();
+    @Output() empty: EventEmitter<number> = new EventEmitter(); //currently used only with resource view tabbed when all tab are closed
 
     private resViewMode: ResourceViewMode; //"splitted" or "tabbed";
 
@@ -42,9 +40,6 @@ export class ResourceViewPanelComponent {
         } else {
             this.resViewTabbedChild.selectResource(res);
         }
-        if (this.size == 0) {
-            this.setSize(3);
-        }
     }
 
     deleteResource(res: ARTResource) {
@@ -55,27 +50,8 @@ export class ResourceViewPanelComponent {
         }
     }
 
-    //resizer handler
-
-    private expandPanel() {
-        if (this.size < 4) {
-            this.setSize(this.size+1);
-        }
-    }
-
-    private reducePanel() {
-        if (this.size > 0) {
-            this.setSize(this.size-1);
-        }
-    }
-
     private onTabEmpty() {
-        this.setSize(0);
-    }
-
-    private setSize(size: number) {
-        this.size = size;
-        this.resize.emit(this.size);
+        this.empty.emit();
     }
 
 }
