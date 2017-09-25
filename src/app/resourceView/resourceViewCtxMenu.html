@@ -9,8 +9,7 @@
         <li *ngIf="isURIResource()" [ngClass]="{ disabled : isSetDeprecatedDisabled() }">
             <a (click)="setAsDeprecated()">Set as deprecated</a>
         </li>
-        <li *ngIf="resource.getRole() == 'xLabel'"
-            [ngClass]="{ disabled : isSpawnFromLabelDisabled() }">
+        <li *ngIf="resource.getRole() == 'xLabel'" [ngClass]="{ disabled : isSpawnFromLabelDisabled() }">
             <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
         </li>
     </ul>

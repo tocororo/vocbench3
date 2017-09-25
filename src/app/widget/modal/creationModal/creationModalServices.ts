@@ -132,9 +132,10 @@ export class CreationModalServices {
      * @param xLabel label that the new concept will have
      * @param cls class of the new creating resource
      * @param clsChangeable tells if the class of the creating resource can be changed
+     * @param sibling a concept that if provided, set the position chosen to "sibling" and prevent to change it
      */
-    newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean) {
-        var modalData = new NewConceptFromLabelModalData(title, xLabel, cls, clsChangeable);
+    newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, sibling?: ARTURIResource) {
+        var modalData = new NewConceptFromLabelModalData(title, xLabel, cls, clsChangeable, sibling);
         const builder = new BSModalContextBuilder<NewConceptFromLabelModalData>(
             modalData, undefined, NewConceptFromLabelModalData
         );

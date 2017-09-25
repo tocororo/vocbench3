@@ -338,6 +338,21 @@ export class EditableResourceComponent {
 		);
 	}
 
+	private spawnNewSiblingConceptWithLabel() {
+		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
+			data => {
+				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
+				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
+					data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
+					stResp => {
+						this.update.emit();
+					}
+				);
+			},
+			() => { }
+		);
+	}
+
 	private moveLabelToConcept() {
 		this.browsingModals.browsePropertyTree("Select a lexicalization predicate", [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
 			predicate => {

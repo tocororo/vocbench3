@@ -16,6 +16,7 @@ export class NewConceptFromLabelModalData extends BSModalContext {
         public xLabel: ARTResource,
         public cls: ARTURIResource, //class that this modal is creating
         public clsChangeable: boolean = true,
+        public sibling: ARTURIResource
     ) {
         super();
     }
@@ -52,6 +53,13 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     ngOnInit() {
         this.resourceClass = this.context.cls;
         this.selectCustomForm();
+
+        //if a sibling is provided, set AS_SIBLING as chosen position
+        if (this.context.sibling) {
+            this.sibling = this.context.sibling;
+            this.position = SpawnPosition.AS_SIBLING;
+            this.updateBroaderOfSibling(); //check for multiple sibling
+        }
     }
 
     changeClass() {
@@ -117,25 +125,31 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         this.browsingModals.browseConceptTree("Select sibling").then(
             (concept: any) => {
                 this.sibling = concept;
-                //check if sibling has multiple broader
-                this.skosService.getBroaderConcepts(this.sibling, this.vbProp.getActiveSchemes()).subscribe(
-                    broaders => {
-                        if (broaders.length == 0) { //sibling is top concept
-                            this.multipleSiblingBroaders = false;
-                            this.siblingBroaders = broaders;
-                            this.selectedSiblingBroader = null;
-                        } else if (broaders.length == 1) { //just one broader
-                            this.selectedSiblingBroader = broaders[0];
-                        } else { //multiple broaders
-                            this.multipleSiblingBroaders = true;
-                            this.siblingBroaders = broaders;
-                            this.selectedSiblingBroader = null;
-                        }
-                    }
-                )
+                this.updateBroaderOfSibling();
             },
             () => {}
         )
+    }
+
+    /**
+     * When selected a sibling, check if it has multiple broaders
+     */
+    private updateBroaderOfSibling() {
+        this.skosService.getBroaderConcepts(this.sibling, this.vbProp.getActiveSchemes()).subscribe(
+            broaders => {
+                if (broaders.length == 0) { //sibling is top concept
+                    this.multipleSiblingBroaders = false;
+                    this.siblingBroaders = broaders;
+                    this.selectedSiblingBroader = null;
+                } else if (broaders.length == 1) { //just one broader
+                    this.selectedSiblingBroader = broaders[0];
+                } else { //multiple broaders
+                    this.multipleSiblingBroaders = true;
+                    this.siblingBroaders = broaders;
+                    this.selectedSiblingBroader = null;
+                }
+            }
+        );
     }
 
     ok(event: Event) {
