@@ -15,9 +15,6 @@
                 <li [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
                     <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
                 </li>
-                <li *ngIf="subject.getRole() == 'concept'" [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
-                    <a (click)="spawnNewSiblingConceptWithLabel()">Spawn as sibling of current concept</a>
-                </li>
                 <li [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() }">
                     <a (click)="moveLabelToConcept()">Move xLabel to another concept</a>
                 </li>

@@ -458,7 +458,8 @@ button.resViewPartitionBtn:disabled  {
 .sliderY, .sliderX {
     display: flex;
     justify-content: center;
-    margin: 3px;
+    margin: 2px;
+    padding: 4px;
     font-size: 8px;
     border-radius: 3px;
 }

@@ -57,7 +57,6 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         //if a sibling is provided, set AS_SIBLING as chosen position
         if (this.context.sibling) {
             this.sibling = this.context.sibling;
-            this.position = SpawnPosition.AS_SIBLING;
             this.updateBroaderOfSibling(); //check for multiple sibling
         }
     }
@@ -90,8 +89,6 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     //when position select changes, reset the parameters for broader/sibling...
     private onPositionChange() {
         this.broader = null;
-        this.sibling = null;
-        this.siblingBroaders = null;
         this.selectedSiblingBroader = null;
         this.multipleSiblingBroaders = false;
     }
@@ -192,6 +189,6 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
 
 class SpawnPosition {
     public static AS_TOP_CONCEPT: string = "Top Concept";
-    public static AS_NARROWER: string = "Child of existing Concept";
-    public static AS_SIBLING: string = "Sibling of existing Concept";
+    public static AS_NARROWER: string = "Child of Concept";
+    public static AS_SIBLING: string = "Sibling of Concept";
 }

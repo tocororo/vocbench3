@@ -324,21 +324,6 @@ export class EditableResourceComponent {
 
 	private spawnNewConceptWithLabel() {
 		//here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
-		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept).then(
-			data => {
-				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
-				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
-					data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
-					stResp => {
-						this.update.emit();
-					}
-				);
-			},
-			() => { }
-		);
-	}
-
-	private spawnNewSiblingConceptWithLabel() {
 		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
 			data => {
 				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;

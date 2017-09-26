@@ -36,7 +36,7 @@
                 <tr>
                     <td class="text-right"><label>Position:</label></td>
                     <td>
-                        <select class="form-control input-sm" [(ngModel)]="position" (ngModelChange)="onPositionChange()" [disabled]="context.sibling">
+                        <select class="form-control input-sm" [(ngModel)]="position" (ngModelChange)="onPositionChange()">
                             <option *ngFor="let p of positionList">{{p}}</option>
                         </select>
                     </td>
@@ -64,7 +64,7 @@
                                 <rdf-resource *ngIf="sibling" [resource]="sibling"></rdf-resource>
                             </div>
                             <span class="input-group-btn">
-                                <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectSibling()" [disabled]="context.sibling">
+                                <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectSibling()">
                                     <img src="../../../../../assets/images/icons/actions/concept_create.png"/>
                                 </button>
                             </span>

@@ -2,12 +2,7 @@
     [hideSearch]="true" [readonly]="readonly">
 </class-tree-panel>
 
-<div class="sliderY" (mousedown)="onMousedown($event);">
-    <div>
-        <span class="glyphicon glyphicon-chevron-up"></span>
-        <span class="glyphicon glyphicon-chevron-down"></span>
-    </div>
-</div>
+<div class="sliderY" (mousedown)="onMousedown($event);"></div>
 
 <instance-list-panel #instPanel [ngStyle]="{ 'flex': instancePanelFlex }" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
     (nodeDeleted)="onInstanceDeleted($event)" [hideSearch]="true" [readonly]="readonly">
