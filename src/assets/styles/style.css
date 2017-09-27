@@ -271,6 +271,11 @@ img.disabled  {
     background-color: #cde8ff;
 }
 
+.listItem rdf-resource {
+	border-radius: 2px;
+	flex: 1;
+}
+
 .listItem.disabled {
     cursor: not-allowed;
     color: #999;
