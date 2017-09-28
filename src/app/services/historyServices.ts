@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { CommitInfo, ParameterInfo, CommitOperation, SortingDirection } from "../models/History";
+import { CommitInfo, ParameterInfo, CommitOperation, SortingDirection, CommitDelta } from "../models/History";
 import { ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
@@ -123,15 +123,15 @@ export class HistoryServices {
      * Returns the triples added and removed by the given commit
      * @param commit 
      */
-    getCommitDelta(commit: ARTURIResource): Observable<{ additions: CommitOperation[], removals: CommitOperation[] }> {
+    getCommitDelta(commit: ARTURIResource): Observable<CommitDelta> {
         console.log("[HistoryServices] getCommitDelta");
         var params: any = {
             commit: commit
         };
         return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params, true).map(
             stResp => {
-                var additions: CommitOperation[] = [];
-                var removals: CommitOperation[] = [];
+                let additions: CommitOperation[] = [];
+                let removals: CommitOperation[] = [];
 
                 var additionsJsonArray: any[] = stResp.additions;
                 for (var i = 0; i < additionsJsonArray.length; i++) {
@@ -159,7 +159,17 @@ export class HistoryServices {
                     );
                 }
 
-                return { additions: additions, removals: removals };
+                let additionsTruncated: number = stResp.additionsTruncated;
+                let removalsTruncated: number = stResp.removalsTruncated;
+
+                let commitDelta: CommitDelta = {
+                    additions: additions,
+                    removals: removals,
+                    additionsTruncated: additionsTruncated,
+                    removalsTruncated: removalsTruncated
+                }
+
+                return commitDelta;
             }
         );
     }

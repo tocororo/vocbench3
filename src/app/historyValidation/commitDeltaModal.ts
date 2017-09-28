@@ -26,6 +26,8 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
 
     private additions: CommitOperation[];
     private removals: CommitOperation[];
+    private truncated: boolean = false; //true if response contains
+    private messageTruncated: string;
 
     constructor(public dialog: DialogRef<CommitDeltaModalData>, private historyService: HistoryServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
@@ -37,6 +39,19 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
             delta => {
                 this.additions = delta.additions;
                 this.removals = delta.removals;
+                let additionsTruncated: number = delta.additionsTruncated;
+                let removalsTruncated: number = delta.removalsTruncated;
+                if (additionsTruncated || removalsTruncated) {
+                    this.truncated = true;
+                    if (additionsTruncated) {
+                        this.messageTruncated = "For performance issue, the additions reported have been limited to " + additionsTruncated + " triples";
+                        if (removalsTruncated) {
+                            this.messageTruncated += " as well as the removals";
+                        }
+                    } else {
+                        this.messageTruncated = "For performance issue, the removals reported have been limited to " + removalsTruncated + " triples";
+                    }
+                }
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
             }
         );

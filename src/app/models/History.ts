@@ -93,3 +93,9 @@ export const RepositoryStatus = {
     UNITIALIZED: "UNITIALIZED" as RepositoryStatus
 }
 
+export class CommitDelta {
+    additions: CommitOperation[];
+    removals: CommitOperation[];
+    additionsTruncated?: number;
+    removalsTruncated?: number;
+}
