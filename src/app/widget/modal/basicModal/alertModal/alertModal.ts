@@ -38,19 +38,19 @@ export class AlertModal implements ModalComponent<AlertModalData> {
         //based on the modal type set the css style of the message alert
         switch (this.context.type) {
             case "info":
-                this.msgStyle = "alert alert-info";
+                this.msgStyle = "vbox alert alert-info";
                 this.headerStyle = "modal-title text-info";
                 break;
             case "error":
-                this.msgStyle = "alert alert-danger";
+                this.msgStyle = "vbox alert alert-danger";
                 this.headerStyle = "modal-title text-danger";
                 break;
             case "warning":
-                this.msgStyle = "alert alert-warning";
+                this.msgStyle = "vbox alert alert-warning";
                 this.headerStyle = "modal-title text-warning";
                 break;
             default:
-                this.msgStyle = "alert alert-info";
+                this.msgStyle = "vbox alert alert-info";
                 this.headerStyle = "modal-title text-info";
                 break;
         }
