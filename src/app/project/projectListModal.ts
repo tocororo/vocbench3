@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs/Observable';
-import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "angular2-modal";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
 import { AdministrationServices } from "../services/administrationServices";

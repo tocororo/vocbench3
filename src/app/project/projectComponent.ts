@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ElementRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs/Observable';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
@@ -180,9 +180,7 @@ export class ProjectComponent implements OnInit {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(ProjectPropertiesModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ProjectPropertiesModal, overlayConfig)
     }
 
     private openACLModal() {
@@ -206,12 +204,10 @@ export class ProjectComponent implements OnInit {
     private openTableConfig() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('sm').toJSON() };
-        this.modal.open(ProjectTableConfigModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => {
-                    this.initTable();
-                }
-            )
+        this.modal.open(ProjectTableConfigModal, overlayConfig).result.then(
+            res => {
+                this.initTable();
+            }
         );
     }
 

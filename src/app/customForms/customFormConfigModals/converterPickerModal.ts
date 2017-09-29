@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
-import {BSModalContext, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent, Modal, OverlayConfig} from "angular2-modal";
+import {BSModalContext, BSModalContextBuilder} from 'ngx-modialog/plugins/bootstrap';
+import {DialogRef, ModalComponent, Modal, OverlayConfig} from "ngx-modialog";
 import {SignaturePickerModal, SignaturePickerModalData} from "./signaturePickerModal";
 import {CODAServices} from "../../services/codaServices"
 import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../../models/Coda";
@@ -75,14 +75,12 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         );
         builder.keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(SignaturePickerModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (signature: SignatureDescription) => {
-                    this.selectedSignature = signature;
-                    this.updateProjectionOperator();
-                },
-                () => {}
-            )
+        return this.modal.open(SignaturePickerModal, overlayConfig).result.then(
+            (signature: SignatureDescription) => {
+                this.selectedSignature = signature;
+                this.updateProjectionOperator();
+            },
+            () => {}
         );
     }
 

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
 import { VBProperties, StringMatchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../utils/VBProperties";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";

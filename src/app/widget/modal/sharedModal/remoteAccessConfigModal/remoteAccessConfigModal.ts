@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { DialogRef, ModalComponent, Modal, OverlayConfig } from "angular2-modal";
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent, Modal, OverlayConfig } from "ngx-modialog";
 import { RemoteRepositoryAccessConfig } from "../../../../models/Project";
 import { Properties } from "../../../../models/Properties";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
@@ -62,13 +62,11 @@ export class RemoteAccessConfigModal implements ModalComponent<RemoteAccessConfi
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
 
-        this.modal.open(RemoteAccessConfigEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (newConfig: any) => {
-                    this.initConfigs();
-                },
-                () => {}
-            )
+        this.modal.open(RemoteAccessConfigEditorModal, overlayConfig).result.then(
+            (newConfig: any) => {
+                this.initConfigs();
+            },
+            () => {}
         );
     }
 

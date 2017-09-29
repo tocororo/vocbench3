@@ -1,6 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { DialogRef, ModalComponent, Modal, OverlayConfig } from "angular2-modal";
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent, Modal, OverlayConfig } from "ngx-modialog";
 import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal";
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType } from "../../models/CustomForms";
@@ -75,13 +75,11 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         );
         builder.size('lg').keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(ConverterPickerModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                projOperator => {
-                    this.viewChildCodemirror.insertAtCursor(projOperator);
-                },
-                () => { }
-            )
+        return this.modal.open(ConverterPickerModal, overlayConfig).result.then(
+            projOperator => {
+                this.viewChildCodemirror.insertAtCursor(projOperator);
+            },
+            () => { }
         );
     }
 

@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "angular2-modal";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { SkosServices } from "../../../../services/skosServices";

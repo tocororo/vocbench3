@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { CustomFormsServices } from "../services/customFormsServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingModal"
@@ -38,7 +38,7 @@ export class CustomFormConfigComponent {
     private showBrokenCFS() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(BrokenCFStructReportModal, overlayConfig).then();
+        return this.modal.open(BrokenCFStructReportModal, overlayConfig)
     }
 
     /**
@@ -65,30 +65,28 @@ export class CustomFormConfigComponent {
     private createFormCollMapping() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(FormCollMappingModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => {
-                    var resource: ARTURIResource = res.resource;
-                    var formCollId: string = res.formCollection;
-                    //check if selected property has not a FormCollection already assigned
-                    for (var i = 0; i < this.cfConfigurationMap.length; i++) {
-                        if (this.cfConfigurationMap[i].getResource().getURI() == resource.getURI()) {
-                            //already in a mapping
-                            this.basicModals.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
-                                ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
-                                ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
-                                "warning");
-                            return;
-                        }
+        return this.modal.open(FormCollMappingModal, overlayConfig).result.then(
+            res => {
+                var resource: ARTURIResource = res.resource;
+                var formCollId: string = res.formCollection;
+                //check if selected property has not a FormCollection already assigned
+                for (var i = 0; i < this.cfConfigurationMap.length; i++) {
+                    if (this.cfConfigurationMap[i].getResource().getURI() == resource.getURI()) {
+                        //already in a mapping
+                        this.basicModals.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
+                            ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
+                            ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
+                            "warning");
+                        return;
                     }
-                    this.customFormsService.addFormsMapping(formCollId, resource).subscribe(
-                        stResp => {
-                            this.initCFConfMap();
-                        }
-                    )
-                },
-                () => { }
-            )
+                }
+                this.customFormsService.addFormsMapping(formCollId, resource).subscribe(
+                    stResp => {
+                        this.initCFConfMap();
+                    }
+                )
+            },
+            () => {}
         );
     }
 
@@ -136,11 +134,9 @@ export class CustomFormConfigComponent {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(FormCollEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => this.initFormCollList(),
-                () => { }
-            )
+        return this.modal.open(FormCollEditorModal, overlayConfig).result.then(
+            res => this.initFormCollList(),
+            () => { }
         );
     }
 
@@ -151,11 +147,9 @@ export class CustomFormConfigComponent {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(FormCollEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => { },
-                () => { }
-            )
+        return this.modal.open(FormCollEditorModal, overlayConfig).result.then(
+            res => { },
+            () => { }
         );
     }
 
@@ -208,17 +202,15 @@ export class CustomFormConfigComponent {
             modalData, undefined, ImportCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ImportCfModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (data: any) => {
-                    this.customFormsService.importFormCollection(data.file, data.id).subscribe(
-                        stResp => {
-                            this.initFormCollList();
-                        }
-                    )
-                },
-                () => { }
-            )
+        return this.modal.open(ImportCfModal, overlayConfig).result.then(
+            (data: any) => {
+                this.customFormsService.importFormCollection(data.file, data.id).subscribe(
+                    stResp => {
+                        this.initFormCollList();
+                    }
+                )
+            },
+            () => { }
         );
     }
 
@@ -254,11 +246,9 @@ export class CustomFormConfigComponent {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(CustomFormEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => this.initCustomFormList(),
-                () => { }
-            )
+        return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
+            res => this.initCustomFormList(),
+            () => { }
         );
     }
 
@@ -269,11 +259,9 @@ export class CustomFormConfigComponent {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(CustomFormEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => { },
-                () => { }
-            )
+        return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
+            res => { },
+            () => { }
         );
     }
 
@@ -348,17 +336,15 @@ export class CustomFormConfigComponent {
             modalData, undefined, ImportCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(ImportCfModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (data: any) => {
-                    this.customFormsService.importCustomForm(data.file, data.id).subscribe(
-                        stResp => {
-                            this.initCustomFormList();
-                        }
-                    )
-                },
-                () => { }
-            )
+        this.modal.open(ImportCfModal, overlayConfig).result.then(
+            (data: any) => {
+                this.customFormsService.importCustomForm(data.file, data.id).subscribe(
+                    stResp => {
+                        this.initCustomFormList();
+                    }
+                )
+            },
+            () => { }
         );
     }
 

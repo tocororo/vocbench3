@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ARTURIResource, ARTResource, ARTLiteral } from "../../../models/ARTResources";
 import { NewResourceModal, NewResourceModalData } from "./newResourceModal/newResourceModal";
 import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/newResourceCfModal";
@@ -27,9 +27,7 @@ export class CreationModalServices {
             modalData, undefined, NewResourceModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewResourceModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewResourceModal, overlayConfig).result;
     }
 
     /**
@@ -46,9 +44,7 @@ export class CreationModalServices {
             modalData, undefined, NewResourceCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewResourceCfModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewResourceCfModal, overlayConfig).result;
     }
 
     /**
@@ -65,9 +61,7 @@ export class CreationModalServices {
             modalData, undefined, NewConceptCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewConceptCfModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewConceptCfModal, overlayConfig).result;
     }
 
     /**
@@ -84,9 +78,7 @@ export class CreationModalServices {
             modalData, undefined, NewSkosResourceCfModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewSkosResourceCfModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewSkosResourceCfModal, overlayConfig).result;
     }
 
     /**
@@ -104,9 +96,7 @@ export class CreationModalServices {
             modalData, undefined, NewPlainLiteralModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewPlainLiteralModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewPlainLiteralModal, overlayConfig).result;
     }
 
     /**
@@ -121,9 +111,7 @@ export class CreationModalServices {
             modalData, undefined, NewTypedLiteralModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewTypedLiteralModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewTypedLiteralModal, overlayConfig).result;
     }
 
     /**
@@ -140,9 +128,7 @@ export class CreationModalServices {
             modalData, undefined, NewConceptFromLabelModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewConceptFromLabelModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(NewConceptFromLabelModal, overlayConfig).result;
     }
 
 }

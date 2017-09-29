@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
 import { EnrichPropertyModal, EnrichPropertyModalData } from "./enrichPropertyModal";
@@ -30,9 +30,7 @@ export class ResViewModalServices {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(ClassListCreatorModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ClassListCreatorModal, overlayConfig).result;
     }
 
     /**
@@ -47,9 +45,7 @@ export class ResViewModalServices {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(InstanceListCreatorModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(InstanceListCreatorModal, overlayConfig).result;
     }
 
     /**
@@ -66,9 +62,7 @@ export class ResViewModalServices {
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(EnrichPropertyModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(EnrichPropertyModal, overlayConfig).result;
     }
 
     /**
@@ -82,9 +76,7 @@ export class ResViewModalServices {
             modalData, undefined, CustomFormModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(CustomFormModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(CustomFormModal, overlayConfig).result;
     }
 
     /**
@@ -103,9 +95,7 @@ export class ResViewModalServices {
         );
         builder.keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(AddPropertyValueModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(AddPropertyValueModal, overlayConfig).result;
     }
 
     /**
@@ -119,9 +109,7 @@ export class ResViewModalServices {
         );
         builder.keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(DataRangeEditorModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(DataRangeEditorModal, overlayConfig).result;
     }
 
 }

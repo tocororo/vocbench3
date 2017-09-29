@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { UserCreateModal, UserCreateModalData } from "./userCreateModal"
 import { UserServices } from "../../services/userServices";
 import { User, UserStatusEnum } from "../../models/User";
@@ -47,13 +47,11 @@ export class UsersAdministrationComponent {
             modalData, undefined, UserCreateModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(UserCreateModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                res => {
-                    this.initUserList();
-                },
-                () => {}
-            )
+        return this.modal.open(UserCreateModal, overlayConfig).result.then(
+            res => {
+                this.initUserList();
+            },
+            () => {}
         );
     }
 

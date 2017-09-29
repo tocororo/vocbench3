@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder, Modal } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
-import { DialogRef, ModalComponent } from "angular2-modal";
+import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
 import { ProjectServices } from "../../services/projectServices";
 import { AccessLevel, LockLevel } from '../../models/Project';
@@ -178,14 +178,12 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         );
         builder.size("sm").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(ACLEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (update: any) => {
-                    if (update) {
-                        this.init();
-                    }
+        return this.modal.open(ACLEditorModal, overlayConfig).result.then(
+            (update: any) => {
+                if (update) {
+                    this.init();
                 }
-            )
+            }
         );
     }
 

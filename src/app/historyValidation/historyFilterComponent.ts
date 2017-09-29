@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { OperationSelectModal } from "./operationSelectModal";
 import { ARTURIResource, ResourceUtils } from "../models/ARTResources";
 
@@ -26,18 +26,16 @@ export class HistoryFilterComponent {
     private selectOperationFilter() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(OperationSelectModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (operations: any) => {
-                    //for each operation to add, add it only if not already in operations array
-                    operations.forEach((op: ARTURIResource) => {
-                        if (!ResourceUtils.containsNode(this.operations, op)) {
-                            this.operations.push(op);
-                        }
-                    });
-                },
-                () => {}
-            )
+        return this.modal.open(OperationSelectModal, overlayConfig).result.then(
+            (operations: any) => {
+                //for each operation to add, add it only if not already in operations array
+                operations.forEach((op: ARTURIResource) => {
+                    if (!ResourceUtils.containsNode(this.operations, op)) {
+                        this.operations.push(op);
+                    }
+                });
+            },
+            () => {}
         );
     }
 

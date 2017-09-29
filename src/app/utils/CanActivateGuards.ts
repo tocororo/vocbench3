@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanDeactivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { DialogRef } from "angular2-modal";
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { DialogRef } from "ngx-modialog";
+import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { VBContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalContext } from "../widget/modal/ModalContext";

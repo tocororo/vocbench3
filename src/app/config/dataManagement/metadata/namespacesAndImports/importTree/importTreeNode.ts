@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ImportOntologyModal, ImportOntologyModalData } from "../importOntologyModal";
 import { MetadataServices } from "../../../../../services/metadataServices";
 import { OntologyImport, ImportType } from "../../../../../models/Metadata";
@@ -86,9 +86,7 @@ export class ImportTreeNodeComponent {
             modalData, undefined, ImportOntologyModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ImportOntologyModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ImportOntologyModal, overlayConfig).result;
     }
 
     private onNodeRemoved(node: OntologyImport) {

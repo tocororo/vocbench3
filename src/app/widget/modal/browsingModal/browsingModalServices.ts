@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ClassTreeModal, ClassTreeModalData } from "../browsingModal/classTreeModal/classTreeModal";
 import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "../browsingModal/classIndividualTreeModal/classIndividualTreeModal";
 import { InstanceListModal, InstanceListModalData } from "../browsingModal/instanceListModal/instanceListModal";
@@ -29,9 +29,7 @@ export class BrowsingModalServices {
             modalData, undefined, ClassTreeModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ClassTreeModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ClassTreeModal, overlayConfig).result;
     }
 
     /**
@@ -45,9 +43,7 @@ export class BrowsingModalServices {
             modalData, undefined, ClassIndividualTreeModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.size("lg").keyboard(null).toJSON() };
-        return this.modal.open(ClassIndividualTreeModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ClassIndividualTreeModal, overlayConfig).result;
     }
 
     /**
@@ -62,9 +58,7 @@ export class BrowsingModalServices {
             modalData, undefined, InstanceListModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(InstanceListModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(InstanceListModal, overlayConfig).result;
     }
 
     /**
@@ -80,9 +74,7 @@ export class BrowsingModalServices {
             modalData, undefined, ConceptTreeModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ConceptTreeModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ConceptTreeModal, overlayConfig).result;
     }
 
     /**
@@ -96,9 +88,7 @@ export class BrowsingModalServices {
             modalData, undefined, CollectionTreeModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(CollectionTreeModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(CollectionTreeModal, overlayConfig).result;
     }
 
     /**
@@ -112,9 +102,7 @@ export class BrowsingModalServices {
             modalData, undefined, SchemeListModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(SchemeListModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(SchemeListModal, overlayConfig).result;
     }
 
     /**
@@ -131,9 +119,7 @@ export class BrowsingModalServices {
             modalData, undefined, PropertyTreeModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PropertyTreeModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(PropertyTreeModal, overlayConfig).result;
     }
 
 }

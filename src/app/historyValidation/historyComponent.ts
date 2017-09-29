@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { HistoryServices } from "../services/historyServices";
 import { UIUtils } from "../utils/UIUtils";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";

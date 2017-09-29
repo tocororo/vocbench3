@@ -14,8 +14,8 @@ import 'jquery';
 import 'bootstrap/dist/js/bootstrap';
 // import 'bootstrap/dist/css/bootstrap.min.css'; //overriden by assets/styles/custom_bootstrap/css/bootstrap.min.css
 
-import 'angular2-modal';
-import 'angular2-modal/plugins/bootstrap';
+import 'ngx-modialog';
+import 'ngx-modialog/plugins/bootstrap';
 
 //import 'yasgui-yasqe/dist/yasqe.bundled.js'; //already imported in yasguiComponent
 import 'yasgui-yasqe/dist/yasqe.min.css';

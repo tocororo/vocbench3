@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'angular2-modal/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "angular2-modal";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ARTURIResource, ARTLiteral, ResourceUtils } from "../../../../models/ARTResources";
 import { XmlSchema, SKOS } from "../../../../models/Vocabulary";
 import { VBContext } from "../../../../utils/VBContext";

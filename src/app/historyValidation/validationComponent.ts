@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { ValidationServices } from "../services/validationServices";
 import { CommitInfo } from "../models/History";
 import { UIUtils } from "../utils/UIUtils";

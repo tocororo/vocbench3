@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ARTResource } from "../../../models/ARTResources";
 import { PluginConfiguration } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
@@ -26,9 +26,7 @@ export class SharedModalServices {
             modalData, undefined, PluginConfigModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PluginConfigModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(PluginConfigModal, overlayConfig).result;
     }
 
     /**
@@ -42,9 +40,7 @@ export class SharedModalServices {
             modalData, undefined, RemoteAccessConfigModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(RemoteAccessConfigModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(RemoteAccessConfigModal, overlayConfig).result;
     }
 
     /**
@@ -59,9 +55,7 @@ export class SharedModalServices {
             modalData, undefined, RemoteRepoSelectionModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(RemoteRepoSelectionModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(RemoteRepoSelectionModal, overlayConfig).result;
     }
 
     /**
@@ -74,9 +68,7 @@ export class SharedModalServices {
             modalData, undefined, ResourceViewModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(ResourceViewModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ResourceViewModal, overlayConfig).result;
     }
 
     /**
@@ -90,9 +82,7 @@ export class SharedModalServices {
             modalData, undefined, LanguageSelectorModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(LanguageSelectorModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(LanguageSelectorModal, overlayConfig).result;
     }
 
 }

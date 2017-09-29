@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { AlignmentServices } from "../services/alignmentServices";
 import { RefactorServices } from "../services/refactorServices";
 import { ResourcesServices } from "../services/resourcesServices";
@@ -47,9 +47,7 @@ export class ResourceViewContextMenu {
             modalData, undefined, ResourceAlignmentModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ResourceAlignmentModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ResourceAlignmentModal, overlayConfig).result;
     }
 
     private spawnNewConceptWithLabel() {

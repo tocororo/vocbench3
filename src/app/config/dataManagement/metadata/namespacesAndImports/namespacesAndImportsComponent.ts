@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { OntoManagerServices } from '../../../../services/ontoManagerServices';
@@ -304,9 +304,7 @@ export class NamespacesAndImportsComponent {
             modalData, undefined, PrefixNamespaceModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PrefixNamespaceModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(PrefixNamespaceModal, overlayConfig).result;
     }
 
     //======= IMPORTS MANAGEMENT =======
@@ -429,9 +427,7 @@ export class NamespacesAndImportsComponent {
             modalData, undefined, ImportOntologyModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ImportOntologyModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ImportOntologyModal, overlayConfig).result;
     }
 
     private onInportTreeUpdate() {

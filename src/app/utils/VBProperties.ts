@@ -12,7 +12,9 @@ import { BasicModalServices } from '../widget/modal/basicModal/basicModalService
 @Injectable()
 export class VBProperties {
 
-    private projectLanguages: Language[] = []; //all available languages in a project (settings)
+    private projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
+    private projectLanguagesPreference: string[] = []; //languages that user
+
     private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
@@ -54,6 +56,12 @@ export class VBProperties {
                     this.projectThemeId = prefs.project_theme;
                     UIUtils.changeNavbarTheme(this.projectThemeId);
                 }
+            }
+        );
+
+        this.prefService.getProjectPreferences([Properties.pref_languages], Properties.plugin_id_rendering_engine).subscribe(
+            prefs => {
+                this.projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
         );
     }
@@ -107,6 +115,13 @@ export class VBProperties {
         this.prefService.setProjectTheme(theme).subscribe();
     }
 
+    getLanguagesPreference(): string[] {
+        return this.projectLanguagesPreference;
+    }
+    setLanguagesPreference(languages: string[]) {
+        this.projectLanguagesPreference = languages;
+    }
+
     /* =============================
     =========== SETTINGS ===========
     ============================= */
@@ -117,12 +132,12 @@ export class VBProperties {
             settings => {
                 var langsValue: string = settings[Properties.setting_languages];
                 try {
-                    this.projectLanguages = <Language[]>JSON.parse(langsValue);
-                    Languages.sortLanguages(this.projectLanguages);
+                    this.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
+                    Languages.sortLanguages(this.projectLanguagesSetting);
                 } catch (err) {
                     this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
                         "languages settings. Default languages will be set for this project.", "error");
-                    this.projectLanguages = [
+                    this.projectLanguagesSetting = [
                         { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },
                         { name: "French" , tag: "fr" }, { name: "Italian" , tag: "it" }
                     ];
@@ -135,10 +150,10 @@ export class VBProperties {
      * Returns the language available in the project
      */
     getProjectLanguages(): Language[] {
-        return this.projectLanguages;
+        return this.projectLanguagesSetting;
     }
     setProjectLanguages(languages: Language[]) {
-        this.projectLanguages = languages;
+        this.projectLanguagesSetting = languages;
     }
 
 

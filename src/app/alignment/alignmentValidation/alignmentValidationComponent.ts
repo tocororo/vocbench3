@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { Cookie } from "../../utils/Cookie";
 import { UIUtils } from "../../utils/UIUtils";
@@ -248,9 +248,7 @@ export class AlignmentValidationComponent {
             modalData, undefined, MappingPropertySelectionModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(MappingPropertySelectionModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(MappingPropertySelectionModal, overlayConfig).result;
     }
 
     /**
@@ -303,7 +301,7 @@ export class AlignmentValidationComponent {
                     )
                 },
                 () => { }
-                )
+            );
         }
     }
 
@@ -349,21 +347,19 @@ export class AlignmentValidationComponent {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
 
-        this.modal.open(ValidationSettingsModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                () => {
-                    //update settings
-                    this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
-                    this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
-                    this.confOnMeter = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
-                    this.alignmentPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-                    if (oldAlignPerPage != this.alignmentPerPage) {
-                        this.page = 0;
-                        this.updateAlignmentCells();
-                    }
-                },
-                () => { }
-            )
+        this.modal.open(ValidationSettingsModal, overlayConfig).result.then(
+            () => {
+                //update settings
+                this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
+                this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
+                this.confOnMeter = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
+                this.alignmentPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+                if (oldAlignPerPage != this.alignmentPerPage) {
+                    this.page = 0;
+                    this.updateAlignmentCells();
+                }
+            },
+            () => { }
         );
     }
 
@@ -427,7 +423,7 @@ export class AlignmentValidationComponent {
                     this.applyValidation(false);
                 },
                 () => { }
-                );
+            );
         } else if (this.rejectedAlignmentAction == "delete") {
             this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments and delete the triples of the ones rejected. Are you sure to continue?", "warning").then(
@@ -435,7 +431,7 @@ export class AlignmentValidationComponent {
                     this.applyValidation(true);
                 },
                 () => { }
-                );
+            );
         } else if (this.rejectedAlignmentAction == "ask") {
             this.basicModals.confirmCheck("Apply valdiation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments. Are you sure to continue?", "Delete triples of rejected alignments", "warning").then(
@@ -443,7 +439,7 @@ export class AlignmentValidationComponent {
                     this.applyValidation(confirm);
                 },
                 () => { }
-                );
+            );
         }
     }
 
@@ -462,9 +458,7 @@ export class AlignmentValidationComponent {
                 );
                 builder.size("lg").keyboard(null);
                 let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-                return this.modal.open(ValidationReportModal, overlayConfig).then(
-                    dialog => dialog.result
-                );
+                return this.modal.open(ValidationReportModal, overlayConfig).result;
             }
         )
     }

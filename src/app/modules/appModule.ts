@@ -18,8 +18,8 @@ import { UserModule } from "./userModule";
 import { MetadataModule } from "./metadataModule";
 import { HistoryValidationModule } from "./historyValidationModule";
 
-import { ModalModule } from 'angular2-modal';
-import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+import { ModalModule } from 'ngx-modialog';
+import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
 
 import { AppComponent } from "../appComponent";
 import { appRouting } from '../appRoutes';
@@ -54,7 +54,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 
             STServicesModule,
             appRouting,
-            ModalModule.forRoot(), BootstrapModalModule //Modules of angular2-modal
+            ModalModule.forRoot(), BootstrapModalModule //Modules of ngx-modialog
       ],
       //services with application scope
       providers: [

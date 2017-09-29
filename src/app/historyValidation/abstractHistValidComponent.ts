@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
 import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";
 import { OperationSelectModal } from "./operationSelectModal";
@@ -65,9 +65,7 @@ export abstract class AbstractHistValidComponent {
             modalData, undefined, OperationParamsModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(OperationParamsModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(OperationParamsModal, overlayConfig);
     }
 
     getCommitDelta(item: CommitInfo) {
@@ -76,9 +74,7 @@ export abstract class AbstractHistValidComponent {
             modalData, undefined, CommitDeltaModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(CommitDeltaModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(CommitDeltaModal, overlayConfig);
     }
 
     //SORT HANDLER

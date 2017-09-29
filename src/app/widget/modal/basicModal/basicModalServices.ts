@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { CustomForm } from "../../../models/CustomForms";
 import { PromptModal, PromptModalData } from "./promptModal/promptModal";
@@ -38,9 +38,7 @@ export class BasicModalServices {
             modalData, undefined, PromptModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PromptModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(PromptModal, overlayConfig).result;
     }
 
     /**
@@ -60,9 +58,7 @@ export class BasicModalServices {
             modalData, undefined, PromptPrefixedModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(PromptPrefixedModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(PromptPrefixedModal, overlayConfig).result;
     }
 
     /**
@@ -81,9 +77,7 @@ export class BasicModalServices {
             modalData, undefined, ConfirmModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ConfirmModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ConfirmModal, overlayConfig).result;
     }
 
     /**
@@ -103,9 +97,7 @@ export class BasicModalServices {
             modalData, undefined, ConfirmCheckModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ConfirmCheckModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ConfirmCheckModal, overlayConfig).result;
     }
 
     /**
@@ -123,9 +115,7 @@ export class BasicModalServices {
             modalData, undefined, AlertModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(AlertModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(AlertModal, overlayConfig).result;
     }
 
     /**
@@ -144,9 +134,7 @@ export class BasicModalServices {
             modalData, undefined, SelectionModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(SelectionModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(SelectionModal, overlayConfig).result;
     }
 
     /**
@@ -162,9 +150,7 @@ export class BasicModalServices {
             modalData, undefined, DownloadModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(DownloadModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(DownloadModal, overlayConfig).result;
     }
 
     /**
@@ -181,9 +167,7 @@ export class BasicModalServices {
             modalData, undefined, FilePickerModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(FilePickerModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(FilePickerModal, overlayConfig).result;
     }
 
     /**
@@ -200,9 +184,7 @@ export class BasicModalServices {
             modalData, undefined, ResourceSelectionModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ResourceSelectionModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(ResourceSelectionModal, overlayConfig).result;
     }
 
     /**
@@ -218,9 +200,7 @@ export class BasicModalServices {
             modalData, undefined, CustomFormSelectionModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(CustomFormSelectionModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(CustomFormSelectionModal, overlayConfig).result;
     }
 
 }

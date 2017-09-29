@@ -274,7 +274,6 @@ export class ProjectServices {
                         lock: projectLock
                     });
                 }
-                console.log("aclMap", aclMap);
                 return aclMap;
             }
         );

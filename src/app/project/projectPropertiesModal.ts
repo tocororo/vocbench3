@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "ngx-modialog";
 import {ProjectServices} from "../services/projectServices";
 import {Project} from '../models/Project';
 

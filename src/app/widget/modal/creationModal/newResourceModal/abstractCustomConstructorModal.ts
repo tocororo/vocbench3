@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ModalComponent } from "angular2-modal";
+import { ModalComponent } from "ngx-modialog";
 import { CustomFormsServices } from "../../../../services/customFormsServices"
 import { BasicModalServices } from "../../basicModal/basicModalServices"
 import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"

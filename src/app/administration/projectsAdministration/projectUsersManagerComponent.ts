@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
 import { User, Role, ProjectUserBinding } from "../../models/User";
 import { Project } from "../../models/Project";
@@ -100,19 +100,17 @@ export class ProjectUsersManagerComponent {
             modalData, undefined, UserProjBindingModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(UserProjBindingModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                data => {
-                    var user: User = data.user;
-                    var roles: string[] = data.roles;
-                    this.adminService.addRolesToUser(this.project.getName(), user.getEmail(), roles).subscribe(
-                        stResp => {
-                            this.usersBound.push(user);
-                        }
-                    )
-                },
-                () => { }
-            )
+        return this.modal.open(UserProjBindingModal, overlayConfig).result.then(
+            data => {
+                var user: User = data.user;
+                var roles: string[] = data.roles;
+                this.adminService.addRolesToUser(this.project.getName(), user.getEmail(), roles).subscribe(
+                    stResp => {
+                        this.usersBound.push(user);
+                    }
+                )
+            },
+            () => { }
         );
     }
 

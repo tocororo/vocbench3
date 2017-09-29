@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { RefactorServices } from "../services/refactorServices";

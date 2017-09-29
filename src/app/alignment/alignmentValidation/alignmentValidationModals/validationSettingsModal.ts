@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
+import {DialogRef, ModalComponent} from "ngx-modialog";
 import {Cookie} from "../../../utils/Cookie";
 
 @Component({
@@ -33,10 +33,12 @@ export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
     
     ngOnInit() {
         //here there's no need to check if cookies are != null, because they're initialized in AlignmentValidationComponent
-        this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
-        this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
-        this.confOnMeterCheck = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
-        this.maxAlignment = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+        setTimeout(() => {
+            this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
+            this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
+            this.confOnMeterCheck = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
+            this.maxAlignment = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+        })
     }
     
     ok(event: Event) {

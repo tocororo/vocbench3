@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { PluginsServices } from "../../../services/pluginsServices";
 import { ExportServices } from "../../../services/exportServices";
 import { MetadataServices } from "../../../services/metadataServices";
@@ -238,9 +238,7 @@ export class ExportDataComponent {
             modalData, undefined, FilterGraphsModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(FilterGraphsModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(FilterGraphsModal, overlayConfig).result;
     }
 
     /**

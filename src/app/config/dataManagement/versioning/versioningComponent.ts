@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
 import { VersionsServices } from "../../../services/versionsServices";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
@@ -93,9 +93,10 @@ export class VersioningComponent {
             modalData, undefined, DumpCreationModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(DumpCreationModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(DumpCreationModal, overlayConfig).result;
+        // .then(
+        //     dialog => dialog.result
+        // );
     }
 
     private isActiveVersion(version: VersionInfo): boolean {

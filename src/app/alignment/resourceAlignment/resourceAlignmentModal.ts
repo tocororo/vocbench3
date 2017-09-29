@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
-import {BSModalContext} from 'angular2-modal/plugins/bootstrap';
-import {Modal, BSModalContextBuilder} from 'angular2-modal/plugins/bootstrap';
-import {OverlayConfig} from 'angular2-modal';
-import {DialogRef, ModalComponent} from "angular2-modal";
+import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
+import {Modal, BSModalContextBuilder} from 'ngx-modialog/plugins/bootstrap';
+import {OverlayConfig} from 'ngx-modialog';
+import {DialogRef, ModalComponent} from "ngx-modialog";
 import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
 import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
 import {AlignmentServices} from "../../services/alignmentServices";
@@ -93,9 +93,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     private openBrowseExternalResModal(title: string, resRole: RDFResourceRolesEnum) {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(BrowseExternalResourceModal, overlayConfig).then(
-            dialog => dialog.result
-        );
+        return this.modal.open(BrowseExternalResourceModal, overlayConfig).result;
     }
     
     private isOkClickable(): boolean {

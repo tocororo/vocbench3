@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'angular2-modal/plugins/bootstrap';
-import { OverlayConfig } from 'angular2-modal';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
 import { CapabilityEditorModal, CapabilityEditorModalData } from "./capabilityEditorModal";
 import { ImportRoleModal, ImportRoleModalData } from "./importRoleModal";
 import { AdministrationServices } from "../../services/administrationServices";
@@ -89,20 +89,19 @@ export class RolesAdministrationComponent {
             modalData, undefined, ImportRoleModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(ImportRoleModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (data: any) => {
-                    if (this.roleExists(data.name)) {
-                        this.basicModals.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", "error");
-                        return;
-                    }
-                    this.adminService.importRole(data.file, data.name).subscribe(
-                        stResp => {
-                            this.initRoles();
-                        }
-                    );
+        this.modal.open(ImportRoleModal, overlayConfig).result.then(
+            (data: any) => {
+                if (this.roleExists(data.name)) {
+                    this.basicModals.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", "error");
+                    return;
                 }
-            )
+                this.adminService.importRole(data.file, data.name).subscribe(
+                    stResp => {
+                        this.initRoles();
+                    }
+                );
+            },
+            () => {}
         );
     }
 
@@ -134,23 +133,21 @@ export class RolesAdministrationComponent {
             modalData, undefined, CapabilityEditorModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(CapabilityEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (capability: any) => {
-                    if (this.capabilityList.indexOf(capability) != -1) {
-                        this.basicModals.alert("Duplicated capability", "Capability " + capability + 
-                            " already exists in role " + this.selectedRole.getName(), "error").then();
-                        return;
+        return this.modal.open(CapabilityEditorModal, overlayConfig).result.then(
+            (capability: any) => {
+                if (this.capabilityList.indexOf(capability) != -1) {
+                    this.basicModals.alert("Duplicated capability", "Capability " + capability + 
+                        " already exists in role " + this.selectedRole.getName(), "error").then();
+                    return;
+                }
+                this.adminService.addCapabilityToRole(this.selectedRole.getName(), capability).subscribe(
+                    stResp => {
+                        this.selectedCapability = null;
+                        this.initCapabilities();
                     }
-                    this.adminService.addCapabilityToRole(this.selectedRole.getName(), capability).subscribe(
-                        stResp => {
-                            this.selectedCapability = null;
-                            this.initCapabilities();
-                        }
-                    );
-                },
-                () => {}
-            )
+                );
+            },
+            () => {}
         );
     }
 
@@ -169,23 +166,21 @@ export class RolesAdministrationComponent {
             modalData, undefined, CapabilityEditorModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(CapabilityEditorModal, overlayConfig).then(
-            dialog => dialog.result.then(
-                (capability: any) => {
-                    if (this.capabilityList.indexOf(capability) != -1) {
-                        this.basicModals.alert("Duplicated capability", "Capability " + capability + 
-                            " already exists in role " + this.selectedRole.getName(), "error").then();
-                        return;
+        return this.modal.open(CapabilityEditorModal, overlayConfig).result.then(
+            (capability: any) => {
+                if (this.capabilityList.indexOf(capability) != -1) {
+                    this.basicModals.alert("Duplicated capability", "Capability " + capability + 
+                        " already exists in role " + this.selectedRole.getName(), "error").then();
+                    return;
+                }
+                this.adminService.updateCapabilityForRole(this.selectedRole.getName(), this.selectedCapability, capability).subscribe(
+                    stResp => {
+                        this.selectedCapability = null;
+                        this.initCapabilities();
                     }
-                    this.adminService.updateCapabilityForRole(this.selectedRole.getName(), this.selectedCapability, capability).subscribe(
-                        stResp => {
-                            this.selectedCapability = null;
-                            this.initCapabilities();
-                        }
-                    );
-                },
-                () => {}
-            )
+                );
+            },
+            () => {}
         );
     }
     
