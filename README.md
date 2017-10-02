@@ -59,6 +59,7 @@ Semantic Turkey is necessary for VocBench to operate. VB3 is actually a web clie
 ### Different Deployments
 
 In order to run VocBench 3, it is possible to:
+
 * deploy the war file produced through the Maven build procedure inside the `/deploy` directory of the Karaf distribution of Semantic Turkey. Then run Semantic Turkey and access VocBench at `http://localhost:1979/vocbench3`
 * deploy the `dist` directory (produced by any of the two described build procedures) on any HTTP server. Run Semantic Turkey and access VocBench at the address/port determined by the chosen HTTP server.
 * run without building, as detailed here below (still ST must be running)
