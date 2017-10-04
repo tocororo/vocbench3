@@ -17,6 +17,7 @@ import { AdministrationModule } from "./administrationModule";
 import { UserModule } from "./userModule";
 import { MetadataModule } from "./metadataModule";
 import { HistoryValidationModule } from "./historyValidationModule";
+import { PreferencesModule } from "./preferencesModule"
 
 import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
@@ -39,7 +40,6 @@ import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataCom
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
-import { VocbenchPreferencesComponent } from "../preferences/vocbenchPreferencesComponent";
 import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 
 @NgModule({
@@ -50,7 +50,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
-            HistoryValidationModule,
+            HistoryValidationModule, PreferencesModule,
 
             STServicesModule,
             appRouting,
@@ -72,7 +72,6 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
             ExportDataComponent,
             RefactorComponent,
             VersioningComponent,
-            VocbenchPreferencesComponent,
       ],
       bootstrap: [AppComponent],
 })

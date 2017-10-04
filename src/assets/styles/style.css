@@ -508,6 +508,11 @@ button.resViewPartitionBtn:disabled  {
     cursor: pointer;
 }
 
+lang-pref {
+    display: flex;
+    flex: 1;
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/
