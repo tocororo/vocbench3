@@ -28,26 +28,26 @@
                     <th class="text-center" style="padding: 0px 8px;">Active</th>
                     <th class="text-center" style="padding: 0px 8px;" nowrap>
                         Position
-                        <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder">
-                            <span class="glyphicon glyphicon-sort-by-order" *ngSwitchCase="'position_ascending'" (click)="changePositionOrder()"></span>
-                            <span class="glyphicon glyphicon-sort-by-order-alt" *ngSwitchCase="'position_descending'" (click)="changePositionOrder()"></span>
-                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault (click)="changePositionOrder()"></span>
+                        <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changePositionOrder()">
+                            <span class="glyphicon glyphicon-sort-by-order" *ngSwitchCase="'position_ascending'" ></span>
+                            <span class="glyphicon glyphicon-sort-by-order-alt" *ngSwitchCase="'position_descending'"></span>
+                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
                         </button>
                     </th>
                     <th class="text-center" style="padding: 0px 8px;" nowrap>
                         ISO code
-                        <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder">
-                            <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="'isocode_ascending'" (click)="changeIsocodeOrder()"></span>
-                            <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="'isocode_descending'" (click)="changeIsocodeOrder()"></span>
-                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault (click)="changeIsocodeOrder()"></span>
+                        <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeIsocodeOrder()">
+                            <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="'isocode_ascending'" ></span>
+                            <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="'isocode_descending'"></span>
+                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
                         </button>
                     </th>
                     <th class="text-center" style="padding: 0px 8px;" nowrap>
                         Language
-                        <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder">
-                            <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="'language_ascending'" (click)="changeLanguageOrder()"></span>
-                            <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="'language_descending'" (click)="changeLanguageOrder()"></span>
-                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault (click)="changeLanguageOrder()"></span>
+                        <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeLanguageOrder()">
+                            <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="'language_ascending'"></span>
+                            <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="'language_descending'"></span>
+                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
                         </button>
                     </th>
                 </tr>

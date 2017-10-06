@@ -20,44 +20,6 @@ export class LanguagePreferencesComponent {
 
     ngOnInit() {
         var projectLanguages: Language[] = this.properties.getProjectLanguages();
-
-        // this.prefSettingService.getProjectPreferences([Properties.pref_languages], Properties.plugin_id_rendering_engine).subscribe(
-        //     prefs => {
-        //         let renderLangs: string[] = prefs[Properties.pref_languages].split(",");
-        //         if (renderLangs.length == 1 && renderLangs[0] == "*") { //"*" stands for all languages
-        //             //set as selected renderingLangs all the available langs
-        //             for (var i = 0; i < projectLanguages.length; i++) {
-        //                 this.renderingLanguages.push({
-        //                     lang: projectLanguages[i],
-        //                     active: false,
-        //                     position: null
-        //                 });
-        //             }
-        //         } else {
-        //             //set as selected renderingLangs only the listed by the preference
-        //             for (var i = 0; i < projectLanguages.length; i++) {
-        //                 this.renderingLanguages.push({
-        //                     lang: projectLanguages[i],
-        //                     active: (renderLangs.indexOf(projectLanguages[i].tag) != -1), //active if the language is among the listed in preferences
-        //                     position: null
-        //                 });
-        //             }
-        //             //set the positions according to the preference order
-        //             let position: number = 1; //here I didn't exploit index i since a lang in preferences could be not in the project langs
-        //             for (var i = 0; i < renderLangs.length; i++) {
-        //                 let langTag: string = renderLangs[i];
-        //                 this.renderingLanguages.forEach((lang: LanguageItem) => {
-        //                     if (lang.lang.tag == langTag) {
-        //                         lang.position = position;
-        //                         return;
-        //                     }
-        //                 })
-        //                 position++;
-        //             }
-        //         }
-        //     }
-        // );
-        
         let renderingLanguages: string[] = this.properties.getLanguagesPreference();
         if (renderingLanguages.length == 1 && renderingLanguages[0] == "*") { //"*" stands for all languages
             //set as selected renderingLangs all the available langs
