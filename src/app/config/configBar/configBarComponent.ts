@@ -7,6 +7,7 @@ import { Project, ProjectTypesEnum } from "../../models/Project";
 import { VersionInfo } from "../../models/History";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ProjectServices } from "../../services/projectServices";
+import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
 import { HttpServiceContext } from "../../utils/HttpManager";
@@ -22,7 +23,8 @@ export class ConfigBarComponent {
     private currentProject: Project;
 
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, 
-        private basicModals: BasicModalServices, private router: Router, private modal: Modal) {
+        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, 
+        private router: Router, private modal: Modal) {
     }
 
     /**
@@ -73,10 +75,11 @@ export class ConfigBarComponent {
         this.basicModals.confirm("Clear data", "This operation will erase all the data stored in the project." +
             " The project will be closed and then you will be redirect to the projects page." +
             " Are you sure to proceed?", "warning").then(
-            result => {
+            (result: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
                     stResp => {
+                        this.prefService.setActiveSchemes().subscribe();
                         this.basicModals.alert("Clear data", "All data cleared successfully!");
                         this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
                             stResp => {

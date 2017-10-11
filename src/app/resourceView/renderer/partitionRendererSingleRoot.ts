@@ -65,7 +65,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 if (ranges != undefined && formCollection == undefined) { //just "classic" range
                     //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                     if (ranges.type == RDFTypesEnum.resource) {
-                        this.enrichWithResource(predicate, ranges.rangeCollection.resources);
+                        let resourceTypes: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                        this.enrichWithResource(predicate, resourceTypes);
                     } else if (ranges.type == RDFTypesEnum.plainLiteral) {
                         this.enrichWithPlainLiteral(predicate);
                     } else if (ranges.type == RDFTypesEnum.typedLiteral) {
