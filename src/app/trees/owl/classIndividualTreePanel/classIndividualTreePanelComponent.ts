@@ -106,6 +106,12 @@ export class ClassIndividualTreePanelComponent {
         }
     }
 
+    public openClassTreeAt(resource: ARTURIResource) {
+        if (resource.getRole() == RDFResourceRolesEnum.cls) {
+            this.viewChildTree.openTreeAt(resource);
+        }
+    }
+
     //EVENT LISTENERS
     private onClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;

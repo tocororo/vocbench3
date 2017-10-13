@@ -35,9 +35,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private resourceService: ResourcesServices,
-        private eventHandler: VBEventHandler, private vbProp: VBProperties, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices) {
-        super(cfService, basicModals);
+        private vbProp: VBProperties, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(cfService, basicModals, eventHandler);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));
@@ -213,7 +213,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             }
         }
         if (isInActiveSchemes) {
-            this.viewChildTree.openTreeAt(resource);
+            this.openTreeAt(resource);
         } else {
             let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
             if (schemes.length > 1) {
@@ -225,15 +225,19 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             this.resourceService.getResourcesInfo(schemes).subscribe(
                 schemes => {
                     this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
-                        scheme => {
+                        (scheme: ARTURIResource) => {
                             this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
-                            this.viewChildTree.openTreeAt(resource); //then open the tree on the searched resource
+                            this.openTreeAt(resource); //then open the tree on the searched resource
                         },
                         () => {}
                     );
                 }
             );
         }
+    }
+
+    openTreeAt(resource: ARTURIResource) {
+        this.viewChildTree.openTreeAt(resource);
     }
 
     //EVENT LISTENERS

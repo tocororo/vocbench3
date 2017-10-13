@@ -3,7 +3,7 @@
     <!--Tabs navigation-->
     <ul class="nav nav-tabs">
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
-            <a (click)="selectTab(t)">
+            <a (click)="selectTab(t, 'true')">
                 <rdf-resource [resource]="t.resource"></rdf-resource>
                 <span class="glyphicon glyphicon-remove-circle" (click)="closeTab(t, $event)"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
@@ -25,5 +25,5 @@
             <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)" (update)="onResourceUpdate($event, t)"></resource-view>
         </div>
     </div>
-    
+
 </div>

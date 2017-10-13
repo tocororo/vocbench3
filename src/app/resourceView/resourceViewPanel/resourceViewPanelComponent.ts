@@ -15,6 +15,7 @@ export class ResourceViewPanelComponent {
     @ViewChild(ResourceViewSplittedComponent) resViewSplittedChild: ResourceViewSplittedComponent;
 
     @Output() empty: EventEmitter<number> = new EventEmitter(); //currently used only with resource view tabbed when all tab are closed
+    @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter(); //used only with resource view tabbed when a tab containing a concept is selected
 
     private resViewMode: ResourceViewMode; //"splitted" or "tabbed";
 
@@ -22,7 +23,17 @@ export class ResourceViewPanelComponent {
 
     constructor(private eventHandler: VBEventHandler, private preferences: VBProperties) {
         this.eventHandler.resViewModeChangedEvent.subscribe(
-            (resViewMode: ResourceViewMode) => { this.resViewMode = resViewMode; }
+            (newResViewMode: ResourceViewMode) => { 
+                let resToRestore: ARTResource;
+                if (newResViewMode == ResourceViewMode.splitted) { //changed from tabbed to splitted
+                    resToRestore = this.resViewTabbedChild.getMainResource();
+                } else { //changed from splitted to tabbed
+                    resToRestore = this.resViewSplittedChild.getMainResource();
+                }
+                this.resViewMode = newResViewMode;
+                //timeout in order to wait that the RVPanel is updated after the change of mode
+                setTimeout(() => { this.selectResource(resToRestore); });
+            }
         );
     }
 
@@ -50,6 +61,14 @@ export class ResourceViewPanelComponent {
         }
     }
 
+    //handlers only for resource view in tabbed mode
+
+    //when a tab describing a concept is selected
+    private onTabSelected(resource: ARTResource) {
+        this.tabSelect.emit(resource);
+    }
+
+    //when there is no more tab open
     private onTabEmpty() {
         this.empty.emit();
     }

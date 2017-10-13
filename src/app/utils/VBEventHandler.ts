@@ -64,6 +64,7 @@ export class VBEventHandler {
 
     //user changes resourceViewMode preference => resource view panel need to be updated
     public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter("resViewModeChangedEvent");
+    public resViewTabSyncChangedEvent: EventEmitter<boolean> = new VBEventEmitter("resViewTabSyncChangedEvent");
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 

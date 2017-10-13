@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
+import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { VersionInfo } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
@@ -52,7 +53,8 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private eventHandler: VBEventHandler, private preferences: VBProperties) {
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
+        private eventHandler: VBEventHandler, private preferences: VBProperties, private resViewModals: ResViewModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -311,7 +313,6 @@ export class ResourceViewComponent {
         this.preferences.setRenderingInResourceView(this.rendering);
     }
 
-
     private listVersions() {
         this.versionService.getVersions().subscribe(
             versions => {
@@ -334,6 +335,10 @@ export class ResourceViewComponent {
             this.buildResourceView(this.resource);
         }
         this.readonly = this.activeVersion != null; //if the version is not the current, set the RV in readOnly mode
+    }
+
+    private openSettings() {
+        this.resViewModals.editSettings();
     }
 
     /**

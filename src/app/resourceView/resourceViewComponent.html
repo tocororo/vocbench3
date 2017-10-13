@@ -32,6 +32,9 @@
             <button class="btn btn-default btn-xs" title="Refresh" (click)="buildResourceView(resource)" style="margin-left: 3px;">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
+            <button class="btn btn-default btn-xs" title="ResourceView settings" (click)="openSettings()" style="margin-left: 3px;">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>
             <res-view-menu [resource]="resource" (update)="buildResourceView(resource)" [readonly]="readonly"></res-view-menu>
         </div>
     </div>

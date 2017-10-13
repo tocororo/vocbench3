@@ -4,6 +4,7 @@ import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
@@ -24,8 +25,8 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     /**
      * CONSTRUCTOR
      */
-    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices) {
-        super(cfService, basicModals);
+    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(cfService, basicModals, eventHandler);
     }
 
     /**
@@ -34,6 +35,8 @@ export abstract class AbstractTreePanel extends AbstractPanel {
 
     abstract createRoot(role?: RDFResourceRolesEnum): void;
     abstract createChild(role?: RDFResourceRolesEnum): void;
+
+    abstract openTreeAt(node: ARTURIResource): void;
 
     //the following determines if the create button is disabled in the UI. It could be overriden in the extending components
     isCreateChildDisabled(): boolean {

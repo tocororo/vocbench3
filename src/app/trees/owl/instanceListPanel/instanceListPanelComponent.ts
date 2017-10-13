@@ -9,6 +9,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
@@ -25,8 +26,8 @@ export class InstanceListPanelComponent extends AbstractPanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices) {
-        super(cfService, basicModals);
+        private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(cfService, basicModals, eventHandler);
     }
 
     //@Override

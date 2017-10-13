@@ -39,6 +39,7 @@ import { EnrichPropertyModal } from '../resourceView/resViewModals/enrichPropert
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
 import { AddPropertyValueModal } from '../resourceView/resViewModals/addPropertyValueModal';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
+import { ResViewSettingsModal } from '../resourceView/resViewModals/resViewSettingsModal';
 //this is only used in addPropertyValueModal, if it will be usefull somewhere else, move this in sharedModules
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 
@@ -61,14 +62,15 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         PredicateObjectsRenderer,
         //modals
         ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
-        DataRangeEditor
+        DataRangeEditor, ResViewSettingsModal
     ],
     exports: [
         ResourceViewPanelComponent, ResourceViewModal
     ],
     providers: [ResViewModalServices],
     entryComponents: [
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, ResourceViewModal
+        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, 
+        ResourceViewModal, ResViewSettingsModal
     ]
 })
 export class ResourceViewModule { }

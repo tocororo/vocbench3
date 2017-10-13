@@ -10,6 +10,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
@@ -27,8 +28,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices) {
-        super(cfService, basicModals);
+        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(cfService, basicModals, eventHandler);
     }
 
     createRoot(role: RDFResourceRolesEnum) {
@@ -87,12 +88,12 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            this.viewChildTree.openTreeAt(searchResult[0]);
+                            this.openTreeAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
-                                    this.viewChildTree.openTreeAt(selectedResource);
+                                    this.openTreeAt(selectedResource);
                                 },
                                 () => { }
                             );
@@ -103,6 +104,9 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         }
     }
 
+    openTreeAt(resource: ARTURIResource) {
+        this.viewChildTree.openTreeAt(resource);
+    }
 
     private convertRoleToClass(role: RDFResourceRolesEnum): ARTURIResource {
         let propertyType: ARTURIResource;

@@ -6,7 +6,6 @@ import { VersionsServices } from "../../../services/versionsServices";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { VBContext } from '../../../utils/VBContext';
 import { HttpServiceContext } from "../../../utils/HttpManager";
-import { VBEventHandler } from '../../../utils/VBEventHandler';
 import { UIUtils } from '../../../utils/UIUtils';
 import { RepositoryAccess, RepositoryAccessType } from '../../../models/Project';
 import { VersionInfo, RepositoryStatus } from '../../../models/History';
@@ -21,8 +20,7 @@ export class VersioningComponent {
     private versionList: VersionInfo[];
     private selectedVersion: VersionInfo;
 
-    constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, 
-        private eventHandler: VBEventHandler, private modal: Modal) { }
+    constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initVersions();
@@ -52,7 +50,6 @@ export class VersioningComponent {
         } else {
             HttpServiceContext.setContextVersion(this.selectedVersion);
         }
-        // this.eventHandler.refreshDataBroadcastEvent.emit(); //this doesn't reinitialize the RV, so ngOnInit and ngAfterViewInit doesn't fire
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
 

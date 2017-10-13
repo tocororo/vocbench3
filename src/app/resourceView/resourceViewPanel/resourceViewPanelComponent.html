@@ -1,2 +1,2 @@
 <resource-view-splitted *ngIf="resViewMode=='splitted'"></resource-view-splitted>
-<resource-view-tabbed *ngIf="resViewMode=='tabbed'" (empty)="onTabEmpty()"></resource-view-tabbed>
+<resource-view-tabbed *ngIf="resViewMode=='tabbed'" (empty)="onTabEmpty()" (tabSelect)="onTabSelected($event)"></resource-view-tabbed>

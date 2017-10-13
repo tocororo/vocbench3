@@ -1,20 +1,41 @@
 import { Component, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ResAttribute } from "../../models/ARTResources";
+import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
+import { ARTResource, ResAttribute, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { VBProperties } from "../../utils/VBProperties";
+import { VBEventHandler } from "../../utils/VBEventHandler";
 
 @Component({
     selector: "resource-view-tabbed",
     templateUrl: "./resourceViewTabbedComponent.html",
 })
-export class ResourceViewTabbedComponent {
+export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
 
     private tabs: Array<Tab> = [];
+    private sync: boolean = false;
 
-    @Output() empty: EventEmitter<any> = new EventEmitter(); //tells to the parent component that there are no more tab open
+    //tells to the parent component that there are no more tab open
+    @Output() empty: EventEmitter<any> = new EventEmitter();
+    //emits event when a tab is selected, useful to keep in sync tabbed ResView and trees/lists
+    @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter();
 
-    constructor() {}
+    private eventSubscriptions: any[] = [];
+
+    constructor(private vbProps: VBProperties, private eventHandler: VBEventHandler) {
+        super();
+        this.eventHandler.resViewTabSyncChangedEvent.subscribe(
+            (sync: boolean) => { this.sync = sync; }
+        );
+    }
+
+    ngOnInit() {
+        this.sync = this.vbProps.getResourceViewTabSync();
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
 
     selectResource(resource: ARTResource) {
-        // this.tabs = [];
         let tab = this.getTabWithResource(resource);
         if (tab != null) { //resource already open in a tab => select it
             this.selectTab(tab)
@@ -28,10 +49,25 @@ export class ResourceViewTabbedComponent {
         this.closeTab(tab);
     }
 
-    private objectDblClick(obj: ARTResource) {
+    /**
+     * Returns the resource described in the currently active tab (null if no tab is open)
+     * Useful for the ResourceViewPanel in order to keep a resource when the RViewMode changes
+     */
+    getMainResource(): ARTResource {
+        let activeTabRes: ARTResource = null;
+        for (var i = 0; i < this.tabs.length; i++) {
+            if (this.tabs[i].active) {
+                activeTabRes = this.tabs[i].resource;
+                break;
+            }
+        }
+        return activeTabRes;
+    }
+
+    objectDblClick(obj: ARTResource) {
         var tab = this.getTabWithResource(obj);
         if (tab != null) { //object already open in a tab => select it
-            this.selectTab(tab);
+            this.selectTab(tab, true);
         } else {
             this.addTab(obj);
         }
@@ -61,10 +97,18 @@ export class ResourceViewTabbedComponent {
         });
     }
 
-    private selectTab(t: Tab) {
+    /**
+     * Select and activate a tab
+     * @param t 
+     * @param emitSelect if true emits a select event
+     */
+    private selectTab(t: Tab, emitSelect?: boolean) {
         //deactivate the previous active tab
         this.deactivateCurrentActiveTab();
         t.active = true;
+        if (this.sync && emitSelect) {
+            this.tabSelect.emit(t.resource);
+        }
     }
 
     private closeTab(t: Tab, e?: Event) {
@@ -72,9 +116,9 @@ export class ResourceViewTabbedComponent {
         //if the closed tab is active and not the only open, change the active tab
         if (t.active && this.tabs.length > 1) {
             if (tabIdx == this.tabs.length - 1) { //if the closed tab was the last one, active the previous
-                this.tabs[tabIdx - 1].active = true;
+                this.selectTab(this.tabs[tabIdx-1], true);
             } else { //otherwise active the next
-                this.tabs[tabIdx + 1].active = true;
+                this.selectTab(this.tabs[tabIdx+1], true);
             }
         }
         this.tabs.splice(tabIdx, 1);

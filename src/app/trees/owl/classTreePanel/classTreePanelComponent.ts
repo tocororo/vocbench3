@@ -10,6 +10,7 @@ import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } fro
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
 @Component({
@@ -26,8 +27,8 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices) {
-        super(cfService, basicModals);
+        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(cfService, basicModals, eventHandler);
     }
 
     //Top Bar commands handlers

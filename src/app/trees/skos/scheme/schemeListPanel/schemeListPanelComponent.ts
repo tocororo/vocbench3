@@ -22,9 +22,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private schemeList: SchemeListItem[];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private eventHandler: VBEventHandler, private vbProp: VBProperties, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices) {
-        super(cfService, basicModals);
+        private vbProp: VBProperties, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(cfService, basicModals, eventHandler);
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
     }
 
@@ -72,10 +72,10 @@ export class SchemeListPanelComponent extends AbstractPanel {
                 } else {
                     this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
                         + " Are you sure to continue?", "warning").then(
-                        confirm => {
+                        (confirm: any) => {
                             this.deleteScheme();
                         },
-                        reject => {}
+                        (reject: any) => {}
                     );
                 }
             }
@@ -144,6 +144,10 @@ export class SchemeListPanelComponent extends AbstractPanel {
                 }
             );
         }
+    }
+
+    public openAt(resource: ARTURIResource) {
+        this.selectSchemeItem(this.getSchemeToSelectFromList(resource));
     }
 
     /**

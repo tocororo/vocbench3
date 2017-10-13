@@ -14,6 +14,7 @@ import { PreferencesSettingsServices } from "../services/preferencesSettingsServ
 export class VocbenchPreferencesComponent {
 
     private resViewMode: ResourceViewMode;
+    private resViewTabSync: boolean;
     private showFlags: boolean;
     private showInstNumb: boolean;
     private themes: Theme[] = UIUtils.themes;
@@ -31,6 +32,7 @@ export class VocbenchPreferencesComponent {
         });
 
         this.resViewMode = this.properties.getResourceViewMode();
+        this.resViewTabSync = this.properties.getResourceViewTabSync();
         var projectLanguages: Language[] = this.properties.getProjectLanguages();
     }
 
@@ -39,6 +41,11 @@ export class VocbenchPreferencesComponent {
     private onResViewModeChanged() {
         this.properties.setResourceViewMode(this.resViewMode);
         this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
+    }
+
+    private onTabSyncChange() {
+        this.properties.setResourceViewTabSync(this.resViewTabSync);
+        this.eventHandler.resViewTabSyncChangedEvent.emit(this.resViewTabSync);
     }
 
     //show flags handlers

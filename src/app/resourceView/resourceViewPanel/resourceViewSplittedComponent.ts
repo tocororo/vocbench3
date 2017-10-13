@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
 import { ResourceViewComponent } from "../resourceViewComponent";
 
@@ -6,7 +7,7 @@ import { ResourceViewComponent } from "../resourceViewComponent";
     selector: "resource-view-splitted",
     templateUrl: "./resourceViewSplittedComponent.html",
 })
-export class ResourceViewSplittedComponent {
+export class ResourceViewSplittedComponent extends AbstractResourceViewPanel {
 
     private resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
 
@@ -32,7 +33,15 @@ export class ResourceViewSplittedComponent {
         this.object = this.resStack.pop();
     }
 
-    private objectDblClick(obj: ARTResource) {
+    /**
+     * Returns the resource described in the main RV (null if no RV is open)
+     * Useful for the ResourceViewPanel in order to keep a resource when the RViewMode changes
+     */
+    getMainResource(): ARTResource {
+        return this.resource;
+    }
+
+    objectDblClick(obj: ARTResource) {
         if (this.object != null && this.object.getNominalValue() != obj.getNominalValue() &&
             this.resource.getNominalValue() != obj.getNominalValue()) {
             this.resStack.push(this.object);

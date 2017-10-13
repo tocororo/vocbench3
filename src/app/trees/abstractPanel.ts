@@ -4,6 +4,7 @@ import { CustomFormsServices } from "../services/customFormsServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { VBEventHandler } from "../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
@@ -35,18 +36,24 @@ export abstract class AbstractPanel {
      */
     protected cfService: CustomFormsServices;
     protected basicModals: BasicModalServices;
-    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices) {
+    protected eventHandler: VBEventHandler;
+    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         this.cfService = cfService;
         this.basicModals = basicModals;
+        this.eventHandler = eventHandler;
     }
 
     /**
      * METHODS
      */
 
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+
     abstract refresh(): void;
     abstract delete(): void;
-
+    
     //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
     isCreateDisabled(): boolean {
         return (this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));

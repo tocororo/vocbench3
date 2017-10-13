@@ -1,4 +1,9 @@
-import { Component, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter, ViewChild } from "@angular/core";
+import { ConceptTreePanelComponent } from "../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent";
+import { CollectionTreePanelComponent } from "../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent";
+import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/schemeListPanelComponent";
+import { PropertyTreePanelComponent } from "../trees/property/propertyTreePanel/propertyTreePanelComponent";
+import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
@@ -12,6 +17,12 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 export class TreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTResource>();
     @Output() nodeDeleted = new EventEmitter<ARTResource>();
+
+    @ViewChild(ConceptTreePanelComponent) viewChildConceptPanel: ConceptTreePanelComponent;
+    @ViewChild(CollectionTreePanelComponent) viewChildCollectionPanel: CollectionTreePanelComponent;
+    @ViewChild(SchemeListPanelComponent) viewChildSchemePanel: SchemeListPanelComponent;
+    @ViewChild(PropertyTreePanelComponent) viewChildPropertyPanel: PropertyTreePanelComponent;
+    @ViewChild(ClassIndividualTreePanelComponent) viewChildClsIndPanel: ClassIndividualTreePanelComponent;
 
     private selectedResource: ARTResource;
 
@@ -61,6 +72,26 @@ export class TreePanelComponent {
         this.nodeDeleted.emit(node);
     }
 
+    public syncResource(resource: ARTResource) {
+        let resRole: RDFResourceRolesEnum = resource.getRole();
+        //sync the resource in the tree/list only if the resource has the same role of the tree/list currently active
+        if (resource.isURIResource() && this.activeTab == resRole) {
+            if (resRole == RDFResourceRolesEnum.concept) {
+                this.viewChildConceptPanel.openTreeAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.conceptScheme) {
+                this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.skosCollection || resRole == RDFResourceRolesEnum.skosOrderedCollection) {
+                this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.property || resRole == RDFResourceRolesEnum.annotationProperty || 
+                resRole == RDFResourceRolesEnum.datatypeProperty || resRole == RDFResourceRolesEnum.objectProperty ||
+                resRole == RDFResourceRolesEnum.ontologyProperty) {
+                this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.cls) {
+                this.viewChildClsIndPanel.openClassTreeAt(<ARTURIResource>resource);
+            }
+        }
+    }
+
     /**
      * returns true if a project is SKOS or SKOS-XL. Useful to show/hide tree panel
      */
@@ -70,7 +101,7 @@ export class TreePanelComponent {
 
     //TAB HANDLER
 
-    private selectTab(tabName: string) {
+    private selectTab(tabName: RDFResourceRolesEnum) {
         this.activeTab = tabName;
     }
 

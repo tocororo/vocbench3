@@ -62,10 +62,10 @@ export class InstanceListComponent {
                         this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
                             + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
                             + "and it may cause server error. Do you want to continue anyway?", "warning").then(
-                            confirm => {
+                            (confirm: any) => {
                                 this.initList();
                             },
-                            cancel =>  {
+                            (cancel: any) =>  {
                                 this.instanceList = [];
                             }
                         );

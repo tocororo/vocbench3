@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { TreePanelComponent } from "../trees/treePanelComponent";
 import { ResourceViewPanelComponent } from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
-import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
     selector: "data-component",
@@ -15,13 +15,12 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 })
 export class DataComponent {
 
+    @ViewChild(TreePanelComponent) treePanelChild: TreePanelComponent;
     @ViewChild(ResourceViewPanelComponent) resViewPanelChild: ResourceViewPanelComponent;
 
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
     @ViewChild('treePanel') private treePanelRef: ElementRef; 
     @ViewChild('resViewPanel',  { read: ElementRef }) private resViewPanelRef: ElementRef;
-
-    constructor(private eventHandler: VBEventHandler) { }
 
     private onNodeSelected(node: ARTResource) {
         if (this.resViewPanelFlex == 0) { //if the right panel is collapsed, open it
@@ -60,10 +59,6 @@ export class DataComponent {
     private dragging: boolean = false;
     private startMousedownX: number;
 
-    private onResViewEmpty() {
-        this.resViewPanelFlex = 0;   
-    }
-
     private onMousedown(event: MouseEvent) {
         event.preventDefault();
         this.dragging = true;
@@ -94,6 +89,15 @@ export class DataComponent {
         else if (this.treePanelFlex < this.minPanelSize) this.treePanelFlex = this.minPanelSize;
         //update the initial X position of the cursor
         this.startMousedownX = event.clientX;
+    }
+
+    private onResViewEmpty() {
+        this.resViewPanelFlex = 0;   
+    }
+
+    //when a tab describing a concept is selected (only in res view in tab mode)
+    private onTabSelected(resource: ARTResource) {
+        this.treePanelChild.syncResource(resource);
     }
 
 }

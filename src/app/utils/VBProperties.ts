@@ -166,26 +166,26 @@ export class VBProperties {
      * Sets the preference to show or hide the inferred information in resource view
      */
     setInferenceInResourceView(showInferred: boolean) {
-        Cookie.setCookie(Cookie.VB_INFERENCE_IN_RES_VIEW, showInferred + "", 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE, showInferred + "", 365*10);
     }
     /**
      * Gets the preference to show or hide the inferred information in resource view
      */
     getInferenceInResourceView(): boolean {
-        return Cookie.getCookie(Cookie.VB_INFERENCE_IN_RES_VIEW) == "true";
+        return Cookie.getCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE) == "true";
     }
 
     /**
      * Sets the preference to show the URI or the rendering of resources in resource view
      */
     setRenderingInResourceView(rendering: boolean) {
-        Cookie.setCookie(Cookie.VB_RENDERING_IN_RES_VIEW, rendering + "", 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_RENDERING, rendering + "", 365*10);
     }
     /**
      * Gets the preference to show the URI or the rendering of resources in resource view
      */
     getRenderingInResourceView(): boolean {
-        let cookieValue: string = Cookie.getCookie(Cookie.VB_RENDERING_IN_RES_VIEW);
+        let cookieValue: string = Cookie.getCookie(Cookie.RES_VIEW_RENDERING);
         return (cookieValue == null || cookieValue == "true"); //default true, so true if cookie is not defined
     }
 
@@ -193,18 +193,32 @@ export class VBProperties {
      * Sets the preference about the resource view mode
      */
     setResourceViewMode(mode: ResourceViewMode) {
-        Cookie.setCookie(Cookie.VB_RESOURCE_VIEW_MODE, mode, 365*10);
+        Cookie.setCookie(Cookie.RES_VIEW_MODE, mode, 365*10);
     }
     /**
      * Gets the preference about the resource view mode
      */
     getResourceViewMode(): ResourceViewMode {
-        let mode: ResourceViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.VB_RESOURCE_VIEW_MODE);
+        let mode: ResourceViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.RES_VIEW_MODE);
         if (mode != ResourceViewMode.splitted && mode != ResourceViewMode.tabbed) {
             mode = ResourceViewMode.tabbed;
             this.setResourceViewMode(mode);
         }
         return mode;
+    }
+    /**
+     * Sets the preference to keep in sync the tree/list with the resource in the tab
+     * @param sync
+     */
+    setResourceViewTabSync(sync: boolean) {
+        Cookie.setCookie(Cookie.RES_VIEW_TAB_SYNCED, sync + "", 365*10);
+    }
+    /**
+     * Gets the preference to keep in sync the tree/list with the resource in the tab
+     */
+    getResourceViewTabSync(): boolean {
+        let cookieValue: string = Cookie.getCookie(Cookie.RES_VIEW_TAB_SYNCED);
+        return cookieValue == "true";
     }
 
     getSearchSettings(): SearchSettings {

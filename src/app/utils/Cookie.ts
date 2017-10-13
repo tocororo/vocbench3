@@ -1,9 +1,10 @@
 //https://github.com/BCJTI/ng2-cookies
 export class Cookie {
 	
-	public static VB_INFERENCE_IN_RES_VIEW = "resource_view.include_inference";
-	public static VB_RENDERING_IN_RES_VIEW = "resource_view.rendering";
-	public static VB_RESOURCE_VIEW_MODE = "resource_view.mode";
+	public static RES_VIEW_INCLUDE_INFERENCE = "resource_view.include_inference";
+	public static RES_VIEW_RENDERING = "resource_view.rendering";
+	public static RES_VIEW_MODE = "resource_view.mode";
+	public static RES_VIEW_TAB_SYNCED = "resource_view.tab_synced";
 
 	public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_validation.alignment_per_page";
 	public static ALIGNMENT_VALIDATION_RELATION_SHOW = "alignment_validation.relation_show";

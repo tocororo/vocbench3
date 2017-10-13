@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h3 class="modal-title">ResourceView settings</h3>
+</div>
+<div class="modal-body">
+    <div class="hbox">
+        <div class="vbox" style="margin-right: 8px;">
+            <select class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="mode">
+                <option value="splitted">Splitted</option>
+                <option value="tabbed">Tabbed</option>
+            </select>
+            <div class="alert alert-info" role="alert">
+                <span *ngIf="mode == 'tabbed'">
+                    The Resource View is shown in a tab and multiple Resource View can be open in different tabs.
+                </span>
+                <span *ngIf="mode == 'splitted'">
+                    The Resource View panel is splitted in two: on the left there is a main Resource View which describes
+                    (and is synched with) the resource selected in the tree/list; on the right there is an optional
+                    secondary Resource View which describes a resource selected (double click) from the main Resource View.
+                </span>
+            </div>
+            <div *ngIf="mode == 'tabbed'">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="tabSync">
+                        Keep selected tab synchronized with tree/list
+                        <span class="glyphicon glyphicon-exclamation-sign"
+                            title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+        <div>
+            <img *ngIf="mode == 'tabbed'" src="../../../assets/images/res_view_tabbed.jpg">
+            <img *ngIf="mode == 'splitted'" src="../../../assets/images/res_view_splitted.jpg">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

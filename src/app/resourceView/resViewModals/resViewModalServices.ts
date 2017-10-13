@@ -6,6 +6,7 @@ import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instan
 import { EnrichPropertyModal, EnrichPropertyModalData } from "./enrichPropertyModal";
 import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
+import { ResViewSettingsModal } from "./resViewSettingsModal";
 import { CustomFormModal, CustomFormModalData } from "../../customForms/customForm/customFormModal";
 import { ARTResource, ARTBNode, ARTURIResource, ARTLiteral } from '../../models/ARTResources';
 
@@ -110,6 +111,15 @@ export class ResViewModalServices {
         builder.keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(DataRangeEditorModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal that allows to edit the resource view settings
+     */
+    editSettings() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(ResViewSettingsModal, overlayConfig).result;
     }
 
 }
