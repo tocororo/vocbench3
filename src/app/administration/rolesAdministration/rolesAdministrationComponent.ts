@@ -114,6 +114,23 @@ export class RolesAdministrationComponent {
         )
     }
 
+    private cloneRole() {
+        this.basicModals.prompt("Clone role " + this.selectedRole.getName(), "Role name", null, null, false, true).then(
+            (newRoleName: any) => {
+                if (this.roleExists(newRoleName)) {
+                    this.basicModals.alert("Duplicated role", "A role with the same name (" + newRoleName + ") already exists", "error");
+                    return;
+                }
+                this.adminService.cloneRole(this.selectedRole.getName(), newRoleName).subscribe(
+                    stResp => {
+                        this.initRoles();
+                    }
+                );
+            },
+            () => { }
+        )
+    }
+
     private roleExists(roleName: string): boolean {
         for (var i = 0; i < this.roleList.length; i++) {
             if (this.roleList[i].getName() == roleName) {

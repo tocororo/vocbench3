@@ -15,6 +15,9 @@
                              [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
+                        <button class="btn btn-default" title="Clone role" (click)="cloneRole()" [disabled]="!isProjectOpen() || !selectedRole">
+                            <span class="glyphicon glyphicon-duplicate"></span>
+                        </button>
                         <button class="btn btn-default" (click)="importRole()" title="Import role" [disabled]="!isProjectOpen()">
                             <span class="glyphicon glyphicon-open"></span>
                         </button>

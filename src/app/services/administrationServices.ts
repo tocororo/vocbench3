@@ -167,6 +167,19 @@ export class AdministrationServices {
     }
 
     /**
+     * Clones a role
+     * @param roleName
+     */
+    cloneRole(sourceRoleName: string, targetRoleName: string) {
+        console.log("[AdministrationServices] cloneRole");
+        var params: any = {
+            sourceRoleName: sourceRoleName,
+            targetRoleName: targetRoleName
+        };
+        return this.httpMgr.doGet(this.serviceName, "cloneRole", params, true);
+    }
+
+    /**
      * Deletes the role with the given name
      * @param roleName
      */
