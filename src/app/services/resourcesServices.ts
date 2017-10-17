@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTNode } from "../models/ARTResources";
+import { CustomFormValue } from "../models/CustomForms";
 
 @Injectable()
 export class ResourcesServices {
@@ -63,7 +64,7 @@ export class ResourcesServices {
      * @param property 
      * @param value 
      */
-    addValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
+    addValue(subject: ARTResource, property: ARTURIResource, value: ARTNode | CustomFormValue) {
         console.log("[ResourcesServices] addValue");
         var params: any = {
             subject: subject,

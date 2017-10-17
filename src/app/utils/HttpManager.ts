@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { UIUtils } from "../utils/UIUtils";
 import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
+import { CustomFormValue } from "../models/CustomForms";
 import { Project } from "../models/Project";
 import { VersionInfo } from "../models/History";
 import { VBContext } from './VBContext';
@@ -326,9 +327,7 @@ export class HttpManager {
      * Returns the request context parameters.
      */
     private getContextParametersForUrl(options: VBRequestOptions): string {
-
         var params: string = "";
-
         //give priority to ctx_project in VBRequestOptions over project in ctx
         if (HttpServiceContext.getContextProject() != undefined) {
             params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
@@ -365,6 +364,8 @@ export class HttpManager {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(arrayAsString));
             } else if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()));
+            } else if (paramValue instanceof CustomFormValue) {
+                strBuilder.push(encodeURIComponent(paramName) + "=" + JSON.stringify(paramValue));
             } else {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(paramValue));
             }
@@ -421,7 +422,7 @@ export class HttpManager {
             //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
             this.basicModals.alert("Error", err._body, "error").then(
-                result => {
+                (result: any) => {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {
                         VBContext.resetContext();
@@ -434,7 +435,7 @@ export class HttpManager {
         } else if (err.status == 500) { //in case of server error (e.g. out of memory)
             let errorMsg = err.statusText != null ? err.statusText : "Unknown response from the server";
             this.basicModals.alert("Error", err.statusText, "error", err._body).then(
-                result => {}
+                (result: any) => {}
             )
         }
         //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion

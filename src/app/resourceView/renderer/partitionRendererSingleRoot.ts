@@ -9,7 +9,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { FormCollection, CustomForm } from "../../models/CustomForms";
+import { FormCollection, CustomForm, CustomFormValue } from "../../models/CustomForms";
 
 
 
@@ -163,7 +163,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
         this.rvModalService.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
-                this.cfService.addValueThroughCustomRange(this.resource, predicate, form.getId(), entryMap).subscribe(
+                let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
+                this.resourcesService.addValue(this.resource, predicate, cfValue).subscribe(
                     (stResp: any) => {
                         this.update.emit(null);
                     }

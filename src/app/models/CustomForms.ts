@@ -221,6 +221,25 @@ export class FormField {
 
 }
 
+export class CustomFormValue {
+    private customFormId: string;
+    private userPromptMap: { [key: string]: any };
+
+    constructor(customFormId: string, userPromptMap: { [key: string]: any }) {
+        this.customFormId = customFormId;
+        this.userPromptMap = userPromptMap;
+    }
+
+    public getCustomFormId(): string {
+        return this.customFormId;
+    }
+
+    public getUserPromptMap(): { [key: string]: any } {
+        return this.userPromptMap;
+    }
+    
+}
+
 export class BrokenCFStructure {
     public id: string;
     public type: string; //class name: CustomFrom or FormCollection

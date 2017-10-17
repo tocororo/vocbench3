@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResourceUtils, RDFResourceRolesEnum } from "../models/ARTResources";
-import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, BrokenCFStructure, 
+import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, BrokenCFStructure,
     FormFieldType, CustomFormLevel } from "../models/CustomForms";
 
 @Injectable()
@@ -121,26 +121,6 @@ export class CustomFormsServices {
                 return form;
             }
         );
-    }
-
-    /**
-     * Makes Coda execute the pearl rule in the given CustomForm and with the value specified in the entryMap.
-     * Then "append" the generated triples (representing a reified object) to the subject-predicate pair. 
-     * @param subject
-     * @param predicate
-     * @param customFormId
-     * @param entryMap array of object {key: value} where "key" is the feature
-     * name in the pearl rule which its "value" is provided by means a custom form
-     */
-    addValueThroughCustomRange(subject: ARTResource, predicate: ARTURIResource, customFormId: string, entryMap: any) {
-        console.log("[CustomFormsServices] addValueThroughCustomRange");
-        var params: any = {
-            subject: subject,
-            predicate: predicate,
-            customFormId: customFormId,
-            userPromptMap: JSON.stringify(entryMap)
-        };
-        return this.httpMgr.doPost(this.serviceName, "addValueThroughCustomRange", params, true);
     }
 
     /**
