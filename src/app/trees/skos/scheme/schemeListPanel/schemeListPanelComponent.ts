@@ -7,9 +7,10 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { VBProperties, SearchSettings } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBContext } from "../../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
-import { SKOS } from "../../../../models/Vocabulary";
+import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
 
 @Component({
     selector: "scheme-list-panel",
@@ -94,16 +95,25 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private deleteSchemeRespHandler() {
         for (var i = 0; i < this.schemeList.length; i++) {//Update the schemeList
             if (this.schemeList[i].scheme.getURI() == this.selectedNode.getURI()) {
-                this.schemeList.splice(i, 1);
+                if (VBContext.getWorkingProject().isValidationEnabled()) {
+                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
+                    let stagedRes: ARTURIResource = this.schemeList[i].scheme.clone();
+                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
+                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
+                    this.schemeList[i].scheme = stagedRes;
+                } else {
+                    this.schemeList.splice(i, 1);
+                }
                 break;
             }
         }
         //update the activeSchemes if the deleted was active
         if (this.vbProp.isActiveScheme(this.selectedNode)) {
             this.updateActiveSchemesPref();
-            this.nodeDeleted.emit(this.selectedNode);
-            this.selectedNode = null;
         }
+        this.nodeDeleted.emit(this.selectedNode);
+        this.selectedNode = null;
     }
 
     /**
