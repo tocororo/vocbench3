@@ -14,7 +14,7 @@ export class ResourceViewPanelComponent {
     @ViewChild(ResourceViewTabbedComponent) resViewTabbedChild: ResourceViewTabbedComponent;
     @ViewChild(ResourceViewSplittedComponent) resViewSplittedChild: ResourceViewSplittedComponent;
 
-    @Output() empty: EventEmitter<number> = new EventEmitter(); //currently used only with resource view tabbed when all tab are closed
+    @Output() empty: EventEmitter<number> = new EventEmitter(); //used with tabbed RV when all tab are closed or in splitted RV when the main resource is deleted
     @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter(); //used only with resource view tabbed when a tab containing a concept is selected
 
     private resViewMode: ResourceViewMode; //"splitted" or "tabbed";
@@ -56,6 +56,7 @@ export class ResourceViewPanelComponent {
     deleteResource(res: ARTResource) {
         if (this.resViewMode == ResourceViewMode.splitted) {
             this.resViewSplittedChild.deleteResource(res);
+            this.empty.emit();
         } else {
             this.resViewTabbedChild.deleteResource(res);
         }

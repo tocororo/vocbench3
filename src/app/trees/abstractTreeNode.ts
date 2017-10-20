@@ -1,7 +1,9 @@
 import { Component, Input, Output, ViewChild, QueryList, ElementRef, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ResAttribute } from "../models/ARTResources";
+import { SemanticTurkey } from "../models/Vocabulary";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "tree-node",
@@ -183,11 +185,20 @@ export abstract class AbstractTreeNode {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
         for (var i = 0; i < children.length; i++) {
             if (children[i].getURI() == deletedNode.getNominalValue()) {
-                children.splice(i, 1);
-                //if node has no more children change info of node so the UI will update
-                if (children.length == 0) {
-                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
-                    this.open = false;
+                if (VBContext.getWorkingProject().isValidationEnabled()) {
+                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
+                    let stagedRes: ARTURIResource = children[i].clone();
+                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
+                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
+                    children[i] = stagedRes;
+                } else {
+                    children.splice(i, 1);
+                    //if node has no more children change info of node so the UI will update
+                    if (children.length == 0) {
+                        this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                        this.open = false;
+                    }
                 }
                 break;
             }

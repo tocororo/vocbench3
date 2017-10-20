@@ -1,5 +1,7 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
 import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
+import { SemanticTurkey } from "../models/Vocabulary";
+import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { UIUtils } from "../utils/UIUtils";
 
@@ -84,7 +86,16 @@ export abstract class AbstractTree {
         //check if the node to delete is a root
         for (var i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == deletedNode.getNominalValue()) {
-                this.roots.splice(i, 1);
+                if (VBContext.getWorkingProject().isValidationEnabled()) {
+                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
+                    let stagedRes: ARTURIResource = this.roots[i].clone();
+                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
+                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
+                    this.roots[i] = stagedRes;
+                } else {
+                    this.roots.splice(i, 1);
+                }
                 break;
             }
         }

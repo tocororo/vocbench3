@@ -2,6 +2,7 @@ import {
     ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
 } from "../models/ARTResources";
 import { User } from "../models/User";
+import { SemanticTurkey } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
 
 export class Deserializer {
@@ -107,16 +108,22 @@ export class Deserializer {
             
             /**
              * if explicit is null => explicit attribute was missing => infer it from the graphs in the nature:
-             * explicit is true if the resource is defined in the main graph
+             * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
              */
             if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
                 var baseURI = VBContext.getWorkingProject().getBaseURI();
                 let resGraphs: ARTURIResource[] = node.getGraphs();
+                let inMainGraph: boolean = false;
+                let inRemoveStagingGraph: boolean = false;
                 for (var i = 0; i < resGraphs.length; i++) {
                     if (resGraphs[i].getURI() == baseURI) {
-                        node.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-                        break;
+                        inMainGraph = true;
+                    } else if (resGraphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
+                        inRemoveStagingGraph = true;
                     }
+                }
+                if (inMainGraph && !inRemoveStagingGraph) {
+                    node.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                 }
             }
             //if explicit is still null, set it to false
