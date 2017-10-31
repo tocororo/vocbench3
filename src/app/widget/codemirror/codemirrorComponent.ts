@@ -7,7 +7,7 @@ import "./pearl";
 @Component({
     selector: 'codemirror',
     template: `
-        <div style="overflow: auto">
+        <div class="vbox" style="overflow: auto">
             <textarea #txtarea [ngClass]="{disabled: disabled}">{{code}}</textarea>
         </div>
     `,
@@ -52,12 +52,20 @@ export class CodemirrorComponent {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        /* Since the @Input code is initialized after the initialization of the codemirror editor (code is init 
-        asynchronously in the parent component creEditorModal), I need to set the value in codemirror editor manually
-        and only at the first change (when previousValue is undefined and currentValue is not undefined), otherwise
-        every single change will reset the cursor at the begin of the editor (setValue() resets the cursor) */
-        if (changes['code'].previousValue == undefined && changes['code'].currentValue) {
+        /* Unlike when the user change the code by typing in the textare, when the @Input 'code' is changed in the parent component 
+        (e.g. by doing codeVar = "abcde", where codeVar is bound in the template with this @Input like [code]="code"),
+        I need to call setValue() manually. The only way to distinguish this scenario is to recognize the first initialization of 
+        @Input code. I cannot do it using changes['code'].firstChange since the "change in the parent" could be not be the first change,
+        so I recognize this scenario inspecting the previous value. The parent component need to set the bound code to undefined, then
+        set its real value, so that the the "if condition" is true and then the setValue() is fired. */
+        if (changes['code'] && changes['code'].previousValue == undefined && changes['code'].currentValue != undefined) {
+            //setValue() reset the cursor at the begin of the textarea, so I need to reset manually
+            let cursor = this.cmEditor.getDoc().getCursor();
             this.cmEditor.setValue(changes['code'].currentValue);
+            this.cmEditor.getDoc().setCursor(cursor);
+        }
+        if (changes['disabled'] && this.cmEditor != null) {
+            this.cmEditor.setOption('readOnly', changes['disabled'].currentValue);
         }
     }
 

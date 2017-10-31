@@ -1,10 +1,8 @@
 <div style="border: 1px solid #ddd;" class="vbox">
     <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
         <div *ngFor="let r of resources; index as idx">
-            <div *ngIf="idx < resLimit" class="listItem">
-                <rdf-resource [resource]="r" [rendering]="rendering" [ngClass]="{selectedResource : r == resourceSelected}"
-                    (click)="onResourceSelected(r)">
-                </rdf-resource>
+            <div *ngIf="idx < resLimit" class="listItem" [ngClass]="{selectedResource : r == resourceSelected}" (click)="onResourceSelected(r)">
+                <rdf-resource [resource]="r" [rendering]="rendering"></rdf-resource>
             </div>
         </div>
     </div>

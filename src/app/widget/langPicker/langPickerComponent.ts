@@ -16,7 +16,7 @@ export class LangPickerComponent implements OnInit {
     @Output() langChange = new EventEmitter<any>();
 
     private selectClass: string = "form-control input-";
-    private languageList: Language[];
+    private languageList: Language[] = [];
     private language: string;
     private showFlag: boolean = true;
 

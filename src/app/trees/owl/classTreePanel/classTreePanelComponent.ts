@@ -85,9 +85,13 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            let searchLangs: string[];
+            if (searchSettings.restrictLang) {
+                searchLangs = searchSettings.languages;
+            }
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
-                searchSettings.stringMatchMode).subscribe(
+                searchSettings.stringMatchMode, searchLangs).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

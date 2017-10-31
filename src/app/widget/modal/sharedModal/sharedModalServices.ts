@@ -75,9 +75,10 @@ export class SharedModalServices {
      * Opens a modal to select multiple languages
      * @param title
      * @param languages languages already selected
+     * @param projectAware if true, allow selection only of languages available in the current project
      */
-    selectLanguages(title: string, languages: string[]) {
-        var modalData = new LanguageSelectorModalData(title, languages);
+    selectLanguages(title: string, languages: string[], projectAware?: boolean) {
+        var modalData = new LanguageSelectorModalData(title, languages, projectAware);
         const builder = new BSModalContextBuilder<LanguageSelectorModalData>(
             modalData, undefined, LanguageSelectorModalData
         );

@@ -55,8 +55,12 @@ export class SchemeListComponent {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            let searchLangs: string[];
+            if (searchSettings.restrictLang) {
+                searchLangs = searchSettings.languages;
+            }
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode).subscribe(
+                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

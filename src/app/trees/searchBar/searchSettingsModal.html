@@ -38,6 +38,35 @@
         </div>
     </div>
 
+    <div class="panel panel-default" style="margin-top: 5px;">
+        <div class="panel-heading">
+            <label>Lexicalizations search</label>
+        </div>
+        <div class="panel-body">
+            <div class="hbox">
+                <div class="checkbox" style="margin: 5px 0px 0px">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="restrictLang" (ngModelChange)="updateSettings()">
+                        Restrict search to languages
+                    </label>
+                </div>
+                <div class="hbox" style="align-items: center; margin-left: 8px;">
+                    <div>
+                        <div class="input-group input-group-xs">
+                            <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" (click)="selectRestrictionLanguages()" placeholder="Select languages"
+                                    [disabled]="!restrictLang">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div *ngIf="settingsForConceptPanel" class="panel panel-default" style="margin-top: 5px;">
         <div class="panel-heading">
             <label>Concept search</label>

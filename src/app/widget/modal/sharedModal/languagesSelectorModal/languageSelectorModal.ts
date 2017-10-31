@@ -3,12 +3,14 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { Language, Languages } from "../../../../models/LanguagesCountries";
+import { VBProperties } from "../../../../utils/VBProperties";
 
 export class LanguageSelectorModalData extends BSModalContext {
     /**
      * @param languages languages selected
+     * @param projectAware if true, restrict the languages only to the available in the current project
      */
-    constructor(public title: string, public languages: string[] = []) {
+    constructor(public title: string, public languages: string[] = [], public projectAware: boolean = false) {
         super();
     }
 }
@@ -22,17 +24,22 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
 
     private languageItems: LanguageItem[];
 
-    constructor(public dialog: DialogRef<LanguageSelectorModalData>, private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<LanguageSelectorModalData>, private vbProp: VBProperties, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        let systemLanguages: Language[] = Languages.getSystemLanguages();
+        let languages: Language[];
         this.languageItems = [];
-        for (var i = 0; i < systemLanguages.length; i++) {
+        if (this.context.projectAware) {
+            languages = this.vbProp.getProjectLanguages();
+        } else {
+            languages = Languages.getSystemLanguages();
+        }
+        for (var i = 0; i < languages.length; i++) {
             this.languageItems.push({
-                lang: systemLanguages[i], 
-                selected: this.context.languages.indexOf(systemLanguages[i].tag) != -1
+                lang: languages[i], 
+                selected: this.context.languages.indexOf(languages[i].tag) != -1
             });
         }
     }

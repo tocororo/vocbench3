@@ -390,13 +390,19 @@ input[type=number]::-webkit-outer-spin-button {
     min-width: 130px;
 }
  
+codemirror {
+    display: flex;
+    flex: 1;
+}
 codemirror .CodeMirror { 
     border: 1px solid #ddd; /*Border of textare of CodeMirror (just in codemirror, because in yasqe there is already)*/
     height: auto !important; 
+    flex: 1;
 }
 codemirror .CodeMirror-scroll {
     min-height: 100px;
-    max-height: 300px;
+    margin-right: 0px;
+    flex: 1;
 }
 textarea.disabled + .CodeMirror {
     background: #eee;
@@ -464,8 +470,7 @@ button.resViewPartitionBtn:disabled  {
     display: flex;
     justify-content: center;
     margin: 2px;
-    padding: 4px;
-    font-size: 8px;
+    padding: 3px;
     border-radius: 3px;
 }
 .sliderY {

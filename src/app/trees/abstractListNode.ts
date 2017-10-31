@@ -50,7 +50,7 @@ export abstract class AbstractListNode {
     }
 
     ensureVisible() {
-        this.listNodeElement.nativeElement.scrollIntoView();
+        this.listNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
     }
 
     //BROADCAST EVENTS HANDLERS

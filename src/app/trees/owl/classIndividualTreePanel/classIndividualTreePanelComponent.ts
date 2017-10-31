@@ -61,9 +61,13 @@ export class ClassIndividualTreePanelComponent {
             } else if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyClasses) {
                 searchRoles = [RDFResourceRolesEnum.cls];
             }
+            let searchLangs: string[];
+            if (searchSettings.restrictLang) {
+                searchLangs = searchSettings.languages;
+            }
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
-                searchSettings.stringMatchMode).subscribe(
+                searchSettings.stringMatchMode, searchLangs).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

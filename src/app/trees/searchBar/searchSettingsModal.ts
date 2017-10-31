@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { VBProperties, StringMatchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../utils/VBProperties";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 
@@ -13,6 +14,10 @@ export class SearchSettingsModalData extends BSModalContext {
 @Component({
     selector: "search-settings-modal",
     templateUrl: "./searchSettingsModal.html",
+    styles: [
+        //in order to keep the background of the languages-input-text white when it's readonly but not disabled
+        '.form-control[readonly]:not([disabled]) { background-color: #fff; }'
+    ]
 })
 export class SearchSettingsModal implements ModalComponent<SearchSettingsModalData> {
     context: SearchSettingsModalData;
@@ -34,6 +39,9 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private useURI: boolean = true;
     private useLocalName: boolean = true;
 
+    private restrictLang: boolean = false;
+    private languages: string[];
+
     //concept search restriction
     private restrictConceptSchemes: boolean = true;
 
@@ -46,7 +54,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private activeClsIndSearchMode: ClassIndividualPanelSearchMode;
 
 
-    constructor(public dialog: DialogRef<SearchSettingsModalData>, private vbProp: VBProperties) {
+    constructor(public dialog: DialogRef<SearchSettingsModalData>, private vbProp: VBProperties, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
 
@@ -59,14 +67,28 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.activeStringMatchMode = this.settings.stringMatchMode;
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;
+        this.restrictLang = this.settings.restrictLang;
+        this.languages = this.settings.languages;
         this.restrictConceptSchemes = this.settings.restrictActiveScheme;
         this.activeClsIndSearchMode = this.settings.classIndividualSearchMode;
+    }
+
+    private selectRestrictionLanguages() {
+        this.sharedModals.selectLanguages("Language restrictions", this.languages, true).then(
+            (langs: string[]) => {
+                this.languages = langs;
+                this.updateSettings();
+            },
+            () => {}
+        );
     }
 
     private updateSettings() {
         this.settings.stringMatchMode = this.activeStringMatchMode;
         this.settings.useURI = this.useURI;
         this.settings.useLocalName = this.useLocalName;
+        this.settings.restrictLang = this.restrictLang;
+        this.settings.languages = this.languages;
         this.settings.restrictActiveScheme = this.restrictConceptSchemes;
         this.settings.classIndividualSearchMode = this.activeClsIndSearchMode
         this.vbProp.setSearchSettings(this.settings);

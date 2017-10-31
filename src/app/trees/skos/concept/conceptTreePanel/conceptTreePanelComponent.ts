@@ -168,7 +168,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
-
+            let searchLangs: string[];
+            if (searchSettings.restrictLang) {
+                searchLangs = searchSettings.languages;
+            }
             let searchingScheme: ARTURIResource[] = [];
             if (searchSettings.restrictActiveScheme) {
                 if (this.schemeChangeable) {
@@ -180,7 +183,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchingScheme).subscribe(
+                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, searchingScheme).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
