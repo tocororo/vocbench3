@@ -109,6 +109,22 @@ export class PreferencesSettingsServices {
     }
 
     /**
+     * 
+     * @param property 
+     * @param value 
+     */
+    setProjectPreference(property: string, value?: string) {
+        console.log("[PreferencesServices] setProjectPreference");
+        var params: any = {
+            property: property,
+        };
+        if (value != null) {
+            params.value = value;
+        }
+        return this.httpMgr.doPost(this.serviceName, "setProjectPreference", params, true);
+    }
+
+    /**
      * Gets the settings for the currently open project
      * @param properties 
      * @param project 

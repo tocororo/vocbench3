@@ -60,74 +60,74 @@ export class UIUtils {
         "hi", "hr", "hu", "hy", "id", "it", "ja", "ka", "km", "ko", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv",
         "th", "tr", "uk", "vi", "zh"];
 
+
+    private static classImgSrc = require("../../assets/images/icons/res/class.png");
+    private static classImportedImgSrc = require("../../assets/images/icons/res/class_imported.png");
+    private static classDeprecatedImgSrc = require("../../assets/images/icons/res/class_deprecated.png");
+    private static classImportedDeprecatedImgSrc = require("../../assets/images/icons/res/class_imported_deprecated.png");
+    private static classDefVocImgSrc = require("../../assets/images/icons/res/class_defvoc.png");//how to use?
+    private static classDefVocDeprecatedImgSrc = require("../../assets/images/icons/res/class_defvoc_deprecated.png");//how to use?
+    
+    private static individualImgSrc = require("../../assets/images/icons/res/individual.png");
+    private static individualImportedImgSrc = require("../../assets/images/icons/res/individual_imported.png");
+    private static individualDeprecatedImgSrc = require("../../assets/images/icons/res/individual_deprecated.png");
+    private static individualImportedDeprecatedImgSrc = require("../../assets/images/icons/res/individual_imported_deprecated.png");
+    
+    private static conceptImgSrc = require("../../assets/images/icons/res/concept.png");
+    private static conceptImportedImgSrc = require("../../assets/images/icons/res/concept_imported.png");
+    private static conceptDeprecatedImgSrc = require("../../assets/images/icons/res/concept_deprecated.png");
+    private static conceptImportedDeprecatedImgSrc = require("../../assets/images/icons/res/concept_imported_deprecated.png");
+    
+    private static conceptSchemeImgSrc = require("../../assets/images/icons/res/conceptScheme.png");
+    private static conceptSchemeImportedImgSrc = require("../../assets/images/icons/res/conceptScheme_imported.png");
+    private static conceptSchemeDeprecatedImgSrc = require("../../assets/images/icons/res/conceptScheme_deprecated.png");
+    private static conceptSchemeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/conceptScheme_imported_deprecated.png");
+    
+    private static collectionImgSrc = require("../../assets/images/icons/res/collection.png");
+    private static collectionImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
+    private static collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
+    private static collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
+
+    private static orderedCollectionImgSrc = require("../../assets/images/icons/res/orderedCollection.png");
+    private static orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported.png");
+    private static orderedCollectionDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_deprecated.png");
+    private static orderedCollectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported_deprecated.png");
+
+    private static xLabelImgSrc = require("../../assets/images/icons/res/xLabel.png");
+    private static xLabelImportedImgSrc = require("../../assets/images/icons/res/xLabel_imported.png");
+    private static xLabelDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_deprecated.png");
+    private static xLabelImportedDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_imported_deprecated.png");
+    
+    private static ontologyImgSrc = require("../../assets/images/icons/res/ontology.png");
+    
+    private static propImgSrc = require("../../assets/images/icons/res/prop.png");
+    private static propImportedImgSrc = require("../../assets/images/icons/res/prop_imported.png");
+    private static propDeprecatedImgSrc = require("../../assets/images/icons/res/prop_deprecated.png");
+    private static propImportedDeprecatedImgSrc = require("../../assets/images/icons/res/prop_imported_deprecated.png");
+    
+    private static propObjectImgSrc = require("../../assets/images/icons/res/propObject.png");
+    private static propObjectImportedImgSrc = require("../../assets/images/icons/res/propObject_imported.png");
+    private static propObjectDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_deprecated.png");
+    private static propObjectImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_imported_deprecated.png");
+    
+    private static propDatatypeImgSrc = require("../../assets/images/icons/res/propDatatype.png");
+    private static propDatatypeImportedImgSrc = require("../../assets/images/icons/res/propDatatype_imported.png");
+    private static propDatatypeDeprecatedImgSrc = require("../../assets/images/icons/res/propDatatype_deprecated.png");
+    private static propDatatypeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propDatatype_imported_deprecated.png");
+    
+    private static propAnnotationImgSrc = require("../../assets/images/icons/res/propAnnotation.png");
+    private static propAnnotationImportedImgSrc = require("../../assets/images/icons/res/propAnnotation_imported.png");
+    private static propAnnotationDeprecatedImgSrc = require("../../assets/images/icons/res/propAnnotation_deprecated.png");
+    private static propAnnotationImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propAnnotation_imported_deprecated.png");
+    
+    private static propOntologyImgSrc = require("../../assets/images/icons/res/propOntology.png");
+    private static propOntologyImportedImgSrc = require("../../assets/images/icons/res/propOntology_imported.png");
+    private static propOntologyDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_deprecated.png");
+    private static propOntologyImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_imported_deprecated.png");
+
+    private static mentionImgSrc = require("../../assets/images/icons/res/mention.png"); 
+
     static getImageSrc(rdfResource: ARTNode): string {
-
-        var classImgSrc = require("../../assets/images/icons/res/class.png");
-        var classImportedImgSrc = require("../../assets/images/icons/res/class_imported.png");
-        var classDeprecatedImgSrc = require("../../assets/images/icons/res/class_deprecated.png");
-        var classImportedDeprecatedImgSrc = require("../../assets/images/icons/res/class_imported_deprecated.png");
-        var classDefVocImgSrc = require("../../assets/images/icons/res/class_defvoc.png");//how to use?
-        var classDefVocDeprecatedImgSrc = require("../../assets/images/icons/res/class_defvoc_deprecated.png");//how to use?
-        
-        var individualImgSrc = require("../../assets/images/icons/res/individual.png");
-        var individualImportedImgSrc = require("../../assets/images/icons/res/individual_imported.png");
-        var individualDeprecatedImgSrc = require("../../assets/images/icons/res/individual_deprecated.png");
-        var individualImportedDeprecatedImgSrc = require("../../assets/images/icons/res/individual_imported_deprecated.png");
-        
-        var conceptImgSrc = require("../../assets/images/icons/res/concept.png");
-        var conceptImportedImgSrc = require("../../assets/images/icons/res/concept_imported.png");
-        var conceptDeprecatedImgSrc = require("../../assets/images/icons/res/concept_deprecated.png");
-        var conceptImportedDeprecatedImgSrc = require("../../assets/images/icons/res/concept_imported_deprecated.png");
-        
-        var conceptSchemeImgSrc = require("../../assets/images/icons/res/conceptScheme.png");
-        var conceptSchemeImportedImgSrc = require("../../assets/images/icons/res/conceptScheme_imported.png");
-        var conceptSchemeDeprecatedImgSrc = require("../../assets/images/icons/res/conceptScheme_deprecated.png");
-        var conceptSchemeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/conceptScheme_imported_deprecated.png");
-        
-        var collectionImgSrc = require("../../assets/images/icons/res/collection.png");
-        var collectionImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
-        var collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
-        var collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
-
-        var orderedCollectionImgSrc = require("../../assets/images/icons/res/orderedCollection.png");
-        var orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported.png");
-        var orderedCollectionDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_deprecated.png");
-        var orderedCollectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported_deprecated.png");
-
-        var xLabelImgSrc = require("../../assets/images/icons/res/xLabel.png");
-        var xLabelImportedImgSrc = require("../../assets/images/icons/res/xLabel_imported.png");
-        var xLabelDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_deprecated.png");
-        var xLabelImportedDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_imported_deprecated.png");
-        
-        var ontologyImgSrc = require("../../assets/images/icons/res/ontology.png");
-        
-        var propImgSrc = require("../../assets/images/icons/res/prop.png");
-        var propImportedImgSrc = require("../../assets/images/icons/res/prop_imported.png");
-        var propDeprecatedImgSrc = require("../../assets/images/icons/res/prop_deprecated.png");
-        var propImportedDeprecatedImgSrc = require("../../assets/images/icons/res/prop_imported_deprecated.png");
-        
-        var propObjectImgSrc = require("../../assets/images/icons/res/propObject.png");
-        var propObjectImportedImgSrc = require("../../assets/images/icons/res/propObject_imported.png");
-        var propObjectDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_deprecated.png");
-        var propObjectImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_imported_deprecated.png");
-        
-        var propDatatypeImgSrc = require("../../assets/images/icons/res/propDatatype.png");
-        var propDatatypeImportedImgSrc = require("../../assets/images/icons/res/propDatatype_imported.png");
-        var propDatatypeDeprecatedImgSrc = require("../../assets/images/icons/res/propDatatype_deprecated.png");
-        var propDatatypeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propDatatype_imported_deprecated.png");
-        
-        var propAnnotationImgSrc = require("../../assets/images/icons/res/propAnnotation.png");
-        var propAnnotationImportedImgSrc = require("../../assets/images/icons/res/propAnnotation_imported.png");
-        var propAnnotationDeprecatedImgSrc = require("../../assets/images/icons/res/propAnnotation_deprecated.png");
-        var propAnnotationImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propAnnotation_imported_deprecated.png");
-        
-        var propOntologyImgSrc = require("../../assets/images/icons/res/propOntology.png");
-        var propOntologyImportedImgSrc = require("../../assets/images/icons/res/propOntology_imported.png");
-        var propOntologyDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_deprecated.png");
-        var propOntologyImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_imported_deprecated.png");
-
-        var mentionImgSrc = require("../../assets/images/icons/res/mention.png");
-
         var imgSrc: string;
         if (rdfResource.isResource()) {
             var role = rdfResource.getRole().toLowerCase();
@@ -135,144 +135,145 @@ export class UIUtils {
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
                 rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
-                imgSrc = classImgSrc;
+                imgSrc = this.classImgSrc;
                 if (!explicit) {
-                    imgSrc = classImportedImgSrc;
+                    imgSrc = this.classImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = classImportedDeprecatedImgSrc;
+                        imgSrc = this.classImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = classDeprecatedImgSrc;
+                    imgSrc = this.classDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.concept.toLowerCase()) {
-                imgSrc = conceptImgSrc;
+                imgSrc = this.conceptImgSrc;
                 if (!explicit) {
-                    imgSrc = conceptImportedImgSrc;
+                    imgSrc = this.conceptImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = conceptImportedDeprecatedImgSrc;
+                        imgSrc = this.conceptImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = conceptDeprecatedImgSrc;
+                    imgSrc = this.conceptDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
-                imgSrc = individualImgSrc;
+                imgSrc = this.individualImgSrc;
                 if (!explicit) {
-                    imgSrc = individualImportedImgSrc;
+                    imgSrc = this.individualImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = individualImportedDeprecatedImgSrc;
+                        imgSrc = this.individualImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = individualDeprecatedImgSrc;
+                    imgSrc = this.individualDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
-                imgSrc = conceptSchemeImgSrc;
+                imgSrc = this.conceptSchemeImgSrc;
                 if (!explicit) {
-                    imgSrc = conceptSchemeImportedImgSrc;
+                    imgSrc = this.conceptSchemeImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = conceptSchemeImportedDeprecatedImgSrc;
+                        imgSrc = this.conceptSchemeImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = conceptSchemeDeprecatedImgSrc;
+                    imgSrc = this.conceptSchemeDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.objectProperty.toLowerCase()) {
-                imgSrc = propObjectImgSrc;
+                imgSrc = this.propObjectImgSrc;
                 if (!explicit) {
-                    imgSrc = propObjectImportedImgSrc;
+                    imgSrc = this.propObjectImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = propObjectImportedDeprecatedImgSrc;
+                        imgSrc = this.propObjectImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = propObjectDeprecatedImgSrc;
+                    imgSrc = this.propObjectDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.skosCollection.toLowerCase()) {
-                imgSrc = collectionImgSrc;
+                imgSrc = this.collectionImgSrc;
                 if (!explicit) {
-                    imgSrc = collectionImportedImgSrc;
+                    imgSrc = this.collectionImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = collectionImportedDeprecatedImgSrc;
+                        imgSrc = this.collectionImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = collectionDeprecatedImgSrc;
+                    imgSrc = this.collectionDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.skosOrderedCollection.toLowerCase()) {
-                imgSrc = orderedCollectionImgSrc;
+                imgSrc = this.orderedCollectionImgSrc;
                 if (!explicit) {
-                    imgSrc = orderedCollectionImportedImgSrc;
+                    imgSrc = this.orderedCollectionImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = orderedCollectionImportedDeprecatedImgSrc;
+                        imgSrc = this.orderedCollectionImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = orderedCollectionDeprecatedImgSrc;
+                    imgSrc = this.orderedCollectionDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.datatypeProperty.toLowerCase()) {
-                imgSrc = propDatatypeImgSrc;
+                imgSrc = this.propDatatypeImgSrc;
                 if (!explicit) {
-                    imgSrc = propDatatypeImportedImgSrc;
+                    imgSrc = this.propDatatypeImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = propDatatypeImportedDeprecatedImgSrc;
+                        imgSrc = this.propDatatypeImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = propDatatypeDeprecatedImgSrc;
+                    imgSrc = this.propDatatypeDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.annotationProperty.toLowerCase()) {
-                imgSrc = propAnnotationImgSrc;
+                imgSrc = this.propAnnotationImgSrc;
                 if (!explicit) {
-                    imgSrc = propAnnotationImportedImgSrc;
+                    imgSrc = this.propAnnotationImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = propAnnotationImportedDeprecatedImgSrc;
+                        imgSrc = this.propAnnotationImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = propAnnotationDeprecatedImgSrc;
+                    imgSrc = this.propAnnotationDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.ontologyProperty.toLowerCase()) {
-                imgSrc = propOntologyImgSrc;
+                imgSrc = this.propOntologyImgSrc;
                 if (!explicit) {
-                    imgSrc = propOntologyImportedImgSrc;
+                    imgSrc = this.propOntologyImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = propOntologyImportedDeprecatedImgSrc;
+                        imgSrc = this.propOntologyImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = propOntologyDeprecatedImgSrc;
+                    imgSrc = this.propOntologyDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.property.toLowerCase()) {
-                imgSrc = propImgSrc;
+                imgSrc = this.propImgSrc;
                 if (!explicit) {
-                    imgSrc = propImportedImgSrc;
+                    imgSrc = this.propImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = propImportedDeprecatedImgSrc;
+                        imgSrc = this.propImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = propDeprecatedImgSrc;
+                    imgSrc = this.propDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.ontology.toLowerCase()) {
-                imgSrc = ontologyImgSrc;
+                imgSrc = this.ontologyImgSrc;
             } else if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
                 let lang: string = rdfResource.getAdditionalProperty(ResAttribute.LANG);
                 if (lang != null) {
                     imgSrc = this.getFlagImgSrc(lang);
                 } else {
-                    imgSrc = xLabelImgSrc;
+                    imgSrc = this.xLabelImgSrc;
                     if (!explicit) {
-                        imgSrc = xLabelImportedImgSrc;
+                        imgSrc = this.xLabelImportedImgSrc;
                         if (deprecated) {
-                            imgSrc = xLabelImportedDeprecatedImgSrc;
+                            imgSrc = this.xLabelImportedDeprecatedImgSrc;
                         }
                     } else if (deprecated) {
-                        imgSrc = xLabelDeprecatedImgSrc;
+                        imgSrc = this.xLabelDeprecatedImgSrc;
                     }
                 }
             } else if (role == RDFResourceRolesEnum.mention.toLocaleLowerCase()) {
-                imgSrc = mentionImgSrc;
+                imgSrc = this.mentionImgSrc;
                 // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
+                console.log("here starts with", rdfResource);
                 if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
-                    imgSrc = mentionImgSrc; //it is a mentrion
+                    imgSrc = this.mentionImgSrc; //it is a mentrion
                 } else { //else set individual image as default
-                    imgSrc = individualImgSrc;
+                    imgSrc = this.individualImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.dataRange.toLocaleLowerCase()) {
-                imgSrc = classImgSrc;
+                imgSrc = this.classImgSrc;
             } else { //unknown role (none of the previous roles)
-                imgSrc = individualImgSrc;
+                imgSrc = this.individualImgSrc;
             }
         } else if (rdfResource.isLiteral()) {
             let lang: string = (<ARTLiteral>rdfResource).getLang();

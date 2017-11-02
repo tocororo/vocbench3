@@ -84,14 +84,15 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     }
 
     private updateSettings() {
-        this.settings.stringMatchMode = this.activeStringMatchMode;
-        this.settings.useURI = this.useURI;
-        this.settings.useLocalName = this.useLocalName;
-        this.settings.restrictLang = this.restrictLang;
-        this.settings.languages = this.languages;
-        this.settings.restrictActiveScheme = this.restrictConceptSchemes;
-        this.settings.classIndividualSearchMode = this.activeClsIndSearchMode
-        this.vbProp.setSearchSettings(this.settings);
+        this.vbProp.setSearchSettings({
+            stringMatchMode: this.activeStringMatchMode,
+            useURI: this.useURI,
+            useLocalName: this.useLocalName,
+            restrictLang: this.restrictLang,
+            languages: this.languages,
+            restrictActiveScheme: this.restrictConceptSchemes,
+            classIndividualSearchMode: this.activeClsIndSearchMode
+        });
     }
 
     ok(event: Event) {

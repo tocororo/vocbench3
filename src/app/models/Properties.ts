@@ -5,6 +5,8 @@ export class Properties {
     static pref_show_flags: string = "show_flags";
     static pref_project_theme: string = "project_theme";
     static pref_show_instances_number: string = "show_instances_number";
+    static pref_search_languages: string = "search_languages";
+    static pref_search_restrict_lang: string = "search_restrict_lang";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";

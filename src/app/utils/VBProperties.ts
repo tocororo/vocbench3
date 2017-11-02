@@ -20,7 +20,15 @@ export class VBProperties {
     private showInstancesNumber: boolean = true;
     private projectThemeId: number = null;
 
-    private searchSettings: SearchSettings = null;
+    private searchSettings: SearchSettings = {
+        stringMatchMode: StringMatchMode.contains,
+        useURI: true,
+        useLocalName: true,
+        restrictLang: false,
+        languages: [],
+        restrictActiveScheme: true,
+        classIndividualSearchMode: ClassIndividualPanelSearchMode.all
+    };
 
     constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {}
 
@@ -34,7 +42,8 @@ export class VBProperties {
     initUserProjectPreferences() {
         var properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_show_flags,
-            Properties.pref_show_instances_number, Properties.pref_project_theme
+            Properties.pref_show_instances_number, Properties.pref_project_theme,
+            Properties.pref_search_languages, Properties.pref_search_restrict_lang
         ];
         this.prefService.getProjectPreferences(properties).subscribe(
             prefs => {
@@ -53,9 +62,21 @@ export class VBProperties {
                 
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
+
+                let searchLangsPref = prefs[Properties.pref_search_languages];
+                if (searchLangsPref == null) {
+                    this.searchSettings.languages = [];
+                } else {
+                    this.searchSettings.languages = JSON.parse(searchLangsPref);
+                }
+
+                this.searchSettings.restrictLang = prefs[Properties.pref_search_languages] == "true";
+
+                this.initSearchSettingsCookie(); //other settings stored in cookies
             }
         );
 
+        // this is called separately since requires the pluginId parameter
         this.prefService.getProjectPreferences([Properties.pref_languages], Properties.plugin_id_rendering_engine).subscribe(
             prefs => {
                 this.projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
@@ -218,60 +239,46 @@ export class VBProperties {
         return cookieValue == "true";
     }
 
-    getSearchSettings(): SearchSettings {
-        if (this.searchSettings == null) {
-            this.searchSettings = { 
-                stringMatchMode: StringMatchMode.contains,
-                useURI: true,
-                useLocalName: true,
-                restrictLang: false,
-                languages: [],
-                restrictActiveScheme: true,
-                classIndividualSearchMode: ClassIndividualPanelSearchMode.all
-            }
-            let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
-            if (searchModeCookie != null) {
-                this.searchSettings.stringMatchMode = <StringMatchMode>searchModeCookie;
-            }
-            let useUriCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_URI);
-            if (useUriCookie != null) {
-                this.searchSettings.useURI = useUriCookie == "true";
-            }
-            let useLocalNameCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_LOCAL_NAME);
-            if (useLocalNameCookie != null) {
-                this.searchSettings.useLocalName = useLocalNameCookie == "true";
-            }
 
-            let restrictLangCookie: string = Cookie.getCookie(Cookie.SEARCH_RESTRICT_LANG);
-            if (restrictLangCookie != null) {
-                this.searchSettings.restrictLang = restrictLangCookie == "true";
-            }
-            let languagesCookie: string = Cookie.getCookie(Cookie.SEARCH_LANGUAGES);
-            if (languagesCookie != null) {
-                this.searchSettings.languages = JSON.parse(languagesCookie);
-            }
-
-            let restrictSchemesCookie: string = Cookie.getCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION);
-            if (restrictSchemesCookie != null) {
-                this.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
-            }
-            let clsIndPanelSearchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_CLS_IND_PANEL);
-            if (clsIndPanelSearchModeCookie != null) {
-                this.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
-            }
+    initSearchSettingsCookie() {
+        let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
+        if (searchModeCookie != null) {
+            this.searchSettings.stringMatchMode = <StringMatchMode>searchModeCookie;
         }
-        
+        let useUriCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_URI);
+        if (useUriCookie != null) {
+            this.searchSettings.useURI = useUriCookie == "true";
+        }
+        let useLocalNameCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_LOCAL_NAME);
+        if (useLocalNameCookie != null) {
+            this.searchSettings.useLocalName = useLocalNameCookie == "true";
+        }
+        let restrictSchemesCookie: string = Cookie.getCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION);
+        if (restrictSchemesCookie != null) {
+            this.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
+        }
+        let clsIndPanelSearchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_CLS_IND_PANEL);
+        if (clsIndPanelSearchModeCookie != null) {
+            this.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
+        }
+    }
+
+    getSearchSettings(): SearchSettings {
         return this.searchSettings;
     }
     setSearchSettings(settings: SearchSettings) {
-        this.searchSettings = settings;
         Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, this.searchSettings.stringMatchMode, 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_URI, this.searchSettings.useURI+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, this.searchSettings.useLocalName+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_RESTRICT_LANG, this.searchSettings.restrictLang+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_LANGUAGES, JSON.stringify(this.searchSettings.languages), 365*10);
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, this.searchSettings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, this.searchSettings.classIndividualSearchMode, 365*10);
+        if (this.searchSettings.languages != settings.languages) {
+            this.prefService.setProjectPreference(Properties.pref_search_languages, JSON.stringify(this.searchSettings.languages)).subscribe();
+        }
+        if (this.searchSettings.restrictLang != settings.restrictLang) {
+            this.prefService.setProjectPreference(Properties.pref_search_restrict_lang, this.searchSettings.restrictLang+"").subscribe();
+        }
+        this.searchSettings = settings;
     }
 
     

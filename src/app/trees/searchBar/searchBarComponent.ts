@@ -48,7 +48,9 @@ export class SearchBarComponent {
             modalData, undefined, SearchSettingsModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(SearchSettingsModal, overlayConfig);
+        return this.modal.open(SearchSettingsModal, overlayConfig).result.then(
+            () => { this.activeMatchMode = this.vbProperties.getSearchSettings().stringMatchMode; }
+        );
     }
 
     private updateSearchMode(mode: StringMatchMode, event: Event) {
