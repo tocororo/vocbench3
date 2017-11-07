@@ -345,7 +345,7 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesNoLexicalization", params, true).map(
             stResp => {
-                return Deserializer.createResourceArray(stResp);
+                return Deserializer.createResourceArray(stResp, ["missingLang"]);
             }
         );
     }

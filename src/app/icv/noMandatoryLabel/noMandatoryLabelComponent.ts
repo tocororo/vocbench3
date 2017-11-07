@@ -90,7 +90,7 @@ export class NoMandatoryLabelComponent {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.brokenRecordList = [];
                 resources.forEach(r => {
-                    let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty(ResAttribute.LANG).split(","));
+                    let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("missingLang").split(","));
                     this.brokenRecordList.push({ resource: r, langs: langs });
                 })
             }

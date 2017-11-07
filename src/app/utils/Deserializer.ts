@@ -10,28 +10,34 @@ export class Deserializer {
     /**
      * Creates an ARTURIResource from a Json Object {"@id": string, "show": string, "role": string, ...other optional attributes}
      */
-    public static createURI(uri: any): ARTURIResource {
+    public static createURI(uri: any, additionalAttr?: string[]): ARTURIResource {
         var id: string = uri['@id'];
         var show: string = uri[ResAttribute.SHOW];
         var uriRes: ARTURIResource = new ARTURIResource(id, show);
         //other properties
-        this.parseNodeOptionalProperties(uri, uriRes);
+        this.parseNodeOptionalProperties(uri, uriRes, additionalAttr);
 
         return uriRes;
     }
 
-    public static createBlankNode(bnode: any): ARTBNode {
+    public static createBlankNode(bnode: any, additionalAttr?: string[]): ARTBNode {
         var id = bnode['@id'];
         var show = bnode[ResAttribute.SHOW];
         var role = RDFResourceRolesEnum[bnode[ResAttribute.ROLE]];
         var bNodeRes = new ARTBNode(id, show, role);
         //other properties
-        this.parseNodeOptionalProperties(bnode, bNodeRes);
+        this.parseNodeOptionalProperties(bnode, bNodeRes, additionalAttr);
 
         return bNodeRes;
     }
 
-    private static parseNodeOptionalProperties(resJson: any, node: ARTNode) {
+    /**
+     * 
+     * @param resJson 
+     * @param node 
+     * @param additionalAttr list of non common attributes to parse
+     */
+    private static parseNodeOptionalProperties(resJson: any, node: ARTNode, additionalAttr?: string[]) {
         var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
         if (role != undefined) {
             node.setRole(role);
@@ -75,11 +81,11 @@ export class Deserializer {
         }
         var members: any[] = resJson[ResAttribute.MEMBERS];
         if (members != undefined) {
-            node.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArray(members));
+            node.setAdditionalProperty(ResAttribute.MEMBERS, this.createResourceArray(members, additionalAttr));
         }
         var index: any = resJson[ResAttribute.INDEX];
         if (index != undefined) {
-            node.setAdditionalProperty(ResAttribute.INDEX, this.createLiteral(index));
+            node.setAdditionalProperty(ResAttribute.INDEX, this.createLiteral(index, additionalAttr));
         }
         var inScheme: string = resJson[ResAttribute.IN_SCHEME];
         if (inScheme != undefined) {
@@ -148,9 +154,18 @@ export class Deserializer {
                 node.setAdditionalProperty(ResAttribute.SHOW, shortShow);
             }
         }
+
+        if (additionalAttr != undefined) {
+            for (var i = 0; i < additionalAttr.length; i++) {
+                let attrValue: string = resJson[additionalAttr[i]];
+                if (attrValue != undefined) {
+                    node.setAdditionalProperty(additionalAttr[i], attrValue);
+                }
+            }
+        }
     }
 
-    public static createLiteral(literal: any): ARTLiteral {
+    public static createLiteral(literal: any, additionalAttr?: string[]): ARTLiteral {
         var isTypedLiteral: boolean;
 
         var value = literal['@value'];
@@ -168,31 +183,31 @@ export class Deserializer {
         }
         
         //optional properties
-        this.parseNodeOptionalProperties(literal, artLiteralRes)
+        this.parseNodeOptionalProperties(literal, artLiteralRes, additionalAttr)
 
         return artLiteralRes;
     }
 
-    public static createRDFResource(resource: any): ARTResource {
+    public static createRDFResource(resource: any, additionalAttr?: string[]): ARTResource {
         var resId = resource['@id'];
         if (resource['@id'] != undefined) {
             if (resId.startsWith('_:')) {
-                return this.createBlankNode(resource);
+                return this.createBlankNode(resource, additionalAttr);
             } else {
-                return this.createURI(resource);
+                return this.createURI(resource, additionalAttr);
             }
         } else {
             throw new Error("Not a RDFResource");
         }
     }
 
-    public static createRDFNode(node: any): ARTNode {
+    public static createRDFNode(node: any, additionalAttr?: string[]): ARTNode {
         var nodeId: string = node['@id']; //resource
         var nodeValue: string = node['@value']; //literal
         if (nodeId != undefined) {
-            return this.createRDFResource(node);
+            return this.createRDFResource(node, additionalAttr);
         } else if (nodeValue != undefined) {
-            return this.createLiteral(node);
+            return this.createLiteral(node, additionalAttr);
         } else {
             throw new Error("Not a RDFNode");
         }
@@ -201,43 +216,43 @@ export class Deserializer {
     /**
      * creates an array of only ARTURIResource from a json result
      */
-    public static createURIArray(result: Array<any>): ARTURIResource[] {
+    public static createURIArray(result: Array<any>, additionalAttr?: string[]): ARTURIResource[] {
         var uriResourceArray: ARTURIResource[] = new Array();
         for (var i = 0; i < result.length; i++) {
-            uriResourceArray.push(this.createURI(result[i]));
+            uriResourceArray.push(this.createURI(result[i], additionalAttr));
         }
         return uriResourceArray;
     }
 
-    public static createResourceArray(resArray: any[]): ARTResource[] {
+    public static createResourceArray(resArray: any[], additionalAttr?: string[]): ARTResource[] {
         var resourceArray: ARTResource[] = new Array();
         for (var i = 0; i < resArray.length; i++) {
-            resourceArray.push(this.createRDFResource(resArray[i]));
+            resourceArray.push(this.createRDFResource(resArray[i], additionalAttr));
         }
         return resourceArray;
     }
 
-    public static createLiteralArray(result: Array<any>): ARTLiteral[] {
+    public static createLiteralArray(result: Array<any>, additionalAttr?: string[]): ARTLiteral[] {
         var literalArray: ARTLiteral[] = new Array();
         for (var i = 0; i < result.length; i++) {
-            literalArray.push(this.createLiteral(result[i]));
+            literalArray.push(this.createLiteral(result[i], additionalAttr));
         }
         return literalArray;
     }
 
-    public static createRDFNodeArray(nodeArray: any) {
+    public static createRDFNodeArray(nodeArray: any, additionalAttr?: string[]) {
         var collectionArray: ARTNode[] = new Array();
         for (var i = 0; i < nodeArray.length; i++) {
-            collectionArray.push(this.createRDFNode(nodeArray[i]));
+            collectionArray.push(this.createRDFNode(nodeArray[i], additionalAttr));
         }
         return collectionArray;
     }
 
-    public static createPredicateObjectsList(poList: any): ARTPredicateObjects[] {
+    public static createPredicateObjectsList(poList: any, additionalAttr?: string[]): ARTPredicateObjects[] {
         var result: ARTPredicateObjects[] = [];
         for (var i = 0; i < poList.length; i++) {
-            var predicate = this.createURI(poList[i].predicate);
-            var objects = this.createRDFNodeArray(poList[i].objects);
+            var predicate = this.createURI(poList[i].predicate, additionalAttr);
+            var objects = this.createRDFNodeArray(poList[i].objects, additionalAttr);
             var predicateObjects = new ARTPredicateObjects(predicate, objects);
             result.push(predicateObjects);
         }
