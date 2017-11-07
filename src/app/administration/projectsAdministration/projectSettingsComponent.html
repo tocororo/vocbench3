@@ -25,6 +25,7 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="padding: 0px 8px;">Active</th>
+                        <th class="text-center" style="padding: 0px 8px;">Mandatory</th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>ISO code</th>
                         <th class="text-center" style="padding: 0px 8px;">Language</th>
                     </tr>
@@ -34,6 +35,10 @@
                         <td class="text-center">
                             <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="updateSettings()"
                                 [disabled]="!project">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.lang.mandatory" (ngModelChange)="updateSettings()"
+                                [disabled]="!project || !l.active">
                         </td>
                         <td class="text-center" nowrap>{{l.lang.tag}}</td>
                         <td class="text-center">

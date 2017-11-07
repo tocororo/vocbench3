@@ -79,6 +79,9 @@ export class ProjectSettingsComponent {
     private changeAllLangStatus(checked: boolean) {
         this.languageItems.forEach((item: LanguageItem) => {
             item.active = checked;
+            if (!checked) {
+                item.lang.mandatory = false;
+            }
         });
         this.updateSettings();
     }
@@ -89,6 +92,9 @@ export class ProjectSettingsComponent {
         for (var i = 0; i < this.languageItems.length; i++) {
             if (this.languageItems[i].active) {
                 activeLangs.push(this.languageItems[i].lang);
+                if (!this.languageItems[i].lang.mandatory) {
+                    delete this.languageItems[i].lang.mandatory; //if not mandatory, delete the property so that it is not serialized
+                }
             }
         }
         if (activeLangs.length == 0) { //if no language is active, set null as value, so the setting is removed

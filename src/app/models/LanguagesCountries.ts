@@ -116,4 +116,5 @@ export class Languages {
 export class Language {
     public name: string;
     public tag: string;
+    public mandatory?: boolean;
 }
