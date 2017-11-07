@@ -17,6 +17,7 @@ import { OnlyAltLabelResourceComponent } from "../icv/onlyAltLabelResource/onlyA
 import { OverlappedLabelComponent } from "../icv/overlappedLabel/overlappedLabelComponent";
 import { NoLangLabelComponent } from "../icv/noLangLabel/noLangLabelComponent";
 import { DanglingXLabelComponent } from "../icv/danglingXLabel/danglingXLabelComponent";
+import { NoMandatoryLabelComponent } from "../icv/noMandatoryLabel/noMandatoryLabelComponent";
 
 import { icvRouting } from "../icv/icvRoutes";
 
@@ -26,7 +27,7 @@ import { icvRouting } from "../icv/icvRoutes";
         IcvComponent, IcvListComponent,
         DanglingConceptComponent, NoSchemeConceptComponent, NoTopConceptSchemeComponent, TopConceptWithBroaderComponent,
         HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
-        NoLangLabelComponent, DanglingXLabelComponent,
+        NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent
     ],
     exports: [IcvComponent],
     providers: []

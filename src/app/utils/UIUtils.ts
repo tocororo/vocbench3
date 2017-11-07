@@ -287,6 +287,34 @@ export class UIUtils {
         return imgSrc;
     };
 
+    static getRoleImageSrc(role: RDFResourceRolesEnum) {
+        if (role == RDFResourceRolesEnum.concept) {
+            return this.conceptImgSrc;
+        } else if (role == RDFResourceRolesEnum.conceptScheme) {
+            return this.conceptSchemeImgSrc
+        } else if (role == RDFResourceRolesEnum.cls) {
+            return this.classImgSrc;
+        } else if (role == RDFResourceRolesEnum.individual) {
+            return this.individualImgSrc;
+        } else if (role == RDFResourceRolesEnum.skosCollection) {
+            return this.collectionImgSrc;
+        } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
+            return this.orderedCollectionImgSrc;
+        } else if (role == RDFResourceRolesEnum.property) {
+            return this.propImgSrc;
+        } else if (role == RDFResourceRolesEnum.annotationProperty) {
+            return this.propAnnotationImgSrc;
+        } else if (role == RDFResourceRolesEnum.datatypeProperty) {
+            return this.propDatatypeImgSrc;
+        } else if (role == RDFResourceRolesEnum.objectProperty) {
+            return this.propObjectImgSrc;
+        } else if (role == RDFResourceRolesEnum.ontologyProperty) {
+            return this.propOntologyImgSrc;
+        } else if (role == RDFResourceRolesEnum.xLabel) {
+            return this.xLabelImgSrc;
+        }
+    }
+
     /**
      * Available values for action are: "create" and "delete"
      */

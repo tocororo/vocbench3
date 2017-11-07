@@ -51,14 +51,20 @@ export class IcvListComponent {
         open: true,
         list: [
             {
-                name: "No skos:prefLabel resource", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLabelResource",
+                name: "No skos:prefLabel resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLabelResource",
                 description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel", 
                 authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_WITHOUT_PREFLABEL
             },
             {
-                name: "No skosxl:prefLabel resource", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLabelResource",
+                name: "No skosxl:prefLabel resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLabelResource",
                 description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel", 
                 authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_WITHOUT_PREFLABEL
+            },
+            {
+                name: "No mandatory label resources", lexicalizationModel: [SKOSXL.uri, SKOS.uri, RDFS.uri], 
+                routeName: "/Icv/NoMandatoryLabelResource",
+                description: "Resources that don't have any label in the given languages", 
+                authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_WITHOUT_MANDATORY_LABEL
             },
             // {
             //     name: "No rdfs:label resource", lexicalizationModel: [RDFS.uri], // routeName: "/Icv/NoLabelResource", 

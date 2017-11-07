@@ -4,7 +4,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ARTResource } from '../models/ARTResources';
 
 export class ResourceViewModalData extends BSModalContext {
-    constructor(public resource: ARTResource) {
+    constructor(public resource: ARTResource, public readonly: boolean = true) {
         super();
     }
 }

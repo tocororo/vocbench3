@@ -35,11 +35,11 @@ export class IcvServices {
      * Detects cyclic hierarchical relations. Returns a list of records top, n1, n2 where 
 	 * top is likely the cause of the cycle, n1 and n2 are vertex that belong to the cycle
      */
-    listCyclicConcepts() {
-        console.log("[IcvServices] listCyclicConcepts");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listCyclicConcepts", params);
-    }
+    // listCyclicConcepts() {
+    //     console.log("[IcvServices] listCyclicConcepts");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listCyclicConcepts", params);
+    // }
 
     /**
      * Returns a list of skos:ConceptScheme that have no top concept
@@ -104,21 +104,21 @@ export class IcvServices {
      * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skos:prefLabel
 	 * in the same language
      */
-    listConceptsWithSameSKOSPrefLabel() {
-        console.log("[IcvServices] listConceptsWithSameSKOSPrefLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSPrefLabel", params);
-    }
+    // listConceptsWithSameSKOSPrefLabel() {
+    //     console.log("[IcvServices] listConceptsWithSameSKOSPrefLabel");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSPrefLabel", params);
+    // }
 
-    /**
-     * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skosxl:prefLabel
-	 * in the same language
-     */
-    listConceptsWithSameSKOSXLPrefLabel() {
-        console.log("[IcvServices] listConceptsWithSameSKOSXLPrefLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSXLPrefLabel", params);
-    }
+    // /**
+    //  * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skosxl:prefLabel
+	//  * in the same language
+    //  */
+    // listConceptsWithSameSKOSXLPrefLabel() {
+    //     console.log("[IcvServices] listConceptsWithSameSKOSXLPrefLabel");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSXLPrefLabel", params);
+    // }
 
     /**
      * Returns a list of records resource-lang, of concept or conceptScheme that have a skos:altLabel for a lang
@@ -192,23 +192,23 @@ export class IcvServices {
         );
     }
 
-    /**
-     * Returns a list of pairs concept-lang of that concept that have more skos:prefLabel in a same language
-     */
-    listConceptsWithMultipleSKOSPrefLabel() {
-        console.log("[IcvServices] listConceptsWithMultipleSKOSPrefLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSPrefLabel", params);
-    }
+    // /**
+    //  * Returns a list of pairs concept-lang of that concept that have more skos:prefLabel in a same language
+    //  */
+    // listConceptsWithMultipleSKOSPrefLabel() {
+    //     console.log("[IcvServices] listConceptsWithMultipleSKOSPrefLabel");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSPrefLabel", params);
+    // }
 
-    /**
-     * Returns a list of records concept-lang of that concept that have more skosxl:prefLabel in a same language
-     */
-    listConceptsWithMultipleSKOSXLPrefLabel() {
-        console.log("[IcvServices] listConceptsWithMultipleSKOSXLPrefLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSXLPrefLabel", params);
-    }
+    // /**
+    //  * Returns a list of records concept-lang of that concept that have more skosxl:prefLabel in a same language
+    //  */
+    // listConceptsWithMultipleSKOSXLPrefLabel() {
+    //     console.log("[IcvServices] listConceptsWithMultipleSKOSXLPrefLabel");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSXLPrefLabel", params);
+    // }
 
     /**
      * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
@@ -297,27 +297,27 @@ export class IcvServices {
         );
     }
 
-    /**
-     * Returns a list of records concept-labelPred-label-lang. A record like that means that
-     * that the concept ?concept has the skos label ?label in language ?lang for the predicates ?labelPred that
-     * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
-     */
-    listConceptsWithExtraWhitespaceInSKOSLabel() {
-        console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSLabel", params);
-    }
+    // /**
+    //  * Returns a list of records concept-labelPred-label-lang. A record like that means that
+    //  * that the concept ?concept has the skos label ?label in language ?lang for the predicates ?labelPred that
+    //  * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
+    //  */
+    // listConceptsWithExtraWhitespaceInSKOSLabel() {
+    //     console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSLabel");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSLabel", params);
+    // }
 
-    /**
-     * Returns a list of records concept-labelPred-label-lang. A record like that means that
-     * that the concept ?concept has the skosxl label ?label in language ?lang for the predicates ?labelPred that
-     * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
-     */
-    listConceptsWithExtraWhitespaceInSKOSXLLabel() {
-        console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSXLLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSXLLabel", params);
-    }
+    // /**
+    //  * Returns a list of records concept-labelPred-label-lang. A record like that means that
+    //  * that the concept ?concept has the skosxl label ?label in language ?lang for the predicates ?labelPred that
+    //  * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
+    //  */
+    // listConceptsWithExtraWhitespaceInSKOSXLLabel() {
+    //     console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSXLLabel");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSXLLabel", params);
+    // }
 
     /**
      * Returns a list of dangling skosxl:Label, namely the skosxl:Label not linked with any concept
@@ -332,6 +332,24 @@ export class IcvServices {
         );
     }
 
+    /**
+     * Returns a list of resources with no lexicalization (rdfs:label, skos:prefLabel or skosxl:prefLabel) in one or more input languages
+     * @param rolesArray 
+     * @param languagesArray 
+     */
+    listResourcesNoLexicalization(rolesArray: RDFResourceRolesEnum[], languagesArray: string[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesNoLexicalization");
+        var params: any = {
+            rolesArray: rolesArray,
+            languagesArray: languagesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesNoLexicalization", params, true).map(
+            stResp => {
+                return Deserializer.createResourceArray(stResp);
+            }
+        );
+    }
+
     //==============================
     //======= GENERIC CHECKS =======
     //==============================
@@ -340,11 +358,11 @@ export class IcvServices {
      * Returns resources which URI contains white spaces
      * @param limit max number of results to return
      */
-    listResourcesURIWithSpace() {
-        console.log("[IcvServices] listResourcesURIWithSpace");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params);
-    }
+    // listResourcesURIWithSpace() {
+    //     console.log("[IcvServices] listResourcesURIWithSpace");
+    //     var params: any = {};
+    //     return this.httpMgr.doGet(this.serviceName, "listResourcesURIWithSpace", params);
+    // }
 
     //=============================
     //======== QUICK FIXES ========
