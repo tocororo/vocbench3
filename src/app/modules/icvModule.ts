@@ -19,6 +19,8 @@ import { NoLangLabelComponent } from "../icv/noLangLabel/noLangLabelComponent";
 import { DanglingXLabelComponent } from "../icv/danglingXLabel/danglingXLabelComponent";
 import { NoMandatoryLabelComponent } from "../icv/noMandatoryLabel/noMandatoryLabelComponent";
 
+import { IcvConfigPanelComponent } from "../icv/icvConfigPanelComponent";
+
 import { icvRouting } from "../icv/icvRoutes";
 
 @NgModule({
@@ -27,7 +29,8 @@ import { icvRouting } from "../icv/icvRoutes";
         IcvComponent, IcvListComponent,
         DanglingConceptComponent, NoSchemeConceptComponent, NoTopConceptSchemeComponent, TopConceptWithBroaderComponent,
         HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
-        NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent
+        NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent,
+        IcvConfigPanelComponent
     ],
     exports: [IcvComponent],
     providers: []

@@ -350,6 +350,22 @@ export class IcvServices {
         );
     }
 
+    /**
+     * Returns a list of resources with alternative label but not preferred label in the same language
+     * @param rolesArray 
+     */
+    listResourcesWithAltNoPrefLabel(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesWithAltNoPrefLabel");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithAltNoPrefLabel", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp, ["missingLang"]);
+            }
+        );
+    }
+
     //==============================
     //======= GENERIC CHECKS =======
     //==============================

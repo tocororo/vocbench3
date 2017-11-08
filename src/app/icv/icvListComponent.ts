@@ -70,14 +70,11 @@ export class IcvListComponent {
             //     name: "No rdfs:label resource", lexicalizationModel: [RDFS.uri], // routeName: "/Icv/NoLabelResource", 
             //     description: "Classes or instances that have no rdfs:label"
             // },
-            // {
-            //     name: "Only skos:altLabel resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/OnlyAltLabelResource",
-            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skos:altLabel but don't have a skos:prefLabel in the same language"
-            // },
-            // {
-            //     name: "Only skosxl:altLabel resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OnlyAltLabelResource",
-            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:altLabel but don't have a skosxl:prefLabel in the same language"
-            // },
+            {
+                name: "Only alternative label resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/OnlyAltLabelResource",
+                description: "Resources that have an alternative label but not a preferred in the same language",
+                authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_ONLY_ALT_LABEL
+            },
             // {
             //     name: "No language tag skos label", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLangLabelResource",
             //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS label without language tag"

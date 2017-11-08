@@ -1,14 +1,13 @@
 import { Component } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, ARTResource, ARTLiteral, ARTNode, RDFTypesEnum } from "../../models/ARTResources";
-import { SKOS, SKOSXL } from "../../models/Vocabulary";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { Language, Languages } from "../../models/LanguagesCountries";
+import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { SKOS, OWL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
-import { SkosServices } from "../../services/skosServices";
-import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "only-alt-label-resource-component",
@@ -17,134 +16,41 @@ import { SkosxlServices } from "../../services/skosxlServices";
 })
 export class OnlyAltLabelResourceComponent {
 
-    private brokenRecordList: Array<any>; //{resource: ARTURIResource, lang: ARTLiteral}
-    //lang is an ARTLiteral just to render it with the rdfResource widget
-    private lexicalizationModel: string;
+    private rolesToCheck: RDFResourceRolesEnum[];
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
+    private brokenRecordList: { resource: ARTResource, langs: Language[] }[];
 
-    ngOnInit() {
-        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
+    constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
+
+    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
+        this.rolesToCheck = roles;
     }
 
     /**
      * Run the check
      */
     runIcv() {
-        if (this.lexicalizationModel == SKOS.uri) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-            this.icvService.listResourcesWithOnlySKOSAltLabel().subscribe(
-                records => {
-                    this.brokenRecordList = records;
-                },
-                err => { },
-                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
-            )
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-            this.icvService.listResourcesWithOnlySKOSXLAltLabel().subscribe(
-                records => {
-                    this.brokenRecordList = records;
-                },
-                err => { },
-                () => UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
-            )
+        if (this.rolesToCheck.length == 0) {
+            this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
+            return;
         }
-    }
 
-    /**
-     * Fixes resource by setting the alternative label as preferred
-     */
-    setAltAsPrefLabel(record: any) {
-        if (this.lexicalizationModel == SKOS.uri) {
-            this.skosService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
-                altLabels => {
-                    this.basicModals.selectResource("Select alternative label", null, altLabels).then(
-                        (selectedAltLabel: any) => {
-                            this.changeAltToPref(record.resource, selectedAltLabel).subscribe(
-                                () => {
-                                    this.runIcv();
-                                }
-                            );
-                        },
-                        () => { }
-                    );
-                }
-            );
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            this.skosxlService.getAltLabels(record.resource, record.lang.getLang()).subscribe(
-                altLabels => {
-                    this.basicModals.selectResource("Select alternative label", null, altLabels).then(
-                        (selectedAltLabel: any) => {
-                            this.changeAltToPref(record.resource, selectedAltLabel).subscribe(
-                                () => {
-                                    this.runIcv();
-                                }
-                            );
-                        },
-                        () => { }
-                    );
-                }
-            );
-        }
-    }
-
-    /**
-     * Removes an alt label and set it as pref label. Returns an observable so that
-     * in setAltAsPrefLabel it can be subscribed and execute operations once it's done
-     */
-    private changeAltToPref(resource: ARTURIResource, label: ARTNode) {
-        return new Observable((observer: any) => {
-            if (this.lexicalizationModel == SKOS.uri) {
-                this.skosService.removeAltLabel(resource, <ARTLiteral>label).subscribe(
-                    stResp => {
-                        this.skosService.setPrefLabel(resource, (<ARTLiteral>label)).subscribe(
-                            stResp => {
-                                observer.next();
-                                observer.complete();
-                            }
-                        )
-                    }
-                );
-            } else if (this.lexicalizationModel == SKOSXL.uri) {
-                this.skosxlService.altToPrefLabel(resource, <ARTResource>label).subscribe(
-                    stResp => {
-                        observer.next();
-                        observer.complete();
-                    }
-                )
+        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
+        this.icvService.listResourcesWithAltNoPrefLabel(this.rolesToCheck).subscribe(
+            resources => {
+                console.log("resources");
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
+                this.brokenRecordList = [];
+                resources.forEach(r => {
+                    let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("missingLang").split(","));
+                    this.brokenRecordList.push({ resource: r, langs: langs });
+                })
             }
-        });
+        );
     }
 
-    /**
-     * Fixes resource by adding a preferred label
-     */
-    addPrefLabel(record: any) {
-        if (this.lexicalizationModel == SKOS.uri) {
-            this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
-                (literal: any) => {
-                    this.skosService.setPrefLabel(record.resource, literal).subscribe(
-                        stResp => {
-                            this.runIcv();
-                        }
-                    )
-                },
-                () => { }
-            )
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
-                (literal: any) => {
-                    this.skosxlService.setPrefLabel(record.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                        stResp => {
-                            this.runIcv();
-                        }
-                    )
-                },
-                () => { }
-            )
-        }
+    private onResourceClick(res: ARTResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }
