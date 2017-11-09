@@ -18,6 +18,7 @@ import { OverlappedLabelComponent } from "../icv/overlappedLabel/overlappedLabel
 import { NoLangLabelComponent } from "../icv/noLangLabel/noLangLabelComponent";
 import { DanglingXLabelComponent } from "../icv/danglingXLabel/danglingXLabelComponent";
 import { NoMandatoryLabelComponent } from "../icv/noMandatoryLabel/noMandatoryLabelComponent";
+import { MultiplePrefLabelComponent } from "../icv/multiplePrefLabel/multiplePrefLabelComponent";
 
 import { IcvConfigPanelComponent } from "../icv/icvConfigPanelComponent";
 
@@ -29,7 +30,7 @@ import { icvRouting } from "../icv/icvRoutes";
         IcvComponent, IcvListComponent,
         DanglingConceptComponent, NoSchemeConceptComponent, NoTopConceptSchemeComponent, TopConceptWithBroaderComponent,
         HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
-        NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent,
+        NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent, MultiplePrefLabelComponent,
         IcvConfigPanelComponent
     ],
     exports: [IcvComponent],

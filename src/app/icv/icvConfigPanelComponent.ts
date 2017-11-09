@@ -33,6 +33,7 @@ export class IcvConfigPanelComponent {
             for (var i = 0; i < projectLangs.length; i++) {
                 this.languages.push({ lang: projectLangs[i], check: projectLangs[i].mandatory });
             }
+            this.onLangsChange();
         }
 
         if (this.checkRoles) {
@@ -45,10 +46,8 @@ export class IcvConfigPanelComponent {
                 { role: RDFResourceRolesEnum.individual, show: "Individual", img: UIUtils.getRoleImageSrc(RDFResourceRolesEnum.individual), check: false },
                 { role: RDFResourceRolesEnum.property, show: "Property", img: UIUtils.getRoleImageSrc(RDFResourceRolesEnum.property), check: false }
             ];
+            this.onRolesChange();
         }
-
-        this.onRolesChange();
-        this.onLangsChange();
     }
 
     private checkAllRoles(check: boolean) {

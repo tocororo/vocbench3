@@ -7,14 +7,13 @@ import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 
 @Component({
-    selector: "no-mandatory-label-component",
-    templateUrl: "./noMandatoryLabelComponent.html",
+    selector: "multiple-pref-label-component",
+    templateUrl: "./multiplePrefLabelComponent.html",
     host: { class: "pageComponent" }
 })
-export class NoMandatoryLabelComponent {
+export class MultiplePrefLabelComponent {
 
     private rolesToCheck: RDFResourceRolesEnum[];
-    private langsToCheck: string[];
 
     private brokenRecordList: { resource: ARTResource, langs: Language[] }[];
 
@@ -22,10 +21,6 @@ export class NoMandatoryLabelComponent {
 
     private onRolesChanged(roles: RDFResourceRolesEnum[]) {
         this.rolesToCheck = roles;
-    }
-
-    private onLangsChanged(langs: string[]) {
-        this.langsToCheck = langs;
     }
 
     /**
@@ -36,18 +31,14 @@ export class NoMandatoryLabelComponent {
             this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
             return;
         }
-        if (this.langsToCheck.length == 0) {
-            this.basicModals.alert("Missing language", "You need to select at least a language in order to run the ICV", "warning");
-            return;
-        }
 
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-        this.icvService.listResourcesNoLexicalization(this.rolesToCheck, this.langsToCheck).subscribe(
+        this.icvService.listResourcesWithMorePrefLabelSameLang(this.rolesToCheck).subscribe(
             resources => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.brokenRecordList = [];
                 resources.forEach(r => {
-                    let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("missingLang").split(","));
+                    let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("duplicateLang").split(","));
                     this.brokenRecordList.push({ resource: r, langs: langs });
                 })
             }

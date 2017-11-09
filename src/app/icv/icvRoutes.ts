@@ -15,6 +15,7 @@ import { OverlappedLabelComponent } from "./overlappedLabel/overlappedLabelCompo
 import { NoLangLabelComponent } from "./noLangLabel/noLangLabelComponent";
 import { DanglingXLabelComponent } from "./danglingXLabel/danglingXLabelComponent";
 import { NoMandatoryLabelComponent } from "./noMandatoryLabel/noMandatoryLabelComponent";
+import { MultiplePrefLabelComponent } from "./multiplePrefLabel/multiplePrefLabelComponent";
 
 export const routes: Routes = [
     {
@@ -30,6 +31,7 @@ export const routes: Routes = [
             { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "NoMandatoryLabelResource", component: NoMandatoryLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+            { path: "MutliplePrefLabelResource", component: MultiplePrefLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
         ]
     },

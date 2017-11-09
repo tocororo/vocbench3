@@ -104,14 +104,11 @@ export class IcvListComponent {
             //     name: "Extra whitespace skosxl label concepts", lexicalizationModel: [SKOSXL.uri],
             //     description: "skos:Concept(s) that have some extra whitespace in a SKOS-XL label"
             // },
-            // {
-            //     name: "Multiple skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
-            //     description: "skos:Concept(s) that have multiple skos:prefLabel in the same language"
-            // },
-            // {
-            //     name: "Multiple skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
-            //     description: "skos:Concept(s) that have multiple skosxl:prefLabel in the same language"
-            // },
+            {
+                name: "Multiple preferred labels resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri], 
+                routeName: "/Icv/MutliplePrefLabelResource", description: "Resources that have multiple preferred labels in the same language",
+                authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_MULTIPLE_PREF_LABEL
+            },
             // {
             //     name: "skosxl:Label without skos:literalForm", lexicalizationModel: [SKOSXL.uri],
             //     description: "skosxl:Label(s) that don't specify a literal form"
