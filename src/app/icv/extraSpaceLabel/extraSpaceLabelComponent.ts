@@ -1,17 +1,19 @@
 import { Component } from "@angular/core";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral, ResAttribute } from "../../models/ARTResources";
 import { XmlSchema } from "../../models/Vocabulary";
 import { UIUtils } from "../../utils/UIUtils";
+import { Deserializer } from "../../utils/Deserializer";
 import { IcvServices } from "../../services/icvServices";
+import { literal } from "@angular/compiler/src/output/output_ast";
 
 @Component({
-    selector: "no-lang-label-component",
-    templateUrl: "./noLangLabelComponent.html",
+    selector: "extra-space-label-component",
+    templateUrl: "./extraSpaceLabelComponent.html",
     host: { class: "pageComponent" }
 })
-export class NoLangLabelComponent {
+export class ExtraSpaceLabelComponent {
 
     private rolesToCheck: RDFResourceRolesEnum[];
 
@@ -33,22 +35,24 @@ export class NoLangLabelComponent {
         }
 
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-        this.icvService.listResourcesWithNoLanguageTagForLabel(this.rolesToCheck).subscribe(
+        this.icvService.listResourcesWitExtraSpacesInLabel(this.rolesToCheck).subscribe(
             resources => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.brokenRecordList = [];
                 resources.forEach(r => {
                     let xlabelAttr = r.getAdditionalProperty("xlabel");
-                    let labelAttr = r.getAdditionalProperty("label");
+                    let labelRes: ARTLiteral = Deserializer.createLiteral(r.getAdditionalProperty("label"));
                     if (xlabelAttr != null) {
+                        let xLabel: ARTURIResource = new ARTURIResource(xlabelAttr, labelRes.getShow(), RDFResourceRolesEnum.xLabel);
+                        xLabel.setAdditionalProperty(ResAttribute.LANG, labelRes.getLang());
                         this.brokenRecordList.push({
                             resource: r, 
-                            label: new ARTURIResource(xlabelAttr, labelAttr, RDFResourceRolesEnum.xLabel)
+                            label: xLabel
                         });
                     } else {
                         this.brokenRecordList.push({
                             resource: r, 
-                            label: new ARTLiteral(labelAttr, XmlSchema.string.getURI())
+                            label: labelRes
                         });
                     }
                 });

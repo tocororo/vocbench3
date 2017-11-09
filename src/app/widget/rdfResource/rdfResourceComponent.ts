@@ -159,7 +159,8 @@ export class RdfResourceComponent {
 	 * Useful for flag icons since they have not the "transparent" version (as for the concept/class/property... icons)
 	 */
 	private isExplicit(): boolean {
-		return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT);
+		return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+			this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
 	}
 
 }

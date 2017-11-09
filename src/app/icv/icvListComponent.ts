@@ -109,14 +109,11 @@ export class IcvListComponent {
             //     name: "Overlapped skosxl label resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OverlappedLabelResource",
             //     description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skosxl:prefLabel and skosxl:altLabel in the same language"
             // },
-            // {
-            //     name: "Extra whitespace skos label concepts", lexicalizationModel: [SKOS.uri],
-            //     description: "skos:Concept(s) that have some extra whitespace in a SKOS label"
-            // },
-            // {
-            //     name: "Extra whitespace skosxl label concepts", lexicalizationModel: [SKOSXL.uri],
-            //     description: "skos:Concept(s) that have some extra whitespace in a SKOS-XL label"
-            // },
+            {
+                name: "Extra whitespace label resources", model:[], lexicalization: [SKOS.uri, SKOSXL.uri, RDFS.uri],
+                routeName: "/Icv/ExtraSpaceLabelResource", description: "skos:Concept(s) that have some extra whitespace in a SKOS label",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
+            },
             {
                 name: "Multiple preferred labels resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], 
                 routeName: "/Icv/MutliplePrefLabelResource", description: "Resources that have multiple preferred labels in the same language",

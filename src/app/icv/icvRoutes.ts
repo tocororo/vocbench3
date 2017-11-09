@@ -13,6 +13,7 @@ import { NoLabelResourceComponent } from "./noLabelResource/noLabelResourceCompo
 import { OnlyAltLabelResourceComponent } from "./onlyAltLabelResource/onlyAltLabelResourceComponent";
 import { OverlappedLabelComponent } from "./overlappedLabel/overlappedLabelComponent";
 import { NoLangLabelComponent } from "./noLangLabel/noLangLabelComponent";
+import { ExtraSpaceLabelComponent } from "./extraSpaceLabel/extraSpaceLabelComponent";
 import { DanglingXLabelComponent } from "./danglingXLabel/danglingXLabelComponent";
 import { NoMandatoryLabelComponent } from "./noMandatoryLabel/noMandatoryLabelComponent";
 import { MultiplePrefLabelComponent } from "./multiplePrefLabel/multiplePrefLabelComponent";
@@ -35,6 +36,7 @@ export const routes: Routes = [
             { path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+            { path: "ExtraSpaceLabelResource", component: ExtraSpaceLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "NoMandatoryLabelResource", component: NoMandatoryLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "MutliplePrefLabelResource", component: MultiplePrefLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },

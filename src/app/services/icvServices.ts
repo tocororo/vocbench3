@@ -204,6 +204,22 @@ export class IcvServices {
     }
 
     /**
+     * Returns a list of resources that have extra whitespaces in the label
+     * @param rolesArray 
+     */
+    listResourcesWitExtraSpacesInLabel(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesWitExtraSpacesInLabel");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWitExtraSpacesInLabel", params, true).map(
+            stResp => {
+                return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
+            }
+        );
+    }
+
+    /**
      * Returns a list of resources that have a multiple preferred labels in the same language
      */
     listResourcesWithMorePrefLabelSameLang(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
