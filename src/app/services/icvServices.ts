@@ -86,6 +86,32 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params);
     }
 
+    /**
+     * Returns a list of skos:Concept that are linked with other by the relation skos:related and other disjoint with this one
+     */
+    listConceptsRelatedDisjoint(): Observable<ARTURIResource[]> {
+        console.log("[IcvServices] listConceptsRelatedDisjoint");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listConceptsRelatedDisjoint", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns a list of skos:Concept that are linked with other by the relation skos:exactMatch and other disjoint with this one
+     */
+    listConceptsExactMatchDisjoint(): Observable<ARTURIResource[]> {
+        console.log("[IcvServices] listConceptsExactMatchDisjoint");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listConceptsExactMatchDisjoint", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
     //=============================
     //======== LABEL CHECKS ========
     //=============================
@@ -173,6 +199,21 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagForLabel", params, true).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns a list of resources that have a multiple preferred labels in the same language
+     */
+    listResourcesWithMorePrefLabelSameLang(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesWithMorePrefLabelSameLang");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithMorePrefLabelSameLang", params, true).map(
+            stResp => {
+                return Deserializer.createResourceArray(stResp, ["duplicateLang"]);
             }
         );
     }

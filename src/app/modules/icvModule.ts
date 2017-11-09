@@ -11,6 +11,8 @@ import { DanglingConceptComponent } from "../icv/danglingConcept/danglingConcept
 import { NoSchemeConceptComponent } from "../icv/noSchemeConcept/noSchemeConceptComponent";
 import { NoTopConceptSchemeComponent } from "../icv/noTopConceptScheme/noTopConceptSchemeComponent";
 import { TopConceptWithBroaderComponent } from "../icv/topConceptWithBroader/topConceptWithBroaderComponent";
+import { DisjointExactMatchConceptComponent } from "../icv/disjointExactMatchConcept/disjointExactMatchConceptComponent";
+import { DisjointRelatedConceptComponent } from "../icv/disjointRelatedConcept/disjointRelatedConceptComponent";
 import { HierarchicalRedundancyComponent } from "../icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
 import { NoLabelResourceComponent } from "../icv/noLabelResource/noLabelResourceComponent";
 import { OnlyAltLabelResourceComponent } from "../icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
@@ -29,6 +31,7 @@ import { icvRouting } from "../icv/icvRoutes";
     declarations: [
         IcvComponent, IcvListComponent,
         DanglingConceptComponent, NoSchemeConceptComponent, NoTopConceptSchemeComponent, TopConceptWithBroaderComponent,
+        DisjointExactMatchConceptComponent, DisjointRelatedConceptComponent,
         HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
         NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent, MultiplePrefLabelComponent,
         IcvConfigPanelComponent

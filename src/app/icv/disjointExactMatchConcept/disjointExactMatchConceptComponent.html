@@ -1,0 +1,35 @@
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label style="flex: 1;">No language tag label resources</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+        
+        <div class="scrollableContainer">
+            <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                <thead>
+                    <tr>
+                        <th class="text-center">Resource</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let resource of brokenRecordList">
+                        <td class="text-center">
+                            <rdf-resource class="clickable" [resource]="resource" (click)="onResourceClick(resource)"></rdf-resource>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>
