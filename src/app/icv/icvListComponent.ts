@@ -75,14 +75,11 @@ export class IcvListComponent {
                 description: "Resources that have an alternative label but not a preferred in the same language",
                 authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_ONLY_ALT_LABEL
             },
-            // {
-            //     name: "No language tag skos label", lexicalizationModel: [SKOS.uri], routeName: "/Icv/NoLangLabelResource",
-            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS label without language tag"
-            // },
-            // {
-            //     name: "No language tag skosxl label", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/NoLangLabelResource",
-            //     description: "skos:Concept(s) or skos:ConceptScheme(s) that have a SKOS-XL label without language tag"
-            // },
+            {
+                name: "No language tag label resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/NoLangLabelResource",
+                description: "Resources that have a label without language tag",
+                authAction: AuthorizationEvaluator.Actions.ICV_RESOURCE_NO_LANG_TAG_LABEL
+            },
             // {
             //     name: "Same skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
             //     description: "skos:Concept(s) that have the same skos:prefLabel in the same language"

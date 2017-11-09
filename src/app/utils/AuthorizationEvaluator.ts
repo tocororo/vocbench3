@@ -38,6 +38,7 @@ enum Actions {
     ICV_CONCEPT_WITHOUT_SCHEME,
     ICV_DANGLING_CONCEPT,
     ICV_DANGLING_XLABEL,
+    ICV_RESOURCE_NO_LANG_TAG_LABEL,
     ICV_RESOURCE_ONLY_ALT_LABEL,
     ICV_RESOURCE_WITHOUT_MANDATORY_LABEL,
     ICV_RESOURCE_WITHOUT_PREFLABEL, //valid also for resource without xl:prefLabel
@@ -144,6 +145,7 @@ export class AuthorizationEvaluator {
         [Actions.ICV_CONCEPT_WITHOUT_SCHEME] : 'auth(rdf(concept), "R").',
         [Actions.ICV_DANGLING_CONCEPT] : 'auth(rdf(concept), "R").',
         [Actions.ICV_DANGLING_XLABEL] : 'auth(rdf(xLabel), "R").',
+        [Actions.ICV_RESOURCE_NO_LANG_TAG_LABEL] : 'auth(rdf(resource), "R").',
         [Actions.ICV_RESOURCE_ONLY_ALT_LABEL] : 'auth(rdf(resource), "R").',
         [Actions.ICV_RESOURCE_WITHOUT_MANDATORY_LABEL] : 'auth(rdf(resource), "R").',
         [Actions.ICV_RESOURCE_WITHOUT_PREFLABEL] : 'auth(rdf(resource), "R").',

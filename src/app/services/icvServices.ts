@@ -32,16 +32,6 @@ export class IcvServices {
     }
 
     /**
-     * Detects cyclic hierarchical relations. Returns a list of records top, n1, n2 where 
-	 * top is likely the cause of the cycle, n1 and n2 are vertex that belong to the cycle
-     */
-    // listCyclicConcepts() {
-    //     console.log("[IcvServices] listCyclicConcepts");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listCyclicConcepts", params);
-    // }
-
-    /**
      * Returns a list of skos:ConceptScheme that have no top concept
      */
     listConceptSchemesWithNoTopConcept(): Observable<ARTURIResource[]> {
@@ -99,26 +89,6 @@ export class IcvServices {
     //=============================
     //======== LABEL CHECKS ========
     //=============================
-
-    /**
-     * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skos:prefLabel
-	 * in the same language
-     */
-    // listConceptsWithSameSKOSPrefLabel() {
-    //     console.log("[IcvServices] listConceptsWithSameSKOSPrefLabel");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSPrefLabel", params);
-    // }
-
-    // /**
-    //  * Returns a list of records concept1-concept2-label-lang, of concepts that have the same skosxl:prefLabel
-	//  * in the same language
-    //  */
-    // listConceptsWithSameSKOSXLPrefLabel() {
-    //     console.log("[IcvServices] listConceptsWithSameSKOSXLPrefLabel");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithSameSKOSXLPrefLabel", params);
-    // }
 
     /**
      * Returns a list of records resource-lang, of concept or conceptScheme that have a skos:altLabel for a lang
@@ -192,64 +162,17 @@ export class IcvServices {
         );
     }
 
-    // /**
-    //  * Returns a list of pairs concept-lang of that concept that have more skos:prefLabel in a same language
-    //  */
-    // listConceptsWithMultipleSKOSPrefLabel() {
-    //     console.log("[IcvServices] listConceptsWithMultipleSKOSPrefLabel");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSPrefLabel", params);
-    // }
-
-    // /**
-    //  * Returns a list of records concept-lang of that concept that have more skosxl:prefLabel in a same language
-    //  */
-    // listConceptsWithMultipleSKOSXLPrefLabel() {
-    //     console.log("[IcvServices] listConceptsWithMultipleSKOSXLPrefLabel");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithMultipleSKOSXLPrefLabel", params);
-    // }
-
     /**
-     * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
-     * skos label without languageTag
+     * Returns a list of resources that have a label without languageTag
      */
-    listResourcesWithNoLanguageTagSKOSLabel() {
-        console.log("[IcvServices] listResourcesWithNoLanguageTagSKOSLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSLabel", params).map(
+    listResourcesWithNoLanguageTagForLabel(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesWithNoLanguageTagForLabel");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagForLabel", params, true).map(
             stResp => {
-                var records: any[] = [];
-                var recordElemColl = stResp.getElementsByTagName("record");
-                for (var i = 0; i < recordElemColl.length; i++) {
-                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
-                    var predicate: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("predicate")[0].children[0]);
-                    var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i].getElementsByTagName("object")[0].children[0]);
-                    records.push({ resource: resource, predicate: predicate, label: label });
-                }
-                return records;
-            }
-        );
-    }
-
-    /**
-     * Returns a list of records resource-predicate-label of concepts and conceptSchemes that have a
-     * skosxl label without languageTag
-     */
-    listResourcesWithNoLanguageTagSKOSXLLabel() {
-        console.log("[IcvServices] listResourcesWithNoLanguageTagSKOSXLLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagSKOSXLLabel", params).map(
-            stResp => {
-                var records: any[] = [];
-                var recordElemColl = stResp.getElementsByTagName("record");
-                for (var i = 0; i < recordElemColl.length; i++) {
-                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("resource")[0].children[0]);
-                    var predicate: ARTURIResource = Deserializer.createURI(recordElemColl[i].getElementsByTagName("predicate")[0].children[0]);
-                    var label: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("object")[0].children[0]);
-                    records.push({ resource: resource, predicate: predicate, label: label });
-                }
-                return records;
+                return Deserializer.createResourceArray(stResp);
             }
         );
     }
@@ -296,28 +219,6 @@ export class IcvServices {
             }
         );
     }
-
-    // /**
-    //  * Returns a list of records concept-labelPred-label-lang. A record like that means that
-    //  * that the concept ?concept has the skos label ?label in language ?lang for the predicates ?labelPred that
-    //  * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
-    //  */
-    // listConceptsWithExtraWhitespaceInSKOSLabel() {
-    //     console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSLabel");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSLabel", params);
-    // }
-
-    // /**
-    //  * Returns a list of records concept-labelPred-label-lang. A record like that means that
-    //  * that the concept ?concept has the skosxl label ?label in language ?lang for the predicates ?labelPred that
-    //  * contains some extra whitespace (at the begin, at the end or multiple whitespace between two words)
-    //  */
-    // listConceptsWithExtraWhitespaceInSKOSXLLabel() {
-    //     console.log("[IcvServices] listConceptsWithExtraWhitespaceInSKOSXLLabel");
-    //     var params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "listConceptsWithExtraWhitespaceInSKOSXLLabel", params);
-    // }
 
     /**
      * Returns a list of dangling skosxl:Label, namely the skosxl:Label not linked with any concept

@@ -1,13 +1,10 @@
 import { Component } from "@angular/core";
-import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { ARTResource, ARTURIResource, ARTLiteral } from "../../models/ARTResources";
-import { SKOS, SKOSXL } from "../../models/Vocabulary";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
-import { PropertyServices } from "../../services/propertyServices";
-import { SkosServices } from "../../services/skosServices";
-import { SkosxlServices } from "../../services/skosxlServices";
 
 @Component({
     selector: "no-lang-label-component",
@@ -16,149 +13,37 @@ import { SkosxlServices } from "../../services/skosxlServices";
 })
 export class NoLangLabelComponent {
 
-    private brokenRecordList: Array<any>; //{resource: ARTURIResource, predicate: ARTURIResource, label: ARTLiteral(SKOS)/ARTResource(XL)}
-    private lexicalizationModel: string;
+    private rolesToCheck: RDFResourceRolesEnum[];
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private propService: PropertyServices, private creationModals: CreationModalServices) { }
+    private brokenRecordList: ARTResource[];
 
-    ngOnInit() {
-        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
+    constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+
+    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
+        this.rolesToCheck = roles;
     }
 
     /**
      * Run the check
      */
     runIcv() {
-        //TODO check when service will be refactored
-        if (this.lexicalizationModel == SKOS.uri) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-            this.icvService.listResourcesWithNoLanguageTagSKOSLabel().subscribe(
-                records => {
-                    this.brokenRecordList = records;
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-                },
-                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
-            );
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-            this.icvService.listResourcesWithNoLanguageTagSKOSXLLabel().subscribe(
-                records => {
-                    this.brokenRecordList = records;
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-                },
-                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
-            );
-        } else { //OWL 
-            //TODO listResourcesWithNoLanguageRDFSLabel and should look for classes and individuals
-            //individuals are also concept, so the service would return also all the cocnept with skos(xl) labels
-            //what should I do?
+        if (this.rolesToCheck.length == 0) {
+            this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
+            return;
         }
+
+        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
+        this.icvService.listResourcesWithNoLanguageTagForLabel(this.rolesToCheck).subscribe(
+            resources => {
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
+                this.brokenRecordList = resources;
+            }
+        );
+    
     }
 
-    /**
-     * Fixes resource by setting a language tag to the label. In order to do that, first removes the current
-     * label, then adds a new one with language.
-     */
-    setLanguage(record: any) {
-        if (this.lexicalizationModel == SKOS.uri) {
-            let label: ARTLiteral = <ARTLiteral>record.label;
-            this.creationModals.newPlainLiteral("Set language", label.getValue(), true).then(
-                (literal: any) => {
-                    if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
-                        this.skosService.removePrefLabel(record.resource, label).subscribe(
-                            stResp => {
-                                this.skosService.setPrefLabel(record.resource, literal).subscribe(
-                                    stResp => {
-                                        this.runIcv();
-                                    }
-                                )
-                            }
-                        );
-                    } else if (record.predicate.getURI() == SKOS.altLabel.getURI()) {
-                        this.skosService.removeAltLabel(record.resource, label).subscribe(
-                            stResp => {
-                                this.skosService.addAltLabel(record.resource, literal).subscribe(
-                                    stResp => {
-                                        this.runIcv();
-                                    }
-                                )
-                            }
-                        );
-                    } else if (record.predicate.getURI() == SKOS.hiddenLabel.getURI()) {
-                        this.skosService.removeHiddenLabel(record.resource, label).subscribe(
-                            stResp => {
-                                this.skosService.addHiddenLabel(record.resource, literal).subscribe(
-                                    stResp => {
-                                        this.runIcv();
-                                    }
-                                )
-                            }
-                        );
-                    }
-                },
-                () => { }
-            );
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            let label: ARTResource = <ARTResource>record.label;
-            this.creationModals.newPlainLiteral("Set language", label.getShow(), true).then(
-                (literal: any) => {
-                    this.skosxlService.changeLabelInfo(label, (<ARTLiteral>literal)).subscribe(
-                        stResp => {
-                            this.runIcv();
-                        }
-                    );
-                },
-                () => { }
-            );
-        }
-    }
-
-    /**
-     * Fixes resource by removing the label.
-     */
-    removeLabel(record: any) {
-        if (this.lexicalizationModel == SKOS.uri) {
-            if (record.predicate.getURI() == SKOS.prefLabel.getURI()) {
-                this.skosService.removePrefLabel(record.resource, record.label).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                );
-            } else if (record.predicate.getURI() == SKOS.altLabel.getURI()) {
-                this.skosService.removeAltLabel(record.resource, record.label).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                );
-            } else if (record.predicate.getURI() == SKOS.hiddenLabel.getURI()) {
-                this.skosService.removeHiddenLabel(record.resource, record.label).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                );
-            }
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            if (record.predicate.getURI() == SKOSXL.prefLabel.getURI()) {
-                this.skosxlService.removePrefLabel(record.resource, (<ARTResource>record.label)).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                );
-            } else if (record.predicate.getURI() == SKOSXL.altLabel.getURI()) {
-                this.skosxlService.removeAltLabel(record.resource, (<ARTResource>record.label)).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                );
-            } else if (record.predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
-                this.skosxlService.removeHiddenLabel(record.resource, (<ARTResource>record.label)).subscribe(
-                    stResp => {
-                        this.runIcv();
-                    }
-                );
-            }
-        }
+    private onResourceClick(res: ARTResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }

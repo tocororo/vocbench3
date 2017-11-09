@@ -1,64 +1,44 @@
 <div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
-        <label *ngIf="ontoType == 'SKOS' || ontoType == 'SKOS-XL'" style="flex: 1;">Concepts which have a label without language</label>
-        <label *ngIf="ontoType == 'OWL'" style="flex: 1;">Resources which have a label without language</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
-    </div>
-    <div class="panel-body vbox">
-        
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i *ngIf="ontoType == 'SKOS'">
-                skos:Concept(s) or skos:ConceptScheme(s) that have a skos:prefLabel or skos:altLabel or skos:hiddenLabel without language
-            </i>
-            <i *ngIf="ontoType == 'SKOS-XL'">
-                skos:Concept(s) or skos:ConceptScheme(s) that have a skosxl:prefLabel or skosxl:altLabel or skosxl:hiddenLabel without language
-            </i>
-            <i *ngIf="ontoType == 'OWL'">
-                Classes or instances that have a rdfs:label without language
-            </i>
+        <div class="panel-heading">
+            <label style="flex: 1;">No language tag label resources</label>
+            <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
         </div>
-
-        <div *ngIf="!brokenRecordList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
-        </div>
-        <div *ngIf="brokenRecordList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
-                <thead>
-                    <tr>
-                        <th class="text-center">Resource</th>
-                        <th class="text-center">Lexicalization prop.</th>
-                        <th class="text-center">Label</th>
-                        <th class="text-center" style="width: 1%">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let record of brokenRecordList">
-                        <td>
-                            <rdf-resource [resource]="record.resource"></rdf-resource>
-                        </td>
-                        <td>
-                            <rdf-resource [resource]="record.predicate"></rdf-resource>
-                        </td>
-                        <td>
-                            <rdf-resource [resource]="record.label"></rdf-resource>
-                        </td>
-                        <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="setLanguage(record)">Set language</button>
-                            <button class="btn btn-xs btn-default" (click)="removeLabel(record)">Remove label</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <div class="panel-body vbox">
+            
+            <icv-config-panel checkRoles="true" (rolesChange)="onRolesChanged($event)">
+            </icv-config-panel>
     
-    <div id="blockDivIcv" class="blockingDiv" style="display:none">
-        <div class="loadingDiv">
-            <div>
-                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            <div class="scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Resource</th>
+                            <!-- <th class="text-center">Missing language(s) label</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let resource of brokenRecordList">
+                            <td class="text-center">
+                                <rdf-resource class="clickable" [resource]="resource" (click)="onResourceClick(resource)"></rdf-resource>
+                            </td>
+                            <!-- <td class="text-center">
+                                <ng-template ngFor let-lang [ngForOf]="record.langs">
+                                    <lang-item [language]="lang"></lang-item>
+                                </ng-template>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+        <div id="blockDivIcv" class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+                </div>
             </div>
         </div>
+        
     </div>
-    
-</div>
