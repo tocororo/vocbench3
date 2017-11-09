@@ -13,19 +13,17 @@
                     <thead>
                         <tr>
                             <th class="text-center">Resource</th>
-                            <!-- <th class="text-center">Missing language(s) label</th> -->
+                            <th class="text-center">Label</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let resource of brokenRecordList">
+                        <tr *ngFor="let record of brokenRecordList">
                             <td class="text-center">
-                                <rdf-resource class="clickable" [resource]="resource" (click)="onResourceClick(resource)"></rdf-resource>
+                                <rdf-resource class="clickable" [resource]="record.resource" (click)="onResourceClick(record.resource)"></rdf-resource>
                             </td>
-                            <!-- <td class="text-center">
-                                <ng-template ngFor let-lang [ngForOf]="record.langs">
-                                    <lang-item [language]="lang"></lang-item>
-                                </ng-template>
-                            </td> -->
+                            <td class="text-center">
+                                <rdf-resource [ngClass]="{ clickable : isResource(record.label) }" [resource]="record.label" (click)="onResourceClick(record.label)"></rdf-resource>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -1,10 +1,12 @@
 import { Component } from "@angular/core";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral } from "../../models/ARTResources";
+import { XmlSchema } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
+import { isRegExp } from "util";
 
 @Component({
     selector: "no-lang-label-component",
@@ -15,7 +17,7 @@ export class NoLangLabelComponent {
 
     private rolesToCheck: RDFResourceRolesEnum[];
 
-    private brokenRecordList: ARTResource[];
+    private brokenRecordList: { resource: ARTResource, label: ARTLiteral|ARTResource }[];
 
     constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
@@ -36,14 +38,35 @@ export class NoLangLabelComponent {
         this.icvService.listResourcesWithNoLanguageTagForLabel(this.rolesToCheck).subscribe(
             resources => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-                this.brokenRecordList = resources;
+                this.brokenRecordList = [];
+                resources.forEach(r => {
+                    let xlabelAttr = r.getAdditionalProperty("xlabel");
+                    let labelAttr = r.getAdditionalProperty("label");
+                    if (xlabelAttr != null) {
+                        this.brokenRecordList.push({
+                            resource: r, 
+                            label: new ARTURIResource(xlabelAttr, labelAttr, RDFResourceRolesEnum.xLabel)
+                        });
+                    } else {
+                        this.brokenRecordList.push({
+                            resource: r, 
+                            label: new ARTLiteral(labelAttr, XmlSchema.string.getURI())
+                        });
+                    }
+                });
             }
         );
     
     }
 
+    private isResource(res: ARTNode) {
+        return res.isResource();
+    }
+
     private onResourceClick(res: ARTResource) {
-        this.sharedModals.openResourceView(res, false);
+        if (this.isResource(res)) {
+            this.sharedModals.openResourceView(res, false);
+        }
     }
 
 }

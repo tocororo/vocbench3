@@ -89,8 +89,8 @@ export class IcvListComponent {
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
-                name: "No language tag label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/NoLangLabelResource",
-                description: "Resources that have a label without language tag",
+                name: "No language tag label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri, RDFS.uri],
+                routeName: "/Icv/NoLangLabelResource", description: "Resources that have a label without language tag",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             // {

@@ -198,7 +198,7 @@ export class IcvServices {
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagForLabel", params, true).map(
             stResp => {
-                return Deserializer.createResourceArray(stResp);
+                return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
             }
         );
     }
