@@ -120,7 +120,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
 
                     //ask the user to choose
                     this.basicModals.selectCustomForm("Select a range type", rangeOptions).then(
-                        (selectedCF: any) => {
+                        (selectedCF: CustomForm) => {
                             //check if selected range is one of the customs
                             for (var i = 0; i < customForms.length; i++) {
                                 if ((<CustomForm>selectedCF).getId() == customForms[i].getId()) {
@@ -128,11 +128,12 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                                     return;
                                 }
                             }
-                            if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.resource) {
-                                this.enrichWithResource(predicate, ranges.rangeCollection.resources);
-                            } else if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.typedLiteral) {
+                            if (selectedCF.getId() == RDFTypesEnum.resource) {
+                                let resourceTypes: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                                this.enrichWithResource(predicate, resourceTypes);
+                            } else if (selectedCF.getId() == RDFTypesEnum.typedLiteral) {
                                 this.enrichWithTypedLiteral(predicate);
-                            } else if ((<CustomForm>selectedCF).getId() == RDFTypesEnum.plainLiteral) {
+                            } else if (selectedCF.getId() == RDFTypesEnum.plainLiteral) {
                                 this.enrichWithPlainLiteral(predicate);
                             }
                         },
