@@ -1,42 +1,42 @@
 <div class="panel panel-default vbox" style="position: relative">
-        <div class="panel-heading">
-            <label style="flex: 1;">Extra whitespace label resources</label>
-            <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
-        </div>
-        <div class="panel-body vbox">
-            
-            <icv-config-panel checkRoles="true" (rolesChange)="onRolesChanged($event)">
-            </icv-config-panel>
-    
-            <div class="scrollableContainer">
-                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Resource</th>
-                            <th class="text-center">Label</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let record of brokenRecordList">
-                            <td class="text-center">
-                                <rdf-resource class="clickable" [resource]="record.resource" (click)="onResourceClick(record.resource)"></rdf-resource>
-                            </td>
-                            <td class="text-center">
-                                <rdf-resource [ngClass]="{ clickable : isResource(record.label) }" [resource]="record.label" (click)="onResourceClick(record.label)"></rdf-resource>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-        </div>
+    <div class="panel-heading">
+        <label style="flex: 1;">Extra whitespace label resources</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
         
-        <div id="blockDivIcv" class="blockingDiv" style="display:none">
-            <div class="loadingDiv">
-                <div>
-                    <p>Loading...</p><img src="../../../assets/images/loading.gif" />
-                </div>
-            </div>
+        <icv-config-panel checkRoles="true" (rolesChange)="onRolesChanged($event)">
+        </icv-config-panel>
+
+        <div class="scrollableContainer">
+            <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                <thead>
+                    <tr>
+                        <th class="text-center">Resource</th>
+                        <th class="text-center">Label</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let record of brokenRecordList">
+                        <td class="text-center">
+                            <rdf-resource class="clickable" [resource]="record.resource" (click)="onResourceClick(record.resource)"></rdf-resource>
+                        </td>
+                        <td class="text-center">
+                            <rdf-resource [ngClass]="{ clickable : isResource(record.label) }" [resource]="record.label" (click)="onResourceClick(record.label)"></rdf-resource>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         
     </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

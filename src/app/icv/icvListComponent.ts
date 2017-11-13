@@ -74,7 +74,7 @@ export class IcvListComponent {
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
-                name: "No mandatory label resources", model: [], lexicalization: [SKOSXL.uri, SKOS.uri, RDFS.uri], 
+                name: "No mandatory label resources", model: [], lexicalization: [], 
                 routeName: "/Icv/NoMandatoryLabelResource",
                 description: "Resources that don't have any label in the given languages", 
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
@@ -89,7 +89,7 @@ export class IcvListComponent {
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
-                name: "No language tag label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri, RDFS.uri],
+                name: "No language tag label resources", model: [], lexicalization: [],
                 routeName: "/Icv/NoLangLabelResource", description: "Resources that have a label without language tag",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
@@ -101,16 +101,13 @@ export class IcvListComponent {
             //     name: "Same skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
             //     description: "skos:Concept(s) that have the same skosxl:prefLabel in the same language"
             // },
-            // {
-            //     name: "Overlapped skos label resources", lexicalizationModel: [SKOS.uri], routeName: "/Icv/OverlappedLabelResource",
-            //     description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skos:prefLabel and skos:altLabel in the same language"
-            // },
-            // {
-            //     name: "Overlapped skosxl label resources", lexicalizationModel: [SKOSXL.uri], routeName: "/Icv/OverlappedLabelResource",
-            //     description: "skos:Concept(s) and skos:ConceptScheme(s) that have the same value as skosxl:prefLabel and skosxl:altLabel in the same language"
-            // },
             {
-                name: "Extra whitespace label resources", model:[], lexicalization: [SKOS.uri, SKOSXL.uri, RDFS.uri],
+                name: "Overlapped skos label resources", model: [], lexicalization: [], routeName: "/Icv/OverlappedLabelResource",
+                description: "Resources that have the same label in the same language",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
+            },
+            {
+                name: "Extra whitespace label resources", model:[], lexicalization: [],
                 routeName: "/Icv/ExtraSpaceLabelResource", description: "skos:Concept(s) that have some extra whitespace in a SKOS label",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },

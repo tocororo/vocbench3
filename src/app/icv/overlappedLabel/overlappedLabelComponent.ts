@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
-import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute } from "../../models/ARTResources";
-import { SKOS, SKOSXL } from "../../models/Vocabulary";
-import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral, ResAttribute } from "../../models/ARTResources";
+import { XmlSchema } from "../../models/Vocabulary";
 import { UIUtils } from "../../utils/UIUtils";
+import { Deserializer } from "../../utils/Deserializer";
 import { IcvServices } from "../../services/icvServices";
-import { SkosServices } from "../../services/skosServices";
-import { SkosxlServices } from "../../services/skosxlServices";
+import { literal } from "@angular/compiler/src/output/output_ast";
 
 @Component({
     selector: "overlapped-label-component",
@@ -15,148 +15,74 @@ import { SkosxlServices } from "../../services/skosxlServices";
 })
 export class OverlappedLabelComponent {
 
-    private brokenRecordList: Array<any>; //if SKOS {resource: ARTURIResource, label: ARTLiteral}
-            //if SKOSXL {resource: ARTURIResource, prefLabel: ARTResource, altLabel: ARTResource}
-    private lexicalizationModel: string;
+    private rolesToCheck: RDFResourceRolesEnum[];
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private creationModals: CreationModalServices) { }
+    private brokenRecordList: { resources: ARTResource[], label: ARTLiteral|ARTResource }[];
 
-    ngOnInit() {
-        this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
+    constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+
+    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
+        this.rolesToCheck = roles;
     }
 
     /**
      * Run the check
      */
     runIcv() {
-        if (this.lexicalizationModel == SKOS.uri) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-            this.icvService.listResourcesWithOverlappedSKOSLabel().subscribe(
-                brokenRecords => {
-                    this.brokenRecordList = brokenRecords;
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-                },
-                err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
-            );
-        } else if (this.lexicalizationModel == SKOSXL.uri) {
-            UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-            this.icvService.listResourcesWithOverlappedSKOSXLLabel().subscribe(
-                brokenRecords => {
-                    this.brokenRecordList = brokenRecords;
-                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-                }
-            );
+        if (this.rolesToCheck.length == 0) {
+            this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
+            return;
         }
-    }
 
-    /**
-     * Fixes by changing prefLabel
-     */
-    changePrefLabel(record: any) {
-        this.creationModals.newPlainLiteral("Change preferred label", (<ARTLiteral>record.label).getValue(), false,
-            (<ARTLiteral>record.label).getLang(), true).then(
-            (literal: any) => {
-                if (this.lexicalizationModel == SKOS.uri) {
-                    this.skosService.removePrefLabel(record.resource, record.label).subscribe(
-                        stResp => {
-                            this.skosService.setPrefLabel(record.resource, literal).subscribe(
-                                stResp => {
-                                    this.runIcv();
-                                }
-                            )
+        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
+        this.icvService.listResourcesWithOverlappedLabels(this.rolesToCheck).subscribe(
+            resources => {
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
+                this.brokenRecordList = [];
+                resources.forEach(r => {
+                    let xlabelAttr = r.getAdditionalProperty("xlabel");
+                    let labelRes: ARTLiteral = Deserializer.createLiteral(r.getAdditionalProperty("label"));
+                    //looks for the record with the same label
+                    let sameLabelRecord: { resources: ARTResource[], label: ARTLiteral|ARTResource };
+                    for (var i = 0; i < this.brokenRecordList.length; i++) {
+                        console.log("comparing labels", this.brokenRecordList[i].label.getShow(), labelRes.getShow());
+                        if (this.brokenRecordList[i].label.getShow() == labelRes.getShow()) {
+                            sameLabelRecord = this.brokenRecordList[i];
+                            break;
                         }
-                    )
-                } else { //SKOS-XL
-                    //first get the xlabel to change
-                    this.skosxlService.getPrefLabel(record.resource, (<ARTLiteral>literal).getLang()).subscribe(
-                        xlabel => {
-                            //then update info
-                            this.skosxlService.changeLabelInfo(xlabel, (<ARTLiteral>literal)).subscribe(
-                                stResp => {
-                                    this.runIcv();
-                                }
-                            )
+                    }
+                    //record found => add the resource to the resources of the record
+                    if (sameLabelRecord != null) {
+                        sameLabelRecord.resources.push(r);
+                    } else { //record not found => create it
+                        //distinguishes skos and skosxl
+                        if (xlabelAttr != null) {
+                            let xLabel: ARTURIResource = new ARTURIResource(xlabelAttr, labelRes.getShow(), RDFResourceRolesEnum.xLabel);
+                            xLabel.setAdditionalProperty(ResAttribute.LANG, labelRes.getLang());
+                            this.brokenRecordList.push({
+                                resources: [r], 
+                                label: xLabel
+                            });
+                        } else {
+                            this.brokenRecordList.push({
+                                resources: [r], 
+                                label: labelRes
+                            });
                         }
-                    );
-                }
-            },
-            () => { }
+                    }
+                });
+            }
         );
+    
     }
 
-    /**
-     * Fixes by removing prefLabel
-     */
-    removePrefLabel(record: any) {
-        if (this.lexicalizationModel == SKOS.uri) {
-            this.skosService.removePrefLabel(record.resource, record.label).subscribe(
-                stReso => {
-                    this.runIcv();
-                }
-            );
-        } else { //SKOS-XL
-            this.skosxlService.removePrefLabel(record.resource, (<ARTResource>record.prefLabel)).subscribe(
-                stReso => {
-                    this.runIcv();
-                }
-            );
-        }
+    private isResource(res: ARTNode) {
+        return res.isResource();
     }
 
-    /**
-     * Fixes by changing altLabel
-     */
-    changeAltLabel(record: any) {
-        var literalForm: string;
-        var lang: string;
-        if (this.lexicalizationModel == SKOS.uri) {
-            literalForm = (<ARTLiteral>record.label).getValue();
-            lang = (<ARTLiteral>record.label).getLang();
-        } else {
-            literalForm = (<ARTResource>record.altLabel).getShow();
-            lang = (<ARTResource>record.altLabel).getAdditionalProperty(ResAttribute.LANG);
-        }
-        this.creationModals.newPlainLiteral("Change preferred label", literalForm, false, lang, true).then(
-            (literal: any) => {
-                if (this.lexicalizationModel == SKOS.uri) {
-                    this.skosService.removeAltLabel(record.resource, <ARTLiteral>record.label).subscribe(
-                        stReso => {
-                            this.skosService.addAltLabel(record.resource, literal).subscribe(
-                                stResp => {
-                                    this.runIcv();
-                                }
-                            );
-                        }
-                    );
-                } else { //SKOS-XL
-                    this.skosxlService.changeLabelInfo((<ARTResource>record.altLabel), (<ARTLiteral>literal)).subscribe(
-                        stResp => {
-                            this.runIcv();
-                        }
-                    );
-                }
-            },
-            () => { }
-        );
-    }
-
-    /**
-     * Fixes by removing altLabel
-     */
-    removeAltLabel(record: any) {
-        if (this.lexicalizationModel == SKOS.uri) {
-            this.skosService.removeAltLabel(record.resource, <ARTLiteral>record.label).subscribe(
-                stReso => {
-                    this.runIcv();
-                }
-            );
-        } else { //SKOS-XL
-            this.skosxlService.removeAltLabel(record.resource, (<ARTResource>record.altLabel)).subscribe(
-                stReso => {
-                    this.runIcv();
-                }
-            );
+    private onResourceClick(res: ARTResource) {
+        if (this.isResource(res)) {
+            this.sharedModals.openResourceView(res, false);
         }
     }
 

@@ -309,6 +309,22 @@ export class IcvServices {
     }
 
     /**
+     * Returns a list of resources that have the same preferred or alt label of another resource
+     * @param rolesArray 
+     */
+    listResourcesWithOverlappedLabels(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesWithOverlappedLabels");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedLabels", params, true).map(
+            stResp => {
+                return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
+            }
+        );
+    }
+
+    /**
      * Returns a list of resources with alternative label but not preferred label in the same language
      * @param rolesArray 
      */
