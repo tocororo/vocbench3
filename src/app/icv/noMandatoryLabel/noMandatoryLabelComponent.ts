@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
@@ -11,36 +12,20 @@ import { IcvServices } from "../../services/icvServices";
     templateUrl: "./noMandatoryLabelComponent.html",
     host: { class: "pageComponent" }
 })
-export class NoMandatoryLabelComponent {
+export class NoMandatoryLabelComponent extends AbstractIcvComponent {
 
-    private rolesToCheck: RDFResourceRolesEnum[];
-    private langsToCheck: string[];
-
+    checkLanguages = true;
+    checkRoles = true;
     private brokenRecordList: { resource: ARTResource, langs: Language[] }[];
 
-    constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
-
-    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
-        this.rolesToCheck = roles;
-    }
-
-    private onLangsChanged(langs: string[]) {
-        this.langsToCheck = langs;
+    constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(basicModals, sharedModals);
     }
 
     /**
      * Run the check
      */
-    runIcv() {
-        if (this.rolesToCheck.length == 0) {
-            this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
-            return;
-        }
-        if (this.langsToCheck.length == 0) {
-            this.basicModals.alert("Missing language", "You need to select at least a language in order to run the ICV", "warning");
-            return;
-        }
-
+    executeIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listResourcesNoLexicalization(this.rolesToCheck, this.langsToCheck).subscribe(
             resources => {
@@ -50,12 +35,10 @@ export class NoMandatoryLabelComponent {
                     let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("missingLang").split(","));
                     this.brokenRecordList.push({ resource: r, langs: langs });
                 })
+                this.initPaging(this.brokenRecordList);
             }
         );
     }
 
-    private onResourceClick(res: ARTResource) {
-        this.sharedModals.openResourceView(res, false);
-    }
 
 }

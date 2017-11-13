@@ -79,10 +79,6 @@ export class IcvListComponent {
                 description: "Resources that don't have any label in the given languages", 
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
-            // {
-            //     name: "No rdfs:label resource", lexicalizationModel: [RDFS.uri], // routeName: "/Icv/NoLabelResource", 
-            //     description: "Classes or instances that have no rdfs:label"
-            // },
             {
                 name: "Only alternative label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/OnlyAltLabelResource",
                 description: "Resources that have an alternative label but not a preferred in the same language",
@@ -93,22 +89,14 @@ export class IcvListComponent {
                 routeName: "/Icv/NoLangLabelResource", description: "Resources that have a label without language tag",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
-            // {
-            //     name: "Same skos:prefLabel concepts", lexicalizationModel: [SKOS.uri],
-            //     description: "skos:Concept(s) that have the same skos:prefLabel in the same language"
-            // },
-            // {
-            //     name: "Same skosxl:prefLabel concepts", lexicalizationModel: [SKOSXL.uri],
-            //     description: "skos:Concept(s) that have the same skosxl:prefLabel in the same language"
-            // },
             {
-                name: "Overlapped skos label resources", model: [], lexicalization: [], routeName: "/Icv/OverlappedLabelResource",
+                name: "Overlapped label resources", model: [], lexicalization: [], routeName: "/Icv/OverlappedLabelResource",
                 description: "Resources that have the same label in the same language",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
                 name: "Extra whitespace label resources", model:[], lexicalization: [],
-                routeName: "/Icv/ExtraSpaceLabelResource", description: "skos:Concept(s) that have some extra whitespace in a SKOS label",
+                routeName: "/Icv/ExtraSpaceLabelResource", description: "Resources that have some extra whitespace in a label",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {

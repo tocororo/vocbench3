@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ARTResource, ARTURIResource, ARTNode, RDFResourceRolesEnum, ARTLiteral, ResAttribute } from "../../models/ARTResources";
@@ -13,27 +14,20 @@ import { literal } from "@angular/compiler/src/output/output_ast";
     templateUrl: "./overlappedLabelComponent.html",
     host: { class: "pageComponent" }
 })
-export class OverlappedLabelComponent {
+export class OverlappedLabelComponent extends AbstractIcvComponent {
 
-    private rolesToCheck: RDFResourceRolesEnum[];
-
+    checkLanguages = false;
+    checkRoles = true;
     private brokenRecordList: { resources: ARTResource[], label: ARTLiteral|ARTResource }[];
 
-    constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
-
-    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
-        this.rolesToCheck = roles;
+    constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(basicModals, sharedModals);
     }
 
     /**
      * Run the check
      */
-    runIcv() {
-        if (this.rolesToCheck.length == 0) {
-            this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
-            return;
-        }
-
+    executeIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listResourcesWithOverlappedLabels(this.rolesToCheck).subscribe(
             resources => {
@@ -71,19 +65,10 @@ export class OverlappedLabelComponent {
                         }
                     }
                 });
+                this.initPaging(this.brokenRecordList);
             }
         );
     
-    }
-
-    private isResource(res: ARTNode) {
-        return res.isResource();
-    }
-
-    private onResourceClick(res: ARTResource) {
-        if (this.isResource(res)) {
-            this.sharedModals.openResourceView(res, false);
-        }
     }
 
 }

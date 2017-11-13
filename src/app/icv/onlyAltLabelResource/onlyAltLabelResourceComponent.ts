@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { Language, Languages } from "../../models/LanguagesCountries";
@@ -14,27 +15,20 @@ import { IcvServices } from "../../services/icvServices";
     templateUrl: "./onlyAltLabelResourceComponent.html",
     host: { class: "pageComponent" }
 })
-export class OnlyAltLabelResourceComponent {
+export class OnlyAltLabelResourceComponent extends AbstractIcvComponent {
 
-    private rolesToCheck: RDFResourceRolesEnum[];
-
+    checkLanguages = false;
+    checkRoles = true;
     private brokenRecordList: { resource: ARTResource, langs: Language[] }[];
 
-    constructor(private icvService: IcvServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
-
-    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
-        this.rolesToCheck = roles;
+    constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(basicModals, sharedModals);
     }
 
     /**
      * Run the check
      */
-    runIcv() {
-        if (this.rolesToCheck.length == 0) {
-            this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
-            return;
-        }
-
+    executeIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listResourcesWithAltNoPrefLabel(this.rolesToCheck).subscribe(
             resources => {
@@ -44,13 +38,10 @@ export class OnlyAltLabelResourceComponent {
                 resources.forEach(r => {
                     let langs: Language[] = Languages.fromTagsToLanguages(r.getAdditionalProperty("missingLang").split(","));
                     this.brokenRecordList.push({ resource: r, langs: langs });
-                })
+                });
+                this.initPaging(this.brokenRecordList);
             }
         );
-    }
-
-    private onResourceClick(res: ARTResource) {
-        this.sharedModals.openResourceView(res, false);
     }
 
 }

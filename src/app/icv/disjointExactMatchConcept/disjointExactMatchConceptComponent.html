@@ -5,21 +5,39 @@
     </div>
     <div class="panel-body vbox">
         
-        <div class="scrollableContainer">
-            <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
-                <thead>
-                    <tr>
-                        <th class="text-center">Resource</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let resource of brokenRecordList">
-                        <td class="text-center">
-                            <rdf-resource class="clickable" [resource]="resource" (click)="onResourceClick(resource)"></rdf-resource>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="panel panel-default vbox">
+            <div class="panel-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Resource</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-template ngFor let-record [ngForOf]="brokenRecordList" let-i="index">
+                            <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record" (click)="onResourceClick(record)"></rdf-resource>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
+                <div class="btn-group btn-group-xs pull-right" role="group">
+                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{page+1}} of {{pageCount}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         
     </div>

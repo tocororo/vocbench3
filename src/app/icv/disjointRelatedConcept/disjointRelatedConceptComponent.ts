@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ARTResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
@@ -10,28 +12,30 @@ import { IcvServices } from "../../services/icvServices";
     templateUrl: "./disjointRelatedConceptComponent.html",
     host: { class: "pageComponent" }
 })
-export class DisjointRelatedConceptComponent {
+export class DisjointRelatedConceptComponent extends AbstractIcvComponent {
 
+    checkLanguages = false;
+    checkRoles = false;
     private brokenRecordList: ARTResource[];
 
-    constructor(private icvService: IcvServices, private sharedModals: SharedModalServices) { }
+    constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(basicModals, sharedModals);
+    }
 
     /**
      * Run the check
      */
-    runIcv() {
+    executeIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listConceptsRelatedDisjoint().subscribe(
             resources => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.brokenRecordList = resources;
+
+                this.initPaging(this.brokenRecordList);
             }
         );
     
-    }
-
-    private onResourceClick(res: ARTResource) {
-        this.sharedModals.openResourceView(res, false);
     }
 
 }
