@@ -22,6 +22,7 @@ import { DanglingXLabelComponent } from "../icv/danglingXLabel/danglingXLabelCom
 import { NoMandatoryLabelComponent } from "../icv/noMandatoryLabel/noMandatoryLabelComponent";
 import { MultiplePrefLabelComponent } from "../icv/multiplePrefLabel/multiplePrefLabelComponent";
 import { ExtraSpaceLabelComponent } from "../icv/extraSpaceLabel/extraSpaceLabelComponent";
+import { NoDefinitionResourceComponent } from "../icv/noDefinitionResource/noDefinitionResourceComponent";
 
 import { IcvConfigPanelComponent } from "../icv/icvConfigPanelComponent";
 
@@ -35,6 +36,7 @@ import { icvRouting } from "../icv/icvRoutes";
         DisjointExactMatchConceptComponent, DisjointRelatedConceptComponent, ExtraSpaceLabelComponent,
         HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
         NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent, MultiplePrefLabelComponent,
+        NoDefinitionResourceComponent,
         IcvConfigPanelComponent
     ],
     exports: [IcvComponent],

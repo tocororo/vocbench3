@@ -345,6 +345,24 @@ export class IcvServices {
     //==============================
 
     /**
+     * Returns a list of resources that have no definitions in the given language
+     * @param rolesArray 
+     * @param languagesArray 
+     */
+    listResourcesNoDef(rolesArray: RDFResourceRolesEnum[], languagesArray: string[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesNoDef");
+        var params: any = {
+            rolesArray: rolesArray,
+            languagesArray: languagesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesNoDef", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp, ["missingLang"]);
+            }
+        );
+    }
+
+    /**
      * Returns resources which URI contains white spaces
      * @param limit max number of results to return
      */

@@ -131,6 +131,11 @@ export class IcvListComponent {
     private genericIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
+            {
+                name: "No definition resources", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/NoDefinitionResource",
+                description: "Resources that don't have any skos definition in the given language(s)", 
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
+            }
             // {
             //     name: "Whitespace URI Resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri, RDFS.uri],
             //     description: "URI Resources that have a whitespace in the URI"

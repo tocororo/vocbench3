@@ -19,6 +19,7 @@ import { NoMandatoryLabelComponent } from "./noMandatoryLabel/noMandatoryLabelCo
 import { MultiplePrefLabelComponent } from "./multiplePrefLabel/multiplePrefLabelComponent";
 import { DisjointExactMatchConceptComponent } from "./disjointExactMatchConcept/disjointExactMatchConceptComponent";
 import { DisjointRelatedConceptComponent } from "./disjointRelatedConcept/disjointRelatedConceptComponent";
+import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefinitionResourceComponent";
 
 
 export const routes: Routes = [
@@ -40,6 +41,7 @@ export const routes: Routes = [
             { path: "NoMandatoryLabelResource", component: NoMandatoryLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "MutliplePrefLabelResource", component: MultiplePrefLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+            { path: "NoDefinitionResource", component: NoDefinitionResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
         ]
     },
 ];
