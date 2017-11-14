@@ -82,13 +82,13 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfId, data.cfValueMap).subscribe(
                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap, false).subscribe(
+                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfId, data.cfValueMap, false).subscribe(
                                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                     );
                                 },
@@ -106,13 +106,13 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, true).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                this.skosService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.cfId, data.cfValueMap).subscribe(
                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createNarrower(data.label, this.selectedNode, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap, false).subscribe(
+                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.cfId, data.cfValueMap, false).subscribe(
                                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                     );
                                 },

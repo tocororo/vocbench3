@@ -85,20 +85,22 @@ export class SkosServices {
     }
 
     /**
-     * Creates a top concept in the given scheme. Emits a topConceptCreatedEvent with concept and scheme.
+     * Creates a concept in the given scheme. If a broader concept is provided, the new concept will be a narrower of that, 
+     * otherwise it will be a top concept.
      * NB: although the service server-side has both label and newConcept optional, here only newConcept is optional,
      * so the user is forced to write at least the label.
      * @param label preferred label of the concept (comprehensive of the lang)
      * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
+     * @param broaderConcept broader of the new created concept. If provided, the serivce creates a narrower
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new concept's label (default true)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
-    createTopConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
-        customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
+    createConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
+        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -106,6 +108,9 @@ export class SkosServices {
         };
         if (newConcept != null) {
             params.newConcept = newConcept
+        }
+        if (broaderConcept != null) {
+            params.broaderConcept = broaderConcept
         }
         if (conceptCls != null) {
             params.conceptCls = conceptCls;
@@ -133,8 +138,12 @@ export class SkosServices {
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.topConceptCreatedEvent.emit({ concept: <ARTURIResource>resource, schemes: conceptSchemes });
-                        return { concept: resource, scheme: conceptSchemes };
+                        if (broaderConcept != null) {
+                            this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
+                        } else {
+                            this.eventHandler.topConceptCreatedEvent.emit({ concept: <ARTURIResource>resource, schemes: conceptSchemes });
+                        }
+                        return <ARTURIResource>resource;
                     }
                 );
             }
@@ -193,63 +202,6 @@ export class SkosServices {
             stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
-            }
-        );
-    }
-
-    /**
-     * Creates a narrower of the given concept. Emits a narrowerCreatedEvent with narrower (the created narrower) and broader
-     * @param label preferred label of the concept (comprehensive of the lang)
-     * @param broaderConcept broader of the new created concept
-     * @param conceptSchemes scheme where new concept should belong
-     * @param newConcept URI concept
-     * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
-     * @param checkExistingAltLabel enables the check of clash between existing labels and the new concept's label (default true)
-     * @param customFormId id of the custom form that set additional info to the concept
-     * @param userPromptMap json map object of key - value of the custom form
-     * @return the new concept
-     */
-    createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource,
-        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
-        console.log("[SkosServices] createConcept");
-        var params: any = {
-            label: label,
-            conceptSchemes: conceptSchemes,
-            broaderConcept: broaderConcept
-        };
-        if (newConcept != null) {
-            params.newConcept = newConcept
-        }
-        if (conceptCls != null) {
-            params.conceptCls = conceptCls;
-        }
-        if (checkExistingAltLabel != null) {
-            params.checkExistingAltLabel = checkExistingAltLabel;
-        }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
-        }
-        var options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
-            } 
-        });
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true, options).map(
-            stResp => {
-                return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            concept => {
-                return this.resourceService.getResourceDescription(concept).map(
-                    resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                        resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
-                        return <ARTURIResource>resource;
-                    }
-                );
             }
         );
     }
@@ -594,25 +546,30 @@ export class SkosServices {
     }
 
     /**
-     * Creates a root collection
+     * Creates a collection. If a container collection is provided, the created one will be a nested collection, otherwise it will be 
+     * a root collection.
      * @param collectioType the type of the collection (skos:Collection or skos:OrderedCollection)
      * @param label the preferred label
      * @param newCollection the (optional) uri of the collection
+     * @param containingCollection the parent collection. If provided the new collection will be nested of this one.
      * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new collection's label (default true)
      * @param customFormId id of the custom form that set additional info to the collection
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
-    createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource,
-        customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
+    createCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, containingCollection?: ARTURIResource,
+        collectionCls?: ARTURIResource, customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createCollection");
         var params: any = {
             collectionType: collectionType,
             label: label
         };
         if (newCollection != null) {
-            params.newCollection = newCollection
+            params.newCollection = newCollection;
+        }
+        if (containingCollection != null) {
+            params.containingCollection = containingCollection;
         }
         if (collectionCls != null) {
             params.collectionCls = collectionCls;
@@ -640,64 +597,11 @@ export class SkosServices {
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.rootCollectionCreatedEvent.emit(resource);
-                        return resource;
-                    }
-                );
-            }
-        );
-    }
-
-    /**
-     * Creates a root collection
-     * @param collectioType the type of the collection (skos:Collection or skos:OrderedCollection)
-     * @param containingCollection the collection which the new collection is member
-     * @param newCollection the (optional) uri of the collection
-     * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
-     * @param checkExistingAltLabel enables the check of clash between existing labels and the new collection's label (default true)
-     * @param customFormId id of the custom form that set additional info to the collection
-     * @param userPromptMap json map object of key - value of the custom form
-     * @return the new collection
-     */
-    createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral,
-        newCollection?: ARTURIResource, collectionCls?: ARTURIResource,
-        customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
-        console.log("[SkosServices] createCollection");
-        var params: any = {
-            collectionType: collectionType,
-            containingCollection: containingCollection,
-            label: label
-        };
-        if (newCollection != null) {
-            params.newCollection = newCollection
-        }
-        if (collectionCls != null) {
-            params.collectionCls = collectionCls;
-        }
-        if (checkExistingAltLabel != null) {
-            params.checkExistingAltLabel = checkExistingAltLabel;
-        }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
-        }
-        var options: VBRequestOptions = new VBRequestOptions({
-            errorAlertOpt: { 
-                show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
-            } 
-        });
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true, options).map(
-            stResp => {
-                return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            collection => {
-                return this.resourceService.getResourceDescription(collection).map(
-                    resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                        resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: resource, container: containingCollection });
+                        if (containingCollection != null) {
+                            this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: resource, container: containingCollection });
+                        } else {
+                            this.eventHandler.rootCollectionCreatedEvent.emit(resource);
+                        }
                         return resource;
                     }
                 );

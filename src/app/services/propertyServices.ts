@@ -272,57 +272,20 @@ export class PropertyServices {
      * Emits a topPropertyCreatedEvent with the new property
      * @param propertyType uri of a property class
      * @param newProperty uri of the new property
+     * @param superProperty if provided the new property will be subProperty of this
      * @param customFormId id of the custom form that set additional info to the property
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new property
      */
-    createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, customFormId?: string, userPromptMap?: any) {
-        console.log("[PropertyServices] createProperty");
-        var params: any = {
-            propertyType: propertyType,
-            newProperty: newProperty
-        };
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
-        }
-        return this.httpMgr.doPost(this.serviceName, "createProperty", params, true).map(
-            stResp => {
-                return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            property => {
-                return this.resourceService.getResourceDescription(property).map(
-                    resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                        resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.topPropertyCreatedEvent.emit(<ARTURIResource>resource);
-                        return resource;
-                    }
-                );
-            }
-        );
-    }
-
-    /**
-     * Creates a property (subPropertyOf the superProperty) of the given type.
-     * Emits a topPropertyCreatedEvent with the new property
-     * @param propertyType uri of a property class
-     * @param newProperty uri of the new property
-     * @param superProperty uri of the super property
-     * @param customFormId id of the custom form that set additional info to the property
-     * @param userPromptMap json map object of key - value of the custom form
-     * @return the new property
-     */
-    createSubProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty: ARTURIResource,
-        customFormId?: string, userPromptMap?: any) {
+    createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty?: ARTURIResource, 
+            customFormId?: string, userPromptMap?: any) {
         console.log("[PropertyServices] createProperty");
         var params: any = {
             propertyType: propertyType,
             newProperty: newProperty
         };
         if (superProperty != null) {
-            params.superProperty = superProperty
+            params.superProperty = superProperty;
         }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
@@ -338,7 +301,11 @@ export class PropertyServices {
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: <ARTURIResource>resource, superProperty: superProperty });
+                        if (superProperty != null) {
+                            this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: <ARTURIResource>resource, superProperty: superProperty });
+                        } else {
+                            this.eventHandler.topPropertyCreatedEvent.emit(<ARTURIResource>resource);
+                        }
                         return resource;
                     }
                 );

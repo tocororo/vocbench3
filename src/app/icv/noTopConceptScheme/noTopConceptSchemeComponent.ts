@@ -59,7 +59,7 @@ export class NoTopConceptSchemeComponent {
     createTopConcept(scheme: ARTURIResource) {
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
             (data: any) => {
-                this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
+                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfId, data.cfValueMap).subscribe(
                     stResp => {
                         this.runIcv();
                     },
@@ -67,7 +67,7 @@ export class NoTopConceptSchemeComponent {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap, false).subscribe(
+                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfId, data.cfValueMap, false).subscribe(
                                         stResp => {
                                             this.runIcv();
                                         },
