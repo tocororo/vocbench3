@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
 
@@ -36,15 +36,25 @@ export class SkosxlServices {
      * @param concept
      * @param literal
      * @param mode available values: uri or bnode
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new created
      */
-    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string) {
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string, checkExistingAltLabel?: boolean) {
         console.log("[SkosxlServices] setPrefLabel");
         var params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
         };
-        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true);
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true, options);
     }
 
     /**

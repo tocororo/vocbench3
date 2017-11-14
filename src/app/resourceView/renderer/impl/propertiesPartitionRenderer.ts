@@ -65,7 +65,19 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                         switch (predicate.getURI()) {
                             case SKOSXL.prefLabel.getURI():
                                 this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                                    stResp => this.update.emit(null)
+                                    stResp => this.update.emit(null),
+                                    (err: Error) => {
+                                        if (err.name.endsWith('PrefAltLabelClashException')) {
+                                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                                confirm => {
+                                                    this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri, false).subscribe(
+                                                        stResp => this.update.emit(null)
+                                                    );
+                                                },
+                                                () => {}
+                                            );
+                                        }
+                                    }
                                 );
                                 break;
                             case SKOSXL.altLabel.getURI():
@@ -80,7 +92,19 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                                 break;
                             case SKOS.prefLabel.getURI():
                                 this.skosService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
-                                    stResp => this.update.emit(null)
+                                    stResp => this.update.emit(null),
+                                    (err: Error) => {
+                                        if (err.name.endsWith('PrefAltLabelClashException')) {
+                                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                                confirm => {
+                                                    this.skosService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), false).subscribe(
+                                                        stResp => this.update.emit(null)
+                                                    );
+                                                },
+                                                () => {}
+                                            );
+                                        }
+                                    }
                                 );
                                 break;
                             case SKOS.altLabel.getURI():

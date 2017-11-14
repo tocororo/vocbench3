@@ -58,12 +58,34 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
                 if (collectionType.getURI() == SKOS.collection.getURI()) {
                     this.skosService.createRootCollection(SKOS.collection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                        (err: Error) => {
+                            if (err.name.endsWith('PrefAltLabelClashException')) {
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                    confirm => {
+                                        this.skosService.createRootCollection(SKOS.collection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap, false).subscribe(
+                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                                        );
+                                    },
+                                    () => {}
+                                );
+                            }
+                        }
                     );
                 } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
                     this.skosService.createRootCollection(SKOS.orderedCollection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                        (err: Error) => {
+                            if (err.name.endsWith('PrefAltLabelClashException')) {
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                    confirm => {
+                                        this.skosService.createRootCollection(SKOS.orderedCollection, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap, false).subscribe(
+                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                                        );
+                                    },
+                                    () => {}
+                                );
+                            }
+                        }
                     );
                 }
             },
@@ -79,13 +101,35 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
                     this.skosService.createNestedCollection(
                             SKOS.collection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                        (err: Error) => {
+                            if (err.name.endsWith('PrefAltLabelClashException')) {
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                    confirm => {
+                                        this.skosService.createNestedCollection(SKOS.collection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap, false).subscribe(
+                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                                        );
+                                    },
+                                    () => {}
+                                );
+                            }
+                        }
                     );
                 } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
                     this.skosService.createNestedCollection(
                             SKOS.orderedCollection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        err => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement)
+                        (err: Error) => {
+                            if (err.name.endsWith('PrefAltLabelClashException')) {
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                    confirm => {
+                                        this.skosService.createNestedCollection(SKOS.orderedCollection, this.selectedNode, res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap, false).subscribe(
+                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+                                        );
+                                    }, 
+                                    () => {}
+                                );
+                            }
+                        }
                     );
                 }
             },

@@ -55,10 +55,22 @@ export class SchemeListPanelComponent extends AbstractPanel {
             (res: any) => {
                 this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
                     newScheme => { 
-                        // this.schemeList.push({ checked: false, scheme: newScheme });
                         this.schemeList.unshift({ checked: false, scheme: newScheme });
                     },
-                    err => { }
+                    (err: Error) => {
+                        if (err.name.endsWith('PrefAltLabelClashException')) {
+                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                confirm => {
+                                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap, false).subscribe(
+                                        newScheme => { 
+                                            this.schemeList.unshift({ checked: false, scheme: newScheme });
+                                        }
+                                    );
+                                },
+                                () => {}
+                            );
+                        }
+                    }
                 );
             },
             () => { }

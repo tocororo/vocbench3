@@ -62,6 +62,20 @@ export class NoTopConceptSchemeComponent {
                 this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap).subscribe(
                     stResp => {
                         this.runIcv();
+                    },
+                    (err: Error) => {
+                        if (err.name.endsWith('PrefAltLabelClashException')) {
+                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                confirm => {
+                                    this.skosService.createTopConcept(data.label, data.schemes, data.uriResource, data.cls, data.cfId, data.cfValueMap, false).subscribe(
+                                        stResp => {
+                                            this.runIcv();
+                                        },
+                                    );
+                                },
+                                reject => {}
+                            )
+                        }
                     }
                 );
             },

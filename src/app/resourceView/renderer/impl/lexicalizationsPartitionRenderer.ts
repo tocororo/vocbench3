@@ -8,6 +8,7 @@ import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { ResViewPartition } from "../../../models/ResourceView";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 
@@ -40,7 +41,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     ];
 
     constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private resourceService: ResourcesServices, private resViewService: ResourceViewServices, 
+        private resourceService: ResourcesServices, private resViewService: ResourceViewServices, private basicModals: BasicModalServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
         super();
     }
@@ -118,12 +119,24 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 switch (predicate.getURI()) {
                     case SKOSXL.prefLabel.getURI():
                         this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                            stResp => this.update.emit(null)
+                            stResp => this.update.emit(null),
+                            (err: Error) => {
+                                if (err.name.endsWith('PrefAltLabelClashException')) {
+                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                        confirm => {
+                                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri, false).subscribe(
+                                                stResp => this.update.emit(null)
+                                            );
+                                        },
+                                        () => {}
+                                    );
+                                }
+                            }
                         );
                         break;
                     case SKOSXL.altLabel.getURI():
                         this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                            stResp => this.update.emit(null)
+                            stResp => this.update.emit(null),
                         );
                         break;
                     case SKOSXL.hiddenLabel.getURI():
@@ -133,7 +146,19 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                         break;
                     case SKOS.prefLabel.getURI():
                         this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal).subscribe(
-                            stResp => this.update.emit(null)
+                            stResp => this.update.emit(null),
+                            (err: Error) => {
+                                if (err.name.endsWith('PrefAltLabelClashException')) {
+                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                        confirm => {
+                                            this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal, false).subscribe(
+                                                stResp => this.update.emit(null)
+                                            );
+                                        },
+                                        () => {}
+                                    );
+                                }
+                            }
                         );
                         break;
                     case SKOS.altLabel.getURI():

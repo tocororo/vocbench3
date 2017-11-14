@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
@@ -92,12 +92,13 @@ export class SkosServices {
      * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new concept's label (default true)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return 
      */
     createTopConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, conceptCls?: ARTURIResource,
-        customFormId?: string, userPromptMap?: any) {
+        customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -109,11 +110,20 @@ export class SkosServices {
         if (conceptCls != null) {
             params.conceptCls = conceptCls;
         }
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true, options).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -194,12 +204,13 @@ export class SkosServices {
      * @param conceptSchemes scheme where new concept should belong
      * @param newConcept URI concept
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new concept's label (default true)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new concept
      */
     createNarrower(label: ARTLiteral, broaderConcept: ARTURIResource, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource,
-        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -212,11 +223,20 @@ export class SkosServices {
         if (conceptCls != null) {
             params.conceptCls = conceptCls;
         }
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, true, options).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -332,12 +352,13 @@ export class SkosServices {
      * @param label the lexical form of the pref label
      * @param newScheme the (optional) uri of the scheme
      * @param schemeCls class of the scheme that is creating (a subclass of skos:ConceptScheme, if not provided the default is skos:ConceptScheme)
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new scheme's label (default true)
      * @param customFormId id of the custom form that set additional info to the concept
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new scheme
      */
-    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource, customFormId?: string, 
-            userPromptMap?: any): Observable<ARTURIResource> {
+    createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource,
+            customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean): Observable<ARTURIResource> {
         console.log("[SkosServices] createConceptScheme");
         var params: any = {
             label: label
@@ -348,11 +369,20 @@ export class SkosServices {
         if (schemeCls != undefined) {
             params.schemeCls = schemeCls;
         };
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, true, options).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -399,14 +429,24 @@ export class SkosServices {
      * Sets a preferred label to the given concept (or scheme)
      * @param concept
      * @param literal label
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new created (default true)
      */
-    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral) {
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] setPrefLabel");
         var params: any = {
             concept: concept,
             literal: literal
         };
-        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true);
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true, options);
     }
 
     /**
@@ -559,12 +599,13 @@ export class SkosServices {
      * @param label the preferred label
      * @param newCollection the (optional) uri of the collection
      * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new collection's label (default true)
      * @param customFormId id of the custom form that set additional info to the collection
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
     createRootCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, collectionCls?: ARTURIResource,
-        customFormId?: string, userPromptMap?: any) {
+        customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createCollection");
         var params: any = {
             collectionType: collectionType,
@@ -576,11 +617,20 @@ export class SkosServices {
         if (collectionCls != null) {
             params.collectionCls = collectionCls;
         }
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true, options).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -604,12 +654,14 @@ export class SkosServices {
      * @param containingCollection the collection which the new collection is member
      * @param newCollection the (optional) uri of the collection
      * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
+     * @param checkExistingAltLabel enables the check of clash between existing labels and the new collection's label (default true)
      * @param customFormId id of the custom form that set additional info to the collection
      * @param userPromptMap json map object of key - value of the custom form
      * @return the new collection
      */
     createNestedCollection(collectionType: ARTURIResource, containingCollection: ARTURIResource, label: ARTLiteral,
-        newCollection?: ARTURIResource, collectionCls?: ARTURIResource, customFormId?: string, userPromptMap?: any) {
+        newCollection?: ARTURIResource, collectionCls?: ARTURIResource,
+        customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createCollection");
         var params: any = {
             collectionType: collectionType,
@@ -622,11 +674,20 @@ export class SkosServices {
         if (collectionCls != null) {
             params.collectionCls = collectionCls;
         }
+        if (checkExistingAltLabel != null) {
+            params.checkExistingAltLabel = checkExistingAltLabel;
+        }
         if (customFormId != null && userPromptMap != null) {
             params.customFormId = customFormId;
             params.userPromptMap = JSON.stringify(userPromptMap);
         }
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true).map(
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, true, options).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
