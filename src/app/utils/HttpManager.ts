@@ -328,7 +328,7 @@ export class HttpManager {
      */
     private getContextParametersForUrl(options: VBRequestOptions): string {
         var params: string = "";
-        //give priority to ctx_project in VBRequestOptions over project in ctx
+        //give priority to ctx_project in HttpServiceContext over project in ctx
         if (HttpServiceContext.getContextProject() != undefined) {
             params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
             params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
@@ -336,8 +336,11 @@ export class HttpManager {
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
 
-        if (HttpServiceContext.getContextVersion() != undefined) { //give priority to version in VBRequestOptions over version in ctx
+        //give priority to version in HttpServiceContext over version in ctx
+        if (HttpServiceContext.getContextVersion() != undefined) {
             params += "ctx_version=" + encodeURIComponent(HttpServiceContext.getContextVersion().versionId) + "&";
+        } else if (VBContext.getContextVersion() != undefined) { 
+            params += "ctx_version=" + encodeURIComponent(VBContext.getContextVersion().versionId) + "&";
         }
 
         if (HttpServiceContext.getSessionToken() != undefined) {
@@ -454,29 +457,25 @@ export class HttpManager {
 
 export class HttpServiceContext {
     private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
-    private static ctxVersion: VersionInfo; //version used
+    private static ctxVersion: VersionInfo; //version temporarly used in some scenarios (e.g. versioning res view)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
 
     /**
-     * Sets a contextual project (project temporarly used in some scenarios)
+     * Methods for managing a contextual project (project temporarly used in some scenarios)
      */
     static setContextProject(project: Project) {
         this.ctxProject = project;
     }
-    /**
-     * Gets a contextual project (project temporarly used in some scenarios)
-     */
     static getContextProject(): Project {
         return this.ctxProject;
     }
-    /**
-     * Removes a contextual project (project temporarly used in some scenarios)
-     */
     static removeContextProject() {
         this.ctxProject = null;
     }
 
-
+    /**
+     * Methods for managing a contextual version (version temporarly used in some scenarios)
+     */
     static setContextVersion(version: VersionInfo) {
         this.ctxVersion = version;
     }

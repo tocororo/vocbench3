@@ -27,29 +27,37 @@ class ProjectContext {
 export class VBContext {
 
     private static workingProjectCtx: ProjectContext = new ProjectContext();
+    private static ctxVersion: VersionInfo; // version used
     private static projectChanged: boolean;
     private static loggedUser: User;
     private static puBinging: ProjectUserBinding;
 
     /**
-     * Sets the working project (the one set as ctx_project requests parameter)
+     * Methods for managing context project (project that is set as ctx_project requests parameter)
      */
     static setWorkingProject(project: Project) {
         this.workingProjectCtx.setProject(project);
     }
-    /**
-     * Gets the working project (the one set as ctx_project requests parameter)
-     */
     static getWorkingProject(): Project {
         return this.workingProjectCtx.getProject();
     }
-    /**
-     * Removes the working project (the one set as ctx_project requests parameter)
-     */
     static removeWorkingProject() {
         this.workingProjectCtx.reset();
         this.puBinging = null;
         UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
+    }
+
+    /**
+     * Methods for managing context version (version that is set as ctx_version requests parameter)
+     */
+    static setContextVersion(version: VersionInfo) {
+        this.ctxVersion = version;
+    }
+    static getContextVersion(): VersionInfo {
+        return this.ctxVersion;
+    }
+    static removeContextVersion() {
+        this.ctxVersion = null;
     }
 
     /**

@@ -7,7 +7,6 @@ import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualT
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
-import { HttpServiceContext } from "../utils/HttpManager";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
@@ -61,7 +60,7 @@ export class TreePanelComponent {
                 this.activeTab = RDFResourceRolesEnum.property;
             }
         }
-        this.readonly = HttpServiceContext.getContextVersion() != null; //if the RV is working on an old dump version, disable the updates
+        this.readonly = VBContext.getContextVersion() != null; //if the RV is working on an old dump version, disable the updates
     }
 
     private onNodeSelected(node: ARTResource) {

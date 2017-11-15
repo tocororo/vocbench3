@@ -5,7 +5,6 @@ import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
 import { VersionsServices } from "../../../services/versionsServices";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { VBContext } from '../../../utils/VBContext';
-import { HttpServiceContext } from "../../../utils/HttpManager";
 import { UIUtils } from '../../../utils/UIUtils';
 import { RepositoryAccess, RepositoryAccessType } from '../../../models/Project';
 import { VersionInfo, RepositoryStatus } from '../../../models/History';
@@ -46,9 +45,9 @@ export class VersioningComponent {
     private swithcToVersion() {
         //update current version
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
-            HttpServiceContext.removeContextVersion();
+            VBContext.removeContextVersion();
         } else {
-            HttpServiceContext.setContextVersion(this.selectedVersion);
+            VBContext.setContextVersion(this.selectedVersion);
         }
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
@@ -91,17 +90,14 @@ export class VersioningComponent {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(DumpCreationModal, overlayConfig).result;
-        // .then(
-        //     dialog => dialog.result
-        // );
     }
 
     private isActiveVersion(version: VersionInfo): boolean {
-        var activeVersion: VersionInfo = HttpServiceContext.getContextVersion();
+        var activeVersion: VersionInfo = VBContext.getContextVersion();
         if (activeVersion == null) {
             return this.versionList.indexOf(version) == 0;
         } else {
-            return HttpServiceContext.getContextVersion().versionId == version.versionId;
+            return VBContext.getContextVersion().versionId == version.versionId;
         }
     }
 

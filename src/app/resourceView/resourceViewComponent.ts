@@ -9,6 +9,7 @@ import { VBProperties } from "../utils/VBProperties";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "resource-view",
@@ -78,8 +79,8 @@ export class ResourceViewComponent {
     }
 
     ngOnInit() {
-        this.activeVersion = HttpServiceContext.getContextVersion();
-        this.readonly = this.readonly || this.activeVersion != null; //if the RV is working on an old dump version, disable the updates
+        this.activeVersion = VBContext.getContextVersion();
+        this.readonly = this.readonly || (this.activeVersion != null || HttpServiceContext.getContextVersion() != null); //if the RV is working on an old dump version, disable the updates
     }
 
     ngAfterViewInit() {
@@ -334,7 +335,8 @@ export class ResourceViewComponent {
             this.activeVersion = version;
             this.buildResourceView(this.resource);
         }
-        this.readonly = this.activeVersion != null; //if the version is not the current, set the RV in readOnly mode
+        //resView is readonly if one of the temp version and the context version are not null
+        this.readonly = this.activeVersion != null || VBContext.getContextVersion() != null;
     }
 
     private openSettings() {
