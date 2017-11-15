@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
-import { SkosServices } from "../../services/skosServices";
 import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
@@ -9,55 +11,31 @@ import { UIUtils } from "../../utils/UIUtils";
     templateUrl: "./hierarchicalRedundancyComponent.html",
     host: { class: "pageComponent" }
 })
-export class HierarchicalRedundancyComponent {
+export class HierarchicalRedundancyComponent extends AbstractIcvComponent {
 
-    private brokenRecordList: Array<any>;
+    checkLanguages = false;
+    checkRoles = false;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices) { }
+    private sameScheme: boolean = true;
+
+    private brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
+
+    constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(basicModals, sharedModals);
+    }
 
     /**
      * Run the check
      */
-    runIcv() {
-        //TODO check when service will be refactored
+    executeIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-        this.icvService.listHierarchicallyRedundantConcepts().subscribe(
-            stResp => {
-                this.brokenRecordList = new Array();
-                var recordColl = stResp.getElementsByTagName("record");
-                for (var i = 0; i < recordColl.length; i++) {
-                    var b = new ARTURIResource(recordColl[i].getAttribute("broader"), recordColl[i].getAttribute("broader"), RDFResourceRolesEnum.concept);
-                    var n = new ARTURIResource(recordColl[i].getAttribute("narrower"), recordColl[i].getAttribute("narrower"), RDFResourceRolesEnum.concept);
-                    this.brokenRecordList.push({ broader: b, narrower: n });
-                }
+        this.icvService.listConceptsHierarchicalRedundancies(this.sameScheme).subscribe(
+            redundancies => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
-            },
-            err => { UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv")); }
-        );
-    }
-
-    /**
-     * Fixes redundancies by removing the redundant relation between broader and narrower
-     */
-    fix(record: any) {
-        var broader = record.broader;
-        var narrower = record.narrower;
-        this.skosService.removeBroaderConcept(narrower, broader).subscribe(
-            stResp => {
-                this.runIcv();
+                this.brokenRecordList = redundancies;
+                this.initPaging(this.brokenRecordList);
             }
         );
-    }
-
-    /**
-     * Fixes all record by removing redundant relations (server side with just one request)
-     */
-    quickFix() {
-        this.icvService.removeAllHierarchicalRedundancy().subscribe(
-            stResp => {
-                this.runIcv();
-            }
-        )
     }
 
 }

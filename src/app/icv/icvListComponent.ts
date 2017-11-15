@@ -49,11 +49,11 @@ export class IcvListComponent {
                     + "(skos:related relation is disjoint with skos:broaderTransitive)",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
             },
-            // {
-            //     name: "Hierarchical redundancy", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalRedundancy",
-            //     description: "skos:Concept(s) that have redundant hierarchical relations",
-            //     authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
-            // },
+            {
+                name: "Hierarchical redundancies", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalRedundancy",
+                description: "skos:Concept(s) that have redundant hierarchical relations with another concept",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
+            },
             {
                 name: "Cyclic hierarchical concepts", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalCycle",
                 description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader relations",

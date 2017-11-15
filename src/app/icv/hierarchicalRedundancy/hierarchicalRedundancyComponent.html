@@ -1,55 +1,68 @@
 <div class="panel panel-default vbox" style="position: relative">
     <div class="panel-heading">
-        <label style="flex: 1;">Top concepts with broader</label>
+        <label style="flex: 1;">Hierarchical redundancies</label>
+        <div class="checkbox" style="margin: 0px 12px;"
+            title="If active, the check is performed only to the relations between Concepts belonging to the same ConceptScheme">
+            <label style="min-height: 0px;">
+                <input type="checkbox" [(ngModel)]="sameScheme">Same scheme
+            </label>
+        </div>
         <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
     </div>
     <div class="panel-body vbox">
         
-        <div class="alert alert-info" role="alert">
+        <div class="alert alert-info" role="alert" style="margin-bottom: 6px;">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>
-                skos:Concept(s) that have redundant hierarchical relations. e.g.<br/>
-                1) c_3 skos:broader c_2<br/>2) c_2 skos:broader c_1<br/>3) c_3 skos:broader c_1<br/>
-                3rd relation is redundant since it is a consequence of 1) and 2) 
-            </i>
+            skos:Concept(s) that have redundant hierarchical relations. e.g.<br/>
+            1) <i>:concept3 skos:broader :concept2</i><br/>
+            2) <i>:concept2 skos:broader :concept1</i><br/>
+            3) <i>:concept3 skos:broader :concept1</i><br/>
+            3rd statement is redundant since it is a consequence of 1) and 2) 
         </div>
 
-        <div *ngIf="!brokenRecordList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+        <div class="panel panel-default vbox">
+            <div class="panel-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Subject</th>
+                            <th class="text-center">Predicate</th>
+                            <th class="text-center">Object</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-template ngFor let-record [ngForOf]="brokenRecordList" let-i="index">
+                            <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.subject" (click)="onResourceClick(record.subject)"></rdf-resource>
+                                </td>
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.predicate" (click)="onResourceClick(record.predicate)"></rdf-resource>
+                                </td>
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.object" (click)="onResourceClick(record.object)"></rdf-resource>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
+                <div class="btn-group btn-group-xs pull-right" role="group">
+                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{page+1}} of {{pageCount}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         
-        <div *ngIf="brokenRecordList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
-                <thead>
-                    <tr>
-                        <th class="text-center">Broader</th>
-                        <th class="text-center">Narrower</th>
-                        <th class="text-center" style="width: 1%">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let record of brokenRecordList">
-                        <td>
-                            <rdf-resource [resource]="record.broader"></rdf-resource>
-                        </td>
-                        <td>
-                            <rdf-resource [resource]="record.narrower"></rdf-resource>
-                        </td>
-                        <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="fix(record)">Remove redundancy</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="panel-footer">
-        <div  class="dropup pull-right">
-            <button *ngIf="brokenRecordList && !brokenRecordList.length == 0" class="btn btn-default btn-xs" type="button"
-                (click)="quickFix()">
-                Remove all redundancy
-            </button>
-        </div>
     </div>
     
     <div id="blockDivIcv" class="blockingDiv" style="display:none">

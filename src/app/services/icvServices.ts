@@ -78,15 +78,6 @@ export class IcvServices {
     }
 
     /**
-     * Returns a list of skos:Concept that have redundant hierarchical relations
-     */
-    listHierarchicallyRedundantConcepts() {
-        console.log("[IcvServices] listHierarchicallyRedundantConcepts");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listHierarchicallyRedundantConcepts", params);
-    }
-
-    /**
      * Returns a list of skos:Concept that are linked with other by the relation skos:related and other disjoint with this one
      */
     listConceptsRelatedDisjoint(): Observable<ARTURIResource[]> {
@@ -125,6 +116,33 @@ export class IcvServices {
                     cycles.push(Deserializer.createURIArray(stResp[i]));
                 }
                 return cycles;
+            }
+        );
+    }
+
+    /**
+     * Return a list of <triples> that are redundant from the hierarchical point of view
+     * @param sameScheme tells if the check should be performed considering just the concept in the same scheme
+     */
+    listConceptsHierarchicalRedundancies(sameScheme?: boolean): Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
+        console.log("[IcvServices] listConceptsHierarchicalRedundancies");
+        var params: any = {};
+        if (sameScheme != null) {
+            params.sameScheme = sameScheme;
+        }
+        return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalRedundancies", params, true).map(
+            stResp => {
+                let redundancies: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    let r = {
+                        subject: Deserializer.createURI(stResp[i].subject),
+                        predicate: Deserializer.createURI(stResp[i].predicate),
+                        object: Deserializer.createURI(stResp[i].object)
+                    }
+                    redundancies.push(r);
+                }
+                console.log(redundancies);
+                return redundancies;
             }
         );
     }
