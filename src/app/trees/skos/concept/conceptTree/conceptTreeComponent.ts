@@ -113,9 +113,10 @@ export class ConceptTreeComponent extends AbstractTree {
             this.searchRetryAttempt++;
             if (this.searchRetryAttempt > 20) { //after 20 attempts (20*300ms) stop searching
                 this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+            } else {
+                this.ensureRootVisibility(path[0]);
+                this.openRoot(path, node); 
             }
-            this.ensureRootVisibility(path[0]);
-            this.openRoot(path, node); 
         }, 300); //try again after 300ms
     }
 
