@@ -95,11 +95,17 @@ export class AppComponent {
     }
 
     private isHistoryAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.HISTORY);
+        return (
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.HISTORY) &&
+            VBContext.getContextVersion() == null
+        );
     }
     
     private isValidationAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VALIDATION);
+        return (
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VALIDATION) &&
+            VBContext.getContextVersion() == null
+        );
     }
     
     private isCustomFormAuthorized() {
