@@ -5,53 +5,41 @@
     </div>
     <div class="panel-body vbox">
         
-        <div class="alert alert-info" role="alert">
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-            <i>
-                skos:Concept(s) that create a hierarchical cycle. e.g.<br/>
-                1) c_3 skos:broader c_2<br/>2) c_2 skos:broader c_1<br/>3) c_1 skos:broader c_2<br/>
-                The concepts create a cycle c_3 -> c_2 -> c_1 -> c_3<br/>
-                Note: in the list below will be shown the skos:Concept(s) that likely is the cause of one or more cycles.
-                It's recommended to fix one or more relationships of these concepts to eliminate the cycle(s)
-                and to avoid the creation of danglind concept. The suggested fix removes the broader/narrower
-                relation that closes the cycle. For further information check the concept tree.
-            </i>
-        </div>
+        <div class="panel panel-default vbox">
+            <div class="panel-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Cycles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-template ngFor let-cycle [ngForOf]="brokenRecordList" let-i="index">
+                            <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                                <td class="text-center">
+                                    <rdf-resource *ngFor="let r of cycle" class="clickable" [resource]="r" (click)="onResourceClick(r)"></rdf-resource>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
 
-        <div *ngIf="!brokenRecordList" style="padding: 4px;">
-            Press <strong>Run</strong> button to run the check.
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
+                <div class="btn-group btn-group-xs pull-right" role="group">
+                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{page+1}} of {{pageCount}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    </button>
+                </div>
+            </div>
         </div>
         
-        <div *ngIf="brokenRecordList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
-                <thead>
-                    <tr>
-                        <th class="text-center">Concept</th>
-                        <th class="text-center" style="width: 1%">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let concept of brokenConceptList">
-                        <td>
-                            <rdf-resource [resource]="concept"></rdf-resource>
-                        </td>
-                        <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="fix(concept)">Fix cycle</button>
-                            <button class="btn btn-xs btn-default" (click)="showGraph(concept)">See cycle graph</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="panel-footer">
-        <div  class="dropup pull-right">
-            <button *ngIf="brokenRecordList && !brokenRecordList.length == 0" class="btn btn-default btn-xs" type="button"
-                (click)="quickFix()">
-                Remove all redundancy
-            </button>
-        </div>
     </div>
     
     <div id="blockDivIcv" class="blockingDiv" style="display:none">

@@ -1,49 +1,38 @@
-import {Component} from "@angular/core";
-import {ARTURIResource} from "../../models/ARTResources";
-import {IcvServices} from "../../services/icvServices";
-import {SkosServices} from "../../services/skosServices";
+import { Component } from "@angular/core";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { ARTURIResource } from "../../models/ARTResources";
+import { IcvServices } from "../../services/icvServices";
+import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
     selector: "cyclic-concept-component",
     templateUrl: "./cyclicConceptComponent.html",
-    host: { class : "pageComponent" }
+    host: { class: "pageComponent" }
 })
-export class CyclicConceptComponent {
-    
-    private brokenRecordList: Array<any>;
-    
-    constructor(private icvService: IcvServices, private skosService: SkosServices) {}
-    
+export class CyclicConceptComponent extends AbstractIcvComponent {
+
+    checkLanguages = false;
+    checkRoles = false;
+    private brokenRecordList: ARTURIResource[][];
+
+    constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(basicModals, sharedModals);
+    }
+
     /**
      * Run the check
      */
-    runIcv() {
-        //TODO change the service.
-        //currently the service returns <record> elements that contain
-        //node1, node2 and topCyclicConcept attributes that represent
-        //the nodes of the edge and the concept that probably is the cause of the cycle.
-        //the new service should return different <cycle> element for each cycle.
-        //Then each <cycle> should be described by a collection of <edge> with two <uri>
-        //representing the nodes of the edge, and a <topCyclicConcept> containign the <uri>
-        //of the node that casues the cycle.
+    executeIcv() {
+        UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
+        this.icvService.listConceptsHierarchicalCycles().subscribe(
+            cycles => {
+                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
+                this.brokenRecordList = cycles;
+                this.initPaging(this.brokenRecordList);
+            }
+        );
     }
-    
-    /**
-     * 
-     */
-    fix(concept: any) {//concept could be the topCyclicConcept with whom retrieve the cycle record
-        //TODO the fix should remove the broader/narrower relation of the topCyclicConcept
-    }
-    
-    /**
-     * TODO: provide a quickFix for a so unlikely and delicate problem? maybe it's better if every cycle is fixed
-     * separately 
-     */
-    quickFix() {
-    }
-    
-    showGraph(concept: any) {//concept could be the topCyclicConcept with whom retrieve the cycle record
-        //TODO
-    }
-    
+
 }

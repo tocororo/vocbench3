@@ -112,6 +112,23 @@ export class IcvServices {
         );
     }
 
+    /**
+     * Returns a list of concepts belonging to a hierarchical cycle 
+     */
+    listConceptsHierarchicalCycles(): Observable<ARTURIResource[][]> {
+        console.log("[IcvServices] listConceptsHierarchicalCycles");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalCycles", params, true).map(
+            stResp => {
+                let cycles: ARTURIResource[][] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    cycles.push(Deserializer.createURIArray(stResp[i]));
+                }
+                return cycles;
+            }
+        );
+    }
+
     //=============================
     //======== LABEL CHECKS ========
     //=============================

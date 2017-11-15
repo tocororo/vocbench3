@@ -50,13 +50,15 @@ export class IcvListComponent {
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
             },
             // {
-            //     name: "Hierarchical redundancy", lexicalizationModel: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/HierarchicalRedundancy",
-            //     description: "skos:Concept(s) that have redundant hierarchical relations"
+            //     name: "Hierarchical redundancy", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalRedundancy",
+            //     description: "skos:Concept(s) that have redundant hierarchical relations",
+            //     authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
             // },
-            // {
-            //     name: "Cyclic hierarchical concepts", lexicalizationModel: [SKOS.uri, SKOSXL.uri],
-            //     description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader properties"
-            // },
+            {
+                name: "Cyclic hierarchical concepts", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/HierarchicalCycle",
+                description: "skos:Concept(s) that compose a hierarchical cycle through the skos:narrower and skos:broader relations",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
+            },
         ]
     };
 
@@ -65,18 +67,18 @@ export class IcvListComponent {
         list: [
             {
                 name: "No skos:prefLabel resources", model: [], lexicalization: [SKOS.uri], routeName: "/Icv/NoLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel", 
+                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skos:prefLabel",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
                 name: "No skosxl:prefLabel resources", model: [], lexicalization: [SKOSXL.uri], routeName: "/Icv/NoLabelResource",
-                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel", 
+                description: "skos:Concept(s) or skos:ConceptScheme(s) that don't have any skosxl:prefLabel",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
-                name: "No mandatory label resources", model: [], lexicalization: [], 
+                name: "No mandatory label resources", model: [], lexicalization: [],
                 routeName: "/Icv/NoMandatoryLabelResource",
-                description: "Resources that don't have any label in the given languages", 
+                description: "Resources that don't have any label in the given languages",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
@@ -95,12 +97,12 @@ export class IcvListComponent {
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
-                name: "Extra whitespace label resources", model:[], lexicalization: [],
+                name: "Extra whitespace label resources", model: [], lexicalization: [],
                 routeName: "/Icv/ExtraSpaceLabelResource", description: "Resources that have some extra whitespace in a label",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
-                name: "Multiple preferred labels resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], 
+                name: "Multiple preferred labels resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri],
                 routeName: "/Icv/MutliplePrefLabelResource", description: "Resources that have multiple preferred labels in the same language",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
@@ -110,7 +112,7 @@ export class IcvListComponent {
             // },
             {
                 name: "Dangling skosxl:Label(s)", model: [], lexicalization: [SKOSXL.uri], routeName: "/Icv/DanglingXLabel",
-                description: "skosxl:Label(s) that are not linked with any skos:Concept", 
+                description: "skosxl:Label(s) that are not linked with any skos:Concept",
                 authAction: AuthorizationEvaluator.Actions.ICV_DANGLING_XLABEL
             }
         ]
@@ -121,7 +123,7 @@ export class IcvListComponent {
         list: [
             {
                 name: "No definition resources", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/NoDefinitionResource",
-                description: "Resources that don't have any skos definition in the given language(s)", 
+                description: "Resources that don't have any skos definition in the given language(s)",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             }
             // {

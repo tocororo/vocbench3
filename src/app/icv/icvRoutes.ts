@@ -20,6 +20,7 @@ import { MultiplePrefLabelComponent } from "./multiplePrefLabel/multiplePrefLabe
 import { DisjointExactMatchConceptComponent } from "./disjointExactMatchConcept/disjointExactMatchConceptComponent";
 import { DisjointRelatedConceptComponent } from "./disjointRelatedConcept/disjointRelatedConceptComponent";
 import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefinitionResourceComponent";
+import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
 
 
 export const routes: Routes = [
@@ -33,6 +34,7 @@ export const routes: Routes = [
             { path: "DisjointRelatedConcept", component: DisjointRelatedConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "DisjointExactMatchConcept", component: DisjointExactMatchConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+            { path: "HierarchicalCycle", component: CyclicConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
