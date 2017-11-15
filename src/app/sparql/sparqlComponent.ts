@@ -347,7 +347,7 @@ export class SparqlComponent {
             } else {
                 res = new ARTBNode("_:" + binding.value);
             }
-            this.sharedModals.openResourceView(res);
+            this.sharedModals.openResourceView(res, false);
         }
     }
 
