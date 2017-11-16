@@ -17,7 +17,8 @@ import { AdministrationModule } from "./administrationModule";
 import { UserModule } from "./userModule";
 import { MetadataModule } from "./metadataModule";
 import { HistoryValidationModule } from "./historyValidationModule";
-import { PreferencesModule } from "./preferencesModule"
+import { PreferencesModule } from "./preferencesModule";
+import { Sheet2RdfModule } from "./sheet2rdfModule";
 
 import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
@@ -50,7 +51,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
-            HistoryValidationModule, PreferencesModule,
+            HistoryValidationModule, PreferencesModule, Sheet2RdfModule,
 
             STServicesModule,
             appRouting,

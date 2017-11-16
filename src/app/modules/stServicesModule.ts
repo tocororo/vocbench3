@@ -27,6 +27,7 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { SearchServices } from "../services/searchServices";
 import { ServicesServices } from "../services/servicesServices";
+import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
@@ -64,6 +65,7 @@ import { VersionsServices } from "../services/versionsServices";
         ResourceViewServices,
         SearchServices,
         ServicesServices,
+        Sheet2RDFServices,
         SkosServices,
         SkosxlServices,
         SparqlServices,

@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {BSModalContext, BSModalContextBuilder} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent, Modal, OverlayConfig} from "ngx-modialog";
-import {SignaturePickerModal, SignaturePickerModalData} from "./signaturePickerModal";
-import {CODAServices} from "../../services/codaServices"
-import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../../models/Coda";
+import { Component } from "@angular/core";
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent, Modal, OverlayConfig } from "ngx-modialog";
+import { SignaturePickerModal, SignaturePickerModalData } from "./signaturePickerModal";
+import { CODAServices } from "../../../../services/codaServices"
+import { ConverterContractDescription, ConverterUtils, SignatureDescription, ParameterDescription, RDFCapabilityType } from "../../../../models/Coda";
 
 export class ConverterPickerModalData extends BSModalContext {
     /**
@@ -30,7 +30,7 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
     
     private converters: ConverterContractDescription[];
     private selectedConverter: ConverterContractDescription;
-    private selectedConverterType: "uri" | "literal"; //uri/literal
+    private selectedConverterType: RDFCapabilityType; //uri/literal
     private selectedSignature: SignatureDescription;
 
     private projectionOperator: string = "";
@@ -105,43 +105,20 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
     }
 
     private updateProjectionOperator() {
-        this.projectionOperator = "";
-        if (this.selectedConverter != null) {
-            this.projectionOperator += this.selectedConverterType; //'uri' or 'literal'
-            //default converter doesn't need to be specified explicitly
-            if (this.selectedConverter.getName() == "DefaultConverter") {
-                return;
-            }
-            let convQName = this.selectedConverter.getURI().replace("http://art.uniroma2.it/coda/contracts/", "coda:")
-            this.projectionOperator += "(" + convQName + "(";
-            //converter params
-            this.projectionOperator += this.serializeConverterParams();
-            this.projectionOperator += "))";
-        }
+        this.projectionOperator = ConverterUtils.getConverterProjectionOperator(this.selectedConverter, this.selectedSignature, this.selectedConverterType);
     }
 
-    private serializeConverterParams(): string {
-        var params: string = "";
-        var signatureParams: ParameterDescription[] = this.selectedSignature.getParameters();
-        for (var i = 0; i < signatureParams.length; i++) {
-            if (signatureParams[i].getType().startsWith("java.util.Map")) {
-                params += "{ key = \"value\"}, ";    
-            } else { //java.lang.String
-                params += "\"" + this.selectedSignature.getParameters()[i].getName() + "\", ";
-            }
-        }
-        params = params.slice(0, -2); //remove the final ', '
-        return params;
-    }
-
-    private switchConverterType(convType: "uri"|"literal") {
+    private switchConverterType(convType: RDFCapabilityType) {
         this.selectedConverterType = convType;
         this.updateProjectionOperator();
     }
 
     ok(event: Event) {
         event.stopPropagation();
-        this.dialog.close(this.projectionOperator);
+        this.dialog.close({
+            projectionOperator: this.projectionOperator,
+            contractDesctiption: this.selectedConverter
+        });
     }
 
     cancel() {

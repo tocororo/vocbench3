@@ -10,6 +10,7 @@ import { SparqlComponent } from "./sparql/sparqlComponent";
 import { HistoryComponent } from "./historyValidation/historyComponent";
 import { ValidationComponent } from "./historyValidation/validationComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
+import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
 import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
@@ -32,6 +33,7 @@ export const routes: Routes = [
     { path: "History", component: HistoryComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+    { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
     { path: "Registration/:firstAccess", component: RegistrationComponent, canDeactivate: [CanDeactivateModalGuard] }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent, canDeactivate: [CanDeactivateModalGuard] },

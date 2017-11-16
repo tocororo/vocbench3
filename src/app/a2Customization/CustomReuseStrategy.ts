@@ -6,13 +6,14 @@ import { ComponentRef } from "@angular/core";
 import { ProjectComponent } from "../project/projectComponent";
 import { SparqlComponent } from "../sparql/sparqlComponent";
 import { DataComponent } from "../data/dataComponent";
+import { Sheet2RdfComponent } from "../sheet2rdf/sheet2rdfComponent";
 import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { VBContext } from "../utils/VBContext";
 
 // This impl. bases upon one that can be found in the router's test cases.
 export class CustomReuseStrategy implements RouteReuseStrategy {
 
-    private pathWithState: string[] = ["Data", "Sparql", "AlignmentValidation"];
+    private pathWithState: string[] = ["Data", "Sparql", "AlignmentValidation", "Sheet2RDF"];
 
     // private projectChanged: boolean;
 
@@ -75,6 +76,12 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
                     let componentRef: ComponentRef<AlignmentValidationComponent> = detachedRouteHandle['componentRef'];
                     componentRef.destroy();
                     delete this.handlers["AlignmentValidation"];
+                }
+                if (this.handlers["Sheet2RDF"]) {
+                    let detachedRouteHandle = this.handlers["Sheet2RDF"];
+                    let componentRef: ComponentRef<Sheet2RdfComponent> = detachedRouteHandle['componentRef'];
+                    componentRef.destroy();
+                    delete this.handlers["Sheet2RDF"];
                 }
                 //return false, so it attacches a new DataComponent
                 return false;

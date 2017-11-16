@@ -9,6 +9,7 @@ import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAc
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
+import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
 
 @Injectable()
 export class SharedModalServices {
@@ -84,6 +85,21 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(LanguageSelectorModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal that allow to select a converter
+     * @param title 
+     * @param message 
+     */
+    selectConverter(title: string, message?: string) {
+        var modalData = new ConverterPickerModalData(title, message);
+        const builder = new BSModalContextBuilder<ConverterPickerModalData>(
+            modalData, undefined, ConverterPickerModalData
+        );
+        builder.size('lg').keyboard(null);
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(ConverterPickerModal, overlayConfig).result;
     }
 
 }

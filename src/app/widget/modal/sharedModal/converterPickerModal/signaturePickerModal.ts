@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
 import {DialogRef, ModalComponent} from "ngx-modialog";
-import {SignatureDescription, ParameterDescription} from "../../models/Coda";
+import {SignatureDescription, ParameterDescription} from "../../../../models/Coda";
 
 export class SignaturePickerModalData extends BSModalContext {
     /**

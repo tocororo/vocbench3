@@ -1,12 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent, Modal, OverlayConfig } from "ngx-modialog";
-import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal";
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType } from "../../models/CustomForms";
 import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
 export class CustomFormEditorModalData extends BSModalContext {
@@ -45,7 +45,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private errorMsg: string;
 
     constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private browsingModals: BrowsingModalServices,
-        private basicModals: BasicModalServices, private cfService: CustomFormsServices) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private cfService: CustomFormsServices) {
         this.context = dialog.context;
     }
 
@@ -69,18 +69,11 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     }
 
     private pickConverter() {
-        var modalData = new ConverterPickerModalData("Pick a converter", null);
-        const builder = new BSModalContextBuilder<ConverterPickerModalData>(
-            modalData, undefined, ConverterPickerModalData
-        );
-        builder.size('lg').keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(ConverterPickerModal, overlayConfig).result.then(
-            projOperator => {
-                this.viewChildCodemirror.insertAtCursor(projOperator);
-            },
-            () => { }
-        );
+        this.sharedModals.selectConverter("Pick a converter", null).then(
+            (converter: {projectionOperator: string, contractDesctiption: any }) => {
+                this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
+            }
+        )
     }
 
     //========= PROPERTY CHAIN HANDLERS ============

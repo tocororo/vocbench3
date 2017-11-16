@@ -487,10 +487,19 @@ export class HttpServiceContext {
     }
 
     /**
-     * Sets a sessione token (to keep track of session in some tools/scenarios)
+     * Initializes (only if not already initialized) a session token 
+     * (to keep track of session in some tools/scenarios like alignment validation or sheet2rdf).
      */
-    static setSessionToken(token: string) {
-        this.sessionToken = token
+    static initSessionToken() {
+        if (this.sessionToken == null) {
+            let token = '';
+            let chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (var i = 0; i < 16; i++) {
+                let idx = Math.round(Math.random() * (chars.length - 1));
+                token = token + chars[idx];
+            }
+            this.sessionToken = token;
+        }
     }
     /**
      * Gets a sessione token (to keep track of session in some tools/scenarios)

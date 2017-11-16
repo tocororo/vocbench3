@@ -1,0 +1,145 @@
+<div class="vbox">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="hbox" style="flex: initial; align-items: center;">
+                <label style="white-space: nowrap; margin-right: 4px;">Spreadsheet file:</label>
+                <file-picker (fileChanged)="fileChangeEvent($event)" [size]="'xs'" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
+                <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="loadSpreadsheet()"
+                    [disabled]="!spreadsheetFile">Load</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="vbox" style="margin-top: 4px;">
+
+        <div #topPanel class="hbox" [ngStyle]="{ 'flex': topPanelFlex }">
+
+            <div #previewPanel class="subPanel vbox" [ngStyle]="{ 'flex': previewPanelFlex }" style="margin-bottom: 0px;">
+                <div class="subPanel-heading">
+                    <span style="flex: 1;">
+                        <label>Spreadsheet preview</label>
+                        <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
+                    </span>
+                    
+                    <div class="dropdown pull-right" style="margin-left: 4px;">
+                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            Legend <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a>
+                                    <div><span class="glyphicon glyphicon-stop unknownHeader"></span> Header with unknown or not valid associated property</div>
+                                    <div><span class="glyphicon glyphicon-stop propertyHeader"></span> Header with valid associated property</div>
+                                    <div><span class="glyphicon glyphicon-stop subjectHeader"></span> Subject header</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox" style="padding: 0px; background: #eee;">
+                    <table class="table scrollableContainer">
+                        <tbody>
+                            <tr>
+                                <td *ngFor="let h of headers" class="columnHeader">
+                                    <span [ngClass]="getHeaderCssClass(h)">
+                                        {{h.name}}
+                                    </span>
+                                    <button class="btn btn-xs btn-default" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h)">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{active: row == selectedTablePreviewRow }">
+                                <td *ngFor="let c of row.cells" class="spreadsheetCell" [title]="c.value">{{c.value}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="sliderX" (mousedown)="onMousedownX($event);"></div>
+
+            <div #pearlPanel class="subPanel vbox" [ngStyle]="{ 'flex': pearlPanelFlex }" style="margin-bottom: 0px;">
+                <div class="subPanel-heading">
+                    <label style="flex: 1;">
+                        Pearl
+                        <span *ngIf="pearlUnsaved" title="Unsaved pearl code">*</span>
+                    </label>
+                    <span *ngIf="!pearlValidation.valid" class="glyphicon glyphicon-alert" style="margin-right: 8px; color: #d00;"
+                        [title]="pearlValidation.details"></span>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="savePearl()" title="Save Pearl" [disabled]="!pearlUnsaved">
+                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                        </button>
+                        <!-- Workaround to show input file as simple <button> -->
+                        <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
+                        <button class="btn btn-default" (click)="inputFile.click()" title="Load Pearl" [disabled]="!tablePreview">
+                            <span class="glyphicon glyphicon-open"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="exportPearl()" title="Export Pearl" [disabled]="!pearl">
+                            <span class="glyphicon glyphicon-save"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox">
+                    <codemirror [code]="pearl" (codechange)="onPearlChange($event)" style="flex: 1;" [disabled]="!tablePreview">
+                    </codemirror>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sliderY" (mousedown)="onMousedownY($event);"></div>
+
+        <div #triplesPanel class="vbox" [ngStyle]="{ 'flex': triplesPanelFlex }">
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <span style="flex: 1;">
+                        <label>Generated triples preview</label>
+                        <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} out of {{totalTriples}})</span>
+                    </span>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="generateTriples()" title="Generate Triples">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="addTriples()" title="Add triples" [disabled]="!triplesPreview">
+                            <span class="glyphicon glyphicon-import"></span>
+                        </button>
+                    </div>
+                    <div class="dropdown pull-right" style="margin-left: 4px;">
+                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="!triplesPreview">
+                            Export as... <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li *ngFor="let f of exportFormats"><a (click)="exportTriplesAs(f)">{{f.name}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="subPanel-body vbox scrollableContainer">
+                    <table class="table table-condensed table-hoverable" style="flex: 1">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Predicate</th>
+                                <th>Object</th>
+                            </tr>
+                        </thead>
+                        <tbody style="overflow: auto;">
+                            <tr *ngFor="let t of triplesPreview" (click)="selectTriplePreviewRow(t)"
+                                [ngClass]="{ 'oddTablePreviewRow' : t.row%2==0, active: t == selectedTriplePreviewRow }">
+                                <td>{{t.subject}}</td>
+                                <td>{{t.predicate}}</td>
+                                <td>{{t.object}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

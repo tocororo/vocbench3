@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { HttpServiceContext } from "../../utils/HttpManager";
@@ -21,8 +21,6 @@ import { ResourcesServices } from "../../services/resourcesServices";
     host: { class: "pageComponent" }
 })
 export class AlignmentValidationComponent {
-
-    private sessionToken: string;
 
     private alignmentFile: File;
     private alignmentCellList: Array<AlignmentCell> = [];
@@ -65,7 +63,6 @@ export class AlignmentValidationComponent {
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
-        this.sessionToken = this.generateSessionRandomToken();
         //init settings (where not provided, set a default)
         this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
         if (this.rejectedAlignmentAction == null) {
@@ -85,7 +82,9 @@ export class AlignmentValidationComponent {
         }
     }
 
-    ngOnDestroy() {
+    //use HostListener instead of ngOnDestroy since this component is reused and so it is never destroyed
+    @HostListener('window:beforeunload', [ '$event' ])
+    beforeUnloadHandler(event: Event) {
         // close session server side
         this.alignmentService.closeSession().subscribe();
     }
@@ -101,7 +100,7 @@ export class AlignmentValidationComponent {
      * Loads the alignment file and the mapping cells
      */
     private loadAlignment() {
-        this.alignmentService.setSessionToken(this.sessionToken);
+        HttpServiceContext.initSessionToken();
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.alignmentService.loadAlignment(this.alignmentFile).subscribe(
             stResp => {
@@ -293,7 +292,7 @@ export class AlignmentValidationComponent {
             this.basicModals.confirm("Change relation",
                 "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
                 "warning").then(
-                confirm => {
+                (confirm: any) => {
                     this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), relation).subscribe(
                         resultCell => {//replace the alignment cell with the new one
                             this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
@@ -419,7 +418,7 @@ export class AlignmentValidationComponent {
         if (this.rejectedAlignmentAction == "skip") {
             this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments. Are you sure to continue?", "warning").then(
-                confirm => {
+                (confirm: any) => {
                     this.applyValidation(false);
                 },
                 () => { }
@@ -427,7 +426,7 @@ export class AlignmentValidationComponent {
         } else if (this.rejectedAlignmentAction == "delete") {
             this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
                 + "accepted alignments and delete the triples of the ones rejected. Are you sure to continue?", "warning").then(
-                confirm => {
+                (confirm: any) => {
                     this.applyValidation(true);
                 },
                 () => { }
@@ -470,16 +469,6 @@ export class AlignmentValidationComponent {
                 this.basicModals.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
             }
         );
-    }
-
-    private generateSessionRandomToken() {
-        var result = '';
-        var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for (var i = 0; i < 16; i++) {
-            var idx = Math.round(Math.random() * (chars.length - 1));
-            result = result + chars[idx];
-        }
-        return result;
     }
 
     /**

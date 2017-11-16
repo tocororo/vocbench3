@@ -31,6 +31,8 @@ import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAcces
 import { RemoteAccessConfigEditorModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigEditorModal";
 import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
+import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
+import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
 
 //browsing modals
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
@@ -76,6 +78,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
+        ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent
     ],
@@ -98,6 +101,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
+        ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal
     ]
 })

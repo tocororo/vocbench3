@@ -387,8 +387,4 @@ export class AlignmentServices {
         return c;
     }
 
-    public setSessionToken(token: string) {
-        HttpServiceContext.setSessionToken(token);
-    }
-
 }

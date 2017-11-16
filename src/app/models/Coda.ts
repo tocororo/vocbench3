@@ -1,3 +1,5 @@
+import { RDFTypesEnum } from "./ARTResources";
+
 export class ConverterContractDescription {
 
     public static NAMESPACE = "http://art.uniroma2.it/coda/contracts/";
@@ -37,6 +39,48 @@ export class ConverterContractDescription {
     public getSignatures(): SignatureDescription[] {
         return this.signatures;
     }
+}
+
+export class ConverterUtils {
+
+    public static getConverterProjectionOperator(converter: ConverterContractDescription, signature?: SignatureDescription,
+            capabilityType?: RDFCapabilityType): string {
+        let projectionOperator: string = "";
+        projectionOperator += (converter.getRDFCapability() == RDFTypesEnum.uri) ? RDFTypesEnum.uri : RDFTypesEnum.literal; //'uri' or 'literal'
+        //default converter doesn't need to be specified explicitly
+        if (converter.getURI() == ConverterContractDescription.NAMESPACE + "default") {
+            return capabilityType;
+        }
+        let convQName = converter.getURI().replace(ConverterContractDescription.NAMESPACE, ConverterContractDescription.PREFIX + ":");
+        projectionOperator += "(" + convQName + "(";
+        //converter params
+        if (signature != null) {
+            projectionOperator += this.serializeConverterParams(signature);
+        }
+        projectionOperator += "))";
+        return projectionOperator;
+    }
+
+    private static serializeConverterParams(signature: SignatureDescription): string {
+        var params: string = "";
+        if (signature != null) {
+            var signatureParams: ParameterDescription[] = signature.getParameters();
+            for (var i = 0; i < signatureParams.length; i++) {
+                if (signatureParams[i].getType().startsWith("java.util.Map")) {
+                    params += "{ key = \"value\"}, ";    
+                } else { //java.lang.String
+                    params += "\"" + signature.getParameters()[i].getName() + "\", ";
+                }
+            }
+            params = params.slice(0, -2); //remove the final ', '
+        }
+        return params;
+    }
+
+    public static getConverterQName(converterUri: string): string {
+        return converterUri.replace(ConverterContractDescription.NAMESPACE, ConverterContractDescription.PREFIX + ":");
+    }
+
 }
 
 export class SignatureDescription {
@@ -86,4 +130,15 @@ export class ParameterDescription {
 }
 
 export type RDFCapabilityType = "node" | "uri" | "typedLiteral" | "literal";
+export const RDFCapabilityType = {
+    node: "node" as RDFCapabilityType,
+    uri: "uri" as RDFCapabilityType,
+    typedLiteral: "typedLiteral" as RDFCapabilityType,
+    literal: "literal" as RDFCapabilityType
+}
+
 export type RequirementLevels = "literal" | "uri";
+export const RequirementLevels = {
+    literal: "literal" as RequirementLevels,
+    uri: "uri" as RequirementLevels
+}
