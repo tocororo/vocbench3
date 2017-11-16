@@ -45,13 +45,15 @@
                         </span>
                         <div class="dropdown pull-right" style="margin-left: 5px;">
                             <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"
-                                [disabled]="t.queryResult == null">
+                                [disabled]="t.queryResult == null && t.resultType != 'boolean'">
                                 Save results as... <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a (click)="exportAsJSON(t)">Json</a></li>
                                 <li><a (click)="exportAsCSV(t)">CSV</a></li>
                                 <li><a (click)="exportAsTSV(t)">TSV</a></li>
+                                <li><a (click)="exportAsSpradsheet(t, 'xlsx')">XLSX (MicroSoft spreadsheet)</a></li>
+                                <li><a (click)="exportAsSpradsheet(t, 'ods')">ODS (LibreOffice spreadsheet)</a></li>
                             </ul>
                         </div>
                     </div>
@@ -72,9 +74,6 @@
                                         <ng-template [ngIf]="i >= t.resultsPage*resultsLimit && i < t.resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
                                             <tr>
                                                 <td *ngFor="let h of t.headers">
-                                                    <!--<ng-template [ngIf]="bindings[h]">
-                                                        {{getBindingShow(bindings[h])}}
-                                                    </ng-template>-->
                                                     <span *ngIf="bindings[h]" [ngClass]="{ clickable: isBindingResource(bindings[h]) }" (click)="onBindingClick(bindings[h])">
                                                         {{getBindingShow(bindings[h])}}
                                                     </span>
@@ -107,7 +106,6 @@
                             </button>
                         </div>
                     </div>
-
 
                 </div>
             </ng-template>

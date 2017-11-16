@@ -31,23 +31,7 @@ export class SparqlComponent {
         }
         //set them as suffix of sampleQuery
         this.sampleQuery = prefixImports + "\n" + this.sampleQuery;
-        //initialize the first tab
-        this.tabs.push({
-            query: this.sampleQuery,
-            queryMode: "query",
-            respSparqlJSON: null, //keep the "sparql" JSON object contained in the response
-            resultType: null, //graph / tuple / boolean
-            headers: null,
-            queryResult: null,
-            queryInProgress: false,
-            queryValid: true,
-            queryTime: null,
-            inferred: false,
-            removable: false,
-            active: true,
-            resultsPage: 0,
-            resultsTotPage: 0
-        });
+        this.addTab();
     }
 
     private doQuery(tab: Tab) {
@@ -55,6 +39,7 @@ export class SparqlComponent {
         tab.queryResult = null;
         tab.resultsPage = 0;
         tab.resultsTotPage = 0;
+        tab.queryCache = tab.query; //stored the submitted query
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (tab.queryMode == "query") {
             if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EVALUATE_QUERY)) {
@@ -246,6 +231,17 @@ export class SparqlComponent {
         return value;
     }
 
+    private exportAsSpradsheet(tab: Tab, format: "xlsx" | "ods") {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.sparqlService.exportQueryResultAsSpreadsheet(tab.queryCache, format, tab.inferred).subscribe(
+            blob => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                var exportLink = window.URL.createObjectURL(blob);
+                this.basicModals.downloadLink("Export SPARQL results", null, exportLink, "sparql_export." + format);
+            }
+        );
+    }
+
     /**
      * Prepares a json or text file containing the given content and shows a modal to download it.
      */
@@ -253,7 +249,7 @@ export class SparqlComponent {
         var data = new Blob([fileContent], { type: 'text/plain' });
         var textFile = window.URL.createObjectURL(data);
         var fileName = "result." + type;
-        this.basicModals.downloadLink("Save SPARQL results", null, textFile, fileName).then(
+        this.basicModals.downloadLink("Export SPARQL results", null, textFile, fileName).then(
             done => { window.URL.revokeObjectURL(textFile); },
             () => { }
         );
@@ -294,10 +290,14 @@ export class SparqlComponent {
     //TAB HANDLER
 
     addTab() {
-        this.getActiveTab().active = false;
+        let currentActiveTab = this.getActiveTab();
+        if (currentActiveTab != null) {
+            currentActiveTab.active = false;
+        }
         this.tabs.push({
             query: this.sampleQuery,
             queryMode: "query",
+            queryCache: null,
             respSparqlJSON: null,
             resultType: null,
             headers: null,
@@ -359,6 +359,7 @@ export class SparqlComponent {
 class Tab {
     query: string;
     queryMode: "query" | "update";
+    queryCache: string; //contains the last query submitted (useful to invoke the export excel)
     respSparqlJSON: any; //keep the "sparql" JSON object contained in the response
     resultType: "graph" | "tuple" | "boolean"; //graph / tuple / boolean
     headers: string[];

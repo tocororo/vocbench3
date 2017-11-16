@@ -90,5 +90,45 @@ export class SparqlServices {
         }
         return this.httpMgr.doPost(this.serviceName, "executeUpdate", params, true);
     }
+    
+    /**
+     * Exports the results of a query in the given spreadsheet format
+     * @param query 
+     * @param format 
+     * @param includeInferred 
+     * @param ql 
+     * @param bindings 
+     * @param maxExecTime 
+     * @param defaultGraphs 
+     * @param namedGraphs 
+     */
+    exportQueryResultAsSpreadsheet(query: string, format: "xlsx" | "ods", includeInferred?: boolean, ql?: "SPARQL" | "SERQL",
+            bindings?: any, maxExecTime?: number, defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
+        console.log("[SparqlServices] exportQueryResultAsSpreadsheet");
+        var params: any = {
+            query: query,
+            format: format
+        };
+        if (includeInferred != null) {
+            params.includeInferred = includeInferred;
+        }
+        if (ql != null) {
+            params.ql = ql;
+        }
+        if (bindings != null) {
+            params.bindings = bindings;
+        }
+        if (maxExecTime != null) {
+            params.maxExecTime = maxExecTime;
+        }
+        if (defaultGraphs != null) {
+            params.defaultGraphs = defaultGraphs;
+        }
+        if (namedGraphs != null) {
+            params.namedGraphs = namedGraphs;
+        }
+        return this.httpMgr.downloadFile(this.serviceName, "exportQueryResultAsSpreadsheet", params, true);
+    }
+
 
 }
