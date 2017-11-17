@@ -11,40 +11,42 @@
                         <div style="text-align: right;">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
                         <div style="text-align: left;"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
                     </th>
-                    <th *ngFor="let cons of consumerList" class="text-center fixedCol" colspan="2" [title]="cons">{{cons}}</th>
+                    <th *ngFor="let cons of consumerList" class="text-center fixedCol" [title]="cons">{{cons}}</th>
                 </tr>
             </thead>
             <tbody>
                 <ng-template ngFor let-map [ngForOf]="tableModel">
                     <tr>
-                        <td style="font-weight: bold; vertical-align: middle" class="firstCol" rowspan="2">
+                        <td style="font-weight: bold; vertical-align: middle;">
                             <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{map.project}}</span>
                             <button class="btn btn-default btn-xs pull-right" title="Edit project ACL" (click)="editProjectACL(map.project)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                         </td>
-                        <ng-template ngFor let-acl [ngForOf]="map.consumerACLs">
-                            <td [class]="getCellClass(map.project, acl.consumer)"
-                                 [title]="getTitleAvailableAccessLevel(map.project, acl.consumer, acl.availableAccessLevel)">
-                                {{ acl.availableAccessLevel }}
-                            </td>
-                            <td [class]="getCellClass(map.project, acl.consumer, true)"
-                                [title]="getTitleAcquiredAccessLevel(map.project, acl.consumer, acl.acquiredAccessLevel)">
-                                {{ acl.acquiredAccessLevel }}
-                            </td>
-                        </ng-template>
-                    </tr>
-                    <tr>
-                        <ng-template ngFor let-acl [ngForOf]="map.consumerACLs">
-                            <td [class]="getCellClass(map.project, acl.consumer)"
-                                [title]="getTitleAvailableLock(map.project, acl.availableLockLevel)">
-                                {{ acl.availableLockLevel }}
-                            </td>
-                            <td [class]="getCellClass(map.project, acl.consumer, false, true)"
-                                [title]="getTitleAcquiredLock(map.project, acl.consumer, acl.acquiredLockLevel)">
-                                {{ acl.acquiredLockLevel }}
-                            </td>
-                        </ng-template>
+                        <td *ngFor="let acl of map.consumerACLs" style="padding: 0px;">
+                            <table class="table table-bordered table-condensed">
+                                <tr>
+                                    <td [class]="getCellClass(map.project, acl.consumer)"
+                                        [title]="getTitleAvailableAccessLevel(map.project, acl.consumer, acl.availableAccessLevel)">
+                                        {{ acl.availableAccessLevel }}
+                                    </td>
+                                    <td [class]="getCellClass(map.project, acl.consumer, true)"
+                                        [title]="getTitleAcquiredAccessLevel(map.project, acl.consumer, acl.acquiredAccessLevel)">
+                                        {{ acl.acquiredAccessLevel }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td [class]="getCellClass(map.project, acl.consumer)"
+                                        [title]="getTitleAvailableLock(map.project, acl.availableLockLevel)">
+                                        {{ acl.availableLockLevel }}
+                                    </td>
+                                    <td [class]="getCellClass(map.project, acl.consumer, false, true)"
+                                        [title]="getTitleAcquiredLock(map.project, acl.consumer, acl.acquiredLockLevel)">
+                                        {{ acl.acquiredLockLevel }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </ng-template>
             </tbody>

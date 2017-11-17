@@ -11,8 +11,8 @@ import { AccessLevel, LockLevel } from '../../models/Project';
     templateUrl: "./projectACLModal.html",
     styles: [`
         .firstCol { min-width: 90px; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fixedCol { min-width: 60px; max-width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fixedColInner { min-width: 30px; max-width: 30px; }
+        .fixedCol { width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fixedColInner { width: 30px; height: 22px; }
         .disabledCell { background-color: #eee;}
         .accessed { background-color: #58fa58;}
         .locked { background-color: #fa5858;}

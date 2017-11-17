@@ -264,7 +264,6 @@ export class UIUtils {
             } else if (role == RDFResourceRolesEnum.mention.toLocaleLowerCase()) {
                 imgSrc = this.mentionImgSrc;
                 // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
-                console.log("here starts with", rdfResource);
                 if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
                     imgSrc = this.mentionImgSrc; //it is a mentrion
                 } else { //else set individual image as default

@@ -20,7 +20,7 @@
                 <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{active: c == selectedConverter}">
                     <td>{{c.getName()}}</td>
                     <td>{{c.getDescription()}}</td>
-                    <td>{{c.getRDFCapability()}}
+                    <td nowrap>{{c.getRDFCapability()}}
                         <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
                     </td>
                     <td>{{c.getURI()}}</td>
