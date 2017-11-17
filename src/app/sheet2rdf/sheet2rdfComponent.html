@@ -85,9 +85,13 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body vbox">
+                <div class="subPanel-body hbox">
                     <codemirror [code]="pearl" (codechange)="onPearlChange($event)" style="flex: 1;" [disabled]="!tablePreview">
                     </codemirror>
+                    <button class="btn btn-default btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
+                        title="Insert converter" [disabled]="!tablePreview">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
                 </div>
             </div>
 

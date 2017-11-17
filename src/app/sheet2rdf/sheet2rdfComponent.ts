@@ -5,6 +5,8 @@ import { HeaderEditorModal, HeaderEditorModalData } from "./headerEditorModal";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { ExportServices } from "../services/exportServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { HeaderStruct, TableRow, TableCell, TriplePreview } from "../models/Sheet2RDF";
 import { RDFFormat } from "../models/RDFFormat";
@@ -59,8 +61,10 @@ export class Sheet2RdfComponent {
     @ViewChild('topPanel',  { read: ElementRef }) private topPanelRef: ElementRef;
     @ViewChild('triplesPanel',  { read: ElementRef }) private triplesPanelRef: ElementRef;
 
+    @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
+
     constructor(private s2rdfService: Sheet2RDFServices, private exportService: ExportServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, private modal: Modal) {}
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
         this.exportService.getOutputFormats().subscribe(
@@ -242,6 +246,14 @@ export class Sheet2RdfComponent {
             (done: any) => { window.URL.revokeObjectURL(textFile); },
             () => { }
         );
+    }
+
+    private insertConverter() {
+        this.sharedModals.selectConverter("Pick a converter", null).then(
+            (converter: {projectionOperator: string, contractDesctiption: any }) => {
+                this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
+            }
+        )
     }
 
     /**
