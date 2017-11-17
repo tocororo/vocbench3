@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { SparqlServices } from "../services/sparqlServices";
+import { ExportServices } from "../services/exportServices";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { UIUtils } from "../utils/UIUtils";
@@ -7,6 +8,7 @@ import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { PrefixMapping } from "../models/Metadata";
 import { ARTURIResource, ARTResource, ARTBNode } from "../models/ARTResources";
+import { RDFFormat } from "../models/RDFFormat";
 
 @Component({
     selector: "sparql-component",
@@ -20,7 +22,8 @@ export class SparqlComponent {
 
     private resultsLimit: number = 100;
 
-    constructor(private sparqlService: SparqlServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+    constructor(private sparqlService: SparqlServices, private exportService: ExportServices, 
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         //collect the prefix namespace mappings
@@ -238,6 +241,35 @@ export class SparqlComponent {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink("Export SPARQL results", null, exportLink, "sparql_export." + format);
+            }
+        );
+    }
+
+    private exportAsRdf(tab: Tab) {
+        this.exportService.getOutputFormats().subscribe(
+            formats => {
+                let options: string[] = [];
+                formats.forEach(f => options.push(f.name + " (" + f.defaultFileExtension + ")"));
+                this.basicModals.select("Select RDF format", null, options).then(
+                    (selectedFormat: string) => {
+                        let format: RDFFormat;
+                        //select modal returns the string serialization of the format (serialized as before). Here get back the RDFFormat.
+                        formats.forEach(f => {
+                            if (f.name + " (" + f.defaultFileExtension + ")" == selectedFormat) {
+                                format = f;
+                            }
+                        });
+
+                        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                        this.sparqlService.exportConstructResultAsRdf(tab.queryCache, format, tab.inferred).subscribe(
+                            blob => {
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                                var exportLink = window.URL.createObjectURL(blob);
+                                this.basicModals.downloadLink("Export SPARQL results", null, exportLink, "sparql_export." + format.defaultFileExtension);
+                            }
+                        );
+                    }
+                )
             }
         );
     }
