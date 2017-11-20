@@ -1,4 +1,6 @@
-//https://github.com/BCJTI/ng2-cookies
+// this class is partially re-using code from the project:
+// https://github.com/BCJTI/ng2-cookies
+
 export class Cookie {
 	
 	public static RES_VIEW_INCLUDE_INFERENCE = "resource_view.include_inference";
