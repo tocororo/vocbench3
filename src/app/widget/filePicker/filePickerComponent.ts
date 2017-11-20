@@ -2,7 +2,10 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'file-picker',
-    templateUrl: './filePickerComponent.html'
+    templateUrl: './filePickerComponent.html',
+    styles: [
+        ':host { flex: 1; }'
+    ]
 })
 export class FilePickerComponent implements OnInit {
     
