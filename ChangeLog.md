@@ -1,7 +1,9 @@
-# 2.1.0-beta.1 (dd-MM-yyyy)
+# 3.0.0-beta.1 (dd-MM-yyyy)
   * Enabled languages restriction in search.
   * Added support for the definition of mandatory languages for projects.
   * Implemented new ICVs.
+  * Implemented export of SPARQL query results in datasheet (for tuple and graph query) and rdf (only for graph
+  	query) formats.
 
 
 # 2.0.0 (30-10-2017)
