@@ -4,6 +4,7 @@ import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
+import { CustomFormValue } from "../models/CustomForms";
 import { SKOS } from "../models/Vocabulary";
 import { ResourcesServices } from "./resourcesServices"
 
@@ -95,12 +96,11 @@ export class SkosServices {
      * @param broaderConcept broader of the new created concept. If provided, the serivce creates a narrower
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new concept's label (default true)
-     * @param customFormId id of the custom form that set additional info to the concept
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the concept
      * @return 
      */
     createConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
-        conceptCls?: ARTURIResource, customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
+        conceptCls?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -118,9 +118,8 @@ export class SkosServices {
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;
         }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -305,12 +304,11 @@ export class SkosServices {
      * @param newScheme the (optional) uri of the scheme
      * @param schemeCls class of the scheme that is creating (a subclass of skos:ConceptScheme, if not provided the default is skos:ConceptScheme)
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new scheme's label (default true)
-     * @param customFormId id of the custom form that set additional info to the concept
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the concept
      * @return the new scheme
      */
     createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource,
-            customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean): Observable<ARTURIResource> {
+            customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean): Observable<ARTURIResource> {
         console.log("[SkosServices] createConceptScheme");
         var params: any = {
             label: label
@@ -324,9 +322,8 @@ export class SkosServices {
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;
         }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -554,12 +551,11 @@ export class SkosServices {
      * @param containingCollection the parent collection. If provided the new collection will be nested of this one.
      * @param collectionCls class of the collection that is creating (a subclass of skos:Collection, if not provided the default is skos:Collection)
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new collection's label (default true)
-     * @param customFormId id of the custom form that set additional info to the collection
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the collection
      * @return the new collection
      */
     createCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, containingCollection?: ARTURIResource,
-        collectionCls?: ARTURIResource, customFormId?: string, userPromptMap?: any, checkExistingAltLabel?: boolean) {
+        collectionCls?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createCollection");
         var params: any = {
             collectionType: collectionType,
@@ -577,9 +573,8 @@ export class SkosServices {
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;
         }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 

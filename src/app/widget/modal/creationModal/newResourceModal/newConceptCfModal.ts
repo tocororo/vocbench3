@@ -6,6 +6,7 @@ import { CustomFormsServices } from "../../../../services/customFormsServices"
 import { BasicModalServices } from "../../basicModal/basicModalServices"
 import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
+import { CustomFormValue } from "../../../../models/CustomForms"
 import { SKOS } from "../../../../models/Vocabulary"
 
 export class NewConceptCfModalData extends BSModalContext {
@@ -80,13 +81,12 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, schemes: ARTURIResource[], cfValue: CustomFormValue } = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
             cls: null,
             schemes: this.schemes,
-            cfId: this.customFormId,
-            cfValueMap: entryMap
+            cfValue: new CustomFormValue(this.customFormId, entryMap)
         }
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {

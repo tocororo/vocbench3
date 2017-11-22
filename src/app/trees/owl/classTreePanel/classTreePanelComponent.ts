@@ -36,7 +36,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     createRoot() {
         this.creationModals.newResourceCf("Create a new class", OWL.class, false).then(
             (data: any) => {
-                this.classesService.createClass(data.uriResource, OWL.thing, data.cfId, data.cfValueMap).subscribe();
+                this.classesService.createClass(data.uriResource, OWL.thing, data.cfValue).subscribe();
             },
             () => {}
         );
@@ -45,7 +45,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     createChild() {
         this.creationModals.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), OWL.class, false).then(
             (data: any) => {
-                this.classesService.createClass(data.uriResource, this.selectedNode, data.cfId, data.cfValueMap).subscribe();
+                this.classesService.createClass(data.uriResource, this.selectedNode, data.cfValue).subscribe();
             },
             () => {}
         );

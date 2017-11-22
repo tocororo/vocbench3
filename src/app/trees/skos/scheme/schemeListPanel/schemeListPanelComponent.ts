@@ -53,7 +53,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private create() {
         this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
             (res: any) => {
-                this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap).subscribe(
+                this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfValue).subscribe(
                     newScheme => { 
                         this.schemeList.unshift({ checked: false, scheme: newScheme });
                     },
@@ -61,7 +61,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfId, res.cfValueMap, false).subscribe(
+                                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfValue, false).subscribe(
                                         newScheme => { 
                                             this.schemeList.unshift({ checked: false, scheme: newScheme });
                                         }

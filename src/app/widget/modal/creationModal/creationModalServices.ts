@@ -36,7 +36,7 @@ export class CreationModalServices {
      * @param cls class of the new creating resource
      * @param clsChangeable tells if the class of the creating resource can be changed
      * @param cfId the custom form id
-     * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, cfValueMap:any}
+     * @return
      */
     newResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean) {
         var modalData = new NewResourceCfModalData(title, cls, clsChangeable);
@@ -70,7 +70,7 @@ export class CreationModalServices {
      * @param cls class of the new creating resource
      * @param clsChangeable tells if the class of the creating resource can be changed
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
-     * @return if the modal closes with ok returns a promise containing an object {uriResource:ARTURIResource, label:ARTLiteral, cfValueMap:any}
+     * @return
      */
     newSkosResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, lang?: string) {
         var modalData = new NewSkosResourceCfModalData(title, cls, clsChangeable, lang);

@@ -45,7 +45,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
     private create() {
         this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false).then(
             (data: any) => {
-                this.classesService.createInstance(data.uriResource, this.cls, data.cfId, data.cfValueMap).subscribe();
+                this.classesService.createInstance(data.uriResource, this.cls, data.cfValue).subscribe();
             },
             () => {}
         );

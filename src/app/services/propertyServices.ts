@@ -5,7 +5,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource, ARTLiteral, ARTBNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
 import { RDF, OWL } from "../models/Vocabulary";
-import { FormCollection, CustomForm, CustomFormType } from "../models/CustomForms";
+import { FormCollection, CustomForm, CustomFormType, CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "./resourcesServices"
 
 @Injectable()
@@ -273,12 +273,11 @@ export class PropertyServices {
      * @param propertyType uri of a property class
      * @param newProperty uri of the new property
      * @param superProperty if provided the new property will be subProperty of this
-     * @param customFormId id of the custom form that set additional info to the property
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the property
      * @return the new property
      */
     createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty?: ARTURIResource, 
-            customFormId?: string, userPromptMap?: any) {
+            customFormValue?: CustomFormValue) {
         console.log("[PropertyServices] createProperty");
         var params: any = {
             propertyType: propertyType,
@@ -287,9 +286,8 @@ export class PropertyServices {
         if (superProperty != null) {
             params.superProperty = superProperty;
         }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
         return this.httpMgr.doPost(this.serviceName, "createProperty", params, true).map(
             stResp => {

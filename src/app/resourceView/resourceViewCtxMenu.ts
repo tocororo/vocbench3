@@ -56,7 +56,7 @@ export class ResourceViewContextMenu {
                 //from the resView of the xLabel I don't know the concept to which it belongs, 
                 //so oldConcept in spawnNewConceptFromLabel request is null and lets the server find the oldConcept
                 this.refactorService.spawnNewConceptFromLabel(this.resource, data.schemes, null,
-                    data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
+                    data.uriResource, data.broader, data.cfValue).subscribe(
                     stResp => {
                         this.update.emit();
                     }

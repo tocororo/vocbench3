@@ -4,6 +4,7 @@ import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute } from "../models/ARTResources";
+import { CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "./resourcesServices"
 
 @Injectable()
@@ -76,19 +77,16 @@ export class ClassesServices {
      * Creates a new class
      * @param newClass 
      * @param superClass 
-     * @param customFormId id of the custom form that set additional info to the concept
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the concept
      */
-    createClass(newClass: ARTURIResource, superClass: ARTURIResource,
-        customFormId?: string, userPromptMap?: any) {
+    createClass(newClass: ARTURIResource, superClass: ARTURIResource, customFormValue?: CustomFormValue) {
         console.log("[ClassesServices] createClass");
         var params: any = {
             newClass: newClass,
             superClass: superClass
         };
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
         return this.httpMgr.doPost(this.serviceName, "createClass", params, true).map(
             stResp => {
@@ -131,19 +129,16 @@ export class ClassesServices {
      * Creates a new instance for the given class
      * @param newInstance 
      * @param cls 
-     * @param customFormId id of the custom form that set additional info to the concept
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the concept
      */
-    createInstance(newInstance: ARTURIResource, cls: ARTURIResource,
-        customFormId?: string, userPromptMap?: any) {
+    createInstance(newInstance: ARTURIResource, cls: ARTURIResource, customFormValue?: CustomFormValue) {
         console.log("[ClassesServices] createInstance");
         var params: any = {
             newInstance: newInstance,
             cls: cls
         };
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
         return this.httpMgr.doPost(this.serviceName, "createInstance", params, true).map(
             stResp => {

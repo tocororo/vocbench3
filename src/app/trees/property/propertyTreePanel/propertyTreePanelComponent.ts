@@ -36,7 +36,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         let propertyType: ARTURIResource = this.convertRoleToClass(role);
         this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false).then(
             (data: any) => {
-                this.propService.createProperty(data.cls, data.uriResource, null, data.cfId, data.cfValueMap).subscribe();
+                this.propService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe();
             },
             () => {}
         );
@@ -47,7 +47,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
         this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false).then(
             (data: any) => {
-                this.propService.createProperty(data.cls, data.uriResource, this.selectedNode, data.cfId, data.cfValueMap).subscribe();
+                this.propService.createProperty(data.cls, data.uriResource, this.selectedNode, data.cfValue).subscribe();
             },
             () => {}
         );

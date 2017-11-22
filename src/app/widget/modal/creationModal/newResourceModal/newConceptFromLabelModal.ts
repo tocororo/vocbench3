@@ -6,7 +6,7 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
-import { CustomForm, FormField } from "../../../../models/CustomForms";
+import { CustomForm, FormField, CustomFormValue } from "../../../../models/CustomForms";
 import { ARTLiteral, ARTURIResource, ARTResource } from "../../../../models/ARTResources";
 import { VBProperties } from "../../../../utils/VBProperties";
 
@@ -155,13 +155,12 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfValue: CustomFormValue } = {
             uriResource: null,
             broader: null,
             cls: null,
             schemes: this.schemes,
-            cfId: this.customFormId,
-            cfValueMap: entryMap
+            cfValue: new CustomFormValue(this.customFormId, entryMap)
         }
         //Set URI only if not empty
         if (this.uri != null && this.uri.trim() != "") {

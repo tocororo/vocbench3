@@ -328,7 +328,7 @@ export class EditableResourceComponent {
 			data => {
 				let oldConcept: ARTURIResource = <ARTURIResource>this.subject;
 				this.refactorService.spawnNewConceptFromLabel(<ARTResource>this.resource, data.schemes, oldConcept,
-					data.uriResource, data.broader, data.cfId, data.cfValueMap).subscribe(
+					data.uriResource, data.broader, data.cfValue).subscribe(
 					stResp => {
 						this.update.emit();
 					}

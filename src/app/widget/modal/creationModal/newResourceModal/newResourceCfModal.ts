@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal"
-import { CustomFormsServices } from "../../../../services/customFormsServices"
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
-import { BasicModalServices } from "../../basicModal/basicModalServices"
-import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
+import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal";
+import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
+import { CustomFormValue } from "../../../../models/CustomForms";
 
 export class NewResourceCfModalData extends BSModalContext {
     constructor(
@@ -52,11 +53,10 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal implement
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfValue: CustomFormValue } = {
             uriResource: new ARTURIResource(this.uri),
             cls: this.resourceClass,
-            cfId: this.customFormId,
-            cfValueMap: entryMap
+            cfValue: new CustomFormValue(this.customFormId, entryMap)
         }
         this.dialog.close(returnedData);
     }

@@ -1,12 +1,13 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal"
-import { CustomFormsServices } from "../../../../services/customFormsServices"
-import { BasicModalServices } from "../../basicModal/basicModalServices"
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
-import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
-import { SKOS } from "../../../../models/Vocabulary"
+import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal";
+import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
+import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
+import { CustomFormValue } from "../../../../models/CustomForms";
+import { SKOS } from "../../../../models/Vocabulary";
 
 export class NewSkosResourceCfModalData extends BSModalContext {
     constructor(
@@ -74,12 +75,11 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
 
         var entryMap: any = this.collectCustomFormData();
 
-        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, cfId: string, cfValueMap: any} = {
+        var returnedData: { uriResource: ARTURIResource, label: ARTLiteral, cls: ARTURIResource, cfValue: CustomFormValue } = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
             cls: null,
-            cfId: this.customFormId,
-            cfValueMap: entryMap
+            cfValue: new CustomFormValue(this.customFormId, entryMap)
         }
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {

@@ -267,11 +267,11 @@ export class VBProperties {
         return this.searchSettings;
     }
     setSearchSettings(settings: SearchSettings) {
-        Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, this.searchSettings.stringMatchMode, 365*10);
-        Cookie.setCookie(Cookie.SEARCH_USE_URI, this.searchSettings.useURI+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, this.searchSettings.useLocalName+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, this.searchSettings.restrictActiveScheme+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, this.searchSettings.classIndividualSearchMode, 365*10);
+        Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode, 365*10);
+        Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
         if (this.searchSettings.languages != settings.languages) {
             this.prefService.setProjectPreference(Properties.pref_search_languages, JSON.stringify(this.searchSettings.languages)).subscribe();
         }

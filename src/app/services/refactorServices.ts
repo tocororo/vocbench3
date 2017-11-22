@@ -5,6 +5,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
+import { CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "../services/resourcesServices";
 
 @Injectable()
@@ -111,12 +112,11 @@ export class RefactorServices {
      * @param oldConcept concept that owned the xLabel (if null it is retrieved directly from label)
      * @param newConcept uri of the new concept to spawn (if null the uri will be randomically generated)
      * @param broaderConcept broader of the new created concept (if null the concept will be a top)
-     * @param customFormId id of the custom form that set additional info to the concept
-     * @param userPromptMap json map object of key - value of the custom form
+     * @param customFormValue custom form that set additional info to the concept
      */
     spawnNewConceptFromLabel(xLabel: ARTResource, conceptSchemes: ARTURIResource[], oldConcept?: ARTURIResource, 
         newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
-		customFormId?: string, userPromptMap?: any) {
+		customFormValue?: CustomFormValue) {
 
         console.log("[RefactorServices] spawnNewConceptFromLabel");
         var params: any = {
@@ -132,11 +132,10 @@ export class RefactorServices {
         if (broaderConcept != undefined) {
             params.broaderConcept = broaderConcept;
         }
-        if (customFormId != null && userPromptMap != null) {
-            params.customFormId = customFormId;
-            params.userPromptMap = JSON.stringify(userPromptMap);
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doGet(this.serviceName, "spawnNewConceptFromLabel", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "spawnNewConceptFromLabel", params, true).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
