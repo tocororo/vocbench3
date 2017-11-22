@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
-import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { Properties } from '../models/Properties';
 import { ProjectTableColumnStruct } from '../models/Project';
@@ -30,7 +31,17 @@ export class VBProperties {
         classIndividualSearchMode: ClassIndividualPanelSearchMode.all
     };
 
-    constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {}
+    private eventSubscriptions: Subscription[] = [];
+
+    constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
+            (data: { oldResource: ARTResource, newResource: ARTResource }) => this.onResourceRenamed(data.oldResource, data.newResource)
+        ));
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
 
     /* =============================
     ========= PREFERENCES ==========
@@ -93,9 +104,9 @@ export class VBProperties {
         } else {
             this.activeSchemes = schemes;
         }
-        this.prefService.setActiveSchemes(schemes).subscribe(
+        this.prefService.setActiveSchemes(this.activeSchemes).subscribe(
             stResp => {
-                this.eventHandler.schemeChangedEvent.emit(schemes);
+                this.eventHandler.schemeChangedEvent.emit(this.activeSchemes);
             }
         );
     }
@@ -297,6 +308,23 @@ export class VBProperties {
             columns = JSON.parse(value);
         }
         return columns;
+    }
+
+
+    //EVENT HANDLER
+    /**
+     * In case of resource renamed, check if the resource is a current active scheme, in case update the preference
+     * @param oldResource 
+     * @param newResource 
+     */
+    private onResourceRenamed(oldResource: ARTResource, newResource: ARTResource) {
+        for (var i = 0; i < this.activeSchemes.length; i++) {
+            if (this.activeSchemes[i].getNominalValue() == oldResource.getNominalValue()) {
+                this.activeSchemes[i].setURI(newResource.getNominalValue());
+                this.setActiveSchemes(this.activeSchemes);
+                break;
+            }
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { ARTURIResource, ARTResource, ARTLiteral } from '../models/ARTResources';
 import { ResourceViewMode } from '../utils/VBProperties';
 import { VBContext } from '../utils/VBContext';
@@ -73,7 +74,7 @@ export class VBEventHandler {
     /**
      * utility method to make a component unsubscribe from all the event to which has subscribed
      */
-    public unsubscribeAll(subscriptions: any[]) {
+    public unsubscribeAll(subscriptions: Subscription[]) {
         for (var i = 0; i < subscriptions.length; i++) {
             subscriptions[i].unsubscribe();
         }

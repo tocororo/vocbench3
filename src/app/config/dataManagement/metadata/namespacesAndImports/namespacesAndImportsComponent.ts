@@ -177,7 +177,6 @@ export class NamespacesAndImportsComponent {
                                         this.refreshBaseURI();
                                         this.refreshDefaultNamespace();
                                         this.nsBaseURISubmitted = true;
-                                        this.preferences.setActiveSchemes([]);
                                     }
                                 )
                             }

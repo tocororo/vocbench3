@@ -85,8 +85,7 @@ export class RefactorServices {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
                     VBContext.getWorkingProject().setBaseURI(targetBaseURI);
-                    this.preferences.setActiveSchemes(null);
-                    this.eventHandler.schemeChangedEvent.emit(null);
+                    this.preferences.setActiveSchemes([]);
                 }
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
