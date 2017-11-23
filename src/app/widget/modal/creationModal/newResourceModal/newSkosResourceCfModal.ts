@@ -79,7 +79,7 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
             cls: null,
-            cfValue: new CustomFormValue(this.customFormId, entryMap)
+            cfValue: null
         }
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
@@ -88,6 +88,10 @@ export class NewSkosResourceCfModal extends AbstractCustomConstructorModal imple
         //set class only if not the default
         if (this.resourceClass.getURI() != this.context.cls.getURI()) {
             returnedData.cls = this.resourceClass;
+        }
+        //set cfValue only if not null
+        if (this.customFormId != null && entryMap != null) {
+            returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
         this.dialog.close(returnedData);
     }

@@ -86,7 +86,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
             label: new ARTLiteral(this.label, null, this.lang),
             cls: null,
             schemes: this.schemes,
-            cfValue: new CustomFormValue(this.customFormId, entryMap)
+            cfValue: null
         }
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
@@ -96,6 +96,11 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         if (this.resourceClass.getURI() != SKOS.concept.getURI()) {
             returnedData.cls = this.resourceClass;
         }
+        //set cfValue only if not null
+        if (this.customFormId != null && entryMap != null) {
+            returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
+        }
+        
         this.dialog.close(returnedData);
     }
 
