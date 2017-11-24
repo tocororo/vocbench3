@@ -36,8 +36,10 @@ import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceLis
 import { SearchBarComponent } from '../trees/searchBar/searchBarComponent'; //not exported, used just in this module
 import { SearchSettingsModal } from '../trees/searchBar/searchSettingsModal';
 
+import { Ng2CompleterModule } from "ng2-completer";
+
 @NgModule({
-    imports: [CommonModule, FormsModule, RouterModule, SharedModule],
+    imports: [CommonModule, FormsModule, RouterModule, SharedModule, Ng2CompleterModule], 
     declarations: [
         TreePanelComponent,
         ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent,

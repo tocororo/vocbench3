@@ -518,13 +518,26 @@ lang-pref {
     flex: 1;
 }
 
+/* Limit the dropdown size of ng2-completer */
+.completer-dropdown {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 140px !important;
+    bottom: 18px;
+    border-color: #ddd !important;
+}
+ng2-completer {
+    position: relative;
+}
+.matchClass { color: red; font-weight: bold; }
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/
 
-.glyphicon {
+/* .glyphicon {
     line-height: 1.5;
-}
+} */
 
 nav {
     font-size: 12px;
@@ -534,20 +547,6 @@ nav {
     z-index: 999;
     border: 0;
 }
-
-/*.navbar-default, .navbar-collapse,
-.navbar-default .navbar-form {
-	background-color: #1b3671;
-    border-color: #152956;
-}
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus,
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus,
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus,
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-	background-color: #7486ab;
-}*/
 
 .navbar-brand {
     font-size: 18px;
@@ -624,25 +623,6 @@ input[type="radio"], input[type="checkbox"] {
 .dropdown-menu a:hover {
     cursor: pointer
 }
-
-/* To center vertically the modals. Note: this solution is not well tested. 
-If modals  show layout problems try to remove it.*/
-/*.modal {
-  text-align: center;
-}
-@media screen and (min-width: 768px) { 
-  .modal:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-  }
-}
-.modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-}*/
 
 .dropdown-menu .divider {
     margin: 2px 0px;

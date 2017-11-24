@@ -1,9 +1,15 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Subscription } from "rxjs/Subscription";
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
+import { CompleterService } from 'ng2-completer';
+import { CustomCompleterData } from "./customCompleterData";
 import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
+import { SearchServices } from "../../services/searchServices";
 import { VBProperties, StringMatchMode, SearchSettings } from "../../utils/VBProperties";
-import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { VBEventHandler } from "../../utils/VBEventHandler";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 
 @Component({
     selector: "search-bar",
@@ -12,6 +18,7 @@ import { RDFResourceRolesEnum } from "../../models/ARTResources";
 export class SearchBarComponent {
 
     @Input() roles: RDFResourceRolesEnum[]; //tells the roles of the panel where the search bar is placed (usefull for customizing the settings)
+    @Input() disabled: boolean = false;
     @Output() search: EventEmitter<string> = new EventEmitter();
 
     //search mode startsWith/contains/endsWith
@@ -23,23 +30,41 @@ export class SearchBarComponent {
 
     private activeMatchMode: StringMatchMode;
 
-    constructor(private modal: Modal, private vbProperties: VBProperties) {}
+    private searchStr: string;
+    private completerDatasource: CustomCompleterData;
+
+    private eventSubscriptions: Subscription[] = [];
+
+    constructor(private searchService: SearchServices, private modal: Modal, private vbProperties: VBProperties,
+        private eventHandler: VBEventHandler, private completerService: CompleterService) {
+
+        this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
+            (schemes: ARTURIResource[]) => this.setSchemeInCompleter()));
+    }
 
     ngOnInit() {
         this.activeMatchMode = this.vbProperties.getSearchSettings().stringMatchMode;
+        this.completerDatasource = new CustomCompleterData(this.searchService, this.roles, this.vbProperties.getSearchSettings());
+        this.setSchemeInCompleter();
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
     /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
+     * Handles the keyup event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key: number, searchedText: string) {
+    private searchKeyHandler(key: number) {
         if (key == 13) {
-            this.doSearch(searchedText);
+            this.doSearch();
         }
     }
 
-    private doSearch(text: string) {
-        this.search.emit(text);
+    private doSearch() {
+        if (this.searchStr != undefined && this.searchStr.trim() != "") {
+            this.search.emit(this.searchStr);
+        }
     }
 
     private editSettings() {
@@ -49,7 +74,10 @@ export class SearchBarComponent {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(SearchSettingsModal, overlayConfig).result.then(
-            () => { this.activeMatchMode = this.vbProperties.getSearchSettings().stringMatchMode; }
+            () => { 
+                this.activeMatchMode = this.vbProperties.getSearchSettings().stringMatchMode;
+                this.completerDatasource.updateSearchSettings(this.vbProperties.getSearchSettings());
+            }
         );
     }
 
@@ -61,5 +89,10 @@ export class SearchBarComponent {
         this.vbProperties.setSearchSettings(searchSettings);
     }
 
+    private setSchemeInCompleter() {
+        if (this.roles.indexOf(RDFResourceRolesEnum.concept) != -1) {
+            this.completerDatasource.setConceptSchemes(this.vbProperties.getActiveSchemes());
+        }
+    }
 
 }

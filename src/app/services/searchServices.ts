@@ -107,4 +107,31 @@ export class SearchServices {
         );
     }
 
+    /**
+     * 
+     * @param searchString 
+     * @param rolesArray 
+     * @param useLocalName 
+     * @param searchMode 
+     * @param langs 
+     * @param schemes 
+     */
+    searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: StringMatchMode, 
+            langs?: string[], schemes?: ARTURIResource[]): Observable<string[]> {
+        console.log("[SearchServices] searchStringList");
+        var params: any = {
+            searchString: searchString,
+            rolesArray: rolesArray,
+            useLocalName: useLocalName,
+            searchMode: searchMode,
+        };
+        if (langs != null) {
+            params.langs = langs;
+        }
+        if (schemes != null) {
+            params.schemes = schemes;
+        }
+        return this.httpMgr.doGet(this.serviceName, "searchStringList", params, true);
+    }
+
 }

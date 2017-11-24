@@ -81,7 +81,7 @@ export class VBProperties {
                     this.searchSettings.languages = JSON.parse(searchLangsPref);
                 }
 
-                this.searchSettings.restrictLang = prefs[Properties.pref_search_languages] == "true";
+                this.searchSettings.restrictLang = prefs[Properties.pref_search_restrict_lang] == "true";
 
                 this.initSearchSettingsCookie(); //other settings stored in cookies
             }
@@ -284,10 +284,10 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
         if (this.searchSettings.languages != settings.languages) {
-            this.prefService.setProjectPreference(Properties.pref_search_languages, JSON.stringify(this.searchSettings.languages)).subscribe();
+            this.prefService.setProjectPreference(Properties.pref_search_languages, JSON.stringify(settings.languages)).subscribe();
         }
         if (this.searchSettings.restrictLang != settings.restrictLang) {
-            this.prefService.setProjectPreference(Properties.pref_search_restrict_lang, this.searchSettings.restrictLang+"").subscribe();
+            this.prefService.setProjectPreference(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
         }
         this.searchSettings = settings;
     }

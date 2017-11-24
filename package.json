@@ -30,7 +30,8 @@
     "ngx-modialog": "5.0.0",
     "codemirror": "5.26.0",
     "yasgui-yasqe": "2.11.14",
-    "jsprolog": "0.2.2"
+    "jsprolog": "0.2.2",
+    "ng2-completer": "1.6.3"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.41",

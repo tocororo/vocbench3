@@ -27,3 +27,5 @@ import 'codemirror/lib/codemirror.css';
 //import 'codemirror/lib/codemirror.js'; //already imported in codemirrorComponent
 
 import 'jsprolog/dist/jsprolog';
+
+import 'ng2-completer';
