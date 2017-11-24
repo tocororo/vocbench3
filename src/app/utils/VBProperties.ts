@@ -27,6 +27,7 @@ export class VBProperties {
         useLocalName: true,
         restrictLang: false,
         languages: [],
+        useAutocompletion: false,
         restrictActiveScheme: true,
         classIndividualSearchMode: ClassIndividualPanelSearchMode.all
     };
@@ -54,7 +55,7 @@ export class VBProperties {
         var properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
-            Properties.pref_search_languages, Properties.pref_search_restrict_lang
+            Properties.pref_search_languages, Properties.pref_search_restrict_lang, Properties.pref_search_use_autocomplete
         ];
         this.prefService.getProjectPreferences(properties).subscribe(
             prefs => {
@@ -74,14 +75,15 @@ export class VBProperties {
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
 
+                //search settings
                 let searchLangsPref = prefs[Properties.pref_search_languages];
                 if (searchLangsPref == null) {
                     this.searchSettings.languages = [];
                 } else {
                     this.searchSettings.languages = JSON.parse(searchLangsPref);
                 }
-
                 this.searchSettings.restrictLang = prefs[Properties.pref_search_restrict_lang] == "true";
+                this.searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
 
                 this.initSearchSettingsCookie(); //other settings stored in cookies
             }
@@ -289,7 +291,11 @@ export class VBProperties {
         if (this.searchSettings.restrictLang != settings.restrictLang) {
             this.prefService.setProjectPreference(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
         }
+        if (this.searchSettings.useAutocompletion != settings.useAutocompletion) {
+            this.prefService.setProjectPreference(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"").subscribe();
+        }
         this.searchSettings = settings;
+        this.eventHandler.searchPrefsUpdatedEvent.emit();
     }
 
     
@@ -341,6 +347,7 @@ export class SearchSettings {
     public useLocalName: boolean;
     public restrictLang: boolean;
     public languages: string[];
+    public useAutocompletion: boolean;
     public restrictActiveScheme: boolean;
     public classIndividualSearchMode: ClassIndividualPanelSearchMode;
 }

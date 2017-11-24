@@ -27,7 +27,7 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
-        <search-bar (search)="doSearch($event)" [roles]="[panelRole]"></search-bar>
+        <search-bar (search)="doSearch($event)" [roles]="[panelRole]" [disabled]="!cls"></search-bar>
     </div>
     
 </div>

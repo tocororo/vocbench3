@@ -7,6 +7,7 @@ export class Properties {
     static pref_show_instances_number: string = "show_instances_number";
     static pref_search_languages: string = "search_languages";
     static pref_search_restrict_lang: string = "search_restrict_lang";
+    static pref_search_use_autocomplete: string = "search_use_autocomplete";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";

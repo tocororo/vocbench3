@@ -42,6 +42,8 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private restrictLang: boolean = false;
     private languages: string[];
 
+    private useAutocompletion: boolean = false;
+
     //concept search restriction
     private restrictConceptSchemes: boolean = true;
 
@@ -69,6 +71,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.useLocalName = this.settings.useLocalName;
         this.restrictLang = this.settings.restrictLang;
         this.languages = this.settings.languages;
+        this.useAutocompletion = this.settings.useAutocompletion;
         this.restrictConceptSchemes = this.settings.restrictActiveScheme;
         this.activeClsIndSearchMode = this.settings.classIndividualSearchMode;
     }
@@ -90,6 +93,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
             useLocalName: this.useLocalName,
             restrictLang: this.restrictLang,
             languages: this.languages,
+            useAutocompletion: this.useAutocompletion,
             restrictActiveScheme: this.restrictConceptSchemes,
             classIndividualSearchMode: this.activeClsIndSearchMode
         });

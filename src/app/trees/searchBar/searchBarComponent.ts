@@ -28,7 +28,7 @@ export class SearchBarComponent {
         { show: "Ends with", value: StringMatchMode.endsWith, symbol: "..α" }
     ];
 
-    private activeMatchMode: StringMatchMode;
+    private searchSettings: SearchSettings;
 
     private searchStr: string;
     private completerDatasource: CustomCompleterData;
@@ -40,11 +40,13 @@ export class SearchBarComponent {
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.setSchemeInCompleter()));
+        this.eventSubscriptions.push(eventHandler.searchPrefsUpdatedEvent.subscribe(
+            () => this.updateSearchSettings()));
     }
 
     ngOnInit() {
-        this.activeMatchMode = this.vbProperties.getSearchSettings().stringMatchMode;
-        this.completerDatasource = new CustomCompleterData(this.searchService, this.roles, this.vbProperties.getSearchSettings());
+        this.searchSettings = this.vbProperties.getSearchSettings();
+        this.completerDatasource = new CustomCompleterData(this.searchService, this.roles, this.searchSettings);
         this.setSchemeInCompleter();
     }
 
@@ -73,26 +75,27 @@ export class SearchBarComponent {
             modalData, undefined, SearchSettingsModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(SearchSettingsModal, overlayConfig).result.then(
-            () => { 
-                this.activeMatchMode = this.vbProperties.getSearchSettings().stringMatchMode;
-                this.completerDatasource.updateSearchSettings(this.vbProperties.getSearchSettings());
-            }
-        );
+        return this.modal.open(SearchSettingsModal, overlayConfig);
     }
 
     private updateSearchMode(mode: StringMatchMode, event: Event) {
         event.stopPropagation();
-        this.activeMatchMode = mode;
-        let searchSettings: SearchSettings = this.vbProperties.getSearchSettings();
-        searchSettings.stringMatchMode = this.activeMatchMode;
-        this.vbProperties.setSearchSettings(searchSettings);
+        this.searchSettings.stringMatchMode = mode;
+        this.vbProperties.setSearchSettings(this.searchSettings);
     }
 
     private setSchemeInCompleter() {
         if (this.roles.indexOf(RDFResourceRolesEnum.concept) != -1) {
             this.completerDatasource.setConceptSchemes(this.vbProperties.getActiveSchemes());
         }
+    }
+
+    /**
+     * When the search settings is updated, updates the setting of the bar and the settings for the autocompleter
+     */
+    private updateSearchSettings() {
+        this.searchSettings = this.vbProperties.getSearchSettings();
+        this.completerDatasource.updateSearchSettings(this.searchSettings);
     }
 
 }

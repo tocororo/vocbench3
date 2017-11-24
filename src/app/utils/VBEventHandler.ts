@@ -69,6 +69,8 @@ export class VBEventHandler {
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 
+    public searchPrefsUpdatedEvent: EventEmitter<any> = new VBEventEmitter("searchPrefsUpdatedEvent");
+
     constructor() { }
 
     /**

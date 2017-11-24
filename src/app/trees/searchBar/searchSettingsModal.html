@@ -19,7 +19,7 @@
 
     <div class="panel panel-default" style="margin-top: 5px;">
         <div class="panel-heading">
-            <label style="margin-right: 3px;">Search mode</label>
+            <label style="margin-right: 5px;">Search mode</label>
             <span class="glyphicon glyphicon-info-sign" title="Search always looks for the input string among the lexicalizations"></span>
         </div>
         <div class="panel-body">
@@ -63,6 +63,22 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default" style="margin-top: 5px;">
+        <div class="panel-heading">
+            <label style="margin-right: 5px;">Autocompletion</label>
+            <span class="glyphicon glyphicon-info-sign" 
+                title="It is highly recommended to disable this feature in big project not hosted by a GraphDB server"></span>
+        </div>
+        <div class="panel-body">
+            <div class="checkbox" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="checkbox" [(ngModel)]="useAutocompletion" (ngModelChange)="updateSettings()">
+                    Enable autocompletion support during typing
+                </label>
             </div>
         </div>
     </div>

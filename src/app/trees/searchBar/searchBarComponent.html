@@ -1,8 +1,11 @@
 <div class="hbox">
-    <ng2-completer style="flex: 1;" [inputClass]="'form-control input-xs'" (keyup)="searchKeyHandler($event.which)"
-        [(ngModel)]="searchStr" [datasource]="completerDatasource" [minSearchLength]="3" placeholder="Search..." 
-        matchClass="matchClass" pause="500" [disableInput]="disabled">
+    <ng2-completer *ngIf="searchSettings.useAutocompletion" style="flex: 1;" [inputClass]="'form-control input-xs'" 
+        [(ngModel)]="searchStr" [datasource]="completerDatasource" (keyup)="searchKeyHandler($event.which)" [minSearchLength]="3"
+        placeholder="Search..." matchClass="matchClass" pause="500" [disableInput]="disabled">
     </ng2-completer>
+
+    <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control input-xs" style="flex: 1;" 
+        [(ngModel)]="searchStr" (keyup)="searchKeyHandler($event.which)" placeholder="Search..." [disabled]="disabled">
 
     <div class="btn-group btn-group-xs dropup" style="margin-left: 4px;">
         <button class="btn btn-default" type="button" (click)="doSearch()" [disabled]="disabled">
@@ -11,17 +14,17 @@
 
         <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"
             style="border-radius: 0px; padding-left: 3px; padding-right: 3px; border-right: 1px;">
-            <span *ngIf="activeMatchMode == 'startsWith'" 
+            <span *ngIf="searchSettings.stringMatchMode == 'startsWith'" 
                 style="font-weight: bold; font-size: 14px; line-height: 1;">&#945;..</span>
-            <span *ngIf="activeMatchMode == 'contains'"
+            <span *ngIf="searchSettings.stringMatchMode == 'contains'"
                 style="font-weight: bold; font-size: 14px; line-height: 1;">.&#945;.</span>
-            <span *ngIf="activeMatchMode == 'endsWith'" 
+            <span *ngIf="searchSettings.stringMatchMode == 'endsWith'" 
                 style="font-weight: bold; font-size: 14px; line-height: 1;">..&#945;</span>
         </button>
         <ul class="dropdown-menu pull-right">
             <li *ngFor="let mode of stringMatchModes">
                 <a (click)="updateSearchMode(mode.value, $event)">
-                    <span *ngIf="activeMatchMode == mode.value" class="glyphicon glyphicon-ok" style="float: right"></span>
+                    <span *ngIf="searchSettings.stringMatchMode == mode.value" class="glyphicon glyphicon-ok" style="float: right"></span>
                     <span style="font-weight: bold; font-size: 13px; margin-right: 4px;">{{mode.symbol}}</span>
                     <span>{{mode.show}}</span>
                 </a>
