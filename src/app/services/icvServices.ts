@@ -152,52 +152,6 @@ export class IcvServices {
     //=============================
 
     /**
-     * Returns a list of records resource-lang, of concept or conceptScheme that have a skos:altLabel for a lang
-     * but not a skos:prefLabel
-     */
-    listResourcesWithOnlySKOSAltLabel() {
-        console.log("[IcvServices] listResourcesWithOnlySKOSAltLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSAltLabel", params).map(
-            stResp => {
-                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records: any[] = [];
-                for (var i = 0; i < recordElemColl.length; i++) {
-                    var resource = Deserializer.createURI(recordElemColl[i]);
-                    var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
-                    var langRes = new ARTLiteral(lang);
-                    langRes.setLang(lang);
-                    records.push({ resource: resource, lang: langRes });
-                }
-                return records;
-            }
-        );
-    }
-
-    /**
-     * Returns a list of records resource-lang, of concept or conceptScheme that have a skosxl:altLabel for a lang
-     * but not a skosxl:prefLabel
-     */
-    listResourcesWithOnlySKOSXLAltLabel() {
-        console.log("[IcvServices] listResourcesWithOnlySKOSXLAltLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOnlySKOSXLAltLabel", params).map(
-            stResp => {
-                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records: any[] = [];
-                for (var i = 0; i < recordElemColl.length; i++) {
-                    var resource = Deserializer.createURI(recordElemColl[i]);
-                    var lang = recordElemColl[i].getElementsByTagName("lang")[0].textContent;
-                    var langRes = new ARTLiteral(lang);
-                    langRes.setLang(lang);
-                    records.push({ resource: resource, lang: langRes });
-                }
-                return records;
-            }
-        );
-    }
-
-    /**
      * Returns a list of concepts or scheme that have no skos:prefLabel
      */
     listResourcesWithNoSKOSPrefLabel(): Observable<ARTResource[]> {
@@ -265,49 +219,6 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithMorePrefLabelSameLang", params, true).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["duplicateLang"]);
-            }
-        );
-    }
-
-    /**
-     * Returns a list of records {resource: ARTURIResource, label: ARTLiteral}. A record like that means that the resource has 
-	 * the same skos:prefLabel and skos:altLabel in the same language
-     */
-    listResourcesWithOverlappedSKOSLabel() {
-        console.log("[IcvServices] listResourcesWithOverlappedSKOSLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSLabel", params).map(
-            stResp => {
-                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records: any[] = [];
-                for (var i = 0; i < recordElemColl.length; i++) {
-                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
-                    var label: ARTLiteral = Deserializer.createLiteral(recordElemColl[i]);
-                    records.push({ resource: resource, label: label });
-                }
-                return records;
-            }
-        );
-    }
-
-    /**
-     * Returns a list of records {resource: ARTURIResource, label: ARTLiteral}. A record like that means that the resource has 
-	 * the same skosxl:prefLabel and skosxl:altLabel in the same language
-     */
-    listResourcesWithOverlappedSKOSXLLabel(): Observable<{ resource: ARTURIResource, prefLabel: ARTResource, altLabel: ARTResource }[]> {
-        console.log("[IcvServices] listResourcesWithOverlappedSKOSXLLabel");
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedSKOSXLLabel", params).map(
-            stResp => {
-                var recordElemColl: Element[] = stResp.getElementsByTagName("record");
-                var records: any[] = [];
-                for (var i = 0; i < recordElemColl.length; i++) {
-                    var resource: ARTURIResource = Deserializer.createURI(recordElemColl[i]);
-                    var prefLabel: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("prefLabel")[0].children[0]);
-                    var altLabel: ARTResource = Deserializer.createRDFResource(recordElemColl[i].getElementsByTagName("altLabel")[0].children[0]);
-                    records.push({ resource: resource, prefLabel: prefLabel, altLabel: altLabel });
-                }
-                return records;
             }
         );
     }
@@ -393,6 +304,48 @@ export class IcvServices {
         return this.httpMgr.doGet(this.serviceName, "listResourcesNoDef", params, true).map(
             stResp => {
                 return Deserializer.createURIArray(stResp, ["missingLang"]);
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param rolesArray 
+     */
+    listAlignedNamespaces(rolesArray: RDFResourceRolesEnum[]) {
+        console.log("[IcvServices] listAlignedNamespaces");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listAlignedNamespaces", params, true);
+    }
+
+    /**
+     * 
+     * @param rolesArray 
+     * @param namespaces 
+     * @param checkLocalRes 
+     * @param checkRemoteRes 
+     */
+    listBrokenAlignments(nsToLocationMap: { [ns: string]: string }, rolesArray: RDFResourceRolesEnum[]): 
+            Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
+        console.log("[IcvServices] listBrokenAlignments");
+        var params: any = {
+            nsToLocationMap: JSON.stringify(nsToLocationMap),
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doPost(this.serviceName, "listBrokenAlignments", params, true).map(
+            stResp => {
+                let brokenAlignments: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    let a = {
+                        subject: Deserializer.createURI(stResp[i].subject),
+                        predicate: Deserializer.createURI(stResp[i].predicate),
+                        object: Deserializer.createURI(stResp[i].object, ["deprecated"])
+                    }
+                    brokenAlignments.push(a);
+                }
+                return brokenAlignments;
             }
         );
     }

@@ -1,0 +1,124 @@
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label style="flex: 1;">Broken alignments</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+        
+        <icv-config-panel [checkRoles]="checkRoles" (rolesChange)="onRolesChanged($event)">
+        </icv-config-panel>
+
+            <div class="subPanel vbox" style="flex: initial;">
+                <div class="subPanel-heading">
+                    <span style="flex: 1;">
+                        <label>Namespaces to check</label>
+                        <span class="glyphicon glyphicon-info-sign" 
+                            title="Namespaces of the resources that appear as object of mapping relations"></span>
+                    </span>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="checkAllNs(true)" title="Check all" [disabled]="!namespaces">
+                            <span class="glyphicon glyphicon-check"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="checkAllNs(false)" title="Uncheck all" [disabled]="!namespaces">
+                            <span class="glyphicon glyphicon-unchecked"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="initNamespaces()" [disabled]="rolesToCheck.length==0">
+                            <span>Reload</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body scrollableContainer" style="max-height: 170px;">
+                    <table *ngIf="namespaces" class="table table-condensed table-borderless table-hoverable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Check</th>
+                                <th class="text-center">Namespace</th>
+                                <th class="text-center">Alignments count</th>
+                                <th class="text-center" colspan="2">Locations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ns of namespaces">
+                                <td class="text-center">
+                                    <input type="checkbox" style="vertical-align: middle" [(ngModel)]="ns.check">
+                                </td>
+                                <td class="text-center">
+                                    {{ns.namespace}}
+                                </td>
+                                <td class="text-center">
+                                    {{ns.count}}
+                                </td>
+                                <td>
+                                    <select class="form-control input-xs" [(ngModel)]="ns.chosenResolutionLocation" 
+                                        [disabled]="objectKeys(ns.resolutions).length == 1">
+                                        <option *ngFor="let location of objectKeys(ns.resolutions)">{{location}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control input-xs" [(ngModel)]="ns.chosenResolutionOpt"
+                                    [disabled]="ns.resolutions[ns.chosenResolutionLocation].length == 1">
+                                        <option *ngFor="let opt of ns.resolutions[ns.chosenResolutionLocation]" [ngValue]="opt.value">{{opt.show}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        <div class="panel panel-default vbox">
+            <div class="panel-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Subject</th>
+                            <th class="text-center">Predicate</th>
+                            <th class="text-center">Object</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-template ngFor let-record [ngForOf]="brokenRecordList" let-i="index">
+                            <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.subject" (click)="onResourceClick(record.subject)"></rdf-resource>
+                                </td>
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.predicate" (click)="onResourceClick(record.predicate)"></rdf-resource>
+                                </td>
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.object" (click)="onResourceClick(record.object)"></rdf-resource>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
+                <div class="btn-group btn-group-xs pull-right" role="group">
+                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{page+1}} of {{pageCount}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

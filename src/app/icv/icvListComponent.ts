@@ -45,8 +45,8 @@ export class IcvListComponent {
             },
             {
                 name: "Concepts exactMatch disjoint relations", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/DisjointExactMatchConcept",
-                description: "skos:Concept(s) connected to another with both the skos:related and the skos:broaderTransitive "
-                    + "(skos:related relation is disjoint with skos:broaderTransitive)",
+                description: "skos:Concept(s) connected to another with both the skos:exactMatch and one of skos:broadMatch or skos:relatedMatch "
+                    + "(skos:exactMatch relation is disjoint with skos:broadMatch and skos:relatedMatch)",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_CONCEPT
             },
             {
@@ -125,7 +125,13 @@ export class IcvListComponent {
                 name: "No definition resources", model: [SKOS.uri], lexicalization: [], routeName: "/Icv/NoDefinitionResource",
                 description: "Resources that don't have any skos definition in the given language(s)",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
+            },
+            {
+                name: "Broken alignments", model: [], lexicalization: [], routeName: "/Icv/BrokenAlignment",
+                description: "Alignment where the object resource doesn't exist or is deprecated",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             }
+
             // {
             //     name: "Whitespace URI Resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri, RDFS.uri],
             //     description: "URI Resources that have a whitespace in the URI"

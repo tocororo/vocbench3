@@ -21,6 +21,7 @@ import { DisjointExactMatchConceptComponent } from "./disjointExactMatchConcept/
 import { DisjointRelatedConceptComponent } from "./disjointRelatedConcept/disjointRelatedConceptComponent";
 import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefinitionResourceComponent";
 import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
+import { BrokenAlignmentComponent } from "./brokenAlignment/brokenAlignmentComponent";
 
 
 export const routes: Routes = [
@@ -44,6 +45,7 @@ export const routes: Routes = [
             { path: "MutliplePrefLabelResource", component: MultiplePrefLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
             { path: "NoDefinitionResource", component: NoDefinitionResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
+            { path: "BrokenAlignment", component: BrokenAlignmentComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] }
         ]
     },
 ];
