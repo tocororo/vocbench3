@@ -52,6 +52,7 @@ export class ProjectServices {
                     proj.setModelType(projCollJson[i].model);
                     proj.setLexicalizationModelType(projCollJson[i].lexicalizationModel);
                     proj.setOpen(projCollJson[i].open);
+                    proj.setRepositoryLocation(projCollJson[i].repositoryLocation);
                     proj.setStatus(projCollJson[i].status);
                     projectList.push(proj);
                 }

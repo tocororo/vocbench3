@@ -10,6 +10,7 @@ export class Project {
     private model: string;
     private lexicalizationModel: string;
     private open: boolean;
+    private repositoryLocation: { location: "remote" | "local", serverURL?: string };
     private status: { status: string, message?: string };
     
     constructor(name?: string) {
@@ -103,6 +104,16 @@ export class Project {
     }
     public isOpen(): boolean {
         return this.open;
+    }
+
+    public getRepositoryLocation() {
+        return this.repositoryLocation;
+    }
+    public setRepositoryLocation(repositoryLocation: { location: "remote" | "local", serverURL?: string }) {
+        this.repositoryLocation = repositoryLocation;
+    }
+    public isRepositoryRemote(): boolean {
+        return this.repositoryLocation.location == "remote";
     }
     
     public setStatus(status:  { status: string, message?: string }) {

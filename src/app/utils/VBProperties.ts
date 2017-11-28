@@ -304,16 +304,50 @@ export class VBProperties {
             { name: "Accessed", show: true, mandatory: true }, { name: "Open/Close", show: true, mandatory: true },
             { name: "Project Name", show: true, mandatory: true }, { name: "Model", show: true },
             { name: "Lexicalization Model", show: true }, { name: "History", show: true },
-            { name: "Validation", show: true }, { name: "Status", show: true }
+            { name: "Validation", show: true }, { name: "Repository Location", show: true }
         ];
     };
     getCustomProjectTableColumns(): ProjectTableColumnStruct[] {
-        var columns: ProjectTableColumnStruct[] = this.getDefaultProjectTableColumns();
+        let defaultColumns: ProjectTableColumnStruct[] = this.getDefaultProjectTableColumns();
         var value = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER);
-        if (value != null) {
-            columns = JSON.parse(value);
+        if (value == null) {
+            return defaultColumns;
+        } else {
+            let customColumns: ProjectTableColumnStruct[] = JSON.parse(value);
+            /**
+             * check if there is some default columns not stored in cookie (add it eventually)
+             * and if there is some columns stored in the cookie not foreseen in the default columns structure
+             * (feasible scenarios if, in the client, the project table structure is changed by adding/removing some columns,
+             * so the column struct stored in the cookie is not in sync with the default one)
+             */
+            defaultColumns.forEach((col: ProjectTableColumnStruct) => {
+                let columnFound: boolean = false;
+                for (var i = 0; i < customColumns.length; i++) {
+                    if (col.name == customColumns[i].name) {
+                        columnFound = true;
+                        break;
+                    }
+                }
+                if (!columnFound) {
+                    customColumns.push(col); //add the default column to the customized structure
+                }
+            });
+
+            customColumns.forEach((col: ProjectTableColumnStruct) => {
+                let columnFound: boolean = false;
+                for (var i = 0; i < defaultColumns.length; i++) {
+                    if (col.name == defaultColumns[i].name) {
+                        columnFound = true;
+                        break;
+                    }
+                }
+                if (!columnFound) {
+                    customColumns.splice(customColumns.indexOf(col), 1); //remove the column from the customized structure
+                }
+            });
+
+            return customColumns;
         }
-        return columns;
     }
 
 

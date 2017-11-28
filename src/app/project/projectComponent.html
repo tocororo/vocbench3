@@ -48,7 +48,11 @@
                             </button>
                         </td>
                         <td class="text-center">
-                            {{p.getName()}}
+                            <span *ngIf="p.getStatus().status != 'ok'" style="color: red; font-weight: bold;">
+                                {{p.getName()}}
+                                <span class="glyphicon glyphicon-exclamation-sign" [title]="p.getStatus().message"></span>
+                            </span>
+                            <span *ngIf="p.getStatus().status == 'ok'">{{p.getName()}}</span>
                         </td>
                         <td *ngIf="showColumn('Model')" class="text-center">{{p.getModelType(true)}}</td>
                         <td *ngIf="showColumn('Lexicalization Model')" class="text-center">{{p.getLexicalizationModelType(true)}}</td>
@@ -60,9 +64,9 @@
                             <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
                             <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
                         </td>
-                        <td *ngIf="showColumn('Status')" class="text-center">
-                            <span *ngIf="p.getStatus().status != 'ok'" class="glyphicon glyphicon-exclamation-sign" [title]="p.getStatus().message"></span>
-                            <span *ngIf="p.getStatus().status == 'ok'" class="glyphicon glyphicon-ok-circle" title="ok"></span>
+                        <td *ngIf="showColumn('Repository Location')" class="text-center">
+                            {{p.getRepositoryLocation().location}}
+                            <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-info-sign" [title]="p.getRepositoryLocation().serverURL"></span>
                         </td>
                     </tr>
                 </tbody>
