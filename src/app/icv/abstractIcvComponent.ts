@@ -27,11 +27,11 @@ export abstract class AbstractIcvComponent {
         this.sharedModals = sharedModals;
     }
 
-    private onRolesChanged(roles: RDFResourceRolesEnum[]) {
+    onRolesChanged(roles: RDFResourceRolesEnum[]) {
         this.rolesToCheck = roles;
     }
 
-    private onLangsChanged(langs: string[]) {
+    onLangsChanged(langs: string[]) {
         this.langsToCheck = langs;
     }
 

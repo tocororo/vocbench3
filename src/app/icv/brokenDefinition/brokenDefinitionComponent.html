@@ -1,0 +1,80 @@
+<div class="panel panel-default vbox" style="position: relative">
+    <div class="panel-heading">
+        <label style="flex: 1;">Broken definitions</label>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+    </div>
+    <div class="panel-body vbox">
+
+        <icv-config-panel [checkRoles]="checkRoles" (rolesChange)="onRolesChanged($event)">
+            <div class="vbox" style="flex: 0.5; justify-content: center; padding: 12px;">
+                <div style="display: flex; margin-bottom: 4px; align-items: center;">
+                    <label style="white-space: nowrap">
+                        Definition property:
+                        <span class="glyphicon glyphicon-info-sign" 
+                            title="The ICV checks for resources with broken definitions linked by means this property or its subProperties">
+                        </span>
+                    </label>
+                    <div class="form-control input-sm" style="margin: 0px 4px;">
+                        <rdf-resource [resource]="noteProperty"></rdf-resource>
+                    </div>
+                    <button class="btn btn-default btn-sm" (click)="changeProperty()">
+                        <img src="../../../assets/images/icons/res/propAnnotation.png"/>
+                    </button>
+                </div>
+            </div>
+        </icv-config-panel>
+
+        <div class="panel panel-default vbox">
+            <div class="panel-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Subject</th>
+                            <th class="text-center">Predicate</th>
+                            <th class="text-center">Object</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-template ngFor let-record [ngForOf]="brokenRecordList" let-i="index">
+                            <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.subject" (click)="onResourceClick(record.subject)"></rdf-resource>
+                                </td>
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.predicate" (click)="onResourceClick(record.predicate)"></rdf-resource>
+                                </td>
+                                <td class="text-center">
+                                    <rdf-resource class="clickable" [resource]="record.object" (click)="onResourceClick(record.object)"></rdf-resource>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
+                <div class="btn-group btn-group-xs pull-right" role="group">
+                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{page+1}} of {{pageCount}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div id="blockDivIcv" class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>

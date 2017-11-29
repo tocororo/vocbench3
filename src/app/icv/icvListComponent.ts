@@ -130,6 +130,11 @@ export class IcvListComponent {
                 name: "Broken alignments", model: [], lexicalization: [], routeName: "/Icv/BrokenAlignment",
                 description: "Alignment where the object resource doesn't exist or is deprecated",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
+            },
+            {
+                name: "Broken definitions", model: [], lexicalization: [], routeName: "/Icv/BrokenDefinition",
+                description: "Definitions of resources  where the object resource doesn't exist or is deprecated",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             }
 
             // {

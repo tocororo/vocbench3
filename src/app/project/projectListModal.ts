@@ -11,7 +11,6 @@ import { Project } from '../models/Project';
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from '../utils/UIUtils';
-import { ModalContext } from '../widget/modal/ModalContext';
 
 @Component({
     selector: "project-list-modal",

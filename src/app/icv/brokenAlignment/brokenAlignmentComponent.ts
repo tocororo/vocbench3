@@ -17,6 +17,8 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     checkLanguages = false;
     checkRoles = true;
 
+    private rolesUpdated: boolean = false;
+
     private namespaces: NsCheckItem[] = [];
 
     private HTTP_DEFERENCIATION: { show: string, value: string } = { show: "Http dereferenciation", value: "dereference" };
@@ -31,11 +33,18 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
         this.initNamespaces();
     }
 
+    //@Override
+    onRolesChanged(roles: RDFResourceRolesEnum[]) {
+        this.rolesToCheck = roles;
+        this.rolesUpdated = true;
+    }
+
     private initNamespaces() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listAlignedNamespaces(this.rolesToCheck).subscribe(
             (ns: { count: number; namespace: string; locations: any [] }[]) => {
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
+                this.rolesUpdated = false;
                 this.namespaces = [];
                 for (var i = 0; i < ns.length; i++) {
                     this.namespaces.push({ 

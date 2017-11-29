@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdminGuard, AuthGuard, CanDeactivateModalGuard } from "../utils/CanActivateGuards";
+import { AdminGuard, AuthGuard } from "../utils/CanActivateGuards";
 
 import { AdministrationComponent } from "./administrationComponent";
 import { ConfigAdministrationComponent } from "./configAdministration/configAdministrationComponent";
@@ -10,11 +10,11 @@ import { ProjectsAdministrationComponent } from "./projectsAdministration/projec
 
 export const routes: Routes = [
     {
-        path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateModalGuard], children: [
-            { path: "Users", component: UsersAdministrationComponent, canActivate: [AdminGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "Roles", component: RolesAdministrationComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "Configuration", component: ConfigAdministrationComponent, canActivate: [AdminGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "Projects", component: ProjectsAdministrationComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateModalGuard] }
+        path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard], children: [
+            { path: "Users", component: UsersAdministrationComponent, canActivate: [AdminGuard] },
+            { path: "Roles", component: RolesAdministrationComponent, canActivate: [AuthGuard] },
+            { path: "Configuration", component: ConfigAdministrationComponent, canActivate: [AdminGuard] },
+            { path: "Projects", component: ProjectsAdministrationComponent, canActivate: [AuthGuard] }
         ]
     },
 ];

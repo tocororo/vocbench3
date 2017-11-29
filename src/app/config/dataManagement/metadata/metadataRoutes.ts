@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard, ProjectGuard, CanDeactivateModalGuard } from "../../../utils/CanActivateGuards";
+import { AuthGuard, ProjectGuard } from "../../../utils/CanActivateGuards";
 
 import { MetadataManagementComponent } from "./metadataManagementComponent";
 import { MetadataVocabulariesComponent } from "./metadataVocabularies/metadataVocabulariesComponent";
@@ -8,9 +8,9 @@ import { NamespacesAndImportsComponent } from "./namespacesAndImports/namespaces
 
 export const routes: Routes = [
     {
-        path: "Metadata", component: MetadataManagementComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard], children: [
-            { path: "Vocabularies", component: MetadataVocabulariesComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "Imports", component: NamespacesAndImportsComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] }
+        path: "Metadata", component: MetadataManagementComponent, canActivate: [AuthGuard, ProjectGuard], children: [
+            { path: "Vocabularies", component: MetadataVocabulariesComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "Imports", component: NamespacesAndImportsComponent, canActivate: [AuthGuard, ProjectGuard] }
         ]
     },
 ];

@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthGuard, ProjectGuard, CanDeactivateModalGuard } from "../utils/CanActivateGuards";
+import { AuthGuard, ProjectGuard } from "../utils/CanActivateGuards";
 
 import { IcvComponent } from "./icvComponent";
 import { IcvListComponent } from "./icvListComponent";
@@ -22,30 +22,32 @@ import { DisjointRelatedConceptComponent } from "./disjointRelatedConcept/disjoi
 import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefinitionResourceComponent";
 import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
 import { BrokenAlignmentComponent } from "./brokenAlignment/brokenAlignmentComponent";
+import { BrokenDefinitionComponent } from "./brokenDefinition/brokenDefinitionComponent";
 
 
 export const routes: Routes = [
     {
-        path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard], children: [
-            { path: "", component: IcvListComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "DanglingConcept", component: DanglingConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "NoSchemeConcept", component: NoSchemeConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "NoTopConceptScheme", component: NoTopConceptSchemeComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "TopConceptWithBroader", component: TopConceptWithBroaderComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "DisjointRelatedConcept", component: DisjointRelatedConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "DisjointExactMatchConcept", component: DisjointExactMatchConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "HierarchicalCycle", component: CyclicConceptComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "ExtraSpaceLabelResource", component: ExtraSpaceLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "NoMandatoryLabelResource", component: NoMandatoryLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "MutliplePrefLabelResource", component: MultiplePrefLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "NoDefinitionResource", component: NoDefinitionResourceComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] },
-            { path: "BrokenAlignment", component: BrokenAlignmentComponent, canActivate: [AuthGuard, ProjectGuard], canDeactivate: [CanDeactivateModalGuard] }
+        path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard], children: [
+            { path: "", component: IcvListComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "DanglingConcept", component: DanglingConceptComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "NoSchemeConcept", component: NoSchemeConceptComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "NoTopConceptScheme", component: NoTopConceptSchemeComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "TopConceptWithBroader", component: TopConceptWithBroaderComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "DisjointRelatedConcept", component: DisjointRelatedConceptComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "DisjointExactMatchConcept", component: DisjointExactMatchConceptComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "HierarchicalRedundancy", component: HierarchicalRedundancyComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "HierarchicalCycle", component: CyclicConceptComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "ExtraSpaceLabelResource", component: ExtraSpaceLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "NoMandatoryLabelResource", component: NoMandatoryLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "MutliplePrefLabelResource", component: MultiplePrefLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "NoDefinitionResource", component: NoDefinitionResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "BrokenAlignment", component: BrokenAlignmentComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "BrokenDefinition", component: BrokenDefinitionComponent, canActivate: [AuthGuard, ProjectGuard] }
         ]
     },
 ];

@@ -5,7 +5,6 @@ import { DialogRef } from "ngx-modialog";
 import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { VBContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ModalContext } from "../widget/modal/ModalContext";
 import { UserServices } from '../services/userServices';
 
 /**
@@ -118,23 +117,4 @@ export class UnsavedChangesGuard implements CanDeactivate<CanDeactivateOnChanges
     }
 }
 
-/**
- * Prevents the page with this guard to deactivate
- */
-@Injectable()
-export class CanDeactivateModalGuard implements CanDeactivate<any> {
-    constructor(private modal: Modal) { }
-    canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        if (this.modal.overlay.stackLength > 0) { //if there is any modal open deactivate only if navigation is enabled
-            /**
-             * disabled temporarly. This is hard to handle since if a modal is open,
-             * this code prevent to navigate even if I navigate programmatically (e.g. error not logged in => redirect home)
-             */
-            // return ModalContext.isNavigationEnabled(); 
-            return true;
-        }
-        return true;
-    }
-}
-
-export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard, CanDeactivateModalGuard];
+export const GUARD_PROVIDERS = [AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard];

@@ -351,6 +351,34 @@ export class IcvServices {
     }
 
     /**
+     * 
+     * @param rolesArray 
+     * @param property 
+     */
+    listBrokenDefinitions(rolesArray: RDFResourceRolesEnum[], property: ARTURIResource): 
+            Observable<{ subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource}[]> {
+        console.log("[IcvServices] listBrokenDefinitions");
+        var params: any = {
+            rolesArray: rolesArray,
+            property: property
+        };
+        return this.httpMgr.doGet(this.serviceName, "listBrokenDefinitions", params, true).map(
+            stResp => {
+                let brokenDefs: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    let def = {
+                        subject: Deserializer.createURI(stResp[i].subject),
+                        predicate: Deserializer.createURI(stResp[i].predicate),
+                        object: Deserializer.createURI(stResp[i].object)
+                    }
+                    brokenDefs.push(def);
+                }
+                return brokenDefs;
+            }
+        );
+    }
+
+    /**
      * Returns resources which URI contains white spaces
      * @param limit max number of results to return
      */
