@@ -4,9 +4,10 @@ import {DialogRef, ModalComponent} from "ngx-modialog";
 import { UserServices } from "../../services/userServices";
 import { AdministrationServices } from "../../services/administrationServices";
 import { User, Role } from "../../models/User";
+import { Project } from "../../models/Project";
 
 export class UserProjBindingModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public usersBound: Array<User>) {
+    constructor(public title: string = 'Modal Title', public project: Project, public usersBound: Array<User>) {
         super();
     }
 }
@@ -35,7 +36,7 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
                 this.userList = users;
             }
         )
-        this.adminService.listRoles().subscribe(
+        this.adminService.listRoles(this.context.project).subscribe(
             roles => {
                 this.roleList = roles;
             }

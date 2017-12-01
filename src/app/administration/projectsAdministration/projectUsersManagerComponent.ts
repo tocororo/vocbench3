@@ -95,7 +95,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private addUserToProject() {
-        var modalData = new UserProjBindingModalData("Add user to " + this.project.getName(), this.usersBound);
+        var modalData = new UserProjBindingModalData("Add user to " + this.project.getName(), this.project, this.usersBound);
         const builder = new BSModalContextBuilder<UserProjBindingModalData>(
             modalData, undefined, UserProjBindingModalData
         );
