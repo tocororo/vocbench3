@@ -91,6 +91,10 @@ export abstract class ARTResource extends ARTNode {
         }
     }
 
+    isDeprecated(): boolean {
+        return this.getAdditionalProperty(ResAttribute.DEPRECATED);
+    }
+
 }
 
 export class ARTURIResource extends ARTResource {

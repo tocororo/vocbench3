@@ -19,11 +19,11 @@
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
             <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering" [ngClass]="{active: rendering}">
-            <span class="glyphicon glyphicon-font"></span>
-        </button>
-        <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span>
-        </button>
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
+            <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+                <span class="glyphicon glyphicon-refresh"></span>
+            </button>
         </div>
     </div>
     
@@ -38,7 +38,7 @@
             </select>
         </div>
 
-        <concept-tree [schemes]="workingSchemes" [rendering]="rendering"
+        <concept-tree [schemes]="workingSchemes" [rendering]="rendering" [showDeprecated]="showDeprecated"
             (nodeSelected)="onNodeSelected($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>

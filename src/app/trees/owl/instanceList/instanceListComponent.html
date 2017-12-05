@@ -4,12 +4,13 @@
 
         <div *ngIf="list && list.length > 0" class="scrollableContainer">
             
-            <div *ngFor="let instance of list; let idx = index;">
-                <div *ngIf="showInstance(idx)" class="listNodeItem">
-                    <instance-list-node [node]="instance" [rendering]="rendering" (nodeSelected)="selectNode($event)" style="flex: 1;">
+            <ng-template ngFor let-instance [ngForOf]="list" let-idx="index">
+                <div *ngIf="showInstance(idx) && (!instance.isDeprecated() || showDeprecated && instance.isDeprecated())" class="listNodeItem">
+                    <instance-list-node [node]="instance" [rendering]="rendering" [showDeprecated]="showDeprecated" 
+                        (nodeSelected)="selectNode($event)" style="flex: 1;">
                     </instance-list-node>
                 </div>
-            </div>
+            </ng-template>
 
             <div *ngIf="showMoreButton()">
                 <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showMore()">

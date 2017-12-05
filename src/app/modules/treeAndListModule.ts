@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from './sharedModule';
 
 import { TreePanelComponent } from '../trees/treePanelComponent';
+import { TreeListSettingsModal } from '../trees/treeListSettingsModal';
 
 import { ConceptTreePanelComponent } from '../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent';
 import { ConceptTreeComponent } from '../trees/skos/concept/conceptTree/conceptTreeComponent';
@@ -41,7 +42,7 @@ import { Ng2CompleterModule } from "ng2-completer";
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule, Ng2CompleterModule], 
     declarations: [
-        TreePanelComponent,
+        TreePanelComponent, TreeListSettingsModal,
         ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent,
         CollectionTreePanelComponent, CollectionTreeComponent, CollectionTreeNodeComponent,
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
@@ -59,6 +60,6 @@ import { Ng2CompleterModule } from "ng2-completer";
         PropertyTreePanelComponent, PropertyTreeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent
     ],
-    entryComponents: [SearchSettingsModal]
+    entryComponents: [SearchSettingsModal, TreeListSettingsModal]
 })
 export class TreeAndListModule { }

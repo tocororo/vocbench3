@@ -1,16 +1,19 @@
 <div class="treeNode" #treeNodeElement>
       <div class="expandCollapseBtnContainer">
-            <img *ngIf="node.getAdditionalProperty('more')==1 && !open"
-                  src="../../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode()">
-            <img *ngIf="open" src="../../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
+            <ng-template [ngIf]="showExpandCollapse()">
+                  <img *ngIf="!open" src="../../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode().subscribe()">
+                  <img *ngIf="open" src="../../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
+            </ng-template>
 	</div>
 	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
             [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
-      <concept-tree-node *ngFor="let n of node.getAdditionalProperty('children')"
-            [node]="n" [schemes]="schemes" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"
-            (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
-      </concept-tree-node>
+      <ng-template ngFor let-n [ngForOf]="node.getAdditionalProperty('children')">
+            <concept-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
+                  [node]="n" [schemes]="schemes" [rendering]="rendering" [showDeprecated]="showDeprecated" 
+                  (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+            </concept-tree-node>
+      </ng-template>
 </div>

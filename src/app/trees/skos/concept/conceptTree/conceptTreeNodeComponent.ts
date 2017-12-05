@@ -33,14 +33,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
-    /**
- 	 * Function called when "+" button is clicked.
- 	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
- 	 * then expands the subtree div.
- 	 */
-    expandNode() {
-        this.nodeExpandStart.emit();
-        this.skosService.getNarrowerConcepts(this.node, this.schemes).subscribe(
+    expandNodeImpl() {
+        return this.skosService.getNarrowerConcepts(this.node, this.schemes).map(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
@@ -48,7 +42,6 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
                 //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower);
                 this.open = true;
-                this.nodeExpandEnd.emit();
             }
         );
     }

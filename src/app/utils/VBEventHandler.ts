@@ -68,6 +68,8 @@ export class VBEventHandler {
     public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter("resViewModeChangedEvent");
     public resViewTabSyncChangedEvent: EventEmitter<boolean> = new VBEventEmitter("resViewTabSyncChangedEvent");
 
+    public showDeprecatedChangedEvent: EventEmitter<boolean> = new VBEventEmitter("showDeprecatedChangedEvent");
+
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
 
     public searchPrefsUpdatedEvent: EventEmitter<any> = new VBEventEmitter("searchPrefsUpdatedEvent");

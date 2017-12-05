@@ -1,4 +1,5 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
+import { AbstractStruct } from "./abstractStruct";
 import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
@@ -7,9 +8,9 @@ import { UIUtils } from "../utils/UIUtils";
 
 @Component({
     selector: "tree",
-    templateUrl: "./owl/classTree/classTreeComponent.html",
+    template: "",
 })
-export abstract class AbstractTree {
+export abstract class AbstractTree extends AbstractStruct {
 
     /**
      * VIEWCHILD, INPUTS / OUTPUTS
@@ -18,23 +19,19 @@ export abstract class AbstractTree {
     @ViewChild('blockDivTree') public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
     @ViewChild('scrollableContainer') scrollableElement: ElementRef;
     @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+    @Input() showDeprecated: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     /**
      * ATTRIBUTES
      */
-
-    eventSubscriptions: any[] = [];
     roots: ARTURIResource[];
-    selectedNode: ARTURIResource;
 
     /**
      * CONSTRUCTOR
      */
-    protected eventHandler: VBEventHandler;
     constructor(eventHandler: VBEventHandler) {
-        this.eventHandler = eventHandler;
-        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initTree()));
+        super(eventHandler);
     }
 
     /**
@@ -56,8 +53,8 @@ export abstract class AbstractTree {
         }
     }
 
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    init() {
+        this.initTree();
     }
 
     abstract initTree(): void;
@@ -70,14 +67,6 @@ export abstract class AbstractTree {
     }
     private onNodeExpandEnd() {
         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-    }
-    private onNodeSelected(node: ARTURIResource) {
-        if (this.selectedNode != undefined) {
-            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-        }
-        this.selectedNode = node;
-        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        this.nodeSelected.emit(node);
     }
 
     //BROADCAST EVENT HANDLERS

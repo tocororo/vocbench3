@@ -1,15 +1,19 @@
 <div class="treeNode" #treeNodeElement>
-	<div class="expandCollapseBtnContainer">
-            <img *ngIf="node.getAdditionalProperty('more')==1 && !open"
-                  src="../../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode()">
-            <img *ngIf="open" src="../../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
-	</div>
-	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
-        [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+        <div class="expandCollapseBtnContainer">
+                <ng-template [ngIf]="showExpandCollapse()">
+                        <img *ngIf="!open" src="../../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode().subscribe()">
+                        <img *ngIf="open" src="../../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
+                </ng-template>
+        </div>
+        <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
+                [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
-	<collection-tree-node *ngFor="let n of node.getAdditionalProperty('children')" [node]="n" [rendering]="rendering"
-        (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
-    </collection-tree-node>
+        <ng-template ngFor let-n [ngForOf]="node.getAdditionalProperty('children')">
+                <collection-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
+                        [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" 
+                        (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+                </collection-tree-node>
+        </ng-template>
 </div>

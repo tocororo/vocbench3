@@ -28,6 +28,7 @@ export abstract class AbstractPanel {
 
     abstract panelRole: RDFResourceRolesEnum; //declare the type of resources in the panel
     rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+    showDeprecated: boolean = true;
     eventSubscriptions: any[] = [];
     selectedNode: ARTURIResource;
 
@@ -41,6 +42,9 @@ export abstract class AbstractPanel {
         this.cfService = cfService;
         this.basicModals = basicModals;
         this.eventHandler = eventHandler;
+
+        this.eventSubscriptions.push(eventHandler.showDeprecatedChangedEvent.subscribe(
+            (showDeprecated: boolean) => this.showDeprecated = showDeprecated));
     }
 
     /**

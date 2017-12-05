@@ -8,6 +8,8 @@ export class Cookie {
 	public static RES_VIEW_MODE = "resource_view.mode";
 	public static RES_VIEW_TAB_SYNCED = "resource_view.tab_synced";
 
+	public static SHOW_DEPRECATED = "tree_list.show_deprecated";
+
 	public static ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE = "alignment_validation.alignment_per_page";
 	public static ALIGNMENT_VALIDATION_RELATION_SHOW = "alignment_validation.relation_show";
 	public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "alignment_validation.show_confidence";

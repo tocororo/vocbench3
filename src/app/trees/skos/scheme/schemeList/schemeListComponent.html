@@ -2,21 +2,22 @@
 
     <div class="panel-body vbox">
         <div class="scrollableContainer">
-
-            <div *ngFor="let s of list">
-                <div class="listNodeItem">
-                    <input *ngIf="editable" type="checkbox" style="margin-right: 5px;" [(ngModel)]="s.checked" (ngModelChange)="updateActiveSchemesPref()">
-                    <scheme-list-node [node]="s.scheme" [rendering]="rendering" (nodeSelected)="selectNode(s)" style="flex:1">
-                    </scheme-list-node>
+            <ng-template ngFor let-s [ngForOf]="list">
+                <div *ngIf="!s.scheme.isDeprecated() || showDeprecated && s.scheme.isDeprecated()">
+                    <div class="listNodeItem">
+                        <input *ngIf="editable" type="checkbox" style="margin-right: 5px;" [(ngModel)]="s.checked" (ngModelChange)="updateActiveSchemesPref()">
+                        <scheme-list-node [node]="s.scheme" [rendering]="rendering" [showDeprecated]="showDeprecated" 
+                            (nodeSelected)="selectNode(s)" style="flex:1">
+                        </scheme-list-node>
+                    </div>
                 </div>
-            </div>
-
+            </ng-template>
         </div>
 
         <div #blockDivList class="blockingDiv" style="display:none">
             <div class="loadingDiv">
                 <div>
-                    <p>Loading...</p><img src="../../../../../assets/images/loading.gif" />
+                    <p>Loading...</p><img src="../../../../../assets/images/loading.gif"/>
                 </div>
             </div>
         </div>

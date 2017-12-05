@@ -28,7 +28,8 @@
         </div>
     </div>
     <div class="panel-body vbox">
-        <scheme-list [rendering]="rendering" [editable]="editable" (nodeSelected)="onNodeSelected($event)"></scheme-list>
+        <scheme-list [rendering]="rendering" [showDeprecated]="showDeprecated" [editable]="editable" (nodeSelected)="onNodeSelected($event)">
+        </scheme-list>
     </div>
 
     <!-- search -->

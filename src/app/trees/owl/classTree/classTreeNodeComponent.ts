@@ -6,6 +6,7 @@ import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
+import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: "class-tree-node",
@@ -44,25 +45,18 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         //expand immediately the node if it is a root and if it is owl:Thing or rdfs:Resource
         if ((this.node.getURI() == OWL.thing.getURI() || this.node.getURI() == RDFS.resource.getURI()) && 
             this.root && this.node.getAdditionalProperty(ResAttribute.MORE) == "1") {
-            this.expandNode();
+            this.expandNode().subscribe();
         }
     }
 
-    /**
-	 * Function called when "+" button is clicked.
-	 * Gets a node as parameter and retrieve with an http call the subClass of the node,
-	 * then expands the subtree div.
-	 */
-    expandNode() {
-        this.nodeExpandStart.emit();
-        this.clsService.getSubClasses(this.node, this.pref.getShowInstancesNumber()).subscribe(
+    expandNodeImpl(): Observable<any> {
+        return this.clsService.getSubClasses(this.node, this.pref.getShowInstancesNumber()).map(
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
                 ResourceUtils.sortResources(subClasses, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.open = true;
-                this.nodeExpandEnd.emit();
             }
         );
     }

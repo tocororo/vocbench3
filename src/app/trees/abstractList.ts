@@ -1,42 +1,37 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter, QueryList } from "@angular/core";
+import { AbstractStruct } from "./abstractStruct";
 import { AbstractListNode } from "./abstractListNode";
-import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
-import { SemanticTurkey } from "../models/Vocabulary";
-import { VBContext } from "../utils/VBContext";
+import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { UIUtils } from "../utils/UIUtils";
 
 @Component({
     selector: "list",
     template: "",
 })
-export abstract class AbstractList {
+export abstract class AbstractList extends AbstractStruct {
 
     @ViewChild('blockDivList') public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList
     abstract viewChildrenNode: QueryList<AbstractListNode>;
     
-    @Input() rendering: boolean = true; //if true the nodes in the list should be rendered with the show, with the qname otherwise
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-
     /**
      * ATTRIBUTES
      */
 
-    eventSubscriptions: any[] = [];
-    abstract list: any[];
-    selectedNode: ARTURIResource;
+    list: any[];
 
     /**
      * CONSTRUCTOR
      */
-    protected eventHandler: VBEventHandler;
     constructor(eventHandler: VBEventHandler) {
-        this.eventHandler = eventHandler;
-        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
+        super(eventHandler);
     }
 
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    /**
+     * METHODS
+     */
+
+    init() {
+        this.initList();
     }
 
     abstract initList(): void;
@@ -49,14 +44,5 @@ export abstract class AbstractList {
     abstract onListNodeCreated(node: ARTURIResource): void;
     abstract onListNodeDeleted(node: ARTURIResource): void;
     abstract openListAt(node: ARTURIResource): void;
-
-    private onNodeSelected(node: ARTURIResource) {
-        if (this.selectedNode != undefined) {
-            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
-        }
-        this.selectedNode = node;
-        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
-        this.nodeSelected.emit(node);
-    }
 
 }

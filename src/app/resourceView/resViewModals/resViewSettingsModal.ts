@@ -12,7 +12,10 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
     private tabSync: boolean;
+    private tabSyncPristine: boolean;
+
     private mode: ResourceViewMode;
+    private modePristine: ResourceViewMode;
 
     constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties, private eventHandler: VBEventHandler) {
         this.context = dialog.context;
@@ -20,15 +23,20 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
 
     ngOnInit() {
         this.mode = this.vbProp.getResourceViewMode();
+        this.modePristine = this.mode;
         this.tabSync = this.vbProp.getResourceViewTabSync();
+        this.tabSyncPristine = this.tabSync;
     }
 
     ok(event: Event) {
-        this.vbProp.setResourceViewMode(this.mode);
-        this.eventHandler.resViewModeChangedEvent.emit(this.mode);
-        this.vbProp.setResourceViewTabSync(this.tabSync);
-        this.eventHandler.resViewTabSyncChangedEvent.emit(this.tabSync);
-
+        if (this.mode != this.modePristine) {
+            this.vbProp.setResourceViewMode(this.mode);
+            this.eventHandler.resViewModeChangedEvent.emit(this.mode);
+        }
+        if (this.tabSync != this.tabSyncPristine) {
+            this.vbProp.setResourceViewTabSync(this.tabSync);
+            this.eventHandler.resViewTabSyncChangedEvent.emit(this.tabSync);
+        }
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close();

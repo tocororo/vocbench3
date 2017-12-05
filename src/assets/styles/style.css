@@ -458,6 +458,7 @@ button.resViewPartitionBtn:disabled  {
 
 /*override padding of the nav-tab links*/
 .nav-tabs-xs>li>a {
+    cursor: pointer !important;
     padding: 1px 2px !important;
 }
 

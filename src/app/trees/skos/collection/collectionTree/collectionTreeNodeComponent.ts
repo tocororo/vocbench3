@@ -34,21 +34,14 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
-    /**
- 	 * Function called when "+" button is clicked.
- 	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
- 	 * then expands the subtree div.
- 	 */
-    expandNode() {
-        this.nodeExpandStart.emit();
-        this.skosService.getNestedCollections(this.node).subscribe( //new service
+    expandNodeImpl() {
+        return this.skosService.getNestedCollections(this.node).map(
             nestedColl => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
                 ResourceUtils.sortResources(nestedColl, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node
                 this.open = true;
-                this.nodeExpandEnd.emit();
             }
         );
     }

@@ -1,4 +1,7 @@
 import { Component, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
+import { TreeListSettingsModal } from "./treeListSettingsModal";
 import { ConceptTreePanelComponent } from "../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent";
 import { CollectionTreePanelComponent } from "../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent";
 import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/schemeListPanelComponent";
@@ -37,7 +40,7 @@ export class TreePanelComponent {
     ];
     private activeTab: string;
 
-    constructor() { }
+    constructor(private modal: Modal) { }
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getModelType();
@@ -96,6 +99,12 @@ export class TreePanelComponent {
      */
     private isProjectSKOS(): boolean {
         return this.ONTO_TYPE == SKOS.uri;
+    }
+
+    private openSettings() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(TreeListSettingsModal, overlayConfig).result;
     }
 
     //TAB HANDLER

@@ -252,6 +252,20 @@ export class VBProperties {
         return cookieValue == "true";
     }
 
+    /**
+     * Sets the preference to show the deprecated resources in the trees/lists
+     * @param showDeprecated 
+     */
+    setShowDeprecated(showDeprecated: boolean) {
+        Cookie.setCookie(Cookie.SHOW_DEPRECATED, showDeprecated + "", 365*10);
+    }
+    /**
+     * Gets the preference to show the deprecated resources in the trees/lists
+     */
+    getShowDeprecated(): boolean {
+        let cookieValue: string = Cookie.getCookie(Cookie.SHOW_DEPRECATED);
+        return cookieValue != "false"; //default true
+    }
 
     initSearchSettingsCookie() {
         let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);

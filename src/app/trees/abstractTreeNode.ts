@@ -1,4 +1,6 @@
 import { Component, Input, Output, ViewChild, QueryList, ElementRef, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { AbstractNode } from "./abstractNode";
 import { ARTResource, ARTURIResource, ARTNode, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -7,17 +9,14 @@ import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "tree-node",
-    templateUrl: "./owl/classTree/classTreeNodeComponent.html",
+    template: "",
 })
-export abstract class AbstractTreeNode {
+export abstract class AbstractTreeNode extends AbstractNode {
 
     /**
      * VIEWCHILD, INPUTS / OUTPUTS
      */
 
-    @Input() node: ARTURIResource;
-    @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeExpandStart = new EventEmitter<any>(); //emit an event when the user click on button to expand a subTree of a node
     @Output() nodeExpandEnd = new EventEmitter<any>(); //emit an event when the subTree expansion is completed
 
@@ -31,21 +30,12 @@ export abstract class AbstractTreeNode {
      */
     open: boolean = false;
 
-    //structure to support the tree opening
-    pendingSearch: { pending: boolean, path: ARTURIResource[] } = {
-        pending: false, //tells if there is a pending search waiting that children view are initialized 
-        path: [], //remaining path of the tree to open
-    }
-
-    eventSubscriptions: any[] = [];
-
     /**
      * CONSTRUCTOR
      */
-    protected eventHandler: VBEventHandler;
     protected basicModals: BasicModalServices;
     constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices) {
-        this.eventHandler = eventHandler;
+        super(eventHandler);
         this.basicModals = basicModals;
     }
 
@@ -54,27 +44,36 @@ export abstract class AbstractTreeNode {
      */
 
     ngAfterViewInit() {
-        //when ClassTreeNodeComponent children are added, looks for a pending search to resume
-        this.viewChildrenNode.changes.subscribe(
-            c => {
-                if (this.pendingSearch.pending) {//there is a pending search
-                    /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
-                    (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
-                    window.setTimeout(() =>
-                        this.expandPath(this.pendingSearch.path)
-                    );
-                }
-            }
-        );
         //if the resource is new (just created), make it visible in the view
         if (this.node.getAdditionalProperty(ResAttribute.NEW)) {
             this.treeNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
             this.node.deleteAdditionalProperty(ResAttribute.NEW);
         }
+        //in case of node initialized after switching on the "showDeprecated" and the node was expanded
+        if (this.node.getAdditionalProperty(ResAttribute.CHILDREN).length > 0) {
+            setTimeout(() => this.open = true);
+        }
     }
 
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    private showExpandCollapse(): boolean {
+        let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
+        if (more) {
+            let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
+            if (children.length > 0) {
+                let childNotDeprecated: boolean = false;
+                children.forEach(c => { 
+                    if (!c.isDeprecated()) {
+                        childNotDeprecated = true;
+                        return;
+                    }
+                });
+                return (this.showDeprecated == true || (!this.showDeprecated && childNotDeprecated));
+            } else { //no children and "more" true means that the node has not been yet expanded, so in the doubt return true
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -82,7 +81,18 @@ export abstract class AbstractTreeNode {
 	 * Gets a node as parameter and retrieves with an http call the children of the node,
 	 * then expands the subtree div.
 	 */
-    abstract expandNode(): void;
+    expandNode(): Observable<any> {
+        this.nodeExpandStart.emit();
+        return this.expandNodeImpl().map(
+            () => {
+                this.nodeExpandEnd.emit();
+            }
+        );
+    }
+    /**
+     * Implementation of the expansion. It calls the  service for getting the child of a node in the given tree
+     */
+    abstract expandNodeImpl(): Observable<any>;
 
     /**
    	 * Function called when "-" button is clicked.
@@ -108,49 +118,48 @@ export abstract class AbstractTreeNode {
             }
         } else {
             if (!this.open) { //if node is close, expand itself
-                this.expandNode();
+                this.expandNode().subscribe(
+                    () => {
+                        //trigger a round of change detection so that the view children are rendered
+                        setTimeout(
+                            () => {
+                                this.expandChild(path);
+                            }
+                        );
+                        
+                    }
+                );
+            } else {
+                this.expandChild(path);
             }
-            var nodeChildren = this.viewChildrenNode.toArray();
-            if (nodeChildren.length == 0) {//Still no children ConceptTreeNodeComponent (view not yet initialized)
-                //save pending search so it can resume when the children are initialized
-                this.pendingSearch.pending = true;
-                this.pendingSearch.path = path;
-                return;
-            } else if (this.pendingSearch.pending) {
-                //the tree expansion is resumed, reset the pending search
-                this.pendingSearch.pending = false;
-                this.pendingSearch.path = [];
-            }
-            for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
-                if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
-                    //let the child node expand the remaining path
-                    path.splice(0, 1);
-                    nodeChildren[i].expandPath(path);
-                    return;
-                }
-            }
-            //if this line is reached it means that the first node of the path has not been found
-            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree");
         }
     }
 
-    /**
-     * Called when the node is clicked. This function emit an event 
-     */
-    private selectNode() {
-        this.nodeSelected.emit(this.node);
+    private expandChild(path: ARTURIResource[]) {
+        //If the deprecated nodes are hidden, check if the path pass through a deprecated node not visible
+        if (!this.showDeprecated) {
+            let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
+            for (var i = 0; i < children.length; i++) {
+                if (children[i].getURI() == path[0].getURI() && children[i].isDeprecated()) {
+                    this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + 
+                        " is not reachable in the current tree since the path to reach it contains a deprecated node." +
+                        " Enable the show of deprecated resources and repeat the search", "warning");
+                    return;
+                }
+            }
+        }
+        let nodeChildren = this.viewChildrenNode.toArray();
+        for (var i = 0; i < nodeChildren.length; i++) {//for every ConceptTreeNodeComponent child
+            if (nodeChildren[i].node.getURI() == path[0].getURI()) { //look for the next node of the path
+                //let the child node expand the remaining path
+                path.splice(0, 1);
+                nodeChildren[i].expandPath(path);
+                return;
+            }
+        }
+        //if this line is reached it means that the first node of the path has not been found
+        this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree", "warning");
     }
-
-    /**
-     * Called when a rdf-resource is clicked. 
-     */
-    // private onResourceClicked(event: MouseEvent) {
-    //     if (event.ctrlKey) { //ctrl + click
-    //         this.nodeCtrlClicked.emit(this.node);
-    //     } else {
-    //         this.selectNode();
-    //     }
-    // }
 
     /**
      * Listener to the nodeSelected @Output event, called when a node in the subTree is clicked
@@ -168,18 +177,6 @@ export abstract class AbstractTreeNode {
     }
 
     //BROADCAST EVENTS HANDLERS
-
-    /**
-     * Called when a resource is renamed in resource view.
-     * This function replace the uri of the resource contained in the node if it is the resource
-     * affected by the renaming.
-     */
-    onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        if (oldResource.getURI() == this.node.getURI()) {
-            // this.node[ResAttribute.SHOW] = newResource.getShow();
-            this.node.setURI(newResource.getURI());
-        }
-    }
 
     onTreeNodeDeleted(deletedNode: ARTResource) {
         var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
@@ -211,11 +208,9 @@ export abstract class AbstractTreeNode {
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             if (this.open) { //if node is open, show the child with its children
                 let children: ARTResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-                // children.push(child);
                 children.unshift(child);
             } else {
-                this.expandNode();
-                // this.treeNodeElement.nativeElement.scrollIntoView();
+                this.expandNode().subscribe();
             }
         }
     }

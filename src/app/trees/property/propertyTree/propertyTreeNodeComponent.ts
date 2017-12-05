@@ -28,21 +28,14 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
-    /**
- 	 * Function called when "+" button is clicked.
- 	 * Gets a node as parameter and retrieve with an http call the narrower of the node,
- 	 * then expands the subtree div.
- 	 */
-    expandNode() {
-        this.nodeExpandStart.emit();
-        this.propService.getSubProperties(this.node).subscribe(
+    expandNodeImpl() {
+        return this.propService.getSubProperties(this.node).map(
             subProps => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
                 ResourceUtils.sortResources(subProps, attribute);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subProps); //append the retrieved node as child of the expanded node
                 this.open = true;
-                this.nodeExpandEnd.emit();
             }
         );
     }

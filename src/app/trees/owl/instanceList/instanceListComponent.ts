@@ -2,7 +2,9 @@ import { Component, ViewChild, ViewChildren, Input, Output, EventEmitter, Elemen
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 import { AbstractList } from "../../abstractList";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
+import { SemanticTurkey } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ClassesServices } from "../../../services/classesServices";
@@ -186,7 +188,16 @@ export class InstanceListComponent extends AbstractList {
     onListNodeDeleted(node: ARTURIResource) {
         for (var i = 0; i < this.list.length; i++) {
             if (this.list[i].getURI() == node.getURI()) {
-                this.list.splice(i, 1);
+                if (VBContext.getWorkingProject().isValidationEnabled()) {
+                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
+                    let stagedRes: ARTURIResource = this.list[i].clone();
+                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
+                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
+                    this.list[i] = stagedRes;
+                } else {
+                    this.list.splice(i, 1);
+                }
                 break;
             }
         }

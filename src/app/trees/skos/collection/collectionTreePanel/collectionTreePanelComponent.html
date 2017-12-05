@@ -38,7 +38,7 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <collection-tree [rendering]="rendering" (nodeSelected)="onNodeSelected($event)" 
+        <collection-tree [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)" 
             (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </collection-tree>
     </div>
