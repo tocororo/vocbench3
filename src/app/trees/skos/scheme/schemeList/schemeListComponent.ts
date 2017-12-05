@@ -1,7 +1,13 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ViewChildren, QueryList } from "@angular/core";
+import { AbstractList } from "../../../abstractList";
+import { SchemeListNodeComponent } from "./schemeListNodeComponent";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
+import { UIUtils } from "../../../../utils/UIUtils";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBContext } from "../../../../utils/VBContext";
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -10,89 +16,136 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
     selector: "scheme-list",
     templateUrl: "./schemeListComponent.html",
 })
-export class SchemeListComponent {
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    @Input() hideSearch: boolean = false;
+export class SchemeListComponent extends AbstractList {
 
-    private rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
+    @Input() editable: boolean = true; //tells if checkbox should be visible
 
-    private schemeList: ARTURIResource[];
-    private selectedScheme: ARTURIResource;
+    @ViewChildren(SchemeListNodeComponent) viewChildrenNode: QueryList<SchemeListNodeComponent>;
+
+    list: SchemeListItem[];
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices) { }
+        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        super(eventHandler);
+        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
+        this.eventSubscriptions.push(eventHandler.schemeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
+        this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+    }
 
     ngOnInit() {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES)) {
             return;
         }
+        this.initList();
+    }
 
-        this.skosService.getAllSchemes().subscribe( //new service
-            schemeList => {
+    initList() {
+        this.list = [];
+        this.selectedNode = null;
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        this.skosService.getAllSchemes().subscribe(
+            schemes => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(schemeList, attribute);
-                this.schemeList = schemeList;
+                ResourceUtils.sortResources(schemes, attribute);
+
+                for (var i = 0; i < schemes.length; i++) {
+                    let active: boolean = this.vbProp.isActiveScheme(schemes[i]);
+                    this.list.push({ checked: active, scheme: schemes[i] });
+                }
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
         );
     }
 
-    private selectScheme(scheme: ARTURIResource) {
-        if (this.selectedScheme == undefined) {
-            this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
-        } else if (this.selectedScheme.getURI() != scheme.getURI()) {
-            this.selectedScheme.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.selectedScheme = scheme;
-            this.selectedScheme.setAdditionalProperty(ResAttribute.SELECTED, true);
-        }
-        this.selectedScheme = scheme;
-        this.nodeSelected.emit(scheme);
+    onListNodeCreated(node: ARTURIResource) {
+        this.list.unshift({ checked: false, scheme: node });
     }
 
-    private doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
-            let searchLangs: string[];
-            if (searchSettings.restrictLang) {
-                searchLangs = searchSettings.languages;
-            }
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs).subscribe(
-                searchResult => {
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.selectScheme(this.getSchemeToSelectFromList(searchResult[0]));
-                        } else { //multiple results, ask the user which one select
-                            ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                                (selectedResource: any) => {
-                                    this.selectScheme(this.getSchemeToSelectFromList(selectedResource));
-                                },
-                                () => { }
-                            );
-                        }
-                    }
+    onListNodeDeleted(node: ARTURIResource) {
+        for (var i = 0; i < this.list.length; i++) {//Update the schemeList
+            if (this.list[i].scheme.getURI() == node.getURI()) {
+                if (VBContext.getWorkingProject().isValidationEnabled()) {
+                    //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
+                    let stagedRes: ARTURIResource = this.list[i].scheme.clone();
+                    stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
+                    stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+                    stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
+                    this.list[i].scheme = stagedRes;
+                } else {
+                    this.list.splice(i, 1);
                 }
-                );
+                break;
+            }
         }
+        //update the activeSchemes if the deleted was active
+        if (this.vbProp.isActiveScheme(this.selectedNode)) {
+            this.updateActiveSchemesPref();
+        }
+        this.selectedNode = null;
     }
 
     /**
-     * Retrieves from the schemeList the scheme to select. This method is necessary because searchResource service
-     * returns a new ARTURIResource that has the same attribute of the one in the schemeList but is not the same object,
-     * so I need to invoke selectScheme to the one in the list, not to the one returned from service
+     * Called when a scheme is clicked. Set the clicked scheme as selected
      */
-    private getSchemeToSelectFromList(scheme: ARTURIResource): ARTURIResource {
-        for (var i = 0; i < this.schemeList.length; i++) {
-            if (this.schemeList[i].getURI() == scheme.getURI()) {
-                return this.schemeList[i];
+    selectNode(node: SchemeListItem) {
+        if (this.selectedNode != undefined) {
+            this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);
+        }
+        this.selectedNode = node.scheme;
+        this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
+        this.nodeSelected.emit(node.scheme);
+    }
+
+    openListAt(node: ARTURIResource) {
+        var childrenNodeComponent = this.viewChildrenNode.toArray();
+        for (var i = 0; i < childrenNodeComponent.length; i++) {
+            if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
+                childrenNodeComponent[i].ensureVisible();
+                if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
+                    childrenNodeComponent[i].selectNode();
+                }
+                break;
             }
         }
     }
 
+    public activateAllScheme() {
+        for (var i = 0; i < this.list.length; i++) {
+            this.list[i].checked = true;
+        }
+        this.updateActiveSchemesPref();
+    }
+
+    public deactivateAllScheme() {
+        for (var i = 0; i < this.list.length; i++) {
+            this.list[i].checked = false;
+        }
+        this.updateActiveSchemesPref();
+    }
+
+    private updateActiveSchemesPref() {
+        this.vbProp.setActiveSchemes(this.collectCheckedSchemes());
+    }
+
+    /**
+     * Collects all the schemes checked
+     */
+    private collectCheckedSchemes(): ARTURIResource[] {
+        //collect all the active scheme
+        var activeSchemes: ARTURIResource[] = [];
+        for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].checked) {
+                activeSchemes.push(this.list[i].scheme);
+            }
+        }
+        return activeSchemes;
+    }
+
+}
+
+
+class SchemeListItem {
+    public checked: boolean;
+    public scheme: ARTURIResource;
 }

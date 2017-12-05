@@ -2,14 +2,14 @@
 
     <div class="panel-body vbox">
 
-        <div *ngIf="instanceList && instanceList.length > 0" class="scrollableContainer">
+        <div *ngIf="list && list.length > 0" class="scrollableContainer">
             
-            <ng-template ngFor let-instance [ngForOf]="instanceList" let-idx="index">
-                <div *ngIf="showInstance(idx)"> <!-- paging filter -->
-                    <instance-list-node [node]="instance" [rendering]="rendering" (nodeSelected)="selectInstance($event)">
+            <div *ngFor="let instance of list; let idx = index;">
+                <div *ngIf="showInstance(idx)" class="listNodeItem">
+                    <instance-list-node [node]="instance" [rendering]="rendering" (nodeSelected)="selectNode($event)" style="flex: 1;">
                     </instance-list-node>
                 </div>
-            </ng-template>
+            </div>
 
             <div *ngIf="showMoreButton()">
                 <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showMore()">
@@ -19,7 +19,7 @@
 
         </div>
 
-        <div #blockDivInstanceList class="blockingDiv" style="display:none">
+        <div #blockDivList class="blockingDiv" style="display:none">
             <div class="loadingDiv">
                 <div>
                     <p>Loading...</p><img src="../../../../assets/images/loading.gif" />

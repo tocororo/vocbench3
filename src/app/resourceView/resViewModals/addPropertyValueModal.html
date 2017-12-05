@@ -20,14 +20,14 @@
             [editable]="false"></class-tree-panel>
 
         <concept-tree-panel *ngIf="viewType == 'conceptTree'" [editable]="false" [schemeChangeable]="true" [schemes]="schemes"
-            (nodeSelected)="onResourceSelected($event)" >
+            (nodeSelected)="onResourceSelected($event)">
         </concept-tree-panel>
         
         <property-tree-panel *ngIf="viewType == 'propertyTree'" [editable]="false" [type]="propertyType"
             (nodeSelected)="onResourceSelected($event)">
         </property-tree-panel>
         
-        <scheme-list *ngIf="viewType == 'schemeList'" (nodeSelected)="onResourceSelected($event)"></scheme-list>
+        <scheme-list-panel *ngIf="viewType == 'schemeList'" [editable]="false" (nodeSelected)="onResourceSelected($event)"></scheme-list-panel>
         
         <resource-list *ngIf="viewType == 'resourceList'" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
         

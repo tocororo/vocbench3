@@ -221,17 +221,17 @@ editable-resource {
 	padding-left:15px;
 }
 
-.schemeItem {
+.listNodeItem {
     display: flex;
     align-items: center;
     min-height: 24px;
 }
 
-.schemeItem input {
+.listNodeItem input {
     min-width: 13px;
 }
 
-.schemeItem rdf-resource {
+.listNodeItem rdf-resource {
 	border-radius: 2px;
 	flex: 1;
 }

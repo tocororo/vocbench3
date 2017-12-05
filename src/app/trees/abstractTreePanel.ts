@@ -43,13 +43,4 @@ export abstract class AbstractTreePanel extends AbstractPanel {
         return (!this.selectedNode || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
     }
 
-    /**
-     * Handles the keydown event in search text field (when enter key is pressed execute the search)
-     */
-
-    onNodeSelected(node: ARTURIResource) {
-        this.selectedNode = node;
-        this.nodeSelected.emit(node);
-    }
-
 }

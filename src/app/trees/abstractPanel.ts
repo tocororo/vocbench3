@@ -67,4 +67,9 @@ export abstract class AbstractPanel {
 
     abstract doSearch(searchedText: string): void;
 
+    onNodeSelected(node: ARTURIResource) {
+        this.selectedNode = node;
+        this.nodeSelected.emit(node);
+    }
+
 }

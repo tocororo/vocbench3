@@ -1,7 +1,7 @@
 <div class="panel panel-default vbox">
     <!-- Commands -->
     <div class="panel-heading">
-        <div class="btn-group btn-group-xs" role="group" style="flex: 1">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <button class="btn btn-default" title="Create Concept Scheme" (click)="create()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" class="panelButtonImg"/>
             </button>
@@ -9,32 +9,26 @@
                 <img src="../../../../../assets/images/icons/actions/conceptScheme_delete.png" class="panelButtonImg"/>
             </button>
         </div>
-        <div class="btn-group btn-group-xs" role="group" style="margin-right: 5px;">
-            <button class="btn btn-default" title="Select all schemes" (click)="activateAllScheme()">
-                <span class="glyphicon glyphicon-check" style="width: 16px;"></span>
+        <div style="flex: 1"></div>
+        <div class="btn-toolbar" role="toolbar">
+            <div *ngIf="editable" class="btn-group btn-group-xs" role="group" style="margin-right: 5px;">
+                <button class="btn btn-default" title="Select all schemes" (click)="activateAllScheme()">
+                    <span class="glyphicon glyphicon-check" style="width: 16px;"></span>
+                </button>
+                <button class="btn btn-default" title="Deselect all schemes" (click)="deactivateAllScheme()">
+                    <span class="glyphicon glyphicon-unchecked" style="width: 16px;"></span>
+                </button>
+            </div>
+            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering" [ngClass]="{active: rendering}">
+                <span class="glyphicon glyphicon-font"></span>
             </button>
-            <button class="btn btn-default" title="Deselect all schemes" (click)="deactivateAllScheme()">
-                <span class="glyphicon glyphicon-unchecked" style="width: 16px;"></span>
+            <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+                <span class="glyphicon glyphicon-refresh"></span>
             </button>
         </div>
-        <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering"
-            style="margin-right: 5px;" [ngClass]="{active: rendering}">
-            <span class="glyphicon glyphicon-font"></span>
-        </button>
-        <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
-            <span class="glyphicon glyphicon-refresh"></span>
-        </button>
     </div>
     <div class="panel-body vbox">
-        <div class="scrollableContainer">
-            <div *ngFor="let s of schemeList">
-                <div class="schemeItem">
-                    <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="s.checked" (ngModelChange)="updateActiveSchemesPref()">
-                    <scheme-list-node [node]="s.scheme" [rendering]="rendering" (nodeSelected)="selectSchemeItem(s)" style="flex:1">
-                    </scheme-list-node>
-                </div>
-            </div>
-        </div>
+        <scheme-list [rendering]="rendering" [editable]="editable" (nodeSelected)="onNodeSelected($event)"></scheme-list>
     </div>
 
     <!-- search -->

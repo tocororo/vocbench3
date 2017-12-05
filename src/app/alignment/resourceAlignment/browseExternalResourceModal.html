@@ -35,8 +35,8 @@
         <property-tree-panel *ngIf="activeView=='property'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
         </property-tree-panel>
             
-        <scheme-list *ngIf="activeView=='conceptScheme'" (nodeSelected)="onResourceSelected($event)">
-        </scheme-list>
+        <scheme-list-panel *ngIf="activeView=='conceptScheme'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </scheme-list-panel>
 
         <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" (nodeSelected)="onResourceSelected($event)">
         </collection-tree-panel>

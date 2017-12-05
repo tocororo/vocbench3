@@ -1,11 +1,11 @@
 <div class="hbox">
     <ng2-completer *ngIf="searchSettings.useAutocompletion" style="flex: 1;" [inputClass]="'form-control input-xs'" 
-        [(ngModel)]="searchStr" [datasource]="completerDatasource" (keyup)="searchKeyHandler($event.which)" [minSearchLength]="3"
+        [(ngModel)]="searchStr" [datasource]="completerDatasource" (keydown)="searchKeyHandler($event)" [minSearchLength]="3"
         placeholder="Search..." matchClass="matchClass" pause="500" [disableInput]="disabled">
     </ng2-completer>
 
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control input-xs" style="flex: 1;" 
-        [(ngModel)]="searchStr" (keyup)="searchKeyHandler($event.which)" placeholder="Search..." [disabled]="disabled">
+        [(ngModel)]="searchStr" (keydown)="searchKeyHandler($event)" placeholder="Search..." [disabled]="disabled">
 
     <div class="btn-group btn-group-xs dropup" style="margin-left: 4px;">
         <button class="btn btn-default" type="button" (click)="doSearch()" [disabled]="disabled">

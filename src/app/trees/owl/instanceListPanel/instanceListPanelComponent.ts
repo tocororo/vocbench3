@@ -103,9 +103,4 @@ export class InstanceListPanelComponent extends AbstractPanel {
         this.viewChildInstanceList.selectSearchedInstance(cls, instance);
     }
 
-    onNodeSelected(node: ARTURIResource) {
-        this.selectedNode = node;
-        this.nodeSelected.emit(node);
-    }
-
 }

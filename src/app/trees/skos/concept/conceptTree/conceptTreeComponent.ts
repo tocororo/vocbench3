@@ -97,6 +97,11 @@ export class ConceptTreeComponent extends AbstractTree {
         );
     }
 
+    /**
+     * Expand the given "path" in order to reach "node" starting from the root
+     * @param path 
+     * @param node 
+     */
     private openRoot(path: ARTURIResource[], node: ARTURIResource) {
         var childrenNodeComponent = this.viewChildrenNode.toArray();
         for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand

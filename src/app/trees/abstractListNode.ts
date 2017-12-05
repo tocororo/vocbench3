@@ -4,7 +4,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
     selector: "list-node",
-    templateUrl: "./owl/instanceList/instanceListNodeComponent.html",
+    template: "",
 })
 export abstract class AbstractListNode {
 

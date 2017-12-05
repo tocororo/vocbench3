@@ -57,8 +57,10 @@ export class SearchBarComponent {
     /**
      * Handles the keyup event in search text field (when enter key is pressed execute the search)
      */
-    private searchKeyHandler(key: number) {
-        if (key == 13) {
+    private searchKeyHandler(event: KeyboardEvent) {
+        if (event.which == 13) {
+            event.preventDefault();
+            event.stopPropagation();
             this.doSearch();
         }
     }

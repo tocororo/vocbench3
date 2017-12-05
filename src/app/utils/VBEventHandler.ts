@@ -27,7 +27,8 @@ export class VBEventHandler {
     public broaderRemovedEvent: EventEmitter<{ concept: ARTURIResource, broader: ARTURIResource }> = new VBEventEmitter("broaderRemovedEvent");
 
     //SCHEME EVENTS
-    //event should contain the selected scheme
+    public schemeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeCreatedEvent");
+    public schemeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeDeletedEvent");
     public schemeChangedEvent: EventEmitter<ARTURIResource[]> = new VBEventEmitter("schemeChangedEvent");
 
     //COLLECTION EVENTS
