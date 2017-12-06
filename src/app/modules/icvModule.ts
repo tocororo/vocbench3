@@ -26,6 +26,7 @@ import { NoDefinitionResourceComponent } from "../icv/noDefinitionResource/noDef
 import { CyclicConceptComponent } from "../icv/cyclicConcept/cyclicConceptComponent";
 import { BrokenAlignmentComponent } from "../icv/brokenAlignment/brokenAlignmentComponent";
 import { BrokenDefinitionComponent } from "../icv/brokenDefinition/brokenDefinitionComponent";
+import { InvalidUriComponent } from "../icv/invalidUri/invalidUriComponent";
 
 import { IcvConfigPanelComponent } from "../icv/icvConfigPanelComponent";
 
@@ -39,7 +40,7 @@ import { icvRouting } from "../icv/icvRoutes";
         DisjointExactMatchConceptComponent, DisjointRelatedConceptComponent, ExtraSpaceLabelComponent, CyclicConceptComponent,
         HierarchicalRedundancyComponent, NoLabelResourceComponent, OnlyAltLabelResourceComponent, OverlappedLabelComponent,
         NoLangLabelComponent, DanglingXLabelComponent, NoMandatoryLabelComponent, MultiplePrefLabelComponent,
-        NoDefinitionResourceComponent, BrokenAlignmentComponent, BrokenDefinitionComponent,
+        NoDefinitionResourceComponent, BrokenAlignmentComponent, BrokenDefinitionComponent, InvalidUriComponent,
         IcvConfigPanelComponent
     ],
     exports: [IcvComponent],

@@ -379,6 +379,19 @@ export class IcvServices {
     }
 
     /**
+     * Lists IRI resources with a not valid URI
+     */
+    listLocalInvalidURIs(): Observable<ARTURIResource[]> {
+        console.log("[IcvServices] listLocalInvalidURIs");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listLocalInvalidURIs", params, true).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
+    /**
      * Returns resources which URI contains white spaces
      * @param limit max number of results to return
      */

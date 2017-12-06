@@ -135,12 +135,12 @@ export class IcvListComponent {
                 name: "Broken definitions", model: [], lexicalization: [], routeName: "/Icv/BrokenDefinition",
                 description: "Definitions of resources  where the object resource doesn't exist or is deprecated",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
+            },
+            {
+                name: "Invalid URI local resources", model: [], lexicalization: [], routeName: "/Icv/InvalidURI",
+                description: "Locally defined resources whith syntactically invalid URI",
+                authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             }
-
-            // {
-            //     name: "Whitespace URI Resources", lexicalizationModel: [SKOS.uri, SKOSXL.uri, RDFS.uri],
-            //     description: "URI Resources that have a whitespace in the URI"
-            // }
         ]
     };
 

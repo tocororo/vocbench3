@@ -23,6 +23,7 @@ import { NoDefinitionResourceComponent } from "./noDefinitionResource/noDefiniti
 import { CyclicConceptComponent } from "./cyclicConcept/cyclicConceptComponent";
 import { BrokenAlignmentComponent } from "./brokenAlignment/brokenAlignmentComponent";
 import { BrokenDefinitionComponent } from "./brokenDefinition/brokenDefinitionComponent";
+import { InvalidUriComponent } from "./invalidUri/invalidUriComponent";
 
 
 export const routes: Routes = [
@@ -47,7 +48,8 @@ export const routes: Routes = [
             { path: "DanglingXLabel", component: DanglingXLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "NoDefinitionResource", component: NoDefinitionResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "BrokenAlignment", component: BrokenAlignmentComponent, canActivate: [AuthGuard, ProjectGuard] },
-            { path: "BrokenDefinition", component: BrokenDefinitionComponent, canActivate: [AuthGuard, ProjectGuard] }
+            { path: "BrokenDefinition", component: BrokenDefinitionComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "InvalidURI", component: InvalidUriComponent, canActivate: [AuthGuard, ProjectGuard] }
         ]
     },
 ];
