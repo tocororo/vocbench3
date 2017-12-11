@@ -117,7 +117,7 @@ export class SearchServices {
      * @param schemes 
      */
     searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: StringMatchMode, 
-            langs?: string[], schemes?: ARTURIResource[]): Observable<string[]> {
+            langs?: string[], schemes?: ARTURIResource[], cls?: ARTURIResource): Observable<string[]> {
         console.log("[SearchServices] searchStringList");
         var params: any = {
             searchString: searchString,
@@ -130,6 +130,9 @@ export class SearchServices {
         }
         if (schemes != null) {
             params.schemes = schemes;
+        }
+        if (cls != null) {
+            params.cls = cls;
         }
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params, true);
     }

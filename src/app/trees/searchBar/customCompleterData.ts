@@ -7,6 +7,7 @@ import { SearchSettings, ClassIndividualPanelSearchMode } from "../../utils/VBPr
 export class CustomCompleterData extends Subject<CompleterItem[]> implements CompleterData {
 
     private activeSchemes: ARTURIResource[];
+    private cls: ARTURIResource;
     
     constructor(private searchService: SearchServices, private roles: RDFResourceRolesEnum[], private searchSettings: SearchSettings) {
         super();
@@ -29,8 +30,12 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
                 rolesParam = [RDFResourceRolesEnum.individual];
             }
         }
+        let clsParam: ARTURIResource;
+        if (this.roles.length == 1 && this.roles[0] == RDFResourceRolesEnum.individual) {
+            clsParam = this.cls;
+        }
         this.searchService.searchStringList(term, rolesParam, this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
-            langsParam, schemesParam).map(
+            langsParam, schemesParam, clsParam).map(
             strings => {
                 let results: CompleterItem[] = [];
                 strings.slice(0, 100).forEach(s => {
@@ -51,6 +56,10 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
 
     public setConceptSchemes(schemes: ARTURIResource[]) {
         this.activeSchemes = schemes;
+    }
+
+    public setClass(cls: ARTURIResource) {
+        this.cls = cls;
     }
 
 }

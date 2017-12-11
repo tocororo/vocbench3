@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { Subscription } from "rxjs/Subscription";
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
@@ -19,6 +19,7 @@ export class SearchBarComponent {
 
     @Input() roles: RDFResourceRolesEnum[]; //tells the roles of the panel where the search bar is placed (usefull for customizing the settings)
     @Input() disabled: boolean = false;
+    @Input() cls: ARTURIResource; //useful where search-bar is in the instance list panel
     @Output() search: EventEmitter<string> = new EventEmitter();
 
     //search mode startsWith/contains/endsWith
@@ -52,6 +53,13 @@ export class SearchBarComponent {
 
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['cls'] && ! changes['cls'].firstChange) {
+            this.completerDatasource.setClass(changes['cls'].currentValue);
+        }
+        
     }
 
     /**
