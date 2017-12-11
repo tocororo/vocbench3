@@ -9,6 +9,7 @@ import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices'
+import { OWL } from '../models/Vocabulary';
 
 @Injectable()
 export class VBProperties {
@@ -20,6 +21,8 @@ export class VBProperties {
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
     private projectThemeId: number = null;
+
+    private classTreePreferences: ClassTreePreference = { rootClassUri: OWL.thing.getURI(), filterMap: {}, filterEnabled: false };
 
     private searchSettings: SearchSettings = {
         stringMatchMode: StringMatchMode.contains,
@@ -55,7 +58,8 @@ export class VBProperties {
         var properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
-            Properties.pref_search_languages, Properties.pref_search_restrict_lang, Properties.pref_search_use_autocomplete
+            Properties.pref_search_languages, Properties.pref_search_restrict_lang, Properties.pref_search_use_autocomplete,
+            Properties.pref_class_tree_preferences
         ];
         this.prefService.getProjectPreferences(properties).subscribe(
             prefs => {
@@ -74,6 +78,11 @@ export class VBProperties {
                 
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
+
+                let classTreePref: any = JSON.parse(prefs[Properties.pref_class_tree_preferences]);
+                if (classTreePref != null) {
+                    this.classTreePreferences = classTreePref;
+                }
 
                 //search settings
                 let searchLangsPref = prefs[Properties.pref_search_languages];
@@ -151,6 +160,14 @@ export class VBProperties {
     }
     setLanguagesPreference(languages: string[]) {
         this.projectLanguagesPreference = languages;
+    }
+
+    getClassTreePreferences(): ClassTreePreference {
+        return this.classTreePreferences;
+    }
+    setClassTreePreference(pref: ClassTreePreference) {
+        this.prefService.setProjectPreference(Properties.pref_class_tree_preferences, JSON.stringify(pref)).subscribe();
+        this.classTreePreferences = pref;
     }
 
     /* =============================
@@ -412,4 +429,10 @@ export const ClassIndividualPanelSearchMode = {
     onlyClasses: "onlyClasses" as ClassIndividualPanelSearchMode,
     onlyInstances: "onlyInstances" as ClassIndividualPanelSearchMode,
     all: "all" as ClassIndividualPanelSearchMode
+}
+
+export class ClassTreePreference {
+    rootClassUri: string;
+    filterMap: { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
+    filterEnabled: boolean;
 }

@@ -1,0 +1,76 @@
+<div class="modal-header">
+    <h3 class="modal-title">Class tree settings</h3>
+</div>
+<div class="modal-body vbox" style="height: 70vh;">
+
+    <div class="alert alert-info" style="margin-bottom: 6px;">
+        Here you can change the root class of the tree and create filters in order to filter out subClasses.
+    </div>
+
+    <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
+        <label style="white-space: nowrap; margin-right: 4px;">
+            Root class:
+        </label>
+        <input-editable *ngIf="rootClass" [value]="rootClass.getURI()" (valueEdited)="updateRootClass($event)"></input-editable>
+        <button class="btn btn-default btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeClass()">
+            <img src="../../../../assets/images/icons/res/class.png"/>
+        </button>
+    </div>
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>SubClasses filter</label>
+            <div style="flex: 1"></div>
+            <label>Enabled</label>
+            <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled" title="Enable filter">
+        </div>
+        <div class="panel-body hbox">
+            <div class="subPanel vbox">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Classes</label>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="addFilter()" title="Add filter">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="removeFilter()" title="Remove filter" [disabled]="!selectedFilteredClass">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body scrollableContainer">
+                    <div *ngFor="let f of filterMapRes" class="listItem" (click)="selectFilteredClass(f.cls)"
+                        [ngClass]="{ active: f.cls == selectedFilteredClass }">
+                        <rdf-resource [resource]="f.cls"></rdf-resource>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subPanel vbox" style="margin-left: 4px;">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Filtered subClasses</label>
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="checkAllClasses(true)" title="Check all">
+                            <span class="glyphicon glyphicon-check"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="checkAllClasses(false)" title="Uncheck all">
+                            <span class="glyphicon glyphicon-unchecked"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body scrollableContainer">
+                    <div *ngFor="let f of getFilterSubClasses()" class="listItem">
+                        <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="f.checked" [disabled]="f.disabled">
+                        <rdf-resource [resource]="f.resource" style="flex: 1;"></rdf-resource>
+                        <span *ngIf="f.checked" class="glyphicon glyphicon-eye-open"></span>
+                        <span *ngIf="!f.checked" class="glyphicon glyphicon-eye-close"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

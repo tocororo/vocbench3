@@ -1,4 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
+import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
 import { AbstractTreePanel } from "../../abstractTreePanel"
 import { ClassTreeComponent } from "../classTree/classTreeComponent";
 import { ClassesServices } from "../../../services/classesServices";
@@ -8,7 +11,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
-import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
+import { VBProperties, SearchSettings, ClassTreePreference } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -26,9 +29,16 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.cls;
     rendering: boolean = false; //override the value in AbstractPanel
 
+    private filterEnabled: boolean;
+
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        private vbProp: VBProperties, private modal: Modal, 
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(cfService, basicModals, eventHandler);
+    }
+
+    ngOnInit() {
+        this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
     }
 
     //Top Bar commands handlers
@@ -117,6 +127,20 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     //this is public so it can be invoked from classIndividualTreePanelComponent
     openTreeAt(cls: ARTURIResource) {
         this.viewChildTree.openTreeAt(cls);
+    }
+
+    private settings() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(ClassTreeSettingsModal, overlayConfig).result.then(
+            changesDone => {
+                this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+                this.refresh();
+            },
+            () => {
+                this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+            }
+        );
     }
 
 }

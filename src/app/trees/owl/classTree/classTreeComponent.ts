@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, Simple
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBProperties } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ClassesServices } from "../../../services/classesServices";
@@ -17,13 +18,14 @@ import { AbstractTree } from "../../abstractTree";
 })
 export class ClassTreeComponent extends AbstractTree {
     @Input('roots') rootClasses: ARTURIResource[];
+    @Input() filterEnabled: boolean = false;
 
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
-    constructor(private clsService: ClassesServices, private searchService: SearchServices, 
+    constructor(private clsService: ClassesServices, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
@@ -45,12 +47,13 @@ export class ClassTreeComponent extends AbstractTree {
         this.selectedNode = null;
         this.rootLimit = this.initialRoots;
 
-        if (this.rootClasses == undefined || this.rootClasses.length == 0) {
-            this.rootClasses = [OWL.thing];
+        let clsTreeRoots: ARTURIResource[] = this.rootClasses;
+        if (clsTreeRoots == undefined || clsTreeRoots.length == 0) {
+            clsTreeRoots = [new ARTURIResource(this.vbProp.getClassTreePreferences().rootClassUri)];
         }
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement)
-        this.clsService.getClassesInfo(this.rootClasses).subscribe(
+        this.clsService.getClassesInfo(clsTreeRoots).subscribe(
             roots => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";

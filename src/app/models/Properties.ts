@@ -9,6 +9,8 @@ export class Properties {
     static pref_search_restrict_lang: string = "search_restrict_lang";
     static pref_search_use_autocomplete: string = "search_use_autocomplete";
 
+    static pref_class_tree_preferences: string = "class_tree_preferences";
+
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
 

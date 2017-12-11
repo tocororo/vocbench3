@@ -18,6 +18,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
 
     @Input() root: boolean = false;
+    @Input() filterEnabled: boolean = false;
 
     constructor(private clsService: ClassesServices, private pref: VBProperties, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
         super(eventHandler, basicModals);
@@ -59,6 +60,19 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                 this.open = true;
             }
         );
+    }
+
+    /**
+     * Used to filter out the subclasses of a root class
+     * @param subClass 
+     */
+    private filterOutRootSubClass(subClass: ARTURIResource): boolean {
+        let classTreePref = this.pref.getClassTreePreferences();
+        if (this.filterEnabled) {
+            return classTreePref.filterMap[this.node.getURI()] != null && 
+                classTreePref.filterMap[this.node.getURI()].indexOf(subClass.getURI()) != -1;
+        }
+            
     }
 
     private showInstNumber(): boolean {

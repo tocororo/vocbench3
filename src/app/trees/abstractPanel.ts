@@ -18,7 +18,7 @@ export abstract class AbstractPanel {
      */
 
     @Input() editable: boolean = true; //if true show the buttons to edit the tree/list
-    @Input() readonly: boolean = false; //if true disable the buttons to edit the tree/list
+    @Input() readonly: boolean = false; //if true disable the buttons to edit the tree/list (useful to disable edit when exploring old version)
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeDeleted = new EventEmitter<ARTURIResource>();
 
