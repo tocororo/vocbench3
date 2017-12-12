@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { SKOS } from "../models/Vocabulary";
 import { ResourcesServices } from "./resourcesServices"
@@ -777,6 +777,22 @@ export class SkosServices {
                 return stResp;
             }
         );
+    }
+
+    /**
+     * Adds a note
+     * @param resource
+     * @param predicate
+     * @param value
+     */
+    addNote(resource: ARTURIResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
+        console.log("[SkosServices] addNote");
+        var params: any = {
+            resource: resource,
+            predicate: predicate,
+            value: value
+        };
+        return this.httpMgr.doPost(this.serviceName, "addNote", params, true);
     }
 
 }

@@ -9,7 +9,8 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { CustomFormValue } from "../../../models/CustomForms"
 import { SKOS } from "../../../models/Vocabulary"
 import { ResViewPartition } from "../../../models/ResourceView";
 
@@ -34,7 +35,7 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices) {
+        rvModalService: ResViewModalServices, private skosService: SkosServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
     }
 
@@ -49,6 +50,13 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         } else {
             this.enrichProperty(predicate);
         }
+    }
+
+    //@Override
+    addPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
+        this.skosService.addNote(<ARTURIResource>resource, predicate, value).subscribe(
+            stResp => this.update.emit()
+        );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

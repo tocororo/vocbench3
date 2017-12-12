@@ -389,19 +389,22 @@ export class AuthorizationEvaluator {
         
         chk_capability(rdf(_,lexicalization), CRUDV) :-
             capability(rdf(lexicalization), CRUDV).
+
+        chk_capability(rdf(_,notes), CRUDV) :-
+            capability(rdf(notes), CRUDV).
         
         chk_capability(rdf(xLabel), CRUDV) :-
             capability(rdf(lexicalization), CRUDV).
         
         chk_capability(rdf(xLabel,_), CRUDV) :-
-            capability(rdf(lexicalization), CRUDV).        
+            capability(rdf(lexicalization), CRUDV).
 
         chk_capability(rbac(_), CRUDV) :-	
             chk_capability(rbac, CRUDV).	
 
         chk_capability(rbac(_,_), CRUDV) :-	
-            chk_capability(rbac, CRUDV).      
-        
+            chk_capability(rbac, CRUDV).
+
         resolveCRUDV(CRUDVRequest, CRUDV) :-
             char_subset(CRUDVRequest, CRUDV).
 

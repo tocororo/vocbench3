@@ -28,6 +28,7 @@ import { ClassIndividualTreePanelComponent } from '../trees/owl/classIndividualT
 import { ClassTreePanelComponent } from '../trees/owl/classTreePanel/classTreePanelComponent';
 import { ClassTreeComponent } from '../trees/owl/classTree/classTreeComponent';
 import { ClassTreeNodeComponent } from '../trees/owl/classTree/classTreeNodeComponent';
+import { ClassTreeSettingsModal } from '../trees/owl/classTreePanel/classTreeSettingsModal';
 
 import { ClassIndividualTreeComponent } from '../trees/owl/classIndividualTree/classIndividualTreeComponent';
 import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/instanceListPanelComponent';
@@ -36,6 +37,7 @@ import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceLis
 
 import { SearchBarComponent } from '../trees/searchBar/searchBarComponent'; //not exported, used just in this module
 import { SearchSettingsModal } from '../trees/searchBar/searchSettingsModal';
+
 
 import { Ng2CompleterModule } from "ng2-completer";
 
@@ -49,7 +51,7 @@ import { Ng2CompleterModule } from "ng2-completer";
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
-        SearchBarComponent, SearchSettingsModal
+        SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal
     ],
     exports: [
         TreePanelComponent,
@@ -60,6 +62,6 @@ import { Ng2CompleterModule } from "ng2-completer";
         PropertyTreePanelComponent, PropertyTreeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent
     ],
-    entryComponents: [SearchSettingsModal, TreeListSettingsModal]
+    entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, TreeListSettingsModal]
 })
 export class TreeAndListModule { }

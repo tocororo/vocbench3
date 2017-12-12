@@ -17,7 +17,7 @@ export class ProjectPropertiesModalData extends BSModalContext {
 export class ProjectPropertiesModal implements ModalComponent<ProjectPropertiesModalData> {
     context: ProjectPropertiesModalData;
 
-    private propertyList: Array<any> = [];
+    private propertyList: { name: string, value: string }[] = [];
     
     constructor(public dialog: DialogRef<ProjectPropertiesModalData>, private projectService: ProjectServices) {
         this.context = dialog.context;
@@ -26,6 +26,9 @@ export class ProjectPropertiesModal implements ModalComponent<ProjectPropertiesM
     ngOnInit() {
         this.projectService.getProjectPropertyMap(this.context.project).subscribe(
             propList => {
+                propList.sort(function (p1: { name: string, value: string }, p2: { name: string, value: string }) {
+                    return p1.name.localeCompare(p2.name);
+                });
                 this.propertyList = propList;
             }
         )

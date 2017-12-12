@@ -382,9 +382,6 @@ export class ResourceUtils {
             list.sort(
                 function (r1: ARTResource, r2: ARTResource) {
                     return r1.getShow().toLowerCase().localeCompare(r2.getShow().toLowerCase());
-                    // if (r1.getShow().toLowerCase() > r2.getShow().toLowerCase()) return 1;
-                    // if (r1.getShow().toLowerCase() < r2.getShow().toLowerCase()) return -1;
-                    // return 0;
                 }
             );
         }

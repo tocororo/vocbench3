@@ -165,11 +165,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
         this.rvModalService.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
-                this.resourcesService.addValue(this.resource, predicate, cfValue).subscribe(
-                    (stResp: any) => {
-                        this.update.emit(null);
-                    }
-                );
+                this.addPartitionAware(this.resource, predicate, cfValue);
             },
             () => { }
         )
@@ -180,10 +176,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      */
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
         this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
-            (literal: any) => {
-                this.resourcesService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
-                    stResp => { this.update.emit(null) }
-                );
+            (literal: ARTLiteral) => {
+                this.addPartitionAware(this.resource, predicate, literal);
             },
             () => { }
         );
@@ -194,10 +188,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
         this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes, dataRanges).then(
-            (literal: any) => {
-                this.resourcesService.addValue(this.resource, predicate, <ARTLiteral>literal).subscribe(
-                    stResp => this.update.emit(null)
-                );
+            (literal: ARTLiteral) => {
+                this.addPartitionAware(this.resource, predicate, literal);
             },
             () => { }
         );
@@ -209,11 +201,22 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
         this.rvModalService.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
             (resource: any) => {
-                this.resourcesService.addValue(this.resource, predicate, resource).subscribe(
-                    stResp => this.update.emit(null)
-                )
+                this.addPartitionAware(this.resource, predicate, resource);
             },
             () => { }
+        );
+    }
+
+    /**
+     * This represents the specific partition implementation for the add. It could be override in a partition if it has
+     * a specific implementation (like in notes partition for which exists the addNote service that accept a SpecialValue as value)
+     * @param resource
+     * @param predicate 
+     * @param value 
+     */
+    addPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
+        this.resourcesService.addValue(resource, predicate, value).subscribe(
+            stResp => this.update.emit()
         );
     }
 
