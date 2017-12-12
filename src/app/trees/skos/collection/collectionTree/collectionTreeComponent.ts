@@ -64,7 +64,7 @@ export class CollectionTreeComponent extends AbstractTree {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
                     return;
                 };
                 
@@ -85,7 +85,7 @@ export class CollectionTreeComponent extends AbstractTree {
                             }
                         }
                         //if this line is reached it means that the first node of the path has not been found
-                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
                     }
                 );
             }

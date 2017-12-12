@@ -79,6 +79,35 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         return this.pref.getShowInstancesNumber();
     }
 
+    /**
+     * Tells if the expand/collapse button should be shown according to the class tree filter
+     */
+    private showExpandCollapseForClassFilter(): boolean {
+        let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
+        if (more) {
+            let classTreePref = this.pref.getClassTreePreferences();
+            //if subClass filter is enabled and there is a filter for the children of the given node
+            if (this.filterEnabled && classTreePref.filterMap[this.node.getURI()] != null) {
+                let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
+                if (children.length > 0) {
+                    let childNotFiltered: boolean = false;
+                    for (var i = 0; i < children.length; i++) { //if there is at least one child not filtered out
+                        if (classTreePref.filterMap[this.node.getURI()].indexOf(children[i].getURI()) == -1) {
+                            return true;
+                        }
+                    }
+                    return false; //all children are filter out => do not show the button
+                } else { //no children and "more" true means that the node has not been yet expanded, so in the doubt return true
+                    return true;
+                }
+            } else { //class tree filter disabled
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
     //EVENT LISTENERS
 
     //decrease numInst property when an instance of the current class is deleted

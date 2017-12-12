@@ -55,18 +55,21 @@ export abstract class AbstractTreeNode extends AbstractNode {
         }
     }
 
+    /**
+     * Tells if the expand/collapse button should be shown according to the deprecated resources filter
+     */
     private showExpandCollapse(): boolean {
         let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
         if (more) {
             let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
             if (children.length > 0) {
                 let childNotDeprecated: boolean = false;
-                children.forEach(c => { 
-                    if (!c.isDeprecated()) {
+                for (var i = 0; i < children.length; i++) {
+                    if (!children[i].isDeprecated()) {
                         childNotDeprecated = true;
-                        return;
+                        break;
                     }
-                });
+                }
                 return (this.showDeprecated == true || (!this.showDeprecated && childNotDeprecated));
             } else { //no children and "more" true means that the node has not been yet expanded, so in the doubt return true
                 return true;

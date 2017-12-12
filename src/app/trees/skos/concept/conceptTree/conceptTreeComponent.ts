@@ -82,7 +82,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, schemes).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
                     return;
                 };
                 //open tree from root to node
@@ -117,7 +117,7 @@ export class ConceptTreeComponent extends AbstractTree {
         setTimeout(() => { 
             this.searchRetryAttempt++;
             if (this.searchRetryAttempt > 20) { //after 20 attempts (20*300ms) stop searching
-                this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
             } else {
                 this.ensureRootVisibility(path[0]);
                 this.openRoot(path, node); 

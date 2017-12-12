@@ -152,6 +152,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
     private removeFilter() {
         for (var i = 0; i < this.filterMapRes.length; i++) {
             if (this.filterMapRes[i].cls.getURI() == this.selectedFilteredClass.getURI()) {
+                this.selectedFilteredClass = null;
                 this.filterMapRes.splice(i, 1);
                 return;
             }

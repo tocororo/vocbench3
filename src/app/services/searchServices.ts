@@ -81,9 +81,10 @@ export class SearchServices {
      * @param resource
      * @param role role of the given resource, available roles: "concept", "cls", "property"
      * @param schemes where all the resource of the path should belong (optional and used only for concept)
+     * @param root the root of the class tree (optional and used only for cls)
      * @return an array of resources
      */
-    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[]) {
+    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], root?: ARTURIResource) {
         console.log("[SearchServices] getPathFromRoot");
         var params: any = {
             role: role,
@@ -91,6 +92,9 @@ export class SearchServices {
         };
         if (schemes != undefined) {
             params.schemesIRI = schemes;
+        }
+        if (root != undefined) {
+            params.root = root;
         }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, true).map(
             stResp => {

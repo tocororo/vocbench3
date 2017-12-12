@@ -66,10 +66,16 @@ export class ClassTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls).subscribe(
+        let rootForPath: ARTURIResource;
+        if (this.rootClasses == undefined || this.rootClasses.length == 0) {
+            rootForPath = new ARTURIResource(this.vbProp.getClassTreePreferences().rootClassUri);
+        } else if (this.rootClasses != undefined && this.rootClasses.length == 1) {
+            rootForPath = this.rootClasses[0];
+        }
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls, null, rootForPath).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
                     return;
                 };
 
@@ -81,17 +87,8 @@ export class ClassTreeComponent extends AbstractTree {
                 setTimeout( //apply timeout in order to wait that the children node is rendered (in case the visibile roots have been increased)
                     () => {
                         var childrenNodeComponent = this.viewChildrenNode.toArray();
-                
                         for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-                            if (path[0].getURI() != OWL.thing.getURI() && childrenNodeComponent[i].node.getURI() == OWL.thing.getURI()) {
-                                /* Workaround to resolve an issue:
-                                some classes (e.g. skos:Concept, skos:Collection,...) are visible in class tree of SKOS projects,
-                                but they are not subClassOf owl:Thing, so getPathFromRoot does not return the path up to owl:Thing.
-                                Here I perform a check to skip this scenario. If first node of path is not owl:Thing, I expand owl:Thing
-                                anyway when encountered in this for loop (without splice the first node of the path). */
-                                childrenNodeComponent[i].expandPath(path);
-                                return;
-                            } else if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                            if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
                                 //let the found node expand itself and the remaining path
                                 path.splice(0, 1);
                                 childrenNodeComponent[i].expandPath(path);
@@ -99,7 +96,7 @@ export class ClassTreeComponent extends AbstractTree {
                             }
                         }
                         //if this line is reached it means that the first node of the path has not been found
-                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree");
+                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
                     }
                 );
             }
