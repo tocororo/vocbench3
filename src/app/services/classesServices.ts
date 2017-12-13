@@ -77,14 +77,18 @@ export class ClassesServices {
      * Creates a new class
      * @param newClass 
      * @param superClass 
+     * @param classType the type of the class (rdfs:Class or owl:Class)
      * @param customFormValue custom form that set additional info to the concept
      */
-    createClass(newClass: ARTURIResource, superClass: ARTURIResource, customFormValue?: CustomFormValue) {
+    createClass(newClass: ARTURIResource, superClass: ARTURIResource, classType?: ARTURIResource, customFormValue?: CustomFormValue) {
         console.log("[ClassesServices] createClass");
         var params: any = {
             newClass: newClass,
             superClass: superClass
         };
+        if (classType != null) {
+            params.classType = classType;
+        }
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
