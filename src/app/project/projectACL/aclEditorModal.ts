@@ -41,12 +41,11 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
         var message: string;
         if (newLevel == this.nullAccessLevel) {
-            message = "Are you sure to revoke Access Level of '" + this.context.acl.name + "' for the consumer '" + consumer.name + "'?"
+            message = "Are you sure to revoke Access Level of '" + this.context.acl.name + "' for the consumer '" + consumer.name + "'?";
         } else {
             message = "Are you sure to change Access Level of '" + this.context.acl.name + "' to '" + newLevel + 
-                "' for the consumer '" + consumer.name + "'?"
+                "' for the consumer '" + consumer.name + "'?";
         }
-        message += " Note: In order to make the change effective, you need to close and re-open the project.";
         this.basicModals.confirm("Update Access Level", message, "warning").then(
             confirm => {
                 this.projectService.updateAccessLevel(new Project(this.context.acl.name), new Project(consumer.name), newLevel).subscribe(
@@ -64,8 +63,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
     private onLockLevelChange(newLevel: LockLevel) {
         var oldLevel: LockLevel = this.lock.availableLockLevel;
-        let message: string = "Are you sure to change project lock to '" + newLevel + 
-            "'? Note: In order to make the change effective, you need to close and re-open the project."
+        let message: string = "Are you sure to change project lock to '" + newLevel + "'?";
         this.basicModals.confirm("Update Lock Level", message, "warning").then(
             confirm => {
                 this.projectService.updateLockLevel(new Project(this.context.acl.name), newLevel).subscribe(
