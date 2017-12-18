@@ -43,12 +43,12 @@ export class SparqlComponent {
         tab.resultsPage = 0;
         tab.resultsTotPage = 0;
         tab.queryCache = tab.query; //stored the submitted query
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (tab.queryMode == "query") {
             if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EVALUATE_QUERY)) {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL query");
                 return;
             }
+            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
             this.sparqlService.evaluateQuery(tab.query, tab.inferred).subscribe(
                 stResp => {
                     this.sparqlResponseHandler(tab, stResp, initTime);
@@ -59,6 +59,7 @@ export class SparqlComponent {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL update");
                 return;
             }
+            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
             this.sparqlService.executeUpdate(tab.query).subscribe(
                 stResp => {
                     this.sparqlResponseHandler(tab, stResp, initTime);
@@ -386,6 +387,7 @@ export class SparqlComponent {
     private isBindingResource(binding: any): boolean {
         return (binding.type == "uri" || binding.type == "bnode");
     }
+
 }
 
 class Tab {

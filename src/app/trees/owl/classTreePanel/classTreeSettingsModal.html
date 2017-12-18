@@ -49,10 +49,10 @@
                 <div class="subPanel-heading">
                     <label style="flex: 1">Filtered subClasses</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="checkAllClasses(true)" title="Check all">
+                        <button class="btn btn-default" (click)="checkAllClasses(true)" title="Check all" [disabled]="!selectedFilteredClass">
                             <span class="glyphicon glyphicon-check"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAllClasses(false)" title="Uncheck all">
+                        <button class="btn btn-default" (click)="checkAllClasses(false)" title="Uncheck all" [disabled]="!selectedFilteredClass">
                             <span class="glyphicon glyphicon-unchecked"></span>
                         </button>
                     </div>
