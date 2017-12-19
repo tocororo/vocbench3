@@ -12,7 +12,6 @@ import { ResourcesServices } from "../services/resourcesServices";
 export class RefactorServices {
 
     private serviceName = "Refactor";
-    private oldTypeService = false;
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private preferences: VBProperties, 
         private resourceService: ResourcesServices) { }

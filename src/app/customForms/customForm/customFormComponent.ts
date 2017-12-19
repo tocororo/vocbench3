@@ -50,9 +50,11 @@ export class CustomForm implements ControlValueAccessor {
                 }
                 this.propagateChange(this.formFields);
             },
-            err => {
-                this.basicModals.alert("Error", "Impossible to create the CustomForm (" + this.cfId
-                    + "). Its description may contains error.", "error", err);
+            (err: Error) => {
+                if (err.name.endsWith("PRParserException")) {
+                    this.basicModals.alert("Error", "Impossible to create the CustomForm (" + this.cfId
+                        + "). Its description may contains error.", "error", err.message);
+                }
             }
         );
     }

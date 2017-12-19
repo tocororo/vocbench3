@@ -17,17 +17,14 @@ export class HttpManager {
 
     private protocol: string;
     private serverhost: string;
-    //new services url parts
+    //services url parts
     private serverpath: string = "semanticturkey";
     private groupId: string = "it.uniroma2.art.semanticturkey";
     private artifactId: string = "st-core-services";
-    //old services url parts
-    private oldServerpath: string = "resources/stserver/STServer";
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
     private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({
-        errorAlertOpt: { show: true, exceptionsToSkip: [] },
-        oldTypeService: false 
+        errorAlertOpt: { show: true, exceptionsToSkip: [] }
     });
 
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
@@ -59,7 +56,7 @@ export class HttpManager {
     doGet(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
-        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
+        var url: string = this.getRequestBaseUrl(service, request);
 
         //add parameters
         url += this.getParametersForUrl(params);
@@ -102,7 +99,7 @@ export class HttpManager {
     doPost(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
-        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
+        var url: string = this.getRequestBaseUrl(service, request);
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
@@ -149,7 +146,7 @@ export class HttpManager {
     uploadFile(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
         
-        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
+        var url: string = this.getRequestBaseUrl(service, request);
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
@@ -197,7 +194,7 @@ export class HttpManager {
     downloadFile(service: string, request: string, params: any, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
         options = this.defaultRequestOptions.merge(options);
         
-        var url: string = this.getRequestBaseUrl(service, request, options.oldTypeService);
+        var url: string = this.getRequestBaseUrl(service, request);
 
         if (post) {
             //add ctx parameters
@@ -272,20 +269,14 @@ export class HttpManager {
 
     /**
      * Composes and returns the base part of the URL of a request.
-     * "http://<serverhost>/<serverpath>/<groupId>/<artifactId>/<service>/<request>?... for new services
-     * "http://<serverhost>/<serverpath>/resources/stserver/STServer?<service>&<request>&... for old services
+     * "http://<serverhost>/<serverpath>/<groupId>/<artifactId>/<service>/<request>?...
      * @param service the service name
      * @param request the request name
-     * @param oldType tells if the request is for the old services or new ones
      * 
      */
-    private getRequestBaseUrl(service: string, request: string, oldType: boolean): string {
-        var url: string = this.protocol + "://" + this.serverhost + "/" + this.serverpath + "/";
-        if (oldType) {
-            url += this.oldServerpath + "?service=" + service + "&request=" + request + "&";
-        } else {
-            url += this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
-        }
+    private getRequestBaseUrl(service: string, request: string): string {
+        var url: string = this.protocol + "://" + this.serverhost + "/" + this.serverpath + "/" + 
+            this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         return url;
     }
 
@@ -410,10 +401,13 @@ export class HttpManager {
 
     /**
      * Handler for error in requests to ST server. Called in catch clause of get/post requests.
+     * This handler returns an Error with a name and message. It is eventually useful in a Component that calls a service that returns 
+     * an error, so that it can recognize (through the name) the error (Exception) and eventually catch it and show a proper alert.
      * @param error error catched in catch clause (is a Response in case the error is a 401 || 403 response or if the server doesn't respond)
      * @param errorAlertOpt tells wheter to show error alert. Is useful to handle the error from the component that invokes the service.
      */
     private handleError(err: Response | any, errorAlertOpt: ErrorAlertOptions) {
+        let error: Error = new Error();
         /** 
          * Handle errors in case ST server is down. In this case, the Response (err) is an object like the following 
          * { "_body": { "isTrusted": true }, "status": 0, "ok": false,
@@ -421,7 +415,11 @@ export class HttpManager {
          */
         if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
             this.basicModals.alert("Error", "Connection with ST server has failed; please check your internet connection", "error");
+            error.name = "ConnectionError";
+            error.message = "Connection with ST server has failed; please check your internet connection";
         } else if (err.status == 401 || err.status == 403) {
+            error.name = "UnauthorizedRequestError";
+            error.message = err._body;
             //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
             this.basicModals.alert("Error", err._body, "error").then(
@@ -437,20 +435,22 @@ export class HttpManager {
             );
         } else if (err.status == 500 || err.status == 404) { //in case of server error (e.g. out of memory)
             let errorMsg = err.statusText != null ? err.statusText : "Unknown response from the server";
-            this.basicModals.alert("Error", err.statusText, "error", err._body).then(
+            error.name = "ServerError";
+            error.message = errorMsg;
+            this.basicModals.alert("Error", errorMsg, "error", err._body).then(
                 (result: any) => {}
             )
         }
         //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
         else if (errorAlertOpt.show) { //if the alert should be shown
-            let error = (<Error>err);
+            error = (<Error>err);
             if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                 this.basicModals.alert("Error", error.message, "error", error.name);
             }
         }
         UIUtils.stopAllLoadingDiv();
-        return Observable.throw(err);
+        return Observable.throw(error);
     }
 
 }
@@ -525,12 +525,10 @@ export class HttpServiceContext {
 //inspired by angular RequestOptions
 export class VBRequestOptions {
 
-    oldTypeService: boolean;
     errorAlertOpt: ErrorAlertOptions;
     
-    constructor({ oldTypeService, errorAlertOpt }: VBRequestOptionsArgs = {}) {
+    constructor({ errorAlertOpt }: VBRequestOptionsArgs = {}) {
         this.errorAlertOpt = errorAlertOpt != null ? errorAlertOpt : null;
-        this.oldTypeService = oldTypeService != null ? oldTypeService : null;
     }
 
     /**
@@ -541,19 +539,13 @@ export class VBRequestOptions {
     merge(options?: VBRequestOptions): VBRequestOptions {
         //if options is provided and its parameters is not null, override the value of the current instance
         return new VBRequestOptions({
-            errorAlertOpt: options && options.errorAlertOpt != null ? options.errorAlertOpt : this.errorAlertOpt,
-            oldTypeService: options && options.oldTypeService != null ? options.oldTypeService : this.oldTypeService,
+            errorAlertOpt: options && options.errorAlertOpt != null ? options.errorAlertOpt : this.errorAlertOpt
         });
     }
 }
 
 //inspired by angular RequestOptionsArgs
 interface VBRequestOptionsArgs {
-    /**
-     * Tells if the service is old type, it determines how to build the request url
-     */
-    oldTypeService?: boolean;
-
     /**
      * To prevent an alert dialog to show up in case of error during requests.
      * Is useful to handle the error from the component that invokes the service.
