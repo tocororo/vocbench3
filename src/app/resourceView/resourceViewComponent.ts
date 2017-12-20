@@ -33,6 +33,8 @@ export class ResourceViewComponent {
 
     private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
 
+    private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
+
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private typesColl: ARTPredicateObjects[] = null;
@@ -113,7 +115,13 @@ export class ResourceViewComponent {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.update.emit(this.resource);
+                this.unknownHost = false;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+            },
+            (err: Error) => {
+                if (err.name.endsWith("UnknownHostException")) {
+                    this.unknownHost = true;
+                }
             }
         );
     }

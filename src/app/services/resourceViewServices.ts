@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 
@@ -23,7 +23,12 @@ export class ResourceViewServices {
         if (includeInferred != null) {
             params.includeInferred = includeInferred;
         }
-        return this.httpMgr.doGet(this.serviceName, "getResourceView", params, true);
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, exceptionsToSkip: ['java.net.UnknownHostException']
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "getResourceView", params, true, options);
     }
 
     /**

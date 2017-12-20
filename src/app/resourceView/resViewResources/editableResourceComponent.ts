@@ -347,17 +347,19 @@ export class EditableResourceComponent {
 							stResp => {
 								this.update.emit();
 							},
-							err => {
-								this.basicModals.confirm("Operation denied", err.message + ". Do you want to force the operation?", "warning").then(
-									confirm => {
-										this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
-											stResp => {
-												this.update.emit();
-											}
-										);			
-									},
-									() => {}
-								);
+							(err: Error) => {
+								if (err.name.endsWith("AlreadyExistingLiteralFormForResourceException")) {
+									this.basicModals.confirm("Operation denied", err.message + ". Do you want to force the operation?", "warning").then(
+										confirm => {
+											this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
+												stResp => {
+													this.update.emit();
+												}
+											);			
+										},
+										() => {}
+									);
+								}
 							}
 						)
 					},

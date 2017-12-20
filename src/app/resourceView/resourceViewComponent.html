@@ -39,6 +39,9 @@
         </div>
     </div>
     <div class="panel-body scrollableContainer">
+        <div *ngIf="unknownHost" class="alert alert-danger">
+            This resource is not available on accessible local projects nor can be reached on the Web
+        </div>
         <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
             (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
         </types-renderer>
