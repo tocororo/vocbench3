@@ -58,6 +58,15 @@ export class RolesAdministrationComponent {
         this.initCapabilities();
     }
 
+    private getCreateRoleTitle(): string {
+        if (this.isProjectOpen()) {
+            return "Create a new role";
+        } else {
+            return "Custom roles can only be created in the context of a project;" + 
+                " in order to create a new role access a project and then create the role for that project";
+        }
+    }
+
     private createRole() {
         this.basicModals.prompt("Create role", "Role name", null, null, false, true).then(
             (result: any) => {

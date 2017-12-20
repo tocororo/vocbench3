@@ -8,7 +8,7 @@
                 <div class="panel-heading">
                     <label style="flex: 1;">Roles:</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="createRole()" title="Create role" [disabled]="!isProjectOpen()">
+                        <button class="btn btn-default" (click)="createRole()" [title]="getCreateRoleTitle()" [disabled]="!isProjectOpen()">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                         <button class="btn btn-default" (click)="deleteRole()" title="Delete role"
