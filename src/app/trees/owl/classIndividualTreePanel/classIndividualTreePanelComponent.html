@@ -1,5 +1,5 @@
 <class-tree-panel #clsPanel [ngStyle]="{ 'flex': classPanelFlex }" (nodeSelected)="onClassSelected($event)" (nodeDeleted)="onClassDeleted($event)"
-    [hideSearch]="true" [readonly]="readonly">
+    [hideSearch]="true" context="clsIndTree" [readonly]="readonly">
 </class-tree-panel>
 
 <div class="sliderY" (mousedown)="onMousedown($event);"></div>

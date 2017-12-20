@@ -12,7 +12,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { VBProperties, SearchSettings, ClassTreePreference } from "../../../utils/VBProperties";
-import { UIUtils } from "../../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 
@@ -23,6 +23,7 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 export class ClassTreePanelComponent extends AbstractTreePanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() roots: ARTURIResource[]; //root classes
+    @Input() context: TreeListContext;
 
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
 

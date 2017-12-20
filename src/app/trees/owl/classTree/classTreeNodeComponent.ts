@@ -4,6 +4,7 @@ import { OWL, RDFS } from "../../../models/Vocabulary";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
+import { TreeListContext } from "../../../utils/UIUtils";
 import { ClassesServices } from "../../../services/classesServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 import { Observable } from "rxjs/Observable";
@@ -19,6 +20,9 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     @Input() root: boolean = false;
     @Input() filterEnabled: boolean = false;
+    @Input() context: TreeListContext;
+
+    private showInstanceNumber: boolean = false;
 
     constructor(private clsService: ClassesServices, private pref: VBProperties, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
         super(eventHandler, basicModals);
@@ -43,6 +47,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     ngOnInit() {
+        //show instance number only if enabled in the preferences and if the node belongs to a tree in TreePanelComponent
+        this.showInstanceNumber = this.pref.getShowInstancesNumber() && this.context == TreeListContext.clsIndTree;
         //expand immediately the node if it is a root and if it is owl:Thing or rdfs:Resource
         if ((this.node.getURI() == OWL.thing.getURI() || this.node.getURI() == RDFS.resource.getURI()) && 
             this.root && this.node.getAdditionalProperty(ResAttribute.MORE) == "1") {
@@ -51,7 +57,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl(): Observable<any> {
-        return this.clsService.getSubClasses(this.node, this.pref.getShowInstancesNumber()).map(
+        return this.clsService.getSubClasses(this.node, this.showInstanceNumber).map(
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
                 let attribute: "show" | "value" = this.rendering ? "show" : "value";
@@ -73,10 +79,6 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                 classTreePref.filterMap[this.node.getURI()].indexOf(subClass.getURI()) != -1;
         }
             
-    }
-
-    private showInstNumber(): boolean {
-        return this.pref.getShowInstancesNumber();
     }
 
     /**

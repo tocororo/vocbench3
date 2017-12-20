@@ -7,7 +7,7 @@
 	</div>
 	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
         [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
-    <div *ngIf="node.getAdditionalProperty('numInst') > 0 && showInstNumber()" style="position: absolute; margin: 4px; top: 0; right: 0;">
+    <div *ngIf="node.getAdditionalProperty('numInst') > 0 && this.showInstanceNumber" style="position: absolute; margin: 4px; top: 0; right: 0;">
         <span class="label label-warning">{{node.getAdditionalProperty('numInst')}}</span>
     </div>
 </div>
@@ -16,7 +16,7 @@
     <ng-template ngFor let-n [ngForOf]="node.getAdditionalProperty('children')">
         <ng-template [ngIf]="!filterOutRootSubClass(n)">
             <class-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
-                [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled"
+                [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled" [context]="context"
                 (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
             </class-tree-node>
         </ng-template>

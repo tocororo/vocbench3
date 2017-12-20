@@ -4,8 +4,8 @@
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
             <ng-template ngFor let-r [ngForOf]="roots" let-idx="index">
-                <class-tree-node *ngIf="idx < rootLimit && (!r.isDeprecated() || showDeprecated && r.isDeprecated())"
-                    [node]="r" [root]="true" [rendering]="rendering" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled"
+                <class-tree-node *ngIf="idx < rootLimit && (!r.isDeprecated() || showDeprecated && r.isDeprecated())" [node]="r" 
+                    [root]="true" [rendering]="rendering" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled" [context]="context"
                     (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
                 </class-tree-node>
             </ng-template>

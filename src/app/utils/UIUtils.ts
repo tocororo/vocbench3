@@ -271,6 +271,14 @@ export class UIUtils {
                 }
             } else if (role == RDFResourceRolesEnum.dataRange.toLocaleLowerCase()) {
                 imgSrc = this.classImgSrc;
+                if (!explicit) {
+                    imgSrc = this.classImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.classImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.classDeprecatedImgSrc;
+                }
             } else { //unknown role (none of the previous roles)
                 imgSrc = this.individualImgSrc;
             }
@@ -441,4 +449,11 @@ export class Theme {
     id: number;
     mainColor: string;
     altColor: string
+}
+
+/**
+ * Useful for trees and nodes to be aware of the context where they are
+ */
+export enum TreeListContext {
+    clsIndTree = 'clsIndTree'
 }
