@@ -10,8 +10,9 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
-import { RDF, OWL } from "../../../models/Vocabulary";
+import { RDFS, OWL } from "../../../models/Vocabulary";
 import { VBProperties, SearchSettings, ClassTreePreference } from "../../../utils/VBProperties";
+import { VBContext } from "../../../utils/VBContext";
 import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -31,6 +32,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     private filterEnabled: boolean;
+    private creatingClassType: ARTURIResource = OWL.class;
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         private vbProp: VBProperties, private modal: Modal, 
@@ -40,21 +42,28 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     ngOnInit() {
         this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+        if (VBContext.getWorkingProject().getModelType() == RDFS.uri) {
+            this.creatingClassType = RDFS.class;
+        }
     }
 
     //Top Bar commands handlers
 
     createRoot() {
-        this.creationModals.newResourceCf("Create a new class", OWL.class).then(
+        this.creationModals.newResourceCf("Create a new class", this.creatingClassType).then(
             (data: any) => {
-                this.classesService.createClass(data.uriResource, OWL.thing, data.cls, data.cfValue).subscribe();
+                let superClass: ARTURIResource = OWL.thing;
+                if (data.cls.getURI() == RDFS.class.getURI()) {
+                    superClass = RDFS.resource;
+                }
+                this.classesService.createClass(data.uriResource, superClass, data.cls, data.cfValue).subscribe();
             },
             () => {}
         );
     }
 
     createChild() {
-        this.creationModals.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), OWL.class).then(
+        this.creationModals.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), this.creatingClassType).then(
             (data: any) => {
                 this.classesService.createClass(data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe();
             },

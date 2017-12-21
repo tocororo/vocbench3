@@ -9,7 +9,9 @@ export class Properties {
     static pref_search_restrict_lang: string = "search_restrict_lang";
     static pref_search_use_autocomplete: string = "search_use_autocomplete";
 
-    static pref_class_tree_preferences: string = "class_tree_preferences";
+    static pref_class_tree_filter_map: string = "class_tree_filter_map";
+    static pref_class_tree_filter_enabled: string = "class_tree_filter_enabled";
+    static pref_class_tree_root: string = "class_tree_root";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";

@@ -9,7 +9,8 @@ import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices'
-import { OWL } from '../models/Vocabulary';
+import { OWL, RDFS } from '../models/Vocabulary';
+import { VBContext } from './VBContext';
 
 @Injectable()
 export class VBProperties {
@@ -22,7 +23,7 @@ export class VBProperties {
     private showInstancesNumber: boolean = true;
     private projectThemeId: number = null;
 
-    private classTreePreferences: ClassTreePreference = { rootClassUri: OWL.thing.getURI(), filterMap: {}, filterEnabled: false };
+    private classTreePreferences: ClassTreePreference;
 
     private searchSettings: SearchSettings = {
         stringMatchMode: StringMatchMode.contains,
@@ -59,7 +60,7 @@ export class VBProperties {
             Properties.pref_active_schemes, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, Properties.pref_search_use_autocomplete,
-            Properties.pref_class_tree_preferences
+            Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root
         ];
         this.prefService.getProjectPreferences(properties).subscribe(
             prefs => {
@@ -79,9 +80,22 @@ export class VBProperties {
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
 
-                let classTreePref: any = JSON.parse(prefs[Properties.pref_class_tree_preferences]);
-                if (classTreePref != null) {
-                    this.classTreePreferences = classTreePref;
+                this.classTreePreferences = { 
+                    rootClassUri: (VBContext.getWorkingProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
+                    filterMap: {}, 
+                    filterEnabled: true 
+                };
+                let classTreeFilterMapPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter_map]);
+                if (classTreeFilterMapPref != null) {
+                    this.classTreePreferences.filterMap = classTreeFilterMapPref;
+                }
+                let classTreeFilterEnabledPref: any = prefs[Properties.pref_class_tree_filter_enabled];
+                if (classTreeFilterEnabledPref != null) {
+                    this.classTreePreferences.filterEnabled = classTreeFilterEnabledPref;
+                }
+                let classTreeRootPref: any = prefs[Properties.pref_class_tree_root];
+                if (classTreeRootPref != null) {
+                    this.classTreePreferences.rootClassUri = classTreeRootPref;
                 }
 
                 //search settings
@@ -165,10 +179,19 @@ export class VBProperties {
     getClassTreePreferences(): ClassTreePreference {
         return this.classTreePreferences;
     }
-    setClassTreePreference(pref: ClassTreePreference) {
-        this.prefService.setProjectPreference(Properties.pref_class_tree_preferences, JSON.stringify(pref)).subscribe();
-        this.classTreePreferences = pref;
+    setClassTreeFilterMap(filterMap: { [key: string]: string[] }) {
+        this.prefService.setProjectPreference(Properties.pref_class_tree_filter_map, JSON.stringify(filterMap)).subscribe();
+        this.classTreePreferences.filterMap = filterMap;
     }
+    setClassTreeFilterEnabled(enabled: boolean) {
+        this.prefService.setProjectPreference(Properties.pref_class_tree_filter_map, enabled+"").subscribe();
+        this.classTreePreferences.filterEnabled = enabled;
+    }
+    setClassTreeRoot(rootUri: string) {
+        this.prefService.setProjectPreference(Properties.pref_class_tree_root, rootUri).subscribe();
+        this.classTreePreferences.rootClassUri = rootUri;
+    }
+
 
     /* =============================
     =========== SETTINGS ===========

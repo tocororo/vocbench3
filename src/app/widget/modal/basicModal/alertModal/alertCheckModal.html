@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h3 [class]="headerStyle">{{context.title}}</h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh;">
+    <div [class]="msgStyle">
+        {{context.message}}
+
+        <div *ngIf="context.details" class="vbox" style="margin-top: 5px;">
+            <div (click)="detailsCollapsed = !detailsCollapsed" style="align-self: left">
+                <div class="expandCollapseBtnContainer" style="display: inline">
+                    <img src="../../../../../assets/images/icons/arrow.png"
+                        [ngClass]="{'arrow-right': detailsCollapsed}">
+                </div>
+                <label>Details:</label>
+            </div>
+            <div *ngIf="!detailsCollapsed" class="panel panel-default vbox">
+                <div class="panel-body scrollableContainer">
+                    {{context.details}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="checkbox" style="margin-bottom: 0px">
+        <label><input type="checkbox" [(ngModel)]="check">{{context.checkboxLabel}}</label>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

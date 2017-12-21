@@ -10,6 +10,7 @@ import { ClassesServices } from "../../../services/classesServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { VBProperties, ClassTreePreference } from "../../../utils/VBProperties";
 import { VBContext } from "../../../utils/VBContext";
+import { Cookie } from "../../../utils/Cookie";
 
 @Component({
     selector: "class-tree-settings-modal",
@@ -18,11 +19,16 @@ import { VBContext } from "../../../utils/VBContext";
 export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
+    private pristineClassPref: ClassTreePreference;
+
     private rootClass: ARTURIResource;
     private filterEnabled: boolean;
 
     private filterMapRes: FilterMapEntry[] = [];
     private selectedFilteredClass: ARTURIResource;
+
+    private renderingClasses: boolean = false;
+    private renderingFilter: boolean = false;
 
     constructor(public dialog: DialogRef<BSModalContext>, private clsService: ClassesServices, private resourceService: ResourcesServices, 
         private vbProp: VBProperties, private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {
@@ -31,6 +37,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
 
     ngOnInit() {
         let clsTreePref: ClassTreePreference = this.vbProp.getClassTreePreferences();
+        this.pristineClassPref = JSON.parse(JSON.stringify(clsTreePref));
         this.filterEnabled = clsTreePref.filterEnabled;
         this.resourceService.getResourceDescription(new ARTURIResource(clsTreePref.rootClassUri)).subscribe(
             res => {
@@ -60,7 +67,17 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
 
     private changeClass() {
         this.browsingModals.browseClassTree("Select root class", [RDFS.resource]).then(
-            cls => {
+            (cls: ARTURIResource) => {
+                if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, VBContext.getLoggedUser().getIri()) != "false") {
+                    let model: string = VBContext.getWorkingProject().getModelType();
+                    if ((model == RDFS.uri && cls.getURI() != RDFS.resource.getURI()) ||
+                        (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or SKOS model
+                    ) {
+                        let message: string = "Selecting a specific class as a root could hide newly created classes " + 
+                            "that are not subclasses of the chosen root.";
+                        this.basicModals.alertCheckWarning("Warning", message, Cookie.WARNING_CUSTOM_ROOT);
+                    }
+                }
                 this.rootClass = cls;
             },
             () => {}
@@ -193,21 +210,24 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             }
             filterMap[f.cls.getURI()] = filteredSubClasses;
         })
-
-        let ctPref: ClassTreePreference = {
-            rootClassUri: this.rootClass.getURI(),
-            filterEnabled: this.filterEnabled,
-            filterMap: filterMap
+        if (JSON.stringify(this.pristineClassPref.filterMap) != JSON.stringify(filterMap)) {
+            this.vbProp.setClassTreeFilterMap(filterMap);
         }
 
-        let classTreePref = this.vbProp.getClassTreePreferences();
-        this.vbProp.setClassTreePreference(ctPref);
+        if (this.pristineClassPref.filterEnabled != this.filterEnabled) {
+            this.vbProp.setClassTreeFilterEnabled(this.filterEnabled);
+        }
+        
+        if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
+            this.vbProp.setClassTreeRoot(this.rootClass.getURI());
+        }
+
         //only if the root class changed close the dialog (so that the class tree refresh)
-        if (classTreePref.rootClassUri != ctPref.rootClassUri) {
+        if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
             event.stopPropagation();
             event.preventDefault();
             this.dialog.close();
-        } else { //for other changes simply dismiss the modal
+        } else {//for other changes simply dismiss the modal
             this.cancel();
         }
     }

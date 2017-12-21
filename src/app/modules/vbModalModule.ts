@@ -15,6 +15,7 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 
 //basic modals
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
+import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
 import { ConfirmModal } from '../widget/modal/basicModal/confirmModal/confirmModal';
 import { ConfirmCheckModal } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
 import { DownloadModal } from '../widget/modal/basicModal/downloadModal/downloadModal';
@@ -70,7 +71,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
-        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
+        AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
@@ -93,7 +94,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
      * There's no harm in exporting them but no benefit either. 
      */
     entryComponents: [
-        AlertModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
+        AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,

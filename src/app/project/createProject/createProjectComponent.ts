@@ -28,6 +28,7 @@ export class CreateProjectComponent {
     private baseUriSuffix: string;;
 
     private ontoModelList = [
+        { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
         { value: new ARTURIResource(OWL.uri), label: "OWL" },
         { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
     ];

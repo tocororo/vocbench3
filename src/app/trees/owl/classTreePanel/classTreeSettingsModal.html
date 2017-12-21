@@ -28,19 +28,25 @@
             <div class="subPanel vbox">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Classes</label>
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="addFilter()" title="Add filter">
-                            <span class="glyphicon glyphicon-plus"></span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-default btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
+                            [ngClass]="{active: renderingClasses}">
+                            <span class="glyphicon glyphicon-font"></span>
                         </button>
-                        <button class="btn btn-default" (click)="removeFilter()" title="Remove filter" [disabled]="!selectedFilteredClass">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" (click)="addFilter()" title="Add filter">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="removeFilter()" title="Remove filter" [disabled]="!selectedFilteredClass">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="subPanel-body scrollableContainer">
                     <div *ngFor="let f of filterMapRes" class="listItem" (click)="selectFilteredClass(f.cls)"
                         [ngClass]="{ active: f.cls == selectedFilteredClass }">
-                        <rdf-resource [resource]="f.cls"></rdf-resource>
+                        <rdf-resource [resource]="f.cls" [rendering]="renderingClasses"></rdf-resource>
                     </div>
                 </div>
             </div>
@@ -48,19 +54,25 @@
             <div class="subPanel vbox" style="margin-left: 4px;">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Filtered subClasses</label>
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="checkAllClasses(true)" title="Check all" [disabled]="!selectedFilteredClass">
-                            <span class="glyphicon glyphicon-check"></span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-default btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter"
+                            [ngClass]="{active: renderingFilter}">
+                            <span class="glyphicon glyphicon-font"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAllClasses(false)" title="Uncheck all" [disabled]="!selectedFilteredClass">
-                            <span class="glyphicon glyphicon-unchecked"></span>
-                        </button>
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" (click)="checkAllClasses(true)" title="Check all" [disabled]="!selectedFilteredClass">
+                                <span class="glyphicon glyphicon-check"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="checkAllClasses(false)" title="Uncheck all" [disabled]="!selectedFilteredClass">
+                                <span class="glyphicon glyphicon-unchecked"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="subPanel-body scrollableContainer">
                     <div *ngFor="let f of getFilterSubClasses()" class="listItem">
                         <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="f.checked" [disabled]="f.disabled">
-                        <rdf-resource [resource]="f.resource" style="flex: 1;"></rdf-resource>
+                        <rdf-resource [resource]="f.resource" [rendering]="renderingFilter" style="flex: 1;"></rdf-resource>
                         <span *ngIf="f.checked" class="glyphicon glyphicon-eye-open"></span>
                         <span *ngIf="!f.checked" class="glyphicon glyphicon-eye-close"></span>
                     </div>

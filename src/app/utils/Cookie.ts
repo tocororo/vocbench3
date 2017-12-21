@@ -23,12 +23,18 @@ export class Cookie {
 
 	public static PROJECT_TABLE_ORDER = "project.table_columns_order";
 
+	public static WARNING_CUSTOM_ROOT = "ui.tree.cls.warnings.customroot";
+
 	/**
 	 * Retrieves a single cookie by it's name
 	 * @param  {string} name Identification of the Cookie
+	 * @param  {string} userIri IRI of the user useful to contextualize the cookie
 	 * @returns The Cookie's value 
 	 */
-	public static getCookie(name: string): string {
+	public static getCookie(name: string, userIri?: string): string {
+		if (userIri) {
+			name += ":" + userIri;
+		}
 		let myWindow: any = window;
 		name = myWindow.escape(name);
 		let regexp = new RegExp('(?:^' + name + '|;\\s*' + name + ')=(.*?)(?:;|$)', 'g');
@@ -41,10 +47,12 @@ export class Cookie {
 	 * @param  {string} name Cookie's identification
 	 * @param  {string} value Cookie's value
 	 * @param  {number} expires Cookie's expiration date in days from now. If it's undefined the cookie is a session Cookie
-	 * @param  {string} path Path relative to the domain where the cookie should be avaiable. Default /
-	 * @param  {string} domain Domain where the cookie should be avaiable. Default current domain
+	 * @param  {string} userIri IRI of the user useful to contextualize the cookie
 	 */
-	public static setCookie(name: string, value: string, expires?: number, path?: string, domain?: string) {
+	public static setCookie(name: string, value: string, expires?: number, userIri?: string) {
+		if (userIri) {
+			name += ":" + userIri;
+		}
 		let myWindow: any = window;
 		let cookieStr = myWindow.escape(name) + '=' + myWindow.escape(value) + ';';
 
@@ -52,26 +60,18 @@ export class Cookie {
 			let dtExpires = new Date(new Date().getTime() + expires * 1000 * 60 * 60 * 24);
 			cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
 		}
-		if (path) {
-			cookieStr += 'path=' + path + ';';
-		}
-		if (domain) {
-			cookieStr += 'domain=' + domain + ';';
-		}
-
 		document.cookie = cookieStr;
 	}
 
 	/**
 	 * Removes specified Cookie
 	 * @param  {string} name Cookie's identification
-	 * @param  {string} path Path relative to the domain where the cookie should be avaiable. Default /
-	 * @param  {string} domain Domain where the cookie should be avaiable. Default current domain
+	 * @param  {string} userIri IRI of the user useful to contextualize the cookie
 	 */
-	public static deleteCookie(name: string, path?: string, domain?: string) {
+	public static deleteCookie(name: string, userIri?: string) {
 		// If the cookie exists
 		if (Cookie.getCookie(name)) {
-			Cookie.setCookie(name, '', -1, path, domain);
+			Cookie.setCookie(name, '', -1, userIri);
 		}
 	}
 

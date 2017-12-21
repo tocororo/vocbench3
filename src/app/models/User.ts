@@ -4,7 +4,7 @@ export class User {
     private email: string;
     private givenName: string;
     private familyName: string
-    private iri: ARTURIResource;
+    private iri: string;
     private birthday: Date;
     private phone: string;
     private gender: string;
@@ -19,7 +19,7 @@ export class User {
 
 
 
-    constructor(email: string, givenName: string, familyName: string, iri: ARTURIResource) {
+    constructor(email: string, givenName: string, familyName: string, iri: string) {
         this.email = email;
         this.givenName = givenName;
         this.familyName = familyName;
@@ -38,7 +38,7 @@ export class User {
         return this.familyName;
     }
 
-    getIri(): ARTURIResource {
+    getIri(): string {
         return this.iri;
     }
 

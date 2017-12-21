@@ -5,9 +5,8 @@
     <div [class]="msgStyle">
         {{context.message}}
     </div>
-    <div class="hbox" style="align-items: center; padding: 10px 8px 0px;">
-        <input type="checkbox" [(ngModel)]="check">
-        <span style="margin-left: 3px;">{{context.checkboxLabel}}</span>
+    <div class="checkbox" style="margin-bottom: 0px">
+        <label><input type="checkbox" [(ngModel)]="check">{{context.checkboxLabel}}</label>
     </div>
 </div>
 <div class="modal-footer">
