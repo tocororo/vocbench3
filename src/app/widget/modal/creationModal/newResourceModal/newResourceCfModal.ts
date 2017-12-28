@@ -7,6 +7,7 @@ import { BrowsingModalServices } from "../../browsingModal/browsingModalServices
 import { BasicModalServices } from "../../basicModal/basicModalServices";
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../models/CustomForms";
+import { OWL, RDFS } from "../../../../models/Vocabulary";
 
 export class NewResourceCfModalData extends BSModalContext {
     constructor(
@@ -40,7 +41,11 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal implement
     }
 
     changeClass() {
-        this.changeClassWithRoot(this.context.cls);
+        let cls: ARTURIResource = this.context.cls;
+        if (cls.getURI() == OWL.class.getURI()) {
+            cls = RDFS.class;
+        }
+        this.changeClassWithRoot(cls);
     }
 
     isStandardFormDataValid(): boolean {
