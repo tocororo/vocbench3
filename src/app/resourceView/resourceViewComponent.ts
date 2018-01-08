@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleCh
 import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { VersionInfo } from "../models/History";
+import { SemanticTurkey } from "../models/Vocabulary";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -260,7 +261,7 @@ export class ResourceViewComponent {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
                     let objGraphs: ARTURIResource[] = objList[j].getGraphs();
-                    if (ResourceUtils.containsNode(objGraphs, new ARTURIResource("http://semanticturkey/inference-graph"))) {
+                    if (ResourceUtils.containsNode(objGraphs, new ARTURIResource(SemanticTurkey.inferenceGraph))) {
                         objList.splice(j, 1);
                         j--;
                     }

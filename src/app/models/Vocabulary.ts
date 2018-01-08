@@ -222,4 +222,5 @@ export class DCT {
 export class SemanticTurkey {
     public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
     public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
+    public static inferenceGraph = "http://semanticturkey/inference-graph";
 }

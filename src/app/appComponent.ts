@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Project } from "./models/Project";
-import { SKOS, OWL } from "./models/Vocabulary";
+import { SKOS, OWL, RDFS } from "./models/Vocabulary";
 import { Language, Languages } from "./models/LanguagesCountries";
 import { VBContext } from "./utils/VBContext";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
@@ -86,7 +86,7 @@ export class AppComponent {
                 AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY) ||
                 AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)
             );
-        } else if (modelType == OWL.uri) {
+        } else if (modelType == OWL.uri || modelType == RDFS.uri) {
             return (
                 AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY) ||
                 AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)

@@ -3,7 +3,7 @@ import {
 	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
 	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
 } from "../../models/ARTResources";
-import { SKOSXL, SKOS, RDFS } from "../../models/Vocabulary";
+import { SKOSXL, SKOS, RDFS, SemanticTurkey } from "../../models/Vocabulary";
 import { ResViewPartition } from "../../models/ResourceView";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { PropertyServices } from "../../services/propertyServices";
@@ -48,6 +48,8 @@ export class EditableResourceComponent {
 	private isPlainLiteral: boolean = false;
 
 	private editMenuDisabled: boolean = false;
+	private isInferred: boolean = false;
+	private isXLabelMenuItemAvailable: boolean = false;
 	private editInProgress: boolean = false;
 	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
@@ -59,12 +61,32 @@ export class EditableResourceComponent {
 		private vbProp: VBProperties) { }
 
 	ngOnInit() {
-		this.editMenuDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
-			(this.resource.isResource() && ResourceUtils.isReourceInStaging(<ARTResource>this.resource)));
-			
 		this.isPlainLiteral = (
 			(this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) || 
 			this.resource.getRole() == RDFResourceRolesEnum.xLabel
+		);
+
+		/**
+		 * Determines if the menu items about xlabels should be visible.
+		 * Visible only if:
+		 * the subject is a concept, the object is a xLabel and if it is in the lexicalizations partition
+		 * (so avoid "spawn new concept..." from xLabel in labelRelation partition of an xLabel ResView)
+		 */
+		this.isXLabelMenuItemAvailable = (
+			this.partition == ResViewPartition.lexicalizations &&
+			this.subject.getRole() == RDFResourceRolesEnum.concept &&
+			this.resource.isResource() && (<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel
+		);
+
+		this.isInferred = ResourceUtils.containsNode(this.resource.getGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
+
+		let inMainGraph: boolean = ResourceUtils.containsNode(this.resource.getGraphs(), new ARTURIResource(VBContext.getWorkingProject().getBaseURI()));
+
+		this.editMenuDisabled = (
+			(!this.isInferred && !inMainGraph) || //neither in the main graph nor in inference graph
+			// (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT)) || 
+			this.readonly || 
+			(this.resource.isResource() && ResourceUtils.isReourceInStaging(<ARTResource>this.resource))
 		);
 	}
 
@@ -308,20 +330,6 @@ export class EditableResourceComponent {
 
 	//====== "Spawn new concept from this xLabel" HANDLER
 
-	/**
-	 * Determines if the menu items about xlabels should be visible.
-	 * Visible only if:
-	 * the subject is a concept, the object is a xLabel and if it is in the lexicalizations partition
-	 * (so avoid "spawn new concept..." from xLabel in labelRelation partition of an xLabel ResView)
-	 */
-	private isXLabelMenuItemAvailable() {
-		return (
-			this.partition == ResViewPartition.lexicalizations &&
-			this.subject.getRole() == RDFResourceRolesEnum.concept &&
-			this.resource.isResource() && (<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel
-		);
-	}
-
 	private spawnNewConceptWithLabel() {
 		//here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
 		this.creationModals.newConceptFromLabel("Spawn new concept", <ARTResource>this.resource, SKOS.concept, true, <ARTURIResource>this.subject).then(
@@ -370,6 +378,16 @@ export class EditableResourceComponent {
 		)
 	}
 
+	//====== Assert inferred statement =============
+
+	private assertInferred() {
+		this.resourcesService.addValue(this.subject, this.predicate, this.resource).subscribe(
+			stResp => {
+				this.update.emit();
+			}
+		)
+	}
+
 	/**
 	 * "Delete" menu item
 	 */
@@ -396,6 +414,9 @@ export class EditableResourceComponent {
 	}
 	private isMoveLabelAuthorized(): boolean {
 		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_MOVE_XLABEL_TO_RESOURCE);
+	}
+	private isAssertAuthorized(): boolean {
+		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.subject);
 	}
 
 }
