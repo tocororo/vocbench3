@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
 import { Project } from "./models/Project";
+import { Properties } from "./models/Properties";
 import { SKOS, OWL, RDFS } from "./models/Vocabulary";
 import { Language, Languages } from "./models/LanguagesCountries";
 import { VBContext } from "./utils/VBContext";
+import { VBProperties } from "./utils/VBProperties";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 import { BasicModalServices } from "./widget/modal/basicModal/basicModalServices";
 import { PreferencesSettingsServices } from "./services/preferencesSettingsServices";
@@ -16,12 +18,15 @@ import '../assets/styles/style.css';
 
 export class AppComponent {
 
-    constructor(private prefSettingService: PreferencesSettingsServices, private basicModals: BasicModalServices) {}
+    constructor(private prefSettingService: PreferencesSettingsServices, private vbProp: VBProperties,
+        private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         if (Languages.getSystemLanguages() == null) {
             Languages.initSystemLanguage(this.prefSettingService, this.basicModals);
         }
+
+        this.vbProp.initSystemSettings();
     }
 
     /**
@@ -118,6 +123,13 @@ export class AppComponent {
     
     private isAlignValidationAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_LOAD_ALIGNMENT);
+    }
+
+    private isSheet2RdfAuthorized() {
+        return (
+            this.vbProp.getExperimentalFeaturesEnabled() &&
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SHEET_2_RDF)
+        );
     }
 
 }

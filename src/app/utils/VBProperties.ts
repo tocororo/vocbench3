@@ -36,6 +36,8 @@ export class VBProperties {
         classIndividualSearchMode: ClassIndividualPanelSearchMode.all
     };
 
+    private experimentalFeaturesEnabled: boolean = false;
+
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
@@ -196,6 +198,25 @@ export class VBProperties {
     /* =============================
     =========== SETTINGS ===========
     ============================= */
+
+    initSystemSettings() {
+        this.prefService.getSystemSettings([Properties.setting_experimental_features_enabled]).subscribe(
+            stResp => {
+                console.log("stResp[Properties.setting_experimental_features_enabled]", stResp[Properties.setting_experimental_features_enabled]);
+                this.experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled] == "true";
+                console.log("this.experimentalFeaturesEnabled", this.experimentalFeaturesEnabled);
+            }
+        );
+    }
+
+    setExperimentalFeaturesEnabled(enabled: boolean) {
+        this.prefService.setSystemSetting(Properties.setting_experimental_features_enabled, enabled+"").subscribe();
+        this.experimentalFeaturesEnabled = enabled;
+    }
+
+    getExperimentalFeaturesEnabled(): boolean {
+        return this.experimentalFeaturesEnabled;
+    }
 
     initProjectSettings() {
         var properties: string[] = [Properties.setting_languages];

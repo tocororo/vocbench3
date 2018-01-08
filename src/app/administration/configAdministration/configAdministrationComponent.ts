@@ -2,6 +2,8 @@ import { Component } from "@angular/core";
 import { AdministrationServices } from "../../services/administrationServices";
 import { AuthServices } from "../../services/authServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { VBProperties } from "../../utils/VBProperties";
+import { Properties } from "../../models/Properties";
 
 @Component({
     selector: "config-admin-component",
@@ -14,8 +16,10 @@ export class ConfigAdministrationComponent {
     private pristineAdminMail: string;
     private config: any = {};
 
+    private expFeatEnabled: boolean = false;
+
     constructor(private adminService: AdministrationServices, private authService: AuthServices, 
-        private basicModals: BasicModalServices) {}
+        private vbProp: VBProperties, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.adminService.getAdministrationConfig().subscribe(
@@ -23,7 +27,8 @@ export class ConfigAdministrationComponent {
                 this.config = conf;
                 this.pristineConfig = Object.assign({}, this.config); //clone 
             }
-        )
+        );
+        this.expFeatEnabled = this.vbProp.getExperimentalFeaturesEnabled();
     }
 
     private submitChange() {
@@ -60,6 +65,10 @@ export class ConfigAdministrationComponent {
             }
         }
         return false;
+    }
+
+    private onExpFeatEnabledChanged() {
+        this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled);
     }
 
 }

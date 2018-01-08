@@ -80,6 +80,20 @@
                 </div>
             </div>
 
+            <div class="panel panel-default" style="margin-top: 8px;">
+                <div class="panel-body">
+                    <div class="checkbox-inline">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
+                            Enable experimental features
+                        </label>
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="Check this option in order to enable experimental features not yet stable">
+                        </span>
+                    </div>
+                </div>
+            </div>
+
          </div>
 
     </div> 
