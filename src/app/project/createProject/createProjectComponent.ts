@@ -4,7 +4,7 @@ import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository, BackendTypesEnum } from "../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification, ExtensionPoint } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
 import { RDFS, OWL, SKOS, SKOSXL, DCT } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -52,7 +52,6 @@ export class CreateProjectComponent {
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
     private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    private repositoryImplConfigurerPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
     private DEFAULT_REPO_CONFIGURER = "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration";
     //core repository containing data
     private dataRepoId: string;
@@ -75,7 +74,6 @@ export class CreateProjectComponent {
 
     //URI GENERATOR PLUGIN
     private uriGenUseDefaultSetting: boolean = true;
-    private uriGeneratorPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
     private uriGenPluginList: Plugin[]; //available plugins for uri generator (retrieved through getAvailablePlugins)
     private selectedUriGenPlugin: Plugin; //chosen plugin for uri generator (the one selected through a <select> element)
     private uriGenPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> used to store the configurations for the plugins
@@ -84,7 +82,6 @@ export class CreateProjectComponent {
 
     //RENDERING GENERATOR PLUGIN
     private rendEngUseDefaultSetting: boolean = true;
-    private renderingEnginePluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
     private rendEngPluginList: Plugin[]; //available plugins for rendering engine
     private selectedRendEngPlugin: Plugin; //chosen plugin for rendering engine
     private rendEngPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> (plugin - available configs)
@@ -103,7 +100,7 @@ export class CreateProjectComponent {
 
     ngOnInit() {
         //init sail repository plugin
-        this.pluginService.getAvailablePlugins(this.repositoryImplConfigurerPluginID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPoint.REPO_IMPL_CONFIGURER_ID).subscribe(
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
@@ -137,7 +134,7 @@ export class CreateProjectComponent {
         );
 
         //init uri generator plugin
-        this.pluginService.getAvailablePlugins(this.uriGeneratorPluginID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPoint.URI_GENERATOR_ID).subscribe(
             (plugins: Plugin[]) => {
                 this.uriGenPluginList = plugins;
                 this.selectedUriGenPlugin = this.uriGenPluginList[0];
@@ -146,7 +143,7 @@ export class CreateProjectComponent {
         );
 
         //init rendering engine plugin
-        this.pluginService.getAvailablePlugins(this.renderingEnginePluginID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPoint.RENDERING_ENGINE_ID).subscribe(
             (plugins: Plugin[]) => {
                 this.rendEngPluginList = plugins;
                 this.selectedRendEngPlugin = this.rendEngPluginList[0];

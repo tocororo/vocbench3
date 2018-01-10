@@ -50,3 +50,11 @@ export class PluginSpecification {
     configType: string;
     properties: any; //object {"key1": "value", "key2": "value2", ...}
 }
+
+export class ExtensionPoint {
+    public static EXPORT_FILTER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.ExportFilter";
+    public static DATASET_METADATA_EXPORTER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.DatasetMetadataExporter";
+    public static RENDERING_ENGINE_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
+    public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
+    public static REPO_IMPL_CONFIGURER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
+}

@@ -12,9 +12,18 @@ var dynamic_st_host_resolution = true;
 var st_host = "127.0.0.1";
 
 /**
- * Port where SemanticTurkey server is listening
+ * Port where SemanticTurkey server is listening (optional)
  */
 var st_port = "1979";
+
+/**   
+ * Path where SemanticTurkey server is listening. If omitted, the sole host is considered.
+ * Please note that the path of Semantic Turkey services is defined as in:
+ *  http://semanticturkey.uniroma2.it/doc/user/web_api.jsf#services_address_structure
+ *  This additional path information is considered to be the starting part of the path described above, 
+ *  and is usually necessary in case Semantic Turkey is installed behind a proxy redirecting the ST URL.
+ */ 
+var st_path;
 
 /**
  * Protocol - either http or https

@@ -5,6 +5,7 @@ import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { Properties } from '../models/Properties';
 import { ProjectTableColumnStruct } from '../models/Project';
+import { ExtensionPoint } from '../models/Plugins';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
@@ -115,7 +116,7 @@ export class VBProperties {
         );
 
         // this is called separately since requires the pluginId parameter
-        this.prefService.getProjectPreferences([Properties.pref_languages], Properties.plugin_id_rendering_engine).subscribe(
+        this.prefService.getProjectPreferences([Properties.pref_languages], ExtensionPoint.RENDERING_ENGINE_ID).subscribe(
             prefs => {
                 this.projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }

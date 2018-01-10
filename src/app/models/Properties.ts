@@ -17,6 +17,4 @@ export class Properties {
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
 
-    static plugin_id_rendering_engine: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
-
 }

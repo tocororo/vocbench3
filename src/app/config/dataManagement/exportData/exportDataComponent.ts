@@ -4,7 +4,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { PluginsServices } from "../../../services/pluginsServices";
 import { ExportServices } from "../../../services/exportServices";
 import { MetadataServices } from "../../../services/metadataServices";
-import { Plugin, PluginConfiguration } from "../../../models/Plugins";
+import { Plugin, PluginConfiguration, ExtensionPoint } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -30,7 +30,6 @@ export class ExportDataComponent {
     private exportGraphs: GraphStruct[] = [];
 
     //export filter management
-    private exportFilterExtPointID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.ExportFilter";
     private availableExporterFilterPlugins: Plugin[];
     private filtersChain: FilterChainElement[] = [];
     private selectedFilterChainElement: FilterChainElement;
@@ -79,7 +78,7 @@ export class ExportDataComponent {
                 }
             }
         );
-        this.pluginService.getAvailablePlugins(this.exportFilterExtPointID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPoint.EXPORT_FILTER_ID).subscribe(
             plugins => {
                 this.availableExporterFilterPlugins = plugins;
                 let filters: PluginStructure[] = [];

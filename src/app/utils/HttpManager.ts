@@ -29,13 +29,24 @@ export class HttpManager {
 
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
+
+        this.serverhost = window['st_protocol'] + "://"; //protocol (http/https)
+
         let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
-        let st_port: string = window['st_port'];
-        this.protocol = window['st_protocol'];
         if (dynamic_st_host_resolution) {
-            this.serverhost = location.hostname + ":" + st_port;
+            this.serverhost += location.hostname;
         } else {
-            this.serverhost = window['st_host'] + ":" + st_port;
+            this.serverhost += window['st_host'];
+        }
+
+        let st_port: string = window['st_port']; //port number (optional)
+        if (st_port != null) {
+            this.serverhost += ":" + st_port;
+        }
+
+        let st_path: string = window['st_path']; //url path (optional)
+        if (st_path != null) {
+            this.serverhost += "/" + st_path;
         }
     }
 
@@ -275,7 +286,7 @@ export class HttpManager {
      * 
      */
     private getRequestBaseUrl(service: string, request: string): string {
-        var url: string = this.protocol + "://" + this.serverhost + "/" + this.serverpath + "/" + 
+        var url: string = this.serverhost + "/" + this.serverpath + "/" + 
             this.groupId + "/" + this.artifactId + "/" + service + "/" + request + "?";
         return url;
     }

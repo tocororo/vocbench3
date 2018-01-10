@@ -3,7 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { PluginsServices } from "../../../services/pluginsServices";
 import { Repository, RemoteRepositoryAccessConfig, RepositoryAccess, RepositoryAccessType, BackendTypesEnum } from "../../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification, ExtensionPoint } from "../../../models/Plugins";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
@@ -32,7 +32,6 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
 
     private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    private repositoryImplConfigurerPluginID = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
     //core repository containing data
     private repositoryId: string;
     private repoConfList: { factoryID: string, configuration: PluginConfiguration }[];
@@ -49,7 +48,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
 
     ngOnInit() {
         //init sail repository plugin
-        this.pluginService.getAvailablePlugins(this.repositoryImplConfigurerPluginID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPoint.REPO_IMPL_CONFIGURER_ID).subscribe(
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(

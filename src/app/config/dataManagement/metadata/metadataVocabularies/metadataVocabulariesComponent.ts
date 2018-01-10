@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DatasetMetadataServices } from "../../../../services/datasetMetadataServices";
 import { ExportServices } from "../../../../services/exportServices";
 import { PluginsServices } from "../../../../services/pluginsServices";
-import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification } from "../../../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification, ExtensionPoint } from "../../../../models/Plugins";
 import { RDFFormat } from "../../../../models/RDFFormat";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -17,8 +17,6 @@ export class MetadataVocabulariesComponent {
     //export format selection
     private exportFormats: RDFFormat[];
     private selectedExportFormat: RDFFormat;
-
-    private metadataExporterExtPoint = "it.uniroma2.art.semanticturkey.plugin.extpts.DatasetMetadataExporter";
 
     private exporterPlugins: Plugin[];
     private selectedExporterPlugin: Plugin;
@@ -43,7 +41,7 @@ export class MetadataVocabulariesComponent {
                 }
             }
         );
-        this.pluginService.getAvailablePlugins(this.metadataExporterExtPoint).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPoint.DATASET_METADATA_EXPORTER_ID).subscribe(
             plugins => {
                 this.exporterPlugins = plugins;
             }
