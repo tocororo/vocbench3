@@ -42,18 +42,18 @@
                 <div class="subPanel-heading">
                     <label style="flex: 1">Export filters:</label>
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" style="padding: 1px 5px;" title="Add filter" (click)="appendFilter()">
+                        <button class="btn btn-default" title="Add filter" (click)="appendFilter()">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
-                        <button class="btn btn-default" style="padding: 1px 5px;" title="Remove filter" (click)="removeFilter()"
+                        <button class="btn btn-default" title="Remove filter" (click)="removeFilter()"
                             [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
-                        <button class="btn btn-default" style="padding: 1px 5px;" title="Move down"  (click)="moveFilterDown()"
+                        <button class="btn btn-default" title="Move down"  (click)="moveFilterDown()"
                             [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
                             <span class="glyphicon glyphicon-chevron-down"></span>
                         </button>
-                        <button class="btn btn-default" style="padding: 1px 5px;" title="Move up" (click)="moveFilterUp()"
+                        <button class="btn btn-default" title="Move up" (click)="moveFilterUp()"
                             [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
                             <span class="glyphicon glyphicon-chevron-up"></span>
                         </button>

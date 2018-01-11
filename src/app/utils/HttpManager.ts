@@ -224,7 +224,7 @@ export class HttpManager {
 
             return this.http.post(url, postData, requestOptions)
                 .map(
-                    res => { return this.arrayBufferRespHanlder(res); }
+                    res => { return this.arrayBufferRespHandler(res); }
                 ).catch(
                     error => { return this.handleError(error, options.errorAlertOpt) }
                 );
@@ -244,7 +244,7 @@ export class HttpManager {
             //execute request
             return this.http.get(url, requestOptions)
                 .map(
-                    res => { return this.arrayBufferRespHanlder(res); }
+                    res => { return this.arrayBufferRespHandler(res); }
                 ).catch(
                     error => { return this.handleError(error, options.errorAlertOpt) }
                 );
@@ -257,7 +257,7 @@ export class HttpManager {
      * This method check if the response is xml, in case it could be an xml error response.
      * In case, throws an error containing the error message in the response.
      */
-    private arrayBufferRespHanlder(res: Response) {
+    private arrayBufferRespHandler(res: Response) {
         var arrayBuffer = res.arrayBuffer();
         var respContType = res.headers.get("content-type");
         if (respContType.includes("application/xml;")) { //could be an error xml response
@@ -451,6 +451,8 @@ export class HttpManager {
             this.basicModals.alert("Error", errorMsg, "error", err._body).then(
                 (result: any) => {}
             )
+        } else if (err instanceof Error) { //err is already an Error (parsed and thrown in arrayBufferRespHandler)
+            error = err;
         }
         //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
         else if (errorAlertOpt.show) { //if the alert should be shown

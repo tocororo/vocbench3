@@ -7,6 +7,7 @@ import { MetadataServices } from "../../../services/metadataServices";
 import { Plugin, PluginConfiguration, ExtensionPoint } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
+import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
@@ -26,7 +27,6 @@ export class ExportDataComponent {
     private includeInferred: boolean;
 
     //graph selection
-    private baseURI: string;
     private exportGraphs: GraphStruct[] = [];
 
     //export filter management
@@ -50,31 +50,17 @@ export class ExportDataComponent {
                 }
             }
         );
-        this.metadataService.getBaseURI().subscribe(
-            baseuri => {
-                this.baseURI = baseuri;
-                //if this response is recieved after getNamedGraphs, set the baseURI graph as checked
-                for (var i = 0; i < this.exportGraphs.length; i++) {
-                    if (this.exportGraphs[i].graph.getURI() == this.baseURI) {
-                        this.exportGraphs[i].checked = true;
-                        break;
-                    }
-                }
-            }
-        );
+
+        let baseURI: string = VBContext.getWorkingProject().getBaseURI();
         this.exportService.getNamedGraphs().subscribe(
             graphs => {
-                for (var i = 0; i < graphs.length; i++) {
-                    this.exportGraphs.push(new GraphStruct(false, graphs[i]));
-                }
-                //if this response is recieved after getBaseuri, set the baseURI graph as checked
-                if (this.baseURI != null) {
-                    for (var i = 0; i < this.exportGraphs.length; i++) {
-                        if (this.exportGraphs[i].graph.getURI() == this.baseURI) {
-                            this.exportGraphs[i].checked = true;
-                            break;
-                        }
+                graphs.sort(
+                    function(g1: ARTURIResource, g2: ARTURIResource) {
+                        return g1.getURI().localeCompare(g2.getURI());
                     }
+                );
+                for (var i = 0; i < graphs.length; i++) {
+                    this.exportGraphs.push(new GraphStruct(graphs[i].getURI() == baseURI, graphs[i])); //set checked the project baseURI
                 }
             }
         );
@@ -85,7 +71,6 @@ export class ExportDataComponent {
             }
         );
     }
-
 
     /** =====================================
      * ============= GRAPHS =================
@@ -207,7 +192,6 @@ export class ExportDataComponent {
 
     private configureFilter(filterChainEl: FilterChainElement) {
         var selectedConfiguration: PluginConfiguration = filterChainEl.selectedPlugin.selectedConfiguration;
-        // this.openConfigurationModal(selectedConfiguration).then(
         this.sharedModals.configurePlugin(selectedConfiguration).then(
             (filterCfg: any) => {
                 //update the selected configuration...
@@ -280,32 +264,7 @@ export class ExportDataComponent {
 
         var filteringPipeline: any[] = [];
         for (var i = 0; i < this.filtersChain.length; i++) {
-            var filterStep: {filter: {factoryId: string, properties: any}, graphs?: string[]} = {filter: null};
-            //filter: factoryId and properties
-            var filter: {factoryId: string, properties: any} = {
-                factoryId: this.filtersChain[i].selectedPlugin.plugin.factoryID,
-                properties: null
-            }
-            var filterProps: any = {};
-            var selectedConf: PluginConfiguration = this.filtersChain[i].selectedPlugin.selectedConfiguration;
-            for (var j = 0; j < selectedConf.params.length; j++) {
-                filterProps[selectedConf.params[j].name] = selectedConf.params[j].value;
-            }
-            filter.properties = filterProps;
-            filterStep.filter = filter;
-            //graphs to which apply the filter
-            var graphs: string[] = [];
-            var fg: GraphStruct[] = this.filtersChain[i].filterGraphs;
-            for (var j = 0; j < fg.length; j++) {
-                if (fg[j].checked) { //collect only the checked graphs
-                    graphs.push(fg[i].graph.getURI());
-                }
-            }
-            if (graphs.length > 0) {
-                filterStep.graphs = graphs;
-            }
-
-            filteringPipeline.push(filterStep);
+            filteringPipeline.push(this.filtersChain[i].convertToFilteringPipelineStep());
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -316,8 +275,9 @@ export class ExportDataComponent {
                 this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
             },
             err => {
+                console.log("err", err);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.confirm("Warning", err + " Do you want to force the export?", "warning").then(
+                this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", "warning").then(
                     yes => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat, true).subscribe(
@@ -388,7 +348,16 @@ class PluginStructure {
     }
 }
 
-class FilterChainElement {
+class GraphStruct {
+    public checked: boolean;
+    public graph: ARTURIResource;
+    constructor(checked: boolean, graph: ARTURIResource) {
+        this.checked = checked;
+        this.graph = graph;
+    }
+}
+
+export class FilterChainElement {
     public availablePlugins: PluginStructure[];
     public selectedPlugin: PluginStructure; //plugin currently selected in the <select> element
     public filterGraphs: GraphStruct[];
@@ -398,13 +367,32 @@ class FilterChainElement {
         this.selectedPlugin = selectedPlugin;
         this.filterGraphs = filterGraphs;
     }
-}
 
-class GraphStruct {
-    public checked: boolean;
-    public graph: ARTURIResource;
-    constructor(checked: boolean, graph: ARTURIResource) {
-        this.checked = checked;
-        this.graph = graph;
+    convertToFilteringPipelineStep(): {filter: {factoryId: string, properties: any}, graphs?: string[]} {
+        let filterStep: {filter: {factoryId: string, properties: any}, graphs?: string[]} = {filter: null};
+        //filter: factoryId and properties
+        var filter: {factoryId: string, properties: any} = {
+            factoryId: this.selectedPlugin.plugin.factoryID,
+            properties: null
+        }
+        var filterProps: any = {};
+        var selectedConf: PluginConfiguration = this.selectedPlugin.selectedConfiguration;
+        for (var j = 0; j < selectedConf.params.length; j++) {
+            filterProps[selectedConf.params[j].name] = selectedConf.params[j].value;
+        }
+        filter.properties = filterProps;
+        filterStep.filter = filter;
+        //graphs to which apply the filter
+        var graphs: string[] = [];
+        var fg: GraphStruct[] = this.filterGraphs;
+        for (var j = 0; j < fg.length; j++) {
+            if (fg[j].checked) { //collect only the checked graphs
+                graphs.push(fg[j].graph.getURI());
+            }
+        }
+        if (graphs.length > 0) {
+            filterStep.graphs = graphs;
+        }
+        return filterStep;
     }
 }
