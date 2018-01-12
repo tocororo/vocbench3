@@ -200,14 +200,23 @@ export class VBProperties {
     =========== SETTINGS ===========
     ============================= */
 
-    initSystemSettings() {
-        this.prefService.getSystemSettings([Properties.setting_experimental_features_enabled]).subscribe(
+    initStartupSystemSettings() {
+        this.prefService.getStartupSystemSettings().subscribe(
             stResp => {
-                console.log("stResp[Properties.setting_experimental_features_enabled]", stResp[Properties.setting_experimental_features_enabled]);
-                this.experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled] == "true";
-                console.log("this.experimentalFeaturesEnabled", this.experimentalFeaturesEnabled);
+                //experimental_features_enabled
+                this.experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled];
+                console.log("experimentalFeaturesEnabled", this.experimentalFeaturesEnabled);
+                //languages
+                try {
+                    var systemLanguages = <Language[]>JSON.parse(stResp[Properties.setting_languages]);
+                    Languages.sortLanguages(systemLanguages);
+                    Languages.setSystemLanguages(systemLanguages);
+                } catch (err) {
+                    this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
+                        "'languages' property. Please, report this to the system administrator.", "error");
+                }
             }
-        );
+        )
     }
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
@@ -248,7 +257,6 @@ export class VBProperties {
     setProjectLanguages(languages: Language[]) {
         this.projectLanguagesSetting = languages;
     }
-
 
     
     /* =============================

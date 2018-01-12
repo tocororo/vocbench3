@@ -4,11 +4,8 @@ import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { ProjectListModal } from './project/projectListModal';
 import { VBContext } from "./utils/VBContext";
-import { VBProperties } from "./utils/VBProperties";
 import { User } from "./models/User";
 import { Languages, Language } from "./models/LanguagesCountries";
-import { BasicModalServices } from "./widget/modal/basicModal/basicModalServices";
-import { PreferencesSettingsServices } from "./services/preferencesSettingsServices";
 
 @Component({
     selector: "home-component",
@@ -17,14 +14,7 @@ import { PreferencesSettingsServices } from "./services/preferencesSettingsServi
 })
 export class HomeComponent {
 
-    constructor(private prefSettingService: PreferencesSettingsServices, private basicModals: BasicModalServices, 
-        private router: Router, private modal: Modal) { }
-
-    ngOnInit() {
-        if (Languages.getSystemLanguages() == null) {
-            Languages.initSystemLanguage(this.prefSettingService, this.basicModals);
-        }
-    }
+    constructor(private router: Router, private modal: Modal) { }
 
     private isUserLogged(): boolean {
         return VBContext.isLoggedIn();

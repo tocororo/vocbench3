@@ -1,6 +1,3 @@
-import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-
 export class Countries {
     
     static countryList = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla",
@@ -95,22 +92,6 @@ export class Languages {
         }
     }
 
-    static initSystemLanguage(prefSettingService: PreferencesSettingsServices, basicModals: BasicModalServices) {
-        if (Languages.getSystemLanguages() == null) {
-            prefSettingService.getSystemLanguages().subscribe(
-                stResp => {
-                    try {
-                        var systemLanguages = <Language[]>JSON.parse(stResp);
-                        Languages.sortLanguages(systemLanguages);
-                        Languages.systemLanguages = systemLanguages;
-                    } catch (err) {
-                        basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
-                            "'languages' property. Please, report this to the system administrator.", "error");
-                    }
-                }
-            );
-        }
-    }
 }
 
 export class Language {

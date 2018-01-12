@@ -171,13 +171,12 @@ export class PreferencesSettingsServices {
     }
 
     /**
-     * Gets the default project settings
-     * @param properties 
+     * Gets the project settings needed during system startup
      */
-    getSystemLanguages() {
-        console.log("[PreferencesServices] getSystemLanguages");
+    getStartupSystemSettings() {
+        console.log("[PreferencesServices] getStartupSystemSettings");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getSystemLanguages", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params, true);
     }
 
     /**
