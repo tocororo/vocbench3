@@ -274,23 +274,22 @@ export class ExportDataComponent {
                 var exportLink = window.URL.createObjectURL(blob);
                 this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
             },
-            err => {
-                console.log("err", err);
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", "warning").then(
-                    yes => {
-                        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat, true).subscribe(
-                            blob => {
-                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                var exportLink = window.URL.createObjectURL(blob);
-                                this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
-                            }
-                        );
-                    },
-                    no => {}
-                );
-                
+            (err: Error) => {
+                if (err.name.endsWith('ExportPreconditionViolationException')) {
+                    this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", "warning").then(
+                        yes => {
+                            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                            this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat, true).subscribe(
+                                blob => {
+                                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                                    var exportLink = window.URL.createObjectURL(blob);
+                                    this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+                                }
+                            );
+                        },
+                        no => {}
+                    );
+                }
             }
         );
 

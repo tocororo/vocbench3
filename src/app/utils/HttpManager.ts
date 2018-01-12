@@ -451,10 +451,17 @@ export class HttpManager {
             this.basicModals.alert("Error", errorMsg, "error", err._body).then(
                 (result: any) => {}
             )
-        } else if (err instanceof Error) { //err is already an Error (parsed and thrown in arrayBufferRespHandler)
+        } else if (err instanceof Error) { //err is already an Error (parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler)
             error = err;
+            if (errorAlertOpt.show) { //if the alert should be shown
+                if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
+                    let errorMsg = error.message != null ? error.message : "Unknown response from the server";
+                    this.basicModals.alert("Error", error.message, "error", error.name);
+                }
+            }
         }
         //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
+        //(needed? maybe the following is already handled by (err instanceof Error) condition)
         else if (errorAlertOpt.show) { //if the alert should be shown
             error = (<Error>err);
             if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {

@@ -86,7 +86,12 @@ export class ExportServices {
         if (force != null) {
             params.force = force;
         }
-        var options: VBRequestOptions = new VBRequestOptions({ errorAlertOpt: { show: false } });
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException'] 
+            } 
+        });
         return this.httpMgr.downloadFile(this.serviceName, "export", params, true, options);
     }   
 
