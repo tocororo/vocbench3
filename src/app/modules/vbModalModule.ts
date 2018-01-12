@@ -68,6 +68,8 @@ import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/brow
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 
+import { ExportResultAsRdfModal } from "../sparql/exportResultAsRdfModal";
+
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
@@ -81,7 +83,8 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        EditableNsInput, SchemeSelectionComponent
+        EditableNsInput, SchemeSelectionComponent,
+        ExportResultAsRdfModal
     ],
     exports: [],
     providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices],
@@ -103,7 +106,8 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal,
-        PluginConfigModal, FilterGraphsModal, DumpCreationModal
+        PluginConfigModal, FilterGraphsModal, DumpCreationModal,
+        ExportResultAsRdfModal
     ]
 })
 export class VBModalModule { }

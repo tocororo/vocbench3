@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ARTURIResource } from "../models/ARTResources";
 import { RDFFormat } from '../models/RDFFormat';
 
@@ -93,7 +93,7 @@ export class SparqlServices {
     }
 
     /**
-     * Exports the results of a construct query in the given rdf format
+     * Exports the results of a graph query in the given rdf format applying optional export filters
      * @param query 
      * @param format 
      * @param includeInferred 
@@ -103,15 +103,19 @@ export class SparqlServices {
      * @param defaultGraphs 
      * @param namedGraphs 
      */
-    exportConstructResultAsRdf(query: string, format: RDFFormat, includeInferred?: boolean, ql?: "SPARQL" | "SERQL",
-            bindings?: any, maxExecTime?: number, defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        console.log("[SparqlServices] exportConstructResultAsRdf");
+    exportGraphQueryResultAsRdf(query: string, format: RDFFormat, includeInferred?: boolean, 
+            filteringPipeline?: string, ql?: "SPARQL" | "SERQL", bindings?: any, maxExecTime?: number, 
+            defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
+        console.log("[SparqlServices] exportGraphQueryResultAsRdf");
         var params: any = {
             query: query,
             format: format.name
         };
         if (includeInferred != null) {
             params.includeInferred = includeInferred;
+        }
+        if (filteringPipeline != null) {
+            params.filteringPipeline = filteringPipeline;
         }
         if (ql != null) {
             params.ql = ql;
@@ -128,7 +132,7 @@ export class SparqlServices {
         if (namedGraphs != null) {
             params.namedGraphs = namedGraphs;
         }
-        return this.httpMgr.downloadFile(this.serviceName, "exportConstructResultAsRdf", params, true);
+        return this.httpMgr.downloadFile(this.serviceName, "exportGraphQueryResultAsRdf", params, true);
     }
     
     /**

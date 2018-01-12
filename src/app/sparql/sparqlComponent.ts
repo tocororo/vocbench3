@@ -1,4 +1,7 @@
 import { Component } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
+import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
 import { SparqlServices } from "../services/sparqlServices";
 import { ExportServices } from "../services/exportServices";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -23,7 +26,7 @@ export class SparqlComponent {
     private resultsLimit: number = 100;
 
     constructor(private sparqlService: SparqlServices, private exportService: ExportServices, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         //collect the prefix namespace mappings
@@ -247,32 +250,12 @@ export class SparqlComponent {
     }
 
     private exportAsRdf(tab: Tab) {
-        this.exportService.getOutputFormats().subscribe(
-            formats => {
-                let options: string[] = [];
-                formats.forEach(f => options.push(f.name + " (" + f.defaultFileExtension + ")"));
-                this.basicModals.select("Select RDF format", null, options).then(
-                    (selectedFormat: string) => {
-                        let format: RDFFormat;
-                        //select modal returns the string serialization of the format (serialized as before). Here get back the RDFFormat.
-                        formats.forEach(f => {
-                            if (f.name + " (" + f.defaultFileExtension + ")" == selectedFormat) {
-                                format = f;
-                            }
-                        });
-
-                        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.sparqlService.exportConstructResultAsRdf(tab.queryCache, format, tab.inferred).subscribe(
-                            blob => {
-                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                var exportLink = window.URL.createObjectURL(blob);
-                                this.basicModals.downloadLink("Export SPARQL results", null, exportLink, "sparql_export." + format.defaultFileExtension);
-                            }
-                        );
-                    }
-                )
-            }
+        var modalData = new ExportResultAsRdfModalData(tab.queryCache, tab.inferred);
+        const builder = new BSModalContextBuilder<ExportResultAsRdfModalData>(
+            modalData, undefined, ExportResultAsRdfModalData
         );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(ExportResultAsRdfModal, overlayConfig).result;
     }
 
     /**

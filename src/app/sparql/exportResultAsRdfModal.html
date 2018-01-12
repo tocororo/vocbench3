@@ -1,0 +1,80 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">Export as RDF</h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh;">
+    
+    <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
+        <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
+    </select>
+
+    <div class="checkbox-inline" style="margin: 6px 2px;">
+        <label>
+            <input type="checkbox" [(ngModel)]="applyFilter">Apply export filters
+        </label>
+    </div>
+
+    <div *ngIf="applyFilter" class="subPanel vbox">
+        <div class="subPanel-heading">
+            <label style="flex: 1">Export filters:</label>
+            <div class="btn-group btn-group-xs" role="group">
+                <button class="btn btn-default" title="Add filter" (click)="appendFilter()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" title="Remove filter" (click)="removeFilter()"
+                    [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+                <button class="btn btn-default" title="Move down"  (click)="moveFilterDown()"
+                    [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                <button class="btn btn-default" title="Move up" (click)="moveFilterUp()"
+                    [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </button>
+            </div>
+        </div>
+        <div class="subPanel-body scrollableContainer" style="min-height: 60px;">
+            <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
+                Here it is possible to create and configure a sequence of filters to be applied during the export process.
+                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+            </div>
+            <table class="table table-condensed table-hoverable">
+                <colgroup>
+                    <col style="width: 5%">
+                    <col>
+                    <col style="width: 2%">
+                </colgroup>
+                <tbody>
+                    <tr *ngFor="let filterChainEl of filtersChain; let l = last; let f = first; let idx = index" 
+                        [ngClass]="{active: filterChainEl == selectedFilterChainElement}" (click)="selectFilterChainElement(filterChainEl)">
+                        <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
+                        <td>
+                            <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedPlugin" (ngModelChange)="onChangePlugin(filterChainEl)">
+                                <option *ngFor="let p of filterChainEl.availablePlugins" [ngValue]="p">{{getFactoryIdShortName(p.plugin.factoryID)}}</option>
+                            </select>
+                            <div class="input-group" style="margin-top: 3px;">
+                                <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedPlugin.selectedConfiguration">
+                                    <option *ngFor="let cfg of filterChainEl.selectedPlugin.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
+                                </select>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default btn-sm" (click)="configureFilter(filterChainEl)">Configure</button>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="text-center" style="font-size: 14px; font-weight: 700;">
+                            <span *ngIf="requireConfiguration(filterChainEl)" class="glyphicon glyphicon-warning-sign"
+                                title="This filter need to be configured"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>
