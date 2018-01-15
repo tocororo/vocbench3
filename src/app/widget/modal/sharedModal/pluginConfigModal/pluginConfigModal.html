@@ -19,7 +19,9 @@
                         <span *ngIf="p.required">*</span>
                     </td>
                     <td>
-                        <input *ngIf="!p.enumeration" type="text" class="form-control input-sm" [(ngModel)]="p.value">
+                        <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                            [(ngModel)]="p.value"></textarea>
+
                         <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
                             <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
                         </select>

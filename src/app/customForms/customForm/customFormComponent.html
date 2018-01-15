@@ -14,8 +14,8 @@
                     <div *ngIf="field.getType() == 'literal'">
                         <div [ngSwitch]="field.getDatatype()">
                             <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
-                                <textarea type="text" rows="1" class="form-control input-sm" [(ngModel)]="field.value" 
-                                    (ngModelChange)="onModelChanged()" [disabled]="!field.checked"></textarea>
+                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                    [(ngModel)]="field.value" (ngModelChange)="onModelChanged()" [disabled]="!field.checked"></textarea>
                             </div>
                             <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'">
                                 <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="1"
@@ -55,9 +55,9 @@
                                     [(ngModel)]="field.value" (ngModelChange)="onModelChanged()" [disabled]="!field.checked">
                             </div>
                             <div *ngSwitchDefault class="hbox" style="align-items: center;">
-                                <textarea type="text" rows="1" class="form-control input-sm" [(ngModel)]="field.value" 
-                                    (ngModelChange)="onModelChanged()" (input)="onEntryValueChange($event.target.value, field)" 
-                                    [disabled]="!field.checked"></textarea>
+                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                    [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"
+                                    (input)="onEntryValueChange($event.target.value, field)" [disabled]="!field.checked"></textarea>
 
                                 <span *ngIf="field.getLang()" style="margin-left: 4px;">
                                     <lang-picker size="sm" [lang]="field.getLang()" disabled="true">
