@@ -22,7 +22,7 @@
                 <div class="panel-heading" style="justify-content: flex-end">
                     <div class="btn-group btn-group-xs">
                         <button *ngFor="let aspect of aspectSelectors" class="btn btn-default" [ngClass]="{ active: selectedAspect == aspect }"
-                            (click)="changeAspect(aspect)">{{aspect}}</button>
+                            style="padding: 1px 5px;" (click)="changeAspect(aspect)">{{aspect}}</button>
                     </div>
                 </div>
 
@@ -32,6 +32,9 @@
 
                     <project-settings *ngIf="selectedAspect == projSettingsAspect" [project]="selectedProject" class="vbox">
                     </project-settings>
+
+                    <collaboration-config *ngIf="selectedAspect == collaborationAspect" [project]="selectedProject" class="vbox">
+                    </collaboration-config>
                 </div>
 
             </div>

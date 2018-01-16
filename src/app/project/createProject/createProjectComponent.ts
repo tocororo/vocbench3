@@ -4,7 +4,7 @@ import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository, BackendTypesEnum } from "../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification, ExtensionPoint } from "../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPoint } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
 import { RDFS, OWL, SKOS, SKOSXL, DCT } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -216,7 +216,7 @@ export class CreateProjectComponent {
     private configureDataRepo() {
         this.sharedModals.configurePlugin(this.selectedDataRepoConf.configuration).then(
             (config: any) => {
-                this.selectedDataRepoConf.configuration.params = (<PluginConfiguration>config).params;
+                this.selectedDataRepoConf.configuration.properties = (<PluginConfiguration>config).properties;
             },
             () => {}
         );
@@ -225,7 +225,7 @@ export class CreateProjectComponent {
     private configureSupportRepo() {
         this.sharedModals.configurePlugin(this.selectedSupportRepoConf.configuration).then(
             (config: any) => {
-                this.selectedSupportRepoConf.configuration.params = (<PluginConfiguration>config).params;
+                this.selectedSupportRepoConf.configuration.properties = (<PluginConfiguration>config).properties;
             },
             () => {}
         );
@@ -276,7 +276,7 @@ export class CreateProjectComponent {
     private configureUriGenConf() {
         this.sharedModals.configurePlugin(this.selectedUriGenPluginConf).then(
             (config: any) => {
-                this.selectedUriGenPluginConf.params = (<PluginConfiguration>config).params;
+                this.selectedUriGenPluginConf.properties = (<PluginConfiguration>config).properties;
             },
             () => {}
         )
@@ -308,7 +308,7 @@ export class CreateProjectComponent {
     private configureRendEngConf() {
         this.sharedModals.configurePlugin(this.selectedRendEngPluginConf).then(
             (config: any) => {
-                this.selectedRendEngPluginConf.params = (<PluginConfiguration>config).params;
+                this.selectedRendEngPluginConf.properties = (<PluginConfiguration>config).properties;
             },
             () => {}
         )
@@ -349,26 +349,18 @@ export class CreateProjectComponent {
         //prepare config of core repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) { 
             //check if data repository configuration need to be configured
-            var coreRepoConfigParams: PluginConfigParam[] = this.selectedDataRepoConf.configuration.params;
-            if (this.selectedDataRepoConf.configuration.editRequired) {
+
+            if (this.selectedDataRepoConf.configuration.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                for (var i = 0; i < coreRepoConfigParams.length; i++) {
-                    if (coreRepoConfigParams[i].required && coreRepoConfigParams[i].value != null) {
-                        this.basicModals.alert("Create project",
-                            "Data Repository (" + this.selectedDataRepoConf.configuration.shortName + ") requires to be configured", "warning");
-                        return;
-                    }
-                }
+                this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConf.configuration.shortName 
+                    + ") requires to be configured", "warning");
+                    return;
             }
 
-            var coreRepoProps: any = {};
-            for (var i = 0; i < coreRepoConfigParams.length; i++) {
-                coreRepoProps[coreRepoConfigParams[i].name] = coreRepoConfigParams[i].value;
-            }
             coreRepoSailConfigurerSpecification = {
                 factoryId: this.selectedDataRepoConf.factoryID,
                 configType: this.selectedDataRepoConf.configuration.type,
-                properties: coreRepoProps
+                properties: this.selectedDataRepoConf.configuration.getPropertiesAsMap()
             }
         }
 
@@ -379,28 +371,18 @@ export class CreateProjectComponent {
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
             //check if support repository configuration need to be configured
-            var supportRepoConfigParams: PluginConfigParam[] = this.selectedSupportRepoConf.configuration.params;
-            if (this.selectedSupportRepoConf.configuration.editRequired) {
+            if (this.selectedSupportRepoConf.configuration.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                for (var i = 0; i < supportRepoConfigParams.length; i++) {
-                    if (supportRepoConfigParams[i].required && supportRepoConfigParams[i].value != null) {
-                        this.basicModals.alert("Create project",
-                            "History/Validation Repository (" + this.selectedSupportRepoConf.configuration.shortName + ") requires to be configured", "warning");
-                        return;
-                    }
-                }
+                this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConf.configuration.shortName 
+                    + ") requires to be configured", "warning");
+                    return;
             }
-            
-            var supportRepoProps: any = {};
-            for (var i = 0; i < supportRepoConfigParams.length; i++) {
-                supportRepoProps[supportRepoConfigParams[i].name] = supportRepoConfigParams[i].value;
-            }
+
             supportRepoSailConfigurerSpecification = {
                 factoryId: this.selectedSupportRepoConf.factoryID,
                 configType: this.selectedSupportRepoConf.configuration.type,
-                properties: supportRepoProps
+                properties: this.selectedSupportRepoConf.configuration.getPropertiesAsMap()
             }
-            // console.log("supportRepoSailConfigurerSpecification", supportRepoSailConfigurerSpecification);
         }
 
         //backend types
@@ -419,26 +401,16 @@ export class CreateProjectComponent {
         var uriGeneratorSpecification: PluginSpecification;
         if (!this.uriGenUseDefaultSetting) {
             //check if uriGenerator plugin need to be configured
-            if (this.selectedUriGenPluginConf.editRequired) {
+            if (this.selectedUriGenPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                for (var i = 0; i < this.selectedUriGenPluginConf.params.length; i++) {
-                    if (this.selectedUriGenPluginConf.params[i].required && this.selectedUriGenPluginConf.params[i].value != null) {
-                        this.basicModals.alert("Create project",
-                            "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName + ") requires configuration", "warning");
-                        return;
-                    }
-                }
+                this.basicModals.alert("Create project", "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName 
+                    + ") requires configuration", "warning");
+                return;
             }
-
-            var uriGenPluginProps: any = {};
-            for (var i = 0; i < this.selectedUriGenPluginConf.params.length; i++) {
-                uriGenPluginProps[this.selectedUriGenPluginConf.params[i].name] = this.selectedUriGenPluginConf.params[i].value;
-            }
-            
             uriGeneratorSpecification = {
                 factoryId: this.selectedUriGenPlugin.factoryID,
                 configType: this.selectedUriGenPluginConf.type,
-                properties: uriGenPluginProps
+                properties: this.selectedUriGenPluginConf.getPropertiesAsMap()
             }
             // console.log("uriGeneratorSpecification", uriGeneratorSpecification);
         }
@@ -449,26 +421,17 @@ export class CreateProjectComponent {
         var renderingEngineSpecification: PluginSpecification;
         if (!this.rendEngUseDefaultSetting) {
             //check if uriGenerator plugin need to be configured
-            if (this.selectedRendEngPluginConf.editRequired) {
+            if (this.selectedRendEngPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                for (var i = 0; i < this.selectedRendEngPluginConf.params.length; i++) {
-                    if (this.selectedRendEngPluginConf.params[i].required && this.selectedRendEngPluginConf.params[i].value != null) {
-                        this.basicModals.alert("Create project",
-                            "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName + ") requires configuration", "warning");
-                        return;
-                    }
-                }
+                this.basicModals.alert("Create project", "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName 
+                    + ") requires configuration", "warning");
+                return;
             }
 
-            var rendEngPluginProps: any = {};
-            for (var i = 0; i < this.selectedRendEngPluginConf.params.length; i++) {
-                rendEngPluginProps[this.selectedRendEngPluginConf.params[i].name] = this.selectedRendEngPluginConf.params[i].value;
-            }
-
-            var renderingEngineSpecification: PluginSpecification = {
+            renderingEngineSpecification = {
                 factoryId: this.selectedRendEngPlugin.factoryID,
                 configType: this.selectedRendEngPluginConf.type,
-                properties: rendEngPluginProps
+                properties: this.selectedRendEngPluginConf.getPropertiesAsMap()
             }
             // console.log("renderingEngineSpecification", renderingEngineSpecification);
         }

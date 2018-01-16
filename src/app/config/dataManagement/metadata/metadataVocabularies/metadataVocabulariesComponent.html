@@ -29,7 +29,7 @@
                             </select>
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-sm" (click)="configurePlugin()" 
-                                    [disabled]="!selectedConfiguration || selectedConfiguration.params.length == 0">
+                                    [disabled]="!selectedConfiguration || selectedConfiguration.properties.length == 0">
                                     Configure
                                 </button>
                             </span>
@@ -54,15 +54,15 @@
                             <col>
                         </colgroup>
                         <tbody>
-                            <ng-template [ngIf]="selectedExporterSettings.extensionPointSettings.params">
-                                <tr *ngIf="selectedExporterSettings.extensionPointSettings.params.length > 0">
+                            <ng-template [ngIf]="selectedExporterSettings.extensionPointSettings.properties">
+                                <tr *ngIf="selectedExporterSettings.extensionPointSettings.properties.length > 0">
                                     <td colspan="3" class="text-center">
                                         <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
                                             <label>{{selectedExporterSettings.extensionPointSettings.shortName}}</label>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr *ngFor="let p of selectedExporterSettings.extensionPointSettings.params">
+                                <tr *ngFor="let p of selectedExporterSettings.extensionPointSettings.properties">
                                     <td class="text-right" nowrap>
                                         <label>{{p.name}}</label>
                                         <span *ngIf="p.required">*</span>
@@ -73,7 +73,7 @@
                                     <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
                                 </tr>
                             </ng-template>
-                            <ng-template [ngIf]="selectedExporterSettings.pluginSettings.params">
+                            <ng-template [ngIf]="selectedExporterSettings.pluginSettings.properties">
                                 <tr>
                                     <td colspan="3" class="text-center">
                                         <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
@@ -81,7 +81,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr *ngFor="let p of selectedExporterSettings.pluginSettings.params">
+                                <tr *ngFor="let p of selectedExporterSettings.pluginSettings.properties">
                                     <td class="text-right" nowrap>
                                         <label>{{p.name}}</label>
                                         <span *ngIf="p.required">*</span>

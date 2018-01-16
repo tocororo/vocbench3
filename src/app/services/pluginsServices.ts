@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
-import {Plugin, PluginConfiguration, PluginConfigParam} from "../models/Plugins";
+import {Plugin, PluginConfiguration, PluginConfigProp} from "../models/Plugins";
 
 @Injectable()
 export class PluginsServices {
@@ -56,21 +56,7 @@ export class PluginsServices {
                 var configColl: any[] = stResp;
                 var configurations: PluginConfiguration[] = [];
                 for (var i = 0; i < configColl.length; i++) {
-                    let shortName = configColl[i].shortName;
-                    let editRequired = configColl[i].editRequired;
-                    let type = configColl[i]['@type'];
-                    
-                    var params: PluginConfigParam[] = [];
-                    var parColl: any[] = configColl[i].properties;
-                    for (var j = 0; j < parColl.length; j++) {
-                        let description = parColl[j].description;
-                        let name = parColl[j].name;
-                        let required = parColl[j].required;
-                        let value = parColl[j].value;
-                        let enumeration = parColl[j].enumeration;
-                        params.push(new PluginConfigParam(name, description, required, value, enumeration));
-                    }
-                    configurations.push(new PluginConfiguration(shortName, type, editRequired, params));
+                    configurations.push(PluginConfiguration.parse(configColl[i]));
                 }
                 return {factoryID: factoryID, configurations: configurations};
             }

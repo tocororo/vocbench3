@@ -12,25 +12,62 @@ export class PluginConfiguration {
     public shortName: string;
     public type: string;
     public editRequired: boolean;
-    public params: PluginConfigParam[];
-    constructor(shortName: string, type: string, editRequired: boolean, params: PluginConfigParam[]) {
+    public properties: PluginConfigProp[];
+    constructor(shortName: string, type: string, editRequired: boolean, properties: PluginConfigProp[]) {
         this.shortName = shortName;
         this.editRequired = editRequired;
         this.type = type;
-        this.params = params;
+        this.properties = properties;
     }
 
     public clone(): PluginConfiguration {
-        var params: PluginConfigParam[] = [];
-        for (var i = 0; i < this.params.length; i++) {
-            let p: PluginConfigParam = this.params[i];
-            params.push(new PluginConfigParam(p.name, p.description, p.required, p.value, p.enumeration));
+        var properties: PluginConfigProp[] = [];
+        for (var i = 0; i < this.properties.length; i++) {
+            let p: PluginConfigProp = this.properties[i];
+            properties.push(new PluginConfigProp(p.name, p.description, p.required, p.value, p.enumeration));
         }
-        return new PluginConfiguration(this.shortName, this.type, this.editRequired, params);
+        return new PluginConfiguration(this.shortName, this.type, this.editRequired, properties);
+    }
+
+    public requireConfiguration(): boolean {
+        if (this.editRequired) {
+            for (var i = 0; i < this.properties.length; i++) {
+                if (this.properties[i].required && (this.properties[i].value == null || this.properties[i].value.trim() == "")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public getPropertiesAsMap(): { [key: string]: string } {
+        let map: { [key: string]: string } = {};
+        for (var i = 0; i < this.properties.length; i++) {
+            let value = this.properties[i].value;
+            if (value != null && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
+                value = undefined;
+            }
+            map[this.properties[i].name] = value;
+        }
+        return map;
+    }
+
+    public static parse(response: any): PluginConfiguration {
+        let props: PluginConfigProp[] = [];
+        for (var i = 0; i < response.properties.length; i++) {
+            let name = response.properties[i].name;
+            let description = response.properties[i].description;
+            let required = response.properties[i].required;
+            let value = response.properties[i].value;
+            let enumeration = response.properties[i].enumeration;
+            props.push(new PluginConfigProp(name, description, required, value, enumeration));
+        }
+        let stProps = new PluginConfiguration(response.shortName, response['@type'], response.editRequired, props);
+        return stProps;
     }
 }
 
-export class PluginConfigParam {
+export class PluginConfigProp {
     public name: string;
     public description: string;
     public required: boolean;
@@ -57,4 +94,5 @@ export class ExtensionPoint {
     public static RENDERING_ENGINE_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
     public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
     public static REPO_IMPL_CONFIGURER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
+    public static COLLABORATION_BACKEND_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.CollaborationBackend";
 }

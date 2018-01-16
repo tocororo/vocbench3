@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { PluginSpecification, PluginConfiguration, PluginConfigParam } from "../models/Plugins";
+import { PluginSpecification, PluginConfiguration, PluginConfigProp } from "../models/Plugins";
 import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
@@ -23,9 +23,9 @@ export class DatasetMetadataServices {
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
                 let extPointParamsJson: any[] = extPointSettingsJson.properties;
-                let extPointParams: PluginConfigParam[] = [];
+                let extPointParams: PluginConfigProp[] = [];
                 for (var i = 0; i < extPointParamsJson.length; i++) {
-                    let param: PluginConfigParam = new PluginConfigParam(
+                    let param: PluginConfigProp = new PluginConfigProp(
                         extPointParamsJson[i].name, 
                         extPointParamsJson[i].description, 
                         extPointParamsJson[i].required,
@@ -38,9 +38,9 @@ export class DatasetMetadataServices {
 
                 let pluginSettingsJson = stResp.pluginSettings;
                 let pluginParamsJson: any[] = pluginSettingsJson.properties;
-                let pluginParams: PluginConfigParam[] = [];
+                let pluginParams: PluginConfigProp[] = [];
                 for (var i = 0; i < pluginParamsJson.length; i++) {
-                    let param: PluginConfigParam = new PluginConfigParam(
+                    let param: PluginConfigProp = new PluginConfigProp(
                         pluginParamsJson[i].name, 
                         pluginParamsJson[i].description, 
                         pluginParamsJson[i].required,

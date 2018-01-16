@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DatasetMetadataServices } from "../../../../services/datasetMetadataServices";
 import { ExportServices } from "../../../../services/exportServices";
 import { PluginsServices } from "../../../../services/pluginsServices";
-import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification, ExtensionPoint } from "../../../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPoint } from "../../../../models/Plugins";
 import { RDFFormat } from "../../../../models/RDFFormat";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -69,8 +69,20 @@ export class MetadataVocabulariesComponent {
     }
 
     private saveSettings() {
-        var extPointProps: any = this.collectExtPointParams();
-        var pluginProps: any = this.collectPluginParams();
+        if (this.selectedExporterSettings.extensionPointSettings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
+                this.selectedExporterSettings.extensionPointSettings.shortName + ")", "warning");
+            return;
+        }
+        var extPointProps: any = this.selectedExporterSettings.extensionPointSettings.getPropertiesAsMap();
+
+        if (this.selectedExporterSettings.pluginSettings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
+                this.selectedExporterSettings.pluginSettings.shortName + ")", "warning");
+            return;
+        }
+        var pluginProps: any = this.selectedExporterSettings.pluginSettings.getPropertiesAsMap();
+
         this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
             stResp => {
                 this.basicModals.alert("Save settings", "Settings saved succesfully");
@@ -79,24 +91,31 @@ export class MetadataVocabulariesComponent {
     }
 
     private export() {
+        if (this.selectedExporterSettings.extensionPointSettings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
+                this.selectedExporterSettings.extensionPointSettings.shortName + ")", "warning");
+            return;
+        }
+        var extPointProps: any = this.selectedExporterSettings.extensionPointSettings.getPropertiesAsMap();
+
+        if (this.selectedExporterSettings.pluginSettings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
+                this.selectedExporterSettings.pluginSettings.shortName + ")", "warning");
+            return;
+        }
+        var pluginProps: any = this.selectedExporterSettings.pluginSettings.getPropertiesAsMap();
+
+
         //first set the exporter settings
-        var extPointProps: any = this.collectExtPointParams();
-        var pluginProps: any = this.collectPluginParams();
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
             stResp => {
                 //export the metadata
-                let configurationProperties: any = {}
-                //the following should be useless since all the exporter have no configuration params
-                for (var i = 0; i < this.selectedConfiguration.params.length; i++) {
-                    configurationProperties[this.selectedConfiguration.params[i].name] = this.selectedConfiguration.params[i].value;
-                }
                 let expoterSpecification: PluginSpecification = {
                     factoryId: this.selectedExporterPlugin.factoryID,
                     configType: this.selectedConfiguration.type,
-                    properties: configurationProperties
+                    properties: this.selectedConfiguration.getPropertiesAsMap()
                 }
-
                 this.metadataExporterService.export(expoterSpecification, this.selectedExportFormat).subscribe(
                     blob => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
@@ -106,37 +125,6 @@ export class MetadataVocabulariesComponent {
                 );
             }
         );
-    }
-
-    private collectExtPointParams(): any {
-        var extPointParams: PluginConfigParam[] = this.selectedExporterSettings.extensionPointSettings.params;
-        var extPointProps: any = {};
-        for (var i = 0; i < extPointParams.length; i++) {
-            if (extPointParams[i].required && extPointParams[i].value == null) {
-                this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
-                    this.selectedExporterSettings.extensionPointSettings.shortName + ")", "error");
-                return;
-            }
-            extPointProps[extPointParams[i].name] = extPointParams[i].value;
-        }
-        return extPointProps;
-    }
-
-    private collectPluginParams(): any {
-        var pluginParams: PluginConfigParam[] = this.selectedExporterSettings.pluginSettings.params;
-        var pluginProps: any = {};
-        for (var i = 0; i < pluginParams.length; i++) {
-            if (pluginParams[i].value == "") { //if user write then delete a value, the value is ""
-                pluginParams[i].value = undefined; //"clean" the value
-            }
-            if (pluginParams[i].required && pluginParams[i].value == null) {
-                this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
-                    this.selectedExporterSettings.pluginSettings.shortName + ")", "error");
-                return;
-            }
-            pluginProps[pluginParams[i].name] = pluginParams[i].value;
-        }
-        return pluginProps;
     }
 
 }

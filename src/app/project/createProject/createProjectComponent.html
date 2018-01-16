@@ -45,8 +45,8 @@
                             <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
                         </select>
                     </div>
-                    <div class="col-sm-offset-1 col-sm-1">
-                        <div class="checkbox">
+                    <div class="col-sm-4 text-center">
+                        <div class="checkbox-inline">
                             <label>
                                 <input type="checkbox" [(ngModel)]="history" name="history"> History
                             </label>
@@ -54,9 +54,7 @@
                                 title="Enable this to keep track of the changes made on the working graph">
                             </span>
                         </div>
-                    </div>
-                    <div class="col-sm-1">
-                        <div class="checkbox">
+                        <div class="checkbox-inline" style="margin-left: 20px;">
                             <label>
                                 <input type="checkbox" [(ngModel)]="validation" name="validation"> Validation
                             </label>
@@ -150,7 +148,7 @@
                             </div>
                             <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
                                 <div class="control-label col-sm-2" style="white-space: nowrap">
-                                    <span class="glyphicon glyphicon-info-sign" title="It is highly recommended not to use inference and to use a native repository"></span>
+                                    <span class="glyphicon glyphicon-info-sign" title="It is highly recommended not to use inference"></span>
                                     <label>Configuration</label>
                                 </div>
                                 <div class="col-sm-4">

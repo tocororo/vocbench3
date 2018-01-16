@@ -186,12 +186,8 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
      */
     private requireConfiguration(filterChainEl: FilterChainElement): boolean {
         var conf: PluginConfiguration = filterChainEl.selectedPlugin.selectedConfiguration;
-        if (conf != null && conf.editRequired) { //!= null required because selectedConfiguration could be not yet initialized
-            for (var i = 0; i < conf.params.length; i++) {
-                if (conf.params[i].required && (conf.params[i].value == null || conf.params[i].value.trim() == "")) {
-                    return true; //if at least one parameter is null => requires confiration
-                }
-            }
+        if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
+            return true;
         }
         return false;
     }
@@ -247,12 +243,7 @@ export class FilterChainElement {
             factoryId: this.selectedPlugin.plugin.factoryID,
             properties: null
         }
-        var filterProps: any = {};
-        var selectedConf: PluginConfiguration = this.selectedPlugin.selectedConfiguration;
-        for (var j = 0; j < selectedConf.params.length; j++) {
-            filterProps[selectedConf.params[j].name] = selectedConf.params[j].value;
-        }
-        filter.properties = filterProps;
+        filter.properties = this.selectedPlugin.selectedConfiguration.getPropertiesAsMap();
         filterStep.filter = filter;
         return filterStep;
     }

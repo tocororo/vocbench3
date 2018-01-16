@@ -11,6 +11,7 @@ import { ConfigAdministrationComponent } from "../administration/configAdministr
 import { ProjectsAdministrationComponent } from "../administration/projectsAdministration/projectsAdministrationComponent";
 import { ProjectUsersManagerComponent } from "../administration/projectsAdministration/projectUsersManagerComponent";
 import { ProjectSettingsComponent } from "../administration/projectsAdministration/projectSettingsComponent";
+import { CollaborationConfigComponent } from "../administration/projectsAdministration/collaborationConfigComponent";
 
 //modals
 import { UserProjBindingModal } from "../administration/projectsAdministration/userProjBindingModal";
@@ -25,7 +26,7 @@ import { adminRouting } from "../administration/administrationRoutes";
     declarations: [
         AdministrationComponent,
         UsersAdministrationComponent, RolesAdministrationComponent, ConfigAdministrationComponent, ProjectsAdministrationComponent,
-        ProjectUsersManagerComponent, ProjectSettingsComponent,
+        ProjectUsersManagerComponent, ProjectSettingsComponent, CollaborationConfigComponent,
         //modals
         UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal
     ],

@@ -16,7 +16,8 @@ export class ProjectsAdministrationComponent {
 
     private projUsersAspect: string = "Project-Users management";
     private projSettingsAspect: string = "Project settings";
-    private aspectSelectors: string[] = [this.projUsersAspect, this.projSettingsAspect];
+    private collaborationAspect: string = "Collaboration System";
+    private aspectSelectors: string[] = [this.projUsersAspect, this.projSettingsAspect, this.collaborationAspect];
     private selectedAspect = this.aspectSelectors[0];
 
     constructor(private projectService: ProjectServices) { }
@@ -42,7 +43,6 @@ export class ProjectsAdministrationComponent {
 
     private changeAspect(aspect: string) {
         this.selectedAspect = aspect;
-        // this.selectedProject = null;
     }
 
     private selectProject(project: Project) {

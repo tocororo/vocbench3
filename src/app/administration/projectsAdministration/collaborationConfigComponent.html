@@ -1,0 +1,77 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <div *ngIf="collSysSettings" class="subPanel vbox">
+            <div class="subPanel-heading">
+                <label>{{collSysSettings.shortName}}:</label>
+            </div>
+            <div class="subPanel-body" class="scrollableContainer">
+                <table class="table table-condensed table-borderless table-hoverable">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col>
+                        <col style="width: 1%;">
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let p of collSysSettings.properties">
+                            <td nowrap>
+                                {{p.name}}
+                                <span *ngIf="p.required">*</span>
+                            </td>
+                            <td>
+                                <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                    [(ngModel)]="p.value"></textarea>
+        
+                                <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                                    <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="collSysPreferences" class="subPanel vbox">
+            <div class="subPanel-heading">
+                <label>{{collSysPreferences.shortName}}:</label>
+            </div>
+            <div class="subPanel-body" class="scrollableContainer">
+                <table class="table table-condensed table-borderless table-hoverable">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col>
+                        <col style="width: 1%;">
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let p of collSysPreferences.properties">
+                            <td nowrap>
+                                {{p.name}}
+                                <span *ngIf="p.required">*</span>
+                            </td>
+                            <td>
+                                <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                    [(ngModel)]="p.value"></textarea>
+        
+                                <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                                    <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-footer">
+        <button class="btn btn-sm btn-default pull-right" (click)="activate()" [disabled]="!isConfigured()">Activate Collaboration System</button>
+        <span class="clearfix"></span>
+    </div>
+</div>

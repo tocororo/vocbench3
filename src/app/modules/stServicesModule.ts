@@ -7,6 +7,7 @@ import { AlignmentServices } from "../services/alignmentServices";
 import { AuthServices } from "../services/authServices";
 import { ClassesServices } from "../services/classesServices";
 import { CODAServices } from "../services/codaServices";
+import { CollaborationServices } from "../services/collaborationServices";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { ExportServices } from "../services/exportServices";
@@ -45,6 +46,7 @@ import { VersionsServices } from "../services/versionsServices";
         AuthServices,
         ClassesServices,
         CODAServices,
+        CollaborationServices,
         CustomFormsServices,
         DatasetMetadataServices,
         ExportServices,

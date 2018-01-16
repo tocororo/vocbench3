@@ -3,7 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { PluginsServices } from "../../../services/pluginsServices";
 import { Repository, RemoteRepositoryAccessConfig, RepositoryAccess, RepositoryAccessType, BackendTypesEnum } from "../../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigParam, PluginSpecification, ExtensionPoint } from "../../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPoint } from "../../../models/Plugins";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
@@ -112,7 +112,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     private configureRepo() {
         this.sharedModals.configurePlugin(this.selectedRepoConf.configuration).then(
             (config: any) => {
-                this.selectedRepoConf.configuration.params = (<PluginConfiguration>config).params;
+                this.selectedRepoConf.configuration.properties = (<PluginConfiguration>config).properties;
             },
             () => {}
         );
@@ -142,17 +142,13 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         }
         //valid repo configuration (in case of repo creation mode)
         if (this.isSelectedRepoAccessCreateMode()) {
-            let repoConfigParams: PluginConfigParam[] = this.selectedRepoConf.configuration.params;
-            if (this.selectedRepoConf.configuration.editRequired) {
-                //check if every required configuration parameters are not null
-                for (var i = 0; i < repoConfigParams.length; i++) {
-                    if (repoConfigParams[i].required && repoConfigParams[i].value == null) {
-                        this.basicModals.alert("Missing configuration", "Required parameter(s) missing in repository configuration (" +
-                            this.selectedRepoConf.configuration.shortName +")", "error");
-                        return;
-                    }
-                }
+            let repoConfigParams: PluginConfigProp[] = this.selectedRepoConf.configuration.properties;
+            if (this.selectedRepoConf.configuration.requireConfiguration()) {
+                this.basicModals.alert("Missing configuration", "Required parameter(s) missing in repository configuration (" +
+                    this.selectedRepoConf.configuration.shortName +")", "error");
+                return;
             }
+            
         }
 
 
@@ -176,17 +172,11 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
             returnedData.backendType = this.selectedRepoBackendType;
         } else { //prepare config of repo only if it is in creation mode
             var repoConfigPluginSpecification: PluginSpecification;
-            var repoProps: any = {};
-            let repoConfigParams: PluginConfigParam[] = this.selectedRepoConf.configuration.params;
-            for (var i = 0; i < repoConfigParams.length; i++) {
-                repoProps[repoConfigParams[i].name] = repoConfigParams[i].value;
-            }
             repoConfigPluginSpecification = {
                 factoryId: this.selectedRepoConf.factoryID,
                 configType: this.selectedRepoConf.configuration.type,
-                properties: repoProps
+                properties: this.selectedRepoConf.configuration.getPropertiesAsMap()
             }
-            
             returnedData.repoConfigurerSpecification = repoConfigPluginSpecification;
         }
         event.stopPropagation();
