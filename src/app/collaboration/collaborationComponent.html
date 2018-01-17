@@ -1,0 +1,34 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading" style="display: flex;">
+        <label style="flex: 1">Collaboration System</label>
+        <!-- This should be allowed only to project manager and admin -->
+        <button class="btn btn-default btn-xs" (click)="openConfig()">
+            <span class="glyphicon glyphicon-cog"></span>
+        </button>
+    </div>
+    
+    <div class="panel-body vbox">
+
+        <!-- Alert if the user is admin or PM and the CS is no configured (no serverURL set) -->
+        <div class="alert alert-warning" style="margin: 3px;">
+            No Collaboration System has been configured. Please, configure a CS pushing the 
+            <span class="glyphicon glyphicon-cog"></span> button in the top right corner.
+        </div>
+
+        <!-- Alert if the user is not logged -->
+        <div class="alert alert-warning" style="margin: 3px;">
+            You need to be logged to the CS in order to see the issues list.
+        </div>
+
+        <!-- Show this only if no project is linked (how to know this?) and if the user has authorization (Admin or PM) -->
+        <div class="alert alert-warning" style="margin: 3px;">
+            There is no CS project assigned to this Vocbench project.
+            <a style="cursor: pointer" (click)="createProject()">Create</a> a new project or 
+            <a style="cursor: pointer" (click)="assignProject()">assign</a> an existing one.
+        </div>
+
+        <!-- Here issues list -->
+
+    </div>
+    
+</div>

@@ -16,8 +16,7 @@ export class ProjectsAdministrationComponent {
 
     private projUsersAspect: string = "Project-Users management";
     private projSettingsAspect: string = "Project settings";
-    private collaborationAspect: string = "Collaboration System";
-    private aspectSelectors: string[] = [this.projUsersAspect, this.projSettingsAspect, this.collaborationAspect];
+    private aspectSelectors: string[] = [this.projUsersAspect, this.projSettingsAspect];
     private selectedAspect = this.aspectSelectors[0];
 
     constructor(private projectService: ProjectServices) { }

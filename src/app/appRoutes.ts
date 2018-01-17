@@ -11,6 +11,7 @@ import { HistoryComponent } from "./historyValidation/historyComponent";
 import { ValidationComponent } from "./historyValidation/validationComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
 import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
+import { CollaborationComponent } from './collaboration/collaborationComponent';
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
 import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
@@ -34,6 +35,7 @@ export const routes: Routes = [
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration/:firstAccess", component: RegistrationComponent }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent },

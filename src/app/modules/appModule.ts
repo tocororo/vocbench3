@@ -37,6 +37,7 @@ import { HomeComponent } from "../homeComponent";
 import { DataComponent } from "../data/dataComponent";
 import { SparqlComponent } from "../sparql/sparqlComponent";
 import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
+import { CollaborationComponent } from "../collaboration/collaborationComponent";
 import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
@@ -69,6 +70,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
             DataComponent,
             SparqlComponent,
             AlignmentValidationComponent,
+            CollaborationComponent,
             LoadDataComponent,
             ExportDataComponent,
             RefactorComponent,

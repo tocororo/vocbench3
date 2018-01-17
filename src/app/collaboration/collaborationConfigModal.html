@@ -1,0 +1,86 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Collaboration System configuration
+    </h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh">
+
+    <div *ngIf="collSysSettings" class="subPanel vbox">
+        <div class="subPanel-heading">
+            <label>{{collSysSettings.shortName}}:</label>
+        </div>
+        <div class="subPanel-body" class="scrollableContainer">
+            <table class="table table-condensed table-borderless table-hoverable">
+                <colgroup>
+                    <col style="width: 1%;">
+                    <col>
+                    <col style="width: 1%;">
+                </colgroup>
+                <tbody>
+                    <tr *ngFor="let p of collSysSettings.properties">
+                        <td nowrap>
+                            {{p.name}}
+                            <span *ngIf="p.required">*</span>
+                        </td>
+                        <td>
+                            <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                [(ngModel)]="p.value"></textarea>
+    
+                            <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                                <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="collSysPreferences" class="subPanel vbox">
+        <div class="subPanel-heading">
+            <label>{{collSysPreferences.shortName}}:</label>
+        </div>
+        <div class="subPanel-body" class="scrollableContainer">
+            <div class="alert alert-warning" style="margin: 3px;">
+                <span class="glyphicon glyphicon-warning-sign" style="margin-right: 4px;"></span>
+                Warning: the credentials are stored wihtout encryption on the server.
+                Be aware that the system administration could be able to see them.
+            </div>
+            <table class="table table-condensed table-borderless table-hoverable">
+                <colgroup>
+                    <col style="width: 1%;">
+                    <col>
+                    <col style="width: 1%;">
+                </colgroup>
+                <tbody>
+                    <tr *ngFor="let p of collSysPreferences.properties">
+                        <td nowrap>
+                            {{p.name}}
+                            <span *ngIf="p.required">*</span>
+                        </td>
+                        <td>
+                            <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                [(ngModel)]="p.value"></textarea>
+    
+                            <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                                <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <span class="pull-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -14,13 +14,11 @@ export class CollaborationServices {
     /**
      * Gets the settings to be set to the collaboration backend (mainly the serverURL)
      * @param backendId
-     * @param projectName
      */
-    getProjectSettings(backendId: string, projectName: string): Observable<PluginConfiguration> {
+    getProjectSettings(backendId: string): Observable<PluginConfiguration> {
         console.log("[CollaborationServices] getProjectSettings");
         var params: any = {
             backendId: backendId,
-            projectName: projectName
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true).map(
             stResp => {
@@ -32,13 +30,11 @@ export class CollaborationServices {
     /**
      * Gets the preferences to be set to the collaboration backend (likely username and password)
      * @param backendId
-     * @param projectName
      */
-    getProjectPreferences(backendId: string, projectName: string): Observable<PluginConfiguration> {
+    getProjectPreferences(backendId: string): Observable<PluginConfiguration> {
         console.log("[CollaborationServices] getProjectPreferences");
         var params: any = {
             backendId: backendId,
-            projectName: projectName
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true).map(
             stResp => {
@@ -53,11 +49,10 @@ export class CollaborationServices {
      * @param projectSettings 
      * @param currentUserPreferences 
      */
-    activateCollaboratioOnProject(backendId: string, projectName: string, projectSettings: any, currentUserPreferences: any) {
+    activateCollaboratioOnProject(backendId: string, projectSettings: any, currentUserPreferences: any) {
         console.log("[CollaborationServices] activateCollaboratioOnProject");
         var params: any = {
             backendId: backendId,
-            projectName: projectName,
             projectSettings: JSON.stringify(projectSettings),
             currentUserPreferences: JSON.stringify(currentUserPreferences)
         };
@@ -82,42 +77,42 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "createIssue", params, true);
     }
 
-    assignProject(collaborationProjectName: string, projectKey: string, projectId?: string) {
+    assignProject(projectName: string, projectKey: string, projectId?: string) {
         console.log("[CollaborationServices] assignProject");
         var params: any = {
-            collaborationProjectName: collaborationProjectName,
+            projectName: projectName,
             projectKey: projectKey,
         };
         if (projectId != undefined) {
             params.projectId = projectId;
         }
         return this.httpMgr.doPost(this.serviceName, "assignProject", params, true);
-	}
+    }
 
-	createProject(collaborationProjectName: string, projectKey: string) {
+    createProject(projectName: string, projectKey: string) {
         console.log("[CollaborationServices] createProject");
         var params: any = {
-            collaborationProjectName: collaborationProjectName,
+            projectName: projectName,
             projectKey: projectKey
         };
         return this.httpMgr.doPost(this.serviceName, "createProject", params, true);
-	}
+    }
 
-	assignResourceToIssue(issue: string, resource: ARTURIResource) {
+    assignResourceToIssue(issue: string, resource: ARTURIResource) {
         console.log("[CollaborationServices] assignResourceToIssue");
         var params: any = {
             issue: issue,
             resource: resource
         };
         return this.httpMgr.doPost(this.serviceName, "assignResourceToIssue", params, true);
-	}
+    }
 
-	listIssuesAssignedToResource(resource: ARTURIResource) {
+    listIssuesAssignedToResource(resource: ARTURIResource) {
         console.log("[CollaborationServices] listIssuesAssignedToResource");
         var params: any = {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, true);
-	}
+    }
 
 }
