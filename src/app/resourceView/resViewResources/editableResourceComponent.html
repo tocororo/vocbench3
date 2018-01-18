@@ -5,8 +5,12 @@
             <span>&#9662;</span>
         </button>
         <ul class="dropdown-menu">
-            <li *ngIf="!isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }"><a (click)="edit()">Edit</a></li>
-            <li *ngIf="isPlainLiteral" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }"><a (click)="editPlainLiteral()">Edit literal content</a></li>
+            <!-- Edit menu item -->
+            <li [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+                <a *ngIf="isXLabel" (click)="editLiteral()">Edit literal content</a>
+                <a *ngIf="isPlainLiteral" (click)="editLiteral()">Edit</a>
+                <a *ngIf="!isPlainLiteral && !isXLabel" (click)="edit()">Edit</a>
+            </li>
 
             <li *ngIf="resource.isResource()" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
                 <a (click)="replace()">Replace with existing resource</a>

@@ -153,6 +153,9 @@ export class ProjectComponent implements OnInit {
                         VBContext.setProjectUserBinding(puBinding);
                     }
                 );
+            },
+            (err: Error) => {
+                this.projectService.handleMissingChangetrackierSailError(err, this.basicModals);
             }
         );
     }

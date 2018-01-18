@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
 import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum } from '../models/Project';
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginSpecification } from '../models/Plugins';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 
 @Injectable()
 export class ProjectServices {
@@ -104,7 +105,13 @@ export class ProjectServices {
             requestedAccessLevel: "RW",
             requestedLockLevel: "NO"
         };
-        return this.httpMgr.doPost(this.serviceName, "accessProject", params, true);
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "accessProject", params, true, options);
     }
 
     /**
@@ -161,7 +168,13 @@ export class ProjectServices {
         if (modificationDateProperty != undefined) {
             params.modificationDateProperty = modificationDateProperty;
         }
-        return this.httpMgr.doPost(this.serviceName, "createProject", params, true);
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "createProject", params, true, options);
     }
 
     /**
@@ -311,6 +324,26 @@ export class ProjectServices {
             lockLevel: lockLevel,
         };
         return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params, true);
+    }
+
+    /**
+     * Method useful to handle the exception about missing st-changetracking-sail.jar in the triple store.
+     * This Exception could be thrown by two services: accessProject() and createProject().
+     * @param error 
+     * @param basicModals 
+     */
+    public handleMissingChangetrackierSailError(error: Error, basicModals: BasicModalServices) {
+        if (
+            error.name.endsWith("ProjectAccessException") && 
+            error.message.includes("Unsupported Sail type: http://semanticturkey.uniroma2.it/sail/changetracker")
+        ) {
+            let message = "The changetracker sail, required for history and validation, " + 
+                "is reported to be missing from the triple store; please contact the administrator in order to " + 
+                "have the st-changetracking-sail.jar bundle deployed within the triple store connected for this project";
+            basicModals.alert("Error", message, "error", error.name + ": " + error.message);
+        } else {
+            basicModals.alert("Error", error.message, "error", error.name);
+        }
     }
 
 }

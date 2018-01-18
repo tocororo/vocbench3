@@ -77,6 +77,10 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                     }
                 );
             }
+            /**
+             * here don't handle the exception thrown for missing changetracker sail since this modal shows only
+             * the open projects, so accessProject() doesn't open a project but simply accesses it.
+             */ 
         );
     }
 

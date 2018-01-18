@@ -348,7 +348,7 @@ export class CreateProjectComponent {
         var coreRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) { 
-            //check if data repository configuration need to be configured
+            //check if data repository configuration needs to be configured
 
             if (this.selectedDataRepoConf.configuration.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
@@ -370,7 +370,7 @@ export class CreateProjectComponent {
         var supportRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
-            //check if support repository configuration need to be configured
+            //check if support repository configuration needs to be configured
             if (this.selectedSupportRepoConf.configuration.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConf.configuration.shortName 
@@ -400,7 +400,7 @@ export class CreateProjectComponent {
          */
         var uriGeneratorSpecification: PluginSpecification;
         if (!this.uriGenUseDefaultSetting) {
-            //check if uriGenerator plugin need to be configured
+            //check if uriGenerator plugin needs to be configured
             if (this.selectedUriGenPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName 
@@ -420,7 +420,7 @@ export class CreateProjectComponent {
          */
         var renderingEngineSpecification: PluginSpecification;
         if (!this.rendEngUseDefaultSetting) {
-            //check if uriGenerator plugin need to be configured
+            //check if uriGenerator plugin needs to be configured
             if (this.selectedRendEngPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName 
@@ -462,6 +462,9 @@ export class CreateProjectComponent {
                 this.basicModals.alert("Create project", "Project created successfully").then(
                     () => this.router.navigate(['/Projects'])
                 );
+            },
+            (err: Error) => {
+                this.projectService.handleMissingChangetrackierSailError(err, this.basicModals);
             }
         );
     }

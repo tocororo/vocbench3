@@ -245,7 +245,7 @@ export class ExportDataComponent {
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
                 this.basicModals.alert("Missing filter configuration", "An export filter ("
-                    + this.filtersChain[i].selectedPlugin.plugin.factoryID + ") need to be configured", "warning");
+                    + this.filtersChain[i].selectedPlugin.plugin.factoryID + ") needs to be configured", "warning");
                 return;
             }
         }

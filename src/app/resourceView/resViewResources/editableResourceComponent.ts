@@ -46,6 +46,7 @@ export class EditableResourceComponent {
 
 	private isClassAxiom: boolean = false;
 	private isPlainLiteral: boolean = false;
+	private isXLabel: boolean = false;
 
 	private editMenuDisabled: boolean = false;
 	private isInferred: boolean = false;
@@ -61,10 +62,9 @@ export class EditableResourceComponent {
 		private vbProp: VBProperties) { }
 
 	ngOnInit() {
-		this.isPlainLiteral = (
-			(this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) || 
-			this.resource.getRole() == RDFResourceRolesEnum.xLabel
-		);
+		this.isPlainLiteral = this.resource instanceof ARTLiteral && this.resource.getDatatype() == null;
+
+		this.isXLabel = this.resource.getRole() == RDFResourceRolesEnum.xLabel;
 
 		/**
 		 * Determines if the menu items about xlabels should be visible.
@@ -99,42 +99,46 @@ export class EditableResourceComponent {
 				ok => { this.update.emit(); },
 				() => {}
 			);
-			return;
 		}
-		if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
-			this.propService.getRange(this.predicate).subscribe(
-				range => {
-					this.ranges = range.ranges;
-					/**
-					 * special case:
-					 * if range is typed literal and range ha restriction (datarange or datatype), allow to edit only with enumeration of datarange
-					 */
-					if (this.ranges != null && this.ranges.type == RDFTypesEnum.typedLiteral) {
-						if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
-							this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(),
-								this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
-								newValue => {
-									this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
-								},
-								() => { }
-							);
+		else {
+			if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
+				this.propService.getRange(this.predicate).subscribe(
+					range => {
+						this.ranges = range.ranges;
+						/**
+						 * special case:
+						 * if range is typed literal and range ha restriction (datarange or datatype), allow to edit only with enumeration of datarange
+						 */
+						if (this.ranges != null && this.ranges.type == RDFTypesEnum.typedLiteral) {
+							if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
+								this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(),
+									this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
+									newValue => {
+										this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+									},
+									() => { }
+								);
+							}
+						} else {
+							this.computeResourceStringValue();
+							this.editInProgress = true;
 						}
-					} else {
-						this.computeResourceStringValue();
-						this.editInProgress = true;
 					}
-				}
-			);
-		} else {
-			this.computeResourceStringValue();
-			this.editInProgress = true;
+				);
+			} else {
+				this.computeResourceStringValue();
+				this.editInProgress = true;
+			}
 		}
 	}
 
-	private editPlainLiteral() {
+	/**
+	 * Edits both plain literal and literal form of xlabel
+	 */
+	private editLiteral() {
 		if (this.resource instanceof ARTLiteral) {
 			this.resourceStringValue = this.resource.getValue();
-		} else if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
+		} else if (this.isXLabel) {
 			this.resourceStringValue = this.resource.getShow()
 		}
 		this.resourceStringValuePristine = this.resourceStringValue;
@@ -176,15 +180,12 @@ export class EditableResourceComponent {
 	private confirmEdit() {
 		if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
 			if (this.isPlainLiteral) {
-				let newValue: ARTLiteral;
-				if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
-					let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-					let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-					this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
-				} else if (this.resource instanceof ARTLiteral) {
-					newValue = new ARTLiteral(this.resourceStringValue, null, this.resource.getLang());
-					this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
-				}
+				let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
+				this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+			} else if (this.isXLabel) {
+				let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+				let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+				this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
 			} else {
 				try {
 					let newValue: ARTNode;

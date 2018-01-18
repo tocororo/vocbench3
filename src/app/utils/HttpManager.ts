@@ -448,9 +448,7 @@ export class HttpManager {
             let errorMsg = err.statusText != null ? err.statusText : "Unknown response from the server";
             error.name = "ServerError";
             error.message = errorMsg;
-            this.basicModals.alert("Error", errorMsg, "error", err._body).then(
-                (result: any) => {}
-            )
+            this.basicModals.alert("Error", errorMsg, "error", err._body);
         } else if (err instanceof Error) { //err is already an Error (parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler)
             error = err;
             if (errorAlertOpt.show) { //if the alert should be shown
