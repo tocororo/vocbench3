@@ -2,8 +2,9 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { PluginsServices } from "../services/pluginsServices";
-import { Plugin, PluginConfiguration, ExtensionPoint } from "../models/Plugins";
 import { CollaborationServices } from "../services/collaborationServices";
+import { Plugin, PluginConfiguration, ExtensionPoint } from "../models/Plugins";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "collaboration-config-modal",
@@ -18,18 +19,22 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     private collSysSettings: PluginConfiguration;
     private collSysPreferences: PluginConfiguration;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private pluginService: PluginsServices, private collaborationService: CollaborationServices) {
+    constructor(public dialog: DialogRef<BSModalContext>, private pluginService: PluginsServices, 
+        private collaborationService: CollaborationServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.pluginService.getAvailablePlugins(ExtensionPoint.COLLABORATION_BACKEND_ID).subscribe(
-            plugins => {
-                this.availableCollaborationPlugins = plugins;
-                this.selectedPlugin = this.availableCollaborationPlugins[0];
-                this.initCollaborationSystemConf();
-            }
-        );
+        //the following is currently not used since there is only one implementation of collaboration ExtPoint
+        // this.pluginService.getAvailablePlugins(ExtensionPoint.COLLABORATION_BACKEND_ID).subscribe(
+        //     plugins => {
+        //         this.availableCollaborationPlugins = plugins;
+        //         this.selectedPlugin = this.availableCollaborationPlugins[0];
+        //         this.initCollaborationSystemConf();
+        //     }
+        // );
+        this.selectedPlugin = new Plugin("it.uniroma2.art.semanticturkey.plugin.impls.collaboration.JiraBackendFactory");
+        this.initCollaborationSystemConf();
 
     }
 

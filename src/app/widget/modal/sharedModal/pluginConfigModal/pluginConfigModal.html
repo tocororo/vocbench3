@@ -19,12 +19,23 @@
                         <span *ngIf="p.required">*</span>
                     </td>
                     <td>
-                        <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
-                            [(ngModel)]="p.value"></textarea>
-
-                        <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                        <select *ngIf="p.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="p.value">
                             <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
                         </select>
+                        <ng-template #notEnumerationBlock>
+                            <div *ngIf="p.type == 'boolean'; else notBooleanBlock" class="input-sm form-control text-center">
+                                <label class="radio-inline">
+                                    <input type="radio" (click)="p.value='true'" [name]="'radio_'+p.name" [checked]="p.value=='true'">true
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" (click)="p.value='false'" [name]="'radio_'+p.name" [checked]="p.value=='false'">false
+                                </label>
+                            </div>
+                            <ng-template #notBooleanBlock>
+                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
+                                </textarea>
+                            </ng-template>
+                        </ng-template>
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>

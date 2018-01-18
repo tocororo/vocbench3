@@ -71,6 +71,7 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
 import { ExportResultAsRdfModal } from "../sparql/exportResultAsRdfModal";
 
 import { CollaborationConfigModal } from "../collaboration/collaborationConfigModal";
+import { CollaborationProjectModal } from "../collaboration/collaborationProjectModal";
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -86,7 +87,8 @@ import { CollaborationConfigModal } from "../collaboration/collaborationConfigMo
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
-        ExportResultAsRdfModal, CollaborationConfigModal
+        ExportResultAsRdfModal,
+        CollaborationConfigModal, CollaborationProjectModal
     ],
     exports: [],
     providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices],
@@ -109,7 +111,8 @@ import { CollaborationConfigModal } from "../collaboration/collaborationConfigMo
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        ExportResultAsRdfModal, CollaborationConfigModal
+        ExportResultAsRdfModal, 
+        CollaborationConfigModal, CollaborationProjectModal
     ]
 })
 export class VBModalModule { }

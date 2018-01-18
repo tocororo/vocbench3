@@ -24,7 +24,7 @@ export class PluginConfiguration {
         var properties: PluginConfigProp[] = [];
         for (var i = 0; i < this.properties.length; i++) {
             let p: PluginConfigProp = this.properties[i];
-            properties.push(new PluginConfigProp(p.name, p.description, p.required, p.value, p.enumeration));
+            properties.push(new PluginConfigProp(p.name, p.description, p.required, p.value, p.enumeration, p.type));
         }
         return new PluginConfiguration(this.shortName, this.type, this.editRequired, properties);
     }
@@ -60,7 +60,8 @@ export class PluginConfiguration {
             let required = response.properties[i].required;
             let value = response.properties[i].value;
             let enumeration = response.properties[i].enumeration;
-            props.push(new PluginConfigProp(name, description, required, value, enumeration));
+            let type = response.properties[i].type;
+            props.push(new PluginConfigProp(name, description, required, value, enumeration, type));
         }
         let stProps = new PluginConfiguration(response.shortName, response['@type'], response.editRequired, props);
         return stProps;
@@ -73,12 +74,14 @@ export class PluginConfigProp {
     public required: boolean;
     public value: any;
     public enumeration: string[];
-    constructor (name: string, description: string, required: boolean, value?: any, enumeration?: string[]) {
+    public type: string;
+    constructor (name: string, description: string, required: boolean, value?: any, enumeration?: string[], type?: string) {
         this.description = description;
         this.name = name;
         this.required = required;
         this.value = value;
         this.enumeration = enumeration;
+        this.type = type;
     }
 }
 

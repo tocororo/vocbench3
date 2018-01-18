@@ -115,4 +115,10 @@ export class CollaborationServices {
         return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, true);
     }
 
+    listProjects(): Observable<{ id: string, key: string, name: string }[]> {
+        console.log("[CollaborationServices] listProjects");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params, true);
+    }
+
 }

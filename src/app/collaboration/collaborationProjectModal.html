@@ -1,0 +1,50 @@
+<div class="blockingDivHost">
+
+    <div class="modal-header">
+        <h3 class="modal-title">
+            Collaboration System projects
+        </h3>
+    </div>
+    <div class="modal-body" style="max-height: 70vh;">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <label style="flex: 1">Projects:</label>
+                <button class="btn btn-xs btn-default">
+                    <span class="glyphicon glyphicon-plus" (click)="createProject()"></span>
+                </button>
+            </div>
+            <div class="panel-body scrollableContainer" style="min-height: 70px;">
+                <table class="table table-condensed table-borderless table-hoverable">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Key</th>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{ active : p == selectedProject }">
+                            <td class="text-center">{{p.key}}</td>
+                            <td class="text-center">{{p.id}}</td>
+                            <td class="text-center">{{p.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    </div>
+
+    <div #blockDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>
