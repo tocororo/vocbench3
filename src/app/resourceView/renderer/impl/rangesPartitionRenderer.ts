@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
@@ -90,51 +91,98 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else {
-            /**
-             * An object in this partition could be:
-             * - Class (type: URI, role: cls)
-             * - Datatype (type: URI, role: individual)
-             * - Manchester expression (type: BNode, role: cls)
-             * - DataRange (type: BNode, role: dataRange)
-             */
-            if (object instanceof ARTBNode) { //object is manchExpr or dataRange
-                if (object.getRole() == RDFResourceRolesEnum.dataRange) {
-                    this.propService.removeDataranges(<ARTURIResource>this.resource, object).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //role cls => manchester expression or simple class
-                    this.manchService.isClassAxiom(object).subscribe(
-                        isClassAxiom => {
-                            if (isClassAxiom) {
-                                this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
-                                    stResp => this.update.emit(null)
-                                );
-                            } else {
-                                this.removeRangeClass(predicate, object);
+        /**
+         * An object in this partition could be:
+         * - Class (type: URI, role: cls)
+         * - Datatype (type: URI, role: individual)
+         * - Manchester expression (type: BNode, role: cls)
+         * - DataRange (type: BNode, role: dataRange)
+         */
+        if (object instanceof ARTBNode) { //object is manchExpr or dataRange
+            if (object.getRole() == RDFResourceRolesEnum.dataRange) {
+                this.propService.removeDataranges(<ARTURIResource>this.resource, object).subscribe(
+                    stResp => this.update.emit(null)
+                );
+            } else { //role cls => manchester expression or simple class
+                this.manchService.isClassAxiom(object).subscribe(
+                    isClassAxiom => {
+                        if (isClassAxiom) {
+                            this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else {
+                            this.getRemoveFunction(predicate, object).subscribe(
+                                stResp => this.update.emit()
+                            )
+                        }
+                    }
+                );
+            }
+        } else { //object instanceof ARTURIResource => object is class or datatype
+            this.getRemoveFunction(predicate, object).subscribe(
+                stResp => this.update.emit()
+            )
+        }
+    }
+
+    //@override
+    removeAllValues(predicate: ARTURIResource) {
+        for (var i = 0; i < this.predicateObjectList.length; i++) {
+            let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
+            //collects all the suspicious class axioms, namely the range that are BNode
+            let suspClassAxioms: ARTBNode[] = [];
+            let notClassAxioms: ARTURIResource[] = [];
+            for (var j = 0; j < objList.length; j++) {
+                let object = objList[j];
+                if (object instanceof ARTBNode) {
+                    suspClassAxioms.push(object);
+                } else {
+                    notClassAxioms.push(<ARTURIResource>object);
+                }
+            }
+            if (suspClassAxioms.length > 0) { //there is at least a bnode, check if it is a class axiom
+                //collects the functions to do the checks
+                let isClassAxiomFnArray: any[] = [];
+                for (var j = 0; j < suspClassAxioms.length; j++) {
+                    isClassAxiomFnArray.push(this.manchService.isClassAxiom(suspClassAxioms[j]));
+                }
+                let removeFnArray: any[] = [];
+                //collects the remove function for all the not class axioms ranges
+                for (var j = 0; j < notClassAxioms.length; j++) {
+                    removeFnArray.push(this.getRemoveFunction(predicate, notClassAxioms[j]));
+                }
+                //collects remove function for all the suspicious class axioms ranges
+                Observable.forkJoin(isClassAxiomFnArray).subscribe(
+                    results => {
+                        for (var j = 0; j < results.length; j++) {
+                            if (results[j]) { //is class axiom
+                                removeFnArray.push(this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, suspClassAxioms[j]));
+                            } else { //not a class axiom
+                                removeFnArray.push(this.getRemoveFunction(predicate, suspClassAxioms[j]));
                             }
                         }
-                    );
+                        this.removeAllRicursively(removeFnArray);
+                    }
+                )
+            } else { //all range are IRI, there's no need to check for class axioms
+                let removeFnArray: any[] = [];
+                for (var j = 0; j < objList.length; j++) {
+                    removeFnArray.push(this.getRemoveFunction(predicate, objList[j]));
                 }
-            } else { //object instanceof ARTURIResource => object is class or datatype
-                this.removeRangeClass(predicate, <ARTResource>object);
+                this.removeAllRicursively(removeFnArray);
             }
         }
     }
 
-    private removeRangeClass(predicate: ARTURIResource, object: ARTResource) {
-        if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdfs:range relation
-            this.propService.removePropertyRange(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else { //removing subProperty of rdfs:range
-            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
+        } else {
+            if (this.rootProperty.getURI() == predicate.getURI()) { //removing rdfs:range relation
+                return this.propService.removePropertyRange(<ARTURIResource>this.resource, <ARTURIResource>object);
+            } else { //removing subProperty of rdfs:range
+                return this.resourcesService.removeValue(this.resource, predicate, object);
+            }
         }
     }
 

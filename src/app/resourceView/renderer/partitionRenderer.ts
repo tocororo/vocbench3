@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "partition-renderer",
@@ -20,7 +22,11 @@ export abstract class PartitionRenderer {
     @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    constructor() { }
+    protected basicModals: BasicModalServices;
+
+    constructor(basicModals: BasicModalServices) {
+        this.basicModals = basicModals;
+    }
 
     /**
      * ATTRIBUTES
@@ -72,11 +78,64 @@ export abstract class PartitionRenderer {
      * @param predicate property to enrich.
      */
     abstract add(predicate?: ARTURIResource): void;
+
+    /**
+     * Listener of remove event. If object is passed with the event remove just that object, otherwise remove all the values
+     * @param predicate 
+     * @param object 
+     */
+    private removeHandler(predicate: ARTURIResource, object?: ARTNode) {
+        if (object == null) {
+            this.basicModals.confirm("Delete all values", "You are deleting all the " + predicate.getShow() + " values. Are you sure?", "warning").then(
+                yes => this.removeAllValues(predicate),
+                no => {}
+            )
+        } else {
+            this.removePredicateObject(predicate, object);
+        }
+    }
+    /**
+     * Removes all the objects of the predicate-objects list
+     * @param predicate 
+     */
+    removeAllValues(predicate: ARTURIResource) {
+        let removeFnArray: any[] = [];
+        for (var i = 0; i < this.predicateObjectList.length; i++) {
+            let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
+            for (var j = 0; j < objList.length; j++) {
+                let object = objList[j];
+                removeFnArray.push(this.getRemoveFunction(predicate, object));
+            }
+        }
+        this.removeAllRicursively(removeFnArray);
+    }
     /**
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
      */
     abstract removePredicateObject(predicate: ARTURIResource, object: ARTNode): void;
+    /**
+     * Based on the predicate and the object, returns the remove function to invoke
+     * @param predicate 
+     * @param object 
+     */
+    abstract getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any>
+    /**
+     * Calls all the remove functions collected in removeAllValues
+     * @param removeFnArray 
+     */
+    removeAllRicursively(removeFnArray: any[]) {
+        removeFnArray[0].subscribe(
+            (stResp: any) => {
+                removeFnArray.shift();
+                if (removeFnArray.length > 0) {
+                    this.removeAllRicursively(removeFnArray);
+                } else {
+                    this.update.emit();
+                }
+            }
+        );
+    }
     
     /**
      * When the object is edited or replaced requires update of res view

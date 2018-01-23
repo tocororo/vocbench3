@@ -121,4 +121,10 @@ export class CollaborationServices {
         return this.httpMgr.doGet(this.serviceName, "listProjects", params, true);
     }
 
+    listIssues() {
+        console.log("[CollaborationServices] listIssues");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listIssues", params, true);
+    }
+
 }

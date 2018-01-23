@@ -50,7 +50,10 @@ export abstract class AbstractTreeNode extends AbstractNode {
             this.node.deleteAdditionalProperty(ResAttribute.NEW);
         }
         //in case of node initialized after switching on the "showDeprecated" and the node was expanded
-        if (this.node.getAdditionalProperty(ResAttribute.CHILDREN).length > 0) {
+        if (
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN) != null && 
+            this.node.getAdditionalProperty(ResAttribute.CHILDREN).length > 0
+        ) {
             setTimeout(() => this.open = true);
         }
     }

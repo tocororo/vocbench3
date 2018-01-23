@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
@@ -40,10 +41,11 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         RDFS.label.getURI()
     ];
 
-    constructor(private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private resourceService: ResourcesServices, private resViewService: ResourceViewServices, private basicModals: BasicModalServices,
+    constructor(basicModals: BasicModalServices,
+        private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
+        private resourceService: ResourcesServices, private resViewService: ResourceViewServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
-        super();
+        super(basicModals);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -183,58 +185,34 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else {
-            //if it is removing a value about a root property, call the specific method
-            if (this.isKnownProperty(predicate)) {
-                this.removeObjectForRootProperty(predicate, object);
-            } else {//predicate is some subProperty of a root property
-                alert("remove of value for " + predicate.getShow() + " not available");
-
-            }
-        }
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => this.update.emit()
+        );
     }
 
-    private removeObjectForRootProperty(predicate: ARTURIResource, object: ARTNode) {
-        switch (predicate.getURI()) {
-            case SKOSXL.prefLabel.getURI():
-                this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-                break;
-            case SKOSXL.altLabel.getURI():
-                this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-                break;
-            case SKOSXL.hiddenLabel.getURI():
-                this.skosxlService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-                break;
-            case SKOS.prefLabel.getURI():
-                this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-                break;
-            case SKOS.altLabel.getURI():
-                this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-                break;
-            case SKOS.hiddenLabel.getURI():
-                this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-                break;
-            case RDFS.label.getURI():
-                this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object)).subscribe(
-                    stResp => this.update.emit(null)
-                    );
-                break;
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
+        } else {
+            if (this.isKnownProperty(predicate)) { //if it is removing a value about a root property, call the specific method
+                if (predicate.getURI() == SKOSXL.prefLabel.getURI()) {
+                    return this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>object);
+                } else if (predicate.getURI() == SKOSXL.altLabel.getURI()) {
+                    return this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>object);
+                } else if (predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
+                    return this.skosxlService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTResource>object);
+                } else if (predicate.getURI() == SKOS.prefLabel.getURI()) {
+                    return this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
+                } else if (predicate.getURI() == SKOS.altLabel.getURI()) {
+                    return this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
+                } else if (predicate.getURI() == SKOS.hiddenLabel.getURI()) {
+                    return this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
+                } else if (predicate.getURI() == RDFS.label.getURI()) {
+                    return this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
+                }
+            } else {//predicate is some subProperty of a root property
+                return this.resourceService.removeValue(this.resource, predicate, object);
+            }
         }
     }
 

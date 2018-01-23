@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
 import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
@@ -62,22 +63,25 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => {
+                if (this.rootProperty.getURI() != predicate.getURI()) { //predicate is some subProperty of rdfs:subPropertyOf
+                    //=> emits superPropertyRemovedEvent cause it has not been fired by the generic service (removeValue)
+                    this.eventHandler.superPropertyRemovedEvent.emit({ property: <ARTURIResource>this.resource, superProperty: <ARTURIResource>object });
+                }
+                this.update.emit(null);
+            }
+        );
+    }
+
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
         } else {
             if (this.rootProperty.getURI() == predicate.getURI()) {// removing a rdfs:subPropertyOf relation
-                this.propService.removeSuperProperty(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                return this.propService.removeSuperProperty(<ARTURIResource>this.resource, <ARTURIResource>object);
             } else {//predicate is some subProperty of rdfs:subPropertyOf
-                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                    stResp => {
-                        this.eventHandler.superPropertyRemovedEvent.emit({ property: <ARTURIResource>this.resource, superProperty: <ARTURIResource>object });
-                        this.update.emit(null);
-                    }
-                );
+                return this.resourcesService.removeValue(this.resource, predicate, object);
             }
         }
     }

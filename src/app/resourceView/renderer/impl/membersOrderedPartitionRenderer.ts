@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import {
@@ -124,16 +125,19 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     // This is called only when the user remove the whole member list, not single member
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => this.update.emit(null)
+        );
+    }
+
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
         } else {
-            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
+
 
     private removeMember(member: ARTResource) {
         this.skosService.removeFromOrderedCollection(this.resource, <ARTResource>member).subscribe(

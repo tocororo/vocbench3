@@ -18,8 +18,8 @@ export class PredicateObjectsRenderer {
     @Input() readonly: boolean;
     @Input() rendering: boolean;
     @Input() partition: ResViewPartition;
-    @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-    @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>();
+    @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();//optional parameter "property".
+    @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //if the event doesn't contain the node, it means "delete all"
     @Output() update = new EventEmitter();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
@@ -44,12 +44,18 @@ export class PredicateObjectsRenderer {
     private addValue() {
         this.add.emit();
     }
+    private addManually() {
+        alert("not yet enabled");
+    }
     /**
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
      */
     private removeValue(object: ARTNode) {
         this.remove.emit(object);
+    }
+    private removeAllValues() {
+        this.remove.emit();
     }
     /**
      * Returns the title of the "+" button placed in a subPanel heading.
@@ -100,13 +106,12 @@ export class PredicateObjectsRenderer {
         );
     }
 
-    private isRemoveReifiedObjDisabled(object: ARTResource): boolean {
+    private isDeleteDisabled() {
         return (
-            !object.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
-            !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
         );
     }
-
 
     // PAGING
     private pagingLimit: number = 10;

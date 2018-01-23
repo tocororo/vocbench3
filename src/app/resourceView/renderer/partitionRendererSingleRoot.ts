@@ -22,7 +22,6 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     protected propService: PropertyServices;
     protected resourcesService: ResourcesServices;
     protected cfService: CustomFormsServices;
-    protected basicModals: BasicModalServices;
     protected browsingModals: BrowsingModalServices;
     protected creationModals: CreationModalServices;
     protected rvModalService: ResViewModalServices;
@@ -30,10 +29,9 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModalService: ResViewModalServices) {
-        super();
+        super(basicModals);
         this.propService = propService;
         this.cfService = cfService;
-        this.basicModals = basicModals;
         this.creationModals = creationModal;
         this.rvModalService = resViewModalService;
         this.resourcesService = resourcesService;

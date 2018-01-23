@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
@@ -12,6 +13,7 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { UIUtils } from "../../../utils/UIUtils";
 
 @Component({
     selector: "schemes-renderer",
@@ -65,22 +67,25 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => {
+                if (this.rootProperty.getURI() != predicate.getURI()) {
+                    //=> emits conceptRemovedFromSchemeEvent cause it has not been fired by the generic service (removeValue)
+                    this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object });
+                }
+                this.update.emit(null)
+            }
+        );
+    }
+
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
         } else {
             if (this.rootProperty.getURI() == predicate.getURI()) {// removing a skos:inScheme relation
-                this.skosService.removeConceptFromScheme(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
-                    data => this.update.emit(null)
-                );
+                return this.skosService.removeConceptFromScheme(<ARTURIResource>this.resource, <ARTURIResource>object);
             } else {//predicate is some subProperty of skos:inScheme
-                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                    stResp => {
-                        this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: <ARTURIResource>this.resource, scheme: <ARTURIResource>object });
-                        this.update.emit(null);
-                    }
-                );
+                return this.resourcesService.removeValue(this.resource, predicate, object);
             }
         }
     }

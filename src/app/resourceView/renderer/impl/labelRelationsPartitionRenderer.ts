@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SKOSXL } from "../../../models/Vocabulary";
@@ -51,14 +52,16 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => this.update.emit()
+        )
+    }
+
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
         } else {
-            this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
 

@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -8,6 +9,7 @@ import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute } from ".
 import { RDFS, OWL } from "../../../models/Vocabulary";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 
 @Component({
@@ -34,9 +36,10 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove class axiom";
 
-    constructor(private clsService: ClassesServices, private manchService: ManchesterServices, private resourceService: ResourcesServices, 
+    constructor(basicModals: BasicModalServices,
+        private clsService: ClassesServices, private manchService: ManchesterServices, private resourceService: ResourcesServices, 
         private cfService: CustomFormsServices, private browsingModals: BrowsingModalServices, private resViewModalService: ResViewModalServices) {
-        super();
+        super(basicModals);
     }
 
     add(predicate?: ARTURIResource) {
@@ -136,58 +139,39 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else {
-            //if it is removing a value about a root property, call the specific method
-            if (this.isKnownProperty(predicate)) {
-                this.removeObjectForRootProperty(predicate, object);
-            } else {//predicate is some subProperty of a root property
-                alert("remove of value for " + predicate.getShow() + " not available");
-            }
-        }
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => this.update.emit(null)
+        );
     }
 
-    /**
-     * Removes a class axiom.
-     * Depending on the property and the type of the object calls the proper service 
-     */
-    private removeObjectForRootProperty(predicate: ARTURIResource, object: ARTNode) {
-        if (predicate.getURI() == RDFS.subClassOf.getURI()) {
-            if (object.isBNode()) {
-                this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null)
-                )
-            } else {
-                this.clsService.removeSuperCls(<ARTURIResource>this.resource, <ARTURIResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
+        } else {
+            if (this.isKnownProperty(predicate)) { //if it is removing a value about a root property, call the specific method
+                if (predicate.getURI() == RDFS.subClassOf.getURI()) {
+                    if (object.isBNode()) {
+                        return this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object);
+                    } else {
+                        return this.clsService.removeSuperCls(<ARTURIResource>this.resource, <ARTURIResource>object);
+                    }
+                } else if (predicate.getURI() == OWL.equivalentClass.getURI() || predicate.getURI() == OWL.disjointWith.getURI() ||
+                    predicate.getURI() == OWL.complementOf.getURI()) {
+                    if (object.isBNode()) {
+                        return this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object);
+                    } else {
+                        return this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, object);
+                    }
+                } else if (predicate.getURI() == OWL.intersectionOf.getURI()) {
+                    return this.clsService.removeIntersectionOf(<ARTURIResource>this.resource, object);
+                } else if (predicate.getURI() == OWL.unionOf.getURI()) {
+                    return this.clsService.removeUnionOf(<ARTURIResource>this.resource, <ARTBNode>object);
+                } else if (predicate.getURI() == OWL.oneOf.getURI()) {
+                    return this.clsService.removeOneOf(<ARTURIResource>this.resource, <ARTBNode>object);
+                }
+            } else {//predicate is some subProperty of a root property
+                return this.resourceService.removeValue(this.resource, predicate, object);
             }
-        } else if (predicate.getURI() == OWL.equivalentClass.getURI() || predicate.getURI() == OWL.disjointWith.getURI() ||
-            predicate.getURI() == OWL.complementOf.getURI()) {
-            if (object.isBNode()) {
-                this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null)
-                )
-            } else {
-                this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            }
-        } else if (predicate.getURI() == OWL.intersectionOf.getURI()) {
-            this.clsService.removeIntersectionOf(<ARTURIResource>this.resource, object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else if (predicate.getURI() == OWL.unionOf.getURI()) {
-            this.clsService.removeUnionOf(<ARTURIResource>this.resource, <ARTBNode>object).subscribe(
-                stResp => this.update.emit(null)
-            );
-        } else if (predicate.getURI() == OWL.oneOf.getURI()) {
-            this.clsService.removeOneOf(<ARTURIResource>this.resource, <ARTBNode>object).subscribe(
-                stResp => this.update.emit(null)
-            );
         }
     }
 

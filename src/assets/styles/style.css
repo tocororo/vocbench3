@@ -452,6 +452,24 @@ button.resViewPartitionBtn:disabled  {
     /*cursor: not-allowed;*/
 }
 
+button.rvParitionPanelBtn {
+    color: #000000;
+	opacity: 0.5;
+    filter: alpha(opacity=50);
+    line-height: 1;
+}
+button.rvParitionPanelBtn:disabled {
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+    cursor: default;
+}
+button.rvParitionPanelBtn:hover, button.rvParitionPanelBtn:focus {
+    color: #000000;
+	opacity: 0.9;
+    filter: alpha(opacity=90);
+    cursor: pointer;
+}
+
 .greyText {
     color: #999;
 }
@@ -530,7 +548,7 @@ lang-pref {
 ng2-completer {
     position: relative;
 }
-.matchClass { color: red; font-weight: bold; }
+.matchClass { color: teal; font-weight: bold; }
 
 /* Fix for a bug in Firefox that adds an additional row to a textarea
 see https://stackoverflow.com/questions/46746887/textarea-extra-row-in-firefox-browser */

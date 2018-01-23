@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler"
@@ -69,21 +70,30 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
+        this.getRemoveFunction(predicate, object).subscribe(
+            stResp => this.update.emit()
+        )
+    }
+
+    removeAllValues(predicate: ARTURIResource) {
+        let removeFnArray: any[] = [];
+        for (var i = 0; i < this.predicateObjectList.length; i++) {
+            let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
+            for (var j = 0; j < objList.length; j++) {
+                removeFnArray.push(this.getRemoveFunction(predicate, objList[j]));
+            }
+        }
+        this.removeAllRicursively(removeFnArray);
+    }
+
+    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            this.cfService.removeReifiedResource(this.resource, predicate, object).subscribe(
-                stResp => this.update.emit(null)
-            );
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
         } else {
             if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
-                this.skosService.removeFromCollection(this.resource, <ARTResource>object).subscribe(
-                    stResp => this.update.emit(null)
-                );
-            } else {//predicate is some subProperty of rdf:type
-                this.resourcesService.removeValue(this.resource, predicate, object).subscribe(
-                    stResp => {
-                        alert("remove of " + predicate.getShow() + " value is not available");
-                    }
-                );
+                return this.skosService.removeFromCollection(this.resource, <ARTResource>object);
+            } else {//predicate is some subProperty of skos:member
+                return this.resourcesService.removeValue(this.resource, predicate, object);
             }
         }
     }
