@@ -433,6 +433,11 @@ export class ResourceUtils {
         }
     }
 
+    /**
+     * Given an NT serialization of a URI, creates and returns an ARTURIResource object.
+     * Code inspired by org.eclipse.rdf4j.rio.ntriples.NTripleUtils#parseURI()
+     * @param nTriplesURI 
+     */
     static parseURI(nTriplesURI: string): ARTURIResource {
         if (nTriplesURI.startsWith("<") && nTriplesURI.endsWith(">")) {
             let uri: string = nTriplesURI.substring(1, nTriplesURI.length - 1);
@@ -445,7 +450,7 @@ export class ResourceUtils {
     }
 
     /**
-     * Given an NT serialization of a literal, creates and returns an ARTLiteral object
+     * Given an NT serialization of a literal, creates and returns an ARTLiteral object.
      * Code inspired by org.eclipse.rdf4j.rio.ntriples.NTripleUtils#parseLiteral()
      * @param nTriplesLiteral
      */

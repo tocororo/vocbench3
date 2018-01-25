@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, 
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { FormCollection, CustomForm } from "../../../models/CustomForms";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { PropertyServices, RangeResponse } from "../../../services/propertyServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -36,8 +36,8 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices, private skosService: SkosServices, private skosxlService: SkosxlServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private skosService: SkosServices, private skosxlService: SkosxlServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     ngOnInit() {
@@ -45,13 +45,15 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate?: ARTURIResource) {
-        if (predicate == null) {
-            this.browsingModals.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
-                (selectedProp: any) => {
-                    this.add(selectedProp);
-                },
-                () => { }
-            );
+        if (predicate == undefined) {
+            this.getPredicateToEnrich().subscribe(
+                predicate => {
+                    if (predicate) {
+                        this.add(predicate);         
+                    }     
+                    
+                }
+            )
         } else {
             //particular cases: labels
             if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
@@ -131,6 +133,25 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                 this.enrichProperty(predicate);
             }
         }
+    }
+
+    getPredicateToEnrich(): Observable<ARTURIResource> {
+        return Observable.fromPromise(
+            this.browsingModals.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
+                selectedProp => {
+                    return selectedProp
+                },
+                () => { }
+            )
+        );
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return this.propService.getRange(predicate).flatMap(
+            range => {
+                return Observable.of(RangeResponse.isRangeCompliant(range, value));
+            }
+        )
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

@@ -6,6 +6,7 @@ import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instan
 import { EnrichPropertyModal, EnrichPropertyModalData } from "./enrichPropertyModal";
 import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
+import { AddManuallyValueModal, AddManuallyValueData } from "./addManuallyValueModal";
 import { ResViewSettingsModal } from "./resViewSettingsModal";
 import { CustomFormModal, CustomFormModalData } from "../../customForms/customForm/customFormModal";
 import { ARTResource, ARTBNode, ARTURIResource, ARTLiteral } from '../../models/ARTResources';
@@ -97,6 +98,15 @@ export class ResViewModalServices {
         builder.keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(AddPropertyValueModal, overlayConfig).result;
+    }
+
+    addManualValue(property: ARTURIResource, propChangeable?: boolean) {
+        var modalData = new AddManuallyValueData(property, propChangeable);
+        const builder = new BSModalContextBuilder<AddManuallyValueData>(
+            modalData, undefined, AddManuallyValueData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(AddManuallyValueModal, overlayConfig).result;
     }
 
     /**

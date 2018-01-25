@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { PartitionRenderer } from "./partitionRenderer";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { ResourcesServices } from "../../services/resourcesServices";
 
 @Component({
     selector: "partition-renderer-multi",
@@ -13,8 +15,8 @@ export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
      * ATTRIBUTES
      */
 
-    constructor(basicModals: BasicModalServices) {
-        super(basicModals);
+    constructor(resourcesService: ResourcesServices, basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
+        super(resourcesService, basicModals, resViewModals);
     }
 
     /**

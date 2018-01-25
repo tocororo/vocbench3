@@ -3,7 +3,8 @@ import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
+import { VBContext } from "../../../utils/VBContext";
+import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary"
 import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -33,15 +34,15 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     addBtnImgSrc = require("../../../../assets/images/icons/actions/concept_create.png");
     removeBtnImgTitle = "Remove broader";
 
-    constructor(propService: PropertyServices, resourceService: ResourcesServices, cfService: CustomFormsServices,
+    constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
-        rvModalService: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourceService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a broader", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a broader", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var broader: ARTURIResource = data.value;
@@ -60,6 +61,10 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
             },
             () => {}
         );
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

@@ -28,6 +28,7 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
     // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
 
     partition = ResViewPartition.notes;
+    addManuallyAllowed: boolean = false;
     rootProperty: ARTURIResource = SKOS.note;
     label = "Notes";
     addBtnImgTitle = "Add a note";
@@ -36,8 +37,8 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices, private skosService: SkosServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private skosService: SkosServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     add(predicate?: ARTURIResource) {
@@ -51,6 +52,11 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         } else {
             this.enrichProperty(predicate);
         }
+    }
+
+    //not used since this partition doesn't allow manual add operation
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(true);
     }
 
     //@Override

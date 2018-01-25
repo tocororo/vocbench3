@@ -1,13 +1,19 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../../models/ARTResources";
-import { ResViewPartition } from "../../models/ResourceView";
+import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils, ARTBNode } from "../../models/ARTResources";
+import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 @Component({
     selector: "partition-renderer",
     templateUrl: "./partitionRenderer.html",
+    styles: [
+        '.hidden: { visibility: hidden; }'
+    ]
 })
 export abstract class PartitionRenderer {
 
@@ -23,9 +29,13 @@ export abstract class PartitionRenderer {
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     protected basicModals: BasicModalServices;
+    protected resourcesService: ResourcesServices;
+    protected resViewModals: ResViewModalServices;
 
-    constructor(basicModals: BasicModalServices) {
+    constructor(resourcesService: ResourcesServices, basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
+        this.resourcesService = resourcesService;
         this.basicModals = basicModals;
+        this.resViewModals = resViewModals;
     }
 
     /**
@@ -68,6 +78,19 @@ export abstract class PartitionRenderer {
      */
 
     /**
+     * Listener of add event fired by "+" or "add value (manually)" buttons (manually parameter true)
+     */
+    private addHandler(predicate: ARTURIResource, manually?: boolean) {
+        if (manually) {
+            this.addManually(predicate);
+        } else {
+            this.add(predicate);
+        }
+    }
+    private isAddManuallyAllowed() {
+        return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
+    }
+    /**
      * Should allow to enrich a property by opening a modal and selecting a value.
      * It can get an optional parameter "property".
      * This is fired when the add button is clicked (the one placed on the groupPanel outline) without property parameter,
@@ -80,6 +103,74 @@ export abstract class PartitionRenderer {
     abstract add(predicate?: ARTURIResource): void;
 
     /**
+     * Handler of add called when clicked on "add value (manually)" 
+     * in the (external) generic partition (in which case the predicate is not provided)
+     * or in the predicateObjectsRenderer  (in which case the predicate is provided)
+     * @param predicate 
+     */
+    private addManually(predicate?: ARTURIResource) {
+        let propChangeable: boolean = predicate == null;
+        if (!predicate) {
+            this.getPredicateToEnrich().subscribe(
+                predicate => {
+                    if (predicate) { //if not canceled
+                        this.addManuallyPredicateAware(predicate, propChangeable);
+                    }
+                }
+            )
+        } else {
+            this.addManuallyPredicateAware(predicate, propChangeable);
+        }
+    }
+
+    /**
+     * Implementation of addManually with the predicate provided
+     * @param predicate 
+     */
+    private addManuallyPredicateAware(predicate: ARTURIResource, propChangeable: boolean) {
+        this.resViewModals.addManualValue(predicate, propChangeable).then(
+            data => {
+                let property: ARTURIResource = data.property;
+                let value: ARTNode = data.value;
+                this.checkTypeCompliantForManualAdd(property, value).subscribe(
+                    compliant => {
+                        if (compliant) { //value type compliant with predicate range
+                            this.resourcesService.addValue(this.resource, property, value).subscribe(
+                                stResp => this.update.emit()
+                            );
+                        } else { //value type not compliant with predicate range
+                            let warningMsg = "The type of value is not compliant with the range of the property " + property.getShow()
+                                + ". The operation may cause inconsistencies and malfunction. Do you want to force the add operation? ";
+                            this.basicModals.confirm("Warning", warningMsg, "warning").then(
+                                confirm => {
+                                    this.resourcesService.addValue(this.resource, property, value).subscribe(
+                                        stResp => this.update.emit()
+                                    );
+                                },
+                                reject => {}
+                            );
+                        }
+                    }
+                )
+            },
+            () => {}
+        );
+    }
+
+    /**
+     * Returns the predicate to enrich in case of an add operation is fired from the generic partition
+     */
+    abstract getPredicateToEnrich(): Observable<ARTURIResource>;
+
+    /**
+     * Tells if a value nature is compliant with the range of a predicate. Useful to check if a manually 
+     * provided value is ok.
+     * @param predicate 
+     * @param value 
+     */
+    abstract checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean>;
+
+    /**
      * Listener of remove event. If object is passed with the event remove just that object, otherwise remove all the values
      * @param predicate 
      * @param object 
@@ -88,7 +179,7 @@ export abstract class PartitionRenderer {
         if (object == null) {
             this.basicModals.confirm("Delete all values", "You are deleting all the " + predicate.getShow() + " values. Are you sure?", "warning").then(
                 yes => this.removeAllValues(predicate),
-                no => {}
+                no => { }
             )
         } else {
             this.removePredicateObject(predicate, object);
@@ -136,7 +227,7 @@ export abstract class PartitionRenderer {
             }
         );
     }
-    
+
     /**
      * When the object is edited or replaced requires update of res view
      */

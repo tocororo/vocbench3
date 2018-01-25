@@ -4,8 +4,9 @@ import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ClassesServices } from "../../../services/classesServices";
+import { PropertyServices, RangeType, RangeResponse } from "../../../services/propertyServices";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, OWL } from "../../../models/Vocabulary";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
@@ -36,31 +37,43 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
     removeBtnImgTitle = "Remove class axiom";
 
-    constructor(basicModals: BasicModalServices,
-        private clsService: ClassesServices, private manchService: ManchesterServices, private resourceService: ResourcesServices, 
-        private cfService: CustomFormsServices, private browsingModals: BrowsingModalServices, private resViewModalService: ResViewModalServices) {
-        super(basicModals);
+    constructor(basicModals: BasicModalServices, resourcesService: ResourcesServices, resViewModals: ResViewModalServices,
+        private clsService: ClassesServices, private manchService: ManchesterServices,  
+        private propService: PropertyServices, private cfService: CustomFormsServices,
+        private browsingModals: BrowsingModalServices) {
+        super(resourcesService, basicModals, resViewModals);
     }
 
     add(predicate?: ARTURIResource) {
         if (predicate == undefined) {
             this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                 (selectedProp: any) => {
-                    if (this.isKnownProperty(selectedProp)) {
-                        this.enrichProperty(selectedProp);
-                    } else {
-                        alert("enrichment of " + selectedProp.getShow() + " not available");
-                    }
+                    this.enrichProperty(selectedProp);
                 },
                 () => { }
             );
         } else {
-            if (this.isKnownProperty(predicate)) {
-                this.enrichProperty(predicate);
-            } else {
-                alert("enrichment of " + predicate.getShow() + " not available");
-            }
+            this.enrichProperty(predicate);
         }
+    }
+
+    getPredicateToEnrich(): Observable<ARTURIResource> {
+        return Observable.fromPromise(
+            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
+                (selectedProp: any) => {
+                    return selectedProp;
+                },
+                () => {}
+            )
+        );
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return this.propService.getRange(predicate).flatMap(
+            range => {
+                return Observable.of(RangeResponse.isRangeCompliant(range, value));
+            }
+        )
     }
 
     /**
@@ -71,6 +84,11 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      * (then opens a class tree modal) or to create a manchester expression (then opens a prompt modal) 
      */
     private enrichProperty(property: ARTURIResource) {
+        if (!this.isKnownProperty(property)) {
+            this.basicModals.alert("Unknown property", property.getShow() + " is not a class axiom known property, it cannot be handled.", "error");
+            return;
+        }
+
         //if the property is oneOf open a modal to create an instance list, otherwise ask the user to make a further decision
         if (property.getURI() == OWL.oneOf.getURI()) {
             this.createInstanceList(property);
@@ -78,7 +96,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
             this.createClassList(property);
         } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
             //ask the user to choose to add an existing class or to add a class expression
-            this.resViewModalService.addPropertyValue("Add " + property.getShow(), this.resource, property, false).then(
+            this.resViewModals.addPropertyValue("Add " + property.getShow(), this.resource, property, false).then(
                 (data: any) => {
                     var value: any = data.value; //value can be a class or a manchester Expression
                     if (typeof value == "string") {
@@ -91,7 +109,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                                 stResp => this.update.emit(null)
                             );
                         } else {
-                            this.resourceService.addValue(this.resource, property, value).subscribe(
+                            this.resourcesService.addValue(this.resource, property, value).subscribe(
                                 stResp => this.update.emit(null)
                             );
                         }
@@ -107,7 +125,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      * Called to enrich intersectionOf and unionOf
      */
     private createClassList(property: ARTURIResource) {
-        this.resViewModalService.createClassList("Add " + property.getShow()).then(
+        this.resViewModals.createClassList("Add " + property.getShow()).then(
             (classes: any) => {
                 if (property.getURI() == OWL.intersectionOf.getURI()) {
                     this.clsService.addIntersectionOf(<ARTURIResource>this.resource, classes).subscribe(
@@ -128,7 +146,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      * Called to enrich oneOf
      */
     private createInstanceList(property: ARTURIResource) {
-        this.resViewModalService.createInstanceList("Add " + property.getShow()).then(
+        this.resViewModals.createInstanceList("Add " + property.getShow()).then(
             (instances: any) => {
                 this.clsService.addOneOf(<ARTURIResource>this.resource, instances).subscribe(
                     stResp => this.update.emit(null)
@@ -160,7 +178,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                     if (object.isBNode()) {
                         return this.manchService.removeExpression(<ARTURIResource>this.resource, predicate, object);
                     } else {
-                        return this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, object);
+                        return this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, object);
                     }
                 } else if (predicate.getURI() == OWL.intersectionOf.getURI()) {
                     return this.clsService.removeIntersectionOf(<ARTURIResource>this.resource, object);
@@ -170,7 +188,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                     return this.clsService.removeOneOf(<ARTURIResource>this.resource, <ARTBNode>object);
                 }
             } else {//predicate is some subProperty of a root property
-                return this.resourceService.removeValue(this.resource, predicate, object);
+                return this.resourcesService.removeValue(this.resource, predicate, object);
             }
         }
     }

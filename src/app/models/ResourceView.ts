@@ -32,3 +32,26 @@ export const ResViewPartition = {
     labelRelations: "labelRelations" as ResViewPartition,
     properties: "properties" as ResViewPartition
 }
+
+export class ResViewUtils {
+
+    /**
+     * partitions where add manually functionality is enabled.
+     * Note: if a partition is added, remember to change the implementation of checkTypeCompliantForManualAdd in the renderer.
+     */
+    public static addManuallyPartition: ResViewPartition[] = [
+        ResViewPartition.broaders,
+        ResViewPartition.classaxioms,
+        ResViewPartition.domains,
+        ResViewPartition.facets,
+        ResViewPartition.labelRelations,
+        ResViewPartition.members,
+        ResViewPartition.properties,
+        ResViewPartition.ranges,
+        ResViewPartition.schemes,
+        ResViewPartition.superproperties,
+        ResViewPartition.topconceptof,
+        ResViewPartition.types
+    ]
+
+}

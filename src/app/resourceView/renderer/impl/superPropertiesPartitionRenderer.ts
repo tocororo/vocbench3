@@ -34,13 +34,13 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices, private eventHandler: VBEventHandler) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private eventHandler: VBEventHandler) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a superproperty", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a superproperty", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var superProp: ARTURIResource = data.value;
@@ -60,6 +60,10 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
             },
             () => { }
         )
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

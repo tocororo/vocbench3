@@ -35,13 +35,13 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add an inverse property", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add an inverse property", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var inverseProp: ARTURIResource = data.value;
@@ -51,6 +51,10 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
             },
             () => { }
         );
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

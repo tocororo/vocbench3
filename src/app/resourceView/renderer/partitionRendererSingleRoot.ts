@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { PartitionRenderer } from "./partitionRenderer";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
 import { PropertyServices } from "../../services/propertyServices";
@@ -11,8 +12,6 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { FormCollection, CustomForm, CustomFormValue } from "../../models/CustomForms";
 
-
-
 @Component({
     selector: "partition-renderer-single",
     templateUrl: "./partitionRenderer.html",
@@ -20,21 +19,17 @@ import { FormCollection, CustomForm, CustomFormValue } from "../../models/Custom
 export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
 
     protected propService: PropertyServices;
-    protected resourcesService: ResourcesServices;
     protected cfService: CustomFormsServices;
     protected browsingModals: BrowsingModalServices;
     protected creationModals: CreationModalServices;
-    protected rvModalService: ResViewModalServices;
     
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModalService: ResViewModalServices) {
-        super(basicModals);
+        super(resourcesService, basicModals, resViewModalService);
         this.propService = propService;
         this.cfService = cfService;
         this.creationModals = creationModal;
-        this.rvModalService = resViewModalService;
-        this.resourcesService = resourcesService;
         this.browsingModals = browsingModals;
     }
 
@@ -50,6 +45,10 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     /**
      * METHODS
      */
+
+    getPredicateToEnrich(): Observable<ARTURIResource> {
+        return Observable.of(this.rootProperty);
+    }
 
     /**
      * Given a predicate, gets its range and based on the range (and the eventually custom range) allows to enrich it
@@ -160,7 +159,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     }
 
     private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
-        this.rvModalService.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
+        this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
                 this.addPartitionAware(this.resource, predicate, cfValue);
@@ -197,7 +196,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      * Opens a modal to enrich the predicate with a resource 
      */
     private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
-        this.rvModalService.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
+        this.resViewModals.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
             (resource: any) => {
                 this.addPartitionAware(this.resource, predicate, resource);
             },

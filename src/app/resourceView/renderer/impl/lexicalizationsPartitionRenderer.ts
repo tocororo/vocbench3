@@ -12,6 +12,7 @@ import { ResViewPartition } from "../../../models/ResourceView";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -26,6 +27,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     partition = ResViewPartition.lexicalizations;
+    addManuallyAllowed: boolean = false;
     rootProperties: ARTURIResource[] = [];
     knownProperties: ARTURIResource[] = [
         RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
@@ -41,11 +43,11 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         RDFS.label.getURI()
     ];
 
-    constructor(basicModals: BasicModalServices,
-        private cfService: CustomFormsServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private resourceService: ResourcesServices, private resViewService: ResourceViewServices,
+    constructor(basicModals: BasicModalServices, resourcesService: ResourcesServices, resViewModals: ResViewModalServices,
+        private cfService: CustomFormsServices, private skosService: SkosServices, 
+        private skosxlService: SkosxlServices, private resViewService: ResourceViewServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
-        super(basicModals);
+        super(resourcesService, basicModals, resViewModals);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -79,47 +81,56 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     add(predicate?: ARTURIResource) {
         if (predicate == undefined) {
-            if (this.rootProperties.length == 0) {
-                this.resViewService.getLexicalizationProperties(this.resource).subscribe(
-                    props => {
-                        this.rootProperties = props;
-                        this.addPropWithRootInitialized(predicate);
-                    }
-                );
-            } else {
-                this.addPropWithRootInitialized(predicate);
-            }
+            this.getPredicateToEnrich().subscribe(
+                predicate => {
+                    if (predicate) {
+                        this.add(predicate);         
+                    }     
+                    
+                }
+            )
         } else {
-            this.addPropWithRootInitialized(predicate);
+            this.enrichProperty(predicate);   
         }
     }
 
-    private addPropWithRootInitialized(predicate?: ARTURIResource) {
-        if (predicate == undefined) {
-            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
-                (selectedProp: any) => {
-                    if (this.isKnownProperty(selectedProp)) {
-                        this.enrichProperty(selectedProp);
-                    } else {
-                        alert("enrichment of " + selectedProp.getShow() + " not available");
-                    }
-                },
-                () => { }
+    //not used since this partition doesn't allow manual add operation
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(true);
+    }
+
+    private ensureInitializedRootProperties(): Observable<void> {
+        if (this.rootProperties.length == 0) { //root properties not yet initialized
+            return this.resViewService.getLexicalizationProperties(this.resource).map(
+                props => {
+                    this.rootProperties = props;
+                }
             );
-        } else {
-            if (this.isKnownProperty(predicate)) {
-                this.enrichProperty(predicate);
-            } else {
-                alert("enrichment of " + predicate.getShow() + " not available");
-            }
+        } else { //root properties already initialized
+            return Observable.of(null);
         }
+    }
+
+    getPredicateToEnrich(): Observable<ARTURIResource> {
+        return this.ensureInitializedRootProperties().flatMap(
+            res => {
+                return Observable.fromPromise(
+                    this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
+                        (selectedProp: any) => {
+                            return selectedProp;
+                        },
+                        () => { }
+                    )
+                );
+            }
+        );
     }
 
     private enrichProperty(predicate: ARTURIResource) {
         this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 switch (predicate.getURI()) {
-                    case SKOSXL.prefLabel.getURI():
+                    case SKOSXL.prefLabel.getURI(): {
                         this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null),
                             (err: Error) => {
@@ -136,17 +147,20 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                             }
                         );
                         break;
-                    case SKOSXL.altLabel.getURI():
+                    }
+                    case SKOSXL.altLabel.getURI(): {
                         this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null),
                         );
                         break;
-                    case SKOSXL.hiddenLabel.getURI():
+                    }
+                    case SKOSXL.hiddenLabel.getURI(): {
                         this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
-                    case SKOS.prefLabel.getURI():
+                    }
+                    case SKOS.prefLabel.getURI(): {
                         this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal).subscribe(
                             stResp => this.update.emit(null),
                             (err: Error) => {
@@ -163,21 +177,31 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                             }
                         );
                         break;
-                    case SKOS.altLabel.getURI():
+                    }
+                    case SKOS.altLabel.getURI(): {
                         this.skosService.addAltLabel(<ARTURIResource>this.resource, literal).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
-                    case SKOS.hiddenLabel.getURI():
+                    }
+                    case SKOS.hiddenLabel.getURI(): {
                         this.skosService.addHiddenLabel(<ARTURIResource>this.resource, literal).subscribe(
                             stResp => this.update.emit(null)
                         );
                         break;
-                    case RDFS.label.getURI():
-                        this.resourceService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
+                    }
+                    case RDFS.label.getURI(): {
+                        this.resourcesService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
                             stResp => this.update.emit(null)
-                            );
+                        );
                         break;
+                    }
+                    default: { //default case, maybe a custom property for which doens't exist a dedicated service
+                        this.resourcesService.addValue(this.resource, predicate, literal).subscribe(
+                            stResp => this.update.emit(null)
+                        )
+                        break;
+                    }
                 }
             },
             () => { }
@@ -208,10 +232,10 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 } else if (predicate.getURI() == SKOS.hiddenLabel.getURI()) {
                     return this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
                 } else if (predicate.getURI() == RDFS.label.getURI()) {
-                    return this.resourceService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
+                    return this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
                 }
             } else {//predicate is some subProperty of a root property
-                return this.resourceService.removeValue(this.resource, predicate, object);
+                return this.resourcesService.removeValue(this.resource, predicate, object);
             }
         }
     }

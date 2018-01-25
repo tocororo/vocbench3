@@ -325,6 +325,12 @@ img.disabled  {
     padding: 0px 2px;
     background: white;
 }
+.groupPanel-add-btn {
+    position: absolute; top: -2px; right: 12px;
+}
+.groupPanel-dropdown-btn {
+    position: absolute; top: 0px; right: -2px;
+}
 .groupPanel-body {
     padding: 12px 4px 4px;
 }

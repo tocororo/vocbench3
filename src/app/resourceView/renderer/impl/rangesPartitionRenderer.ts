@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum, ARTLiteral } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { RDFS, XmlSchema } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -34,13 +34,13 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices, private manchService: ManchesterServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private manchService: ManchesterServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Add a range", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a range", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
@@ -88,6 +88,14 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
             },
             () => { }
         )
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        if (predicate.getRole() == RDFResourceRolesEnum.datatypeProperty) { //datatype property accepts literal as value
+            return Observable.of(value instanceof ARTLiteral);
+        } else {
+            return Observable.of(value instanceof ARTURIResource);
+        }
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

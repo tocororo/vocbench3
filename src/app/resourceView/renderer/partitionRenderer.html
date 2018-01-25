@@ -7,16 +7,27 @@
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
-        <span class="groupPanel-heading-content">
+        <span class="groupPanel-heading-content groupPanel-add-btn">
             <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()" [disabled]="isAddDisabled()">
         </span>
+        <span *ngIf="isAddManuallyAllowed()" class="groupPanel-heading-content groupPanel-dropdown-btn">
+            <div class="btn-group" style="vertical-align: initial;">
+                <button class="resViewPartitionBtn" style="width: 12px;" data-toggle="dropdown">
+                    <span class="caret" style="margin: 0px;"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addManually()">Add value (manually)</a></li>
+                </ul>
+            </div>
+        </span>
+
     </div>
 
     <div class="groupPanel-body">
         <ng-template [ngIf]="!partitionCollapsed">
             <pred-obj-renderer *ngFor="let po of predicateObjectList" [pred-obj]="po" [resource]="resource" [readonly]="readonly"
-                [rendering]="rendering" [partition]="partition" (dblclickObj)="objectDblClick($event)" (add)="add(po.getPredicate())"
-                (remove)="removeHandler(po.getPredicate(), $event)"
+                [rendering]="rendering" [partition]="partition" (dblclickObj)="objectDblClick($event)"
+                (add)="addHandler(po.getPredicate(), $event)" (remove)="removeHandler(po.getPredicate(), $event)"
                 (update)="onObjectUpdate()">
             </pred-obj-renderer>
         </ng-template>

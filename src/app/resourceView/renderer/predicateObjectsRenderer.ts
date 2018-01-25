@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../../models/ARTResources";
-import { ResViewPartition } from "../../models/ResourceView";
+import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator"
 
 @Component({
@@ -18,7 +18,7 @@ export class PredicateObjectsRenderer {
     @Input() readonly: boolean;
     @Input() rendering: boolean;
     @Input() partition: ResViewPartition;
-    @Output() add: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();//optional parameter "property".
+    @Output() add: EventEmitter<boolean> = new EventEmitter<boolean>();//boolean parameter: true if add canually, true or null add existing
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //if the event doesn't contain the node, it means "delete all"
     @Output() update = new EventEmitter();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
@@ -33,7 +33,6 @@ export class PredicateObjectsRenderer {
 
     /**
      * Should allow to enrich a property by opening a modal and selecting a value.
-     * It can get an optional parameter "property".
      * This is fired when the add button is clicked (the one placed on the groupPanel outline) without property parameter,
      * or hen the "+" button of a specific property panel is clicked (placed in the subPanel heading) with the property provided.
      * If property is provided (add fired from specific property panel) the modal won't allow to change it allowing so
@@ -44,8 +43,11 @@ export class PredicateObjectsRenderer {
     private addValue() {
         this.add.emit();
     }
+    private isAddManuallyAllowed() {
+        return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
+    }
     private addManually() {
-        alert("not yet enabled");
+        this.add.emit(true);
     }
     /**
      * Removes an object related to the given predicate.

@@ -4,7 +4,7 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { SkosServices } from "../../../services/skosServices";
 import {
     ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
-    RDFResourceRolesEnum, RDFTypesEnum, ResAttribute
+    RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ResourceUtils
 } from "../../../models/ARTResources";
 import { SKOS } from "../../../models/Vocabulary";
 import { ResViewPartition } from "../../../models/ResourceView";
@@ -30,6 +30,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     partition = ResViewPartition.membersOrdered;
+    addManuallyAllowed: boolean = false;
     rootProperty = SKOS.memberList;
     membersProperty = SKOS.member;
     label = "Members";
@@ -41,8 +42,8 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices, private skosService: SkosServices) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private skosService: SkosServices) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     private selectMember(member: ARTResource) {
@@ -57,11 +58,16 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     //Use addFirst addLast addBefore and addAfter instead
     add() { }
 
+    //not used since this partition doesn't allow manual add operation
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(true);
+    }
+
     /**
      * Adds a first member to an ordered collection 
      */
     private addFirst(predicate?: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
@@ -77,7 +83,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a last member to an ordered collection 
      */
     private addLast(predicate?: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
@@ -93,7 +99,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     private addBefore(predicate?: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
@@ -110,7 +116,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     private addAfter(predicate?: ARTURIResource) {
-        this.rvModalService.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;
@@ -152,10 +158,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         return "Remove " + predicate.getShow();
     }
 
-    private isRemoveReifiedObjDisabled(object: ARTResource): boolean {
+    private isDeleteDisabled() {
         return (
-            !object.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
-            !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition)
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
         );
     }
 

@@ -35,14 +35,14 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
-        rvModalService: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
-        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, rvModalService);
+        resViewModals: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
+        super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
     //add as top concept
     add(predicate?: ARTURIResource) {
         var propChangeable: boolean = predicate == null;
-        this.rvModalService.addPropertyValue("Set as top Concept of", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Set as top Concept of", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var scheme: ARTURIResource = data.value;
@@ -61,6 +61,10 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
             },
             () => {}
         );
+    }
+
+    checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
+        return Observable.of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

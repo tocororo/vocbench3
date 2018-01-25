@@ -57,7 +57,7 @@ export class InstanceListComponent extends AbstractList {
                     if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
                         this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
                             + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
-                            + "and it may cause server error. Do you want to continue anyway?", "warning").then(
+                            + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
                             (confirm: any) => {
                                 this.initList();
                             },

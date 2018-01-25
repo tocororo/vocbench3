@@ -3,8 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTLiteral, ARTBNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
-import { RDF, OWL } from "../models/Vocabulary";
+import { ARTResource, ARTURIResource, ARTLiteral, ARTBNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum, ARTNode, ResourceUtils } from "../models/ARTResources";
+import { RDF, OWL, RDFS } from "../models/Vocabulary";
 import { FormCollection, CustomForm, CustomFormType, CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "./resourcesServices"
 
@@ -494,9 +494,17 @@ export class PropertyServices {
 
 }
 
-type RangeType = "resource" | "plainLiteral" | "typedLiteral" | "literal" | "undetermined" | "inconsistent";
+export type RangeType = "resource" | "plainLiteral" | "typedLiteral" | "literal" | "undetermined" | "inconsistent";
+export const RangeType = {
+    resource: "resource" as RangeType,
+    plainLiteral: "plainLiteral" as RangeType,
+    typedLiteral: "typedLiteral" as RangeType,
+    literal: "literal" as RangeType,
+    undetermined: "undetermined" as RangeType,
+    inconsistent: "inconsistent" as RangeType,
+}
 
-class RangeResponse {
+export class RangeResponse {
     ranges: {
         type: RangeType,
         rangeCollection: { 
@@ -505,4 +513,21 @@ class RangeResponse {
         }
     };
     formCollection: FormCollection;
+
+    static isRangeCompliant(response: RangeResponse, value: ARTNode): boolean {
+        let rngType = response.ranges.type;
+        if (rngType == RangeType.undetermined) {
+            return true;
+        } else {
+            if (value.isLiteral()) {
+                let rngColl: ARTURIResource[] = response.ranges.rangeCollection ? response.ranges.rangeCollection.resources : [];
+                return (
+                    rngType == RangeType.literal || rngType == RangeType.typedLiteral || rngType == RangeType.plainLiteral ||
+                    (rngType == RangeType.resource && ResourceUtils.containsNode(rngColl, RDFS.literal))
+                );
+            } else { //resource
+                return rngType == RangeType.resource;
+            }
+        }
+    }
 }

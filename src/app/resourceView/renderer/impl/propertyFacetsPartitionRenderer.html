@@ -9,8 +9,15 @@
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
         <span class="groupPanel-heading-content">
-            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" 
-                (click)="add()" [disabled]="isAddDisabled()">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()" [disabled]="isAddDisabled()">
+            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;">
+                <button class="resViewPartitionBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown">
+                    <span class="caret" style="margin: 0px;"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addManually()">Add value (manually)</a></li>
+                </ul>
+            </div>
         </span>
     </div>
 
@@ -25,7 +32,7 @@
             <ng-template ngFor let-po [ngForOf]="predicateObjectList">
                 <pred-obj-renderer *ngIf="po.getObjects().length > 0" [pred-obj]="po" [resource]="resource" [rendering]="rendering"
                     [readonly]="readonly" [partition]="partition" (dblclickObj)="objectDblClick($event)"
-                    (add)="add(po.getPredicate())" (remove)="removeHandler(po.getPredicate(), $event)">
+                    (add)="addHandler(po.getPredicate(), $event)" (remove)="removeHandler(po.getPredicate(), $event)">
                </pred-obj-renderer>
             </ng-template>
         </ng-template>
