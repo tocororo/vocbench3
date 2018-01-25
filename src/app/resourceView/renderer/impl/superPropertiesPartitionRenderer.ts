@@ -38,8 +38,7 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
-    add(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
+    add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a superproperty", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;

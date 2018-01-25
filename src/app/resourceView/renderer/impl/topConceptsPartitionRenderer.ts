@@ -40,8 +40,7 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     //add as top concept
-    add(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
+    add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Set as top Concept of", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;

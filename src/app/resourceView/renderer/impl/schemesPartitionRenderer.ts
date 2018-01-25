@@ -41,8 +41,7 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     //add as top concept
-    add(predicate?: ARTURIResource) {
-        var propChangeable: boolean = predicate == null;
+    add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add Concept to a Scheme", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;

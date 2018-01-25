@@ -8,7 +8,7 @@
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
         <span class="groupPanel-heading-content groupPanel-add-btn">
-            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()" [disabled]="isAddDisabled()">
+            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="addHandler()" [disabled]="isAddDisabled()">
         </span>
         <span *ngIf="isAddManuallyAllowed()" class="groupPanel-heading-content groupPanel-dropdown-btn">
             <div class="btn-group" style="vertical-align: initial;">
@@ -16,7 +16,7 @@
                     <span class="caret" style="margin: 0px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addManually()">Add value (manually)</a></li>
+                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addHandler(null, true)">Add value (manually)</a></li>
                 </ul>
             </div>
         </span>

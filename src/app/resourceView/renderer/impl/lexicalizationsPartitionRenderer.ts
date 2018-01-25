@@ -79,21 +79,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         }
     }
 
-    add(predicate?: ARTURIResource) {
-        if (predicate == undefined) {
-            this.getPredicateToEnrich().subscribe(
-                predicate => {
-                    if (predicate) {
-                        this.add(predicate);         
-                    }     
-                    
-                }
-            )
-        } else {
-            this.enrichProperty(predicate);   
-        }
-    }
-
     //not used since this partition doesn't allow manual add operation
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
         return Observable.of(true);
@@ -126,7 +111,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         );
     }
 
-    private enrichProperty(predicate: ARTURIResource) {
+    add(predicate: ARTURIResource) {
         this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
             (literal: any) => {
                 switch (predicate.getURI()) {

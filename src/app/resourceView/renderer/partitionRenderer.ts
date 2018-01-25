@@ -80,16 +80,28 @@ export abstract class PartitionRenderer {
     /**
      * Listener of add event fired by "+" or "add value (manually)" buttons (manually parameter true)
      */
-    private addHandler(predicate: ARTURIResource, manually?: boolean) {
-        if (manually) {
-            this.addManually(predicate);
+    private addHandler(predicate?: ARTURIResource, manually?: boolean) {
+        if (!predicate) {
+            this.getPredicateToEnrich().subscribe(
+                predicate => {
+                    if (predicate) { //if not canceled
+                        if (manually) {
+                            this.addManually(predicate, true);
+                        } else {
+                            this.add(predicate, false);
+                        }
+                    }
+                }
+            )
         } else {
-            this.add(predicate);
+            if (manually) {
+                this.addManually(predicate, false);
+            } else {
+                this.add(predicate, false);
+            }
         }
     }
-    private isAddManuallyAllowed() {
-        return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
-    }
+    
     /**
      * Should allow to enrich a property by opening a modal and selecting a value.
      * It can get an optional parameter "property".
@@ -100,34 +112,17 @@ export abstract class PartitionRenderer {
      * the modal allow to change property to enrich.
      * @param predicate property to enrich.
      */
-    abstract add(predicate?: ARTURIResource): void;
+    abstract add(predicate: ARTURIResource, propChangeable: boolean): void;
 
-    /**
-     * Handler of add called when clicked on "add value (manually)" 
-     * in the (external) generic partition (in which case the predicate is not provided)
-     * or in the predicateObjectsRenderer  (in which case the predicate is provided)
-     * @param predicate 
-     */
-    private addManually(predicate?: ARTURIResource) {
-        let propChangeable: boolean = predicate == null;
-        if (!predicate) {
-            this.getPredicateToEnrich().subscribe(
-                predicate => {
-                    if (predicate) { //if not canceled
-                        this.addManuallyPredicateAware(predicate, propChangeable);
-                    }
-                }
-            )
-        } else {
-            this.addManuallyPredicateAware(predicate, propChangeable);
-        }
+    private isAddManuallyAllowed() {
+        return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
     }
-
+    
     /**
      * Implementation of addManually with the predicate provided
      * @param predicate 
      */
-    private addManuallyPredicateAware(predicate: ARTURIResource, propChangeable: boolean) {
+    private addManually(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addManualValue(predicate, propChangeable).then(
             data => {
                 let property: ARTURIResource = data.property;

@@ -44,16 +44,47 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
         super(resourcesService, basicModals, resViewModals);
     }
 
-    add(predicate?: ARTURIResource) {
-        if (predicate == undefined) {
-            this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
-                (selectedProp: any) => {
-                    this.enrichProperty(selectedProp);
+    /**
+     * Based on the property opens the proper dialog to enrich it
+     * oneOf opens a modal to create a list of instances
+     * intersectionOf and unionOf opens a modal to create a list of classes (or expression)
+     * subClassOf, equivalentClass, disjointWith, complementOf asks the user if choose an existing class
+     * (then opens a class tree modal) or to create a manchester expression (then opens a prompt modal) 
+     */
+    add(predicate: ARTURIResource) {
+        if (!this.isKnownProperty(predicate)) {
+            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a class axiom known property, it cannot be handled.", "error");
+            return;
+        }
+
+        //if the predicate is oneOf open a modal to create an instance list, otherwise ask the user to make a further decision
+        if (predicate.getURI() == OWL.oneOf.getURI()) {
+            this.createInstanceList(predicate);
+        } else if (predicate.getURI() == OWL.intersectionOf.getURI() || predicate.getURI() == OWL.unionOf.getURI()) {
+            this.createClassList(predicate);
+        } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
+            //ask the user to choose to add an existing class or to add a class expression
+            this.resViewModals.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
+                (data: any) => {
+                    var value: any = data.value; //value can be a class or a manchester Expression
+                    if (typeof value == "string") {
+                        this.manchService.createRestriction(<ARTURIResource>this.resource, predicate, value).subscribe(
+                            stResp => this.update.emit(null)
+                        );
+                    } else { //value is an ARTURIResource (a class selected from the tree)
+                        if (predicate.getURI() == RDFS.subClassOf.getURI()) {
+                            this.clsService.addSuperCls(<ARTURIResource>this.resource, value).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else {
+                            this.resourcesService.addValue(this.resource, predicate, value).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        }
+                    }
                 },
                 () => { }
             );
-        } else {
-            this.enrichProperty(predicate);
         }
     }
 
@@ -74,50 +105,6 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                 return Observable.of(RangeResponse.isRangeCompliant(range, value));
             }
         )
-    }
-
-    /**
-     * Based on the property opens the proper dialog to enrich it
-     * oneOf opens a modal to create a list of instances
-     * intersectionOf and unionOf opens a modal to create a list of classes (or expression)
-     * subClassOf, equivalentClass, disjointWith, complementOf asks the user if choose an existing class
-     * (then opens a class tree modal) or to create a manchester expression (then opens a prompt modal) 
-     */
-    private enrichProperty(property: ARTURIResource) {
-        if (!this.isKnownProperty(property)) {
-            this.basicModals.alert("Unknown property", property.getShow() + " is not a class axiom known property, it cannot be handled.", "error");
-            return;
-        }
-
-        //if the property is oneOf open a modal to create an instance list, otherwise ask the user to make a further decision
-        if (property.getURI() == OWL.oneOf.getURI()) {
-            this.createInstanceList(property);
-        } else if (property.getURI() == OWL.intersectionOf.getURI() || property.getURI() == OWL.unionOf.getURI()) {
-            this.createClassList(property);
-        } else { //rdfs:subClassOf, owl:equivalentClass, owl:disjointWith, owl:complementOf
-            //ask the user to choose to add an existing class or to add a class expression
-            this.resViewModals.addPropertyValue("Add " + property.getShow(), this.resource, property, false).then(
-                (data: any) => {
-                    var value: any = data.value; //value can be a class or a manchester Expression
-                    if (typeof value == "string") {
-                        this.manchService.createRestriction(<ARTURIResource>this.resource, property, value).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                    } else { //value is an ARTURIResource (a class selected from the tree)
-                        if (property.getURI() == RDFS.subClassOf.getURI()) {
-                            this.clsService.addSuperCls(<ARTURIResource>this.resource, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                        } else {
-                            this.resourcesService.addValue(this.resource, property, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                        }
-                    }
-                },
-                () => { }
-            );
-        }
     }
 
     /**

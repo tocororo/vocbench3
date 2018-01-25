@@ -41,17 +41,19 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
-    add(predicate?: ARTURIResource) {
-        if (predicate == null) {
+    add(predicate: ARTURIResource) {
+        this.enrichProperty(predicate);
+    }
+
+    getPredicateToEnrich(): Observable<ARTURIResource> {
+        return Observable.fromPromise(
             this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
-                (selectedProp: any) => {
-                    this.add(selectedProp);
+                selectedProp => {
+                    return selectedProp;
                 },
                 () => { }
-            );
-        } else {
-            this.enrichProperty(predicate);
-        }
+            )
+        );
     }
 
     //not used since this partition doesn't allow manual add operation
