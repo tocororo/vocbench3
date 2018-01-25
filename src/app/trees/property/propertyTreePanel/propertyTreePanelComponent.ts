@@ -3,12 +3,13 @@ import { AbstractTreePanel } from "../../abstractTreePanel"
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { OWL, RDF } from "../../../models/Vocabulary";
+import { SearchSettings } from "../../../models/Properties";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
+import { VBProperties } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -80,12 +81,14 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             let searchLangs: string[];
+            let includeLocales: boolean;
             if (searchSettings.restrictLang) {
                 searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
             }
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs).subscribe(
+                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

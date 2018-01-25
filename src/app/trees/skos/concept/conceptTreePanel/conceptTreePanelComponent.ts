@@ -7,13 +7,14 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { CustomForm } from "../../../../models/CustomForms";
 import { SKOS } from "../../../../models/Vocabulary";
+import { SearchSettings } from "../../../../models/Properties";
 
 @Component({
     selector: "concept-tree-panel",
@@ -193,8 +194,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             let searchLangs: string[];
+            let includeLocales: boolean;
             if (searchSettings.restrictLang) {
                 searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
             }
             let searchingScheme: ARTURIResource[] = [];
             if (searchSettings.restrictActiveScheme) {
@@ -207,7 +210,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, searchingScheme).subscribe(
+                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

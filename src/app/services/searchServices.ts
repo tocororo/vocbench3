@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { StringMatchMode } from "../utils/VBProperties";
+import { StringMatchMode } from "../models/Properties";
 import { ARTURIResource } from "../models/ARTResources";
 
 @Injectable()
@@ -24,7 +24,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
-        searchMode: StringMatchMode, langs?: string[], schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
+        searchMode: StringMatchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -36,7 +36,10 @@ export class SearchServices {
         if (langs != null) {
             params.langs = langs;
         }
-        if (schemes != undefined) {
+        if (includeLocales != null) {
+            params.includeLocales = includeLocales;
+        }
+        if (schemes != null) {
             params.schemes = schemes;
         }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, true).map(
@@ -57,7 +60,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean,
-        searchMode: StringMatchMode, langs?: string[]): Observable<ARTURIResource[]> {
+        searchMode: StringMatchMode, langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
             cls: cls,
@@ -68,6 +71,9 @@ export class SearchServices {
         };
         if (langs != null) {
             params.langs = langs;
+        }
+        if (includeLocales != null) {
+            params.includeLocales = includeLocales;
         }
         return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, true).map(
             stResp => {
@@ -90,10 +96,10 @@ export class SearchServices {
             role: role,
             resourceURI: resource
         };
-        if (schemes != undefined) {
+        if (schemes != null) {
             params.schemesIRI = schemes;
         }
-        if (root != undefined) {
+        if (root != null) {
             params.root = root;
         }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, true).map(
@@ -121,7 +127,7 @@ export class SearchServices {
      * @param schemes 
      */
     searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: StringMatchMode, 
-            langs?: string[], schemes?: ARTURIResource[], cls?: ARTURIResource): Observable<string[]> {
+            langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], cls?: ARTURIResource): Observable<string[]> {
         console.log("[SearchServices] searchStringList");
         var params: any = {
             searchString: searchString,
@@ -131,6 +137,9 @@ export class SearchServices {
         };
         if (langs != null) {
             params.langs = langs;
+        }
+        if (includeLocales != null) {
+            params.includeLocales = includeLocales;
         }
         if (schemes != null) {
             params.schemes = schemes;

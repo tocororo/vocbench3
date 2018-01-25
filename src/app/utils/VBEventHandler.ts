@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ARTURIResource, ARTResource, ARTLiteral } from '../models/ARTResources';
-import { ResourceViewMode } from '../utils/VBProperties';
+import { ResourceViewMode } from '../models/Properties';
 import { VBContext } from '../utils/VBContext';
 
 /**

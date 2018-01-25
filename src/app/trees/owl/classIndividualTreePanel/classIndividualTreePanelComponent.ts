@@ -6,7 +6,8 @@ import { IndividualsServices } from "../../../services/individualsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { RDF, OWL } from "../../../models/Vocabulary";
-import { VBProperties, SearchSettings, ClassIndividualPanelSearchMode } from "../../../utils/VBProperties";
+import { SearchSettings, ClassIndividualPanelSearchMode } from "../../../models/Properties";
+import { VBProperties } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 
 /**
@@ -62,12 +63,14 @@ export class ClassIndividualTreePanelComponent {
                 searchRoles = [RDFResourceRolesEnum.cls];
             }
             let searchLangs: string[];
+            let includeLocales: boolean;
             if (searchSettings.restrictLang) {
                 searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
             }
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
-                searchSettings.stringMatchMode, searchLangs).subscribe(
+                searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

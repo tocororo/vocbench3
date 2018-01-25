@@ -7,7 +7,8 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
-import { VBProperties, SearchSettings } from "../../../utils/VBProperties";
+import { SearchSettings } from "../../../models/Properties";
+import { VBProperties } from "../../../utils/VBProperties";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -75,8 +76,14 @@ export class InstanceListPanelComponent extends AbstractPanel {
             this.basicModals.alert("Search", "Please enter a valid string to search", "error");
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+            let searchLangs: string[];
+            let includeLocales: boolean;
+            if (searchSettings.restrictLang) {
+                searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
+            }
             this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, searchSettings.useURI,
-                searchSettings.stringMatchMode).subscribe(
+                searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

@@ -6,12 +6,13 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { VBProperties, SearchSettings } from '../../../../utils/VBProperties';
+import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
+import { SearchSettings } from "../../../../models/Properties";
 
 @Component({
     selector: "scheme-list-panel",
@@ -91,11 +92,13 @@ export class SchemeListPanelComponent extends AbstractPanel {
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             let searchLangs: string[];
+            let includeLocales: boolean;
             if (searchSettings.restrictLang) {
                 searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
             }
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs).subscribe(
+                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

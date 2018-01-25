@@ -8,7 +8,8 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
-import { VBProperties, SearchSettings } from "../../../../utils/VBProperties";
+import { SearchSettings } from "../../../../models/Properties";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -173,12 +174,14 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             let searchLangs: string[];
+            let includeLocales: boolean;
             if (searchSettings.restrictLang) {
                 searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
             }
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs).subscribe(
+                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {

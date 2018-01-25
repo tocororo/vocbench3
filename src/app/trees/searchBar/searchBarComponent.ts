@@ -7,9 +7,10 @@ import { CompleterService } from 'ng2-completer';
 import { CustomCompleterData } from "./customCompleterData";
 import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
 import { SearchServices } from "../../services/searchServices";
-import { VBProperties, StringMatchMode, SearchSettings } from "../../utils/VBProperties";
+import { VBProperties } from "../../utils/VBProperties";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { StringMatchMode, SearchSettings } from "../../models/Properties";
 
 @Component({
     selector: "search-bar",

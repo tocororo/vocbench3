@@ -2,7 +2,8 @@ import { Component, ViewChild, Output, EventEmitter } from "@angular/core";
 import { ResourceViewTabbedComponent } from "./resourceViewTabbedComponent";
 import { ResourceViewSplittedComponent } from "./resourceViewSplittedComponent";
 import { ARTResource } from "../../models/ARTResources";
-import { VBProperties, ResourceViewMode } from "../../utils/VBProperties";
+import { ResourceViewMode } from "../../models/Properties";
+import { VBProperties } from "../../utils/VBProperties";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 
 @Component({

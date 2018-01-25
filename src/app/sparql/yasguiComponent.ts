@@ -1,6 +1,6 @@
 import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { VBContext } from '../utils/VBContext';
-import { StringMatchMode } from '../utils/VBProperties';
+import { StringMatchMode } from '../models/Properties';
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/Metadata';
 import { MetadataServices } from '../services/metadataServices';

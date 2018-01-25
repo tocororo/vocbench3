@@ -3,12 +3,12 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { OWL, RDFS } from "../../../models/Vocabulary";
-import { Properties } from "../../../models/Properties";
+import { Properties, ClassTreePreference } from "../../../models/Properties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { VBProperties, ClassTreePreference } from "../../../utils/VBProperties";
+import { VBProperties } from "../../../utils/VBProperties";
 import { VBContext } from "../../../utils/VBContext";
 import { Cookie } from "../../../utils/Cookie";
 

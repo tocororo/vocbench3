@@ -1,8 +1,9 @@
 import { Component, Input } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { VBProperties, ResourceViewMode } from "../../utils/VBProperties";
+import { VBProperties } from "../../utils/VBProperties";
 import { VBEventHandler } from "../../utils/VBEventHandler";
+import { ResourceViewMode } from "../../models/Properties";
 
 @Component({
     selector: "res-view-settings-modal",

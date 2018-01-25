@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { Properties } from '../models/Properties';
+import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
 import { ProjectTableColumnStruct } from '../models/Project';
 import { ExtensionPoint } from '../models/Plugins';
 import { Cookie } from '../utils/Cookie';
@@ -31,6 +31,7 @@ export class VBProperties {
         useURI: true,
         useLocalName: true,
         restrictLang: false,
+        includeLocales: false,
         languages: [],
         useAutocompletion: false,
         restrictActiveScheme: true,
@@ -62,7 +63,8 @@ export class VBProperties {
         var properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
-            Properties.pref_search_languages, Properties.pref_search_restrict_lang, Properties.pref_search_use_autocomplete,
+            Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
+            Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root
         ];
         this.prefService.getProjectPreferences(properties).subscribe(
@@ -109,6 +111,7 @@ export class VBProperties {
                     this.searchSettings.languages = JSON.parse(searchLangsPref);
                 }
                 this.searchSettings.restrictLang = prefs[Properties.pref_search_restrict_lang] == "true";
+                this.searchSettings.includeLocales = prefs[Properties.pref_search_include_locales] == "true";
                 this.searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
 
                 this.initSearchSettingsCookie(); //other settings stored in cookies
@@ -374,6 +377,9 @@ export class VBProperties {
         if (this.searchSettings.restrictLang != settings.restrictLang) {
             this.prefService.setProjectPreference(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
         }
+        if (this.searchSettings.includeLocales != settings.includeLocales) {
+            this.prefService.setProjectPreference(Properties.pref_search_include_locales, settings.includeLocales+"").subscribe();
+        }
         if (this.searchSettings.useAutocompletion != settings.useAutocompletion) {
             this.prefService.setProjectPreference(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"").subscribe();
         }
@@ -450,41 +456,4 @@ export class VBProperties {
         }
     }
 
-}
-
-export type ResourceViewMode = "tabbed" | "splitted";
-export const ResourceViewMode = {
-    tabbed: "tabbed" as ResourceViewMode,
-    splitted: "splitted" as ResourceViewMode
-}
-
-export class SearchSettings {
-    public stringMatchMode: StringMatchMode;
-    public useURI: boolean;
-    public useLocalName: boolean;
-    public restrictLang: boolean;
-    public languages: string[];
-    public useAutocompletion: boolean;
-    public restrictActiveScheme: boolean;
-    public classIndividualSearchMode: ClassIndividualPanelSearchMode;
-}
-
-export type StringMatchMode = "startsWith" | "contains" | "endsWith";
-export const StringMatchMode = {
-    startsWith: "startsWith" as StringMatchMode,
-    contains: "contains" as StringMatchMode,
-    endsWith: "endsWith" as StringMatchMode
-}
-
-export type ClassIndividualPanelSearchMode = "onlyClasses" | "onlyInstances" | "all";
-export const ClassIndividualPanelSearchMode = {
-    onlyClasses: "onlyClasses" as ClassIndividualPanelSearchMode,
-    onlyInstances: "onlyInstances" as ClassIndividualPanelSearchMode,
-    all: "all" as ClassIndividualPanelSearchMode
-}
-
-export class ClassTreePreference {
-    rootClassUri: string;
-    filterMap: { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
-    filterEnabled: boolean;
 }

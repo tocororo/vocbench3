@@ -2,7 +2,8 @@ import { Component, Input } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { VBProperties, StringMatchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../utils/VBProperties";
+import { VBProperties } from "../../utils/VBProperties";
+import { StringMatchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../models/Properties";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 
 export class SearchSettingsModalData extends BSModalContext {
@@ -40,6 +41,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private useLocalName: boolean = true;
 
     private restrictLang: boolean = false;
+    private includeLocales: boolean = false;
     private languages: string[];
 
     private useAutocompletion: boolean = false;
@@ -70,6 +72,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;
         this.restrictLang = this.settings.restrictLang;
+        this.includeLocales = this.settings.includeLocales;
         this.languages = this.settings.languages;
         this.useAutocompletion = this.settings.useAutocompletion;
         this.restrictConceptSchemes = this.settings.restrictActiveScheme;
@@ -92,6 +95,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
             useURI: this.useURI,
             useLocalName: this.useLocalName,
             restrictLang: this.restrictLang,
+            includeLocales: this.includeLocales,
             languages: this.languages,
             useAutocompletion: this.useAutocompletion,
             restrictActiveScheme: this.restrictConceptSchemes,

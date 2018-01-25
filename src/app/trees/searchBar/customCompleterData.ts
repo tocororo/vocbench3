@@ -2,7 +2,7 @@ import { Subject } from "rxjs/Subject";
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 import { SearchServices } from "../../services/searchServices";
 import { RDFResourceRolesEnum, ARTURIResource } from "../../models/ARTResources";
-import { SearchSettings, ClassIndividualPanelSearchMode } from "../../utils/VBProperties";
+import { ClassIndividualPanelSearchMode, SearchSettings } from "../../models/Properties";
 
 export class CustomCompleterData extends Subject<CompleterItem[]> implements CompleterData {
 
@@ -15,8 +15,10 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
 
     public search(term: string): void {
         let langsParam: string[];
+        let includeLocales: boolean;
         if (this.searchSettings.restrictLang) {
             langsParam = this.searchSettings.languages;
+            includeLocales = this.searchSettings.includeLocales;
         }
         let schemesParam: ARTURIResource[];
         if (this.searchSettings.restrictActiveScheme) {
@@ -35,7 +37,7 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
             clsParam = this.cls;
         }
         this.searchService.searchStringList(term, rolesParam, this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
-            langsParam, schemesParam, clsParam).map(
+            langsParam, includeLocales, schemesParam, clsParam).map(
             strings => {
                 let results: CompleterItem[] = [];
                 strings.slice(0, 100).forEach(s => {

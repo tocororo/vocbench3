@@ -11,7 +11,8 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
 import { RDFS, OWL } from "../../../models/Vocabulary";
-import { VBProperties, SearchSettings, ClassTreePreference } from "../../../utils/VBProperties";
+import { SearchSettings, ClassTreePreference } from "../../../models/Properties";
+import { VBProperties } from "../../../utils/VBProperties";
 import { VBContext } from "../../../utils/VBContext";
 import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
@@ -106,12 +107,14 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         } else {
             let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
             let searchLangs: string[];
+            let includeLocales: boolean;
             if (searchSettings.restrictLang) {
                 searchLangs = searchSettings.languages;
+                includeLocales = searchSettings.includeLocales;
             }
             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
             this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
-                searchSettings.stringMatchMode, searchLangs).subscribe(
+                searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                     if (searchResult.length == 0) {
