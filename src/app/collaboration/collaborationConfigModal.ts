@@ -5,6 +5,8 @@ import { PluginsServices } from "../services/pluginsServices";
 import { CollaborationServices } from "../services/collaborationServices";
 import { Plugin, PluginConfiguration, ExtensionPoint } from "../models/Plugins";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { CollaborationCtx } from "../models/Collaboration";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "collaboration-config-modal",
@@ -14,7 +16,6 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     context: BSModalContext;
 
     private availableCollaborationPlugins: Plugin[];
-    private selectedPlugin: Plugin;
 
     private collSysSettings: PluginConfiguration;
     private collSysPreferences: PluginConfiguration;
@@ -33,22 +34,37 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
         //         this.initCollaborationSystemConf();
         //     }
         // );
-        this.selectedPlugin = new Plugin("it.uniroma2.art.semanticturkey.plugin.impls.collaboration.JiraBackendFactory");
+
         this.initCollaborationSystemConf();
 
     }
 
     private initCollaborationSystemConf() {
-        this.collaborationService.getProjectSettings(this.selectedPlugin.factoryID).subscribe(
-            settings => {
-                this.collSysSettings = settings;
-            }
-        );
-        this.collaborationService.getProjectPreferences(this.selectedPlugin.factoryID).subscribe(
-            prefs => {
-                this.collSysPreferences = prefs;
-            }
-        );
+        this.collSysSettings = VBContext.getCollaborationCtx().getSettings();
+        if (this.collSysSettings == null) {
+            this.collaborationService.getProjectSettings(CollaborationCtx.jiraFactoryId).subscribe(
+                settings => {
+                    VBContext.getCollaborationCtx().setSettings(settings);
+                    this.collSysSettings = settings;
+                }
+            );
+        }
+        
+        this.collSysPreferences = VBContext.getCollaborationCtx().getPreferences();
+        if (this.collSysSettings == null) {
+            this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).subscribe(
+                preferences => {
+                    VBContext.getCollaborationCtx().setPreferences(preferences);
+                    this.collSysPreferences = preferences;
+                }
+            );
+        }
+        
+        // this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).subscribe(
+        //     prefs => {
+        //         this.collSysPreferences = prefs;
+        //     }
+        // );
     }
 
     private isOkClickable(): boolean {
@@ -67,7 +83,7 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     ok(event: Event) {
         let settingsParam = this.collSysSettings.getPropertiesAsMap();
         let prefsParam = this.collSysPreferences.getPropertiesAsMap();
-        this.collaborationService.activateCollaboratioOnProject(this.selectedPlugin.factoryID, settingsParam, prefsParam).subscribe(
+        this.collaborationService.activateCollaboratioOnProject(CollaborationCtx.jiraFactoryId, settingsParam, prefsParam).subscribe(
             resp => {
                 event.stopPropagation();
                 event.preventDefault();

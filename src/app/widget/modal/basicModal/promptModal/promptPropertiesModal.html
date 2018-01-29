@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        {{context.title}}
+    </h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh">
+
+    <div class="scrollableContainer">
+        <table class="table table-condensed table-borderless table-hoverable">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr *ngFor="let p of mapKeys">
+                    <td nowrap>
+                        <label>{{p}}:</label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control input-sm" [(ngModel)]="properties[p]">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

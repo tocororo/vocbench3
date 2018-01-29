@@ -4,6 +4,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { CollaborationServices } from "../services/collaborationServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "collaboration-proj-modal",
@@ -14,7 +15,7 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
 
-    private projects: { id: string, key: string, name: string }[];
+    private projects: { id: string, key: string, name: string }[] = [];
     private selectedProject: { id: string, key: string, name: string }
 
     constructor(public dialog: DialogRef<BSModalContext>, private collaborationService: CollaborationServices, 
@@ -23,12 +24,44 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
     }
 
     ngOnInit() {
+        this.initProjectList();
+    }
+
+    private initProjectList() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.collaborationService.listProjects().subscribe(
             projects => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 this.projects = projects;
+            },
+            (err: Error) => {
+                this.basicModals.alert("Error", "Cannot retrieve the projects list. Connection to Collaboration System server failed." ,
+                    "error", err.name + " " + err.message).then(
+                    () => {
+                        VBContext.getCollaborationCtx().setEnabled(false);
+                        this.dialog.dismiss();
+                    }
+                );
             }
+        );
+    }
+
+    private createProject() {
+        let projectProps: { [key: string]: string } = {
+            name: null, 
+            key: null
+        };
+        this.basicModals.promptProperties("Create project", projectProps).then(
+            props => {
+                let projectName = props.name;
+                let projectKey = props.key;
+                this.collaborationService.createProject(projectName, projectKey).subscribe(
+                    stResp => {
+                        this.initProjectList();
+                    }
+                );
+            },
+            () => {}
         )
     }
 
@@ -38,9 +71,17 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
 
 
     ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+        this.collaborationService.assignProject(this.selectedProject.name, this.selectedProject.key).subscribe(
+            stResp => {
+                event.stopPropagation();
+                event.preventDefault();
+                this.dialog.close();
+            }
+        );
+    }
+
+    cancel() {
+        this.dialog.dismiss();
     }
  
 }

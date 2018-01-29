@@ -5,6 +5,7 @@ import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { CustomForm } from "../../../models/CustomForms";
 import { PromptModal, PromptModalData } from "./promptModal/promptModal";
 import { PromptPrefixedModal, PromptPrefixedModalData } from "./promptModal/promptPrefixedModal";
+import { PromptPropertiesModal, PromptPropertiesModalData } from './promptModal/promptPropertiesModal';
 import { ConfirmModal, ConfirmModalData } from "./confirmModal/confirmModal";
 import { ConfirmCheckModal, ConfirmCheckModalData } from "./confirmModal/confirmCheckModal";
 import { AlertModal, AlertModalData } from "./alertModal/alertModal";
@@ -62,6 +63,20 @@ export class BasicModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PromptPrefixedModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal that allows to provide a set of properties values.
+     * @param title 
+     * @param properties 
+     */
+    promptProperties(title: string, properties: { [key: string]: string }) {
+        var modalData = new PromptPropertiesModalData(title, properties);
+        const builder = new BSModalContextBuilder<PromptPropertiesModalData>(
+            modalData, undefined, PromptPropertiesModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(PromptPropertiesModal, overlayConfig).result;
     }
 
     /**

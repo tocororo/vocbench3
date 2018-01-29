@@ -13,7 +13,6 @@ import { AlignmentValidationComponent } from "./alignment/alignmentValidation/al
 import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
 import { CollaborationComponent } from './collaboration/collaborationComponent';
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
-import { ImportProjectComponent } from "./project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
 import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -51,7 +50,6 @@ export const routes: Routes = [
     { path: "Config/Refactor", component: RefactorComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Config/Versioning", component: VersioningComponent, canActivate: [AuthGuard, ProjectGuard] },
     // route config for project management
-    { path: "Projects/ImportProject", component: ImportProjectComponent, canActivate: [AdminGuard] },
     { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AdminGuard] },
 ];
 

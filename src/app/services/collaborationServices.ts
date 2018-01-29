@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginConfiguration, PluginConfigProp } from '../models/Plugins';
+import { Issue } from '../models/Collaboration';
 
 @Injectable()
 export class CollaborationServices {
@@ -10,6 +11,22 @@ export class CollaborationServices {
     private serviceName = "Collaboration";
 
     constructor(private httpMgr: HttpManager) { }
+
+    /**
+     * Returns an object containing the following boolean values:
+     * enabled
+     * settingsConfigured
+     * preferencesConfigured
+     * @param backendId 
+     */
+    getCollaborationSystemStatus(backendId: string): 
+        Observable<{ enabled: boolean, linked: boolean, settingsConfigured: boolean, preferencesConfigured: boolean }> {
+        console.log("[CollaborationServices] getCollaborationSystemStatus");
+        var params: any = {
+            backendId: backendId
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params, true);
+    }
 
     /**
      * Gets the settings to be set to the collaboration backend (mainly the serverURL)
@@ -118,13 +135,36 @@ export class CollaborationServices {
     listProjects(): Observable<{ id: string, key: string, name: string }[]> {
         console.log("[CollaborationServices] listProjects");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params, true);
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['java.net.ConnectException'] 
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params, true, options);
     }
 
-    listIssues() {
+    listIssues(): Observable<{ resource: ARTURIResource, issues: Issue[] }[]> {
         console.log("[CollaborationServices] listIssues");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listIssues", params, true);
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['java.net.ConnectException'] 
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "listIssues", params, true, options).map(
+            stResp => {
+                let issues: { resource: ARTURIResource, issues: Issue[] }[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    issues.push({
+                        resource: new ARTURIResource(stResp[i].resource),
+                        issues: stResp[i].issues
+                    });
+                }
+                return issues;
+            }
+        );
     }
 
 }

@@ -21,12 +21,34 @@
         </div>
 
         <!-- Show this only if no project is linked (how to know this?) and if the user has authorization (Admin or PM) -->
-        <div *ngIf="csProjectLinked" class="alert alert-warning" style="margin: 3px;">
+        <div *ngIf="!csProjectLinked" class="alert alert-warning" style="margin: 3px;">
             There is no CS project assigned to this Vocbench project.
             <a style="cursor: pointer" (click)="createProject()">Create or assign</a> a project.
         </div>
 
         <!-- Here issues list -->
+
+        <table class="table table-condensed table-borderless table-hoverable">
+            <thead>
+                <tr>
+                    <th class="text-center">Id</th>
+                    <th class="text-center">key</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">URL</th>
+                    <th class="text-center">labels</th>
+                    <th class="text-center">resolution</th>
+                    <th class="text-center">category</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let i of issues">
+                    <td colspan="7">{{ i | json }}</td>
+                    <!-- <td class="text-center">{{p.key}}</td>
+                    <td class="text-center">{{p.id}}</td>
+                    <td class="text-center">{{p.name}}</td> -->
+                </tr>
+            </tbody>
+        </table>
 
     </div>
     

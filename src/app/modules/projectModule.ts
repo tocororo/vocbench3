@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from './sharedModule';
 
 import { ProjectComponent } from "../project/projectComponent";
-import { ImportProjectComponent } from "../project/importProject/importProjectComponent";
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 
 //modals
@@ -18,7 +17,7 @@ import { ProjectListModal } from "../project/projectListModal";
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
-        ProjectComponent, ImportProjectComponent, CreateProjectComponent,
+        ProjectComponent, CreateProjectComponent,
         //modals
         ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal
     ],

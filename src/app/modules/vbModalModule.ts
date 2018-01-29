@@ -22,6 +22,7 @@ import { DownloadModal } from '../widget/modal/basicModal/downloadModal/download
 import { FilePickerModal } from '../widget/modal/basicModal/filePickerModal/filePickerModal';
 import { PromptModal } from '../widget/modal/basicModal/promptModal/promptModal';
 import { PromptPrefixedModal } from '../widget/modal/basicModal/promptModal/promptPrefixedModal';
+import { PromptPropertiesModal } from '../widget/modal/basicModal/promptModal/promptPropertiesModal';
 import { SelectionModal } from '../widget/modal/basicModal/selectionModal/selectionModal';
 import { ResourceSelectionModal } from '../widget/modal/basicModal/selectionModal/resourceSelectionModal';
 import { CustomFormSelectionModal } from '../widget/modal/basicModal/selectionModal/customFormSelectionModal';
@@ -79,7 +80,7 @@ import { CollaborationProjectModal } from "../collaboration/collaborationProject
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
-        PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
+        PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
@@ -104,7 +105,7 @@ import { CollaborationProjectModal } from "../collaboration/collaborationProject
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
-        PromptModal, PromptPrefixedModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
+        PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,

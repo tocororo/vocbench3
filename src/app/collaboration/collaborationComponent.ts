@@ -1,11 +1,15 @@
 import { Component, HostListener } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { CollaborationConfigModal } from "./collaborationConfigModal";
 import { CollaborationProjectModal } from "./collaborationProjectModal";
 import { CollaborationServices } from "../services/collaborationServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { Plugin } from '../models/Plugins';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { Plugin, PluginConfiguration } from '../models/Plugins';
+import { CollaborationCtx } from '../models/Collaboration';
+import { VBContext } from '../utils/VBContext';
 
 @Component({
     selector: 'collaboration-component',
@@ -14,72 +18,99 @@ import { Plugin } from '../models/Plugins';
 })
 export class CollaborationComponent {
 
-    private jiraPlugin: Plugin = new Plugin("it.uniroma2.art.semanticturkey.plugin.impls.collaboration.JiraBackendFactory");
+    private settingsConfigured: boolean; //serverURL
+    private preferencesConfigured: boolean; //credentials
+    private csProjectLinked: boolean;
 
-    private settingsConfigured: boolean = true; //serverURL
-    private preferencesConfigured: boolean = true; //credentials
-    private csProjectLinked: boolean = false;
+    private issues: any[] = []; //TODO
 
-    constructor(private collaborationService: CollaborationServices, private sharedModals: SharedModalServices, private modal: Modal) {}
+    constructor(private collaborationService: CollaborationServices, private basicModals: BasicModalServices,
+        private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
-        this.doPreCheck();
+        this.csProjectLinked = VBContext.getCollaborationCtx().isLinked();
+        this.initIssueList();
     }
 
-    private doPreCheck() {
-        /**
-         * Perform 2 checks:
-         * - server url configured?
-         * - user credentials setted?
-         * If both yes => try to get issueList
-         *      if fails => distinguish wrong settings (serverURL) or wrong preferences (credentials)
-         */
-        this.checkSettings().subscribe(
-            res => {
-                if (this.settingsConfigured) {
-                    this.checkPreferences().subscribe(
-                        res => {
-                            if (this.preferencesConfigured) {
-                                alert("listing issues");
+    private initIssueList() {
+        let collCtx: CollaborationCtx = VBContext.getCollaborationCtx();
+
+        //TODO maybe here it is appropriate to chech the status, since if the project is not linked, the request listIssue is invoked anyway
+        //(just in case when the project was linked at project accessed)
+        
+        let initPrefs = this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).map(
+            prefs => {
+                collCtx.setPreferences(prefs);
+            }
+        );
+        let initSettings = this.collaborationService.getProjectSettings(CollaborationCtx.jiraFactoryId).map(
+            settings => {
+                collCtx.setSettings(settings);
+            }
+        );
+
+        Observable.forkJoin([initPrefs, initSettings]).subscribe(
+            resp => {
+                this.preferencesConfigured = collCtx.isPreferencesConfigured();
+                this.settingsConfigured = collCtx.isSettingsConfigured();
+        
+                if (collCtx.isEnabled() && collCtx.isLinked() && this.preferencesConfigured && this.settingsConfigured) {
+                    this.collaborationService.listIssues().subscribe(
+                        issues => {
+                            this.issues = issues;
+                        },
+                        (err: Error) => {
+                            if (err.name.endsWith("ConnectException")) {
+                                this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
+                                    "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
+                                collCtx.setWorking(false);
                             }
                         }
                     )
                 }
             }
-        )
-    }
-
-    private checkSettings() {
-        return this.collaborationService.getProjectSettings(this.jiraPlugin.factoryID).map(
-            settings => {
-                this.settingsConfigured = !settings.requireConfiguration();
-            }
         );
-    }
 
-    private checkPreferences() {
-        return this.collaborationService.getProjectPreferences(this.jiraPlugin.factoryID).map(
-            prefs => {
-                this.preferencesConfigured = !prefs.requireConfiguration();
-            }
-        );
-    }
+        // this.preferencesConfigured = collCtx.isPreferencesConfigured();
+        // this.settingsConfigured = collCtx.isSettingsConfigured();
 
+        // if (collCtx.isEnabled() && this.preferencesConfigured && this.settingsConfigured) {
+        //     this.collaborationService.listIssues().subscribe(
+        //         issues => {
+        //             console.log(issues);
+        //         },
+        //         (err: Error) => {
+        //             if (err.name.endsWith("ConnectException")) {
+        //                 this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
+        //                     "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
+        //                 collCtx.setWorking(false);
+        //             }
+        //         }
+        //     )
+        // }
+
+    }
 
     private openConfig() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         this.modal.open(CollaborationConfigModal, overlayConfig).result.then(
             res => {
-                this.doPreCheck();
-            }
+                this.initIssueList();
+            },
+            () => {}
         );
     }
 
     private createProject() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(CollaborationProjectModal, overlayConfig);
+        this.modal.open(CollaborationProjectModal, overlayConfig).result.then(
+            res => {
+                this.initIssueList();
+            },
+            () => {}
+        );
     }
 
 }

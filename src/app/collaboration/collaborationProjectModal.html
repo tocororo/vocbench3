@@ -10,8 +10,8 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <label style="flex: 1">Projects:</label>
-                <button class="btn btn-xs btn-default">
-                    <span class="glyphicon glyphicon-plus" (click)="createProject()"></span>
+                <button class="btn btn-xs btn-default" (click)="createProject()">
+                    <span class="glyphicon glyphicon-plus"></span>
                 </button>
             </div>
             <div class="panel-body scrollableContainer" style="min-height: 70px;">
@@ -36,7 +36,8 @@
 
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProject">Ok</button>
+        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
     </div>
 
     <div #blockDiv class="blockingDiv" style="display:none">

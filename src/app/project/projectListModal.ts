@@ -3,11 +3,14 @@ import { Router } from "@angular/router";
 import { Observable } from 'rxjs/Observable';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
 import { AdministrationServices } from "../services/administrationServices";
+import { CollaborationServices } from "../services/collaborationServices";
 import { MetadataServices } from "../services/metadataServices";
 import { Project } from '../models/Project';
+import { CollaborationCtx } from '../models/Collaboration';
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { UIUtils } from '../utils/UIUtils';
@@ -16,16 +19,16 @@ import { UIUtils } from '../utils/UIUtils';
     selector: "project-list-modal",
     templateUrl: "./projectListModal.html",
 })
-export class ProjectListModal implements ModalComponent<BSModalContext> {
+export class ProjectListModal extends AbstractProjectComponent implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
-    private workingProject: Project;
     private projectList: Array<Project> = [];
     private selectedProject: Project;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private projectService: ProjectServices, private metadataService: MetadataServices,
-        private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties,
-        private router: Router) {
+    constructor(public dialog: DialogRef<BSModalContext>,
+        adminService: AdministrationServices, userService: UserServices, collaborationService: CollaborationServices,
+        metadataService: MetadataServices, vbProp: VBProperties, private projectService: ProjectServices, private router: Router) {
+        super(adminService, userService, metadataService, collaborationService, vbProp);
         this.context = dialog.context;
     }
 
@@ -39,56 +42,11 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
                 }
             }
         );
-        this.workingProject = VBContext.getWorkingProject();
     }
 
-    private selectProject(project: Project) {
+    selectProject(project: Project) {
         if (!this.isWorkingProject(project)) {
             this.selectedProject = project;
-        }
-    }
-
-    private accessProject() {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.projectService.accessProject(this.selectedProject).subscribe(
-            stResp => {
-                VBContext.setWorkingProject(this.selectedProject);
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.vbProp.initUserProjectPreferences();
-                this.vbProp.initProjectSettings();
-                this.adminService.getProjectUserBinding(this.selectedProject.getName(), VBContext.getLoggedUser().getEmail()).subscribe(
-                    puBinding => {
-                        VBContext.setProjectUserBinding(puBinding);
-                    }
-                );
-                Observable.forkJoin(
-                    //init the project preferences for the project
-                    this.userService.listUserCapabilities(),
-                    this.metadataService.getNamespaceMappings()
-                ).subscribe(
-                    res => {
-                        VBContext.setProjectChanged(true);
-                        var currentRoute = this.router.url;
-                        this.router.navigate(['/Home']).then(
-                            success => {
-                                this.router.navigate([currentRoute]);
-                            }
-                        );
-                    }
-                );
-            }
-            /**
-             * here don't handle the exception thrown for missing changetracker sail since this modal shows only
-             * the open projects, so accessProject() doesn't open a project but simply accesses it.
-             */ 
-        );
-    }
-
-    private isWorkingProject(project: Project) {
-        if (this.workingProject != null) {
-            return project.getName() == this.workingProject.getName();
-        } else {
-            return false;
         }
     }
 
@@ -99,7 +57,16 @@ export class ProjectListModal implements ModalComponent<BSModalContext> {
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        this.accessProject();
+        this.accessProject(this.selectedProject).subscribe(
+            res => {
+                var currentRoute = this.router.url;
+                this.router.navigate(['/Home']).then(
+                    success => {
+                        this.router.navigate([currentRoute]);
+                    }
+                );
+            }
+        );
         this.dialog.close();
     }
 
