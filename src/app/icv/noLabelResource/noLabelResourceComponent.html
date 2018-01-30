@@ -23,7 +23,7 @@
                 <tbody>
                     <tr *ngFor="let resource of brokenResourceList">
                         <td>
-                            <rdf-resource [resource]="resource"></rdf-resource>
+                            <rdf-resource class="clickable" [resource]="resource" (click)="onResourceClick(resource)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-default" (click)="fix(resource)">

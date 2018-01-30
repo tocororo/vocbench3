@@ -255,7 +255,7 @@ export class IcvServices {
     }
 
     /**
-     * Returns a list of resources that have the same preferred or alt label of another resource
+     * Returns a list of resources that have the same label as preferred alt or hidden label
      * @param rolesArray 
      */
     listResourcesWithOverlappedLabels(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
@@ -264,6 +264,22 @@ export class IcvServices {
             rolesArray: rolesArray
         };
         return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedLabels", params, true).map(
+            stResp => {
+                return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
+            }
+        );
+    }
+
+    /**
+     * Returns a list of resources that have the same preferred or alt label of another resource
+     * @param rolesArray 
+     */
+    listResourcesWithSameLabels(rolesArray: RDFResourceRolesEnum[]): Observable<ARTResource[]> {
+        console.log("[IcvServices] listResourcesWithSameLabels");
+        var params: any = {
+            rolesArray: rolesArray
+        };
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithSameLabels", params, true).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
             }

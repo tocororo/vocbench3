@@ -84,7 +84,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 project.setOpen(true);
-                this.accessProject(project);
+                this.accessProject(project).subscribe();
             },
             (err: Error) => {
                 this.projectService.handleMissingChangetrackierSailError(err, this.basicModals);
@@ -95,7 +95,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private activateProject(project: Project) {
         var workingProj = VBContext.getWorkingProject();
         if (workingProj == undefined || workingProj.getName() != project.getName()) {
-            this.accessProject(project);
+            this.accessProject(project).subscribe();
         }
     }
 

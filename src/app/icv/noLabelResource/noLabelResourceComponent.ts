@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ARTURIResource, ARTResource, ARTLiteral, RDFTypesEnum } from "../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
@@ -23,7 +24,8 @@ export class NoLabelResourceComponent {
     private actionLabel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,
-        private resourcesService: ResourcesServices, private propService: PropertyServices, private creationModals: CreationModalServices) { }
+        private resourcesService: ResourcesServices, private propService: PropertyServices,
+        private creationModals: CreationModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
@@ -101,6 +103,10 @@ export class NoLabelResourceComponent {
                 () => { }
             );
         }
+    }
+
+    onResourceClick(res: ARTResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }

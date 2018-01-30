@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ARTResource } from "../../models/ARTResources";
 import { UIUtils } from "../../utils/UIUtils";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "top-concept-with-broader-component",
@@ -13,7 +14,7 @@ export class TopConceptWithBroaderComponent {
 
     private brokenRecordList: {concept: ARTURIResource, scheme: ARTURIResource}[];
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices) { }
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private sharedModals: SharedModalServices) { }
 
     /**
      * Run the check
@@ -62,6 +63,10 @@ export class TopConceptWithBroaderComponent {
                 this.runIcv();
             }
         );
+    }
+
+    onResourceClick(res: ARTURIResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }

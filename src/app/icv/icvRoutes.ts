@@ -12,6 +12,7 @@ import { HierarchicalRedundancyComponent } from "./hierarchicalRedundancy/hierar
 import { NoLabelResourceComponent } from "./noLabelResource/noLabelResourceComponent";
 import { OnlyAltLabelResourceComponent } from "./onlyAltLabelResource/onlyAltLabelResourceComponent";
 import { OverlappedLabelComponent } from "./overlappedLabel/overlappedLabelComponent";
+import { ConflictualLabelComponent } from "./conflictualLabel/conflictualLabelComponent";
 import { NoLangLabelComponent } from "./noLangLabel/noLangLabelComponent";
 import { ExtraSpaceLabelComponent } from "./extraSpaceLabel/extraSpaceLabelComponent";
 import { DanglingXLabelComponent } from "./danglingXLabel/danglingXLabelComponent";
@@ -41,6 +42,7 @@ export const routes: Routes = [
             { path: "NoLabelResource", component: NoLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "OnlyAltLabelResource", component: OnlyAltLabelResourceComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "OverlappedLabelResource", component: OverlappedLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
+            { path: "ConflictualLabelResource", component: ConflictualLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "NoLangLabelResource", component: NoLangLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "ExtraSpaceLabelResource", component: ExtraSpaceLabelComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "NoMandatoryLabelResource", component: NoMandatoryLabelComponent, canActivate: [AuthGuard, ProjectGuard] },

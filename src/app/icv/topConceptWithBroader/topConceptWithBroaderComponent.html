@@ -29,10 +29,10 @@
                 <tbody>
                     <tr *ngFor="let record of brokenRecordList">
                         <td>
-                            <rdf-resource [resource]="record.concept"></rdf-resource>
+                            <rdf-resource class="clickable" [resource]="record.concept" (click)="onResourceClick(record.concept)"></rdf-resource>
                         </td>
                         <td>
-                            <rdf-resource [resource]="record.scheme"></rdf-resource>
+                            <rdf-resource class="clickable" [resource]="record.scheme" (click)="onResourceClick(record.scheme)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-default" (click)="removeBroaders(record)">Remove broader(s)</button>

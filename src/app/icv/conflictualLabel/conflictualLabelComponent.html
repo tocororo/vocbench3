@@ -1,0 +1,62 @@
+<div class="panel panel-default vbox" style="position: relative">
+        <div class="panel-heading">
+            <label style="flex: 1;">Conflictual label resources</label>
+            <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        </div>
+        <div class="panel-body vbox">
+            
+            <icv-config-panel [checkRoles]="checkRoles" (rolesChange)="onRolesChanged($event)">
+            </icv-config-panel>
+    
+            <div class="panel panel-default vbox">
+                <div class="panel-body scrollableContainer">
+                    <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Resources</th>
+                                <th class="text-center">Label</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-template ngFor let-record [ngForOf]="brokenRecordList" let-i="index">
+                                <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
+                                    <td class="text-center">
+                                        <ng-template ngFor let-r [ngForOf]="record.resources">
+                                            <rdf-resource class="clickable" [resource]="r" (click)="onResourceClick(r)"></rdf-resource>
+                                        </ng-template>
+                                    </td>
+                                    <td class="text-center">
+                                        <rdf-resource [ngClass]="{ clickable : isResource(record.label) }" [resource]="record.label" (click)="onResourceClick(record.label)"></rdf-resource>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+    
+                <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
+                    <div class="btn-group btn-group-xs pull-right" role="group">
+                        <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                            <span class="glyphicon glyphicon-triangle-left"></span>
+                        </button>
+                        <button class="btn btn-default" style="cursor: auto" disabled>
+                            <span>{{page+1}} of {{pageCount}}</span>
+                        </button>
+                        <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                            <span class="glyphicon glyphicon-triangle-right"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div id="blockDivIcv" class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+        
+    </div>
