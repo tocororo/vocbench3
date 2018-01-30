@@ -9,19 +9,23 @@ export class CollaborationCtx {
     private working: boolean = false;
     private enabled: boolean = false;
     private linked: boolean = false; //if a collaboration project is linked to the VB project
-    private settings: PluginConfiguration;
-    private preferences: PluginConfiguration;
-
-    public isConfigured(): boolean {
-        //configured if both settings and preferences are configured
-        return this.isSettingsConfigured() && this.isPreferencesConfigured();
-    }
+    // private settings: PluginConfiguration;
+    private settingsConfigured: boolean = false;
+    // private preferences: PluginConfiguration;
+    private preferencesConfigured: boolean = false;
 
     public isSettingsConfigured(): boolean {
-        return this.settings != null && !this.settings.requireConfiguration();
+        return this.settingsConfigured;
     }
+    public setSettingsConfigured(configured: boolean) {
+        this.settingsConfigured = configured;
+    }
+
     public isPreferencesConfigured(): boolean {
-        return this.preferences != null && !this.preferences.requireConfiguration();
+        return this.preferencesConfigured;
+    }
+    public setPreferencesConfigured(configured: boolean) {
+        this.preferencesConfigured = configured;
     }
 
     public isEnabled(): boolean {
@@ -45,26 +49,34 @@ export class CollaborationCtx {
         this.linked = linked;
     }
     
-    public setSettings(settings: PluginConfiguration) {
-        this.settings = settings;
-    }
-    public getSettings(): PluginConfiguration {
-        return this.settings;
-    }
+    // public setSettings(settings: PluginConfiguration) {
+    //     this.settings = settings;
+    //     if (this.settings != null) {
+    //         this.settingsConfigured = !this.settings.requireConfiguration();
+    //     }
+    // }
+    // public getSettings(): PluginConfiguration {
+    //     return this.settings;
+    // }
 
-    public setPreferences(preferences: PluginConfiguration) {
-        this.preferences = preferences;
-    }
-    public getPreferences(): PluginConfiguration {
-        return this.preferences;
-    }
+    // public setPreferences(preferences: PluginConfiguration) {
+    //     this.preferences = preferences;
+    //     if (this.preferences != null) {
+    //         this.preferencesConfigured = !this.preferences.requireConfiguration();
+    //     }
+    // }
+    // public getPreferences(): PluginConfiguration {
+    //     return this.preferences;
+    // }
 
     public reset() {
         this.working = false;
         this.enabled = false;
         this.linked = false;
-        this.settings = null;
-        this.preferences = null;
+        // this.settings = null;
+        this.settingsConfigured = false;
+        // this.preferences = null;
+        this.preferencesConfigured = false;
     }
 }
 

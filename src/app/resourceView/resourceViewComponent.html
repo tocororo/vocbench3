@@ -19,6 +19,21 @@
                     </li>
                 </ul>
             </div>
+
+            <div *ngIf="collaborationWorking && resource.isURIResource()" class="dropdown pull-right" style="margin-left: 3px;">
+                <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="Issues">
+                    <span [class]="'glyphicon glyphicon-exclamation-sign ' + issuesStruct.btnClass"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let i of issuesStruct.issues" >
+                        <a [href]="i.url" target="_blank">{{i.key}}<span [class]="'label pull-right label-' + i.class" style="font-size: 100%">{{i.status}}</span></a>
+                    </li>
+                    <li *ngIf="issuesStruct.issues" role="separator" class="divider"></li>
+                    <li>
+                        <a (click)="createIssue()">Create issue for this resource</a>
+                    </li>
+                </ul>
+            </div>
             
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: showInferred}"
                 title="Show/hide inferred information" (click)="switchInferred()">

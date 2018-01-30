@@ -40,25 +40,25 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     }
 
     private initCollaborationSystemConf() {
-        this.collSysSettings = VBContext.getCollaborationCtx().getSettings();
-        if (this.collSysSettings == null) {
+        // this.collSysSettings = VBContext.getCollaborationCtx().getSettings();
+        // if (this.collSysSettings == null) {
             this.collaborationService.getProjectSettings(CollaborationCtx.jiraFactoryId).subscribe(
                 settings => {
-                    VBContext.getCollaborationCtx().setSettings(settings);
+                    // VBContext.getCollaborationCtx().setSettings(settings);
                     this.collSysSettings = settings;
                 }
             );
-        }
+        // }
         
-        this.collSysPreferences = VBContext.getCollaborationCtx().getPreferences();
-        if (this.collSysSettings == null) {
+        // this.collSysPreferences = VBContext.getCollaborationCtx().getPreferences();
+        // if (this.collSysSettings == null) {
             this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).subscribe(
                 preferences => {
-                    VBContext.getCollaborationCtx().setPreferences(preferences);
+                    // VBContext.getCollaborationCtx().setPreferences(preferences);
                     this.collSysPreferences = preferences;
                 }
             );
-        }
+        // }
         
         // this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).subscribe(
         //     prefs => {

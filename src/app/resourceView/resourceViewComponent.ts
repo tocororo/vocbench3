@@ -1,20 +1,27 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
 import { ResViewModalServices } from "./resViewModals/resViewModalServices";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { VersionInfo } from "../models/History";
 import { SemanticTurkey } from "../models/Vocabulary";
+import { Issue } from "../models/Collaboration";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { HttpServiceContext } from "../utils/HttpManager";
+import { VBContext } from "../utils/VBContext";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
-import { VBContext } from "../utils/VBContext";
+import { CollaborationServices } from "../services/collaborationServices";
 
 @Component({
     selector: "resource-view",
     templateUrl: "./resourceViewComponent.html",
+    styles: [`
+        .todo-issues { color: #337ab7 }
+        .done-issues { color: #5cb85c }`
+    ]
 })
 export class ResourceViewComponent {
 
@@ -55,10 +62,16 @@ export class ResourceViewComponent {
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
 
+    private collaborationWorking: boolean = VBContext.getCollaborationCtx().isWorking();
+    private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues"; issues: Issue[] } = { 
+        btnClass: "", issues: null
+    };
+
     private eventSubscriptions: any[] = [];
 
     constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
-        private eventHandler: VBEventHandler, private preferences: VBProperties, private resViewModals: ResViewModalServices) {
+        private collaborationService: CollaborationServices, private eventHandler: VBEventHandler, private preferences: VBProperties,
+        private basicModals: BasicModalServices, private resViewModals: ResViewModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -125,6 +138,11 @@ export class ResourceViewComponent {
                 }
             }
         );
+
+        this.collaborationWorking = VBContext.getCollaborationCtx().isWorking();
+        if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
+            this.initCollaboration();
+        }
     }
 
     /**
@@ -347,9 +365,63 @@ export class ResourceViewComponent {
         //resView is readonly if one of the temp version and the context version are not null
         this.readonly = this.activeVersion != null || VBContext.getContextVersion() != null;
     }
-
+    
     private openSettings() {
         this.resViewModals.editSettings();
+    }
+
+    // COLLABORATION SYSTEM HANDLERS
+
+    private initCollaboration() {
+        this.collaborationService.listIssuesAssignedToResource(<ARTURIResource>this.resource).subscribe(
+            issues => {
+                this.issuesStruct = {
+                    btnClass: "",
+                    issues: null
+                }
+                if (issues.length > 0) {
+                    /*
+                     * Iterate over the issues and add the classes for styling
+                     * - the main button of collaboration system
+                     *      - black (no class applied) if there is no issue
+                     *      - green (.done-issues) if there are only closed issues
+                     *      - blue (.todo-issues) if there are at least one open issue
+                     * - the status badge of the single issue:
+                     *      - green (.success) if the issue is closed (Done)
+                     *      - blue (.primary) if the issue is open (To Do)
+                     *      - cyan (.info) otherwise
+                     */
+                    for (var i = 0; i < issues.length; i++) {
+                        if (issues[i].status == 'To Do') {
+                            issues[i]['class'] = "primary";
+                            this.issuesStruct.btnClass = "todo-issues";
+                        } else if (issues[i].status == 'Done') {
+                            issues[i]['class'] = "success";
+                            if (this.issuesStruct.btnClass == "") {
+                                this.issuesStruct.btnClass = "done-issues";
+                            }
+                        } else {
+                            issues[i]['class'] = "info";
+                        }
+                    }
+                    this.issuesStruct.issues = issues;
+                }
+            },
+            err => {
+                VBContext.getCollaborationCtx().setWorking(false);
+            }
+        )
+    }
+
+    private createIssue() {
+        this.basicModals.prompt("Create issue for " + this.resource.getShow(), "Summary").then(
+            summary => {
+                this.collaborationService.createIssue(<ARTURIResource>this.resource, summary).subscribe(
+                    stResp => this.initCollaboration()
+                );
+            },
+            () => {}
+        );
     }
 
     /**

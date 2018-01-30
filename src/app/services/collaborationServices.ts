@@ -4,6 +4,7 @@ import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginConfiguration, PluginConfigProp } from '../models/Plugins';
 import { Issue } from '../models/Collaboration';
+import { VBContext } from '../utils/VBContext';
 
 @Injectable()
 export class CollaborationServices {
@@ -25,7 +26,15 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId
         };
-        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params, true).map(
+            resp => {
+                VBContext.getCollaborationCtx().setEnabled(resp.enabled);
+                VBContext.getCollaborationCtx().setLinked(resp.linked);
+                VBContext.getCollaborationCtx().setPreferencesConfigured(resp.preferencesConfigured);
+                VBContext.getCollaborationCtx().setSettingsConfigured(resp.settingsConfigured);
+                return resp;
+            }
+        );
     }
 
     /**

@@ -38,7 +38,7 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
                 this.basicModals.alert("Error", "Cannot retrieve the projects list. Connection to Collaboration System server failed." ,
                     "error", err.name + " " + err.message).then(
                     () => {
-                        VBContext.getCollaborationCtx().setEnabled(false);
+                        VBContext.getCollaborationCtx().setWorking(false);
                         this.dialog.dismiss();
                     }
                 );
@@ -62,7 +62,7 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
                 );
             },
             () => {}
-        )
+        );
     }
 
     private selectProject(p: { id: string, key: string, name: string }) {

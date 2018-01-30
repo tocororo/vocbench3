@@ -10,6 +10,7 @@ import { BasicModalServices } from '../widget/modal/basicModal/basicModalService
 import { Plugin, PluginConfiguration } from '../models/Plugins';
 import { CollaborationCtx } from '../models/Collaboration';
 import { VBContext } from '../utils/VBContext';
+import { UIUtils } from '../utils/UIUtils';
 
 @Component({
     selector: 'collaboration-component',
@@ -18,48 +19,45 @@ import { VBContext } from '../utils/VBContext';
 })
 export class CollaborationComponent {
 
+    //TODO configuration only available to sys admin or users with privileges
+
     private settingsConfigured: boolean; //serverURL
     private preferencesConfigured: boolean; //credentials
     private csProjectLinked: boolean;
 
-    private issues: any[] = []; //TODO
+    private issues: any[]; //TODO
 
     constructor(private collaborationService: CollaborationServices, private basicModals: BasicModalServices,
         private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
-        this.csProjectLinked = VBContext.getCollaborationCtx().isLinked();
         this.initIssueList();
     }
 
     private initIssueList() {
-        let collCtx: CollaborationCtx = VBContext.getCollaborationCtx();
 
-        //TODO maybe here it is appropriate to chech the status, since if the project is not linked, the request listIssue is invoked anyway
-        //(just in case when the project was linked at project accessed)
-        
-        let initPrefs = this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).map(
-            prefs => {
-                collCtx.setPreferences(prefs);
-            }
-        );
-        let initSettings = this.collaborationService.getProjectSettings(CollaborationCtx.jiraFactoryId).map(
-            settings => {
-                collCtx.setSettings(settings);
-            }
-        );
-
-        Observable.forkJoin([initPrefs, initSettings]).subscribe(
+        /**
+         * Gets the status of the CS, so checks if settings and preferences are configured, if a project is linked,
+         * then retrieves the issues list.
+         */
+        this.collaborationService.getCollaborationSystemStatus(CollaborationCtx.jiraFactoryId).subscribe(
             resp => {
-                this.preferencesConfigured = collCtx.isPreferencesConfigured();
+                let collCtx: CollaborationCtx = VBContext.getCollaborationCtx();
+             
+                this.csProjectLinked = collCtx.isLinked();
                 this.settingsConfigured = collCtx.isSettingsConfigured();
-        
-                if (collCtx.isEnabled() && collCtx.isLinked() && this.preferencesConfigured && this.settingsConfigured) {
+                this.preferencesConfigured = collCtx.isPreferencesConfigured();
+
+                if (this.preferencesConfigured && this.settingsConfigured && this.csProjectLinked && collCtx.isEnabled()) {
+                    collCtx.setWorking(true);
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                     this.collaborationService.listIssues().subscribe(
                         issues => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                             this.issues = issues;
                         },
                         (err: Error) => {
+                            //in case listIssues throws a ConnectException set the "working" flag to false
                             if (err.name.endsWith("ConnectException")) {
                                 this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
                                     "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
@@ -68,26 +66,9 @@ export class CollaborationComponent {
                         }
                     )
                 }
+
             }
         );
-
-        // this.preferencesConfigured = collCtx.isPreferencesConfigured();
-        // this.settingsConfigured = collCtx.isSettingsConfigured();
-
-        // if (collCtx.isEnabled() && this.preferencesConfigured && this.settingsConfigured) {
-        //     this.collaborationService.listIssues().subscribe(
-        //         issues => {
-        //             console.log(issues);
-        //         },
-        //         (err: Error) => {
-        //             if (err.name.endsWith("ConnectException")) {
-        //                 this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
-        //                     "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
-        //                 collCtx.setWorking(false);
-        //             }
-        //         }
-        //     )
-        // }
 
     }
 
@@ -102,7 +83,7 @@ export class CollaborationComponent {
         );
     }
 
-    private createProject() {
+    private assignProject() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         this.modal.open(CollaborationProjectModal, overlayConfig).result.then(

@@ -9,26 +9,34 @@
     
     <div class="panel-body vbox">
 
-        <!-- Alert if the user is admin or PM and the CS is no configured (no serverURL set) -->
-        <div *ngIf="!settingsConfigured" class="alert alert-warning" style="margin: 3px;">
+        <!-- Mandatory settings not configured (missing serverURL) -->
+        <div *ngIf="!settingsConfigured; else elseBlock1" class="alert alert-warning" style="margin: 3px;">
             No Collaboration System has been configured. Please, configure a CS pushing the 
             <span class="glyphicon glyphicon-cog"></span> button in the top right corner.
         </div>
+        <ng-template #elseBlock1>
+            <!-- Mandatory settings configured, Mandatory preferences not configured (missing credentials) -->
+            <div *ngIf="!preferencesConfigured; else elseBlock2" class="alert alert-warning" style="margin: 3px;">
+                You need to be logged to the CS in order to see the issues list. Please, provide your credential pushing the
+                <span class="glyphicon glyphicon-cog"></span> button in the top right corner.
+            </div>
 
-        <!-- Alert if the user is not logged -->
-        <div *ngIf="!preferencesConfigured" class="alert alert-warning" style="margin: 3px;">
-            You need to be logged to the CS in order to see the issues list.
-        </div>
+            <ng-template #elseBlock2>
+                <!-- Mandatory settings and preferences configured, but no project is linked (optional settings) -->
+                <div *ngIf="!csProjectLinked" class="alert alert-warning" style="margin: 3px;">
+                    There is no CS project assigned to this Vocbench project.
+                    <a style="cursor: pointer" (click)="assignProject()">Create or assign</a> a project.
+                </div>
+            </ng-template>
 
-        <!-- Show this only if no project is linked (how to know this?) and if the user has authorization (Admin or PM) -->
-        <div *ngIf="!csProjectLinked" class="alert alert-warning" style="margin: 3px;">
-            There is no CS project assigned to this Vocbench project.
-            <a style="cursor: pointer" (click)="createProject()">Create or assign</a> a project.
-        </div>
+        </ng-template>
+
+
+        
 
         <!-- Here issues list -->
 
-        <table class="table table-condensed table-borderless table-hoverable">
+        <table *ngIf="issues" class="table table-condensed table-borderless table-hoverable">
             <thead>
                 <tr>
                     <th class="text-center">Id</th>
