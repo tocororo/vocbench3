@@ -14,6 +14,7 @@ import { VBContext } from "../utils/VBContext";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 import { CollaborationServices } from "../services/collaborationServices";
+import { VBCollaboration } from "../utils/VBCollaboration";
 
 @Component({
     selector: "resource-view",
@@ -62,7 +63,7 @@ export class ResourceViewComponent {
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
 
-    private collaborationWorking: boolean = VBContext.getCollaborationCtx().isWorking();
+    private collaborationWorking: boolean = false;
     private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues"; issues: Issue[] } = { 
         btnClass: "", issues: null
     };
@@ -70,16 +71,20 @@ export class ResourceViewComponent {
     private eventSubscriptions: any[] = [];
 
     constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
-        private collaborationService: CollaborationServices, private eventHandler: VBEventHandler, private preferences: VBProperties,
+        private collaborationService: CollaborationServices, private eventHandler: VBEventHandler,
+        private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private resViewModals: ResViewModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
+        this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
+            (data: any) => this.onCollaborationSystemStatusChange()
+        ));
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.showInferred = this.preferences.getInferenceInResourceView();
-        this.rendering = this.preferences.getRenderingInResourceView();
+        this.showInferred = this.vbProp.getInferenceInResourceView();
+        this.rendering = this.vbProp.getRenderingInResourceView();
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
             if (!changes['resource'].firstChange) { 
@@ -139,9 +144,13 @@ export class ResourceViewComponent {
             }
         );
 
-        this.collaborationWorking = VBContext.getCollaborationCtx().isWorking();
-        if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
-            this.initCollaboration();
+        if (this.vbProp.getExperimentalFeaturesEnabled()) {
+            setTimeout(() => {
+                this.collaborationWorking = this.vbCollaboration.isWorking();
+                if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
+                    this.initCollaboration();
+                }
+            });
         }
     }
 
@@ -328,7 +337,7 @@ export class ResourceViewComponent {
 
     private switchInferred() {
         this.showInferred = !this.showInferred;
-        this.preferences.setInferenceInResourceView(this.showInferred);
+        this.vbProp.setInferenceInResourceView(this.showInferred);
         if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
             this.buildResourceView(this.resource);
         } else { //resource view has been initialized with showInferred to true, so there's no need to repeat the request
@@ -338,7 +347,7 @@ export class ResourceViewComponent {
 
     private switchRendering() {
         this.rendering = !this.rendering;
-        this.preferences.setRenderingInResourceView(this.rendering);
+        this.vbProp.setRenderingInResourceView(this.rendering);
     }
 
     private listVersions() {
@@ -380,35 +389,33 @@ export class ResourceViewComponent {
                     issues: null
                 }
                 if (issues.length > 0) {
-                    /*
-                     * Iterate over the issues and add the classes for styling
-                     * - the main button of collaboration system
-                     *      - black (no class applied) if there is no issue
-                     *      - green (.done-issues) if there are only closed issues
-                     *      - blue (.todo-issues) if there are at least one open issue
-                     * - the status badge of the single issue:
-                     *      - green (.success) if the issue is closed (Done)
-                     *      - blue (.primary) if the issue is open (To Do)
-                     *      - cyan (.info) otherwise
+                    /* Iterate over the issues and add the classes for styling the button of the collaboration system menu
+                     * - black (no class applied) if there is no issue
+                     * - green (.done-issues) if there are only closed issues
+                     * - blue (.todo-issues) if there are at least one open issue
                      */
                     for (var i = 0; i < issues.length; i++) {
-                        if (issues[i].status == 'To Do') {
-                            issues[i]['class'] = "primary";
+                        if (issues[i].getStatus() == 'To Do') {
                             this.issuesStruct.btnClass = "todo-issues";
-                        } else if (issues[i].status == 'Done') {
-                            issues[i]['class'] = "success";
+                            break;
+                        } else if (issues[i].getStatus() == 'Done') {
                             if (this.issuesStruct.btnClass == "") {
                                 this.issuesStruct.btnClass = "done-issues";
                             }
-                        } else {
-                            issues[i]['class'] = "info";
                         }
                     }
                     this.issuesStruct.issues = issues;
                 }
             },
             err => {
-                VBContext.getCollaborationCtx().setWorking(false);
+                if (err.name.endsWith("ConnectException")) {
+                    if (this.collaborationWorking) {
+                        this.basicModals.alert("Collaboration System error", "The Collaboration System seems to be configured "
+                            + "but it's not working (configuration could be not valid or the server may be not reachable), "
+                            + "so it will be disabled.", "error");
+                        this.vbCollaboration.setWorking(false);
+                    }
+                }
             }
         )
     }
@@ -417,11 +424,18 @@ export class ResourceViewComponent {
         this.basicModals.prompt("Create issue for " + this.resource.getShow(), "Summary").then(
             summary => {
                 this.collaborationService.createIssue(<ARTURIResource>this.resource, summary).subscribe(
-                    stResp => this.initCollaboration()
+                    stResp => this.initCollaboration(),
                 );
             },
             () => {}
         );
+    }
+
+    private onCollaborationSystemStatusChange() {
+        this.collaborationWorking = this.vbCollaboration.isWorking();
+        if (this.collaborationWorking) { //status changed from notWorking to working => refresh issues lists
+            this.initCollaboration();
+        }
     }
 
     /**

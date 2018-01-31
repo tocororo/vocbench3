@@ -5,8 +5,8 @@ import { PluginsServices } from "../services/pluginsServices";
 import { CollaborationServices } from "../services/collaborationServices";
 import { Plugin, PluginConfiguration, ExtensionPoint } from "../models/Plugins";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { CollaborationCtx } from "../models/Collaboration";
 import { VBContext } from "../utils/VBContext";
+import { VBCollaboration } from "../utils/VBCollaboration";
 
 @Component({
     selector: "collaboration-config-modal",
@@ -26,45 +26,17 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     }
 
     ngOnInit() {
-        //the following is currently not used since there is only one implementation of collaboration ExtPoint
-        // this.pluginService.getAvailablePlugins(ExtensionPoint.COLLABORATION_BACKEND_ID).subscribe(
-        //     plugins => {
-        //         this.availableCollaborationPlugins = plugins;
-        //         this.selectedPlugin = this.availableCollaborationPlugins[0];
-        //         this.initCollaborationSystemConf();
-        //     }
-        // );
+        this.collaborationService.getProjectSettings(VBCollaboration.jiraFactoryId).subscribe(
+            settings => {
+                this.collSysSettings = settings;
+            }
+        );
+        this.collaborationService.getProjectPreferences(VBCollaboration.jiraFactoryId).subscribe(
+            preferences => {
+                this.collSysPreferences = preferences;
+            }
+        );
 
-        this.initCollaborationSystemConf();
-
-    }
-
-    private initCollaborationSystemConf() {
-        // this.collSysSettings = VBContext.getCollaborationCtx().getSettings();
-        // if (this.collSysSettings == null) {
-            this.collaborationService.getProjectSettings(CollaborationCtx.jiraFactoryId).subscribe(
-                settings => {
-                    // VBContext.getCollaborationCtx().setSettings(settings);
-                    this.collSysSettings = settings;
-                }
-            );
-        // }
-        
-        // this.collSysPreferences = VBContext.getCollaborationCtx().getPreferences();
-        // if (this.collSysSettings == null) {
-            this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).subscribe(
-                preferences => {
-                    // VBContext.getCollaborationCtx().setPreferences(preferences);
-                    this.collSysPreferences = preferences;
-                }
-            );
-        // }
-        
-        // this.collaborationService.getProjectPreferences(CollaborationCtx.jiraFactoryId).subscribe(
-        //     prefs => {
-        //         this.collSysPreferences = prefs;
-        //     }
-        // );
     }
 
     private isOkClickable(): boolean {
@@ -83,13 +55,13 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     ok(event: Event) {
         let settingsParam = this.collSysSettings.getPropertiesAsMap();
         let prefsParam = this.collSysPreferences.getPropertiesAsMap();
-        this.collaborationService.activateCollaboratioOnProject(CollaborationCtx.jiraFactoryId, settingsParam, prefsParam).subscribe(
+        this.collaborationService.activateCollaboratioOnProject(VBCollaboration.jiraFactoryId, settingsParam, prefsParam).subscribe(
             resp => {
                 event.stopPropagation();
                 event.preventDefault();
                 this.dialog.close();
             }
-        )
+        );
     }
 
     cancel() {

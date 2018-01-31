@@ -5,6 +5,7 @@ import { CollaborationServices } from "../services/collaborationServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
+import { VBCollaboration } from "../utils/VBCollaboration";
 
 @Component({
     selector: "collaboration-proj-modal",
@@ -19,7 +20,7 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
     private selectedProject: { id: string, key: string, name: string }
 
     constructor(public dialog: DialogRef<BSModalContext>, private collaborationService: CollaborationServices, 
-        private basicModals: BasicModalServices) {
+        private vbCollaboration: VBCollaboration, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -38,7 +39,7 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
                 this.basicModals.alert("Error", "Cannot retrieve the projects list. Connection to Collaboration System server failed." ,
                     "error", err.name + " " + err.message).then(
                     () => {
-                        VBContext.getCollaborationCtx().setWorking(false);
+                        this.vbCollaboration.setWorking(false);
                         this.dialog.dismiss();
                     }
                 );

@@ -23,37 +23,46 @@
 
             <ng-template #elseBlock2>
                 <!-- Mandatory settings and preferences configured, but no project is linked (optional settings) -->
-                <div *ngIf="!csProjectLinked" class="alert alert-warning" style="margin: 3px;">
+                <div *ngIf="!csProjectLinked; else elseBlock3" class="alert alert-warning" style="margin: 3px;">
                     There is no CS project assigned to this Vocbench project.
                     <a style="cursor: pointer" (click)="assignProject()">Create or assign</a> a project.
                 </div>
+
+                <ng-template #elseBlock3>
+                    <!-- All configured: mandatory settings and preferences, project linked -->
+                    <div *ngIf="!csWorking" class="alert alert-warning" style="margin: 3px;">
+                        Collaboration System seems to be configured but it is not working. 
+                        Please, check if the configuration is valid, or be sure that the CS server is running.
+                    </div>
+                </ng-template>
+
             </ng-template>
 
         </ng-template>
 
 
-        
 
-        <!-- Here issues list -->
-
-        <table *ngIf="issues" class="table table-condensed table-borderless table-hoverable">
-            <thead>
-                <tr>
-                    <th class="text-center">Id</th>
-                    <th class="text-center">key</th>
-                    <th class="text-center">Status</th>
-                    <th class="text-center">URL</th>
-                    <th class="text-center">labels</th>
-                    <th class="text-center">resolution</th>
-                    <th class="text-center">category</th>
-                </tr>
-            </thead>
+        <table *ngIf="issues" class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col>
+                <col style="width: 1%">
+            </colgroup>
             <tbody>
                 <tr *ngFor="let i of issues">
-                    <td colspan="7">{{ i | json }}</td>
-                    <!-- <td class="text-center">{{p.key}}</td>
-                    <td class="text-center">{{p.id}}</td>
-                    <td class="text-center">{{p.name}}</td> -->
+                    <td nowrap>
+                        <a [href]="i.getUrl()" target="_blank">{{i.getKey()}}</a>
+                    </td>
+                    <td>
+                        {{i.getSummary()}}
+                    </td>
+                    <td>
+                        <rdf-resource *ngFor="let r of i.getResources()" [resource]="r" class="clickable" (click)="onResourceClick(r)"></rdf-resource>
+                    </td>
+                    <td class="text-center">
+                        <span [class]="'label ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</span>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -2,7 +2,6 @@ import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Project } from '../models/Project';
 import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/Metadata';
-import { CollaborationCtx } from '../models/Collaboration';
 import { User, ProjectUserBinding } from '../models/User';
 import { UIUtils } from "./UIUtils";
 import { Cookie } from "./Cookie";
@@ -32,7 +31,6 @@ export class VBContext {
     private static projectChanged: boolean;
     private static loggedUser: User;
     private static puBinging: ProjectUserBinding;
-    private static collaborationCtx: CollaborationCtx = new CollaborationCtx();
 
     /**
      * Methods for managing context project (project that is set as ctx_project requests parameter)
@@ -104,11 +102,6 @@ export class VBContext {
     }
     static getProjectUserBinding(): ProjectUserBinding {
         return this.puBinging;
-    }
-
-
-    static getCollaborationCtx(): CollaborationCtx {
-        return this.collaborationCtx;
     }
 
     /**

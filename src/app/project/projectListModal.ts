@@ -7,12 +7,11 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
 import { AdministrationServices } from "../services/administrationServices";
-import { CollaborationServices } from "../services/collaborationServices";
 import { MetadataServices } from "../services/metadataServices";
 import { Project } from '../models/Project';
-import { CollaborationCtx } from '../models/Collaboration';
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
+import { VBCollaboration } from '../utils/VBCollaboration';
 import { UIUtils } from '../utils/UIUtils';
 
 @Component({
@@ -26,9 +25,9 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>,
-        adminService: AdministrationServices, userService: UserServices, collaborationService: CollaborationServices,
-        metadataService: MetadataServices, vbProp: VBProperties, private projectService: ProjectServices, private router: Router) {
-        super(adminService, userService, metadataService, collaborationService, vbProp);
+        adminService: AdministrationServices, userService: UserServices, metadataService: MetadataServices,
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, private projectService: ProjectServices, private router: Router) {
+        super(adminService, userService, metadataService, vbCollaboration, vbProp);
         this.context = dialog.context;
     }
 

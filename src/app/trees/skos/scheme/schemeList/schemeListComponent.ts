@@ -28,7 +28,6 @@ export class SchemeListComponent extends AbstractList {
     constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
-        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.initList()));
         this.eventSubscriptions.push(eventHandler.schemeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
     }

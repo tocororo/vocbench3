@@ -31,7 +31,7 @@
                             <div *ngIf="resViewMode == 'tabbed'">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" [(ngModel)]="tabSync" (ngModelChange)="onTabSyncChange()">
+                                        <input type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
                                         Keep selected tab synchronized with tree/list
                                         <span class="glyphicon glyphicon-exclamation-sign"
                                             title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">

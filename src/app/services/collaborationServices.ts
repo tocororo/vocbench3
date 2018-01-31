@@ -3,8 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginConfiguration, PluginConfigProp } from '../models/Plugins';
-import { Issue } from '../models/Collaboration';
-import { VBContext } from '../utils/VBContext';
+import { Issue, CollaborationUtils } from '../models/Collaboration';
 
 @Injectable()
 export class CollaborationServices {
@@ -26,15 +25,7 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId
         };
-        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params, true).map(
-            resp => {
-                VBContext.getCollaborationCtx().setEnabled(resp.enabled);
-                VBContext.getCollaborationCtx().setLinked(resp.linked);
-                VBContext.getCollaborationCtx().setPreferencesConfigured(resp.preferencesConfigured);
-                VBContext.getCollaborationCtx().setSettingsConfigured(resp.settingsConfigured);
-                return resp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params, true);
     }
 
     /**
@@ -133,12 +124,24 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "assignResourceToIssue", params, true);
     }
 
-    listIssuesAssignedToResource(resource: ARTURIResource) {
+    listIssuesAssignedToResource(resource: ARTURIResource): Observable<Issue[]> {
         console.log("[CollaborationServices] listIssuesAssignedToResource");
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, true);
+        var options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['java.net.ConnectException'] 
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, true, options).map(
+            resp => {
+                let issues: Issue[] = CollaborationUtils.parseIssues(resp);
+                CollaborationUtils.sortIssues(issues, "key");
+                return issues;
+            }
+        );
     }
 
     listProjects(): Observable<{ id: string, key: string, name: string }[]> {
@@ -153,7 +156,7 @@ export class CollaborationServices {
         return this.httpMgr.doGet(this.serviceName, "listProjects", params, true, options);
     }
 
-    listIssues(): Observable<{ resource: ARTURIResource, issues: Issue[] }[]> {
+    listIssues(): Observable<Issue[]> {
         console.log("[CollaborationServices] listIssues");
         var params: any = {};
         var options: VBRequestOptions = new VBRequestOptions({
@@ -163,14 +166,9 @@ export class CollaborationServices {
             } 
         });
         return this.httpMgr.doGet(this.serviceName, "listIssues", params, true, options).map(
-            stResp => {
-                let issues: { resource: ARTURIResource, issues: Issue[] }[] = [];
-                for (var i = 0; i < stResp.length; i++) {
-                    issues.push({
-                        resource: new ARTURIResource(stResp[i].resource),
-                        issues: stResp[i].issues
-                    });
-                }
+            resp => {
+                let issues: Issue[] = CollaborationUtils.parseIssues(resp);
+                CollaborationUtils.sortIssues(issues, "key");
                 return issues;
             }
         );

@@ -12,12 +12,11 @@ import { MetadataServices } from "../services/metadataServices";
 import { AdministrationServices } from "../services/administrationServices";
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
+import { VBCollaboration } from '../utils/VBCollaboration';
 import { UIUtils } from "../utils/UIUtils";
 import { Cookie } from "../utils/Cookie";
 import { Project, ProjectTypesEnum, ProjectTableColumnStruct } from '../models/Project';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { CollaborationServices } from "../services/collaborationServices";
-import { CollaborationCtx } from "../models/Collaboration";
 import { UserServices } from "../services/userServices";
 
 @Component({
@@ -32,11 +31,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private defaultColumnsOrder: string[]; //default order of the columns (contains only the columns visible according the custom configuration)
     private customColumnsOrder: string[]; //custom order of the columns
 
-    constructor(private projectService: ProjectServices, 
-        adminService: AdministrationServices, userService: UserServices, collaborationService: CollaborationServices, metadataService: MetadataServices, 
-        vbProp: VBProperties,  private router: Router, private basicModals: BasicModalServices, private modal: Modal,
-        private elRef: ElementRef) {
-        super(adminService, userService, metadataService, collaborationService, vbProp);
+    constructor(private projectService: ProjectServices, adminService: AdministrationServices, userService: UserServices,
+        metadataService: MetadataServices, vbCollaboration: VBCollaboration, vbProp: VBProperties, 
+        private router: Router, private basicModals: BasicModalServices, private modal: Modal, private elRef: ElementRef) {
+        super(adminService, userService, metadataService, vbCollaboration, vbProp);
     }
 
     ngOnInit() {

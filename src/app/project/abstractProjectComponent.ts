@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable"
-import { CollaborationServices } from "../services/collaborationServices";
 import { AdministrationServices } from "../services/administrationServices";
 import { UserServices } from "../services/userServices";
 import { MetadataServices } from "../services/metadataServices";
 import { Project } from "../models/Project";
-import { CollaborationCtx } from "../models/Collaboration";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
+import { VBCollaboration } from "../utils/VBCollaboration";
 
 @Component({
     selector: "abstract-project-component",
@@ -18,14 +17,14 @@ export abstract class AbstractProjectComponent {
     protected adminService: AdministrationServices;
     protected userService: UserServices;
     protected metadataService: MetadataServices;
-    protected collaborationService: CollaborationServices;
+    protected vbCollaboration: VBCollaboration;
     protected vbProp: VBProperties;
     constructor(adminService: AdministrationServices, userService: UserServices, metadataService: MetadataServices, 
-        collaborationService: CollaborationServices, vbProp: VBProperties) {
+        vbCollaboration: VBCollaboration, vbProp: VBProperties) {
         this.adminService = adminService;
         this.userService = userService;
         this.metadataService = metadataService;
-        this.collaborationService = collaborationService;
+        this.vbCollaboration = vbCollaboration;
         this.vbProp = vbProp;
     }
 
@@ -43,21 +42,9 @@ export abstract class AbstractProjectComponent {
             }
         );
         
-        let collCtx: CollaborationCtx = VBContext.getCollaborationCtx();
-        collCtx.reset();
-        let initCollSystem = this.collaborationService.getCollaborationSystemStatus(CollaborationCtx.jiraFactoryId).map(
-            resp => {
-                collCtx.setEnabled(resp.enabled);
-                collCtx.setLinked(resp.linked);
-                if (resp.preferencesConfigured && resp.settingsConfigured && resp.linked && resp.enabled) {
-                    collCtx.setWorking(true);
-                }
-            }
-        );
-        
         return Observable.forkJoin(
             initPUBinding, //init PUBinding
-            initCollSystem, //init Collaboration System
+            this.vbCollaboration.initCollaborationSystem(), //init Collaboration System
             this.userService.listUserCapabilities(), //get the capabilities for the user
             this.metadataService.getNamespaceMappings() //get default namespace of the project and set it to the vbContext
         );
