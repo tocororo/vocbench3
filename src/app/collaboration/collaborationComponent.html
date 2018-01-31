@@ -1,8 +1,12 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading" style="display: flex;">
         <label style="flex: 1">Collaboration System</label>
+
+        <button class="btn btn-default btn-xs" (click)="initIssueList()" [disabled]="!issues">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
         <!-- This should be allowed only to project manager and admin -->
-        <button class="btn btn-default btn-xs" (click)="openConfig()">
+        <button class="btn btn-default btn-xs" style="margin-left: 3px" (click)="openConfig()">
             <span class="glyphicon glyphicon-cog"></span>
         </button>
     </div>

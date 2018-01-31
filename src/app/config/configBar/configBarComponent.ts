@@ -83,8 +83,17 @@ export class ConfigBarComponent {
                         this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
                             stResp => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                //then redirect to home page
-                                this.router.navigate(['/Projects']);
+                                //then redirect to Projects page
+                                if (this.router.url == "/Projects") {
+                                    this.router.navigate(['/Home']).then(
+                                        success => {
+                                            this.router.navigate(['/Projects']);
+                                        }
+                                    );    
+                                } else {
+                                    this.router.navigate(['/Projects']);
+                                }
+                                
                             }
                         );
                     }
