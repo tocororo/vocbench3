@@ -19,16 +19,14 @@ import { FormCollection, CustomForm, CustomFormValue } from "../../models/Custom
 export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
 
     protected propService: PropertyServices;
-    protected cfService: CustomFormsServices;
     protected browsingModals: BrowsingModalServices;
     protected creationModals: CreationModalServices;
     
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModalService: ResViewModalServices) {
-        super(resourcesService, basicModals, resViewModalService);
+        super(resourcesService, cfService, basicModals, resViewModalService);
         this.propService = propService;
-        this.cfService = cfService;
         this.creationModals = creationModal;
         this.browsingModals = browsingModals;
     }

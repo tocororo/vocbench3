@@ -95,7 +95,10 @@ export class PredicateObjectsRenderer {
      * @param object object of the predicate object list to render in view.
      */
     private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
-        return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
+        return (
+            predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource() && 
+            !object.getAdditionalProperty(ResAttribute.NOT_REIFIED)
+        );
     }
 
     /**

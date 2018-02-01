@@ -78,15 +78,11 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
         )
     }
 
-    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            return this.cfService.removeReifiedResource(this.resource, predicate, object);
-        } else {
-            if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:topConceptOf relation
-                return this.skosService.removeTopConcept(<ARTURIResource>this.resource, <ARTURIResource>object);
-            } else {//predicate is some subProperty of skos:topConceptOf
-                return this.resourcesService.removeValue(this.resource, predicate, object);
-            }
+    getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:topConceptOf relation
+            return this.skosService.removeTopConcept(<ARTURIResource>this.resource, <ARTURIResource>object);
+        } else {//predicate is some subProperty of skos:topConceptOf
+            return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
 

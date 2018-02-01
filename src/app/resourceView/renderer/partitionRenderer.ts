@@ -6,6 +6,7 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ResourcesServices } from "../../services/resourcesServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 @Component({
@@ -28,12 +29,15 @@ export abstract class PartitionRenderer {
     @Output() update = new EventEmitter(); //something changed in this partition. Tells to ResView to update
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    protected basicModals: BasicModalServices;
     protected resourcesService: ResourcesServices;
+    protected cfService: CustomFormsServices;
+    protected basicModals: BasicModalServices;
     protected resViewModals: ResViewModalServices;
 
-    constructor(resourcesService: ResourcesServices, basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
+    constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
         this.resourcesService = resourcesService;
+        this.cfService = cfService;
         this.basicModals = basicModals;
         this.resViewModals = resViewModals;
     }
@@ -205,12 +209,25 @@ export abstract class PartitionRenderer {
      * @param predicate 
      * @param object 
      */
-    abstract getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any>
+    protected getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (
+            predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource() && 
+            !object.getAdditionalProperty(ResAttribute.NOT_REIFIED)
+        ) {
+            return this.cfService.removeReifiedResource(this.resource, predicate, object);
+        } else {
+            return this.getRemoveFunctionImpl(predicate, object);
+        }
+    }
+    /**
+     * Implementation of the getRemoveFunction() for the partition
+     */
+    abstract getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any>;
     /**
      * Calls all the remove functions collected in removeAllValues
      * @param removeFnArray 
      */
-    removeAllRicursively(removeFnArray: any[]) {
+    protected removeAllRicursively(removeFnArray: any[]) {
         removeFnArray[0].subscribe(
             (stResp: any) => {
                 removeFnArray.shift();

@@ -74,12 +74,8 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         );
     }
 
-    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            return this.cfService.removeReifiedResource(this.resource, predicate, object);
-        } else {
-            return this.resourcesService.removeValue(this.resource, predicate, object);
-        }
+    getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        return this.resourcesService.removeValue(this.resource, predicate, object);
     }
 
 }

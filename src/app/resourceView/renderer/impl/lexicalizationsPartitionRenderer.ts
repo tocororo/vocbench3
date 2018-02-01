@@ -43,11 +43,11 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         RDFS.label.getURI()
     ];
 
-    constructor(basicModals: BasicModalServices, resourcesService: ResourcesServices, resViewModals: ResViewModalServices,
-        private cfService: CustomFormsServices, private skosService: SkosServices, 
-        private skosxlService: SkosxlServices, private resViewService: ResourceViewServices,
+    constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, resViewModals: ResViewModalServices,
+        private skosService: SkosServices, private skosxlService: SkosxlServices, private resViewService: ResourceViewServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
-        super(resourcesService, basicModals, resViewModals);
+        super(resourcesService, cfService, basicModals, resViewModals);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -199,29 +199,25 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         );
     }
 
-    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            return this.cfService.removeReifiedResource(this.resource, predicate, object);
-        } else {
-            if (this.isKnownProperty(predicate)) { //if it is removing a value about a root property, call the specific method
-                if (predicate.getURI() == SKOSXL.prefLabel.getURI()) {
-                    return this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>object);
-                } else if (predicate.getURI() == SKOSXL.altLabel.getURI()) {
-                    return this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>object);
-                } else if (predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
-                    return this.skosxlService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTResource>object);
-                } else if (predicate.getURI() == SKOS.prefLabel.getURI()) {
-                    return this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
-                } else if (predicate.getURI() == SKOS.altLabel.getURI()) {
-                    return this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
-                } else if (predicate.getURI() == SKOS.hiddenLabel.getURI()) {
-                    return this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
-                } else if (predicate.getURI() == RDFS.label.getURI()) {
-                    return this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
-                }
-            } else {//predicate is some subProperty of a root property
-                return this.resourcesService.removeValue(this.resource, predicate, object);
+    getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (this.isKnownProperty(predicate)) { //if it is removing a value about a root property, call the specific method
+            if (predicate.getURI() == SKOSXL.prefLabel.getURI()) {
+                return this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>object);
+            } else if (predicate.getURI() == SKOSXL.altLabel.getURI()) {
+                return this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>object);
+            } else if (predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
+                return this.skosxlService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTResource>object);
+            } else if (predicate.getURI() == SKOS.prefLabel.getURI()) {
+                return this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
+            } else if (predicate.getURI() == SKOS.altLabel.getURI()) {
+                return this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
+            } else if (predicate.getURI() == SKOS.hiddenLabel.getURI()) {
+                return this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
+            } else if (predicate.getURI() == RDFS.label.getURI()) {
+                return this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
             }
+        } else {//predicate is some subProperty of a root property
+            return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
 

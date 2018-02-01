@@ -31,6 +31,7 @@ export class VBCollaboration {
     constructor(private collaborationService: CollaborationServices, private eventHandler: VBEventHandler) {}
 
     public initCollaborationSystem(): Observable<any> {
+        this.reset();
         return this.collaborationService.getCollaborationSystemStatus(VBCollaboration.jiraFactoryId).map(
             resp => {
                 this.enabled = resp.enabled;
@@ -47,23 +48,14 @@ export class VBCollaboration {
     public isSettingsConfigured(): boolean {
         return this.settingsConfigured;
     }
-    // public setSettingsConfigured(configured: boolean) {
-    //     this.settingsConfigured = configured;
-    // }
 
     public isPreferencesConfigured(): boolean {
         return this.preferencesConfigured;
     }
-    // public setPreferencesConfigured(configured: boolean) {
-    //     this.preferencesConfigured = configured;
-    // }
 
     public isEnabled(): boolean {
         return this.enabled;
     }
-    // public setEnabled(enabled: boolean) {
-    //     this.enabled = enabled;
-    // }
 
     public isWorking(): boolean {
         return this.working;
@@ -76,9 +68,6 @@ export class VBCollaboration {
     public isLinked(): boolean {
         return this.linked;
     }
-    // public setLinked(linked: boolean) {
-    //     this.linked = linked;
-    // }
     
     public reset() {
         this.working = false;

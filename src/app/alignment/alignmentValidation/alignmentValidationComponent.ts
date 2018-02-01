@@ -157,8 +157,8 @@ export class AlignmentValidationComponent {
                         }
                     }
                 );
-                //target ontology (only if is a local project)
-                this.resourceService.getResourcePosition(new ARTURIResource(this.targetBaseURI)).subscribe(
+                //target ontology (only if is a local project, trying to detect it by getting the position of the target entity of the first alignment)
+                this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).subscribe(
                     position => {
                         //if target entities are from a local project, get the information of them
                         if (position.startsWith("local:")) {

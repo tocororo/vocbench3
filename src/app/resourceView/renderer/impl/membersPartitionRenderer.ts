@@ -89,15 +89,11 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
         this.removeAllRicursively(removeFnArray);
     }
 
-    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            return this.cfService.removeReifiedResource(this.resource, predicate, object);
-        } else {
-            if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
-                return this.skosService.removeFromCollection(this.resource, <ARTResource>object);
-            } else {//predicate is some subProperty of skos:member
-                return this.resourcesService.removeValue(this.resource, predicate, object);
-            }
+    getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (this.rootProperty.getURI() == predicate.getURI()) { //removing skos:member relation
+            return this.skosService.removeFromCollection(this.resource, <ARTResource>object);
+        } else {//predicate is some subProperty of skos:member
+            return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
 

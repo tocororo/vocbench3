@@ -81,15 +81,11 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
         );
     }
 
-    getRemoveFunction(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource()) {
-            return this.cfService.removeReifiedResource(this.resource, predicate, object);
-        } else {
-            if (this.rootProperty.getURI() == predicate.getURI()) {// removing a skos:inScheme relation
-                return this.skosService.removeConceptFromScheme(<ARTURIResource>this.resource, <ARTURIResource>object);
-            } else {//predicate is some subProperty of skos:inScheme
-                return this.resourcesService.removeValue(this.resource, predicate, object);
-            }
+    getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
+        if (this.rootProperty.getURI() == predicate.getURI()) {// removing a skos:inScheme relation
+            return this.skosService.removeConceptFromScheme(<ARTURIResource>this.resource, <ARTURIResource>object);
+        } else {//predicate is some subProperty of skos:inScheme
+            return this.resourcesService.removeValue(this.resource, predicate, object);
         }
     }
 

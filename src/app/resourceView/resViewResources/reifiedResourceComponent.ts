@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects} from "../../models/ARTResources";
+import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute} from "../../models/ARTResources";
 import {CustomFormsServices} from "../../services/customFormsServices";
 
 @Component({
@@ -48,7 +48,14 @@ export class ReifiedResourceComponent {
      * If it has been expanded but it has no description it should be rendered as simple rdf-resource
      */
     private isExpandableResource() {
-        return (!this.open || this.open && this.predicateObjectList);
+        if (!this.open || this.open && this.predicateObjectList) {
+            return true;
+        } else {
+            setTimeout(() => {
+                this.resource.setAdditionalProperty(ResAttribute.NOT_REIFIED, true);
+            })
+            return false;
+        }
     }
 
 }

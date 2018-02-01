@@ -298,10 +298,13 @@ export class ResAttribute {
     //never in st responses, result of nature parsing
     public static DEPRECATED = "deprecated";
 
-    //never in st responses, added because are util for tree
+    //never in st responses, added because are useful for tree
     public static CHILDREN = "children"; //stores an array of children resources
     public static SELECTED = "selected"; //if true, render the node as selected
     public static NEW = "new"; //if true, the resource is made visible after the treeNodeComponent is initialized
+
+    //useful in ResourceView to render potentially reified resource as not reified
+    public static NOT_REIFIED = "notReified";//
 
 }
 

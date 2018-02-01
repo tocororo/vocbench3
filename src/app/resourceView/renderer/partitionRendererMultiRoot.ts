@@ -4,6 +4,7 @@ import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ResourcesServices } from "../../services/resourcesServices";
+import { CustomFormsServices } from "../../services/customFormsServices";
 
 @Component({
     selector: "partition-renderer-multi",
@@ -15,8 +16,9 @@ export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
      * ATTRIBUTES
      */
 
-    constructor(resourcesService: ResourcesServices, basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
-        super(resourcesService, basicModals, resViewModals);
+    constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
+        basicModals: BasicModalServices, resViewModals: ResViewModalServices) {
+        super(resourcesService, cfService, basicModals, resViewModals);
     }
 
     /**
