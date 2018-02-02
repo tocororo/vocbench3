@@ -92,7 +92,7 @@ export abstract class PartitionRenderer {
                         if (manually) {
                             this.addManually(predicate, true);
                         } else {
-                            this.add(predicate, false);
+                            this.add(predicate, true);
                         }
                     }
                 }

@@ -29,7 +29,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.properties;
     rootProperty: ARTURIResource = null; //there is no root property for this partition
-    label = "Properties";
+    label = "Other properties";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
     addBtnImgTitle = "Add a property value";
     removeBtnImgTitle = "Remove property value";
