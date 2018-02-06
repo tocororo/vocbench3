@@ -27,6 +27,8 @@ export class Issue {
             this.statusClass = "label-primary";
         } else if (status == "Done") {
             this.statusClass = "label-success";
+        } else if (status == "In Progress") {
+            this.statusClass = "label-warning";
         } else {
             this.statusClass = "label-info";
         }
@@ -112,6 +114,5 @@ export class CollaborationUtils {
             );
         }
     }
-
 
 }

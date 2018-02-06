@@ -2,7 +2,8 @@
     <div class="panel-heading" style="display: flex;">
         <label style="flex: 1">Collaboration System</label>
 
-        <button class="btn btn-default btn-xs" (click)="initIssueList()" [disabled]="!issues">
+        <button class="btn btn-default btn-xs" (click)="initIssueList()"
+            [disabled]="!csWorking || !settingsConfigured || !preferencesConfigured || !csProjectLinked">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
         <!-- This should be allowed only to project manager and admin -->

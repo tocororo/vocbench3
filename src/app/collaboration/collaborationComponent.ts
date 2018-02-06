@@ -41,6 +41,7 @@ export class CollaborationComponent {
     }
 
     private initIssueList() {
+        this.issues = [];
         /**
          * Gets the status of the CS, so checks if settings and preferences are configured, if a project is linked,
          * then retrieves the issues list.
@@ -52,8 +53,8 @@ export class CollaborationComponent {
                 this.preferencesConfigured = this.vbCollaboration.isPreferencesConfigured();
 
                 if (this.preferencesConfigured && this.settingsConfigured && this.csProjectLinked && this.vbCollaboration.isEnabled()) {
-                    this.vbCollaboration.setWorking(true);
-                    this.issues = null;
+                    this.csWorking = true;
+                    this.vbCollaboration.setWorking(this.csWorking);
                     UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                     this.collaborationService.listIssues().subscribe(
                         issues => {
@@ -67,8 +68,8 @@ export class CollaborationComponent {
                                 this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
                                     "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
                             }
-                            this.vbCollaboration.setWorking(false);
                             this.csWorking = false;
+                            this.vbCollaboration.setWorking(this.csWorking);
                         }
                     )
                 }

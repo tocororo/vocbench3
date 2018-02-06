@@ -72,8 +72,10 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
 
 
     ok(event: Event) {
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.collaborationService.assignProject(this.selectedProject.name, this.selectedProject.key).subscribe(
             stResp => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 event.stopPropagation();
                 event.preventDefault();
                 this.dialog.close();

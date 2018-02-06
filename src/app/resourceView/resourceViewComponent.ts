@@ -21,6 +21,7 @@ import { VBCollaboration } from "../utils/VBCollaboration";
     templateUrl: "./resourceViewComponent.html",
     styles: [`
         .todo-issues { color: #337ab7 }
+        .in-progress-issues { color: #f0ad4e }
         .done-issues { color: #5cb85c }`
     ]
 })
@@ -64,7 +65,7 @@ export class ResourceViewComponent {
     private labelRelationsColl: ARTPredicateObjects[] = null;
 
     private collaborationWorking: boolean = false;
-    private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues"; issues: Issue[] } = { 
+    private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
         btnClass: "", issues: null
     };
 
@@ -398,8 +399,10 @@ export class ResourceViewComponent {
                         if (issues[i].getStatus() == 'To Do') {
                             this.issuesStruct.btnClass = "todo-issues";
                             break;
+                        } else if (issues[i].getStatus() == 'In Progress') {
+                            this.issuesStruct.btnClass = "in-progress-issues";
                         } else if (issues[i].getStatus() == 'Done') {
-                            if (this.issuesStruct.btnClass == "") {
+                            if (this.issuesStruct.btnClass != "in-progress-issues") {
                                 this.issuesStruct.btnClass = "done-issues";
                             }
                         }

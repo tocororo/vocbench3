@@ -27,8 +27,8 @@
                 <ul class="dropdown-menu">
                     <li *ngFor="let i of issuesStruct.issues" >
                         <a [href]="i.getUrl()" target="_blank" [title]="i.getSummary()">
-                            {{i.getKey()}}
                             <span [class]="'label pull-right ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</span>
+                            {{i.getKey()}}
                         </a>
                     </li>
                     <li *ngIf="issuesStruct.issues" role="separator" class="divider"></li>
