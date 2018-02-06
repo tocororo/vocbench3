@@ -14,6 +14,7 @@ import { SKOS } from "../models/Vocabulary";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { VBProperties } from "../utils/VBProperties";
 import { VBContext } from "../utils/VBContext";
+import { UIUtils } from "../utils/UIUtils";
 
 
 @Component({
@@ -159,8 +160,8 @@ export class Sheet2RdfComponent {
         return cssClass;
     }
 
-    private editHeader(header: HeaderStruct) {
-        var modalData = new HeaderEditorModalData(header.id);
+    private editHeader(header: HeaderStruct, first: boolean) {
+        var modalData = new HeaderEditorModalData(header.id, first);
         const builder = new BSModalContextBuilder<HeaderEditorModalData>(
             modalData, undefined, HeaderEditorModalData
         );
@@ -286,17 +287,24 @@ export class Sheet2RdfComponent {
     private generateTriples() {
         if (this.pearlUnsaved) {
             this.basicModals.confirm("Unsaved pearl code", "Unsaved changes to pearl code. Are you sure to continue?", "warning").then(
-                (confirm: boolean) => {},
+                (confirm: boolean) => {
+                    this.invokeGetTriplesPreview();
+                },
                 () => { return } //if user doesn't confirm, do not generate triples
             );
+        } else {
+            this.invokeGetTriplesPreview();
         }
+    }
+
+    private invokeGetTriplesPreview() {
         this.s2rdfService.getTriplesPreview(this.maxSizePreviews).subscribe(
             triplesPreview => {
                 this.totalTriples = triplesPreview.total;
                 this.truncatedTriples = triplesPreview.returned;
                 this.triplesPreview = triplesPreview.triples;
             }
-        )
+        );
     }
 
     private selectTriplePreviewRow(row: TriplePreview) {
@@ -316,6 +324,13 @@ export class Sheet2RdfComponent {
     }
 
     private addTriples() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.s2rdfService.addTriples().subscribe(
+            resp => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.basicModals.alert("Triples added", "The generated triples have been added");
+            }
+        )
 
     }
 

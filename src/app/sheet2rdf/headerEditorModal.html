@@ -22,7 +22,8 @@
                         <input type="text" class="form-control input-sm" [ngModel]="headerId" readonly>
                     </td>
                 </tr>
-                <tr>
+
+                <tr *ngIf="!context.first">
                     <td class="text-right"><label>Property:</label></td>
                     <td>
                         <div class="input-group input-group-sm">
@@ -37,6 +38,35 @@
                         </div>
                     </td>
                 </tr>
+                <tr *ngIf="context.first">
+                    <td class="text-right" nowrap>
+                        <label>Property/Class:</label>
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="Cells of first columns could also contain references to subjects, so the first header could be mapped to property or classes">
+                        </span>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <div class="form-control">
+                                <rdf-resource *ngIf="headerResource" [resource]="headerResource"></rdf-resource>
+                            </div>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" (click)="browseProperty()">
+                                    <img src="../../assets/images/icons/res/prop.png">
+                                </button>
+                                <button class="btn btn-default dropdown-toggle" style="padding: 3px;" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a (click)="browseProperty()"><img src="../../assets/images/icons/res/prop.png">Property</a></li>
+                                    <li><a (click)="browseClass()"><img src="../../assets/images/icons/res/class.png">Class</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
             </tbody>
         </table>
 

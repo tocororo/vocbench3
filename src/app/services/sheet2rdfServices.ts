@@ -70,7 +70,9 @@ export class Sheet2RDFServices {
         return h;
     }
 
-    updateHeader(headerId: string, headerResource?: ARTURIResource, converterMention?: string, converterType?: RDFCapabilityType, applyToAll?: boolean) {
+    updateHeader(headerId: string, headerResource?: ARTURIResource, 
+        // converterMention?: string, converterType?: RDFCapabilityType, 
+        applyToAll?: boolean) {
         console.log("[Sheet2RDFServices] updateHeader");
         var params: any = {
             headerId: headerId,
@@ -78,10 +80,10 @@ export class Sheet2RDFServices {
         if (headerResource != null) {
             params.headerResource = headerResource;
         }
-        if (converterMention != null && converterType != null) {
-            params.converterMention = converterMention;
-            params.converterType = converterType;
-        }
+        // if (converterMention != null && converterType != null) {
+        //     params.converterMention = converterMention;
+        //     params.converterType = converterType;
+        // }
         if (applyToAll != null) {
             params.applyToAll = applyToAll;
         }
@@ -194,7 +196,9 @@ export class Sheet2RDFServices {
     }
 
     addTriples() {
-
+        console.log("[Sheet2RDFServices] addTriples");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "addTriples", params, true);
     }
 
     exportTriples(outputFormat: RDFFormat) {

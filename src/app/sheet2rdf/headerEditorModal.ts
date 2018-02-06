@@ -15,7 +15,7 @@ export class HeaderEditorModalData extends BSModalContext {
      * (even if the user discard the modal)
      * @param headerId 
      */
-    constructor(public headerId: string) {
+    constructor(public headerId: string, public first: boolean = false) {
         super();
     }
 }
@@ -64,7 +64,17 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.browingModals.browsePropertyTree("Select property").then(
             (property: ARTURIResource) => {
                 this.headerResource = property;
-            }
+            },
+            () => {}
+        )
+    }
+
+    private browseClass() {
+        this.browingModals.browseClassTree("Select class").then(
+            (cls: ARTURIResource) => {
+                this.headerResource = cls;
+            },
+            () => {}
         )
     }
 
@@ -104,7 +114,9 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private updateHeader(applyToAll?: boolean) {
-        this.s2rdfService.updateHeader(this.headerId, this.headerResource, this.converterQName, this.converterType, applyToAll).subscribe(
+        this.s2rdfService.updateHeader(this.headerId, this.headerResource, 
+            // this.converterQName, this.converterType, 
+            applyToAll).subscribe(
             stResp => {
                 this.dialog.close();
             }

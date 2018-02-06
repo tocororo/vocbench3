@@ -41,11 +41,11 @@
                     <table class="table scrollableContainer">
                         <tbody>
                             <tr>
-                                <td *ngFor="let h of headers" class="columnHeader">
+                                <td *ngFor="let h of headers; first as isFirst" class="columnHeader">
                                     <span [ngClass]="getHeaderCssClass(h)">
                                         {{h.name}}
                                     </span>
-                                    <button class="btn btn-xs btn-default" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h)">
+                                    <button class="btn btn-xs btn-default" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h, isFirst)">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
                                 </td>
