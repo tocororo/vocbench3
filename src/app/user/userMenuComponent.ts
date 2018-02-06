@@ -15,10 +15,14 @@ export class UserMenuComponent {
 
     private currentUser: User;
 
+    private imgBackground: string;
+    private imgSrcFallback: string = require("../../assets/images/logos/user.svg");
+
     constructor(private evtHandler: VBEventHandler, private authService: AuthServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.currentUser = VBContext.getLoggedUser();
+        this.initBackgroundImgSrc();
     }
 
     /**
@@ -27,6 +31,7 @@ export class UserMenuComponent {
      */
     private onMenuOpen() {
         this.currentUser = VBContext.getLoggedUser();
+        this.initBackgroundImgSrc();
     }
 
     /**
@@ -58,6 +63,10 @@ export class UserMenuComponent {
                 )
             )
         );
+    }
+
+    private initBackgroundImgSrc() {
+        this.imgBackground = "url(" + this.currentUser.getAvatarUrl() + "), url(" + this.imgSrcFallback + ")"
     }
 
     /**

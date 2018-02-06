@@ -67,60 +67,57 @@
                             <tbody>
                                 <tr>
                                     <td nowrap><label>Given name:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getGivenName()" readonly></td>
+                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getGivenName()" readonly></td>
                                     <td nowrap><label>Family name:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getFamilyName()" readonly></td>
+                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getFamilyName()" readonly></td>
                                 </tr>
                                 <tr>
                                     <td nowrap><label>E-mail:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getEmail()" readonly></td>
+                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getEmail()" readonly></td>
                                     <td nowrap><label>Phone:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getPhone()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getPhone()" class="form-control input-sm" [value]="selectedUser.getPhone()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getPhone()" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td nowrap><label>Birthday:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getBirthday()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getBirthday()" class="form-control input-sm" [value]="selectedUser.getBirthday()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getBirthday()" readonly>
                                     </td>
                                     <td nowrap><label>Gender:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getGender()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getGender()" class="form-control input-sm" [value]="selectedUser.getGender()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getGender()" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td nowrap><label>Country:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getCountry()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getCountry()" class="form-control input-sm" [value]="selectedUser.getCountry()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getCountry()" readonly>
                                     </td>
                                     <td nowrap><label>Address:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getAddress()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getAddress()" class="form-control input-sm" [value]="selectedUser.getAddress()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getAddress()" readonly>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td nowrap><label>Affiliation:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getAffiliation()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getAffiliation()" class="form-control input-sm" [value]="selectedUser.getAffiliation()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getAffiliation()" readonly>
                                     </td>
-                                    <td nowrap><label>Url:</label></td>
+                                    <td nowrap><label>Personal Url:</label></td>
                                     <td>
-                                        <input *ngIf="!selectedUser.getUrl()" class="form-control input-sm" readonly>
-                                        <input *ngIf="selectedUser.getUrl()" class="form-control input-sm" [value]="selectedUser.getUrl()" readonly>
+                                        <input class="form-control input-sm" [ngModel]="selectedUser.getUrl()" readonly>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td nowrap><label>Avatar Url:</label></td>
+                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getAvatarUrl()" readonly></td>
                                     <td nowrap><label>Language proficiencies:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getLanguageProficiencies()" readonly></td>
+                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getLanguageProficiencies()" readonly></td>
+                                </tr>
+                                <tr>
                                     <td nowrap><label>Registration Date:</label></td>
-                                    <td><input class="form-control input-sm" [value]="selectedUser.getRegistrationDate()" readonly></td>
+                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getRegistrationDate()" readonly></td>
                                 </tr>
                             </tbody>
                         </table>

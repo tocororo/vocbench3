@@ -95,8 +95,8 @@ export class UserServices {
      * @param phone
      */
     registerUser(email: string, password: string, givenName: string, familyName: string, iri: ARTURIResource,
-        birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, phone: string,
-        languageProficiencies: string[]) {
+        birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, avatarUrl: string,
+        phone: string, languageProficiencies: string[]) {
         console.log("[UserServices] registerUser");
         var params: any = {
             email: email,
@@ -124,6 +124,9 @@ export class UserServices {
         }
         if (url != undefined) {
             params.url = url;
+        }
+        if (avatarUrl != undefined) {
+            params.avatarUrl = avatarUrl;
         }
         if (phone != undefined) {
             params.phone = phone;
@@ -191,13 +194,15 @@ export class UserServices {
     /**
      * Updates phone of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param phone
+     * @param phone if not provided, remove the info
      */
-    updateUserPhone(email: string, phone: string): Observable<User> {
+    updateUserPhone(email: string, phone?: string): Observable<User> {
         console.log("[UserServices] updateUserPhone");
         var params: any = {
             email: email,
-            phone: phone,
+        }
+        if (phone != null) {
+            params.phone = phone;
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params, true).map(
             stResp => {
@@ -227,13 +232,15 @@ export class UserServices {
     /**
      * Updates gender of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param gender
+     * @param gender if not provided remove the info
      */
-    updateUserGender(email: string, gender: string): Observable<User> {
+    updateUserGender(email: string, gender?: string): Observable<User> {
         console.log("[UserServices] updateUserGender");
         var params: any = {
             email: email,
-            gender: gender,
+        }
+        if (gender != null) {
+            params.gender = gender;
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserGender", params, true).map(
             stResp => {
@@ -263,13 +270,15 @@ export class UserServices {
     /**
      * Updates address of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param address
+     * @param address if not provided removes the info
      */
-    updateUserAddress(email: string, address: string): Observable<User> {
+    updateUserAddress(email: string, address?: string): Observable<User> {
         console.log("[UserServices] updateUserAddress");
         var params: any = {
             email: email,
-            address: address,
+        }
+        if (address != null) {
+            params.address = address;
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params, true).map(
             stResp => {
@@ -281,13 +290,15 @@ export class UserServices {
     /**
      * Updates affiliation of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param affiliation
+     * @param affiliation if not provided removes the info
      */
-    updateUserAffiliation(email: string, affiliation: string): Observable<User> {
+    updateUserAffiliation(email: string, affiliation?: string): Observable<User> {
         console.log("[UserServices] updateUserAffiliation");
         var params: any = {
             email: email,
-            affiliation: affiliation,
+        }
+        if (affiliation != null) {
+            params.affiliation = affiliation;
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params, true).map(
             stResp => {
@@ -299,15 +310,37 @@ export class UserServices {
     /**
      * Updates url of the given user. Returns the updated user.
      * @param email email of the user to update
-     * @param url
+     * @param url if not provided removes the info
      */
-    updateUserUrl(email: string, url: string): Observable<User> {
+    updateUserUrl(email: string, url?: string): Observable<User> {
         console.log("[UserServices] updateUserUrl");
         var params: any = {
             email: email,
-            url: url,
+        }
+        if (url != null) {
+            params.url = url;
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params, true).map(
+            stResp => {
+                return Deserializer.createUser(stResp);
+            }
+        );
+    }
+
+    /**
+     * Updates avatarUrl of the given user. Returns the updated user.
+     * @param email email of the user to update
+     * @param avatarUrl if not provided removes the info
+     */
+    updateUserAvatarUrl(email: string, avatarUrl?: string): Observable<User> {
+        console.log("[UserServices] updateUserAvatarUrl");
+        var params: any = {
+            email: email,
+        }
+        if (avatarUrl != null) {
+            params.avatarUrl = avatarUrl;
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateUserAvatarUrl", params, true).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }

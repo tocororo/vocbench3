@@ -423,8 +423,12 @@ export class ResourceViewComponent {
     private createIssue() {
         this.basicModals.prompt("Create issue for " + this.resource.getShow(), "Summary").then(
             summary => {
+                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
                 this.collaborationService.createIssue(<ARTURIResource>this.resource, summary).subscribe(
-                    stResp => this.initCollaboration(),
+                    stResp => {
+                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                        this.initCollaboration();
+                    }
                 );
             },
             () => {}

@@ -17,7 +17,7 @@ import { VBContext } from './VBContext';
 export class VBProperties {
 
     private projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
-    private projectLanguagesPreference: string[] = []; //languages that user
+    private projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
 
     private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;

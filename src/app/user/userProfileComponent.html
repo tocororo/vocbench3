@@ -25,7 +25,7 @@
                         <td nowrap><label>E-mail:</label></td>
                         <td><input-editable type="email" [value]="user.getEmail()" (valueEdited)="updateEmail($event)"></input-editable></td>
                         <td nowrap><label>Phone:</label></td>
-                        <td><input-editable [value]="user.getPhone()" (valueEdited)="updatePhone($event)"></input-editable></td>
+                        <td><input-editable [value]="user.getPhone()" [allowEmpty]="true" (valueEdited)="updatePhone($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Birthday:</label></td>
@@ -34,21 +34,23 @@
                             </input-editable>
                         </td>
                         <td nowrap><label>Gender:</label></td>
-                        <td><input-editable [value]="user.getGender()" (valueEdited)="updateGender($event)"></input-editable></td>
+                        <td><input-editable [value]="user.getGender()" [allowEmpty]="true" (valueEdited)="updateGender($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Country:</label></td>
                         <td><input-editable type="select" [options]="countries" [value]="user.getCountry()" (valueEdited)="updateCountry($event)"></input-editable></td>
                         <td nowrap><label>Address:</label></td>
-                        <td><input-editable [value]="user.getAddress()" (valueEdited)="updateAddress($event)"></input-editable></td>
+                        <td><input-editable [value]="user.getAddress()" [allowEmpty]="true" (valueEdited)="updateAddress($event)"></input-editable></td>
                     </tr>
                     <tr>
                         <td nowrap><label>Affiliation:</label></td>
-                        <td><input-editable [value]="user.getAffiliation()" (valueEdited)="updateAffiliation($event)"></input-editable></td>
+                        <td><input-editable [value]="user.getAffiliation()" [allowEmpty]="true" (valueEdited)="updateAffiliation($event)"></input-editable></td>
                         <td nowrap><label>Personal Url:</label></td>
-                        <td><input-editable [value]="user.getUrl()" (valueEdited)="updateUrl($event)"></input-editable></td>
+                        <td><input-editable [value]="user.getUrl()" [allowEmpty]="true" (valueEdited)="updateUrl($event)"></input-editable></td>
                     </tr>
                     <tr>
+                        <td nowrap><label>Avatar Url:</label></td>
+                        <td><input-editable [value]="user.getAvatarUrl()" [allowEmpty]="true" (valueEdited)="updateAvatarUrl($event)"></input-editable></td>
                         <td nowrap><label>Language proficiencies:</label></td>
                         <td>
                             <div class="input-group input-group-sm">

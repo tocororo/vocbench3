@@ -314,6 +314,9 @@ export class Deserializer {
         if (userJson.url != undefined) {
             user.setUrl(userJson.url);
         }
+        if (userJson.avatarUrl != undefined) {
+            user.setAvatarUrl(userJson.avatarUrl);
+        }
         if (userJson.languageProficiencies != undefined) {
             user.setLanguageProficiencies(userJson.languageProficiencies);
         }

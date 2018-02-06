@@ -116,6 +116,15 @@ export class UserProfileComponent {
         )
     }
 
+    private updateAvatarUrl(newUrl: string) {
+        this.userService.updateUserAvatarUrl(this.user.getEmail(), newUrl).subscribe(
+            user => {
+                VBContext.setLoggedUser(user);
+                this.initUser();
+            }
+        )
+    }
+
     private editLanguages() {
         this.sharedModals.selectLanguages("Language proficiencies", this.user.getLanguageProficiencies()).then(
             langs => {

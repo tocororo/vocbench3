@@ -105,6 +105,11 @@
             </tr>
 
             <tr>
+                <td nowrap><label>Avatar URL:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.avatarUrl" name="avatarUrl" placeholder="avatarUrl"
+                        (ngModelChange)="onModelChange()">
+                </td>
                 <td nowrap><label>Language proficiencies:</label></td>
                 <td>
                     <div class="input-group input-group-sm">

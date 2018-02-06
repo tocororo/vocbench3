@@ -42,9 +42,15 @@ export class InputEditableComponent implements OnInit {
     }
 
     private confirmEdit() {
-        if (((this.value == undefined || this.value.trim() == "") && !this.allowEmpty) || 
-            (this.type == "email" && !UserForm.isValidEmail(this.value))) {
-            this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "error");
+        if (this.value == undefined || this.value.trim() == "") {
+            if (this.allowEmpty) {
+                this.value = null;
+            } else {
+                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "error");
+                return;
+            }
+        } else if (this.type == "email" && !UserForm.isValidEmail(this.value)) {
+            this.basicModals.alert("Invalid value", "The inserted value is not valid. Please check and retry.", "error");
             return;
         }
         this.editInProgress = false;

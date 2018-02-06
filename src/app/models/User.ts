@@ -13,6 +13,7 @@ export class User {
     private registrationDate: Date;
     private affiliation: string;
     private url: string;
+    private avatarUrl: string;
     private languageProficiencies: string[];
     private status: UserStatusEnum;
     private admin: boolean = false;
@@ -104,6 +105,14 @@ export class User {
 
     getUrl(): string {
         return this.url;
+    }
+
+    setAvatarUrl(avatarUrl: string) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    getAvatarUrl(): string {
+        return this.avatarUrl;
     }
 
     setLanguageProficiencies(languageProficiencies: string[]) {
@@ -255,6 +264,7 @@ export class UserForm {
     phone: string;
     affiliation: string;
     url: string;
+    avatarUrl: string;
     iri: string;
     urlAsIri: boolean;
     languageProficiencies: string[];
