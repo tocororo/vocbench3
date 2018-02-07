@@ -107,7 +107,7 @@
                         <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} out of {{totalTriples}})</span>
                     </span>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="generateTriples()" title="Generate Triples">
+                        <button class="btn btn-default" (click)="generateTriples()" title="Generate Triples" [disabled]="!pearl">
                             <span class="glyphicon glyphicon-play"></span>
                         </button>
                         <button class="btn btn-default" (click)="addTriples()" title="Add triples" [disabled]="!triplesPreview">

@@ -228,7 +228,7 @@ export class Sheet2RdfComponent {
     }
 
     private checkPearl() {
-        if (this.pearl == undefined || this.pearl == "") {
+        if (this.pearl == undefined) {
             this.pearlValidation = { valid: true, details: null };
             return;
         };
@@ -292,6 +292,9 @@ export class Sheet2RdfComponent {
                 },
                 () => { return } //if user doesn't confirm, do not generate triples
             );
+        } else if (this.pearlValidation != null && !this.pearlValidation.valid) {
+            this.basicModals.alert("Invalid pearl code", "Pearl code contains error.", "warning");
+            return;
         } else {
             this.invokeGetTriplesPreview();
         }
