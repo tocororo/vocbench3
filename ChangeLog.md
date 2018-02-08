@@ -1,16 +1,27 @@
 # 3.0.0 (08-02-2018)
-  * Enabled languages restriction in search.
+  * Changed license to BSD-3-Clause.
+  * toggler for hiding the class instance count
+  * Improved search enabling language restriction and including locales.  
   * Implemented autocompletion support in search bar.
-  * Implemented Collaboration System and Sheet2RDF as experimental features.
-  * Enabled customization of some class tree preference (e.g. default root class and filter on class' children).
-  * Added support for the definition of mandatory languages for projects.
-  * Enabled creation of RDFS projects.
   * Implemented new ICVs.
-  * Enabled possibility to apply the export filters during the export of graph query results.
-  * Implemented export of SPARQL query results in datasheet (for tuple and graph query) and rdf (only for graph
-  	query) formats.
-  * Added new actions to ResourceView partitions.
-
+  * added the possibility to change the type of a class when creating it
+  * Enabled creation of RDFS projects (default type for classes is rdfs:Class)
+  * Improved export of SPARQL query results
+    * added the export to spreadsheet (for tuple and graph query) an rdf (only for graph query)
+    * introduced the export filters  
+  *	Implemented alpha-test versions of Collaboration System and Sheet2RDF (marked as experimental)
+  * Enabled customization of class-tree viewing preference (e.g. default root class and filter on class' children).
+  * Added support for the definition of mandatory languages for projects.
+  * Fixed Exceptions when creating a version dump.
+  * Added the possibility to configure GraphDB SE (Standard Edition, paid version) repositories.
+  * Changed capabilities of some default roles.  
+  * Added new actions to ResourceView partitions (in particular, the possibility to add manually a value)
+  * Added a filter-out option for deprecated concepts
+  * Automatically update the ACL for a project after this has been modified
+  * provide a user-friendly message for reporting the change-tracking sail missing from the triplestore
+  * Added a property in vbconfig.js to specify a path of the SemanticTurkey URL
+  * allow for resizeable configuration fields
+  * minor bug-fixes
 
 # 2.0.0 (30-10-2017)
   * Added option to keep in sync the selected ResourceView Tab resource and the resource in the trees/lists.
