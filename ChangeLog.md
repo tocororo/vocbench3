@@ -21,6 +21,7 @@
   * provide a user-friendly message for reporting the change-tracking sail missing from the triplestore
   * Added a property in vbconfig.js to specify a path of the SemanticTurkey URL
   * allow for resizeable configuration fields
+  * introduced avatar URL property for users, to show images from the web as avatars
   * minor bug-fixes
 
 # 2.0.0 (30-10-2017)
