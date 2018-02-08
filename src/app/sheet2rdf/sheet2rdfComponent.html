@@ -77,7 +77,7 @@
                         </button>
                         <!-- Workaround to show input file as simple <button> -->
                         <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
-                        <button class="btn btn-default" (click)="inputFile.click()" title="Load Pearl" [disabled]="!tablePreview">
+                        <button class="btn btn-default" style="margin-left: -1px" (click)="inputFile.click()" title="Load Pearl" [disabled]="!tablePreview">
                             <span class="glyphicon glyphicon-open"></span>
                         </button>
                         <button class="btn btn-default" (click)="exportPearl()" title="Export Pearl" [disabled]="!pearl">
