@@ -46,6 +46,7 @@ export class ResViewUtils {
         ResViewPartition.facets,
         ResViewPartition.labelRelations,
         ResViewPartition.members,
+        ResViewPartition.notes,
         ResViewPartition.properties,
         ResViewPartition.ranges,
         ResViewPartition.schemes,

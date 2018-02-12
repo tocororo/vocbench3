@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { PluginsServices } from "../services/pluginsServices";
@@ -7,6 +7,7 @@ import { Plugin, PluginConfiguration, ExtensionPoint } from "../models/Plugins";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
 import { VBCollaboration } from "../utils/VBCollaboration";
+import { UIUtils } from "../utils/UIUtils";
 
 @Component({
     selector: "collaboration-config-modal",
@@ -14,6 +15,8 @@ import { VBCollaboration } from "../utils/VBCollaboration";
 })
 export class CollaborationConfigModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
+
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     private availableCollaborationPlugins: Plugin[];
 
@@ -55,8 +58,10 @@ export class CollaborationConfigModal implements ModalComponent<BSModalContext> 
     ok(event: Event) {
         let settingsParam = this.collSysSettings.getPropertiesAsMap();
         let prefsParam = this.collSysPreferences.getPropertiesAsMap();
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.collaborationService.activateCollaboratioOnProject(VBCollaboration.jiraFactoryId, settingsParam, prefsParam).subscribe(
             resp => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 event.stopPropagation();
                 event.preventDefault();
                 this.dialog.close();

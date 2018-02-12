@@ -15,6 +15,7 @@ import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 import { CollaborationServices } from "../services/collaborationServices";
 import { VBCollaboration } from "../utils/VBCollaboration";
+import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 
 @Component({
     selector: "resource-view",
@@ -74,7 +75,8 @@ export class ResourceViewComponent {
     constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
         private collaborationService: CollaborationServices, private eventHandler: VBEventHandler,
         private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
-        private basicModals: BasicModalServices, private resViewModals: ResViewModalServices) {
+        private basicModals: BasicModalServices, private resViewModals: ResViewModalServices,
+        private collabModals: CollaborationModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -436,6 +438,20 @@ export class ResourceViewComponent {
             },
             () => {}
         );
+    }
+
+    private assignToIssue() {
+        this.collabModals.openIssueList().then(
+            issue => {
+                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                this.collaborationService.assignResourceToIssue(issue.getKey(), <ARTURIResource>this.resource).subscribe(
+                    stResp => {
+                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                        this.initCollaboration();
+                    }
+                );
+            }
+        )
     }
 
     private onCollaborationSystemStatusChange() {

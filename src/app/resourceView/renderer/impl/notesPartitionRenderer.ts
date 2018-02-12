@@ -56,9 +56,8 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         );
     }
 
-    //not used since this partition doesn't allow manual add operation
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true);
+        return Observable.of(true); //notes accept all kinds of values
     }
 
     //@Override

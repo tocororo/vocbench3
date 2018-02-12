@@ -71,8 +71,11 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
 
 import { ExportResultAsRdfModal } from "../sparql/exportResultAsRdfModal";
 
+//collaboration
 import { CollaborationConfigModal } from "../collaboration/collaborationConfigModal";
 import { CollaborationProjectModal } from "../collaboration/collaborationProjectModal";
+import { IssueListModal } from "../collaboration/issueListModal";
+import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -89,10 +92,10 @@ import { CollaborationProjectModal } from "../collaboration/collaborationProject
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
         ExportResultAsRdfModal,
-        CollaborationConfigModal, CollaborationProjectModal
+        CollaborationConfigModal, CollaborationProjectModal, IssueListModal
     ],
     exports: [],
-    providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices],
+    providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices, CollaborationModalServices],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
      * (From ngModule FAQ https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-what-not-to-export)
@@ -113,7 +116,7 @@ import { CollaborationProjectModal } from "../collaboration/collaborationProject
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         ExportResultAsRdfModal, 
-        CollaborationConfigModal, CollaborationProjectModal
+        CollaborationConfigModal, CollaborationProjectModal, IssueListModal
     ]
 })
 export class VBModalModule { }

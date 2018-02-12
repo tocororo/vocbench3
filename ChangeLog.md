@@ -1,3 +1,7 @@
+# 3.0.1-beta.1 (dd-mm-yyyy)
+  * Enabled "Add manually" option for notes ResourceView partition.
+  * Enabled possibility to add a resource to an existing issue (Collaboration System tool)
+
 # 3.0.0 (08-02-2018)
   * Changed license to BSD-3-Clause.
   * toggler for hiding the class instance count

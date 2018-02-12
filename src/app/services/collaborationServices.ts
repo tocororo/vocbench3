@@ -94,15 +94,13 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "createIssue", params, true);
     }
 
-    assignProject(projectName: string, projectKey: string, projectId?: string) {
+    assignProject(projectName: string, projectKey: string, projectId: string) {
         console.log("[CollaborationServices] assignProject");
         var params: any = {
             projectName: projectName,
             projectKey: projectKey,
+            projectId: projectId
         };
-        if (projectId != undefined) {
-            params.projectId = projectId;
-        }
         return this.httpMgr.doPost(this.serviceName, "assignProject", params, true);
     }
 

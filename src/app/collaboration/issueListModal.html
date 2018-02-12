@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Collaboration System configuration
+    </h3>
+</div>
+<div class="modal-body vbox blockingDivHost" style="min-height: 20vh; max-height: 70vh">
+
+    <div class="scrollableContainer">
+        <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+                <col style="width: 1%">
+            </colgroup>
+            <tbody>
+                <tr *ngFor="let i of issues" (click)="selectIssue(i)" [ngClass]="{ active : i == selectedIssue }">
+                    <td nowrap>
+                        <a [href]="i.getUrl()" target="_blank">{{i.getKey()}}</a>
+                    </td>
+                    <td>
+                        {{i.getSummary()}}
+                    </td>
+                    <td class="text-center">
+                        <span [class]="'label ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedIssue">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>
