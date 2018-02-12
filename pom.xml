@@ -5,6 +5,14 @@
 	<artifactId>vocbench3</artifactId>
 	<version>3.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	
+	<licenses>
+		<license>
+			<name>BSD-3-Clause</name>
+			<url>https://opensource.org/licenses/BSD-3-Clause</url>
+		</license>
+	</licenses>
+	
 	<build>
 		<plugins>
 			<plugin>
