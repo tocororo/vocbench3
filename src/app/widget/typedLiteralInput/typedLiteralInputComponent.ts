@@ -25,13 +25,20 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         if (this.allowedDatatypes != undefined && this.allowedDatatypes[0].getURI() == RDFS.literal.getURI()) {
             this.allowedDatatypes = undefined; //so it allows all the datatypes
         }
-        //initialize default datatype to xsd:string if allowed, to the first allowed otherwise
+        //initialize default datatype...
         if (this.allowedDatatypes == undefined) {
-            this.datatype = XmlSchema.string;
+            this.datatype = XmlSchema.string; //...to xsd:string if no allowedDatatypes is specified
         } else {
+            //check if in allowedDatatypes there is some datatype not foreseen by datatypeList. In case, add it to datatypeList
+            this.allowedDatatypes.forEach(dt => { 
+                if (this.datatypeList.indexOf(dt) == -1) {
+                    this.datatypeList.push(dt);
+                }
+            });
+            //...to xsd:string if it is among the allowedDatatype
             if (this.allowedDatatypes.findIndex(dt => dt.getURI() == XmlSchema.string.getURI()) != -1) {
                 this.datatype = XmlSchema.string;
-            } else {
+            } else {//...to the first datatype in datatypeList that is in allowedDatatypes
                 this.datatype = this.datatypeList[this.datatypeList.findIndex(dt => dt.getURI() == this.allowedDatatypes[0].getURI())];
             }
         }

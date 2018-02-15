@@ -205,7 +205,7 @@ export class XmlSchema { //all resources here have role "individual" (don't know
 
     public static DATATYPES: ARTURIResource[] = [
         XmlSchema.boolean, XmlSchema.date, XmlSchema.dateTime, XmlSchema.float,
-        XmlSchema.integer, XmlSchema.string, XmlSchema.time
+        XmlSchema.integer, XmlSchema.language, XmlSchema.string, XmlSchema.time
     ];
 }
 

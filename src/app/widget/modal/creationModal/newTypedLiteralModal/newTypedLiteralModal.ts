@@ -86,7 +86,9 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
                     valid = new RegExp("^[\-\+]?[0-9]+(\.[0-9]+)?$").test(this.value);
                 } else if (this.datatype.getURI() == XmlSchema.integer.getURI()) {
                     valid = new RegExp("^[\-\+]?[0-9]+$").test(this.value);
-                } else {
+                } else if (this.datatype.getURI() == XmlSchema.language.getURI()) {
+                    valid = new RegExp("^([a-zA-Z]{1,8})(-[a-zA-Z0-9]{1,8})*$").test(this.value);
+                } else { //every other datatype doesn't require validation
                     valid = true;
                 }
             }
