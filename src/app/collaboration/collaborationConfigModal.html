@@ -62,12 +62,23 @@
                             <span *ngIf="p.required">*</span>
                         </td>
                         <td>
-                            <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
-                                [(ngModel)]="p.value"></textarea>
-    
-                            <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
-                                <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
-                            </select>
+                            <div *ngIf="p.name == 'password'; else elseBlock" class="input-group input-group-sm">
+                                <input *ngIf="showPassword" type="text" class="form-control" [(ngModel)]="p.value">
+                                <input *ngIf="!showPassword" type="password" class="form-control" [(ngModel)]="p.value">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" (mousedown)="showPassword=true" (mouseup)="showPassword=false">
+                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <ng-template #elseBlock>
+                                    <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                        [(ngModel)]="p.value"></textarea>
+            
+                                    <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value">
+                                        <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
+                                    </select>
+                            </ng-template>
                         </td>
                         <td>
                             <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
