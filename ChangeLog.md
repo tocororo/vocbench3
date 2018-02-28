@@ -1,6 +1,7 @@
-# 3.0.1-beta.1 (dd-mm-yyyy)
+# 4.0.0-beta.1 (dd-mm-yyyy)
   * Enabled "Add manually" option for notes ResourceView partition.
-  * Enabled possibility to add a resource to an existing issue (Collaboration System tool)
+  * Enabled possibility to add a resource to an existing issue (Collaboration System tool).
+  * Enabled creation of skosxl labels that are instances of a subClass of skosxl:Label.
 
 # 3.0.0 (08-02-2018)
   * Changed license to BSD-3-Clause.

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum, RDFTypesEnum } from "../models/ARTResources";
 
 @Injectable()
 export class SkosxlServices {
@@ -35,16 +35,21 @@ export class SkosxlServices {
      * Sets a preferred label to the given concept (or scheme).
      * @param concept
      * @param literal
-     * @param mode available values: uri or bnode
+     * @param labelCls
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new created
+     * @param mode available values: uri or bnode
      */
-    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string, checkExistingAltLabel?: boolean) {
+    setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, checkExistingAltLabel?: boolean, 
+            mode: string = RDFTypesEnum.uri) {
         console.log("[SkosxlServices] setPrefLabel");
         var params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
         };
+        if (labelCls != null) {
+            params.labelCls = labelCls;
+        }
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;
         }
@@ -93,15 +98,19 @@ export class SkosxlServices {
      * Adds an alternative label to the given concept (or scheme)
      * @param concept
      * @param literal
+     * @param labelCls
      * @param mode available values: uri or bnode
      */
-    addAltLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string) {
+    addAltLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, mode: string = RDFTypesEnum.uri) {
         console.log("[SkosxlServices] addAltLabel");
         var params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
         };
+        if (labelCls != null) {
+            params.labelCls = labelCls;
+        }
         return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, true);
     }
 
@@ -123,15 +132,19 @@ export class SkosxlServices {
      * Adds an hidden label to the given concept (or scheme)
      * @param concept
      * @param literal
+     * @param labelCls
      * @param mode available values: uri or bnode
      */
-    addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral, mode: string) {
+    addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, mode: string = RDFTypesEnum.uri) {
         console.log("[SkosxlServices] addHiddenLabel");
         var params: any = {
             concept: concept,
             literal: literal,
             mode: mode,
         };
+        if (labelCls != null) {
+            params.labelCls = labelCls;
+        }
         return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, true);
     }
 

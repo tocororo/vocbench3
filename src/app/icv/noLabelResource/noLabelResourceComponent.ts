@@ -81,9 +81,9 @@ export class NoLabelResourceComponent {
                 () => { }
             );
         } else if (this.lexicalizationModel == SKOSXL.uri) {
-            this.creationModals.newPlainLiteral("Add skosxl:prefLabel").then(
-                (literal: any) => {
-                    this.skosxlService.setPrefLabel(resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
+            this.creationModals.newXLabel("Add skosxl:prefLabel").then(
+                (data: any) => {
+                    this.skosxlService.setPrefLabel(resource, data.label, data.class).subscribe(
                         stResp => {
                             this.runIcv();
                         }

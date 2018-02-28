@@ -47,6 +47,7 @@ import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTre
 
 //creation modals
 import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
+import { NewXLabelModal } from '../widget/modal/creationModal/newResourceModal/newXLabelModal';
 import { NewResourceModal } from '../widget/modal/creationModal/newResourceModal/newResourceModal';
 import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newResourceCfModal';
 import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newSkosResourceCfModal';
@@ -81,7 +82,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
     declarations: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
+        NewPlainLiteralModal, NewXLabelModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
@@ -106,7 +107,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
      */
     entryComponents: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
-        NewPlainLiteralModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
+        NewPlainLiteralModal, NewXLabelModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
         NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,

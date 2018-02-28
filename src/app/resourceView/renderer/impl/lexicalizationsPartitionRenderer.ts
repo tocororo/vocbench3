@@ -112,85 +112,100 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     add(predicate: ARTURIResource) {
-        this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
-            (literal: any) => {
-                switch (predicate.getURI()) {
-                    case SKOSXL.prefLabel.getURI(): {
-                        this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                            stResp => this.update.emit(null),
-                            (err: Error) => {
-                                if (err.name.endsWith('PrefAltLabelClashException')) {
-                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                        confirm => {
-                                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri, false).subscribe(
-                                                stResp => this.update.emit(null)
-                                            );
-                                        },
-                                        () => {}
-                                    );
+
+        if (predicate.getURI() == SKOSXL.prefLabel.getURI() || 
+            predicate.getURI() == SKOSXL.altLabel.getURI() || 
+            predicate.getURI() == SKOSXL.hiddenLabel.getURI()
+        ) { //SKOSXL
+            this.creationModals.newXLabel("Add " + predicate.getShow()).then(
+                data => {
+                    switch (predicate.getURI()) {
+                        case SKOSXL.prefLabel.getURI(): {
+                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
+                                stResp => this.update.emit(null),
+                                (err: Error) => {
+                                    if (err.name.endsWith('PrefAltLabelClashException')) {
+                                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                            confirm => {
+                                                this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, data.label, data.cls, false).subscribe(
+                                                    stResp => this.update.emit(null)
+                                                );
+                                            },
+                                            () => {}
+                                        );
+                                    }
                                 }
-                            }
-                        );
-                        break;
+                            );
+                            break;
+                        }
+                        case SKOSXL.altLabel.getURI(): {
+                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
+                                stResp => this.update.emit(null),
+                            );
+                            break;
+                        }
+                        case SKOSXL.hiddenLabel.getURI(): {
+                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                            break;
+                        }
                     }
-                    case SKOSXL.altLabel.getURI(): {
-                        this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                            stResp => this.update.emit(null),
-                        );
-                        break;
-                    }
-                    case SKOSXL.hiddenLabel.getURI(): {
-                        this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                        break;
-                    }
-                    case SKOS.prefLabel.getURI(): {
-                        this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal).subscribe(
-                            stResp => this.update.emit(null),
-                            (err: Error) => {
-                                if (err.name.endsWith('PrefAltLabelClashException')) {
-                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                        confirm => {
-                                            this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal, false).subscribe(
-                                                stResp => this.update.emit(null)
-                                            );
-                                        },
-                                        () => {}
-                                    );
+                },
+                () => {}
+            );
+        } else { //Not SKOSXL lexicalization
+            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
+                (literal: any) => {
+                    switch (predicate.getURI()) {
+                        case SKOS.prefLabel.getURI(): {
+                            this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal).subscribe(
+                                stResp => this.update.emit(null),
+                                (err: Error) => {
+                                    if (err.name.endsWith('PrefAltLabelClashException')) {
+                                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                            confirm => {
+                                                this.skosService.setPrefLabel(<ARTURIResource>this.resource, literal, false).subscribe(
+                                                    stResp => this.update.emit(null)
+                                                );
+                                            },
+                                            () => {}
+                                        );
+                                    }
                                 }
-                            }
-                        );
-                        break;
+                            );
+                            break;
+                        }
+                        case SKOS.altLabel.getURI(): {
+                            this.skosService.addAltLabel(<ARTURIResource>this.resource, literal).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                            break;
+                        }
+                        case SKOS.hiddenLabel.getURI(): {
+                            this.skosService.addHiddenLabel(<ARTURIResource>this.resource, literal).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                            break;
+                        }
+                        case RDFS.label.getURI(): {
+                            this.resourcesService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                            break;
+                        }
+                        default: { //default case, maybe a custom property for which doens't exist a dedicated service
+                            this.resourcesService.addValue(this.resource, predicate, literal).subscribe(
+                                stResp => this.update.emit(null)
+                            )
+                            break;
+                        }
                     }
-                    case SKOS.altLabel.getURI(): {
-                        this.skosService.addAltLabel(<ARTURIResource>this.resource, literal).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                        break;
-                    }
-                    case SKOS.hiddenLabel.getURI(): {
-                        this.skosService.addHiddenLabel(<ARTURIResource>this.resource, literal).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                        break;
-                    }
-                    case RDFS.label.getURI(): {
-                        this.resourcesService.addValue(this.resource, predicate, (<ARTLiteral>literal)).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                        break;
-                    }
-                    default: { //default case, maybe a custom property for which doens't exist a dedicated service
-                        this.resourcesService.addValue(this.resource, predicate, literal).subscribe(
-                            stResp => this.update.emit(null)
-                        )
-                        break;
-                    }
-                }
-            },
-            () => { }
-        );
+                },
+                () => { }
+            );
+        }
+
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

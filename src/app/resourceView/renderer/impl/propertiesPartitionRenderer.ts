@@ -48,22 +48,19 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
         //particular cases: labels
         if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
             predicate.getURI() == SKOSXL.altLabel.getURI() ||
-            predicate.getURI() == SKOSXL.hiddenLabel.getURI() ||
-            predicate.getURI() == SKOS.prefLabel.getURI() ||
-            predicate.getURI() == SKOS.altLabel.getURI() ||
-            predicate.getURI() == SKOS.hiddenLabel.getURI() ||
-            predicate.getURI() == RDFS.label.getURI()) {
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
-                (literal: any) => {
+            predicate.getURI() == SKOSXL.hiddenLabel.getURI()
+        ) {
+            this.creationModals.newXLabel("Add " + predicate.getShow()).then(
+                data => {
                     switch (predicate.getURI()) {
-                        case SKOSXL.prefLabel.getURI():
-                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
+                        case SKOSXL.prefLabel.getURI(): {
+                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
                                 stResp => this.update.emit(null),
                                 (err: Error) => {
                                     if (err.name.endsWith('PrefAltLabelClashException')) {
                                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                             confirm => {
-                                                this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri, false).subscribe(
+                                                this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, data.label, data.cls, false).subscribe(
                                                     stResp => this.update.emit(null)
                                                 );
                                             },
@@ -73,16 +70,32 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                                 }
                             );
                             break;
-                        case SKOSXL.altLabel.getURI():
-                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
+                        }
+                        case SKOSXL.altLabel.getURI(): {
+                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
+                                stResp => this.update.emit(null),
+                            );
+                            break;
+                        }
+                        case SKOSXL.hiddenLabel.getURI(): {
+                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
                                 stResp => this.update.emit(null)
                             );
                             break;
-                        case SKOSXL.hiddenLabel.getURI():
-                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), RDFTypesEnum.uri).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                            break;
+                        }
+                    }
+                },
+                () => {}
+            );
+        } else if (
+            predicate.getURI() == SKOS.prefLabel.getURI() ||
+            predicate.getURI() == SKOS.altLabel.getURI() ||
+            predicate.getURI() == SKOS.hiddenLabel.getURI() ||
+            predicate.getURI() == RDFS.label.getURI()
+        ) {
+            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
+                (literal: any) => {
+                    switch (predicate.getURI()) {
                         case SKOS.prefLabel.getURI():
                             this.skosService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
                                 stResp => this.update.emit(null),

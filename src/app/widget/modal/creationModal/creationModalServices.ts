@@ -9,6 +9,7 @@ import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLitera
 import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
 import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/newConceptFromLabelModal";
 import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/newConceptCfModal";
+import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/newXLabelModal';
 
 @Injectable()
 export class CreationModalServices {
@@ -79,6 +80,25 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewSkosResourceCfModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to create a new xLabel
+     * @param title the title of the modal dialog
+     * @param value the value inserted by default
+     * @param valueReadonly if true the input field is disable and cannot be changed
+     * @param lang the language selected as default
+     * @param langReadonly if true the language selection is disable and language cannot be changed
+     * @param clsChangeable tells if the class of the creating resource can be changed
+     * @return if the modal closes with ok returns a promise containing an object with label and cls
+     */
+    newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean, clsChangeable?: boolean) {
+        var modalData = new NewXLabelModalData(title, value, valueReadonly, lang, langReadonly, clsChangeable);
+        const builder = new BSModalContextBuilder<NewXLabelModalData>(
+            modalData, undefined, NewXLabelModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewXLabelModal, overlayConfig).result;
     }
 
     /**

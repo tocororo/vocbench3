@@ -372,7 +372,8 @@ export class UIUtils {
             imgSrc = require("../../assets/images/icons/res/string.png");
         } else if (datatype == XmlSchema.boolean.getURI()) {
             imgSrc = require("../../assets/images/icons/res/boolean.png");
-        } else if (datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.float.getURI() || datatype == XmlSchema.double.getURI()) {
+        } else if (datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.float.getURI() || 
+            datatype == XmlSchema.double.getURI() || datatype == XmlSchema.integer.getURI()) {
             imgSrc = require("../../assets/images/icons/res/number.png");
         }
         return imgSrc;
