@@ -5,6 +5,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBProperties } from "../utils/VBProperties";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
@@ -25,8 +26,8 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     /**
      * CONSTRUCTOR
      */
-    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
     }
 
     /**

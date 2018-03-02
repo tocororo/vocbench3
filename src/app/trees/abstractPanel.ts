@@ -5,6 +5,7 @@ import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../models/AR
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBProperties } from "../utils/VBProperties";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
 @Component({
@@ -38,10 +39,12 @@ export abstract class AbstractPanel {
     protected cfService: CustomFormsServices;
     protected basicModals: BasicModalServices;
     protected eventHandler: VBEventHandler;
-    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    protected vbProp: VBProperties;
+    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
         this.cfService = cfService;
         this.basicModals = basicModals;
         this.eventHandler = eventHandler;
+        this.vbProp = vbProp;
 
         this.eventSubscriptions.push(eventHandler.showDeprecatedChangedEvent.subscribe(
             (showDeprecated: boolean) => this.showDeprecated = showDeprecated));
@@ -50,6 +53,10 @@ export abstract class AbstractPanel {
     /**
      * METHODS
      */
+
+    ngOnInit() {
+        this.showDeprecated = this.vbProp.getShowDeprecated();
+    }
 
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);

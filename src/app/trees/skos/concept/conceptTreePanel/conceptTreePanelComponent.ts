@@ -36,15 +36,16 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private resourceService: ResourcesServices,
-        private vbProp: VBProperties, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+        private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));
     }
 
     ngOnInit() {
+        super.ngOnInit();
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = this.vbProp.getActiveSchemes();
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme

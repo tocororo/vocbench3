@@ -36,9 +36,8 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     private creatingClassType: ARTURIResource = OWL.class;
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private vbProp: VBProperties, private modal: Modal, 
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+        private modal: Modal, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
     }
 
     ngOnInit() {

@@ -26,8 +26,8 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     private searchInputPlaceholder: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
     }
 
     //top bar commands handlers

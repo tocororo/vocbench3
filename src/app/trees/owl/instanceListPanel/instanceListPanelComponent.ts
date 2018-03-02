@@ -26,9 +26,9 @@ export class InstanceListPanelComponent extends AbstractPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private creationModals: CreationModalServices, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+    constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
     }
 
     //@Override

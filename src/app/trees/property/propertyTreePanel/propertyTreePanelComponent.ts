@@ -29,8 +29,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private vbProp: VBProperties, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
     }
 
     createRoot(role: RDFResourceRolesEnum) {

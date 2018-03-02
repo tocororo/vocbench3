@@ -24,10 +24,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.conceptScheme;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private vbProp: VBProperties, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler) {
-        super(cfService, basicModals, eventHandler);
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, basicModals, eventHandler, vbProp);
         
     }
 
