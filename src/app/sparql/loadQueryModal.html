@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">Load SPARQL query</h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh;">
+    
+    <div class="panel panel-default vbox">
+        <div class="panel-body scrollableContainer">
+            <table class="table table-condensed table-hoverable">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Scope</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
+                        <td>{{ref.identifier}}</td>
+                        <td>{{getRefScope(ref)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedRef">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

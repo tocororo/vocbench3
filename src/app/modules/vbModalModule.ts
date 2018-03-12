@@ -70,7 +70,10 @@ import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/brow
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 
+//query
 import { ExportResultAsRdfModal } from "../sparql/exportResultAsRdfModal";
+import { LoadQueryModal } from "../sparql/loadQueryModal";
+import { SaveQueryModal } from "../sparql/saveQueryModal";
 
 //collaboration
 import { CollaborationConfigModal } from "../collaboration/collaborationConfigModal";
@@ -92,7 +95,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
-        ExportResultAsRdfModal,
+        ExportResultAsRdfModal, LoadQueryModal, SaveQueryModal,
         CollaborationConfigModal, CollaborationProjectModal, IssueListModal
     ],
     exports: [],
@@ -116,7 +119,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        ExportResultAsRdfModal, 
+        ExportResultAsRdfModal, LoadQueryModal, SaveQueryModal,
         CollaborationConfigModal, CollaborationProjectModal, IssueListModal
     ]
 })

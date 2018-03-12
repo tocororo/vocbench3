@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">Save SPARQL query</h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh;">
+    
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td nowrap>
+                    <label>ID:</label>
+                </td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="identifier">
+                </td>
+            </tr>
+            <tr>
+                <td nowrap>
+                    <label>Scope:</label>
+                </td>
+                <td>
+                    <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="selectedScope">
+                        <option *ngFor="let s of scopes">{{s}}</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!identifier">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

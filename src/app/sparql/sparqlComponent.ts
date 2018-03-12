@@ -1,9 +1,13 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
+import { YasguiComponent } from "./yasguiComponent";
 import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
+import { SaveQueryModal, SaveQueryModalData } from "./saveQueryModal";
+import { LoadQueryModal } from "./loadQueryModal";
 import { SparqlServices } from "../services/sparqlServices";
 import { ExportServices } from "../services/exportServices";
+import { ConfigurationsServices } from "../services/configurationsServices";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { UIUtils } from "../utils/UIUtils";
@@ -12,6 +16,7 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { PrefixMapping } from "../models/Metadata";
 import { ARTURIResource, ARTResource, ARTBNode } from "../models/ARTResources";
 import { RDFFormat } from "../models/RDFFormat";
+import { ConfigurationComponents, Configuration, ConfigurationProperty } from "../models/Configuration";
 
 @Component({
     selector: "sparql-component",
@@ -20,12 +25,14 @@ import { RDFFormat } from "../models/RDFFormat";
 })
 export class SparqlComponent {
 
+    @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
+
     private sampleQuery: string = "SELECT * WHERE {\n    ?s ?p ?o .\n} LIMIT 10";
     private tabs: Array<Tab> = [];
 
     private resultsLimit: number = 100;
 
-    constructor(private sparqlService: SparqlServices, private exportService: ExportServices, 
+    constructor(private sparqlService: SparqlServices, private exportService: ExportServices, private configurationsService: ConfigurationsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
@@ -301,6 +308,48 @@ export class SparqlComponent {
             }
             return show;
         }
+    }
+
+    //LOAD/SAVE QUERY
+
+    private loadQuery(tab: Tab) {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(LoadQueryModal, overlayConfig).result.then(
+            (conf: Configuration) => {
+                let query: string;
+                let includeInferred: boolean = false;
+                let confProps: ConfigurationProperty[] = conf.properties;
+                for (var i = 0; i < confProps.length; i++) {
+                    if (confProps[i].name == "sparql") {
+                        query = confProps[i].value;
+                    } else if (confProps[i].name == "includeInferred") {
+                        includeInferred = confProps[i].value == "true";
+                    }
+                }
+                tab.query = query;
+                tab.inferred = includeInferred;
+                setTimeout(() => {
+                    //in order to detect the change of @Input query in the child YasguiComponent
+                    this.viewChildYasgui.forceContentUpdate();
+                })
+            },
+            () => {}
+        );
+    }
+
+    private saveQuery(tab: Tab) {
+        var modalData = new SaveQueryModalData(tab.query, tab.queryMode, tab.inferred);
+        const builder = new BSModalContextBuilder<SaveQueryModalData>(
+            modalData, undefined, SaveQueryModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(SaveQueryModal, overlayConfig).result.then(
+            () => {
+                this.basicModals.alert("Save query", "Query saved succesfully");
+            },
+            () => {}
+        );
     }
 
     //TAB HANDLER

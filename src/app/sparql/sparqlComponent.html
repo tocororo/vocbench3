@@ -23,7 +23,7 @@
     <div class="tab-content">
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <ng-template [ngIf]="t.active">
-                
+
                 <yasgui [query]="t.query" (querychange)="onQueryChange(t, $event)"></yasgui>
                 
                 <!--Commands (submit, clear, inferred)-->
@@ -32,18 +32,12 @@
                         Submit
                     </button>
                     <button class="btn btn-xs btn-info" type="button" (click)="clear(t)" [disabled]="t.queryResult == null">Clear</button>
-                    <div class="hbox" style="align-items: center; display: inline-flex;">
-                        <label style="margin-right: 5px;">Include inferred statement:</label>
-                        <input #inferredcb type="checkbox" (change)="t.inferred=inferredcb.checked">
-                    </div>
-                    <div class="hbox pull-right" style="align-items: center">
-                        <span style="display: inline; margin-left: 5px;">
-                            <span *ngIf="t.queryResult != null && t.resultType != 'boolean'">
-                                Results count: {{t.queryResult.length}}
-                            </span>
-                            <span *ngIf="t.queryTime">(Done in {{t.queryTime}})</span>
-                        </span>
-                        <div class="dropdown pull-right" style="margin-left: 5px;">
+                    <div class="hbox" style="align-items: center; display: inline-flex; margin-left: 6px;">
+                        <div class="hbox" style="align-items: center; display: inline-flex; margin-left: 5px;">
+                            <label style="margin-right: 2px;">Include inferred:</label>
+                            <input type="checkbox" [(ngModel)]="t.inferred">
+                        </div>
+                        <div class="dropdown" style="margin-left: 6px;">
                             <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"
                                 [disabled]="t.queryResult == null && t.resultType != 'boolean'">
                                 Save results as... <span class="caret"></span>
@@ -57,8 +51,28 @@
                                 <li *ngIf="t.resultType=='graph'"><a (click)="exportAsRdf(t)">RDF format...</a></li>
                             </ul>
                         </div>
+                        <span style="display: inline; margin-left: 6px;">
+                            <span *ngIf="t.queryResult != null && t.resultType != 'boolean'">
+                                Results count: {{t.queryResult.length}}
+                            </span>
+                            <span *ngIf="t.queryTime">(Done in {{t.queryTime}})</span>
+                        </span>
+                    </div>
+                    <div class="hbox pull-right" style="align-items: center">
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-default btn-xs" title="Save query" (click)="saveQuery(t)">
+                                    <span class="glyphicon glyphicon-floppy-save"></span>
+                                </button>
+                                <button class="btn btn-default btn-xs" title="Load query" (click)="loadQuery(t)">
+                                    <span class="glyphicon glyphicon-floppy-open"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                
                 
                 <!--Query result-->
                 <div *ngIf="t.queryResult != null" class="vbox">

@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges } from '@angular/core';
 import { VBContext } from '../utils/VBContext';
 import { StringMatchMode } from '../models/Properties';
 import { ARTURIResource } from '../models/ARTResources';
@@ -71,10 +71,7 @@ export class YasguiComponent {
             }
         );
 
-        //collapse prefixes declaration if any
-        if (Object.keys(this.yasqe.getPrefixesFromQuery()).length != 0) {
-            this.yasqe.collapsePrefixes(true);
-        }
+        this.collapsePrefixDeclaration();
 
         //called on changes in yasqe editor
         this.yasqe.on('change', (yasqe: any) => {
@@ -109,6 +106,25 @@ export class YasguiComponent {
         //     //update query in parent component
         //     this.querychange.emit(yasqe.getValue());
         // });
+    }
+
+    /**
+     * If query is changed in code from the parent component, the @Input query changes, but content of the yasqe editor is not updated.
+     * I need to force it by setting the value with setValue().
+     * Note: this operation reset the caret at the beginning of the editor, so use it with caution.
+     * @param changes 
+     */
+    public forceContentUpdate() {
+        console.log("forcing update query to ", this.query);
+        this.yasqe.setValue(this.query);
+        this.collapsePrefixDeclaration();
+    }
+
+    private collapsePrefixDeclaration() {
+        //collapse prefixes declaration if any
+        if (Object.keys(this.yasqe.getPrefixesFromQuery()).length != 0) {
+            this.yasqe.collapsePrefixes(true);
+        }
     }
 
     /**
