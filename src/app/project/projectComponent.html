@@ -67,6 +67,10 @@
                         <td *ngIf="showColumn('Repository Location')" class="text-center">
                             {{p.getRepositoryLocation().location}}
                             <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-info-sign" [title]="p.getRepositoryLocation().serverURL"></span>
+                            <button *ngIf="p.isRepositoryRemote()" class="btn btn-xs btn-default" title="Remote repo credentials" 
+                                (click)="editRemoteRepoCredential(p)" [disabled]="p.isOpen()">
+                                <span class="glyphicon glyphicon-cog"></span>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

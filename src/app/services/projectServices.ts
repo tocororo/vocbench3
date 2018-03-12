@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
-import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum } from '../models/Project';
+import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum, RepositorySummary } from '../models/Project';
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginSpecification } from '../models/Plugins';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -344,6 +344,76 @@ export class ProjectServices {
         } else {
             basicModals.alert("Error", error.message, "error", error.name);
         }
+    }
+
+
+    /**
+     * 
+     * @param project 
+     * @param excludeLocal 
+     */
+    getRepositories(project: Project, excludeLocal?: boolean): Observable<RepositorySummary[]> {
+        console.log("[ProjectServices] getRepositories");
+        var params: any = {
+            projectName: project.getName()
+        };
+        if (excludeLocal != null) {
+            params.excludeLocal = excludeLocal;
+        }
+        return this.httpMgr.doGet(this.serviceName, "getRepositories", params, true);
+    }
+
+    /**
+     * 
+     * @param project 
+     * @param repositoryID 
+     * @param newUsername 
+     * @param newPassword 
+     */
+    modifyRepositoryAccessCredentials(project: Project, repositoryID: string, newUsername?: string, newPassword?: string) {
+        console.log("[ProjectServices] modifyRepositoryAccessCredentials");
+        var params: any = {
+            projectName: project.getName(),
+            repositoryID: repositoryID,
+        };
+        if (newUsername != null) {
+            params.newUsername = newUsername;
+        }
+        if (newPassword != null) {
+            params.newPassword = newPassword;
+        }
+        return this.httpMgr.doPost(this.serviceName, "modifyRepositoryAccessCredentials", params, true);
+    }
+    
+    /**
+     * 
+     * @param project 
+     * @param serverURL 
+     * @param matchUsername 
+     * @param currentUsername 
+     * @param newUsername 
+     * @param newPassword 
+     */
+    batchModifyRepostoryAccessCredentials(project: Project, serverURL: string, matchUsername?: boolean, 
+        currentUsername?: string, newUsername?: string, newPassword?: string) {
+        console.log("[ProjectServices] batchModifyRepostoryAccessCredentials");
+        var params: any = {
+            projectName: project.getName(),
+            serverURL: serverURL,
+        };
+        if (matchUsername != null) {
+            params.matchUsername = matchUsername;
+        }
+        if (currentUsername != null) {
+            params.currentUsername = currentUsername;
+        }
+        if (newUsername != null) {
+            params.newUsername = newUsername;
+        }
+        if (newPassword != null) {
+            params.newPassword = newPassword;
+        }
+        return this.httpMgr.doPost(this.serviceName, "batchModifyRepostoryAccessCredentials", params, true);
     }
 
 }

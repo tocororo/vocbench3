@@ -151,6 +151,17 @@ export const LockLevel = {
     NO: "NO" as LockLevel,
 }
 
+export class RepositorySummary {
+    public id: string;
+    public description: string;
+    public remoteRepoSummary: {
+        serverURL: string;
+		repositoryId: string;
+		username: string;
+		password: string;
+    }
+}
+
 export type RepositoryAccessType = "CreateLocal" | "CreateRemote" | "AccessExistingRemote";
 export const RepositoryAccessType = {
     CreateLocal: "CreateLocal" as RepositoryAccessType,

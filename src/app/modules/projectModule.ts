@@ -12,6 +12,7 @@ import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
 import { ProjectTableConfigModal } from "../project/projectTableConfig/projectTableConfigModal";
 import { ProjectListModal } from "../project/projectListModal";
+import { RemoteRepoModal } from "../project/remoteRepoModal";
 
 
 @NgModule({
@@ -19,10 +20,10 @@ import { ProjectListModal } from "../project/projectListModal";
     declarations: [
         ProjectComponent, CreateProjectComponent,
         //modals
-        ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal
+        ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal, RemoteRepoModal
     ],
     exports: [ProjectComponent],
     providers: [],
-    entryComponents: [ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal]
+    entryComponents: [ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal, RemoteRepoModal]
 })
 export class ProjectModule { }

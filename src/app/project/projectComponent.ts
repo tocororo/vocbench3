@@ -5,6 +5,7 @@ import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
+import { RemoteRepoModalData, RemoteRepoModal } from "./remoteRepoModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
 import { ProjectServices } from "../services/projectServices";
@@ -150,8 +151,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         const builder = new BSModalContextBuilder<ProjectPropertiesModalData>(
             modalData, undefined, ProjectPropertiesModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
         return this.modal.open(ProjectPropertiesModal, overlayConfig)
     }
 
@@ -159,6 +159,18 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
         return this.modal.open(ProjectACLModal, overlayConfig);
+    }
+
+    /** 
+     * Opens a modal to edit the remote repositories credentials
+     */
+    private editRemoteRepoCredential(project: Project) {
+        var modalData = new RemoteRepoModalData(project);
+        const builder = new BSModalContextBuilder<RemoteRepoModalData>(
+            modalData, undefined, RemoteRepoModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(RemoteRepoModal, overlayConfig)
     }
 
     /**
