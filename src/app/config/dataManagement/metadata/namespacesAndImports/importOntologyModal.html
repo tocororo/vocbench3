@@ -21,7 +21,7 @@
             <tr *ngIf="context.importType == 'fromWeb' || context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">
                 <td><label>BaseURI:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI">
+                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" [disabled]="baseURIdisabled">
                 </td>
             </tr>
             <tr *ngIf="context.importType == 'fromLocalFile'">

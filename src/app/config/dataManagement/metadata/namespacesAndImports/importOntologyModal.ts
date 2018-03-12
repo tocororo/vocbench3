@@ -12,7 +12,8 @@ export class ImportOntologyModalData extends BSModalContext {
      */
     constructor(
         public title: string = "Modal Title",
-        public importType: ImportType //'fromWeb' | 'fromWebToMirror' | 'fromLocalFile' | 'fromOntologyMirror'
+        public importType: ImportType, //'fromWeb' | 'fromWebToMirror' | 'fromLocalFile' | 'fromOntologyMirror'
+        public baseURI?: string
     ) {
         super();
     }
@@ -26,6 +27,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     context: ImportOntologyModalData;
 
     private baseURI: string; //used for type "fromWeb", "fromWebToMirror", "fromLocalFile"
+    private baseURIdisabled: boolean = false;
 
     private localFile: File; //used for type "fromLocalFile"
 
@@ -76,6 +78,10 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     }
                 }
             );
+        }
+        if (this.context.baseURI != null) {
+            this.baseURI = this.context.baseURI;
+            this.baseURIdisabled = true;
         }
     }
 

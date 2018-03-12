@@ -81,7 +81,7 @@ export class ImportTreeNodeComponent {
      * fromOntologyMirror) mirror object contains "namespace" and "file".
      */
     private openImportModal(title: string, importType: ImportType) {
-        var modalData = new ImportOntologyModalData(title, importType);
+        var modalData = new ImportOntologyModalData(title, importType, this.import.id);
         const builder = new BSModalContextBuilder<ImportOntologyModalData>(
             modalData, undefined, ImportOntologyModalData
         );
