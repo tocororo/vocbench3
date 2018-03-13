@@ -14,6 +14,8 @@ export class Properties {
     static pref_class_tree_filter_enabled: string = "class_tree_filter_enabled";
     static pref_class_tree_root: string = "class_tree_root";
 
+    static pref_concept_tree_broader_prop: string = "concept_tree_broader_prop";
+
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
@@ -56,4 +58,8 @@ export class ClassTreePreference {
     rootClassUri: string;
     filterMap: { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
     filterEnabled: boolean;
+}
+
+export class ConceptTreePreference {
+    baseBroaderUri: string;
 }

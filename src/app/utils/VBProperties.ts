@@ -3,14 +3,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
+import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, StringMatchMode, ConceptTreePreference } from '../models/Properties';
 import { ProjectTableColumnStruct } from '../models/Project';
 import { ExtensionPoint } from '../models/Plugins';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices'
-import { OWL, RDFS } from '../models/Vocabulary';
+import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { VBContext } from './VBContext';
 
 @Injectable()
@@ -25,6 +25,7 @@ export class VBProperties {
     private projectThemeId: number = null;
 
     private classTreePreferences: ClassTreePreference;
+    private conceptTreePreferences: ConceptTreePreference;
 
     private searchSettings: SearchSettings = {
         stringMatchMode: StringMatchMode.contains,
@@ -65,7 +66,8 @@ export class VBProperties {
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
-            Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root
+            Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
+            Properties.pref_concept_tree_broader_prop
         ];
         this.prefService.getProjectPreferences(properties).subscribe(
             prefs => {
@@ -85,6 +87,8 @@ export class VBProperties {
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
 
+                //cls tree preferences
+
                 this.classTreePreferences = { 
                     rootClassUri: (VBContext.getWorkingProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
                     filterMap: {}, 
@@ -101,6 +105,16 @@ export class VBProperties {
                 let classTreeRootPref: any = prefs[Properties.pref_class_tree_root];
                 if (classTreeRootPref != null) {
                     this.classTreePreferences.rootClassUri = classTreeRootPref;
+                }
+
+                //concept tree preferences
+
+                this.conceptTreePreferences = {
+                    baseBroaderUri: SKOS.broader.getURI()
+                }
+                let conceptTreeBroaderPropPref: any = prefs[Properties.pref_concept_tree_broader_prop];
+                if (conceptTreeBroaderPropPref != null) {
+                    this.conceptTreePreferences.baseBroaderUri = conceptTreeBroaderPropPref;
                 }
 
                 //search settings
@@ -196,6 +210,14 @@ export class VBProperties {
     setClassTreeRoot(rootUri: string) {
         this.prefService.setProjectPreference(Properties.pref_class_tree_root, rootUri).subscribe();
         this.classTreePreferences.rootClassUri = rootUri;
+    }
+
+    getConceptTreePreferences(): ConceptTreePreference {
+        return this.conceptTreePreferences;
+    }
+    setConceptTreeBroaderProp(propUri: string) {
+        this.prefService.setProjectPreference(Properties.pref_concept_tree_broader_prop, propUri).subscribe();
+        this.conceptTreePreferences.baseBroaderUri = propUri;
     }
 
 

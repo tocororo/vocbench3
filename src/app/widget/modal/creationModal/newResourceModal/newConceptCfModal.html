@@ -1,6 +1,11 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span *ngIf="context.broader" style="margin-right: 4px;">
+            <button class="btn btn-default btn-xs" title="Change broader property" (click)="changeBroaderProp()">
+                <rdf-resource [resource]="broaderProp"></rdf-resource>
+            </button>
+        </span>
         <span>
             <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()" [disabled]="!context.clsChangeable">
                 <rdf-resource [resource]="resourceClass"></rdf-resource>

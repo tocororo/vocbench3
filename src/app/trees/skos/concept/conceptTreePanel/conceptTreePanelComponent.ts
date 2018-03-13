@@ -1,4 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
+import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
 import { AbstractTreePanel } from "../../../abstractTreePanel"
 import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { SkosServices } from "../../../../services/skosServices";
@@ -7,6 +10,7 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
+import { NewConceptCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/newConceptCfModal";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -36,7 +40,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private resourceService: ResourcesServices,
-        private creationModals: CreationModalServices,
+        private creationModals: CreationModalServices, private modal: Modal,
         cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
         super(cfService, basicModals, eventHandler, vbProp);
 
@@ -82,15 +86,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     createRoot() {
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
-            (data: any) => {
+            (data: NewConceptCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfValue).subscribe(
+                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
+                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
                                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                     );
                                 },
@@ -106,15 +110,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     createChild() {
         this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, true).then(
-            (data: any) => {
+            (data: NewConceptCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
+                this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.broaderProp, data.cfValue).subscribe(
                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
+                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.broaderProp, data.cfValue, false).subscribe(
                                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                     );
                                 },
@@ -269,6 +273,21 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     openTreeAt(resource: ARTURIResource) {
         this.viewChildTree.openTreeAt(resource);
+    }
+
+    private settings() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(ConceptTreeSettingsModal, overlayConfig).result.then(
+            changesDone => {
+                //currently don't do nothing, probably in the future I need to refresh the tree if the hierarchy should be
+                //based on a given property
+                // this.refresh();
+            },
+            () => {
+                // this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+            }
+        );
     }
 
     //EVENT LISTENERS

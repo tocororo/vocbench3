@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3 class="modal-title">Concept tree settings</h3>
+</div>
+<div class="modal-body vbox" style="max-height: 70vh;">
+
+    <div class="alert alert-info" style="margin-bottom: 6px;">
+        Here you can change the base broader property to be selected when creating narrower concepts
+    </div>
+
+    <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
+        <label style="white-space: nowrap; margin-right: 4px;">
+            Broader property:
+        </label>
+        <input-editable *ngIf="broaderProperty" [value]="broaderProperty.getURI()" (valueEdited)="updateBroaderProp($event)" style="flex: 1;"></input-editable>
+        <button class="btn btn-default btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeProperty()">
+            <img src="../../../../../assets/images/icons/res/propObject.png"/>
+        </button>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -11,6 +11,7 @@ import { TreeListSettingsModal } from '../trees/treeListSettingsModal';
 import { ConceptTreePanelComponent } from '../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent';
 import { ConceptTreeComponent } from '../trees/skos/concept/conceptTree/conceptTreeComponent';
 import { ConceptTreeNodeComponent } from '../trees/skos/concept/conceptTree/conceptTreeNodeComponent';
+import { ConceptTreeSettingsModal } from '../trees/skos/concept/conceptTreePanel/conceptTreeSettingsModal';
 
 import { CollectionTreePanelComponent } from '../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent';
 import { CollectionTreeComponent } from '../trees/skos/collection/collectionTree/collectionTreeComponent';
@@ -45,7 +46,7 @@ import { Ng2CompleterModule } from "ng2-completer";
     imports: [CommonModule, FormsModule, RouterModule, SharedModule, Ng2CompleterModule], 
     declarations: [
         TreePanelComponent, TreeListSettingsModal,
-        ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent,
+        ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent, ConceptTreeSettingsModal,
         CollectionTreePanelComponent, CollectionTreeComponent, CollectionTreeNodeComponent,
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
@@ -62,6 +63,6 @@ import { Ng2CompleterModule } from "ng2-completer";
         PropertyTreePanelComponent, PropertyTreeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent
     ],
-    entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, TreeListSettingsModal]
+    entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, TreeListSettingsModal]
 })
 export class TreeAndListModule { }

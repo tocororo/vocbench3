@@ -95,12 +95,13 @@ export class SkosServices {
      * @param newConcept URI concept
      * @param broaderConcept broader of the new created concept. If provided, the serivce creates a narrower
      * @param conceptCls class of the concept that is creating (a subclass of skos:Concept, if not provided the default is skos:Concept)
+     * @param broaderProp property for creating a subConcept
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new concept's label (default true)
      * @param customFormValue custom form that set additional info to the concept
      * @return 
      */
     createConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
-        conceptCls?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
+        conceptCls?: ARTURIResource, broaderProp?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
         console.log("[SkosServices] createConcept");
         var params: any = {
             label: label,
@@ -114,6 +115,9 @@ export class SkosServices {
         }
         if (conceptCls != null) {
             params.conceptCls = conceptCls;
+        }
+        if (broaderProp != null) {
+            params.broaderProp = broaderProp;
         }
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;

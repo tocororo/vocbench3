@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { NewConceptCfModalReturnData } from "../../widget/modal/creationModal/newResourceModal/newConceptCfModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBProperties } from "../../utils/VBProperties";
@@ -58,8 +59,8 @@ export class NoTopConceptSchemeComponent {
      */
     createTopConcept(scheme: ARTURIResource) {
         this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
-            (data: any) => {
-                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfValue).subscribe(
+            (data: NewConceptCfModalReturnData) => {
+                this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
                     stResp => {
                         this.runIcv();
                     },
@@ -67,7 +68,7 @@ export class NoTopConceptSchemeComponent {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
+                                    this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
                                         stResp => {
                                             this.runIcv();
                                         },
