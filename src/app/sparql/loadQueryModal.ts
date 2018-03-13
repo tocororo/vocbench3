@@ -20,12 +20,16 @@ export class LoadQueryModal implements ModalComponent<BSModalContext> {
     private references: Reference[];
     private selectedRef: Reference;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private configurationModal: ConfigurationsServices) {
+    constructor(public dialog: DialogRef<BSModalContext>, private configurationService: ConfigurationsServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.configurationModal.getConfigurationReferences(ConfigurationComponents.SPARQL_STORE).subscribe(
+        this.initReferences();
+    }
+
+    private initReferences() {
+        this.configurationService.getConfigurationReferences(ConfigurationComponents.SPARQL_STORE).subscribe(
             refs => {
                 this.references = refs;
             }
@@ -52,8 +56,16 @@ export class LoadQueryModal implements ModalComponent<BSModalContext> {
         }
     }
 
+    private deleteReference(reference: Reference) {
+        this.configurationService.deleteConfiguration(ConfigurationComponents.SPARQL_STORE, reference.relativeReference).subscribe(
+            stResp => {
+                this.initReferences();
+            }
+        )
+    }
+
     ok(event: Event) {
-        this.configurationModal.getConfiguration(ConfigurationComponents.SPARQL_STORE, this.selectedRef.relativeReference).subscribe(
+        this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_STORE, this.selectedRef.relativeReference).subscribe(
             conf => {
                 event.stopPropagation();
                 this.dialog.close(conf);

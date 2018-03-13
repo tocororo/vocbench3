@@ -51,4 +51,13 @@ export class ConfigurationsServices {
         return this.httpMgr.doPost(this.serviceName, "storeConfiguration", params, true);
     }
 
+    deleteConfiguration(componentID: string, relativeReference: string) {
+        console.log("[ConfigurationsServices] deleteConfiguration");
+        var params = {
+            componentID: componentID,
+            relativeReference: relativeReference
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteConfiguration", params, true);
+    }
+
 }
