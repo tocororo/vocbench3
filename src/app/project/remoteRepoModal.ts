@@ -65,11 +65,11 @@ export class RemoteRepoModal implements ModalComponent<RemoteRepoModalData> {
                 }
             );
         } else { //batch false or undefined (in case of just one repoSummary)
-            this.projectService.modifyRepositoryAccessCredentials(this.context.project, repo.remoteRepoSummary.repositoryId, 
+            this.projectService.modifyRepositoryAccessCredentials(this.context.project, repo.id, 
                 repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                 stResp => {
-                    this.basicModals.alert("Credentials updated", "Credentials for the remote repository " + 
-                        repo.remoteRepoSummary.repositoryId + " have been updated");
+                    this.basicModals.alert("Credentials updated", "Credentials for the '" + repo.id + 
+                        "' remote repository have been updated");
                 }
             );
         }

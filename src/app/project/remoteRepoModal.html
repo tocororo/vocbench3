@@ -3,6 +3,10 @@
 </div>
 <div class="modal-body vbox scrollableContainer" style="max-height:70vh;">
 
+    <div *ngIf="!repoSummaries || repoSummaries.length == 0" class="alert alert-info" style="margin: 4px;">
+        There are no remote repositories related to this project
+    </div>
+
     <div *ngFor="let repo of repoSummaries" class="panel panel-default" style="margin-bottom: 2px;">
         <div class="panel-heading">
             <label>{{repo.id}}:</label>
