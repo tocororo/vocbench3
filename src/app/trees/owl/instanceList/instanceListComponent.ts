@@ -96,7 +96,7 @@ export class InstanceListComponent extends AbstractList {
 
         this.selectedNode = null;
         this.list = [];
-        this.openPages = 0;
+        this.nodeLimit = this.initialNodes;
 
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
@@ -141,35 +141,11 @@ export class InstanceListComponent extends AbstractList {
     }
 
     openListAt(node: ARTURIResource) {
-        //first ensure that the instance is not excluded by the paging mechanism
-        for (var i = 0; i < this.list.length; i++) {//look for the searched instance
-            if (this.list[i].getURI() == node.getURI()) {
-                //given the paging mechanism, check if instance is visible
-                if (!this.showInstance(i)) { //if currently index is not shown...
-                    this.openPages = i/this.pagingLimit; //update openPages
-                    break;
-                }
-            }
-        }
+        this.ensureNodeVisibility(node);
+
         setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
             () => {
                 //then iterate over the visible instanceListNodes and select the searched
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (var i = 0; i < childrenNodeComponent.length; i++) {
-                    if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
-                        childrenNodeComponent[i].ensureVisible();
-                        if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
-                            childrenNodeComponent[i].selectNode();
-                        }
-                        //searched resource found, reset pending search and stop the iteration
-                        this.pendingSearch.pending = false;
-                        this.pendingSearch.cls = null;
-                        this.pendingSearch.instance = null;
-                        break;
-                    }
-                }
-
-
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 for (var i = 0; i < childrenNodeComponent.length; i++) {
                     if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
@@ -226,19 +202,6 @@ export class InstanceListComponent extends AbstractList {
                 this.list[i]['uri'] = newResource.getURI();
             }
         }
-    }
-
-    // PAGING
-    private pagingLimit: number = 50;
-    private openPages: number = 0;
-    private showInstance(index: number) {
-        return (index < this.openPages * this.pagingLimit + this.pagingLimit);
-    }
-    private showMoreButton() {
-        return (this.openPages * this.pagingLimit + this.pagingLimit < this.list.length);
-    }
-    private showMore() {
-        this.openPages++;
     }
 
 }

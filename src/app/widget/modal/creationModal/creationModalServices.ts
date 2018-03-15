@@ -10,6 +10,7 @@ import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLitera
 import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/newConceptFromLabelModal";
 import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/newConceptCfModal";
 import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/newXLabelModal';
+import { NewLexiconCfModalData, NewLexiconCfModal } from './newResourceModal/newLexiconCfModal';
 
 @Injectable()
 export class CreationModalServices {
@@ -80,6 +81,20 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewSkosResourceCfModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to create a new ontolex lexicon
+     * @param title 
+     * @param clsChangeable 
+     */
+    newLexiconCf(title: string, clsChangeable?: boolean) {
+        var modalData = new NewLexiconCfModalData(title, clsChangeable);
+        const builder = new BSModalContextBuilder<NewLexiconCfModalData>(
+            modalData, undefined, NewLexiconCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewLexiconCfModal, overlayConfig).result;
     }
 
     /**

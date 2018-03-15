@@ -54,6 +54,7 @@ import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourc
 import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
 import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/newConceptCfModal';
 import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/newConceptFromLabelModal';
+import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/newLexiconCfModal';
 
 //these are used only in creation modals, if they will be useful elsewhere, they can be moved in sharedModule
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
@@ -86,7 +87,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     declarations: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewXLabelModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
-        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
+        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
@@ -111,7 +112,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     entryComponents: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewXLabelModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
-        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal,
+        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,

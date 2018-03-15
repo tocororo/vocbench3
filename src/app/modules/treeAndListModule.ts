@@ -31,6 +31,10 @@ import { ClassTreeComponent } from '../trees/owl/classTree/classTreeComponent';
 import { ClassTreeNodeComponent } from '../trees/owl/classTree/classTreeNodeComponent';
 import { ClassTreeSettingsModal } from '../trees/owl/classTreePanel/classTreeSettingsModal';
 
+import { LexiconListPanelComponent } from '../trees/ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent';
+import { LexiconListComponent } from '../trees/ontolex/lexicon/lexiconList/lexiconListComponent';
+import { LexiconListNodeComponent } from '../trees/ontolex/lexicon/lexiconList/lexiconListNodeComponent';
+
 import { ClassIndividualTreeComponent } from '../trees/owl/classIndividualTree/classIndividualTreeComponent';
 import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/instanceListPanelComponent';
 import { InstanceListComponent } from '../trees/owl/instanceList/instanceListComponent';
@@ -51,6 +55,7 @@ import { Ng2CompleterModule } from "ng2-completer";
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
+        LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
         SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal
     ],

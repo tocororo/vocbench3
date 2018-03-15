@@ -222,6 +222,13 @@ export class OntoLex {
     public static uri = "http://www.w3.org/ns/lemon/ontolex";
 }
 
+export class Lime {
+    public static uri = "http://www.w3.org/ns/lemon/lime";
+    public static namespace = Lime.uri + "#";
+
+    public static lexicon = new ARTURIResource(Lime.namespace + "Lexicon", "lime:Lexicon", RDFResourceRolesEnum.cls);
+}
+
 export class SemanticTurkey {
     public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
     public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";

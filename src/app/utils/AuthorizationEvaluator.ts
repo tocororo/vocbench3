@@ -51,6 +51,10 @@ enum Actions {
     METADATA_SET_NS_PREFIX_MAPPING,
     ONT_MANAGER_DELETE_ONTOLOGY_MIRROR,
     ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR,
+    ONTOLEX_CREATE_LEXICON,
+    ONTOLEX_CREATE_LEXICAL_ENTRY,
+    ONTOLEX_GET_LEXICAL_ENTRY,
+    ONTOLEX_GET_LEXICON,
     PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
     PROPERTIES_ADD_PROPERTY_DOMAIN,
     PROPERTIES_ADD_PROPERTY_RANGE,
@@ -153,6 +157,10 @@ export class AuthorizationEvaluator {
         [Actions.METADATA_SET_NS_PREFIX_MAPPING] : 'auth(pm(project, prefixMapping), "U").',
         [Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "D").',
         [Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "CU").',
+        [Actions.ONTOLEX_CREATE_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "C").',
+        [Actions.ONTOLEX_CREATE_LEXICON] : 'auth(rdf(lexicon), "C").',
+        [Actions.ONTOLEX_GET_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "R").',
+        [Actions.ONTOLEX_GET_LEXICON] : 'auth(rdf(lexicon), "R").',
         [Actions.PLUGINS_GET_PLUGINS] : 'auth(sys(plugins), "R").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
@@ -318,7 +326,8 @@ export class AuthorizationEvaluator {
                 (role == RDFResourceRolesEnum.skosCollection && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_COLLECTION)) ||
                 (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS)) ||
                 (role == RDFResourceRolesEnum.individual && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_INDIVIDUAL)) ||
-                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY))
+                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY)) ||
+                (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICON))
             );
         },
         isDeleteAuthorized(role: RDFResourceRolesEnum) {
@@ -329,6 +338,8 @@ export class AuthorizationEvaluator {
                 (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_CLASS)) ||
                 (role == RDFResourceRolesEnum.individual && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_INDIVIDUAL)) ||
                 (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY))
+                //still to do
+                // (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICON))
             );
         }
     }

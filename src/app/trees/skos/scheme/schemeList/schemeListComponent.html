@@ -1,13 +1,14 @@
 <div class="panel panel-default vbox">
 
     <div class="panel-body vbox">
-        <div class="scrollableContainer">
-            <ng-template ngFor let-s [ngForOf]="list">
-                <div *ngIf="!s.scheme.isDeprecated() || showDeprecated && s.scheme.isDeprecated()">
+
+        <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+            <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
+                <div *ngIf="idx < nodeLimit && (!n.scheme.isDeprecated() || showDeprecated && n.scheme.isDeprecated())">
                     <div class="listNodeItem">
-                        <input *ngIf="editable" type="checkbox" style="margin-right: 5px;" [(ngModel)]="s.checked" (ngModelChange)="updateActiveSchemesPref()">
-                        <scheme-list-node [node]="s.scheme" [rendering]="rendering" [showDeprecated]="showDeprecated" 
-                            (nodeSelected)="selectNode(s)" style="flex:1">
+                        <input *ngIf="editable" type="checkbox" style="margin-right: 5px;" [(ngModel)]="n.checked" (ngModelChange)="updateActiveSchemesPref()">
+                        <scheme-list-node [node]="n.scheme" [rendering]="rendering" [showDeprecated]="showDeprecated" 
+                            (nodeSelected)="selectNode(n)" style="flex:1">
                         </scheme-list-node>
                     </div>
                 </div>

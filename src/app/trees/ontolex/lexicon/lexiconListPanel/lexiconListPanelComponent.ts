@@ -1,84 +1,53 @@
 import { Component, Output, EventEmitter, ViewChild } from "@angular/core";
-import { SchemeListComponent } from "../schemeList/schemeListComponent";
+import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
 import { AbstractPanel } from "../../../abstractPanel";
-import { SkosServices } from "../../../../services/skosServices";
+import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
+import { NewLexiconCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/newLexiconCfModal";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
-import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
+// import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 
 @Component({
-    selector: "scheme-list-panel",
-    templateUrl: "./schemeListPanelComponent.html",
+    selector: "lexicon-list-panel",
+    templateUrl: "./lexiconListPanelComponent.html",
 })
-export class SchemeListPanelComponent extends AbstractPanel {
+export class LexiconListPanelComponent extends AbstractPanel {
 
-    @ViewChild(SchemeListComponent) viewChildList: SchemeListComponent;
+    @ViewChild(LexiconListComponent) viewChildList: LexiconListComponent;
 
-    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.conceptScheme;
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.limeLexicon;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
         super(cfService, basicModals, eventHandler, vbProp);
         
     }
 
     private create() {
-        this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
-            (res: any) => {
-                this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfValue).subscribe(
-                    newScheme => { },
-                    (err: Error) => {
-                        if (err.name.endsWith('PrefAltLabelClashException')) {
-                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                confirm => {
-                                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfValue, false).subscribe(
-                                        newScheme => { }
-                                    );
-                                },
-                                () => {}
-                            );
-                        }
-                    }
-                );
+        this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
+            (res: NewLexiconCfModalReturnData) => {
+                this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe();
             },
             () => { }
         );
     }
 
     delete() {
-        this.skosService.isSchemeEmpty(this.selectedNode).subscribe(
-            empty => {
-                if (empty) {
-                    this.deleteSelectedScheme();
-                } else {
-                    this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
-                        + " Are you sure to continue?", "warning").then(
-                        (confirm: any) => {
-                            this.deleteSelectedScheme();
-                        },
-                        (reject: any) => {}
-                    );
-                }
-            }
-        )
-    }
-
-    private deleteSelectedScheme() {
-        this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
-            stResp => {
-                this.eventHandler.schemeDeletedEvent.emit(this.selectedNode);
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-            }
-        );
+        // this.ontolexService.deleteConceptScheme(this.selectedNode).subscribe(
+        //     stResp => {
+        //         this.eventHandler.schemeDeletedEvent.emit(this.selectedNode);
+        //         this.nodeDeleted.emit(this.selectedNode);
+        //         this.selectedNode = null;
+        //     }
+        // );
     }
 
     doSearch(searchedText: string) {
@@ -92,7 +61,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
                 searchLangs = searchSettings.languages;
                 includeLocales = searchSettings.includeLocales;
             }
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.limeLexicon], searchSettings.useLocalName, 
                 searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
@@ -117,14 +86,6 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     public openAt(node: ARTURIResource) {
         this.viewChildList.openListAt(node);
-    }
-
-    private activateAllScheme() {
-        this.viewChildList.activateAllScheme();
-    }
-
-    private deactivateAllScheme() {
-        this.viewChildList.deactivateAllScheme();
     }
 
     refresh() {

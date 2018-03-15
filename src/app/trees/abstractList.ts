@@ -11,6 +11,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 export abstract class AbstractList extends AbstractStruct {
 
     @ViewChild('blockDivList') public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList
+    @ViewChild('scrollableContainer') scrollableElement: ElementRef;
     abstract viewChildrenNode: QueryList<AbstractListNode>;
     
     /**
@@ -44,5 +45,31 @@ export abstract class AbstractList extends AbstractStruct {
     abstract onListNodeCreated(node: ARTURIResource): void;
     abstract onListNodeDeleted(node: ARTURIResource): void;
     abstract openListAt(node: ARTURIResource): void;
+
+    //Nodes limitation management
+    initialNodes: number = 100;
+    nodeLimit: number = this.initialNodes;
+    increaseRate: number = this.initialNodes/5;
+    private onScroll() {
+        let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
+        if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
+            //bottom reached => increase max range if there are more roots to show
+            if (this.nodeLimit < this.list.length) { 
+                this.nodeLimit = this.nodeLimit + this.increaseRate;
+            }
+        } 
+    }
+    ensureNodeVisibility(resource: ARTURIResource) {
+        for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].getURI() == resource.getURI()) {
+                if (i >= this.nodeLimit) {
+                    //update nodeLimit so that node at index i is within the range
+                    let scrollStep: number = ((i - this.nodeLimit)/this.increaseRate)+1;
+                    this.nodeLimit = this.nodeLimit + this.increaseRate*scrollStep;
+                }
+                break;
+            }
+        }
+    }
 
 }

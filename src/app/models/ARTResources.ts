@@ -330,7 +330,12 @@ export type RDFResourceRolesEnum =
     "undetermined" |
     "xLabel" |
     "skosCollection" |
-    "skosOrderedCollection";
+    "skosOrderedCollection" |
+    "limeLexicon" |
+    "ontolexLexicalEntry" |
+    "ontolexForm";
+
+    
 
 export const RDFResourceRolesEnum = {
     annotationProperty: "annotationProperty" as RDFResourceRolesEnum,
@@ -348,7 +353,10 @@ export const RDFResourceRolesEnum = {
     undetermined: "undetermined" as RDFResourceRolesEnum,
     xLabel: "xLabel" as RDFResourceRolesEnum,
     skosCollection: "skosCollection" as RDFResourceRolesEnum,
-    skosOrderedCollection: "skosOrderedCollection" as RDFResourceRolesEnum
+    skosOrderedCollection: "skosOrderedCollection" as RDFResourceRolesEnum,
+    limeLexicon: "limeLexicon" as RDFResourceRolesEnum,
+    ontolexLexicalEntry: "ontolexLexicalEntry" as RDFResourceRolesEnum,
+    ontolexForm: "ontolexForm" as RDFResourceRolesEnum
 };
 
 export type RDFTypesEnum =

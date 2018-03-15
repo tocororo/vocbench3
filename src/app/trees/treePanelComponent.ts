@@ -94,11 +94,12 @@ export class TreePanelComponent {
         }
     }
 
-    /**
-     * returns true if a project is SKOS or OntoLex. Useful to show/hide tree panel
-     */
-    private showSKOSPanels(): boolean {
-        return (this.ONTO_TYPE == SKOS.uri) || (this.ONTO_TYPE == OntoLex.uri);
+    private isProjectSKOS(): boolean {
+        return (this.ONTO_TYPE == SKOS.uri);
+    }
+
+    private isProjectOntolex(): boolean {
+        return (this.ONTO_TYPE == OntoLex.uri);
     }
 
     private openSettings() {
@@ -127,6 +128,9 @@ export class TreePanelComponent {
     }
     private isPropertyAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY);
+    }
+    private isLexiconAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICON);
     }
 
 }

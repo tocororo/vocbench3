@@ -42,6 +42,8 @@ export class SchemeListComponent extends AbstractList {
     initList() {
         this.list = [];
         this.selectedNode = null;
+        this.nodeLimit = this.initialNodes;
+
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.skosService.getAllSchemes().subscribe(
             schemes => {
@@ -98,12 +100,30 @@ export class SchemeListComponent extends AbstractList {
     }
 
     openListAt(node: ARTURIResource) {
-        var childrenNodeComponent = this.viewChildrenNode.toArray();
-        for (var i = 0; i < childrenNodeComponent.length; i++) {
-            if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
-                childrenNodeComponent[i].ensureVisible();
-                if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
-                    childrenNodeComponent[i].selectNode();
+        this.ensureNodeVisibility(node);
+        setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
+            () => {
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                for (var i = 0; i < childrenNodeComponent.length; i++) {
+                    if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
+                        childrenNodeComponent[i].ensureVisible();
+                        if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
+                            childrenNodeComponent[i].selectNode();
+                        }
+                        break;
+                    }
+                }
+            }
+        );
+    }
+    //@Override
+    ensureNodeVisibility(resource: ARTURIResource) {
+        for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].scheme.getURI() == resource.getURI()) {
+                if (i >= this.nodeLimit) {
+                    //update nodeLimit so that node at index i is within the range
+                    let scrollStep: number = ((i - this.nodeLimit)/this.increaseRate)+1;
+                    this.nodeLimit = this.nodeLimit + this.increaseRate*scrollStep;
                 }
                 break;
             }

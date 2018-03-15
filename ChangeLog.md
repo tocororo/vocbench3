@@ -2,7 +2,7 @@
   * Enabled "Add manually" option for notes ResourceView partition.
   * Enabled possibility to add a resource to an existing issue (Collaboration System tool).
   * Enabled creation of skosxl labels that are instances of a subClass of skosxl:Label.
-  * Allowed creation of OntoLex projects (both onto-model and lexical model).
+  * Allowed creation of OntoLex projects (both onto-model and lexical model) and added Lexicon panel in Data page.
   * Implemented the storage management of SPARQL queries.
   * Enabled customization of the base broader property in the creation of a concepts hierarcy.
   * Enabled the possibility to change the credentials of remote repositories.

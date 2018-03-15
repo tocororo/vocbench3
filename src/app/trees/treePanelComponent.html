@@ -6,7 +6,7 @@
                 Class
             </a>
         </li>
-        <ng-template [ngIf]="showSKOSPanels()">
+        <ng-template [ngIf]="isProjectSKOS() || isProjectOntolex()">
             <li [ngClass]="{active : activeTab == 'concept', disabled: !isConceptAuthorized() }">
                 <a href (click)="selectTab('concept')">
                     Concept
@@ -28,6 +28,11 @@
                 Property
             </a>
         </li>
+        <li *ngIf="isProjectOntolex()" [ngClass]="{active : activeTab == 'limeLexicon', disabled: !isLexiconAuthorized() }">
+            <a href (click)="selectTab('limeLexicon')">
+                Lexicon
+            </a>
+        </li>
 
         <li class="active" style="float: right;">
             <a (click)="openSettings()" style="margin: 0px 2px;">
@@ -46,7 +51,7 @@
                 </class-individual-tree-panel>
             </div>
         </div>
-        <ng-template [ngIf]="showSKOSPanels()">
+        <ng-template [ngIf]="isProjectSKOS() || isProjectOntolex()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
                 <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
                 </concept-tree-panel>
@@ -63,6 +68,10 @@
         <div [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
             <property-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
             </property-tree-panel>
+        </div>
+        <div *ngIf="isProjectOntolex()" [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
+            <lexicon-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
+            </lexicon-list-panel>
         </div>
     </div>
     

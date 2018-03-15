@@ -106,8 +106,9 @@ resource-view-splitted, resource-view-tabbed {
     flex: 1;
 }
 
-tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, instance-list-panel, property-tree-panel,
-collection-tree-panel, concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list,
+tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, 
+instance-list-panel, property-tree-panel, collection-tree-panel, lexicon-list-panel,
+concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list, lexicon-list,
 class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
@@ -115,8 +116,8 @@ class-individual-tree, resource-view, scheme-selection, data-range-editor, impor
     flex-flow: column;
 }
 
-concept-tree .panel-body, class-tree .panel-body, property-tree .panel-body,
-collection-tree .panel-body, instance-list .panel-body, scheme-list .panel-body {
+concept-tree .panel-body, class-tree .panel-body, property-tree .panel-body, collection-tree .panel-body, 
+instance-list .panel-body, scheme-list .panel-body, lexicon-list .panel-body {
     padding: 0px;
 }
 

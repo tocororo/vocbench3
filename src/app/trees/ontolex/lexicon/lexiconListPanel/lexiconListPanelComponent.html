@@ -1,0 +1,34 @@
+<div class="panel panel-default vbox">
+    <!-- Commands -->
+    <div class="panel-heading">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
+            <button class="btn btn-default" title="Create Lexicon" (click)="create()" [disabled]="isCreateDisabled()">
+                <img src="../../../../../assets/images/icons/actions/individual_create.png" class="panelButtonImg"/>
+            </button>
+            <button class="btn btn-default" title="Delete Lexicon" (click)="delete()" [disabled]="isDeleteDisabled()">
+                <img src="../../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
+            </button>
+        </div>
+        <div style="flex: 1"></div>
+        <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering" [ngClass]="{active: rendering}">
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
+            <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+                <span class="glyphicon glyphicon-refresh"></span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Tree -->
+    <div class="panel-body vbox">
+        <lexicon-list [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        </lexicon-list>
+    </div>
+
+    <!-- Search -->
+    <div *ngIf="!hideSearch" class="panel-footer">
+        <search-bar (search)="doSearch($event)" [roles]="[panelRole]"></search-bar>
+    </div>
+    
+</div>

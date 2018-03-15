@@ -344,6 +344,7 @@ export class SkosServices {
                 return this.resourceService.getResourceDescription(scheme).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
+                        this.eventHandler.schemeCreatedEvent.emit(<ARTURIResource>resource);
                         return <ARTURIResource>resource;
                     }
                 );
