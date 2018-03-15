@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Project } from "./models/Project";
 import { Properties } from "./models/Properties";
-import { SKOS, OWL, RDFS } from "./models/Vocabulary";
+import { SKOS, OWL, RDFS, OntoLex } from "./models/Vocabulary";
 import { Language, Languages } from "./models/LanguagesCountries";
 import { VBContext } from "./utils/VBContext";
 import { VBProperties } from "./utils/VBProperties";
@@ -76,7 +76,7 @@ export class AppComponent {
     
     private isDataAuthorized() {
         let modelType: string = VBContext.getWorkingProject().getModelType();
-        if (modelType == SKOS.uri) {
+        if (modelType == SKOS.uri || modelType == OntoLex.uri) {
             return (
                 AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY) ||
                 AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY) ||

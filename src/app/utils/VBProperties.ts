@@ -69,7 +69,7 @@ export class VBProperties {
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
             Properties.pref_concept_tree_broader_prop
         ];
-        this.prefService.getProjectPreferences(properties).subscribe(
+        this.prefService.getPUSettings(properties).subscribe(
             prefs => {
                 this.activeSchemes = [];
                 let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
@@ -133,7 +133,7 @@ export class VBProperties {
         );
 
         // this is called separately since requires the pluginId parameter
-        this.prefService.getProjectPreferences([Properties.pref_languages], ExtensionPoint.RENDERING_ENGINE_ID).subscribe(
+        this.prefService.getPUSettings([Properties.pref_languages], ExtensionPoint.RENDERING_ENGINE_ID).subscribe(
             prefs => {
                 this.projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
@@ -200,15 +200,15 @@ export class VBProperties {
         return this.classTreePreferences;
     }
     setClassTreeFilterMap(filterMap: { [key: string]: string[] }) {
-        this.prefService.setProjectPreference(Properties.pref_class_tree_filter_map, JSON.stringify(filterMap)).subscribe();
+        this.prefService.setPUSetting(Properties.pref_class_tree_filter_map, JSON.stringify(filterMap)).subscribe();
         this.classTreePreferences.filterMap = filterMap;
     }
     setClassTreeFilterEnabled(enabled: boolean) {
-        this.prefService.setProjectPreference(Properties.pref_class_tree_filter_map, enabled+"").subscribe();
+        this.prefService.setPUSetting(Properties.pref_class_tree_filter_map, enabled+"").subscribe();
         this.classTreePreferences.filterEnabled = enabled;
     }
     setClassTreeRoot(rootUri: string) {
-        this.prefService.setProjectPreference(Properties.pref_class_tree_root, rootUri).subscribe();
+        this.prefService.setPUSetting(Properties.pref_class_tree_root, rootUri).subscribe();
         this.classTreePreferences.rootClassUri = rootUri;
     }
 
@@ -216,7 +216,7 @@ export class VBProperties {
         return this.conceptTreePreferences;
     }
     setConceptTreeBroaderProp(propUri: string) {
-        this.prefService.setProjectPreference(Properties.pref_concept_tree_broader_prop, propUri).subscribe();
+        this.prefService.setPUSetting(Properties.pref_concept_tree_broader_prop, propUri).subscribe();
         this.conceptTreePreferences.baseBroaderUri = propUri;
     }
 
@@ -394,16 +394,16 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
         if (this.searchSettings.languages != settings.languages) {
-            this.prefService.setProjectPreference(Properties.pref_search_languages, JSON.stringify(settings.languages)).subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages)).subscribe();
         }
         if (this.searchSettings.restrictLang != settings.restrictLang) {
-            this.prefService.setProjectPreference(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
         }
         if (this.searchSettings.includeLocales != settings.includeLocales) {
-            this.prefService.setProjectPreference(Properties.pref_search_include_locales, settings.includeLocales+"").subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"").subscribe();
         }
         if (this.searchSettings.useAutocompletion != settings.useAutocompletion) {
-            this.prefService.setProjectPreference(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"").subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"").subscribe();
         }
         this.searchSettings = settings;
         this.eventHandler.searchPrefsUpdatedEvent.emit();

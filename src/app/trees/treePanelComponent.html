@@ -6,7 +6,7 @@
                 Class
             </a>
         </li>
-        <ng-template [ngIf]="isProjectSKOS()">
+        <ng-template [ngIf]="showSKOSPanels()">
             <li [ngClass]="{active : activeTab == 'concept', disabled: !isConceptAuthorized() }">
                 <a href (click)="selectTab('concept')">
                     Concept
@@ -46,7 +46,7 @@
                 </class-individual-tree-panel>
             </div>
         </div>
-        <ng-template [ngIf]="isProjectSKOS()">
+        <ng-template [ngIf]="showSKOSPanels()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
                 <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
                 </concept-tree-panel>

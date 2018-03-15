@@ -218,6 +218,9 @@ export class DCT {
     public static modified = new ARTURIResource(DCT.namespace + "modified", "dct:modified", RDFResourceRolesEnum.property);
 }
 
+export class OntoLex {
+    public static uri = "http://www.w3.org/ns/lemon/ontolex";
+}
 
 export class SemanticTurkey {
     public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";

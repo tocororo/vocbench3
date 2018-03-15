@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormField } from "../../models/CustomForms";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { SKOS } from "../../models/Vocabulary";
+import { SKOS, OntoLex } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -59,8 +59,11 @@ export class CustomForm implements ControlValueAccessor {
         );
     }
 
+    /**
+     * Used to determine whether to show or not the selection of skos resources in the uri resource picker
+     */
     private isProjectSKOS() {
-        return this.ontoType == SKOS.uri;
+        return this.ontoType == SKOS.uri || this.ontoType == OntoLex.uri;
     }
 
     /**

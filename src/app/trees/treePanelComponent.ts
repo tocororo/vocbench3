@@ -8,7 +8,7 @@ import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/s
 import { PropertyTreePanelComponent } from "../trees/property/propertyTreePanel/propertyTreePanelComponent";
 import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
-import { SKOS } from "../models/Vocabulary";
+import { SKOS, OntoLex } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
@@ -95,10 +95,10 @@ export class TreePanelComponent {
     }
 
     /**
-     * returns true if a project is SKOS or SKOS-XL. Useful to show/hide tree panel
+     * returns true if a project is SKOS or OntoLex. Useful to show/hide tree panel
      */
-    private isProjectSKOS(): boolean {
-        return this.ONTO_TYPE == SKOS.uri;
+    private showSKOSPanels(): boolean {
+        return (this.ONTO_TYPE == SKOS.uri) || (this.ONTO_TYPE == OntoLex.uri);
     }
 
     private openSettings() {

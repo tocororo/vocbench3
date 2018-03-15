@@ -93,12 +93,12 @@ export class IcvListComponent {
             },
             {
                 name: "Overlapped label resources", model: [], lexicalization: [], routeName: "/Icv/OverlappedLabelResource",
-                description: "Resources that have the same label in the same language",
+                description: "Resources that have the same label in the same language duplicated as pref, alt or hidden label",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {
                 name: "Conflictual label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/ConflictualLabelResource",
-                description: "Resources that have the same label in the same language duplicated as pref, alt or hidden label",
+                description: "Resources that have the same label in the same language",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {

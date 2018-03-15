@@ -6,7 +6,7 @@ import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository, BackendTypesEnum } from "../../models/Project";
 import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPoint } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
-import { RDFS, OWL, SKOS, SKOSXL, DCT } from "../../models/Vocabulary";
+import { RDFS, OWL, SKOS, SKOSXL, DCT, OntoLex } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { UIUtils } from "../../utils/UIUtils";
@@ -31,13 +31,15 @@ export class CreateProjectComponent {
         { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
         { value: new ARTURIResource(OWL.uri), label: "OWL" },
         { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
+        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
     ];
     private ontoModelType: ARTURIResource = this.ontoModelList[0].value;
 
     private lexicalModelList = [
         { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
         { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
-        { value: new ARTURIResource(SKOSXL.uri), label: "SKOSXL" }
+        { value: new ARTURIResource(SKOSXL.uri), label: "SKOSXL" },
+        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
     ];
     private lexicalModelType: ARTURIResource = this.lexicalModelList[0].value;
     
@@ -179,6 +181,25 @@ export class CreateProjectComponent {
                 break;
             }
         }
+    }
+
+    private onOntoModelChanged() {
+        if (this.ontoModelType.getURI() == OntoLex.uri) {
+            this.lexicalModelList.forEach(
+                (model) => {
+                    if (model.value.getURI() == OntoLex.uri) {
+                        this.lexicalModelType =  model.value;
+                    }
+                }
+            );
+        }
+    }
+
+    /**
+     * Useful in the view to "lock" the selection of lexicalization to OntoLex in case the ontoModel is OntoLex
+     */
+    private isOntoModelOntolex() {
+        return this.ontoModelType.getURI() == OntoLex.uri;
     }
 
     /**

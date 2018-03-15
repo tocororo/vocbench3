@@ -35,13 +35,13 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1">Model:</label>
                     <div class="col-sm-3">
-                        <select class="form-control input-sm" [(ngModel)]="ontoModelType" name="ontoModelType">
+                        <select class="form-control input-sm" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" name="ontoModelType">
                             <option *ngFor="let om of ontoModelList" [ngValue]="om.value">{{om.label}}</option>
                         </select>
                     </div>
                     <label class="control-label col-sm-1">Lexicalization:</label>
                     <div class="col-sm-3">
-                        <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType">
+                        <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="isOntoModelOntolex()">
                             <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
                         </select>
                     </div>

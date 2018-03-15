@@ -1,4 +1,4 @@
-import { RDFS, OWL, SKOS, SKOSXL } from "./Vocabulary";
+import { RDFS, OWL, SKOS, SKOSXL, OntoLex } from "./Vocabulary";
 
 export class Project {
     private name: string;
@@ -96,6 +96,8 @@ export class Project {
             return "SKOS";
         } else if (modelType == SKOSXL.uri) {
             return "SKOSXL";
+        } else if (modelType == OntoLex.uri) {
+            return "OntoLex";
         }
     }
     

@@ -97,15 +97,15 @@ export class PreferencesSettingsServices {
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getProjectPreferences(properties: string[], pluginID?: string) {
-        console.log("[PreferencesServices] getProjectPreferences");
+    getPUSettings(properties: string[], pluginID?: string) {
+        console.log("[PreferencesServices] getPUSettings");
         var params: any = {
             properties: properties
         };
         if (pluginID != null) {
             params.pluginID = pluginID
         }
-        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params, true);
     }
 
     /**
@@ -113,15 +113,15 @@ export class PreferencesSettingsServices {
      * @param property 
      * @param value 
      */
-    setProjectPreference(property: string, value?: string) {
-        console.log("[PreferencesServices] setProjectPreference");
+    setPUSetting(property: string, value?: string) {
+        console.log("[PreferencesServices] setPUSetting");
         var params: any = {
             property: property,
         };
         if (value != null) {
             params.value = value;
         }
-        return this.httpMgr.doPost(this.serviceName, "setProjectPreference", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params, true);
     }
 
     /**
