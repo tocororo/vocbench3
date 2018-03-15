@@ -30,6 +30,12 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onChildCreated(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(
             (data: any) => this.onParentAdded(data.superClass, data.subClass)));
+        this.eventSubscriptions.push(eventHandler.superClassUpdatedEvent.subscribe(
+            (data: any) => {
+                this.onParentRemoved(data.oldParent, data.child);
+                this.onParentAdded(data.newParent, data.child);
+            }
+        ));
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (cls: ARTURIResource) => this.onTreeNodeDeleted(cls)));
         this.eventSubscriptions.push(eventHandler.superClassRemovedEvent.subscribe(

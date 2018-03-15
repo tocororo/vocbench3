@@ -24,6 +24,12 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
             (property: ARTURIResource) => this.onTreeNodeDeleted(property)));
         this.eventSubscriptions.push(eventHandler.superPropertyRemovedEvent.subscribe(
             (data: any) => this.onParentRemoved(data.superProperty, data.property)));
+        this.eventSubscriptions.push(eventHandler.superPropertyUpdatedEvent.subscribe(
+            (data: any) => {
+                this.onParentRemoved(data.oldParent, data.child);
+                this.onParentAdded(data.newParent, data.child);
+            }
+        ));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }

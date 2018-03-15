@@ -29,6 +29,12 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.broaderRemovedEvent.subscribe(
             (data: any) => this.onParentRemoved(data.broader, data.concept)));
+        this.eventSubscriptions.push(eventHandler.broaderUpdatedEvent.subscribe(
+            (data: any) => {
+                this.onParentRemoved(data.oldParent, data.child);
+                this.onParentAdded(data.newParent, data.child);
+            }
+        ));
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }

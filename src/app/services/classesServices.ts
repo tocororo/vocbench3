@@ -194,10 +194,6 @@ export class ClassesServices {
         };
         return this.httpMgr.doPost(this.serviceName, "addSuperCls", params, true).map(
             stResp => {
-                // var subClass = Deserializer.createURI(stResp.getElementsByTagName("Class")[0]);
-                // subClass.setAdditionalProperty(ResAttribute.CHILDREN, []);
-                // subClass.setAdditionalProperty(ResAttribute.MORE, cls.getAdditionalProperty(ResAttribute.MORE));
-                // this.eventHandler.superClassAddedEvent.emit({subClass: subClass, superClass: superClass});
                 this.eventHandler.superClassAddedEvent.emit({subClass: cls, superClass: supercls});
                 return stResp;
             }

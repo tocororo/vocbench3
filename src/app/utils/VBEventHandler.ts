@@ -18,13 +18,11 @@ export class VBEventHandler {
     public topConceptCreatedEvent: EventEmitter<{ concept: ARTURIResource, schemes: ARTURIResource[] }> = new VBEventEmitter("topConceptCreatedEvent");
     public narrowerCreatedEvent: EventEmitter<{ narrower: ARTURIResource, broader: ARTURIResource }> = new VBEventEmitter("narrowerCreatedEvent");
     public broaderAddedEvent: EventEmitter<{ narrower: ARTURIResource, broader: ARTURIResource }> = new VBEventEmitter("broaderAddedEvent");
-    //optional "broader" (if not top Concept) to tells the position where the concept should be attached in the tree
-    //NOTE: this is still not used since the server support is missing (it needs a response that tells if the concept has broader)
-    public conceptAddedToSchemeEvent: EventEmitter<{ concept: ARTURIResource, scheme: ARTURIResource, broader?: ARTURIResource }> = new VBEventEmitter("conceptAddedToSchemeEvent");
     public conceptDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("conceptDeletedEvent");
     public conceptRemovedFromSchemeEvent: EventEmitter<{ concept: ARTURIResource, scheme: ARTURIResource }> = new VBEventEmitter("conceptRemovedFromSchemeEvent");
     public conceptRemovedAsTopConceptEvent: EventEmitter<{ concept: ARTURIResource, scheme: ARTURIResource }> = new VBEventEmitter("conceptRemovedAsTopConceptEvent");
     public broaderRemovedEvent: EventEmitter<{ concept: ARTURIResource, broader: ARTURIResource }> = new VBEventEmitter("broaderRemovedEvent");
+    public broaderUpdatedEvent: EventEmitter<{ child: ARTURIResource, oldParent: ARTURIResource, newParent: ARTURIResource }> = new VBEventEmitter("broaderConceptUpdatedEvent");
 
     //SCHEME EVENTS
     public schemeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeCreatedEvent");
@@ -48,6 +46,7 @@ export class VBEventHandler {
     public typeRemovedEvent: EventEmitter<{ resource: ARTResource, type: ARTResource }> = new VBEventEmitter("typeRemovedEvent");
     public typeAddedEvent: EventEmitter<{ resource: ARTResource, type: ARTResource }> = new VBEventEmitter("typeAddedEvent");
     public superClassRemovedEvent: EventEmitter<{ superClass: ARTResource, subClass: ARTResource }> = new VBEventEmitter("superClassRemovedEvent");
+    public superClassUpdatedEvent: EventEmitter<{ child: ARTURIResource, oldParent: ARTURIResource, newParent: ARTURIResource }> = new VBEventEmitter("superClassUpdatedEvent");
 
     //INSTANCE EVENTS
     public instanceCreatedEvent: EventEmitter<{ instance: ARTResource, cls: ARTResource }> = new VBEventEmitter("instanceCreatedEvent");
@@ -59,6 +58,7 @@ export class VBEventHandler {
     public superPropertyAddedEvent: EventEmitter<{ subProperty: ARTURIResource, superProperty: ARTURIResource }> = new VBEventEmitter("superPropertyAddedEvent");
     public propertyDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter<ARTURIResource>("propertyDeletedEvent");
     public superPropertyRemovedEvent: EventEmitter<{ property: ARTURIResource, superProperty: ARTURIResource }> = new VBEventEmitter("superPropertyRemovedEvent");
+    public superPropertyUpdatedEvent: EventEmitter<{ child: ARTURIResource, oldParent: ARTURIResource, newParent: ARTURIResource }> = new VBEventEmitter("superPropertyUpdatedEvent");
 
     //LEXICON EVENTS
     public lexiconCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconCreatedEvent");
@@ -116,7 +116,7 @@ class VBEventEmitter<T> extends EventEmitter<T> {
         if (this.onlyIfProjectNotChanged && VBContext.isProjectChanged()) {
             return;
         }
-        console.debug("[", this.eventName, "]", value);
+        console.log("[", this.eventName, "]", value);
         super.emit(value);
     }
 

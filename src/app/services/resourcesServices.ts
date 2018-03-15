@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
+import { VBEventHandler } from '../utils/VBEventHandler';
 import { ARTResource, ARTURIResource, ARTNode } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
+import { RDFS, SKOS } from '../models/Vocabulary';
 
 @Injectable()
 export class ResourcesServices {
 
     private serviceName = "Resources";
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * Updates the value of a triple replacing the old value with the new one
@@ -27,7 +29,17 @@ export class ResourcesServices {
             value: value,
             newValue: newValue
         };
-        return this.httpMgr.doPost(this.serviceName, "updateTriple", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateTriple", params, true).map(
+            stResp => {
+                if (property.getURI() == RDFS.subClassOf.getURI()) {
+                    this.eventHandler.superClassUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
+                } else if (property.getURI() == RDFS.subPropertyOf.getURI()) {
+                    this.eventHandler.superPropertyUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
+				} else if (property.getURI() == SKOS.broader.getURI()) {
+                    this.eventHandler.broaderUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
+				}
+            }
+        );
     }
 
     /**
