@@ -167,7 +167,7 @@ export class ClassIndividualTreePanelComponent {
     private readonly maxPanelSize: number = 16;
     private readonly minPanelSize: number = 1;
 
-    private classPanelFlex = this.maxPanelSize;
+    private classPanelFlex = 6;
     private readonly instancePanelFlex: number = 4;
 
     private dragging: boolean = false;

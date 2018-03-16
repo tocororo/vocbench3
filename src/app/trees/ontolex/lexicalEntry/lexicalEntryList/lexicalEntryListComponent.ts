@@ -56,7 +56,6 @@ export class LexicalEntryListComponent extends AbstractList {
                     let attribute: "show" | "value" = this.rendering ? "show" : "value";
                     ResourceUtils.sortResources(entries, attribute);
                     this.list = entries;
-                    console.log(this.list);
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }
             );

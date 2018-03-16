@@ -88,6 +88,16 @@ export class UIUtils {
     private static collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
     private static collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
 
+    private static lexiconImgSrc = require("../../assets/images/icons/res/individual.png");
+    // private static lexiconImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
+    // private static lexiconDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
+    // private static lexiconImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
+
+    private static lexicEntryImgSrc = require("../../assets/images/icons/res/individual.png");
+    // private static lexicEntryImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
+    // private static lexicEntryDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
+    // private static lexicEntryImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
+
     private static orderedCollectionImgSrc = require("../../assets/images/icons/res/orderedCollection.png");
     private static orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported.png");
     private static orderedCollectionDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_deprecated.png");
@@ -279,6 +289,26 @@ export class UIUtils {
                 } else if (deprecated) {
                     imgSrc = this.classDeprecatedImgSrc;
                 }
+            } else if (role == RDFResourceRolesEnum.limeLexicon.toLocaleLowerCase()) {
+                imgSrc = this.lexiconImgSrc;
+                // if (!explicit) {
+                //     imgSrc = this.lexiconImportedImgSrc;
+                //     if (deprecated) {
+                //         imgSrc = this.lexiconImportedDeprecatedImgSrc;
+                //     }
+                // } else if (deprecated) {
+                //     imgSrc = this.lexiconDeprecatedImgSrc;
+                // }
+            } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry.toLocaleLowerCase()) {
+                imgSrc = this.lexicEntryImgSrc;
+                // if (!explicit) {
+                //     imgSrc = this.lexicEntryImportedImgSrc;
+                //     if (deprecated) {
+                //         imgSrc = this.lexicEntryImportedDeprecatedImgSrc;
+                //     }
+                // } else if (deprecated) {
+                //     imgSrc = this.lexicEntryDeprecatedImgSrc;
+                // }
             } else { //unknown role (none of the previous roles)
                 imgSrc = this.individualImgSrc;
             }

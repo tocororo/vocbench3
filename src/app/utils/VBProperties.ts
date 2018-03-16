@@ -19,6 +19,8 @@ export class VBProperties {
     private projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
     private projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
 
+    private editingLanguage: string; //default editing language
+
     private activeSchemes: ARTURIResource[] = [];
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
@@ -67,7 +69,7 @@ export class VBProperties {
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
-            Properties.pref_concept_tree_broader_prop
+            Properties.pref_concept_tree_broader_prop, Properties.pref_editing_language
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
@@ -86,6 +88,8 @@ export class VBProperties {
                 
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
+
+                this.editingLanguage = prefs[Properties.pref_editing_language];
 
                 //cls tree preferences
 
@@ -194,6 +198,14 @@ export class VBProperties {
     }
     setLanguagesPreference(languages: string[]) {
         this.projectLanguagesPreference = languages;
+    }
+
+    getEditingLanguage(): string {
+        return this.editingLanguage;
+    }
+    setEditingLanguage(lang: string) {
+        this.prefService.setPUSetting(Properties.pref_editing_language, lang).subscribe();
+        this.editingLanguage = lang;
     }
 
     getClassTreePreferences(): ClassTreePreference {

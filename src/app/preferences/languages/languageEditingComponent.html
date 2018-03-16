@@ -1,0 +1,32 @@
+<div class="subPanel vbox">
+    <div class="subPanel-heading">
+        <label style="flex: 1">Editing Languages:</label>
+    </div>
+    <div class="subPanel-body scrollableContainer">
+        
+        <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center" style="padding: 0px 8px;">Default</th>
+                    <th class="text-center" style="padding: 0px 8px;" nowrap>ISO code</th>
+                    <th class="text-center" style="padding: 0px 8px;" nowrap>Language</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let l of languages">
+                    <td class="text-center">
+                        <input type="radio" name="lang_radio" [checked]="l == editingLang" (change)="updateDefaultLang(l)">
+                    </td>
+                    <td class="text-center" nowrap>{{l.tag}}</td>
+                    <td class="text-center">
+                        <lang-item [language]="l"></lang-item>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

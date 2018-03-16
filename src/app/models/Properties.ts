@@ -1,6 +1,7 @@
 export class Properties {
 
     static pref_languages: string = "languages";
+    static pref_editing_language: string = "editing_language";
     static pref_active_schemes: string = "active_schemes";
     static pref_show_flags: string = "show_flags";
     static pref_project_theme: string = "project_theme";

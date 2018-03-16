@@ -20,7 +20,7 @@ export class LangPickerComponent implements OnInit {
     private language: string;
     private showFlag: boolean = true;
 
-    constructor(private pref: VBProperties) { }
+    constructor(private properties: VBProperties) { }
 
     ngOnInit() {
         if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
@@ -29,11 +29,11 @@ export class LangPickerComponent implements OnInit {
             this.selectClass += "sm";
         }
 
-        this.showFlag = this.pref.getShowFlags();
+        this.showFlag = this.properties.getShowFlags();
 
         //Init languages list considering only languages assigned to user and allowed in project
         this.languageList = []; //intersection between language available in project and language assigned to user.
-        var projectLangs: Language[] = this.pref.getProjectLanguages();
+        var projectLangs: Language[] = this.properties.getProjectLanguages();
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
         for (var i = 0; i < projectLangs.length; i++) {
             if (userAssignedLangs.indexOf(projectLangs[i].tag) != -1) {
@@ -43,16 +43,27 @@ export class LangPickerComponent implements OnInit {
 
         if (this.languageList.length > 0) { //if there is some language available set the selected language in the picker
             if (this.lang == undefined) { //no language specified as @Input
-                //based on the priority list
-                selectedLangLoop: 
-                for (var i = 0; i < Languages.priorityLangs.length; i++) {
-                    for (var j = 0; j < this.languageList.length; j++) {
-                        if (this.languageList[j].tag == Languages.priorityLangs[i]) {
-                            this.language = this.languageList[j].tag;
-                            break selectedLangLoop;
+                //set the default editing language
+                let editingLang = this.properties.getEditingLanguage();
+                for (var j = 0; j < this.languageList.length; j++) {
+                    if (this.languageList[j].tag == editingLang) {
+                        this.language = this.languageList[j].tag;
+                    }
+                }
+
+                //language null means that the default edit language is not in the in available languages, so set the selected based on the priority list
+                if (this.language == null) {
+                    selectedLangLoop: 
+                    for (var i = 0; i < Languages.priorityLangs.length; i++) {
+                        for (var j = 0; j < this.languageList.length; j++) {
+                            if (this.languageList[j].tag == Languages.priorityLangs[i]) {
+                                this.language = this.languageList[j].tag;
+                                break selectedLangLoop;
+                            }
                         }
                     }
                 }
+                
                 //language null means that no language in languageList is in priority list, so set as selected the first language available
                 if (this.language == null) {
                     this.language = this.languageList[0].tag;
