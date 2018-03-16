@@ -1,0 +1,21 @@
+<div class="panel panel-default vbox">
+    <div class="panel-body vbox">
+
+        <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+            <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
+                <lexical-entry-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
+                    [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+                </lexical-entry-list-node>
+            </ng-template>
+        </div>
+
+        <div #blockDivList class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="../../../../../assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

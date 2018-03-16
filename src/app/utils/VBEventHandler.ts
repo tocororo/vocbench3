@@ -63,6 +63,8 @@ export class VBEventHandler {
     //LEXICON EVENTS
     public lexiconCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconCreatedEvent");
     public lexiconDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconDeletedEvent");
+    public lexicalEntryCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexicalEntryCreatedEvent");
+    public lexicalEntryDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexicalEntryDeletedEvent");
 
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed

@@ -1,0 +1,105 @@
+<div class="modal-header">
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span>
+            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()" [disabled]="!context.clsChangeable">
+                <rdf-resource [resource]="resourceClass"></rdf-resource>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="modal-body">
+
+    <div class="vbox" (keydown)="onKeydown($event)">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>Label:</label></td>
+                    <td>
+                        <div class="form-control input-sm">
+                            <rdf-resource [resource]="context.xLabel"></rdf-resource>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>URI:</label></td>
+                    <td>
+                        <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                        </editable-ns-input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>Position:</label></td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="position" (ngModelChange)="onPositionChange()">
+                            <option *ngFor="let p of positionList">{{p}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionNarrower()">
+                    <td class="text-right"><label>Broader:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="form-control input-sm">
+                                <rdf-resource *ngIf="broader" [resource]="broader"></rdf-resource>
+                            </div>
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectBroader()">
+                                    <img src="../../../../../../assets/images/icons/actions/concept_create.png"/>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionSibling()">
+                    <td class="text-right"><label>Sibling:</label></td>
+                    <td>
+                        <div class="input-group">
+                            <div class="form-control input-sm">
+                                <rdf-resource *ngIf="sibling" [resource]="sibling"></rdf-resource>
+                            </div>
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-default" style="padding: 3px;" (click)="selectSibling()">
+                                    <img src="../../../../../../assets/images/icons/actions/concept_create.png"/>
+                                </button>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="isPositionSibling() && multipleSiblingBroaders">
+                    <td class="text-right" style="white-space: nowrap">
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="Selected sibling concept has multiple broaders, select which one will be the broader of the spawning concept"></span>
+                        <label>Broader:</label>
+                    </td>
+                    <td>
+                        <div class="panel panel-default">
+                            <div class="panel-body scrollableContainer">
+                                <rdf-resource *ngFor="let b of siblingBroaders" [resource]="b" (click)="selectedSiblingBroader = b"
+                                    class="listItem" [ngClass]="{active : b == selectedSiblingBroader}"></rdf-resource>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="vbox" style="max-height: 20vh; margin-top: 2px;">
+            <scheme-selection (update)="onSchemesChanged($event)" [concept]="broader"></scheme-selection>
+        </div>
+
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

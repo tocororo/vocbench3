@@ -220,6 +220,10 @@ export class DCT {
 
 export class OntoLex {
     public static uri = "http://www.w3.org/ns/lemon/ontolex";
+    public static namespace = OntoLex.uri + "#";
+
+    public static lexicalEntry = new ARTURIResource(OntoLex.namespace + "LexicalEntry", "ontolex:LexicalEntry", RDFResourceRolesEnum.cls);
+
 }
 
 export class Lime {

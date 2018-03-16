@@ -19,11 +19,18 @@
             </button>
         </div>
     </div>
-    
+
     <!-- List -->
     <div class="panel-body vbox">
-        <lexicon-list [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
-        </lexicon-list>
+
+        <div style="padding-bottom: 3px; display: flex; align-items: center">
+            <select class="form-control input-xs" [(ngModel)]="index">
+                <option *ngFor="let i of indexes">{{i}}</option>
+            </select>
+        </div>
+
+        <lexical-entry-list [lexicon]="lexicon" [index]="index" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        </lexical-entry-list>
     </div>
 
     <!-- Search -->

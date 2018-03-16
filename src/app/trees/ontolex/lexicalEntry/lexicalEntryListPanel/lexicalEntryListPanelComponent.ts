@@ -1,29 +1,33 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
+import { LexicalEntryListComponent } from "../lexicalEntryList/lexicalEntryListComponent";
 import { AbstractPanel } from "../../../abstractPanel";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewLexiconCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
+import { NewLexicalEntryCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newLexicalEntryCfModal";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
-// import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 
 @Component({
-    selector: "lexicon-list-panel",
-    templateUrl: "./lexiconListPanelComponent.html",
+    selector: "lexical-entry-list-panel",
+    templateUrl: "./lexicalEntryListPanelComponent.html",
 })
-export class LexiconListPanelComponent extends AbstractPanel {
+export class LexicalEntryListPanelComponent extends AbstractPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
-    @ViewChild(LexiconListComponent) viewChildList: LexiconListComponent;
+    @Input() lexicon: ARTURIResource;
 
-    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.limeLexicon;
+    @ViewChild(LexicalEntryListComponent) viewChildList: LexicalEntryListComponent;
+
+    panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.ontolexLexicalEntry;
+
+    private indexes: string[] = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+    private index: string = this.indexes[0];
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
@@ -32,9 +36,9 @@ export class LexiconListPanelComponent extends AbstractPanel {
     }
 
     private create() {
-        this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
-            (res: NewLexiconCfModalReturnData) => {
-                this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe();
+        this.creationModals.newLexicalEntryCf("Create new ontolex:LexicalEntry", false).then(
+            (data: NewLexicalEntryCfModalReturnData) => {
+                this.ontolexService.createLexicalEntry(data.label, this.lexicon, data.uriResource, data.cfValue).subscribe();
             },
             () => { }
         );
@@ -61,7 +65,7 @@ export class LexiconListPanelComponent extends AbstractPanel {
                 searchLangs = searchSettings.languages;
                 includeLocales = searchSettings.includeLocales;
             }
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.limeLexicon], searchSettings.useLocalName, 
+            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.ontolexLexicalEntry], searchSettings.useLocalName, 
                 searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
@@ -89,9 +93,19 @@ export class LexiconListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
-        this.selectedNode = null; //lexical entry list refresh automatically after this since it listen for changes on lexicon
-        this.nodeSelected.emit(this.selectedNode); //emit nodeSelected with node null, so ontolexPanel reset the lexicon entry list
         this.viewChildList.initList();
     }
+
+    //@Override
+    isCreateDisabled(): boolean {
+        return (!this.lexicon || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
+    }
+    // //@Override
+    // isDeleteDisabled(): boolean {
+    //     return (
+    //         !this.lexicon || !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+    //         this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
+    //     );
+    // }
 
 }

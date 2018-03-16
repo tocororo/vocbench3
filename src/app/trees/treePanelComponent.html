@@ -44,12 +44,10 @@
     <!--Tabs content-->
     <div class="tab-content">
         <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
-            <div class="vbox">
-                <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
-                    (classDeleted)="onNodeDeleted($event)" (instanceDeleted)="onNodeDeleted($event)"
-                    [readonly]="readonly">
-                </class-individual-tree-panel>
-            </div>
+            <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
+                (classDeleted)="onNodeDeleted($event)" (instanceDeleted)="onNodeDeleted($event)"
+                [readonly]="readonly">
+            </class-individual-tree-panel>
         </div>
         <ng-template [ngIf]="isProjectSKOS() || isProjectOntolex()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
@@ -70,8 +68,10 @@
             </property-tree-panel>
         </div>
         <div *ngIf="isProjectOntolex()" [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
-            <lexicon-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
-            </lexicon-list-panel>
+            <ontolex-panel (lexiconSelected)="onNodeSelected($event)" (lexiconDeleted)="onNodeDeleted($event)"
+                (lexicalEntrySelected)="onNodeSelected($event)" (lexicalEntryDeleted)="onNodeDeleted($event)"
+                [readonly]="readonly">
+            </ontolex-panel>
         </div>
     </div>
     

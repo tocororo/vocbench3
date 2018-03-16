@@ -47,18 +47,19 @@ import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTre
 
 //creation modals
 import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
-import { NewXLabelModal } from '../widget/modal/creationModal/newResourceModal/newXLabelModal';
+import { NewXLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newXLabelModal';
 import { NewResourceModal } from '../widget/modal/creationModal/newResourceModal/newResourceModal';
 import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newResourceCfModal';
-import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourceModal/newSkosResourceCfModal';
+import { NewSkosResourceCfModal } from '../widget/modal/creationModal/newResourceModal/skos/newSkosResourceCfModal';
 import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
-import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/newConceptCfModal';
-import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/newConceptFromLabelModal';
-import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/newLexiconCfModal';
+import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
+import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptFromLabelModal';
+import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
+import { NewLexicalEntryCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexicalEntryCfModal';
 
 //these are used only in creation modals, if they will be useful elsewhere, they can be moved in sharedModule
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
-import { SchemeSelectionComponent } from '../widget/modal/creationModal/newResourceModal/schemeSelectionComponent';
+import { SchemeSelectionComponent } from '../widget/modal/creationModal/newResourceModal/skos/schemeSelectionComponent';
 
 //alignment modals
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
@@ -87,7 +88,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     declarations: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewXLabelModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
-        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal,
+        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal, NewLexicalEntryCfModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,
@@ -112,7 +113,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     entryComponents: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewXLabelModal, NewResourceModal, NewResourceCfModal, NewConceptCfModal,
-        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal,
+        NewSkosResourceCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal, NewLexicalEntryCfModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal,

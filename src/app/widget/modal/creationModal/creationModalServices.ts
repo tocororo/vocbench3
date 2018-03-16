@@ -4,13 +4,14 @@ import { OverlayConfig } from 'ngx-modialog';
 import { ARTURIResource, ARTResource, ARTLiteral } from "../../../models/ARTResources";
 import { NewResourceModal, NewResourceModalData } from "./newResourceModal/newResourceModal";
 import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/newResourceCfModal";
-import { NewSkosResourceCfModal, NewSkosResourceCfModalData } from "./newResourceModal/newSkosResourceCfModal";
+import { NewSkosResourceCfModal, NewSkosResourceCfModalData } from "./newResourceModal/skos/newSkosResourceCfModal";
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
-import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/newConceptFromLabelModal";
-import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/newConceptCfModal";
-import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/newXLabelModal';
-import { NewLexiconCfModalData, NewLexiconCfModal } from './newResourceModal/newLexiconCfModal';
+import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/skos/newConceptFromLabelModal";
+import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/skos/newConceptCfModal";
+import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/skos/newXLabelModal';
+import { NewLexiconCfModalData, NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
+import { NewLexicalEntryCfModal, NewLexicalEntryCfModalData } from './newResourceModal/ontolex/newLexicalEntryCfModal';
 
 @Injectable()
 export class CreationModalServices {
@@ -95,6 +96,22 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewLexiconCfModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to create a new lexical entry
+     * @param title the title of the modal dialog
+     * @param clsChangeable tells if the class of the creating resource can be changed
+     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
+     * @return
+     */
+    newLexicalEntryCf(title: string,clsChangeable?: boolean, lang?: string) {
+        var modalData = new NewLexicalEntryCfModalData(title, clsChangeable, lang);
+        const builder = new BSModalContextBuilder<NewLexicalEntryCfModalData>(
+            modalData, undefined, NewLexicalEntryCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewLexicalEntryCfModal, overlayConfig).result;
     }
 
     /**

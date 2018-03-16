@@ -53,6 +53,8 @@ enum Actions {
     ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR,
     ONTOLEX_CREATE_LEXICON,
     ONTOLEX_CREATE_LEXICAL_ENTRY,
+    ONTOLEX_DELETE_LEXICON,
+    ONTOLEX_DELETE_LEXICAL_ENTRY,
     ONTOLEX_GET_LEXICAL_ENTRY,
     ONTOLEX_GET_LEXICON,
     PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
@@ -159,6 +161,8 @@ export class AuthorizationEvaluator {
         [Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "CU").',
         [Actions.ONTOLEX_CREATE_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "C").',
         [Actions.ONTOLEX_CREATE_LEXICON] : 'auth(rdf(lexicon), "C").',
+        [Actions.ONTOLEX_DELETE_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "D").',
+        [Actions.ONTOLEX_DELETE_LEXICON] : 'auth(rdf(lexicon), "D").',
         [Actions.ONTOLEX_GET_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "R").',
         [Actions.ONTOLEX_GET_LEXICON] : 'auth(rdf(lexicon), "R").',
         [Actions.PLUGINS_GET_PLUGINS] : 'auth(sys(plugins), "R").',
@@ -327,7 +331,8 @@ export class AuthorizationEvaluator {
                 (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS)) ||
                 (role == RDFResourceRolesEnum.individual && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_INDIVIDUAL)) ||
                 (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY)) ||
-                (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICON))
+                (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICON)) ||
+                (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICAL_ENTRY))
             );
         },
         isDeleteAuthorized(role: RDFResourceRolesEnum) {
@@ -337,9 +342,9 @@ export class AuthorizationEvaluator {
                 (role == RDFResourceRolesEnum.skosCollection && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_COLLECTION)) ||
                 (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_CLASS)) ||
                 (role == RDFResourceRolesEnum.individual && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_INDIVIDUAL)) ||
-                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY))
-                //still to do
-                // (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICON))
+                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY)) ||
+                (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICON)) ||
+                (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICAL_ENTRY))
             );
         }
     }

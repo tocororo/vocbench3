@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span>
+            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()" [disabled]="!context.clsChangeable">
+                <rdf-resource [resource]="resourceClass"></rdf-resource>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="vbox" (keydown)="onKeydown($event)">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right"><label>Label:</label></td>
+                    <td>
+                        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                            <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                            <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>URI:</label></td>
+                    <td>
+                        <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                        </editable-ns-input>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
+
+        <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="margin-top: 5px;">
+            You cannot create resources. You have no language assigned for the current project.
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

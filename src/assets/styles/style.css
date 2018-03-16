@@ -107,9 +107,10 @@ resource-view-splitted, resource-view-tabbed {
 }
 
 tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, 
-instance-list-panel, property-tree-panel, collection-tree-panel, lexicon-list-panel,
-concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list, lexicon-list,
-class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
+instance-list-panel, property-tree-panel, collection-tree-panel, lexicon-list-panel, lexical-entry-list-panel, ontolex-panel,
+concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list, 
+lexicon-list, lexical-entry-list, class-individual-tree,
+resource-view, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
     min-height: 0;
@@ -117,7 +118,7 @@ class-individual-tree, resource-view, scheme-selection, data-range-editor, impor
 }
 
 concept-tree .panel-body, class-tree .panel-body, property-tree .panel-body, collection-tree .panel-body, 
-instance-list .panel-body, scheme-list .panel-body, lexicon-list .panel-body {
+instance-list .panel-body, scheme-list .panel-body, lexicon-list .panel-body, lexical-entry-list .panel-body {
     padding: 0px;
 }
 

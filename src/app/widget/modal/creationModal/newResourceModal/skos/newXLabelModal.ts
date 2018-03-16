@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
-import { SKOSXL } from "../../../../models/Vocabulary";
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
+import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
+import { SKOSXL } from "../../../../../models/Vocabulary";
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 
 export class NewXLabelModalData extends BSModalContext {
     /**

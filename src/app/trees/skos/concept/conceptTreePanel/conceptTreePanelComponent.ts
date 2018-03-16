@@ -10,7 +10,7 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewConceptCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/newConceptCfModal";
+import { NewConceptCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { NewConceptCfModalReturnData } from "../../widget/modal/creationModal/newResourceModal/newConceptCfModal";
+import { NewConceptCfModalReturnData } from "../../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../models/Vocabulary";
 import { VBProperties } from "../../utils/VBProperties";

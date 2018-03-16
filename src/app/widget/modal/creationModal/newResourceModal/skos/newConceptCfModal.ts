@@ -1,15 +1,15 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal"
-import { CustomFormsServices } from "../../../../services/customFormsServices"
-import { ResourcesServices } from "../../../../services/resourcesServices";
-import { BasicModalServices } from "../../basicModal/basicModalServices"
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
-import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources"
-import { CustomFormValue } from "../../../../models/CustomForms"
-import { SKOS } from "../../../../models/Vocabulary"
-import { VBProperties } from "../../../../utils/VBProperties";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal"
+import { CustomFormsServices } from "../../../../../services/customFormsServices"
+import { ResourcesServices } from "../../../../../services/resourcesServices";
+import { BasicModalServices } from "../../../basicModal/basicModalServices"
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices"
+import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources"
+import { CustomFormValue } from "../../../../../models/CustomForms"
+import { SKOS } from "../../../../../models/Vocabulary"
+import { VBProperties } from "../../../../../utils/VBProperties";
 
 export class NewConceptCfModalData extends BSModalContext {
     constructor(

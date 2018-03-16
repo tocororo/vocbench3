@@ -1,13 +1,13 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "./abstractCustomConstructorModal";
-import { CustomFormsServices } from "../../../../services/customFormsServices";
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../basicModal/basicModalServices";
-import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
-import { CustomFormValue } from "../../../../models/CustomForms";
-import { OWL, RDFS, Lime } from "../../../../models/Vocabulary";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
+import { CustomFormsServices } from "../../../../../services/customFormsServices";
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
+import { BasicModalServices } from "../../../basicModal/basicModalServices";
+import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
+import { CustomFormValue } from "../../../../../models/CustomForms";
+import { OWL, RDFS, Lime } from "../../../../../models/Vocabulary";
 
 export class NewLexiconCfModalData extends BSModalContext {
     constructor(
