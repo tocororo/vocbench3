@@ -62,14 +62,15 @@ export class SanitizerDirective {
             // Set the new textbox content
             var contentBeforeSpace = txtContent.slice(0, start);
             var contentAfterSpace = txtContent.slice(end);
-            inputElement.value = contentBeforeSpace + transformedText + contentAfterSpace;
+            var updatedText = contentBeforeSpace + transformedText + contentAfterSpace
+            inputElement.value = updatedText;
             // Move the cursor
             inputElement.selectionStart = inputElement.selectionEnd = start + transformedText.length;
 
             event.preventDefault();//prevent the default ctrl+v keypress listener
 
             //To fix missing ngModel update after paste http://stackoverflow.com/a/41240843/5805661
-            this.model.control.setValue(transformedText);
+            this.model.control.setValue(updatedText);
         }
     }
 
