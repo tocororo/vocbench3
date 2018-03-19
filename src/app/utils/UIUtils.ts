@@ -486,5 +486,6 @@ export class Theme {
  * Useful for trees and nodes to be aware of the context where they are
  */
 export enum TreeListContext {
-    clsIndTree = 'clsIndTree'
+    clsIndTree = 'clsIndTree',
+    dataPanel = 'dataPanel' //context for trees and list inside the "multi-panel" (Class, Concept, Scheme,...) in Data page
 }

@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { SchemeListComponent } from "../schemeList/schemeListComponent";
 import { AbstractPanel } from "../../../abstractPanel";
 import { SkosServices } from "../../../../services/skosServices";
@@ -9,6 +9,7 @@ import { CreationModalServices } from "../../../../widget/modal/creationModal/cr
 import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
+import { TreeListContext } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
@@ -19,6 +20,7 @@ import { SearchSettings } from "../../../../models/Properties";
     templateUrl: "./schemeListPanelComponent.html",
 })
 export class SchemeListPanelComponent extends AbstractPanel {
+    @Input() context: TreeListContext; //useful in scheme list to determine if show the checkboxes
 
     @ViewChild(SchemeListComponent) viewChildList: SchemeListComponent;
 

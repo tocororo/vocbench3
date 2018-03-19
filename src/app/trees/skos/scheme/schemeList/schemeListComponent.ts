@@ -6,7 +6,7 @@ import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils } from "../../../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { SkosServices } from "../../../../services/skosServices";
@@ -19,7 +19,7 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 })
 export class SchemeListComponent extends AbstractList {
 
-    @Input() editable: boolean = true; //tells if checkbox should be visible
+    @Input() context: TreeListContext; //useful to determine if show the checkboxes
 
     @ViewChildren(SchemeListNodeComponent) viewChildrenNode: QueryList<SchemeListNodeComponent>;
 

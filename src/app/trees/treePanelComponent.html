@@ -55,7 +55,7 @@
                 </concept-tree-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'conceptScheme'}" [hidden]="activeTab != 'conceptScheme'">
-                <scheme-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
+                <scheme-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
                 </scheme-list-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">

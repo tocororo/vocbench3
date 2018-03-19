@@ -11,6 +11,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ART
 import { SKOS, OntoLex } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { TreeListContext } from "../utils/UIUtils";
 
 @Component({
     selector: "tree-panel",
@@ -25,6 +26,8 @@ export class TreePanelComponent {
     @ViewChild(SchemeListPanelComponent) viewChildSchemePanel: SchemeListPanelComponent;
     @ViewChild(PropertyTreePanelComponent) viewChildPropertyPanel: PropertyTreePanelComponent;
     @ViewChild(ClassIndividualTreePanelComponent) viewChildClsIndPanel: ClassIndividualTreePanelComponent;
+
+    private context: TreeListContext = TreeListContext.dataPanel;
 
     private selectedResource: ARTResource;
 
