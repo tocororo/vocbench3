@@ -27,8 +27,15 @@ export class LexicalEntryListComponent extends AbstractList {
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
-        this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
-        this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        
+        this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
+            (data: { entry: ARTURIResource, lexicon: ARTURIResource }) => {
+                if (data.lexicon.getURI() == this.lexicon.getURI()) this.onListNodeCreated(data.entry); 
+            } 
+        ));
+        //here there is no need to check for the index (leading char of the entry) since if the entry uri is not found it is not deleted
+        this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe(
+            (data: any) => { if (data.lexicon.getURI() == this.lexicon.getURI()) this.onListNodeDeleted(data.entry); } ));
     }
 
     ngOnInit() {
@@ -54,7 +61,7 @@ export class LexicalEntryListComponent extends AbstractList {
                 entries => {
                     //sort by show if rendering is active, uri otherwise
                     let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                    ResourceUtils.sortResources(entries, attribute);
+                    // ResourceUtils.sortResources(entries, attribute); //TODO restore when show of lexical entries will be fixed
                     this.list = entries;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }

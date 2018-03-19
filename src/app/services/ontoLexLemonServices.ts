@@ -74,7 +74,7 @@ export class OntoLexLemonServices {
      * @param newLexicalEntry 
      * @param customFormValue 
      */
-    createLexicalEntry(canonicalForm: ARTLiteral, lexicon: ARTURIResource, newLexicalEntry?: ARTURIResource,
+    createLexicalEntry(canonicalForm: ARTLiteral, lexicon: ARTURIResource, newLexicalEntry?: ARTURIResource, lexicalEntryCls?: ARTURIResource,
         customFormValue?: CustomFormValue): Observable<ARTURIResource> {
         
         console.log("[OntoLexLemonServices] createLexicalEntry");
@@ -85,6 +85,9 @@ export class OntoLexLemonServices {
         if (newLexicalEntry != null) {
             params.newLexicalEntry = newLexicalEntry;
         }
+        if (lexicalEntryCls != null) {
+            params.lexicalEntryCls = lexicalEntryCls;
+        }
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
@@ -93,11 +96,11 @@ export class OntoLexLemonServices {
                 return Deserializer.createURI(stResp);
             }
         ).flatMap(
-            lexicon => {
-                return this.resourceService.getResourceDescription(lexicon).map(
+            entry => {
+                return this.resourceService.getResourceDescription(entry).map(
                     resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        this.eventHandler.lexiconDeletedEvent.emit((<ARTURIResource>resource));
+                        this.eventHandler.lexicalEntryCreatedEvent.emit({ entry: (<ARTURIResource>resource), lexicon: lexicon });
                         return <ARTURIResource>resource;
                     }
                 );

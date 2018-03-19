@@ -32,13 +32,12 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
         super(cfService, basicModals, eventHandler, vbProp);
-        
     }
 
     private create() {
-        this.creationModals.newLexicalEntryCf("Create new ontolex:LexicalEntry", false).then(
+        this.creationModals.newLexicalEntryCf("Create new ontolex:LexicalEntry", true).then(
             (data: NewLexicalEntryCfModalReturnData) => {
-                this.ontolexService.createLexicalEntry(data.label, this.lexicon, data.uriResource, data.cfValue).subscribe();
+                this.ontolexService.createLexicalEntry(data.label, this.lexicon, data.uriResource, data.cls, data.cfValue).subscribe();
             },
             () => { }
         );

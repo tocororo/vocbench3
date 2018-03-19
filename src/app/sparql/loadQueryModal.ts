@@ -59,6 +59,7 @@ export class LoadQueryModal implements ModalComponent<BSModalContext> {
     private deleteReference(reference: Reference) {
         this.configurationService.deleteConfiguration(ConfigurationComponents.SPARQL_STORE, reference.relativeReference).subscribe(
             stResp => {
+                this.selectedRef = null;
                 this.initReferences();
             }
         )
