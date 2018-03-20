@@ -37,7 +37,7 @@
             <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="isCreateChildDisabled()">
                 <img src="../../../../assets/images/icons/actions/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Property" (click)="delete()" [disabled]="isDeleteDisabled()">
+            <button *ngIf="deletable" class="btn btn-default" title="Delete Property" (click)="delete()" [disabled]="isDeleteDisabled()">
                 <img src="../../../../assets/images/icons/actions/prop_delete.png" class="panelButtonImg"/>
             </button>
         </div>

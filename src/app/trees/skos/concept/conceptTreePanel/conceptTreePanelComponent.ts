@@ -85,7 +85,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //top bar commands handlers
 
     createRoot() {
-        this.creationModals.newConceptCf("Create new skos:Concept", null, true).then(
+        this.creationModals.newConceptCf("Create new skos:Concept", null, this.workingSchemes, true).then(
             (data: NewConceptCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
@@ -109,7 +109,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     createChild() {
-        this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, true).then(
+        this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, null, true).then(
             (data: NewConceptCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.broaderProp, data.cfValue).subscribe(

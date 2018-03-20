@@ -25,7 +25,6 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 export class ClassTreePanelComponent extends AbstractTreePanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() roots: ARTURIResource[]; //root classes
-    @Input() context: TreeListContext;
 
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
 

@@ -46,12 +46,12 @@
         <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
             <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
                 (classDeleted)="onNodeDeleted($event)" (instanceDeleted)="onNodeDeleted($event)"
-                [readonly]="readonly">
+                [context]="context" [readonly]="readonly">
             </class-individual-tree-panel>
         </div>
         <ng-template [ngIf]="isProjectSKOS() || isProjectOntolex()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
-                <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
+                <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
                 </concept-tree-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'conceptScheme'}" [hidden]="activeTab != 'conceptScheme'">
@@ -59,18 +59,18 @@
                 </scheme-list-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">
-                <collection-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
+                <collection-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
                 </collection-tree-panel>
             </div>
         </ng-template>
         <div [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
-            <property-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [readonly]="readonly">
+            <property-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
             </property-tree-panel>
         </div>
         <div *ngIf="isProjectOntolex()" [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
             <ontolex-panel (lexiconSelected)="onNodeSelected($event)" (lexiconDeleted)="onNodeDeleted($event)"
                 (lexicalEntrySelected)="onNodeSelected($event)" (lexicalEntryDeleted)="onNodeDeleted($event)"
-                [readonly]="readonly">
+                [context]="context" [readonly]="readonly">
             </ontolex-panel>
         </div>
     </div>

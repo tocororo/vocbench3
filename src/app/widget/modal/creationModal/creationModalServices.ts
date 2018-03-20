@@ -54,12 +54,13 @@ export class CreationModalServices {
      * Opens a modal to create a new skos concept with label, language, uri (optional) and schemes, plus custom form supplement fields
      * @param title the title of the modal dialog
      * @param broader the broader concept of the new creating (only if not topConcept)
+     * @param schemes the schemes to which the new concept should belong (if not provided, schemes will be the broader's schemes if provided)
      * @param clsChangeable tells if the class of the creating resource can be changed
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
      * @return 
      */
-    newConceptCf(title: string, broader?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
-        var modalData = new NewConceptCfModalData(title, broader, clsChangeable, lang);
+    newConceptCf(title: string, broader?: ARTURIResource, schemes?: ARTURIResource[], clsChangeable?: boolean, lang?: string) {
+        var modalData = new NewConceptCfModalData(title, broader, schemes, clsChangeable, lang);
         const builder = new BSModalContextBuilder<NewConceptCfModalData>(
             modalData, undefined, NewConceptCfModalData
         );

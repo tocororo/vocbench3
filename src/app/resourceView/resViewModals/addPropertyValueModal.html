@@ -17,17 +17,17 @@
     <!--Alternative views-->
     <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
         <class-tree-panel *ngIf="viewType == 'classTree'" (nodeSelected)="onResourceSelected($event)" [roots]="rootsForClsTree"
-            [editable]="false"></class-tree-panel>
+            [deletable]="false"></class-tree-panel>
 
-        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [editable]="false" [schemeChangeable]="true" [schemes]="schemes"
+        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes"
             (nodeSelected)="onResourceSelected($event)">
         </concept-tree-panel>
         
-        <property-tree-panel *ngIf="viewType == 'propertyTree'" [editable]="false" [type]="propertyType"
+        <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType"
             (nodeSelected)="onResourceSelected($event)">
         </property-tree-panel>
         
-        <scheme-list-panel *ngIf="viewType == 'schemeList'" [editable]="false" (nodeSelected)="onResourceSelected($event)"></scheme-list-panel>
+        <scheme-list-panel *ngIf="viewType == 'schemeList'" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></scheme-list-panel>
         
         <resource-list *ngIf="viewType == 'resourceList'" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
         

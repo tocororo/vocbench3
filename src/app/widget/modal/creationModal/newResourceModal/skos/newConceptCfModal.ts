@@ -15,6 +15,7 @@ export class NewConceptCfModalData extends BSModalContext {
     constructor(
         public title: string = "Modal title",
         public broader: ARTURIResource,
+        public schemes: ARTURIResource[],
         public clsChangeable: boolean = true,
         public lang: string
     ) {

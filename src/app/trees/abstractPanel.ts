@@ -7,6 +7,7 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { TreeListContext } from "../utils/UIUtils";
 
 @Component({
     selector: "panel",
@@ -19,7 +20,9 @@ export abstract class AbstractPanel {
      */
 
     @Input() editable: boolean = true; //if true show the buttons to edit the tree/list
+    @Input() deletable: boolean = true; //if true show the buttons to edit the tree/list
     @Input() readonly: boolean = false; //if true disable the buttons to edit the tree/list (useful to disable edit when exploring old version)
+    @Input() context: TreeListContext; //useful in some scenarios (ex. scheme list to show/hide the checkboxes, concept and class panel to show/hide configuration button)
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeDeleted = new EventEmitter<ARTURIResource>();
 
@@ -74,6 +77,10 @@ export abstract class AbstractPanel {
             !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
             !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
         );
+    }
+
+    isContextDataPanel(): boolean {
+        return this.context == TreeListContext.dataPanel;
     }
 
     abstract doSearch(searchedText: string): void;

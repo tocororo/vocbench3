@@ -10,6 +10,7 @@ import { ARTURIResource, ResourceUtils, ResAttribute } from "../../../../../mode
 })
 export class SchemeSelectionComponent {
     @Input() concept: ARTURIResource; //useful to limit the schemeList to the only schemes of a concept
+    @Input() schemes: ARTURIResource[]; //to force the initialization of schemes
     @Output() update = new EventEmitter<ARTURIResource[]>();
 
     private addBtnImgSrc = require("../../../../../../assets/images/icons/actions/conceptScheme_create.png");
@@ -34,10 +35,12 @@ export class SchemeSelectionComponent {
              */
             this.skosService.getAllSchemes().subscribe(
                 schemes => {
-                    var activeSchemes: ARTURIResource[] = this.preferences.getActiveSchemes();
-                    for (var i = 0; i < activeSchemes.length; i++) {
+                    if (this.schemes == null) {
+                        this.schemes = this.preferences.getActiveSchemes();
+                    }
+                    for (var i = 0; i < this.schemes.length; i++) {
                         for (var j = 0; j < schemes.length; j++) {
-                            if (activeSchemes[i].getURI() == schemes[j].getURI()) {
+                            if (this.schemes[i].getURI() == schemes[j].getURI()) {
                                 this.schemeList.push(schemes[j]);
                                 break;
                             }

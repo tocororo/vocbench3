@@ -8,7 +8,7 @@ import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } fro
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { SearchSettings, ClassIndividualPanelSearchMode } from "../../../models/Properties";
 import { VBProperties } from "../../../utils/VBProperties";
-import { UIUtils } from "../../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot
@@ -28,6 +28,7 @@ import { UIUtils } from "../../../utils/UIUtils";
 })
 export class ClassIndividualTreePanelComponent {
     @Input() readonly: boolean;
+    @Input() context: TreeListContext;
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
     @Output() classDeleted = new EventEmitter<ARTURIResource>();

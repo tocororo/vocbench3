@@ -20,7 +20,6 @@ import { SearchSettings } from "../../../../models/Properties";
     templateUrl: "./schemeListPanelComponent.html",
 })
 export class SchemeListPanelComponent extends AbstractPanel {
-    @Input() context: TreeListContext; //useful in scheme list to determine if show the checkboxes
 
     @ViewChild(SchemeListComponent) viewChildList: SchemeListComponent;
 

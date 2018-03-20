@@ -21,7 +21,7 @@
                     <li><a (click)="createChild('skosOrderedCollection')">OrderedCollection</a></li>
                 </ul>
             </div>
-            <button class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="isDeleteDisabled()">
+            <button *ngIf="deletable" class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="isDeleteDisabled()">
                 <img src="../../../../../assets/images/icons/actions/collection_delete.png" class="panelButtonImg"/>
             </button>
         </div>

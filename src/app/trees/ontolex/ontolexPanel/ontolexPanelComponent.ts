@@ -7,7 +7,7 @@ import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } fro
 import { RDF, OWL } from "../../../models/Vocabulary";
 import { SearchSettings, ClassIndividualPanelSearchMode } from "../../../models/Properties";
 import { VBProperties } from "../../../utils/VBProperties";
-import { UIUtils } from "../../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
 
 @Component({
     selector: "ontolex-panel",
@@ -21,6 +21,7 @@ import { UIUtils } from "../../../utils/UIUtils";
 })
 export class OntolexPanelComponent {
     @Input() readonly: boolean;
+    @Input() context: TreeListContext;
     @Output() lexiconSelected = new EventEmitter<ARTURIResource>();
     @Output() lexicalEntrySelected = new EventEmitter<ARTURIResource>();
     @Output() lexiconDeleted = new EventEmitter<ARTURIResource>();
