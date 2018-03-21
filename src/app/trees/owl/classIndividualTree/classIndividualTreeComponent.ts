@@ -11,6 +11,8 @@ export class ClassIndividualTreeComponent {
 
     @Input() roots: ARTURIResource[]; //roots of the class three
     @Input() schemes: ARTURIResource[]; //scheme to use in case the class selected is skos:Concept
+    @Input() editable: boolean = true; //used only in right panel (instance/concept)
+    @Input() deletable: boolean = true; //used only in right panel (instance/concept)
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();//when an instance or a concept is selected
     /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
     create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/

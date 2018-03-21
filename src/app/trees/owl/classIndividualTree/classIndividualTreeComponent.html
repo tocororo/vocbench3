@@ -2,10 +2,11 @@
     <class-tree-panel [roots]="roots" context="clsIndTree" (nodeSelected)="onTreeClassSelected($event)" [editable]="false"></class-tree-panel>
 
     <!-- Show instance-list or concept-tree depending on the selected class in class-tree -->
-    <instance-list-panel *ngIf="!isRangeConcept()" style="margin-left: 4px;" [cls]="selectedClass" [editable]="false"
-        (nodeSelected)="onInstanceSelected($event)">
+    <instance-list-panel *ngIf="!isRangeConcept()" style="margin-left: 4px;" [cls]="selectedClass"
+        [editable]="editable" [deletable]="deletable" (nodeSelected)="onInstanceSelected($event)">
     </instance-list-panel>
-    <concept-tree-panel *ngIf="isRangeConcept()" style="margin-left: 4px;" [schemes]="currentSchemes" [editable]="false" 
-        [schemeChangeable]="true" (nodeSelected)="onInstanceSelected($event)" (schemeChanged)="onConceptTreeSchemeChange($event)">
+    <concept-tree-panel *ngIf="isRangeConcept()" style="margin-left: 4px;" [schemes]="currentSchemes" 
+        [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
+        (nodeSelected)="onInstanceSelected($event)" (schemeChanged)="onConceptTreeSchemeChange($event)">
     </concept-tree-panel>
 </div>

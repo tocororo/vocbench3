@@ -5,7 +5,7 @@
             <button class="btn btn-default" title="Create Instance" (click)="create()" [disabled]="isCreateDisabled()">
                 <img src="../../../../assets/images/icons/actions/individual_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Instance" (click)="delete()" [disabled]="isDeleteDisabled()">
+            <button *ngIf="deletable" class="btn btn-default" title="Delete Instance" (click)="delete()" [disabled]="isDeleteDisabled()">
                 <img src="../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
             </button>
         </div>

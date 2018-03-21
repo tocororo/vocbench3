@@ -41,7 +41,7 @@
         <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" (nodeSelected)="onResourceSelected($event)">
         </collection-tree-panel>
         
-        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" (nodeSelected)="onResourceSelected($event)">
+        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" [editable]="false" (nodeSelected)="onResourceSelected($event)">
         </class-individual-tree>
 
     </div>

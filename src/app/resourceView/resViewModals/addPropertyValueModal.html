@@ -31,7 +31,8 @@
         
         <resource-list *ngIf="viewType == 'resourceList'" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
         
-        <class-individual-tree *ngIf="viewType == 'classAndIndividual'" [roots]="rootsForClsIndList" (nodeSelected)="onResourceSelected($event)">
+        <class-individual-tree *ngIf="viewType == 'classAndIndividual'" [roots]="rootsForClsIndList" [deletable]="false"
+            (nodeSelected)="onResourceSelected($event)">
         </class-individual-tree>
     </div>
 

@@ -2,7 +2,7 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body vbox" style="height:70vh;">
-    <class-individual-tree (nodeSelected)="onInstanceSelected($event)"></class-individual-tree>
+    <class-individual-tree (nodeSelected)="onInstanceSelected($event)" [editable]="false"></class-individual-tree>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedInstance">Ok</button>
