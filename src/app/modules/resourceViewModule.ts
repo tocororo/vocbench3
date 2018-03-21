@@ -36,7 +36,6 @@ import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObje
 
 import { ResViewModalServices } from '../resourceView/resViewModals/resViewModalServices';
 import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCreatorModal';
-import { EnrichPropertyModal } from '../resourceView/resViewModals/enrichPropertyModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
 import { AddPropertyValueModal } from '../resourceView/resViewModals/addPropertyValueModal';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
@@ -63,7 +62,7 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer,
         PredicateObjectsRenderer,
         //modals
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
+        ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
         DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal
     ],
     exports: [
@@ -71,7 +70,7 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
     ],
     providers: [ResViewModalServices],
     entryComponents: [
-        ClassListCreatorModal, EnrichPropertyModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, 
+        ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, 
         ResourceViewModal, ResViewSettingsModal, AddManuallyValueModal
     ]
 })

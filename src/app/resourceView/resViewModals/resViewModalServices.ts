@@ -3,7 +3,6 @@ import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
-import { EnrichPropertyModal, EnrichPropertyModalData } from "./enrichPropertyModal";
 import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
 import { AddManuallyValueModal, AddManuallyValueData } from "./addManuallyValueModal";
@@ -48,23 +47,6 @@ export class ResViewModalServices {
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(InstanceListCreatorModal, overlayConfig).result;
-    }
-
-    /**
-     * Opens a modal to select a resource to set as value of a property with range "resource"
-     * @param title the title of the modal
-     * @param property property to enrich with a resource
-     * @param ranges admitted range classes of the property
-     * @return if the modal closes with ok returns a promise containing the selected resource
-     */
-    enrichProperty(title: string, property: ARTURIResource, ranges?: ARTURIResource[]) {
-        var modalData = new EnrichPropertyModalData(title, property, ranges);
-        const builder = new BSModalContextBuilder<EnrichPropertyModalData>(
-            modalData, undefined, EnrichPropertyModalData
-        );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(EnrichPropertyModal, overlayConfig).result;
     }
 
     /**

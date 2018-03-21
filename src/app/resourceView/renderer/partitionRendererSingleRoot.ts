@@ -60,8 +60,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 if (ranges != undefined && formCollection == undefined) { //just "classic" range
                     //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                     if (ranges.type == RangeType.resource) {
-                        let resourceTypes: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
-                        this.enrichWithResource(predicate, resourceTypes);
+                        this.enrichWithResource(predicate);
                     } else if (ranges.type == RangeType.plainLiteral) {
                         this.enrichWithPlainLiteral(predicate);
                     } else if (ranges.type == RangeType.typedLiteral) {
@@ -124,8 +123,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                                 }
                             }
                             if (selectedCF.getId() == RDFTypesEnum.resource) {
-                                let resourceTypes: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
-                                this.enrichWithResource(predicate, resourceTypes);
+                                this.enrichWithResource(predicate);
                             } else if (selectedCF.getId() == RDFTypesEnum.typedLiteral) {
                                 this.enrichWithTypedLiteral(predicate);
                             } else if (selectedCF.getId() == RDFTypesEnum.plainLiteral) {
@@ -193,13 +191,14 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     /**
      * Opens a modal to enrich the predicate with a resource 
      */
-    private enrichWithResource(predicate: ARTURIResource, resourceTypes?: ARTURIResource[]) {
-        this.resViewModals.enrichProperty("Add " + predicate.getShow(), predicate, resourceTypes).then(
-            (resource: any) => {
-                this.addPartitionAware(this.resource, predicate, resource);
+    private enrichWithResource(predicate: ARTURIResource) {
+        this.resViewModals.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
+            (data: any) => {
+                let value: ARTURIResource = data.value;
+                this.addPartitionAware(this.resource, predicate, value);
             },
             () => { }
-        );
+        )
     }
 
     /**
