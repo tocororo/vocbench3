@@ -10,28 +10,37 @@ export class OntologyImport {
     public imports: OntologyImport[];
 }
 
-export type ImportStatus = "OK" | "FAILED" | "STAGED_ADDITION" | "STAGED_REMOVAL" | "LOOP";
-export const ImportStatus = {
-    OK: "OK" as ImportStatus,
-    FAILED: "FAILED" as ImportStatus,
-    STAGED_ADDITION: "STAGED_ADDITION" as ImportStatus,
-    STAGED_REMOVAL: "STAGED_REMOVAL" as ImportStatus,
-    LOOP: "LOOP" as ImportStatus
+export enum ImportStatus {
+    OK = "OK",
+    FAILED = "FAILED",
+    STAGED_ADDITION = "STAGED_ADDITION",
+    STAGED_REMOVAL = "STAGED_REMOVAL",
+    LOOP = "LOOP"
 }
 
-export type ImportType = "fromWeb" | "fromWebToMirror" | "fromLocalFile" | "toOntologyMirror";
-export const ImportType = {
-    fromWeb: "fromWeb" as ImportType,
-    fromWebToMirror: "fromWebToMirror" as ImportType,
-    fromLocalFile: "fromLocalFile" as ImportType,
-    fromOntologyMirror: "fromOntologyMirror" as ImportType,
-    toOntologyMirror: "toOntologyMirror" as ImportType
+export enum ImportType {
+    fromWeb = "fromWeb",
+    fromWebToMirror = "fromWebToMirror",
+    fromLocalFile = "fromLocalFile",
+    fromOntologyMirror = "fromOntologyMirror",
+    toOntologyMirror = "toOntologyMirror"
 };
 
-export type TransitiveImportMethodAllowance = "web" | "webFallbackToMirror" | "mirrorFallbackToWeb" | "mirror";
-export const TransitiveImportMethodAllowance = {
-    web: "web" as TransitiveImportMethodAllowance,
-    webFallbackToMirror: "webFallbackToMirror" as TransitiveImportMethodAllowance,
-    mirrorFallbackToWeb: "mirrorFallbackToWeb" as TransitiveImportMethodAllowance,
-    mirror: "mirror" as TransitiveImportMethodAllowance,
+export enum TransitiveImportMethodAllowance {
+    web = "web",
+    webFallbackToMirror = "webFallbackToMirror",
+    mirrorFallbackToWeb = "mirrorFallbackToWeb",
+    mirror = "mirror"
+}
+
+export class DatasetInfo {
+    public baseURI: string;
+    public title: string;
+}
+
+export class DatasetMetadata {
+    public baseURI: string;
+	public sparqlEndpoint: string;
+	public dereferenceable: boolean;
+    public title: string;
 }

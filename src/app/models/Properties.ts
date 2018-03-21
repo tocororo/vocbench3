@@ -23,10 +23,9 @@ export class Properties {
 
 }
 
-export type ResourceViewMode = "tabbed" | "splitted";
-export const ResourceViewMode = {
-    tabbed: "tabbed" as ResourceViewMode,
-    splitted: "splitted" as ResourceViewMode
+export enum ResourceViewMode {
+    tabbed = "tabbed",
+    splitted = "splitted"
 }
 
 export class SearchSettings {
@@ -41,18 +40,16 @@ export class SearchSettings {
     public classIndividualSearchMode: ClassIndividualPanelSearchMode;
 }
 
-export type StringMatchMode = "startsWith" | "contains" | "endsWith";
-export const StringMatchMode = {
-    startsWith: "startsWith" as StringMatchMode,
-    contains: "contains" as StringMatchMode,
-    endsWith: "endsWith" as StringMatchMode
+export enum StringMatchMode {
+    startsWith = "startsWith",
+    contains = "contains",
+    endsWith = "endsWith"
 }
 
-export type ClassIndividualPanelSearchMode = "onlyClasses" | "onlyInstances" | "all";
-export const ClassIndividualPanelSearchMode = {
-    onlyClasses: "onlyClasses" as ClassIndividualPanelSearchMode,
-    onlyInstances: "onlyInstances" as ClassIndividualPanelSearchMode,
-    all: "all" as ClassIndividualPanelSearchMode
+export enum ClassIndividualPanelSearchMode {
+    onlyClasses = "onlyClasses",
+    onlyInstances = "onlyInstances",
+    all = "all"
 }
 
 export class ClassTreePreference {

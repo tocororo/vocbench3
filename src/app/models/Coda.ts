@@ -46,7 +46,7 @@ export class ConverterUtils {
     public static getConverterProjectionOperator(converter: ConverterContractDescription, signature?: SignatureDescription,
             capabilityType?: RDFCapabilityType): string {
         let projectionOperator: string = "";
-        projectionOperator += (converter.getRDFCapability() == RDFTypesEnum.uri) ? RDFTypesEnum.uri : RDFTypesEnum.literal; //'uri' or 'literal'
+        projectionOperator += (converter.getRDFCapability() == RDFCapabilityType.uri) ? RDFTypesEnum.uri : RDFTypesEnum.literal; //'uri' or 'literal'
         //default converter doesn't need to be specified explicitly
         if (converter.getURI() == ConverterContractDescription.NAMESPACE + "default") {
             return capabilityType;
@@ -129,16 +129,14 @@ export class ParameterDescription {
     }
 }
 
-export type RDFCapabilityType = "node" | "uri" | "typedLiteral" | "literal";
-export const RDFCapabilityType = {
-    node: "node" as RDFCapabilityType,
-    uri: "uri" as RDFCapabilityType,
-    typedLiteral: "typedLiteral" as RDFCapabilityType,
-    literal: "literal" as RDFCapabilityType
+export enum RDFCapabilityType {
+    node = "node",
+    uri = "uri",
+    typedLiteral = "typedLiteral",
+    literal = "literal"
 }
 
-export type RequirementLevels = "literal" | "uri";
-export const RequirementLevels = {
-    literal: "literal" as RequirementLevels,
-    uri: "uri" as RequirementLevels
+export enum RequirementLevels {
+    uri = "uri",
+    literal = "literal"
 }

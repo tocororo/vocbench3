@@ -70,8 +70,8 @@ export class RdfResourceComponent {
 	private isResourceWithLang(): boolean {
 		var lang: string;
 		if (this.resource.isResource()) {
-			var role = (<ARTResource>this.resource).getRole().toLowerCase();
-			if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
+			var role = (<ARTResource>this.resource).getRole();
+			if (role == RDFResourceRolesEnum.xLabel) {
 				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
 			}
 		} else if (this.resource.isLiteral()) {

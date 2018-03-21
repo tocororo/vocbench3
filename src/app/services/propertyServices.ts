@@ -494,14 +494,13 @@ export class PropertyServices {
 
 }
 
-export type RangeType = "resource" | "plainLiteral" | "typedLiteral" | "literal" | "undetermined" | "inconsistent";
-export const RangeType = {
-    resource: "resource" as RangeType,
-    plainLiteral: "plainLiteral" as RangeType,
-    typedLiteral: "typedLiteral" as RangeType,
-    literal: "literal" as RangeType,
-    undetermined: "undetermined" as RangeType,
-    inconsistent: "inconsistent" as RangeType,
+export enum RangeType {
+    resource = "resource",
+    plainLiteral = "plainLiteral",
+    typedLiteral = "typedLiteral",
+    literal = "literal",
+    undetermined = "undetermined",
+    inconsistent = "inconsistent"
 }
 
 export class RangeResponse {

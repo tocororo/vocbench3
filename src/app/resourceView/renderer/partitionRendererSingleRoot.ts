@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { PartitionRenderer } from "./partitionRenderer";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { PropertyServices } from "../../services/propertyServices";
+import { PropertyServices, RangeType } from "../../services/propertyServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
@@ -59,15 +59,15 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 var formCollection: FormCollection = range.formCollection;
                 if (ranges != undefined && formCollection == undefined) { //just "classic" range
                     //available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
-                    if (ranges.type == RDFTypesEnum.resource) {
+                    if (ranges.type == RangeType.resource) {
                         let resourceTypes: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                         this.enrichWithResource(predicate, resourceTypes);
-                    } else if (ranges.type == RDFTypesEnum.plainLiteral) {
+                    } else if (ranges.type == RangeType.plainLiteral) {
                         this.enrichWithPlainLiteral(predicate);
-                    } else if (ranges.type == RDFTypesEnum.typedLiteral) {
+                    } else if (ranges.type == RangeType.typedLiteral) {
                         //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
                         this.enrichWithTypedLiteral(predicate, ranges.rangeCollection.resources, ranges.rangeCollection.dataRanges);
-                    } else if (ranges.type == RDFTypesEnum.literal) {
+                    } else if (ranges.type == RangeType.literal) {
                         var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                         this.basicModals.select("Select range type", null, options).then(
                             (selectedRange: any) => {
@@ -79,7 +79,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                             },
                             () => { }
                         )
-                    } else if (ranges.type == RDFTypesEnum.undetermined) {
+                    } else if (ranges.type == RangeType.undetermined) {
                         var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                         this.basicModals.select("Select range type", null, options).then(
                             (selectedRange: any) => {
@@ -99,12 +99,12 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 } else if (ranges != undefined && formCollection != undefined) { //both "classic" and custom range
                     var rangeOptions: CustomForm[] = [];
                     //classic ranges (this is a workaround to use selection CF modal with classic range as well)
-                    if (ranges.type == RDFTypesEnum.resource || ranges.type == RDFTypesEnum.plainLiteral || ranges.type == RDFTypesEnum.typedLiteral) {
+                    if (ranges.type == RangeType.resource || ranges.type == RangeType.plainLiteral || ranges.type == RangeType.typedLiteral) {
                         rangeOptions.push(new CustomForm(ranges.type, ranges.type, ranges.type));
-                    } else if (ranges.type == RDFTypesEnum.literal) {
+                    } else if (ranges.type == RangeType.literal) {
                         rangeOptions.push(new CustomForm(RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral));
                         rangeOptions.push(new CustomForm(RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral));
-                    } else if (ranges.type == RDFTypesEnum.undetermined) { //undetermined => range could be resource and any kind of literal
+                    } else if (ranges.type == RangeType.undetermined) { //undetermined => range could be resource and any kind of literal
                         rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource, RDFTypesEnum.resource));
                         rangeOptions.push(new CustomForm(RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral));
                         rangeOptions.push(new CustomForm(RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral));

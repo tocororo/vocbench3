@@ -250,8 +250,8 @@ export class BrokenCFStructure {
 
 export type CustomFormType = "node" | "graph";
 export type FormFieldType = "literal" | "uri";
-export type CustomFormLevel = "system" | "project";
-export const CustomFormLevel = {
-    system: "system" as CustomFormLevel,
-    project: "project" as CustomFormLevel
+
+export enum CustomFormLevel {
+    system = "system",
+    project = "project"
 }

@@ -20,6 +20,7 @@ import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/i
 import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
 import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/impl/labelRelationsPartitionRenderer';
 import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/impl/lexicalizationsPartitionRenderer';
+import { LexicalFormsPartitionRenderer } from '../resourceView/renderer/impl/lexicalFormsPartitionRenderer';
 import { MembersOrderedPartitionRenderer } from '../resourceView/renderer/impl/membersOrderedPartitionRenderer';
 import { MembersPartitionRenderer } from '../resourceView/renderer/impl/membersPartitionRenderer';
 import { NotesPartitionRenderer } from '../resourceView/renderer/impl/notesPartitionRenderer';
@@ -56,7 +57,7 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         ReifiedResourceComponent, EditableResourceComponent,
         //renderers
         BroadersPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-        LexicalizationsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,
+        LexicalizationsPartitionRenderer, LexicalFormsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,
         PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
         TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer,

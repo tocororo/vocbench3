@@ -2,36 +2,19 @@ import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { ARTURIResource, ARTResource, ARTLiteral } from "../../../models/ARTResources";
-import { NewResourceModal, NewResourceModalData } from "./newResourceModal/newResourceModal";
-import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/newResourceCfModal";
-import { NewSkosResourceCfModal, NewSkosResourceCfModalData } from "./newResourceModal/skos/newSkosResourceCfModal";
+import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/shared/newResourceCfModal";
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
 import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/skos/newConceptFromLabelModal";
 import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/skos/newConceptCfModal";
 import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/skos/newXLabelModal';
 import { NewLexiconCfModalData, NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
-import { NewLexicalEntryCfModal, NewLexicalEntryCfModalData } from './newResourceModal/ontolex/newLexicalEntryCfModal';
+import { NewResourceWithLiteralCfModal, NewResourceWithLiteralCfModalData } from './newResourceModal/shared/newResourceWithLiteralCfModal';
 
 @Injectable()
 export class CreationModalServices {
 
     constructor(private modal: Modal) { }
-
-    /**
-     * Opens a modal to create a new resource with name, label and language tag
-     * @param title the title of the modal dialog
-     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
-     * @return if the modal closes with ok returns a promise containing an object with uri, label and lang
-     */
-    newResource(title: string, lang?: string) {
-        var modalData = new NewResourceModalData(title, lang);
-        const builder = new BSModalContextBuilder<NewResourceModalData>(
-            modalData, undefined, NewResourceModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewResourceModal, overlayConfig).result;
-    }
 
     /**
      * Opens a modal to create a new resource with uri plus custom form supplement fields
@@ -48,6 +31,24 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewResourceCfModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to create a new resource with uri, a language tagged literal (label?), plus custom form supplement fields
+     * @param title the title of the modal dialog
+     * @param cls class of the new creating resource
+     * @param clsChangeable tells if the class of the creating resource can be changed
+     * @param literalLabel the label of the literal field (default "Label")
+     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
+     * @return
+     */
+    newResourceWithLiteralCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, literalLabel?: string, lang?: string) {
+        var modalData = new NewResourceWithLiteralCfModalData(title, cls, clsChangeable, literalLabel, lang);
+        const builder = new BSModalContextBuilder<NewResourceWithLiteralCfModalData>(
+            modalData, undefined, NewResourceWithLiteralCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewResourceWithLiteralCfModal, overlayConfig).result;
     }
 
     /**
@@ -69,23 +70,6 @@ export class CreationModalServices {
     }
 
     /**
-     * Opens a modal to create a new skos resource with label, language and uri (optional), plus custom form supplement fields
-     * @param title the title of the modal dialog
-     * @param cls class of the new creating resource
-     * @param clsChangeable tells if the class of the creating resource can be changed
-     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
-     * @return
-     */
-    newSkosResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, lang?: string) {
-        var modalData = new NewSkosResourceCfModalData(title, cls, clsChangeable, lang);
-        const builder = new BSModalContextBuilder<NewSkosResourceCfModalData>(
-            modalData, undefined, NewSkosResourceCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewSkosResourceCfModal, overlayConfig).result;
-    }
-
-    /**
      * Opens a modal to create a new ontolex lexicon
      * @param title 
      * @param clsChangeable 
@@ -97,22 +81,6 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewLexiconCfModal, overlayConfig).result;
-    }
-
-    /**
-     * Opens a modal to create a new lexical entry
-     * @param title the title of the modal dialog
-     * @param clsChangeable tells if the class of the creating resource can be changed
-     * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
-     * @return
-     */
-    newLexicalEntryCf(title: string,clsChangeable?: boolean, lang?: string) {
-        var modalData = new NewLexicalEntryCfModalData(title, clsChangeable, lang);
-        const builder = new BSModalContextBuilder<NewLexicalEntryCfModalData>(
-            modalData, undefined, NewLexicalEntryCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(NewLexicalEntryCfModal, overlayConfig).result;
     }
 
     /**

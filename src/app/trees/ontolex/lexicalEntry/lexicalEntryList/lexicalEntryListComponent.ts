@@ -46,7 +46,6 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log("changes lexicalEntryList", changes);
         if (changes['index'] && !changes['index'].firstChange || changes['lexicon'] && !changes['lexicon'].firstChange) {
             this.initList();
         }
@@ -61,7 +60,7 @@ export class LexicalEntryListComponent extends AbstractList {
                 entries => {
                     //sort by show if rendering is active, uri otherwise
                     let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                    // ResourceUtils.sortResources(entries, attribute); //TODO restore when show of lexical entries will be fixed
+                    ResourceUtils.sortResources(entries, attribute);
                     this.list = entries;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }

@@ -50,10 +50,10 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
     private selectConverter(converter: ConverterContractDescription) {
         if (converter != this.selectedConverter) {
             this.selectedConverter = converter;
-            if (this.selectedConverter.getRDFCapability() == "literal" || this.selectedConverter.getRDFCapability() == "typedLiteral") {
-                this.selectedConverterType = "literal";
+            if (this.selectedConverter.getRDFCapability() == RDFCapabilityType.literal || this.selectedConverter.getRDFCapability() == RDFCapabilityType.typedLiteral) {
+                this.selectedConverterType = RDFCapabilityType.literal;
             } else { //'node' or 'uri'
-                this.selectedConverterType = "uri";
+                this.selectedConverterType = RDFCapabilityType.uri;
             }
             //set as selected signature the one with less parameters
             var signatures = this.selectedConverter.getSignatures();

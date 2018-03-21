@@ -41,13 +41,12 @@ export class LexiconListPanelComponent extends AbstractPanel {
     }
 
     delete() {
-        // this.ontolexService.deleteConceptScheme(this.selectedNode).subscribe(
-        //     stResp => {
-        //         this.eventHandler.schemeDeletedEvent.emit(this.selectedNode);
-        //         this.nodeDeleted.emit(this.selectedNode);
-        //         this.selectedNode = null;
-        //     }
-        // );
+        this.ontolexService.deleteLexicon(this.selectedNode).subscribe(
+            stResp => {
+                this.nodeDeleted.emit(this.selectedNode);
+                this.selectedNode = null;
+            }
+        );
     }
 
     doSearch(searchedText: string) {

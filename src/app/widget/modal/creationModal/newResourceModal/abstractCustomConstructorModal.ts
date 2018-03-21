@@ -8,7 +8,7 @@ import { ARTURIResource } from "../../../../models/ARTResources"
 
 @Component({
     selector: "custom-constructor",
-    templateUrl: "./newResourceCfModal.html",
+    template: "",
 })
 export abstract class AbstractCustomConstructorModal {
     resourceClass: ARTURIResource; //type of the resource that the custom constructor is creating

@@ -221,8 +221,13 @@ export class DCT {
 export class OntoLex {
     public static uri = "http://www.w3.org/ns/lemon/ontolex";
     public static namespace = OntoLex.uri + "#";
-
+    //CLASSES
     public static lexicalEntry = new ARTURIResource(OntoLex.namespace + "LexicalEntry", "ontolex:LexicalEntry", RDFResourceRolesEnum.cls);
+    public static form = new ARTURIResource(OntoLex.namespace + "Form", "ontolex:Form", RDFResourceRolesEnum.cls);
+    //PROPERTIES
+    public static lexicalForm = new ARTURIResource(OntoLex.namespace + "lexicalForm", "ontolex:LexicalForm", RDFResourceRolesEnum.objectProperty);
+    public static canonicalForm = new ARTURIResource(OntoLex.namespace + "canonicalForm", "ontolex:canonicalForm", RDFResourceRolesEnum.objectProperty);
+    public static otherForm = new ARTURIResource(OntoLex.namespace + "otherForm", "ontolex:otherForm", RDFResourceRolesEnum.objectProperty);
 
 }
 

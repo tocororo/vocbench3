@@ -28,7 +28,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     partition = ResViewPartition.lexicalizations;
     addManuallyAllowed: boolean = false;
-    rootProperties: ARTURIResource[] = [];
+    rootProperties: ARTURIResource[] = []; //lexicalization properties are not known at priori
     knownProperties: ARTURIResource[] = [
         RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
         SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];

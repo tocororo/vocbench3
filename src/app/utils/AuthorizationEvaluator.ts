@@ -51,10 +51,12 @@ enum Actions {
     METADATA_SET_NS_PREFIX_MAPPING,
     ONT_MANAGER_DELETE_ONTOLOGY_MIRROR,
     ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR,
+    ONTOLEX_ADD_LEXICAL_FORM,
     ONTOLEX_CREATE_LEXICON,
     ONTOLEX_CREATE_LEXICAL_ENTRY,
     ONTOLEX_DELETE_LEXICON,
     ONTOLEX_DELETE_LEXICAL_ENTRY,
+    ONTOLEX_REMOVE_LEXICAL_FORM,
     ONTOLEX_GET_LEXICAL_ENTRY,
     ONTOLEX_GET_LEXICON,
     PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
@@ -159,12 +161,14 @@ export class AuthorizationEvaluator {
         [Actions.METADATA_SET_NS_PREFIX_MAPPING] : 'auth(pm(project, prefixMapping), "U").',
         [Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "D").',
         [Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "CU").',
-        [Actions.ONTOLEX_CREATE_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "C").',
-        [Actions.ONTOLEX_CREATE_LEXICON] : 'auth(rdf(lexicon), "C").',
-        [Actions.ONTOLEX_DELETE_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "D").',
-        [Actions.ONTOLEX_DELETE_LEXICON] : 'auth(rdf(lexicon), "D").',
-        [Actions.ONTOLEX_GET_LEXICAL_ENTRY] : 'auth(rdf(lexicalEntry), "R").',
-        [Actions.ONTOLEX_GET_LEXICON] : 'auth(rdf(lexicon), "R").',
+        [Actions.ONTOLEX_ADD_LEXICAL_FORM] : 'auth(rdf(ontolexLexicalEntry), "U").',
+        [Actions.ONTOLEX_CREATE_LEXICAL_ENTRY] : 'auth(rdf(ontolexLexicalEntry), "C").',
+        [Actions.ONTOLEX_CREATE_LEXICON] : 'auth(rdf(limeLexicon), "C").',
+        [Actions.ONTOLEX_DELETE_LEXICAL_ENTRY] : 'auth(rdf(ontolexLexicalEntry), "D").',
+        [Actions.ONTOLEX_DELETE_LEXICON] : 'auth(rdf(limeLexicon), "D").',
+        [Actions.ONTOLEX_GET_LEXICAL_ENTRY] : 'auth(rdf(ontolexLexicalEntry), "R").',
+        [Actions.ONTOLEX_GET_LEXICON] : 'auth(rdf(limeLexicon), "R").',
+        [Actions.ONTOLEX_REMOVE_LEXICAL_FORM] : 'auth(rdf(ontolexLexicalEntry), "U").',
         [Actions.PLUGINS_GET_PLUGINS] : 'auth(sys(plugins), "R").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
@@ -290,6 +294,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_RANGE)) ||
                 (partition == ResViewPartition.facets && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.lexicalizations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_LEXICALIZATION, resource)) ||
+                (partition == ResViewPartition.lexicalForms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICAL_FORM)) ||
                 (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.members && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION)) ||
                 (partition == ResViewPartition.membersOrdered && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION)) ||
@@ -312,6 +317,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_RANGE)) ||
                 (partition == ResViewPartition.facets && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
                 (partition == ResViewPartition.lexicalizations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_LEXICALIZATION, resource)) ||
+                (partition == ResViewPartition.lexicalForms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_LEXICAL_FORM)) ||
                 (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
                 (partition == ResViewPartition.members && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_FROM_COLLECTION)) ||
                 (partition == ResViewPartition.membersOrdered && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_FROM_COLLECTION)) ||

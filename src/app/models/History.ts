@@ -62,12 +62,12 @@ export class CommitOperation {
     }
 }
 
-export type SortingDirection = "Ascending" | "Descending" | "Unordered";
-export const SortingDirection = {
-    Ascending: "Ascending" as SortingDirection,
-    Descending: "Descending" as SortingDirection,
-    Unordered: "Unordered" as SortingDirection
+export enum SortingDirection {
+    Ascending = "Ascending",
+    Descending = "Descending",
+    Unordered = "Unordered"
 }
+
 
 export class VersionInfo {
     public versionId: string;
@@ -87,10 +87,10 @@ export class VersionInfo {
     }
 }
 
-export type RepositoryStatus = "INITIALIZED" | "UNITIALIZED";
-export const RepositoryStatus = {
-    INITIALIZED: "INITIALIZED" as RepositoryStatus,
-    UNITIALIZED: "UNITIALIZED" as RepositoryStatus
+
+export enum RepositoryStatus {
+    INITIALIZED = "INITIALIZED",
+    UNITIALIZED = "UNITIALIZED"
 }
 
 export class CommitDelta {

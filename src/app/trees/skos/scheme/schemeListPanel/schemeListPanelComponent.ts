@@ -6,6 +6,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
+import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
@@ -32,15 +33,15 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     private create() {
-        this.creationModals.newSkosResourceCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
-            (res: any) => {
-                this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfValue).subscribe(
+        this.creationModals.newResourceWithLiteralCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
+            (data: NewResourceWithLiteralCfModalReturnData) => {
+                this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
                     newScheme => { },
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                 confirm => {
-                                    this.skosService.createConceptScheme(res.label, res.uriResource, res.cls, res.cfValue, false).subscribe(
+                                    this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
                                         newScheme => { }
                                     );
                                 },

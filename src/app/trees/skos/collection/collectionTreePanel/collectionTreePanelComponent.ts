@@ -6,6 +6,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
+import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SKOS } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
@@ -53,17 +54,17 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     private createCollection(collectionType: ARTURIResource) {
-        this.creationModals.newSkosResourceCf("Create new " + collectionType.getShow(), collectionType, true).then(
-            (res: any) => {
+        this.creationModals.newResourceWithLiteralCf("Create new " + collectionType.getShow(), collectionType, true).then(
+            (data: NewResourceWithLiteralCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (collectionType.getURI() == SKOS.collection.getURI()) {
-                    this.skosService.createCollection(SKOS.collection, res.label, res.uriResource, null, res.cls, res.cfValue).subscribe(
+                    this.skosService.createCollection(SKOS.collection, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
                                 this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                     confirm => {
-                                        this.skosService.createCollection(SKOS.collection, res.label, res.uriResource, null, res.cls, res.cfValue, false).subscribe(
+                                        this.skosService.createCollection(SKOS.collection, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
                                             stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                         );
                                     },
@@ -73,13 +74,13 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
                         }
                     );
                 } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                    this.skosService.createCollection(SKOS.orderedCollection, res.label, res.uriResource, null, res.cls, res.cfValue).subscribe(
+                    this.skosService.createCollection(SKOS.orderedCollection, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
                                 this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                     confirm => {
-                                        this.skosService.createCollection(SKOS.orderedCollection, res.label, res.uriResource, null, res.cls, res.cfValue, false).subscribe(
+                                        this.skosService.createCollection(SKOS.orderedCollection, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
                                             stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                         );
                                     },
@@ -95,18 +96,18 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     }
 
     private createNestedCollection(collectionType: ARTURIResource) {
-         this.creationModals.newSkosResourceCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
-            (res: any) => {
+         this.creationModals.newResourceWithLiteralCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
+            (data: NewResourceWithLiteralCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (collectionType.getURI() == SKOS.collection.getURI()) {
                     this.skosService.createCollection(
-                            SKOS.collection, res.label, res.uriResource, this.selectedNode, res.cls, res.cfValue).subscribe(
+                            SKOS.collection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
                                 this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                     confirm => {
-                                        this.skosService.createCollection(SKOS.collection, res.label, res.uriResource, this.selectedNode, res.cls, res.cfValue, false).subscribe(
+                                        this.skosService.createCollection(SKOS.collection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
                                             stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                         );
                                     },
@@ -117,13 +118,13 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
                     );
                 } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
                     this.skosService.createCollection(
-                            SKOS.orderedCollection, res.label, res.uriResource, this.selectedNode, res.cls, res.cfValue).subscribe(
+                            SKOS.orderedCollection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
                                 this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
                                     confirm => {
-                                        this.skosService.createCollection(SKOS.orderedCollection, res.label, res.uriResource, this.selectedNode, res.cls, res.cfValue, false).subscribe(
+                                        this.skosService.createCollection(SKOS.orderedCollection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
                                             stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
                                         );
                                     }, 

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from '../utils/Deserializer';
 import { VBEventHandler } from '../utils/VBEventHandler';
-import { ARTURIResource, ARTLiteral, ResAttribute } from "../models/ARTResources";
+import { ARTURIResource, ARTLiteral, ResAttribute, ARTResource } from "../models/ARTResources";
 import { CustomFormValue } from '../models/CustomForms';
 import { ResourcesServices } from './resourcesServices';
 
@@ -68,10 +68,28 @@ export class OntoLexLemonServices {
     }
 
     /**
+     * Deletes a lexicon.
+     * @param lexicon 
+     */
+    deleteLexicon(lexicon: ARTURIResource) {
+        console.log("[OntoLexLemonServices] deleteLexicon");
+        var params: any = {
+            lexicon: lexicon
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicon", params, true).map(
+            stResp => {
+                this.eventHandler.lexiconDeletedEvent.emit(lexicon);
+                return stResp;
+            }
+        );
+    }
+
+    /**
      * Creates a new ontolex:LexicalEntry.
      * @param canonicalForm 
      * @param lexicon 
      * @param newLexicalEntry 
+     * @param lexicalEntryCls
      * @param customFormValue 
      */
     createLexicalEntry(canonicalForm: ARTLiteral, lexicon: ARTURIResource, newLexicalEntry?: ARTURIResource, lexicalEntryCls?: ARTURIResource,
@@ -108,8 +126,12 @@ export class OntoLexLemonServices {
         );
     }
 
-    //Returns the entries in a given lexicon that starts with the supplied character.
-    getLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource) {
+    /**
+     * Returns the entries in a given lexicon that starts with the supplied character.
+     * @param index 
+     * @param lexicon 
+     */
+    getLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource): Observable<ARTURIResource[]> {
         console.log("[OntoLexLemonServices] getLexicalEntriesByAlphabeticIndex");
         var params: any = {
             index: index,
@@ -121,6 +143,78 @@ export class OntoLexLemonServices {
                 return lexicons;
             }
         );
+    }
+
+    /**
+     * Sets the canonical form of a given lexical entry.
+     * @param lexicalEntry 
+     * @param writtenRep 
+     * @param newForm 
+     * @param customFormValue 
+     */
+    setCanonicalForm(lexicalEntry: ARTURIResource, writtenRep: ARTLiteral, newForm?: ARTURIResource, customFormValue?: CustomFormValue) {
+        console.log("[OntoLexLemonServices] setCanonicalForm");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            writtenRep: writtenRep
+        };
+        if (newForm != null) {
+            params.newForm = newForm;
+        }
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
+        }
+        return this.httpMgr.doPost(this.serviceName, "setCanonicalForm", params, true);
+    }
+
+    /**
+     * Adds an other form of a given lexical entry.
+     * @param lexicalEntry 
+     * @param writtenRep 
+     * @param newForm 
+     * @param customFormValue 
+     */
+    addOtherForm(lexicalEntry: ARTURIResource, writtenRep: ARTLiteral, newForm: ARTURIResource, customFormValue?: CustomFormValue) {
+        console.log("[OntoLexLemonServices] addOtherForm");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            writtenRep: writtenRep
+        };
+        if (newForm != null) {
+            params.newForm = newForm;
+        }
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addOtherForm", params, true);
+    }
+    
+    /**
+     * Removes a form of a lexical entry, and deletes it.
+     * @param lexicalEntry 
+     * @param property 
+     * @param form 
+     */
+    removeForm(lexicalEntry: ARTResource, property: ARTURIResource, form: ARTResource) {
+        console.log("[OntoLexLemonServices] removeForm");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            property: property,
+            form: form
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeForm", params, true);
+    }
+
+    /**
+     * Deletes a lexical entry.
+     * @param lexicalEntry 
+     */
+    deleteLexicalEntry(lexicalEntry: ARTURIResource) {
+        console.log("[OntoLexLemonServices] deleteLexicon");
+        var params: any = {
+            lexicalEntry: lexicalEntry
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params, true);
     }
 
 }

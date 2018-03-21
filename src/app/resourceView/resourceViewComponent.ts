@@ -57,6 +57,7 @@ export class ResourceViewComponent {
     private domainsColl: ARTPredicateObjects[] = null;
     private rangesColl: ARTPredicateObjects[] = null;
     private lexicalizationsColl: ARTPredicateObjects[] = null;
+    private lexicalFormsColl: ARTPredicateObjects[] = null;
     private notesColl: ARTPredicateObjects[] = null;
     private membersColl: ARTPredicateObjects[] = null;
     private membersOrderedColl: ARTPredicateObjects[] = null;
@@ -172,6 +173,7 @@ export class ResourceViewComponent {
         this.domainsColl = null;
         this.rangesColl = null;
         this.lexicalizationsColl = null;
+        this.lexicalFormsColl = null;
         this.membersColl = null;
         this.propertiesColl = null;
         this.propertyFacets = null;
@@ -239,6 +241,12 @@ export class ResourceViewComponent {
         if (lexicalizationsPartition != null) {
             this.lexicalizationsColl = Deserializer.createPredicateObjectsList(lexicalizationsPartition);
             this.filterInferredFromPredObjList(this.lexicalizationsColl);
+        }
+
+        var lexicalFormsPartition: any = this.resViewResponse.lexicalForms;
+        if (lexicalFormsPartition != null) {
+            this.lexicalFormsColl = Deserializer.createPredicateObjectsList(lexicalFormsPartition);
+            this.filterInferredFromPredObjList(this.lexicalFormsColl);
         }
 
         var notesPartition: any = this.resViewResponse.notes;

@@ -7,7 +7,7 @@ import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 import { ManchesterServices } from "../../services/manchesterServices";
-import { PropertyServices } from "../../services/propertyServices";
+import { PropertyServices, RangeType } from "../../services/propertyServices";
 
 /**
  * This modal allow the user to create a property-value relation and can be open throght a ResView partition.
@@ -146,9 +146,9 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                  */
                 if (range == undefined) {
                     this.viewType = "classAndIndividual";
-                } else if (ranges.type == RDFTypesEnum.undetermined) {
+                } else if (ranges.type == RangeType.undetermined) {
                     this.viewType = "classAndIndividual";
-                } else if (ranges.type == RDFTypesEnum.resource) {
+                } else if (ranges.type == RangeType.resource) {
                     //class, concept, conceptScheme, collection, resourcelist, instance, class individual
                     var rangeCollection: ARTURIResource[] = ranges.rangeCollection.resources;
                     if (rangeCollection != null) {

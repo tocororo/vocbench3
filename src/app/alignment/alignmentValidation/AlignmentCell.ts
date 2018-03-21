@@ -83,20 +83,3 @@ export class AlignmentCell {
     }
 
 }
-
-// export type AlignmentRelation = "=" | ">" | "<" | "%" | "HasInstance" | "InstanceOf";
-// export const AlignmentRelation = {
-//     "=": "=" as AlignmentRelation,
-//     ">": ">" as AlignmentRelation,
-//     "<": "<" as AlignmentRelation,
-//     "%": "%" as AlignmentRelation,
-//     "HasInstance": "HasInstance" as AlignmentRelation,
-//     "InstanceOf": "InstanceOf" as AlignmentRelation,
-// };
-
-// export type AlignmentStatus = "accepted" | "rejected" | "error";
-// export const AlignmentStatus = {
-//     "accepted": "accepted" as AlignmentStatus,
-//     "rejected": "rejected" as AlignmentStatus,
-//     "error": "error" as AlignmentStatus
-// }

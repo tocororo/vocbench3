@@ -6,13 +6,14 @@ import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewLexicalEntryCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newLexicalEntryCfModal";
+import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
+import { OntoLex } from "../../../../models/Vocabulary";
 
 @Component({
     selector: "lexical-entry-list-panel",
@@ -35,22 +36,21 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     }
 
     private create() {
-        this.creationModals.newLexicalEntryCf("Create new ontolex:LexicalEntry", true).then(
-            (data: NewLexicalEntryCfModalReturnData) => {
-                this.ontolexService.createLexicalEntry(data.label, this.lexicon, data.uriResource, data.cls, data.cfValue).subscribe();
+        this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form").then(
+            (data: NewResourceWithLiteralCfModalReturnData) => {
+                this.ontolexService.createLexicalEntry(data.literal, this.lexicon, data.uriResource, data.cls, data.cfValue).subscribe();
             },
             () => { }
         );
     }
 
     delete() {
-        // this.ontolexService.deleteConceptScheme(this.selectedNode).subscribe(
-        //     stResp => {
-        //         this.eventHandler.schemeDeletedEvent.emit(this.selectedNode);
-        //         this.nodeDeleted.emit(this.selectedNode);
-        //         this.selectedNode = null;
-        //     }
-        // );
+        this.ontolexService.deleteLexicalEntry(this.selectedNode).subscribe(
+            stResp => {
+                this.nodeDeleted.emit(this.selectedNode);
+                this.selectedNode = null;
+            }
+        );
     }
 
     doSearch(searchedText: string) {

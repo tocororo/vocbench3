@@ -127,30 +127,26 @@ export class Project {
     
 }
 
-export type ProjectTypesEnum = "saveToStore" | "continuosEditing";
-export const ProjectTypesEnum = {
-    saveToStore: "saveToStore" as ProjectTypesEnum,
-    continuosEditing: "continuosEditing" as ProjectTypesEnum
+export enum ProjectTypesEnum {
+    saveToStore = "saveToStore",
+    continuosEditing = "continuosEditing"
 }
 
-export type BackendTypesEnum = "graphdb:FreeSail" | "openrdf:NativeStore" | "openrdf:MemoryStore";
-export const BackendTypesEnum = {
-    graphdb_FreeSail: "graphdb:FreeSail" as BackendTypesEnum,
-    openrdf_NativeStore: "openrdf:NativeStore" as BackendTypesEnum,
-    openrdf_MemoryStore: "openrdf:MemoryStore" as BackendTypesEnum
+export enum BackendTypesEnum {
+    graphdb_FreeSail = "graphdb:FreeSail",
+    openrdf_NativeStore = "openrdf:NativeStore",
+    openrdf_MemoryStore = "openrdf:MemoryStore"
 }
 
-export type AccessLevel = "R" | "RW";
-export const AccessLevel = {
-    R: "R" as AccessLevel,
-    RW: "RW" as AccessLevel
+export enum AccessLevel {
+    R = "R",
+    RW = "RW"
 }
 
-export type LockLevel = "R" | "W" | "NO";
-export const LockLevel = {
-    R: "R" as LockLevel,
-    W: "W" as LockLevel,
-    NO: "NO" as LockLevel,
+export enum LockLevel {
+    R = "R",
+    W = "W",
+    NO = "NO",
 }
 
 export class RepositorySummary {
@@ -164,11 +160,10 @@ export class RepositorySummary {
     }
 }
 
-export type RepositoryAccessType = "CreateLocal" | "CreateRemote" | "AccessExistingRemote";
-export const RepositoryAccessType = {
-    CreateLocal: "CreateLocal" as RepositoryAccessType,
-    CreateRemote: "CreateRemote" as RepositoryAccessType,
-    AccessExistingRemote: "AccessExistingRemote" as RepositoryAccessType,
+export enum RepositoryAccessType {
+    CreateLocal = "CreateLocal",
+    CreateRemote = "CreateRemote",
+    AccessExistingRemote = "AccessExistingRemote",
 }
 
 export class RepositoryAccess {

@@ -23,7 +23,7 @@ export class Deserializer {
     public static createBlankNode(bnode: any, additionalAttr?: string[]): ARTBNode {
         var id = bnode['@id'];
         var show = bnode[ResAttribute.SHOW];
-        var role = RDFResourceRolesEnum[bnode[ResAttribute.ROLE]];
+        var role: RDFResourceRolesEnum = RDFResourceRolesEnum[<string>bnode[ResAttribute.ROLE]];
         var bNodeRes = new ARTBNode(id, show, role);
         //other properties
         this.parseNodeOptionalProperties(bnode, bNodeRes, additionalAttr);

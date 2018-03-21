@@ -236,17 +236,15 @@ export class Role {
 
 }
 
-export type UserStatusEnum = "NEW" | "INACTIVE" | "ACTIVE";
-export const UserStatusEnum = {
-    NEW: "NEW" as UserStatusEnum,
-    INACTIVE: "INACTIVE" as UserStatusEnum,
-    ACTIVE: "ACTIVE" as UserStatusEnum
+export enum UserStatusEnum {
+    NEW = "NEW",
+    INACTIVE = "INACTIVE",
+    ACTIVE = "ACTIVE"
 }
 
-export type RoleLevel = "system" | "project";
-export const RoleLevel = {
-    system: "system" as RoleLevel,
-    project: "project" as RoleLevel
+export enum RoleLevel {
+    system = "system",
+    project = "project"
 }
 
 export class UserForm {

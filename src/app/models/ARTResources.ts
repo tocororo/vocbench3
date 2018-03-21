@@ -309,75 +309,38 @@ export class ResAttribute {
 }
 
 
-/**
- * String enums
- * See https://github.com/Microsoft/TypeScript/issues/3192 
- */
-
-export type RDFResourceRolesEnum =
-    "annotationProperty" |
-    "cls" |
-    "concept" |
-    "conceptScheme" |
-    "dataRange" |
-    "datatypeProperty" |
-    "individual" |
-    "mention" |
-    "objectProperty" |
-    "ontology" |
-    "ontologyProperty" |
-    "property" |
-    "undetermined" |
-    "xLabel" |
-    "skosCollection" |
-    "skosOrderedCollection" |
-    "limeLexicon" |
-    "ontolexLexicalEntry" |
-    "ontolexForm";
-
-    
-
-export const RDFResourceRolesEnum = {
-    annotationProperty: "annotationProperty" as RDFResourceRolesEnum,
-    cls: "cls" as RDFResourceRolesEnum,
-    concept: "concept" as RDFResourceRolesEnum,
-    conceptScheme: "conceptScheme" as RDFResourceRolesEnum,
-    dataRange: "dataRange" as RDFResourceRolesEnum,
-    datatypeProperty: "datatypeProperty" as RDFResourceRolesEnum,
-    individual: "individual" as RDFResourceRolesEnum,
-    mention: "mention" as RDFResourceRolesEnum,
-    objectProperty: "objectProperty" as RDFResourceRolesEnum,
-    ontology: "ontology" as RDFResourceRolesEnum,
-    ontologyProperty: "ontologyProperty" as RDFResourceRolesEnum,
-    property: "property" as RDFResourceRolesEnum,
-    undetermined: "undetermined" as RDFResourceRolesEnum,
-    xLabel: "xLabel" as RDFResourceRolesEnum,
-    skosCollection: "skosCollection" as RDFResourceRolesEnum,
-    skosOrderedCollection: "skosOrderedCollection" as RDFResourceRolesEnum,
-    limeLexicon: "limeLexicon" as RDFResourceRolesEnum,
-    ontolexLexicalEntry: "ontolexLexicalEntry" as RDFResourceRolesEnum,
-    ontolexForm: "ontolexForm" as RDFResourceRolesEnum
-};
-
-export type RDFTypesEnum =
-    "bnode" |
-    "literal" |
-    "plainLiteral" |
-    "resource" |
-    "typedLiteral" |
-    "undetermined" |
-    "uri";
-
-export const RDFTypesEnum = {
-    bnode: "bnode" as RDFTypesEnum,
-    literal: "literal" as RDFTypesEnum,
-    plainLiteral: "plainLiteral" as RDFTypesEnum,
-    resource: "resource" as RDFTypesEnum,
-    typedLiteral: "typedLiteral" as RDFTypesEnum,
-    undetermined: "undetermined" as RDFTypesEnum,
-    uri: "uri" as RDFTypesEnum
+ export enum RDFResourceRolesEnum {
+    annotationProperty = "annotationProperty",
+    cls = "cls",
+    concept = "concept",
+    conceptScheme = "conceptScheme",
+    dataRange = "dataRange",
+    datatypeProperty = "datatypeProperty",
+    individual = "individual",
+    mention = "mention",
+    objectProperty = "objectProperty",
+    ontology = "ontology",
+    ontologyProperty = "ontologyProperty",
+    property = "property",
+    undetermined = "undetermined",
+    xLabel = "xLabel",
+    skosCollection = "skosCollection",
+    skosOrderedCollection = "skosOrderedCollection",
+    limeLexicon = "limeLexicon",
+    ontolexLexicalEntry = "ontolexLexicalEntry",
+    ontolexForm = "ontolexForm"
 }
 
+
+export enum RDFTypesEnum {
+    bnode = "bnode",
+    literal = "literal",
+    plainLiteral = "plainLiteral",
+    resource = "resource",
+    typedLiteral = "typedLiteral",
+    undetermined = "undetermined",
+    uri = "uri"
+}
 
 
 export class ResourceUtils {
