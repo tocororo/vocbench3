@@ -505,9 +505,8 @@ export class ResourceViewComponent {
     private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
         if (this.resource.isURIResource()) { //rename affect only URIResource
             if ((<ARTURIResource>this.resource).getURI() == oldResource.getURI()) {
-                //replace uri
                 (<ARTURIResource>this.resource).setURI(newResource.getURI());
-                // this.buildResourceView(this.resource); //need to refresh the resource view?
+                this.buildResourceView(this.resource); //refresh the resource view in order to update the panel rdf-resource
             }
         }
     }

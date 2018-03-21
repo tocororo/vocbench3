@@ -13,8 +13,6 @@ export class SchemeListNodeComponent extends AbstractListNode {
 
     constructor(private skosService: SkosServices, eventHandler: VBEventHandler) {
         super(eventHandler);
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
 }

@@ -56,11 +56,19 @@ export class RefactorServices {
             oldResource: oldResource,
             newResource: newResource
         };
-        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params, true).flatMap(
             stResp => {
-                let renamedResource: ARTURIResource = oldResource.clone();
-                renamedResource.setURI(newResource.getURI());
-                this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldResource, newResource: renamedResource });
+                return this.resourceService.getResourceDescription(newResource).map(
+                    newRes => {
+                        /**
+                         * create a clone to avoid that changes on oldResource (in onResourceRenamed of ResView),
+                         * changes also the oldResource in the event
+                         */
+                        let oldRes = new ARTURIResource(oldResource.getURI());
+                        this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldRes, newResource: newRes });
+                        return stResp;
+                    }
+                );
             }
         );
     }

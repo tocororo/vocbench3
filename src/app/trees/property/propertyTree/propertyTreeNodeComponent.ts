@@ -30,8 +30,6 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
                 this.onParentAdded(data.newParent, data.child);
             }
         ));
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
     expandNodeImpl() {

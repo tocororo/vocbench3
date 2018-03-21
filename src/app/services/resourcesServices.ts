@@ -67,7 +67,12 @@ export class ResourcesServices {
         var params: any = {
             resource: resource,
         };
-        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params, true).map(
+            stResp => {
+                this.eventHandler.resourceDeprecatedEvent.emit(resource);
+                return stResp;
+            }
+        );
     }
 
     /**

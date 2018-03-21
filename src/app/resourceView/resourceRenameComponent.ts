@@ -90,7 +90,8 @@ export class ResourceRenameComponent {
             }
         }
         if ((<ARTURIResource>this.resource).getURI() != newUri) { //if the uri has changed
-            this.refactorService.changeResourceURI(<ARTURIResource>this.resource, new ARTURIResource(newUri)).subscribe(
+            let toRes = new ARTURIResource(newUri);
+            this.refactorService.changeResourceURI(<ARTURIResource>this.resource, toRes).subscribe(
                 stResp => {
                     this.renameLocked = true;
                     this.namespaceLocked = true;

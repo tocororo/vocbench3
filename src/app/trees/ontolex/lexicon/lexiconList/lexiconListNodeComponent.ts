@@ -10,8 +10,6 @@ export class LexiconListNodeComponent extends AbstractListNode {
 
     constructor(eventHandler: VBEventHandler) {
         super(eventHandler);
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
 }

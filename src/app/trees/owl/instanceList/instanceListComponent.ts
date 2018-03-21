@@ -43,8 +43,6 @@ export class InstanceListComponent extends AbstractList {
             (data: any) => { if (data.cls.getURI() == this.cls.getURI()) this.onListNodeCreated(data.instance); } ));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
             (data: any) => this.onTypeRemoved(data.resource, data.type)));
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -190,15 +188,6 @@ export class InstanceListComponent extends AbstractList {
                     this.list.splice(i, 1);
                     break;
                 }
-            }
-        }
-    }
-
-    private onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        for (var i = 0; i < this.list.length; i++) {
-            if (oldResource.getURI() == this.list[i].getURI()) {
-                this.list[i][ResAttribute.SHOW] = newResource.getShow();
-                this.list[i]['uri'] = newResource.getURI();
             }
         }
     }

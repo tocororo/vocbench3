@@ -30,8 +30,6 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onNestedCollectionAddedInPosition(data.nested, data.container, data.position)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionRemovedEvent.subscribe(
             (data: any) => this.onParentRemoved(data.container, data.nested)));
-        this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
-            (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)));
     }
 
     expandNodeImpl() {

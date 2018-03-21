@@ -2,7 +2,8 @@
     <div class="panel-heading">
         <div class="hbox" style="align-items: center">
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
-            <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;" [readonly]="readonly"></resource-rename>
+            <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
+            </resource-rename>
             
             <div class="dropdown pull-right" style="margin-left: 3px;">
                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" (click)="listVersions()" title="Change version">
