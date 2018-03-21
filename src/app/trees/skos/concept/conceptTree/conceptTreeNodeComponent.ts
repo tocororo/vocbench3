@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -43,8 +43,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         return this.skosService.getNarrowerConcepts(this.node, this.schemes).map(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(narrower, attribute);
+                ResourceUtils.sortResources(narrower, this.rendering ? SortAttribute.show : SortAttribute.value);
                 //append the retrieved node as child of the expanded node
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower);
                 this.open = true;

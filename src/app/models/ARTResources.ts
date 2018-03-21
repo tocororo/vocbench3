@@ -308,8 +308,7 @@ export class ResAttribute {
 
 }
 
-
- export enum RDFResourceRolesEnum {
+export enum RDFResourceRolesEnum {
     annotationProperty = "annotationProperty",
     cls = "cls",
     concept = "concept",
@@ -331,7 +330,6 @@ export class ResAttribute {
     ontolexForm = "ontolexForm"
 }
 
-
 export enum RDFTypesEnum {
     bnode = "bnode",
     literal = "literal",
@@ -342,6 +340,10 @@ export enum RDFTypesEnum {
     uri = "uri"
 }
 
+export enum SortAttribute {
+    value = "value",
+    show = "show"
+}
 
 export class ResourceUtils {
 
@@ -350,21 +352,38 @@ export class ResourceUtils {
      * @param list 
      * @param attribute
      */
-    static sortResources(list: ARTResource[], attribute: "value" | "show") {
+    // static sortResources(list: ARTResource[], attribute: SortAttribute) {
+    //     //sort by show
+    //     if (attribute == SortAttribute.show) {
+    //         list.sort(
+    //             function (r1: ARTResource, r2: ARTResource) {
+    //                 return r1.getShow().toLowerCase().localeCompare(r2.getShow().toLowerCase());
+    //             }
+    //         );
+    //     }
+    //     if (attribute == SortAttribute.value) {
+    //         list.sort(
+    //             function (r1: ARTResource, r2: ARTResource) {
+    //                 if (r1.getNominalValue() > r2.getNominalValue()) return 1;
+    //                 if (r1.getNominalValue() < r2.getNominalValue()) return -1;
+    //                 return 0;
+    //             }
+    //         );
+    //     }
+    // }
+    static sortResources(list: ARTNode[], attribute: SortAttribute) {
         //sort by show
-        if (attribute == "show") {
+        if (attribute == SortAttribute.show) {
             list.sort(
-                function (r1: ARTResource, r2: ARTResource) {
+                function (r1: ARTNode, r2: ARTNode) {
                     return r1.getShow().toLowerCase().localeCompare(r2.getShow().toLowerCase());
                 }
             );
         }
-        if (attribute == "value") {
+        if (attribute == SortAttribute.value) {
             list.sort(
-                function (r1: ARTResource, r2: ARTResource) {
-                    if (r1.getNominalValue() > r2.getNominalValue()) return 1;
-                    if (r1.getNominalValue() < r2.getNominalValue()) return -1;
-                    return 0;
+                function (r1: ARTNode, r2: ARTNode) {
+                    return r1.getNominalValue().localeCompare(r2.getNominalValue());
                 }
             );
         }

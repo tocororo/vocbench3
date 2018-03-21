@@ -118,6 +118,13 @@ export class PredicateObjectsRenderer {
         );
     }
 
+    private isActionMenuDisabled() {
+        return (
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            this.readonly
+        );
+    }
+
     // PAGING
     private pagingLimit: number = 10;
     private openPages: number = 0;

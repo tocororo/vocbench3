@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -65,8 +65,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.skosService.getTopConcepts(this.schemes).subscribe( //new service (whithout lang param)
             topConcepts => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(topConcepts, attribute);
+                ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.roots = topConcepts;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

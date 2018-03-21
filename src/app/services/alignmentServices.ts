@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
@@ -32,7 +32,7 @@ export class AlignmentServices {
         return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params, true).map(
             stResp => {
                 var props: ARTURIResource[] = Deserializer.createURIArray(stResp);
-                ResourceUtils.sortResources(props, "value");
+                ResourceUtils.sortResources(props, SortAttribute.value);
                 return props;
             }
         );

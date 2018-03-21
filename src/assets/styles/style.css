@@ -471,7 +471,7 @@ button.rvParitionPanelBtn:disabled {
     filter: alpha(opacity=20);
     cursor: default;
 }
-button.rvParitionPanelBtn:hover, button.rvParitionPanelBtn:focus {
+button.rvParitionPanelBtn:hover:enabled, button.rvParitionPanelBtn:focus:enabled {
     color: #000000;
 	opacity: 0.9;
     filter: alpha(opacity=90);

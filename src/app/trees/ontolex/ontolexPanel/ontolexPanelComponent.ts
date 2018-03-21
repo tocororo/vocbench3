@@ -72,7 +72,7 @@ export class OntolexPanelComponent {
         //                 if (searchResult.length == 1) {
         //                     this.selectSearchedResource(searchResult[0]);
         //                 } else { //multiple results, ask the user which one select
-        //                     ResourceUtils.sortResources(searchResult, this.rendering ? "show" : "value");
+        //                     ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
         //                     this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
         //                         (selectedResource: any) => {
         //                             this.selectSearchedResource(selectedResource);

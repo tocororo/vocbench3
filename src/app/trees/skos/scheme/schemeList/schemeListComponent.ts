@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ViewChildren, QueryList } from "@angular/core";
 import { AbstractList } from "../../../abstractList";
 import { SchemeListNodeComponent } from "./schemeListNodeComponent";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -48,8 +48,7 @@ export class SchemeListComponent extends AbstractList {
         this.skosService.getAllSchemes().subscribe(
             schemes => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(schemes, attribute);
+                ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
 
                 for (var i = 0; i < schemes.length; i++) {
                     let active: boolean = this.vbProp.isActiveScheme(schemes[i]);

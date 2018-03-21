@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { OWL, RDFS } from "../../../models/Vocabulary";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
@@ -66,8 +66,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         return this.clsService.getSubClasses(this.node, this.showInstanceNumber).map(
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(subClasses, attribute);
+                ResourceUtils.sortResources(subClasses, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
                 this.open = true;
             }

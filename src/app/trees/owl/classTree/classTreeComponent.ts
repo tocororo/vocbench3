@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { OWL } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
@@ -57,8 +57,7 @@ export class ClassTreeComponent extends AbstractTree {
         this.clsService.getClassesInfo(clsTreeRoots).subscribe(
             roots => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(roots, attribute);
+                ResourceUtils.sortResources(roots, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.roots = this.roots.concat(roots);
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

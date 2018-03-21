@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -58,7 +58,7 @@ export class PropertyTreeComponent extends AbstractTree {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
 
         //sort by show if rendering is active, uri otherwise
-        let orderAttribute: "show" | "value" = this.rendering ? "show" : "value";
+        let orderAttribute: SortAttribute = this.rendering ? SortAttribute.show : SortAttribute.value;
 
         /* different cases:
          * - roots provided as Input: tree is build rootet on these properties

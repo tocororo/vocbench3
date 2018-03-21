@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -51,8 +51,7 @@ export class CollectionTreeComponent extends AbstractTree {
         this.skosService.getRootCollections().subscribe( //new service
             rootColl => {
                 //sort by show if rendering is active, uri otherwise
-                let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                ResourceUtils.sortResources(rootColl, attribute);
+                ResourceUtils.sortResources(rootColl, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.roots = rootColl;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },

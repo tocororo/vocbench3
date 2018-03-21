@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
 import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -59,8 +59,7 @@ export class LexicalEntryListComponent extends AbstractList {
             this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon).subscribe(
                 entries => {
                     //sort by show if rendering is active, uri otherwise
-                    let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                    ResourceUtils.sortResources(entries, attribute);
+                    ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
                     this.list = entries;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }

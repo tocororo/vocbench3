@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResourceUtils, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResourceUtils, RDFResourceRolesEnum, SortAttribute } from "../models/ARTResources";
 import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, BrokenCFStructure,
     FormFieldType, CustomFormLevel } from "../models/CustomForms";
 
@@ -266,7 +266,7 @@ export class CustomFormsServices {
                 formColl.setForms(forms);
 
                 var suggestions: ARTURIResource[] = Deserializer.createURIArray(stResp.suggestions);
-                ResourceUtils.sortResources(suggestions, "value");
+                ResourceUtils.sortResources(suggestions, SortAttribute.value);
                 formColl.setSuggestions(suggestions);
                 
                 return formColl;

@@ -1,7 +1,7 @@
 import { Component, ViewChild, ViewChildren, Input, Output, EventEmitter, ElementRef, QueryList, SimpleChanges } from "@angular/core";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 import { AbstractList } from "../../abstractList";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBContext } from "../../../utils/VBContext";
@@ -103,8 +103,7 @@ export class InstanceListComponent extends AbstractList {
             this.clsService.getInstances(this.cls).subscribe(
                 instances => {
                     //sort by show if rendering is active, uri otherwise
-                    let attribute: "show" | "value" = this.rendering ? "show" : "value";
-                    ResourceUtils.sortResources(instances, attribute);
+                    ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
                     this.list = instances;
                     //if there is some pending instance search and the searched instance is of the same type of the current class
                     if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
