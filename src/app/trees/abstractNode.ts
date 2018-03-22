@@ -53,9 +53,7 @@ export abstract class AbstractNode {
      * affected by the renaming.
      */
     onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        console.log("comparing", oldResource.getURI(), this.node.getURI());
         if (oldResource.getURI() == this.node.getURI()) {
-            console.log("found renamend resource");
             this.node.setURI(newResource.getURI());
             this.node.setAdditionalProperty(ResAttribute.QNAME, newResource.getAdditionalProperty(ResAttribute.QNAME));
             this.node.setShow(newResource.getShow());
@@ -65,10 +63,22 @@ export abstract class AbstractNode {
     onResourceDeprecated(resource: ARTResource) {
         if (resource instanceof ARTURIResource) {
             if (resource.getURI() == this.node.getURI()) {
+                /**
+                 * Replace the resource held by this component with a clone of it and set the deprecated attribute to true.
+                 * In this way the rdfResource component in the node detects the change of @Input node and updates the icon
+                 * (icon is computed only during the init)
+                 */
                 let newNode = this.node.clone();
                 newNode.setAdditionalProperty(ResAttribute.DEPRECATED, true);
-                //so that the rdfResource component detects the change and update the icon (icon is computed only during the init)
                 this.node = newNode;
+                /**
+                 * Simulate the node selection, so the selectedNode in the above components is updated.
+                 * This is required since the node held by this component was just replaced, so a selection on another node 
+                 * (of the tree/list) fires the onNodeSelected on the container tree/list that set to false the resource.selected property.
+                 * Since the resource of this component is now different from the selectedNode in the tree/list, the selected
+                 * property is not changed in the resource of this component.
+                 */
+                this.selectNode();
             }
         }
     }

@@ -76,7 +76,8 @@ export class ResourceViewContextMenu {
     private setAsDeprecated() {
         this.resourcesService.setDeprecated(this.resource).subscribe(
             stResp => {
-                this.update.emit();
+                //do not emit update event. The resource view is updated after "resourceDeprecatedEvent" thrown by the setDeprecated service
+                // this.update.emit();
             }
         );
     }

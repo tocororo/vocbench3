@@ -8,6 +8,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../utils/UIUtils";
+import { ResourcesServices } from "../services/resourcesServices";
 
 @Component({
     selector: "panel",
@@ -40,11 +41,13 @@ export abstract class AbstractPanel {
      * CONSTRUCTOR
      */
     protected cfService: CustomFormsServices;
+    protected resourceService: ResourcesServices;
     protected basicModals: BasicModalServices;
     protected eventHandler: VBEventHandler;
     protected vbProp: VBProperties;
-    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
         this.cfService = cfService;
+        this.resourceService = resourceService;
         this.basicModals = basicModals;
         this.eventHandler = eventHandler;
         this.vbProp = vbProp;
@@ -65,8 +68,12 @@ export abstract class AbstractPanel {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
+    //actions
     abstract refresh(): void;
     abstract delete(): void;
+    deprecate() {
+        this.resourceService.setDeprecated(this.selectedNode).subscribe();
+    }
     
     //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
     isCreateDisabled(): boolean {
@@ -76,6 +83,12 @@ export abstract class AbstractPanel {
         return (
             !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
             !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
+        );
+    }
+    isDeprecateDisabled(): boolean {
+        return (
+            !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
+            !AuthorizationEvaluator.Tree.isDeprecateAuthorized(this.selectedNode)
         );
     }
 

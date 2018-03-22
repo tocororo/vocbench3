@@ -2,12 +2,17 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create Lexicon" (click)="create()" [disabled]="isCreateDisabled()">
+            <button class="btn btn-default" title="Create Lexical Entry" (click)="create()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/individual_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Lexicon" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Lexical Entry" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Lexical Entry" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../../assets/images/icons/res/individual_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">

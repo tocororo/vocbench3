@@ -7,6 +7,7 @@ import { ClassTreeComponent } from "../classTree/classTreeComponent";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
@@ -35,8 +36,9 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     private creatingClassType: ARTURIResource = OWL.class;
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private modal: Modal, cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        private modal: Modal, cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
     ngOnInit() {

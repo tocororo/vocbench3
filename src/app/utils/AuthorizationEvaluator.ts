@@ -360,6 +360,9 @@ export class AuthorizationEvaluator {
                 (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICON)) ||
                 (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICAL_ENTRY))
             );
+        },
+        isDeprecateAuthorized(resource: ARTResource) {
+            return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_SET_DEPRECATED, resource);
         }
     }
 

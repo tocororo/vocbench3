@@ -21,9 +21,14 @@
                     <li><a (click)="createChild('skosOrderedCollection')">OrderedCollection</a></li>
                 </ul>
             </div>
-            <button *ngIf="deletable" class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../../assets/images/icons/actions/collection_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../../assets/images/icons/actions/collection_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Collection" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../../assets/images/icons/res/collection_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
         <div style="flex: 1;"></div>
         <div class="btn-toolbar" role="toolbar">

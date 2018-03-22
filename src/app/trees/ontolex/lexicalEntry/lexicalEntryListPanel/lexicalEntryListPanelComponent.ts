@@ -4,6 +4,7 @@ import { AbstractPanel } from "../../../abstractPanel";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
@@ -31,8 +32,9 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     private index: string = this.indexes[0];
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
     private create() {

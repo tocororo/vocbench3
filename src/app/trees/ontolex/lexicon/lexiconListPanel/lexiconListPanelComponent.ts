@@ -4,6 +4,7 @@ import { AbstractPanel } from "../../../abstractPanel";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { NewLexiconCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
@@ -12,7 +13,6 @@ import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-// import { SKOS, SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 
 @Component({
@@ -26,8 +26,9 @@ export class LexiconListPanelComponent extends AbstractPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.limeLexicon;
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
         
     }
 

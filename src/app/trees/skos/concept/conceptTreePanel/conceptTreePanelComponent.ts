@@ -39,10 +39,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private resourceService: ResourcesServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices,
         private creationModals: CreationModalServices, private modal: Modal,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));

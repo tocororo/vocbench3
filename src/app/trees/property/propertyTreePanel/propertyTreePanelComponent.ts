@@ -7,6 +7,7 @@ import { SearchSettings } from "../../../models/Properties";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { VBProperties } from "../../../utils/VBProperties";
@@ -29,8 +30,9 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
     createRoot(role: RDFResourceRolesEnum) {

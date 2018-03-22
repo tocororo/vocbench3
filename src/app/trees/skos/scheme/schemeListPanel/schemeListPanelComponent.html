@@ -5,9 +5,14 @@
             <button class="btn btn-default" title="Create Concept Scheme" (click)="create()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" class="panelButtonImg"/>
             </button>
-            <button *ngIf="deletable" class="btn btn-default" title="Delete Concept Scheme" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../../assets/images/icons/actions/conceptScheme_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Concept Scheme" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../../assets/images/icons/actions/conceptScheme_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Concept Scheme" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../../assets/images/icons/res/conceptScheme_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">

@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { AbstractPanel } from "./abstractPanel";
 import { CustomFormsServices } from "../services/customFormsServices";
+import { ResourcesServices } from "../services/resourcesServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -26,8 +27,9 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     /**
      * CONSTRUCTOR
      */
-    constructor(cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
     /**

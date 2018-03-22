@@ -37,9 +37,14 @@
             <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="isCreateChildDisabled()">
                 <img src="../../../../assets/images/icons/actions/prop_addSubProperty.png" class="panelButtonImg"/>
             </button>
-            <button *ngIf="deletable" class="btn btn-default" title="Delete Property" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../assets/images/icons/actions/prop_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Property" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../assets/images/icons/actions/prop_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Property" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../assets/images/icons/res/prop_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
 
         <div style="flex: 1"></div>

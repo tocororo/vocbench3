@@ -8,9 +8,14 @@
             <button class="btn btn-default" title="Create SubClass" (click)="createChild()" [disabled]="isCreateChildDisabled()">
                 <img src="../../../../assets/images/icons/actions/class_addSubClass.png" class="panelButtonImg"/>
             </button>
-            <button *ngIf="deletable" class="btn btn-default" title="Delete Class" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../assets/images/icons/actions/class_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Class" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../assets/images/icons/actions/class_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Class" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../assets/images/icons/res/class_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
         <div style="flex: 1"></div>
 

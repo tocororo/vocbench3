@@ -4,6 +4,7 @@ import { CollectionTreeComponent } from "../collectionTree/collectionTreeCompone
 import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { ResourcesServices } from "../../../../services/resourcesServices";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
@@ -27,8 +28,9 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     private searchInputPlaceholder: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
     //top bar commands handlers

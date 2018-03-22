@@ -5,9 +5,14 @@
             <button class="btn btn-default" title="Create Lexicon" (click)="create()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/individual_create.png" class="panelButtonImg"/>
             </button>
-            <button class="btn btn-default" title="Delete Lexicon" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Lexicon" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Lexicon" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../../assets/images/icons/res/individual_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">

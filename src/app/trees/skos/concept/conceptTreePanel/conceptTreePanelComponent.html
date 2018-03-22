@@ -8,9 +8,14 @@
             <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="isCreateChildDisabled()">
                 <img src="../../../../../assets/images/icons/actions/concept_addNarrower.png" class="panelButtonImg"/>
             </button>
-            <button *ngIf="deletable" class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="isDeleteDisabled()">
-                <img src="../../../../../assets/images/icons/actions/concept_delete.png" class="panelButtonImg"/>
-            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../../assets/images/icons/actions/concept_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Concept" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../../assets/images/icons/res/concept_deprecated.png" style="margin: 2px;"/>
+                </button>
+            </ng-template>
         </div>
         <div *ngIf="editable" style="margin: 0px 5px;">
             <img *ngIf="isNoSchemeMode()" src="../../../../../assets/images/icons/warning.png"

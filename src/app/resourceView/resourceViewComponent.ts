@@ -81,6 +81,9 @@ export class ResourceViewComponent {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
+        this.eventSubscriptions.push(eventHandler.resourceDeprecatedEvent.subscribe(
+            (resource: ARTResource) => this.onResourceDeprecated(resource)
+        ));
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
             (data: any) => this.onCollaborationSystemStatusChange()
         ));
@@ -508,6 +511,12 @@ export class ResourceViewComponent {
                 (<ARTURIResource>this.resource).setURI(newResource.getURI());
                 this.buildResourceView(this.resource); //refresh the resource view in order to update the panel rdf-resource
             }
+        }
+    }
+
+    private onResourceDeprecated(resource: ARTResource) {
+        if (this.resource.getNominalValue() == resource.getNominalValue()) {
+            this.buildResourceView(this.resource);
         }
     }
 

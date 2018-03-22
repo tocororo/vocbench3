@@ -3,6 +3,7 @@ import { AbstractPanel } from "../../abstractPanel"
 import { InstanceListComponent } from "../instanceList/instanceListComponent";
 import { SearchServices } from "../../../services/searchServices";
 import { ClassesServices } from "../../../services/classesServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
@@ -27,8 +28,9 @@ export class InstanceListPanelComponent extends AbstractPanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
     //@Override
