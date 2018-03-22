@@ -192,7 +192,7 @@ export class SparqlComponent {
             //Variables are serialized in SPARQL syntax, using question mark ? character followed by the variable name
             var headers = tab.headers;
             for (var i = 0; i < headers.length; i++) {
-                serialization += "?" + headers[i] + separator;
+                serialization += headers[i] + separator;
             }
             serialization = serialization.slice(0, -1); //remove last separator
             serialization += "\n"; //and add new line
@@ -239,7 +239,7 @@ export class SparqlComponent {
                 value += "@" + field["xml:lang"];
             }
             if (field["datatype"] != undefined) {
-                value += "^^" + field["^^"];
+                value += "^^" + field["datatype"];
             }
         }
         return value;
