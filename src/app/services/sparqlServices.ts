@@ -43,7 +43,7 @@ export class SparqlServices {
         if (namedGraphs != null) {
             params.namedGraphs = namedGraphs;
         }
-        return this.httpMgr.doPost(this.serviceName, "evaluateQuery", params, true);
+        return this.httpMgr.doPost(this.serviceName, "evaluateQuery", params);
     }
 
     /**
@@ -89,7 +89,7 @@ export class SparqlServices {
         if (defaultRemoveGraphs != null) {
             params.defaultRemoveGraphs = defaultRemoveGraphs;
         }
-        return this.httpMgr.doPost(this.serviceName, "executeUpdate", params, true);
+        return this.httpMgr.doPost(this.serviceName, "executeUpdate", params);
     }
 
     /**

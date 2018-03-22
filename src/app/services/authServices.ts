@@ -25,7 +25,7 @@ export class AuthServices {
             _spring_security_remember_me: rememberMe
         }
         var options: VBRequestOptions = new VBRequestOptions({ errorAlertOpt: { show: false } });
-        return this.httpMgr.doPost(this.serviceName, "login", params, true, options).map(
+        return this.httpMgr.doPost(this.serviceName, "login", params, options).map(
             stResp => {
                 var loggedUser: User = Deserializer.createUser(stResp);
                 VBContext.setLoggedUser(loggedUser);
@@ -40,7 +40,8 @@ export class AuthServices {
      */
     logout() {
         console.log("[AuthServices] logout");
-        return this.httpMgr.doGet(this.serviceName, "logout", null, true).map(
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "logout", params).map(
             stResp => {
                 this.router.navigate(["/Home"]);
                 VBContext.removeLoggedUser();

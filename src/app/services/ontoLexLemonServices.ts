@@ -36,7 +36,7 @@ export class OntoLexLemonServices {
             params.customFormValue = customFormValue;
         }
 
-        return this.httpMgr.doPost(this.serviceName, "createLexicon", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createLexicon", params).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -59,7 +59,7 @@ export class OntoLexLemonServices {
     getLexicons(): Observable<ARTURIResource[]> {
         console.log("[OntoLexLemonServices] getLexicons");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getLexicons", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getLexicons", params).map(
             stResp => {
                 var lexicons = Deserializer.createURIArray(stResp);
                 return lexicons;
@@ -76,7 +76,7 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicon: lexicon
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteLexicon", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicon", params).map(
             stResp => {
                 this.eventHandler.lexiconDeletedEvent.emit(lexicon);
                 return stResp;
@@ -109,7 +109,7 @@ export class OntoLexLemonServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "createLexicalEntry", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "createLexicalEntry", params).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -137,7 +137,7 @@ export class OntoLexLemonServices {
             index: index,
             lexicon: lexicon
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params).map(
             stResp => {
                 var lexicons = Deserializer.createURIArray(stResp);
                 return lexicons;
@@ -164,7 +164,7 @@ export class OntoLexLemonServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "setCanonicalForm", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setCanonicalForm", params);
     }
 
     /**
@@ -186,7 +186,7 @@ export class OntoLexLemonServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "addOtherForm", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addOtherForm", params);
     }
     
     /**
@@ -202,7 +202,7 @@ export class OntoLexLemonServices {
             property: property,
             form: form
         };
-        return this.httpMgr.doPost(this.serviceName, "removeForm", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeForm", params);
     }
 
     /**
@@ -214,7 +214,7 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params);
     }
 
 }

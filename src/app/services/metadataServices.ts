@@ -24,7 +24,7 @@ export class MetadataServices {
     getNamespaceMappings(): Observable<PrefixMapping[]> {
         console.log("[MetadataServices] getNamespaceMappings");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params).map(
             stResp => {
                 var mappings: PrefixMapping[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -52,7 +52,7 @@ export class MetadataServices {
             prefix: prefix,
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setNSPrefixMapping", params);
     }
 
     /**
@@ -64,7 +64,7 @@ export class MetadataServices {
         var params = {
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "removeNSPrefixMapping", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeNSPrefixMapping", params);
     }
 
     /**
@@ -78,7 +78,7 @@ export class MetadataServices {
             prefix: prefix,
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params, true);
+        return this.httpMgr.doPost(this.serviceName, "changeNSPrefixMapping", params);
     }
 
     /**
@@ -91,7 +91,7 @@ export class MetadataServices {
     getImports(): Observable<OntologyImport[]> {
         console.log("[MetadataServices] getImports");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getImports", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getImports", params).map(
             stResp => {
                 var importedOntologies: OntologyImport[] = [];
 
@@ -124,7 +124,7 @@ export class MetadataServices {
         var params: any = {
             baseURI: baseURI
         };
-        return this.httpMgr.doPost(this.serviceName, "removeImport", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "removeImport", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -150,7 +150,7 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "addFromWeb", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFromWeb", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -178,7 +178,7 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "addFromWebToMirror", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFromWebToMirror", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -201,7 +201,7 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -222,7 +222,7 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.doPost(this.serviceName, "addFromMirror", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "addFromMirror", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -245,7 +245,7 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.uploadFile(this.serviceName, "getFromLocalFile", data, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "getFromLocalFile", data).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -271,7 +271,7 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -300,7 +300,7 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -314,7 +314,7 @@ export class MetadataServices {
     getDefaultNamespace(): Observable<string> {
         console.log("[MetadataServices] getDefaultNamespace");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params);
     }
 
     /**
@@ -326,7 +326,7 @@ export class MetadataServices {
         var params = {
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params).map(
             stResp => {
                 VBContext.getWorkingProject().setDefaultNamespace(namespace);
                 return stResp;
@@ -340,7 +340,7 @@ export class MetadataServices {
     getBaseURI(): Observable<string> {
         console.log("[MetadataServices] getBaseURI");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getBaseURI", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getBaseURI", params);
     }
 
     /**
@@ -351,7 +351,7 @@ export class MetadataServices {
         var params: any = {
             qname: qname
         };
-        return this.httpMgr.doGet(this.serviceName, "expandQName", params, true);
+        return this.httpMgr.doGet(this.serviceName, "expandQName", params);
     }
 
 }

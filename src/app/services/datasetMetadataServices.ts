@@ -19,7 +19,7 @@ export class DatasetMetadataServices {
         var params = {
             exporterId: exporterId
         };
-        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).map(
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
                 let extPointParamsJson: any[] = extPointSettingsJson.properties;
@@ -69,7 +69,7 @@ export class DatasetMetadataServices {
             extensionPointProperties: JSON.stringify(extensionPointProperties),
             pluginProperties: JSON.stringify(pluginProperties)
         };
-        return this.httpMgr.doPost(this.serviceName, "setDatasetMetadata", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setDatasetMetadata", params);
     }
 
     /**

@@ -21,7 +21,7 @@ export class IndividualsServices {
         var params: any = {
             individual: individual
         };
-        return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params).map(
             stResp => {
                 var types = Deserializer.createURIArray(stResp);
                 return types;
@@ -40,7 +40,7 @@ export class IndividualsServices {
             individual: individual,
             type: type,
         };
-        return this.httpMgr.doGet(this.serviceName, "addType", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "addType", params).map(
             stResp => {
                 this.eventHandler.typeAddedEvent.emit({ resource: individual, type: type });
                 return stResp;
@@ -60,7 +60,7 @@ export class IndividualsServices {
             individual: individual,
             type: type,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeType", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "removeType", params).map(
             stResp => {
                 this.eventHandler.typeRemovedEvent.emit({ resource: individual, type: type });
                 return stResp;

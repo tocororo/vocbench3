@@ -25,7 +25,7 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId
         };
-        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params);
     }
 
     /**
@@ -37,7 +37,7 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId,
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params).map(
             stResp => {
                 return PluginConfiguration.parse(stResp);
             }
@@ -53,7 +53,7 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId,
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params).map(
             stResp => {
                 return PluginConfiguration.parse(stResp);
             }
@@ -73,7 +73,7 @@ export class CollaborationServices {
             projectSettings: JSON.stringify(projectSettings),
             currentUserPreferences: JSON.stringify(currentUserPreferences)
         };
-        return this.httpMgr.doPost(this.serviceName, "activateCollaboratioOnProject", params, true);
+        return this.httpMgr.doPost(this.serviceName, "activateCollaboratioOnProject", params);
     }
 
     addPreferenceiesForCurrentUser(backendId: string, currentUserPreferences: any) {
@@ -82,7 +82,7 @@ export class CollaborationServices {
             backendId: backendId,
             currentUserPreferences: JSON.stringify(currentUserPreferences)
         };
-        return this.httpMgr.doPost(this.serviceName, "addPreferenceiesForCurrentUser", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addPreferenceiesForCurrentUser", params);
     }
 
     createIssue(resource: ARTURIResource, summary: string) {
@@ -91,7 +91,7 @@ export class CollaborationServices {
             resource: resource,
             summary: summary
         };
-        return this.httpMgr.doPost(this.serviceName, "createIssue", params, true);
+        return this.httpMgr.doPost(this.serviceName, "createIssue", params);
     }
 
     assignProject(projectName: string, projectKey: string, projectId: string) {
@@ -101,7 +101,7 @@ export class CollaborationServices {
             projectKey: projectKey,
             projectId: projectId
         };
-        return this.httpMgr.doPost(this.serviceName, "assignProject", params, true);
+        return this.httpMgr.doPost(this.serviceName, "assignProject", params);
     }
 
     createProject(projectName: string, projectKey: string) {
@@ -110,7 +110,7 @@ export class CollaborationServices {
             projectName: projectName,
             projectKey: projectKey
         };
-        return this.httpMgr.doPost(this.serviceName, "createProject", params, true);
+        return this.httpMgr.doPost(this.serviceName, "createProject", params);
     }
 
     assignResourceToIssue(issue: string, resource: ARTURIResource) {
@@ -119,7 +119,7 @@ export class CollaborationServices {
             issue: issue,
             resource: resource
         };
-        return this.httpMgr.doPost(this.serviceName, "assignResourceToIssue", params, true);
+        return this.httpMgr.doPost(this.serviceName, "assignResourceToIssue", params);
     }
 
     listIssuesAssignedToResource(resource: ARTURIResource): Observable<Issue[]> {
@@ -133,7 +133,7 @@ export class CollaborationServices {
                 exceptionsToSkip: ['java.net.ConnectException'] 
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, true, options).map(
+        return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, options).map(
             resp => {
                 let issues: Issue[] = CollaborationUtils.parseIssues(resp);
                 CollaborationUtils.sortIssues(issues, "key");
@@ -151,7 +151,7 @@ export class CollaborationServices {
                 exceptionsToSkip: ['java.net.ConnectException'] 
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params, true, options);
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params, options);
     }
 
     listIssues(): Observable<Issue[]> {
@@ -163,7 +163,7 @@ export class CollaborationServices {
                 exceptionsToSkip: ['java.net.ConnectException'] 
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "listIssues", params, true, options).map(
+        return this.httpMgr.doGet(this.serviceName, "listIssues", params, options).map(
             resp => {
                 let issues: Issue[] = CollaborationUtils.parseIssues(resp);
                 CollaborationUtils.sortIssues(issues, "key");

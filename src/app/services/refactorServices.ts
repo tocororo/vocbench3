@@ -24,7 +24,7 @@ export class RefactorServices {
         var params: any = {
             reifyNotes: reifyNotes
         };
-        return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -37,7 +37,7 @@ export class RefactorServices {
     SKOSXLtoSKOS() {
         console.log("[RefactorServices] SKOSXLtoSKOS");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -56,7 +56,7 @@ export class RefactorServices {
             oldResource: oldResource,
             newResource: newResource
         };
-        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params, true).flatMap(
+        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params).flatMap(
             stResp => {
                 return this.resourceService.getResourceDescription(newResource).map(
                     newRes => {
@@ -87,7 +87,7 @@ export class RefactorServices {
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = new ARTURIResource(sourceBaseURI);
         }
-        return this.httpMgr.doPost(this.serviceName, "replaceBaseURI", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "replaceBaseURI", params).map(
             stResp => {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
@@ -105,7 +105,7 @@ export class RefactorServices {
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
-        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }
@@ -141,7 +141,7 @@ export class RefactorServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "spawnNewConceptFromLabel", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "spawnNewConceptFromLabel", params).map(
             stResp => {
                 return Deserializer.createURI(stResp);
             }
@@ -191,7 +191,7 @@ export class RefactorServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.AlreadyExistingLiteralFormForResourceException'] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, true, options);
+        return this.httpMgr.doPost(this.serviceName, "moveXLabelToResource", params, options);
     }
 
 }

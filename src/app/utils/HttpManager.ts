@@ -60,11 +60,9 @@ export class HttpManager {
 	 * 	   "urlParName2" : "urlParValue2",
 	 * 	   "urlParName3" : "urlParValue3",
 	 *  }
-     * @param oldType tells if the request is for the old services or new ones
-     * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param options further options that overrides the default ones
      */
-    doGet(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
+    doGet(service: string, request: string, params: any, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
         var url: string = this.getRequestBaseUrl(service, request);
@@ -76,8 +74,7 @@ export class HttpManager {
         console.log("[GET]: " + url);
 
         var headers = new Headers();
-        var acceptRespType = respJson ? "application/json" : "application/xml";
-        headers.append('Accept', acceptRespType);
+        headers.append('Accept', STResponseUtils.contentTypeJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
@@ -103,11 +100,9 @@ export class HttpManager {
 	 * 	   "urlParName2" : "urlParValue2",
 	 * 	   "urlParName3" : "urlParValue3",
 	 *  }
-     * @param oldType tells if the request is for the old services or new ones
-     * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param options further options that overrides the default ones
      */
-    doPost(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
+    doPost(service: string, request: string, params: any, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
         var url: string = this.getRequestBaseUrl(service, request);
@@ -122,8 +117,7 @@ export class HttpManager {
 
         var headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        var acceptRespType = respJson ? "application/json" : "application/xml";
-        headers.append('Accept', acceptRespType);
+        headers.append('Accept', STResponseUtils.contentTypeJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
@@ -150,11 +144,9 @@ export class HttpManager {
 	 * 	   "urlParName2" : "urlParValue2",
 	 * 	   "urlParName3" : "urlParValue3",
 	 *  }
-     * @param oldType tells if the request is for the old services or new ones
-     * @param respJson optional, tells if require json response (if ture) or xml (if false or omitted)
      * @param options further options that overrides the default ones
      */
-    uploadFile(service: string, request: string, params: any, respJson?: boolean, options?: VBRequestOptions) {
+    uploadFile(service: string, request: string, params: any, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
         
         var url: string = this.getRequestBaseUrl(service, request);
@@ -171,8 +163,7 @@ export class HttpManager {
         }
 
         var headers = new Headers();
-        var acceptRespType = respJson ? "application/json" : "application/xml";
-        headers.append('Accept', acceptRespType);
+        headers.append('Accept', STResponseUtils.contentTypeJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
@@ -198,7 +189,6 @@ export class HttpManager {
 	 * 	   "urlParName2" : "urlParValue2",
 	 * 	   "urlParName3" : "urlParValue3",
 	 *  }
-     * @param oldType tells if the request is for the old services or new ones
      * @param post tells if the download is done via post-request (e.g. Export.export() service)
      * @param options further options that overrides the default ones
      */
@@ -260,7 +250,7 @@ export class HttpManager {
     private arrayBufferRespHandler(res: Response) {
         var arrayBuffer = res.arrayBuffer();
         var respContType = res.headers.get("content-type");
-        if (respContType.includes("application/xml;")) { //could be an error xml response
+        if (respContType.includes(STResponseUtils.contentTypeXml+";")) { //could be an error xml response
             //convert arrayBuffer to xml Document
             var respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
             var xmlResp = new DOMParser().parseFromString(respContentAsString, STResponseUtils.contentTypeXml);

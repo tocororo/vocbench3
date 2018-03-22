@@ -35,7 +35,7 @@ export class ValidationServices {
         if (limit != null) {
             params.limit = limit;
         }
-        return this.httpMgr.doGet(this.serviceName, "getStagedCommitSummary", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getStagedCommitSummary", params).map(
             stResp => {
                 return stResp;
             }
@@ -66,7 +66,7 @@ export class ValidationServices {
         if (page != null) { params.page = page; }
         if (limit != null) { params.limit = limit; }
         
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params).map(
             stResp => {
                 var commits: CommitInfo[] = [];
                 var commitsJsonArray: any[] = stResp;
@@ -127,7 +127,7 @@ export class ValidationServices {
         var params: any = {
             validatableCommit: validatableCommit
         };
-        return this.httpMgr.doPost(this.serviceName, "accept", params, true);
+        return this.httpMgr.doPost(this.serviceName, "accept", params);
     }
 
     /**
@@ -139,7 +139,7 @@ export class ValidationServices {
         var params: any = {
             validatableCommit: validatableCommit
         };
-        return this.httpMgr.doPost(this.serviceName, "reject", params, true);
+        return this.httpMgr.doPost(this.serviceName, "reject", params);
     }
 
 }

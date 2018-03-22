@@ -19,7 +19,7 @@ export class OntoManagerServices {
     getOntologyMirror(): Observable<{ file: string, baseURI: string }[]> {
         console.log("[OntoManagerServices] getOntologyMirror");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params).map(
             stResp => {
                 var mirrors: { file: string, baseURI: string }[] = [];
                 var mirrorNodeColl: any[] = stResp;
@@ -42,7 +42,7 @@ export class OntoManagerServices {
             baseURI: baseURI,
             cacheFileName: cacheFileName
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteOntologyMirrorEntry", params, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteOntologyMirrorEntry", params);
     }
 
     /**
@@ -74,9 +74,9 @@ export class OntoManagerServices {
         }
         if (updateType == "updateFromFile") {
             //in this case, the update is from a local file, so send the file with a POST
-            return this.httpMgr.uploadFile(this.serviceName, "updateOntologyMirrorEntry", params, true);
+            return this.httpMgr.uploadFile(this.serviceName, "updateOntologyMirrorEntry", params);
         } else {
-            return this.httpMgr.doPost(this.serviceName, "updateOntologyMirrorEntry", params, true);
+            return this.httpMgr.doPost(this.serviceName, "updateOntologyMirrorEntry", params);
         }
     }
 

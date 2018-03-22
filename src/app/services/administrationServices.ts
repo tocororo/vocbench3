@@ -18,7 +18,8 @@ export class AdministrationServices {
      */
     getAdministrationConfig() {
         console.log("[AdministrationServices] getAdministrationConfig");
-        return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", null, true);
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", params);
     }
 
     /**
@@ -41,7 +42,7 @@ export class AdministrationServices {
             emailFromHost: emailFromHost,
             emailFromPort: emailFromPort
         }
-        return this.httpMgr.doPost(this.serviceName, "updateAdministrationConfig", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateAdministrationConfig", params);
     }
 
 
@@ -59,7 +60,7 @@ export class AdministrationServices {
             projectName: projectName,
             email: email
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params).map(
             stResp => {
                 return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, stResp.languages);
             }
@@ -79,7 +80,7 @@ export class AdministrationServices {
             email: email,
             roles: roles
         };
-        return this.httpMgr.doGet(this.serviceName, "addRolesToUser", params, true);
+        return this.httpMgr.doGet(this.serviceName, "addRolesToUser", params);
     }
 
     /**
@@ -95,7 +96,7 @@ export class AdministrationServices {
             email: email,
             role: role
         };
-        return this.httpMgr.doGet(this.serviceName, "removeRoleFromUser", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeRoleFromUser", params);
     }
 
     /**
@@ -110,7 +111,7 @@ export class AdministrationServices {
             projectName: projectName,
             email: email
         };
-        return this.httpMgr.doGet(this.serviceName, "removeAllRolesFromUser", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeAllRolesFromUser", params);
     }
 
     /**
@@ -126,7 +127,7 @@ export class AdministrationServices {
             email: email,
             languages: languages
         };
-        return this.httpMgr.doPost(this.serviceName, "updateLanguagesOfUserInProject", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateLanguagesOfUserInProject", params);
     }
 
     //ROLES
@@ -141,7 +142,7 @@ export class AdministrationServices {
         if (project != null) {
             params.projectName = project.getName();
         }
-        return this.httpMgr.doGet(this.serviceName, "listRoles", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listRoles", params).map(
             stResp => {
                 var roles: Role[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -163,7 +164,7 @@ export class AdministrationServices {
         var params: any = {
             roleName: roleName
         };
-        return this.httpMgr.doGet(this.serviceName, "createRole", params, true);
+        return this.httpMgr.doGet(this.serviceName, "createRole", params);
     }
 
     /**
@@ -176,7 +177,7 @@ export class AdministrationServices {
             sourceRoleName: sourceRoleName,
             targetRoleName: targetRoleName
         };
-        return this.httpMgr.doGet(this.serviceName, "cloneRole", params, true);
+        return this.httpMgr.doGet(this.serviceName, "cloneRole", params);
     }
 
     /**
@@ -188,7 +189,7 @@ export class AdministrationServices {
         var params: any = {
             roleName: roleName
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteRole", params, true);
+        return this.httpMgr.doGet(this.serviceName, "deleteRole", params);
     }
 
     /**
@@ -216,7 +217,7 @@ export class AdministrationServices {
         if (newRoleName != null) {
             data.newRoleName = newRoleName;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "importRole", data, true);
+        return this.httpMgr.uploadFile(this.serviceName, "importRole", data);
     }
 
     /**
@@ -231,7 +232,7 @@ export class AdministrationServices {
         if (project != null) {
             params.projectName = project.getName();
         }
-        return this.httpMgr.doGet(this.serviceName, "listCapabilities", params, true);
+        return this.httpMgr.doGet(this.serviceName, "listCapabilities", params);
     }
 
     /**
@@ -245,7 +246,7 @@ export class AdministrationServices {
             role: role,
             capability: capability
         };
-        return this.httpMgr.doPost(this.serviceName, "addCapabilityToRole", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addCapabilityToRole", params);
     }
 
     /**
@@ -259,7 +260,7 @@ export class AdministrationServices {
             role: role,
             capability: capability
         };
-        return this.httpMgr.doGet(this.serviceName, "removeCapabilityFromRole", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeCapabilityFromRole", params);
     }
 
     /**
@@ -274,7 +275,7 @@ export class AdministrationServices {
             oldCapability: oldCapability,
             newCapability: newCapability
         };
-        return this.httpMgr.doPost(this.serviceName, "updateCapabilityForRole", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateCapabilityForRole", params);
     }
 
 }

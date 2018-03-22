@@ -29,7 +29,7 @@ export class ResourcesServices {
             value: value,
             newValue: newValue
         };
-        return this.httpMgr.doPost(this.serviceName, "updateTriple", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateTriple", params).map(
             stResp => {
                 if (property.getURI() == RDFS.subClassOf.getURI()) {
                     this.eventHandler.superClassUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
@@ -55,7 +55,7 @@ export class ResourcesServices {
             property: property,
             value: value
         };
-        return this.httpMgr.doPost(this.serviceName, "removeValue", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeValue", params);
     }
 
     /**
@@ -67,7 +67,7 @@ export class ResourcesServices {
         var params: any = {
             resource: resource,
         };
-        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params).map(
             stResp => {
                 this.eventHandler.resourceDeprecatedEvent.emit(resource);
                 return stResp;
@@ -88,7 +88,7 @@ export class ResourcesServices {
             property: property,
             value: value
         };
-        return this.httpMgr.doPost(this.serviceName, "addValue", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addValue", params);
     }
 
     /**
@@ -100,7 +100,7 @@ export class ResourcesServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params).map(
             stResp => {
                 return Deserializer.createRDFResource(stResp);
             }
@@ -116,7 +116,7 @@ export class ResourcesServices {
         var params: any = {
             resources: resources
         };
-        return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -132,7 +132,7 @@ export class ResourcesServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params);
     }
 
 }

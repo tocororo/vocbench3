@@ -19,7 +19,7 @@ export class PluginsServices {
         var params = {
             extensionPoint: extensionPoint
         };
-        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params).map(
             stResp => {
                 var pluginColl: any[] = stResp;
                 var plugins: Plugin[] = [];
@@ -51,7 +51,7 @@ export class PluginsServices {
         var params = {
             factoryID: factoryID
         };
-        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params).map(
             stResp => {
                 var configColl: any[] = stResp;
                 var configurations: PluginConfiguration[] = [];

@@ -42,7 +42,7 @@ export class SearchServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchResource", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "searchResource", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -75,7 +75,7 @@ export class SearchServices {
         if (includeLocales != null) {
             params.includeLocales = includeLocales;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -102,7 +102,7 @@ export class SearchServices {
         if (root != null) {
             params.root = root;
         }
-        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params).map(
             stResp => {
                 var shortestPath: ARTURIResource[] = [];
                 var paths: ARTURIResource[] = Deserializer.createURIArray(stResp);
@@ -147,7 +147,7 @@ export class SearchServices {
         if (cls != null) {
             params.cls = cls;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchStringList", params, true);
+        return this.httpMgr.doGet(this.serviceName, "searchStringList", params);
     }
 
 }

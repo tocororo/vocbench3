@@ -19,7 +19,7 @@ export class ManchesterServices {
         var params = {
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "checkExpression", params, true);
+        return this.httpMgr.doGet(this.serviceName, "checkExpression", params);
     }
 
     /**
@@ -35,7 +35,7 @@ export class ManchesterServices {
             exprType: predicate,
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "createRestriction", params, true);
+        return this.httpMgr.doGet(this.serviceName, "createRestriction", params);
     }
 
     /**
@@ -51,7 +51,7 @@ export class ManchesterServices {
             exprType: predicate,
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "removeExpression", params, true);
+        return this.httpMgr.doGet(this.serviceName, "removeExpression", params);
     }
 
     /**
@@ -65,7 +65,7 @@ export class ManchesterServices {
             newManchExpr: newManchExpr,
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "updateExpression", params, true);
+        return this.httpMgr.doGet(this.serviceName, "updateExpression", params);
     }
 
     isClassAxiom(bnode: ARTBNode): Observable<boolean> {
@@ -73,7 +73,7 @@ export class ManchesterServices {
         var params = {
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "isClassAxiom", params, true);
+        return this.httpMgr.doGet(this.serviceName, "isClassAxiom", params);
     }
 
 

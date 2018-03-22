@@ -16,7 +16,7 @@ export class ServicesServices {
     getExtensionPaths(): Observable<string[]> {
         console.log("[ServicesServices] getExtensionPaths");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getExtensionPaths", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getExtensionPaths", params);
     }
 
     /**
@@ -28,7 +28,7 @@ export class ServicesServices {
         var params: any = {
             extensionPath: extensionPath
         };
-        return this.httpMgr.doGet(this.serviceName, "getServiceClasses", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getServiceClasses", params).map(
             stResp => {
                 stResp.sort(
                     function (sc1: string, sc2: string) {
@@ -53,7 +53,7 @@ export class ServicesServices {
             extensionPath: extensionPath,
             serviceClass: serviceClass
         };
-        return this.httpMgr.doGet(this.serviceName, "getServiceOperations", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getServiceOperations", params).map(
             stResp => {
                 stResp.sort(
                     function (op1: string, op2: string) {

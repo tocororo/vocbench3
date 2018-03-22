@@ -18,6 +18,7 @@ import { IndividualsServices } from "../services/individualsServices";
 import { InputOutputServices } from "../services/inputOutputServices";
 import { ManchesterServices } from "../services/manchesterServices";
 import { MetadataServices } from "../services/metadataServices";
+import { MetadataRegistryServices } from "../services/metadataRegistryServices";
 import { OntoLexLemonServices } from "../services/ontoLexLemonServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
 import { PluginsServices } from "../services/pluginsServices";
@@ -59,6 +60,7 @@ import { VersionsServices } from "../services/versionsServices";
         InputOutputServices,
         ManchesterServices,
         MetadataServices,
+        MetadataRegistryServices,
         OntoLexLemonServices,
         OntoManagerServices,
         PluginsServices,

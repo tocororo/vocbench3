@@ -35,7 +35,7 @@ export class HistoryServices {
         if (limit != null) {
             params.limit = limit;
         }
-        return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params).map(
             stResp => {
                 return stResp;
             }
@@ -67,7 +67,7 @@ export class HistoryServices {
         if (page != null) { params.page = page; }
         if (limit != null) { params.limit = limit; }
         
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params).map(
             stResp => {
                 var commits: CommitInfo[] = [];
                 var commitsJsonArray: any[] = stResp;
@@ -128,7 +128,7 @@ export class HistoryServices {
         var params: any = {
             commit: commit
         };
-        return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params).map(
             stResp => {
                 let additions: CommitOperation[] = [];
                 let removals: CommitOperation[] = [];

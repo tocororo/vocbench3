@@ -31,7 +31,7 @@ export class InputOutputServices {
         if (validateImplicitly != null) {
             data.validateImplicitly = validateImplicitly;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
@@ -48,7 +48,7 @@ export class InputOutputServices {
         var params: any = {
             fileName: fileName
         }
-        return this.httpMgr.doGet(this.serviceName, "getParserFormatForFileName", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getParserFormatForFileName", params);
     }
 
     /**
@@ -60,7 +60,7 @@ export class InputOutputServices {
         var params: any = {
             fileName: fileName
         }
-        return this.httpMgr.doGet(this.serviceName, "getWriterFormatForFileName", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getWriterFormatForFileName", params);
     }
 
     /**
@@ -69,7 +69,7 @@ export class InputOutputServices {
     clearData() {
         console.log("[InputOutputServices] clearData");
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "clearData", params, true);
+        return this.httpMgr.doPost(this.serviceName, "clearData", params);
     }
 
 }

@@ -24,7 +24,7 @@ export class SkosxlServices {
             concept: concept,
             lang: lang
         };
-        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params).map(
             stResp => {
                 return Deserializer.createRDFResource(stResp[0]);
             }
@@ -59,7 +59,7 @@ export class SkosxlServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, true, options);
+        return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, options);
     }
 
     /**
@@ -73,7 +73,7 @@ export class SkosxlServices {
             concept: concept,
             xlabel: xlabel,
         };
-        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removePrefLabel", params);
     }
 
     /**
@@ -87,7 +87,7 @@ export class SkosxlServices {
             concept: concept,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params).map(
             stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
             }
@@ -111,7 +111,7 @@ export class SkosxlServices {
         if (labelCls != null) {
             params.labelCls = labelCls;
         }
-        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params);
     }
 
     /**
@@ -125,7 +125,7 @@ export class SkosxlServices {
             concept: concept,
             xlabel: xlabel,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeAltLabel", params);
     }
 
     /**
@@ -145,7 +145,7 @@ export class SkosxlServices {
         if (labelCls != null) {
             params.labelCls = labelCls;
         }
-        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params);
     }
 
     /**
@@ -159,7 +159,7 @@ export class SkosxlServices {
             concept: concept,
             xlabel: xlabel,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeHiddenLabel", params);
     }
 
     /**
@@ -174,7 +174,7 @@ export class SkosxlServices {
             xlabel: xlabel,
             literal: literal,
         };
-        return this.httpMgr.doPost(this.serviceName, "changeLabelInfo", params, true);
+        return this.httpMgr.doPost(this.serviceName, "changeLabelInfo", params);
     }
 
     /**
@@ -188,7 +188,7 @@ export class SkosxlServices {
             concept: concept,
             xlabelURI: xLabel
         };
-        return this.httpMgr.doPost(this.serviceName, "prefToAtlLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "prefToAtlLabel", params);
     }
 
     /**
@@ -202,7 +202,7 @@ export class SkosxlServices {
             concept: concept,
             xlabelURI: xLabel
         };
-        return this.httpMgr.doPost(this.serviceName, "altToPrefLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "altToPrefLabel", params);
     }
 
 }

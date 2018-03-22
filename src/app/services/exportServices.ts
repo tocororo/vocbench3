@@ -18,7 +18,7 @@ export class ExportServices {
     getNamedGraphs(): Observable<ARTURIResource[]> {
         console.log("[ExportServices] getNamedGraphs");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getNamedGraphs", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getNamedGraphs", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -31,7 +31,7 @@ export class ExportServices {
     getOutputFormats(): Observable<RDFFormat[]> {
         console.log("[ExportServices] getOutputFormats");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params).map(
             stResp => {
                 var formats: RDFFormat[] = [];
                 for (var i = 0; i < stResp.length; i++) {

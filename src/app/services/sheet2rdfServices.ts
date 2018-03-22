@@ -23,7 +23,7 @@ export class Sheet2RDFServices {
         var data: any = {
             file: file
         };
-        return this.httpMgr.uploadFile(this.serviceName, "uploadSpreadsheet", data, true);
+        return this.httpMgr.uploadFile(this.serviceName, "uploadSpreadsheet", data);
     }
 
     /**
@@ -32,7 +32,7 @@ export class Sheet2RDFServices {
     getHeaders(): Observable<HeaderStruct[]> {
         console.log("[Sheet2RDFServices] getHeaders");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getHeaders", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getHeaders", params).map(
             stResp => {
                 let headers: HeaderStruct[] = [];                
                 for (var i = 0; i < stResp.length; i++) {
@@ -48,7 +48,7 @@ export class Sheet2RDFServices {
         var params: any = {
             headerId: headerId
         };
-        return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).map(
             stResp => {
                 return this.parseHeaderStruct(stResp);
             }
@@ -87,7 +87,7 @@ export class Sheet2RDFServices {
         if (applyToAll != null) {
             params.applyToAll = applyToAll;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateHeader", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateHeader", params);
     }
 
     listConverters(rangeType: string, datatype?: ARTURIResource): Observable<any> {
@@ -99,7 +99,7 @@ export class Sheet2RDFServices {
         if (datatype != null) {
             params.datatype = datatype;
         }
-        return this.httpMgr.doGet(this.serviceName, "listConverters", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConverters", params).map(
             stResp => {
                 console.log("stResp", stResp);
                 return stResp;
@@ -116,7 +116,7 @@ export class Sheet2RDFServices {
         var params: any = {
             maxRows: maxRows,
         };
-        return this.httpMgr.doGet(this.serviceName, "getTablePreview", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTablePreview", params).map(
             stResp => {
                 return stResp;
             }
@@ -133,7 +133,7 @@ export class Sheet2RDFServices {
         if (skosSchema != null) {
             params.skosSchema = skosSchema;
         }
-        return this.httpMgr.doGet(this.serviceName, "getPearl", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getPearl", params).map(
             stResp => {
                 return stResp;
             }
@@ -149,7 +149,7 @@ export class Sheet2RDFServices {
         var data: any = {
             pearlCode: pearlCode
         };
-        return this.httpMgr.doPost(this.serviceName, "savePearl", data, true);
+        return this.httpMgr.doPost(this.serviceName, "savePearl", data);
     }
 
     validatePearl(pearlCode: string): Observable<{valid: boolean, details: string}> {
@@ -157,7 +157,7 @@ export class Sheet2RDFServices {
         var params: any = {
             pearlCode: pearlCode
         };
-        return this.httpMgr.doPost(this.serviceName, "validatePearl", params, true);
+        return this.httpMgr.doPost(this.serviceName, "validatePearl", params);
     }
 
     /**
@@ -170,7 +170,7 @@ export class Sheet2RDFServices {
         var data: any = {
             file: file
         };
-        return this.httpMgr.uploadFile(this.serviceName, "uploadPearl", data, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "uploadPearl", data).map(
             stResp => {
                 return stResp;
             }
@@ -187,7 +187,7 @@ export class Sheet2RDFServices {
         var params: any = {
             maxTableRows: maxTableRows
         };
-        return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params).map(
             stResp => {
                 stResp.returned;
                 return stResp;
@@ -198,7 +198,7 @@ export class Sheet2RDFServices {
     addTriples() {
         console.log("[Sheet2RDFServices] addTriples");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "addTriples", params, true);
+        return this.httpMgr.doGet(this.serviceName, "addTriples", params);
     }
 
     exportTriples(outputFormat: RDFFormat) {
@@ -212,7 +212,7 @@ export class Sheet2RDFServices {
     closeSession() {
         console.log("[Sheet2RDFServices] closeSession");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "closeSession", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "closeSession", params).map(
             stResp => {
                 HttpServiceContext.removeSessionToken();
                 return stResp;

@@ -22,7 +22,7 @@ export class RepositoriesServices {
             params.username = username;
             params.password = password;
         }
-        return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params).map(
             stResp => {
                 var repositories: Repository[] = [];
                 for (var i = 0; i < stResp.length; i++) {

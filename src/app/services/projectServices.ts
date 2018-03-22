@@ -38,7 +38,7 @@ export class ProjectServices {
         if (onlyOpen != null) {
             params.onlyOpen = onlyOpen;
         }
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params).map(
             stResp => {
                 var projCollJson: any[] = stResp;
                 var projectList: Project[] = [];
@@ -86,7 +86,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
-        return this.httpMgr.doPost(this.serviceName, "disconnectFromProject", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "disconnectFromProject", params).map(
             stResp => {
                 return stResp;
             }
@@ -111,7 +111,7 @@ export class ProjectServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "accessProject", params, true, options);
+        return this.httpMgr.doPost(this.serviceName, "accessProject", params, options);
     }
 
     /**
@@ -174,7 +174,7 @@ export class ProjectServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "createProject", params, true, options);
+        return this.httpMgr.doPost(this.serviceName, "createProject", params, options);
     }
 
     /**
@@ -187,7 +187,7 @@ export class ProjectServices {
             consumer: "SYSTEM",
             projectName: project.getName(),
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteProject", params, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteProject", params);
     }
 
     /**
@@ -201,7 +201,7 @@ export class ProjectServices {
             newProjectName: projectName,
             importPackage: projectFile
         };
-        return this.httpMgr.uploadFile(this.serviceName, "importProject", data, true);
+        return this.httpMgr.uploadFile(this.serviceName, "importProject", data);
     }
 
     /**
@@ -225,7 +225,7 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params).map(
             stResp => {
                 var propCollJson: any[] = stResp;
                 var propertyList: Array<any> = [];
@@ -243,7 +243,7 @@ export class ProjectServices {
     getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
         console.log("[ProjectServices] getAccessStatusMap");
         var params = { };
-        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).map(
             stResp => {
                 var aclMap: {name: string, consumers: any[], lock: any}[] = [];
 
@@ -309,7 +309,7 @@ export class ProjectServices {
         if (accessLevel != null) {
             params.accessLevel = accessLevel;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateAccessLevel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateAccessLevel", params);
     }
 
     /**
@@ -323,7 +323,7 @@ export class ProjectServices {
             projectName: project.getName(),
             lockLevel: lockLevel,
         };
-        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params);
     }
 
     /**
@@ -360,7 +360,7 @@ export class ProjectServices {
         if (excludeLocal != null) {
             params.excludeLocal = excludeLocal;
         }
-        return this.httpMgr.doGet(this.serviceName, "getRepositories", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getRepositories", params);
     }
 
     /**
@@ -382,7 +382,7 @@ export class ProjectServices {
         if (newPassword != null) {
             params.newPassword = newPassword;
         }
-        return this.httpMgr.doPost(this.serviceName, "modifyRepositoryAccessCredentials", params, true);
+        return this.httpMgr.doPost(this.serviceName, "modifyRepositoryAccessCredentials", params);
     }
     
     /**
@@ -413,7 +413,7 @@ export class ProjectServices {
         if (newPassword != null) {
             params.newPassword = newPassword;
         }
-        return this.httpMgr.doPost(this.serviceName, "batchModifyRepostoryAccessCredentials", params, true);
+        return this.httpMgr.doPost(this.serviceName, "batchModifyRepostoryAccessCredentials", params);
     }
 
 }

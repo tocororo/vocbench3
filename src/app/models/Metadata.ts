@@ -1,3 +1,5 @@
+import { ARTURIResource } from "./ARTResources";
+
 export class PrefixMapping {
     public prefix: string;
     public namespace: string;
@@ -33,14 +35,18 @@ export enum TransitiveImportMethodAllowance {
     mirror = "mirror"
 }
 
-export class DatasetInfo {
-    public baseURI: string;
-    public title: string;
-}
-
 export class DatasetMetadata {
     public baseURI: string;
 	public sparqlEndpoint: string;
 	public dereferenceable: boolean;
     public title: string;
+}
+
+//TODO check if object types are correct
+export class CatalogRecord {
+    public identity: ARTURIResource;
+	public issued: string;
+	public modified: string;
+	public abstractDataset: DatasetMetadata;
+	public versions: DatasetMetadata[];
 }

@@ -24,7 +24,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listDanglingConcepts", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -37,7 +37,7 @@ export class IcvServices {
     listConceptSchemesWithNoTopConcept(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listConceptSchemesWithNoTopConcept");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConceptSchemesWithNoTopConcept", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -50,7 +50,7 @@ export class IcvServices {
     listConceptsWithNoScheme(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listConceptsWithNoScheme");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConceptsWithNoScheme", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -63,7 +63,7 @@ export class IcvServices {
     listTopConceptsWithBroader(): Observable<{concept: ARTURIResource, scheme: ARTURIResource}[]> {
         console.log("[IcvServices] listTopConceptsWithBroader");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listTopConceptsWithBroader", params).map(
             stResp => {
                 var records: {concept: ARTURIResource, scheme: ARTURIResource}[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -83,7 +83,7 @@ export class IcvServices {
     listConceptsRelatedDisjoint(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listConceptsRelatedDisjoint");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsRelatedDisjoint", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConceptsRelatedDisjoint", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -96,7 +96,7 @@ export class IcvServices {
     listConceptsExactMatchDisjoint(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listConceptsExactMatchDisjoint");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsExactMatchDisjoint", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConceptsExactMatchDisjoint", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -109,7 +109,7 @@ export class IcvServices {
     listConceptsHierarchicalCycles(): Observable<ARTURIResource[][]> {
         console.log("[IcvServices] listConceptsHierarchicalCycles");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalCycles", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalCycles", params).map(
             stResp => {
                 let cycles: ARTURIResource[][] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -130,7 +130,7 @@ export class IcvServices {
         if (sameScheme != null) {
             params.sameScheme = sameScheme;
         }
-        return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalRedundancies", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listConceptsHierarchicalRedundancies", params).map(
             stResp => {
                 let redundancies: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -157,7 +157,7 @@ export class IcvServices {
     listResourcesWithNoSKOSPrefLabel(): Observable<ARTResource[]> {
         console.log("[IcvServices] listResourcesWithNoSKOSPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSPrefLabel", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp);
             }
@@ -170,7 +170,7 @@ export class IcvServices {
     listResourcesWithNoSKOSXLPrefLabel(): Observable<ARTResource[]> {
         console.log("[IcvServices] listResourcesWithNoSKOSXLPrefLabel");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoSKOSXLPrefLabel", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp);
             }
@@ -185,7 +185,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagForLabel", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithNoLanguageTagForLabel", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
             }
@@ -201,7 +201,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithExtraSpacesInLabel", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithExtraSpacesInLabel", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
             }
@@ -216,7 +216,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithMorePrefLabelSameLang", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithMorePrefLabelSameLang", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["duplicateLang"]);
             }
@@ -229,7 +229,7 @@ export class IcvServices {
     listDanglingXLabels(): Observable<ARTResource[]> {
         console.log("[IcvServices] listDanglingXLabels");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listDanglingXLabels", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp);
             }
@@ -247,7 +247,7 @@ export class IcvServices {
             rolesArray: rolesArray,
             languagesArray: languagesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesNoLexicalization", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesNoLexicalization", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["missingLang"]);
             }
@@ -263,7 +263,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedLabels", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithOverlappedLabels", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
             }
@@ -279,7 +279,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithSameLabels", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithSameLabels", params).map(
             stResp => {
                 return Deserializer.createResourceArray(stResp, ["xlabel", "label"]);
             }
@@ -295,7 +295,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesWithAltNoPrefLabel", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesWithAltNoPrefLabel", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp, ["missingLang"]);
             }
@@ -317,7 +317,7 @@ export class IcvServices {
             rolesArray: rolesArray,
             languagesArray: languagesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listResourcesNoDef", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listResourcesNoDef", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp, ["missingLang"]);
             }
@@ -333,7 +333,7 @@ export class IcvServices {
         var params: any = {
             rolesArray: rolesArray
         };
-        return this.httpMgr.doGet(this.serviceName, "listAlignedNamespaces", params, true);
+        return this.httpMgr.doGet(this.serviceName, "listAlignedNamespaces", params);
     }
 
     /**
@@ -350,7 +350,7 @@ export class IcvServices {
             nsToLocationMap: JSON.stringify(nsToLocationMap),
             rolesArray: rolesArray
         };
-        return this.httpMgr.doPost(this.serviceName, "listBrokenAlignments", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "listBrokenAlignments", params).map(
             stResp => {
                 let brokenAlignments: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -378,7 +378,7 @@ export class IcvServices {
             rolesArray: rolesArray,
             property: property
         };
-        return this.httpMgr.doGet(this.serviceName, "listBrokenDefinitions", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listBrokenDefinitions", params).map(
             stResp => {
                 let brokenDefs: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -400,7 +400,7 @@ export class IcvServices {
     listLocalInvalidURIs(): Observable<ARTURIResource[]> {
         console.log("[IcvServices] listLocalInvalidURIs");
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listLocalInvalidURIs", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listLocalInvalidURIs", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -430,7 +430,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "setAllDanglingAsTopConcept", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setAllDanglingAsTopConcept", params);
     }
 
     /**
@@ -445,7 +445,7 @@ export class IcvServices {
             scheme: scheme,
             broader: broader
         };
-        return this.httpMgr.doPost(this.serviceName, "setBroaderForAllDangling", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setBroaderForAllDangling", params);
     }
 
     /**
@@ -457,7 +457,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "removeAllDanglingFromScheme", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeAllDanglingFromScheme", params);
     }
 
     /**
@@ -469,7 +469,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingConcepts", params, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingConcepts", params);
     }
 
     /**
@@ -481,7 +481,7 @@ export class IcvServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "addAllConceptsToScheme", params, true);
+        return this.httpMgr.doPost(this.serviceName, "addAllConceptsToScheme", params);
     }
 
     /**
@@ -495,7 +495,7 @@ export class IcvServices {
             concept: concept,
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "removeBroadersToConcept", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeBroadersToConcept", params);
     }
 
     /**
@@ -505,7 +505,7 @@ export class IcvServices {
     removeBroadersToAllConcepts() {
         console.log("[IcvServices] removeBroadersToAllConcepts");
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "removeBroadersToAllConcepts", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeBroadersToAllConcepts", params);
     }
 
     /**
@@ -514,7 +514,7 @@ export class IcvServices {
     removeAllAsTopConceptsWithBroader() {
         console.log("[IcvServices] removeAllAsTopConceptsWithBroader");
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "removeAllAsTopConceptsWithBroader", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeAllAsTopConceptsWithBroader", params);
     }
 
     /**
@@ -523,7 +523,7 @@ export class IcvServices {
     removeAllHierarchicalRedundancy() {
         console.log("[IcvServices] removeAllHierarchicalRedundancy");
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "removeAllHierarchicalRedundancy", params, true);
+        return this.httpMgr.doPost(this.serviceName, "removeAllHierarchicalRedundancy", params);
     }
 
     /**
@@ -532,7 +532,7 @@ export class IcvServices {
     deleteAllDanglingXLabel() {
         console.log("[IcvServices] deleteAllDanglingXLabel");
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingXLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteAllDanglingXLabel", params);
     }
 
     /**
@@ -548,7 +548,7 @@ export class IcvServices {
             xlabelPred: xlabelPred,
             xlabel: xlabel
         };
-        return this.httpMgr.doPost(this.serviceName, "setDanglingXLabel", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setDanglingXLabel", params);
     }
 
 }

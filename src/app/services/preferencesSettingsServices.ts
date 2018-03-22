@@ -22,7 +22,7 @@ export class PreferencesSettingsServices {
         var params = {
             languages: languages
         };
-        return this.httpMgr.doPost(this.serviceName, "setLanguages", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setLanguages", params);
     }
 
     /**
@@ -34,7 +34,7 @@ export class PreferencesSettingsServices {
         var params = {
             show: show
         };
-        return this.httpMgr.doPost(this.serviceName, "setShowFlags", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setShowFlags", params);
     }
 
     /**
@@ -46,7 +46,7 @@ export class PreferencesSettingsServices {
         var params = {
             show: show
         };
-        return this.httpMgr.doPost(this.serviceName, "setShowInstancesNumb", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setShowInstancesNumb", params);
     }
 
     /**
@@ -59,7 +59,7 @@ export class PreferencesSettingsServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params);
     }
 
     /**
@@ -71,7 +71,7 @@ export class PreferencesSettingsServices {
         var params: any = {
             themeId: themeId
         }
-        return this.httpMgr.doPost(this.serviceName, "setProjectTheme", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setProjectTheme", params);
     }
 
     /**
@@ -83,7 +83,7 @@ export class PreferencesSettingsServices {
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params).map(
             stResp => {
                 if (stResp == null) {
                     return null;
@@ -105,7 +105,7 @@ export class PreferencesSettingsServices {
         if (pluginID != null) {
             params.pluginID = pluginID
         }
-        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
     }
 
     /**
@@ -121,7 +121,7 @@ export class PreferencesSettingsServices {
         if (value != null) {
             params.value = value;
         }
-        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
     }
 
     /**
@@ -137,7 +137,7 @@ export class PreferencesSettingsServices {
         if (project != null) {
             params.projectName = project.getName();
         }
-        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params);
     }
 
     /**
@@ -155,7 +155,7 @@ export class PreferencesSettingsServices {
         if (project != null) {
             params.projectName = project.getName();
         }
-        return this.httpMgr.doPost(this.serviceName, "setProjectSetting", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setProjectSetting", params);
     }
 
     /**
@@ -167,7 +167,7 @@ export class PreferencesSettingsServices {
         var params = {
             properties: properties
         };
-        return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getDefaultProjectSettings", params);
     }
 
     /**
@@ -176,7 +176,7 @@ export class PreferencesSettingsServices {
     getStartupSystemSettings() {
         console.log("[PreferencesServices] getStartupSystemSettings");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params);
     }
 
     /**
@@ -192,7 +192,7 @@ export class PreferencesSettingsServices {
         if (value != null) {
             params.value = value;
         }
-        return this.httpMgr.doPost(this.serviceName, "setSystemSetting", params, true);
+        return this.httpMgr.doPost(this.serviceName, "setSystemSetting", params);
     }
 
     /**
@@ -204,7 +204,7 @@ export class PreferencesSettingsServices {
         var params = {
             properties: properties
         };
-        return this.httpMgr.doGet(this.serviceName, "getSystemSettings", params, true);
+        return this.httpMgr.doGet(this.serviceName, "getSystemSettings", params);
     }
 
 }

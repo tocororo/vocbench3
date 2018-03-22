@@ -29,7 +29,7 @@ export class AlignmentServices {
             resource: resource,
             allMappingProps: allMappingProps
         };
-        return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params).map(
             stResp => {
                 var props: ARTURIResource[] = Deserializer.createURIArray(stResp);
                 ResourceUtils.sortResources(props, SortAttribute.value);
@@ -52,7 +52,7 @@ export class AlignmentServices {
             predicate: predicate,
             targetResource: targetResource
         };
-        return this.httpMgr.doGet(this.serviceName, "addAlignment", params, true);
+        return this.httpMgr.doGet(this.serviceName, "addAlignment", params);
     }
 
     //======= Alignment Validation services ===========
@@ -67,7 +67,7 @@ export class AlignmentServices {
         var data = {
             inputFile: file
         }
-        return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data, true).map(
+        return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data).map(
             stResp => {
                 var onto1 = stResp.onto1;
                 var onto2 = stResp.onto2;
@@ -96,7 +96,7 @@ export class AlignmentServices {
             params.pageIdx = pageIdx,
                 params.range = range
         }
-        return this.httpMgr.doGet(this.serviceName, "listCells", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listCells", params).map(
             stResp => {
                 var page: number = stResp.page;
                 var totPage: number = stResp.totPage;
@@ -136,7 +136,7 @@ export class AlignmentServices {
                 params.setAsDefault = setAsDefault;
             }
         }
-        return this.httpMgr.doGet(this.serviceName, "acceptAlignment", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "acceptAlignment", params).map(
             stResp => {
                 return this.parseAlignmentCell(stResp);
             }
@@ -150,7 +150,7 @@ export class AlignmentServices {
     acceptAllAlignment() {
         console.log("[AlignmentServices] acceptAllAlignment");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params).map(
             stResp => {
                 var cells: Array<AlignmentCell> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -171,7 +171,7 @@ export class AlignmentServices {
         var params = {
             threshold: threshold
         };
-        return this.httpMgr.doGet(this.serviceName, "acceptAllAbove", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "acceptAllAbove", params).map(
             stResp => {
                 var cells: Array<AlignmentCell> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -196,7 +196,7 @@ export class AlignmentServices {
             entity2: entity2,
             relation: relation
         };
-        return this.httpMgr.doGet(this.serviceName, "rejectAlignment", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "rejectAlignment", params).map(
             stResp => {
                 return this.parseAlignmentCell(stResp);
             }
@@ -210,7 +210,7 @@ export class AlignmentServices {
     rejectAllAlignment() {
         console.log("[AlignmentServices] rejectAllAlignment");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params).map(
             stResp => {
                 var cells: Array<AlignmentCell> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -231,7 +231,7 @@ export class AlignmentServices {
         var params = {
             threshold: threshold
         };
-        return this.httpMgr.doGet(this.serviceName, "rejectAllUnder", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "rejectAllUnder", params).map(
             stResp => {
                 var cells: Array<AlignmentCell> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -256,7 +256,7 @@ export class AlignmentServices {
             entity2: entity2,
             relation: relation
         };
-        return this.httpMgr.doGet(this.serviceName, "changeRelation", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "changeRelation", params).map(
             stResp => {
                 return this.parseAlignmentCell(stResp);
             }
@@ -277,7 +277,7 @@ export class AlignmentServices {
             entity2: entity2,
             mappingProperty: mappingProperty
         };
-        return this.httpMgr.doGet(this.serviceName, "changeMappingProperty", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "changeMappingProperty", params).map(
             stResp => {
                 return this.parseAlignmentCell(stResp);
             }
@@ -296,7 +296,7 @@ export class AlignmentServices {
         var params = {
             deleteRejected: deleteRejected
         };
-        return this.httpMgr.doGet(this.serviceName, "applyValidation", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "applyValidation", params).map(
             stResp => {
                 var cells: Array<any> = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -325,7 +325,7 @@ export class AlignmentServices {
             entity: entity,
             relation: relation
         };
-        return this.httpMgr.doGet(this.serviceName, "getSuggestedProperties", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getSuggestedProperties", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -347,7 +347,7 @@ export class AlignmentServices {
     closeSession() {
         console.log("[AlignmentServices] closeSession");
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "closeSession", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "closeSession", params).map(
             stResp => {
                 HttpServiceContext.removeSessionToken();
                 return stResp;

@@ -22,7 +22,8 @@ export class UserServices {
      */
     getUser(): Observable<User> {
         console.log("[UserServices] getUser");
-        return this.httpMgr.doGet(this.serviceName, "getUser", null, true).map(
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getUser", params).map(
             stResp => {
                 if (stResp.user != null) { //user object in respnse => serialize it (it could be empty, so no user logged)
                     let user: User = Deserializer.createUser(stResp.user);
@@ -42,7 +43,8 @@ export class UserServices {
      */
     listUsers(): Observable<User[]> {
         console.log("[UserServices] listUsers");
-        return this.httpMgr.doGet(this.serviceName, "listUsers", null, true).map(
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "listUsers", params).map(
             stResp => {
                 return Deserializer.createUsersArray(stResp);
             }
@@ -56,7 +58,8 @@ export class UserServices {
      */
     listUserCapabilities(): Observable<string[]> {
         console.log("[UserServices] listUserCapabilities");
-        return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", null, true).map(
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).map(
             stResp => {
                 AuthorizationEvaluator.initEvalutator(stResp);
                 return stResp;
@@ -73,7 +76,7 @@ export class UserServices {
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).map(
             stResp => {
                 return Deserializer.createUsersArray(stResp);
             }
@@ -134,7 +137,7 @@ export class UserServices {
         if (languageProficiencies != null) {
             params.languageProficiencies = languageProficiencies;
         }
-        return this.httpMgr.doPost(this.serviceName, "registerUser", params, true);
+        return this.httpMgr.doPost(this.serviceName, "registerUser", params);
     }
 
     /**
@@ -148,7 +151,7 @@ export class UserServices {
             email: email,
             givenName: givenName,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -166,7 +169,7 @@ export class UserServices {
             email: email,
             familyName: familyName,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -184,7 +187,7 @@ export class UserServices {
             email: email,
             newEmail: newEmail,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -204,7 +207,7 @@ export class UserServices {
         if (phone != null) {
             params.phone = phone;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -222,7 +225,7 @@ export class UserServices {
             email: email,
             birthday: birthday,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserBirthday", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserBirthday", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -242,7 +245,7 @@ export class UserServices {
         if (gender != null) {
             params.gender = gender;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserGender", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserGender", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -260,7 +263,7 @@ export class UserServices {
             email: email,
             country: country,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserCountry", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserCountry", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -280,7 +283,7 @@ export class UserServices {
         if (address != null) {
             params.address = address;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -300,7 +303,7 @@ export class UserServices {
         if (affiliation != null) {
             params.affiliation = affiliation;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -320,7 +323,7 @@ export class UserServices {
         if (url != null) {
             params.url = url;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -340,7 +343,7 @@ export class UserServices {
         if (avatarUrl != null) {
             params.avatarUrl = avatarUrl;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserAvatarUrl", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserAvatarUrl", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -358,7 +361,7 @@ export class UserServices {
             email: email,
             languageProficiencies: languageProficiencies,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -376,7 +379,7 @@ export class UserServices {
             email: email,
             enabled: enabled,
         }
-        return this.httpMgr.doPost(this.serviceName, "enableUser", params, true).map(
+        return this.httpMgr.doPost(this.serviceName, "enableUser", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }
@@ -392,7 +395,7 @@ export class UserServices {
         var params: any = {
             email: email
         }
-        return this.httpMgr.doPost(this.serviceName, "deleteUser", params, true);
+        return this.httpMgr.doPost(this.serviceName, "deleteUser", params);
     }
 
     /**
@@ -406,7 +409,7 @@ export class UserServices {
             vbHostAddress: location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
 
         }
-        return this.httpMgr.doPost(this.serviceName, "forgotPassword", params, true);
+        return this.httpMgr.doPost(this.serviceName, "forgotPassword", params);
     }
 
     /**
@@ -420,7 +423,7 @@ export class UserServices {
             email: email,
             token: token
         }
-        return this.httpMgr.doPost(this.serviceName, "resetPassword", params, true);
+        return this.httpMgr.doPost(this.serviceName, "resetPassword", params);
     }
 
 }

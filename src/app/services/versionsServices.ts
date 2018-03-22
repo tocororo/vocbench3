@@ -21,7 +21,7 @@ export class VersionsServices {
         var params: any = {
             setRepositoryStatus: true
         };
-        return this.httpMgr.doGet(this.serviceName, "getVersions", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getVersions", params).map(
             stResp => {
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
@@ -70,7 +70,7 @@ export class VersionsServices {
         if (backendType != null) {
             params.backendType = backendType;
         }
-        return this.httpMgr.doPost(this.serviceName, "createVersionDump", params, true);
+        return this.httpMgr.doPost(this.serviceName, "createVersionDump", params);
     }
 
     /**
@@ -82,7 +82,7 @@ export class VersionsServices {
         var params: any = {
             versionId: versionId
         };
-        return this.httpMgr.doPost(this.serviceName, "closeVersion", params, true);
+        return this.httpMgr.doPost(this.serviceName, "closeVersion", params);
     }
 
 

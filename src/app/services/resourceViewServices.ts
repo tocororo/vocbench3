@@ -28,7 +28,7 @@ export class ResourceViewServices {
                 show: true, exceptionsToSkip: ['java.net.UnknownHostException']
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "getResourceView", params, true, options);
+        return this.httpMgr.doGet(this.serviceName, "getResourceView", params, options);
     }
 
     /**
@@ -44,7 +44,7 @@ export class ResourceViewServices {
         if (resourcePosition != null) {
             params.resourcePosition = resourcePosition;
         }
-        return this.httpMgr.doGet(this.serviceName, "getLexicalizationProperties", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "getLexicalizationProperties", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

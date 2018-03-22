@@ -32,7 +32,7 @@ export class XmlSchemaServices {
         if (offset != undefined) {
             params.offset = offset;
         }
-        return this.httpMgr.doGet(this.serviceName, "formatDateTime", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "formatDateTime", params).map(
             stResp => {
                 return stResp["formatted"];
             }
@@ -53,7 +53,7 @@ export class XmlSchemaServices {
             month : month,
             day : day
         };
-        return this.httpMgr.doGet(this.serviceName, "formatDate", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "formatDate", params).map(
             stResp => {
                 return stResp["formatted"];
             }
@@ -74,7 +74,7 @@ export class XmlSchemaServices {
             minute : minute,
             second : second
         };
-        return this.httpMgr.doGet(this.serviceName, "formatTime", params, true).map(
+        return this.httpMgr.doGet(this.serviceName, "formatTime", params).map(
             stResp => {
                 return stResp["formatted"];
             }
