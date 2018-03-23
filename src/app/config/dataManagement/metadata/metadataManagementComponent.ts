@@ -17,4 +17,8 @@ export class MetadataManagementComponent {
         );
     }
 
+    private isMetadataRegistryAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_READ);
+    }
+
 }

@@ -4,6 +4,8 @@
         <button class="btn btn-default" [routerLink]="['/Metadata/Imports']" routerLinkActive="active">Namespaces and Imports</button>
         <button class="btn btn-default" [routerLink]="['/Metadata/Vocabularies']" [disabled]="!isMetadataVocAuthorized()"
             routerLinkActive="active">Metadata Vocabularies</button>
+        <button class="btn btn-default" [routerLink]="['/Metadata/MetadataRegistry']" [disabled]="!isMetadataRegistryAuthorized()"
+            routerLinkActive="active">Metadata Registry</button>
     </div>
     <router-outlet></router-outlet>
 

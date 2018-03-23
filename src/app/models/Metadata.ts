@@ -36,17 +36,18 @@ export enum TransitiveImportMethodAllowance {
 }
 
 export class DatasetMetadata {
-    public baseURI: string;
+    public identity: string;
+	public uriSpace: string;
+	public title: string;
+	public dereferenciationSystem: string;
 	public sparqlEndpoint: string;
-	public dereferenceable: boolean;
-    public title: string;
+	public versionInfo: string;
 }
 
-//TODO check if object types are correct
 export class CatalogRecord {
-    public identity: ARTURIResource;
-	public issued: string;
-	public modified: string;
+    public identity: string;
+	public issued: Date;
+	public modified: Date;
 	public abstractDataset: DatasetMetadata;
 	public versions: DatasetMetadata[];
 }

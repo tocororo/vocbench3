@@ -1,0 +1,67 @@
+<div class="hbox">
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label style="flex: 1;">Catalog Records:</label>
+            <div class="btn-group btn-group-xs" role="group">
+                <button class="btn btn-default" title="Add Dataset" (click)="addCatalogRecond()" [disabled]="!isAddDatasetAuthorized()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" title="Delete Dataset" (click)="deleteCatalogRecord()"
+                    [disabled]="!selectedCatalog || !isRemoveDatasetAuthorized()">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hoverable">
+                <thead>
+                    <tr>
+                        <th class="text-center">Identity</th>
+                        <th class="text-center">Issued</th>
+                        <th class="text-center">Modified</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of catalogs" (click)="selectCatalog(c)" [ngClass]="{ active : selectedCatalog == c }">
+                        <td class="text-center">{{c.identity}}</td>
+                        <td class="text-center">{{c.issued}}</td>
+                        <td class="text-center">{{c.modified}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default vbox" style="margin-left: 4px;">
+        <div class="panel-heading">
+            <label>Dataset:</label>
+        </div>
+        <div class="panel-body vbox">
+            <dataset-metadata [dataset]="selectedCatalog?.abstractDataset"></dataset-metadata>
+
+            <div class="subPanel vbox" style="margin-top: 4px;">
+                <div class="subPanel-heading">
+                    <label style="flex: 1;">Other versions:</label>
+        
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button class="btn btn-default" title="Add Dataset Version" (click)="addDatasetVersion()" [disabled]="!isAddDatasetAuthorized()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" title="Delete Dataset Version" (click)="deleteDatasetVersion()"
+                            [disabled]="!selectedVersion || !isRemoveDatasetAuthorized()">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="subPanel-body scrollableContainer">
+                    <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" style="margin-bottom: 2px;"
+                        (click)="selectVersion(v)" [ngClass]="{ activeVers : v == selectedVersion }">
+                    </dataset-metadata>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

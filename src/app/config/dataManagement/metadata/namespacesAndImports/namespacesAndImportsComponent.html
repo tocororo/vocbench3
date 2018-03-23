@@ -1,7 +1,7 @@
 <div class="hbox">
 
-    <div class="subPanel vbox">
-        <div class="subPanel-heading">
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
             <label style="flex: 1">Namespace management:</label>
             <div class="btn-group btn-group-xs" role="group">
                 <button class="btn btn-default" title="Add mapping" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
@@ -17,7 +17,7 @@
                 </button>
             </div>
         </div>
-        <div class="subPanel-body vbox">
+        <div class="panel-body vbox">
             
             <div class="panel panel-default" style="margin: 4px">
                 <div class="panel-body">
@@ -85,8 +85,8 @@
     <div class="vbox" style="margin-left: 5px;">
 
         <!--Imports-->
-        <div class="subPanel vbox">
-            <div class="subPanel-heading">
+        <div class="panel panel-default vbox">
+            <div class="panel-heading">
                 <label style="flex: 1">Imports:</label>
                 <div class="dropdown pull-right">
                     <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" [disabled]="!isAddImportAuthorized()">
@@ -108,17 +108,17 @@
                     </ul>
                 </div>
             </div>
-            <div class="subPanel-body vbox">
+            <div class="panel-body vbox">
                 <import-tree [imports]="importTree" (nodeRemoved)="removeImport($event)" (update)="onInportTreeUpdate()"></import-tree>
             </div>
         </div>
 
         <!--Ontology mirror management-->
-        <div class="subPanel vbox">
-            <div class="subPanel-heading">
+        <div class="panel panel-default vbox" style="margin-top: 5px;">
+            <div class="panel-heading">
                 <label>Ontology Mirror Management:</label>
             </div>
-            <div class="subPanel-body vbox">
+            <div class="panel-body vbox">
                 <div class="scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <colgroup>

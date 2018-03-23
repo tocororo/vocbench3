@@ -1,0 +1,54 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table class="table table-borderless table-condensed">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td><label>Title:</label></td>
+                    <td>
+                        <input class="form-control input-sm" [ngModel]="dataset?.title" 
+                            (ngModelChange)="dataset.title = $event" [disabled]="!dataset">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Identity:</label></td>
+                    <td>
+                        <input class="form-control input-sm" [ngModel]="dataset?.identity"
+                            (ngModelChange)="dataset.identity = $event" [disabled]="!dataset">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Dereferenciation System:</label></td>
+                    <td>
+                        <input class="form-control input-sm" [ngModel]="dataset?.dereferenciationSystem"
+                            (ngModelChange)="dataset.dereferenciationSystem = $event" [disabled]="!dataset">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>SPARQL Endpoint:</label></td>
+                    <td>
+                        <input class="form-control input-sm" [ngModel]="dataset?.sparqlEndpoint"
+                            (ngModelChange)="dataset.sparqlEndpoint = $event" [disabled]="!dataset">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>URI space:</label></td>
+                    <td>
+                        <input class="form-control input-sm" [ngModel]="dataset?.uriSpace"
+                            (ngModelChange)="dataset.uriSpace = $event" [disabled]="!dataset">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Version Info:</label></td>
+                    <td>
+                        <input class="form-control input-sm" [ngModel]="dataset?.versionInfo"
+                            (ngModelChange)="dataset.versionInfo = $event" [disabled]="!dataset">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

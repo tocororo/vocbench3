@@ -41,7 +41,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     ngOnInit() {
-        this.partitionCollapsed = (this.predicateObjectList.length > 4);
+        this.partitionCollapsed = (this.predicateObjectList.length > 5);
     }
 
     add(predicate: ARTURIResource) {
