@@ -23,7 +23,7 @@
                         <label>{{param.name}}</label>
                     </td>
                     <td class="text-center">
-                        {{param.value}}
+                        <span (click)="openValueResourceView(param.value)" class="clickable">{{param.value}}</span>
                     </td>
                 </tr>
             </tbody>

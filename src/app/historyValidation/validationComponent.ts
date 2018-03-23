@@ -1,9 +1,11 @@
 import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 import { ValidationServices } from "../services/validationServices";
 import { CommitInfo } from "../models/History";
+import { ARTResource, ResourceUtils } from "../models/ARTResources";
 import { UIUtils } from "../utils/UIUtils";
-import { AbstractHistValidComponent } from "./abstractHistValidComponent";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "validation-component",
@@ -24,8 +26,8 @@ export class ValidationComponent extends AbstractHistValidComponent {
         this.ACTION_REJECT
     ];
 
-    constructor(private validationService: ValidationServices, modal: Modal) {
-        super(modal);
+    constructor(private validationService: ValidationServices, sharedModals: SharedModalServices, modal: Modal) {
+        super(sharedModals, modal);
     }
 
     init() {

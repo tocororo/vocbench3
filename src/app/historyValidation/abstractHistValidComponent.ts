@@ -6,7 +6,8 @@ import { OperationParamsModal, OperationParamsModalData } from "./operationParam
 import { OperationSelectModal } from "./operationSelectModal";
 import { HistoryServices } from "../services/historyServices";
 import { CommitInfo, SortingDirection } from "../models/History";
-import { ARTURIResource } from "../models/ARTResources";
+import { ARTURIResource, ARTResource, ResourceUtils } from "../models/ARTResources";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 /**
  * This abstract class is used to keep the attributes and mehtods that HistoryComponent and ValidationComponent have in common
@@ -39,7 +40,7 @@ export abstract class AbstractHistValidComponent {
 
     commits: CommitInfo[];
 
-    constructor(private modal: Modal) {}
+    constructor(private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
         this.init();
@@ -128,6 +129,22 @@ export abstract class AbstractHistValidComponent {
         } else {
             return item.operationParameters.length > 2;
         }
+    }
+
+    private openValueResourceView(value: string) {
+        try {
+            let res: ARTResource;
+            if (value.startsWith("<") && value.endsWith(">")) { //uri
+                res = ResourceUtils.parseURI(value);
+            } else if (value.startsWith("_:")) { //bnode
+                res = ResourceUtils.parseBNode(value);
+            }
+            if (res != null) {
+                this.sharedModals.openResourceView(res);
+            }
+        } catch (err) {
+            //not parseable => not a resource
+        } 
     }
 
 }

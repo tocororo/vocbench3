@@ -77,20 +77,32 @@
                         </td>
                         <td class="text-center">
                             <ng-template [ngIf]="item.operationParameters.length != 0">
-                                <label style="white-space: pre;">{{item.operationParameters[0].name}}: </label>{{item.operationParameters[0].value}}
+                                <label style="white-space: pre;">{{item.operationParameters[0].name}}: </label>
+                                <span class="clickable" (click)="openValueResourceView(item.operationParameters[0].value)">
+                                    {{item.operationParameters[0].value}}
+                                </span>
                             </ng-template>
                         </td>
                         <td class="text-center" *ngIf="isLargeWidth()">
                             <ng-template [ngIf]="item.operationParameters.length > 1">
-                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>
+                                <span class="clickable" (click)="openValueResourceView(item.operationParameters[1].value)">
+                                    {{item.operationParameters[1].value}}
+                                </span>
                             </ng-template>
                         </td>
                         <td class="text-center">
                             <ng-template [ngIf]="!isLargeWidth() && item.operationParameters.length > 1">
-                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>{{item.operationParameters[1].value}}
+                                <label style="white-space: pre;">{{item.operationParameters[1].name}}: </label>
+                                <span class="clickable" (click)="openValueResourceView(item.operationParameters[1].value)">
+                                    {{item.operationParameters[1].value}}
+                                </span>
                             </ng-template>
                             <ng-template [ngIf]="isLargeWidth() && item.operationParameters.length > 2">
-                                <label style="white-space: pre;">{{item.operationParameters[2].name}}: </label>{{item.operationParameters[2].value}}
+                                <label style="white-space: pre;">{{item.operationParameters[2].name}}: </label>
+                                <span class="clickable" (click)="openValueResourceView(item.operationParameters[2].value)">
+                                    {{item.operationParameters[2].value}}
+                                </span>
                             </ng-template>
                             <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-default" (click)="inspectParams(item)"
                                 title="Show all parameters">
