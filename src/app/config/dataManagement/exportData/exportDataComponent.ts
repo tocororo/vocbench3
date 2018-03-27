@@ -5,7 +5,7 @@ import { ExportServices } from "../../../services/exportServices";
 import { MetadataServices } from "../../../services/metadataServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { ConfigurationsServices } from "../../../services/configurationsServices";
-import { Plugin, PluginConfiguration, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep } from "../../../models/Plugins";
+import { PluginConfiguration, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { VBContext } from "../../../utils/VBContext";
@@ -72,7 +72,7 @@ export class ExportDataComponent {
             extensions => {
                 this.filters = extensions;
             }
-        )
+        );
     }
 
     /** =====================================
@@ -312,8 +312,8 @@ export class ExportDataComponent {
      * =====================================*/
 
     /**
-    * Retrieves the PluginCon from a FilterChainElement about the given Plugin
-    */
+     * Retrieves the PluginCon from a FilterChainElement about the given Plugin
+     */
     private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): PluginConfiguration[] {
         for (var i = 0; i < filterChainEl.availableFactories.length; i++) { //look for the selected PluginConfiguration among the availables
             if (filterChainEl.availableFactories[i].factory.id == pluginFactoryID) {
@@ -382,7 +382,6 @@ class FilterChainElement {
             factoryId: this.selectedFactory.factory.id,
             configuration: null
         }
-        var filterProps: any = {};
         var selectedConf: PluginConfiguration = this.selectedFactory.selectedConfiguration;
         
         filter.configuration = selectedConf.getPropertiesAsMap();

@@ -41,7 +41,7 @@
             </div>
             <table class="table table-condensed table-hoverable">
                 <colgroup>
-                    <col style="width: 5%">
+                    <col style="width: 2%">
                     <col>
                     <col style="width: 2%">
                 </colgroup>
@@ -49,18 +49,18 @@
                     <tr *ngFor="let filterChainEl of filtersChain; let l = last; let f = first; let idx = index" 
                         [ngClass]="{active: filterChainEl == selectedFilterChainElement}" (click)="selectFilterChainElement(filterChainEl)">
                         <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
-                        <td>
-                            <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedPlugin" (ngModelChange)="onChangePlugin(filterChainEl)">
-                                <option *ngFor="let p of filterChainEl.availablePlugins" [ngValue]="p">{{getFactoryIdShortName(p.plugin.factoryID)}}</option>
+                        <td class="hbox">
+                            <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedFactory" 
+                                (ngModelChange)="onChangePlugin(filterChainEl)" [title]="filterChainEl.selectedFactory.factory.description">
+                                <option *ngFor="let fact of filterChainEl.availableFactories" [ngValue]="fact" [title]="fact.factory.description">
+                                    {{fact.factory.name}} 
+                                </option>
                             </select>
-                            <div class="input-group" style="margin-top: 3px;">
-                                <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedPlugin.selectedConfiguration">
-                                    <option *ngFor="let cfg of filterChainEl.selectedPlugin.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
-                                </select>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default btn-sm" (click)="configureFilter(filterChainEl)">Configure</button>
-                                </span>
-                            </div>
+                            <select *ngIf="filterChainEl.selectedFactory.configurations.length > 1" class="form-control input-sm"
+                                [(ngModel)]="filterChainEl.selectedFactory.selectedConfiguration" style="margin-left: 4px;">
+                                <option *ngFor="let cfg of filterChainEl.selectedFactory.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
+                            </select>
+                            <button class="btn btn-default" (click)="configureFilter(filterChainEl)" style="margin-left: 4px;">Configure</button>
                         </td>
                         <td class="text-center" style="font-size: 14px; font-weight: 700;">
                             <span *ngIf="requireConfiguration(filterChainEl)" class="glyphicon glyphicon-warning-sign"
