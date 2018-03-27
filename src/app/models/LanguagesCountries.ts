@@ -56,13 +56,22 @@ export class Languages {
         );
     }
 
-    static containsLanguage(languages: Language[], lang: Language) {
+    static containsLanguage(languages: Language[], lang: Language): boolean {
         for (var i = 0; i < languages.length; i++) {
             if (languages[i].tag == lang.tag) {
                 return true;
             }
         }
         return false;
+    }
+
+    static indexOf(languages: Language[], lang: Language): number {
+        for (var i = 0; i < languages.length; i++) {
+            if (languages[i].tag == lang.tag) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     static fromTagsToLanguages(tags: string[]): Language[] {

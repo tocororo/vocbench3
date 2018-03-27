@@ -60,8 +60,10 @@ export class ProjectSettingsComponent {
                     var projectLanguages = <Language[]>JSON.parse(langsValue);
                     Languages.sortLanguages(projectLanguages);
                     for (var i = 0; i < this.languageItems.length; i++) {
-                        if (Languages.containsLanguage(projectLanguages, this.languageItems[i].lang)) {
+                        let idx = Languages.indexOf(projectLanguages, this.languageItems[i].lang);
+                        if (idx != -1) {
                             this.languageItems[i].active = true;
+                            this.languageItems[i].lang.mandatory = projectLanguages[idx].mandatory;
                             this.noLangActive = false;
                         } else {
                             this.languageItems[i].active = false;
