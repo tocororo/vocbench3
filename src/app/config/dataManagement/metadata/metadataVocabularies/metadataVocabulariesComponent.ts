@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DatasetMetadataServices } from "../../../../services/datasetMetadataServices";
 import { ExportServices } from "../../../../services/exportServices";
 import { PluginsServices } from "../../../../services/pluginsServices";
-import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPoint } from "../../../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPointID } from "../../../../models/Plugins";
 import { RDFFormat } from "../../../../models/RDFFormat";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -41,7 +41,7 @@ export class MetadataVocabulariesComponent {
                 }
             }
         );
-        this.pluginService.getAvailablePlugins(ExtensionPoint.DATASET_METADATA_EXPORTER_ID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPointID.DATASET_METADATA_EXPORTER_ID).subscribe(
             plugins => {
                 this.exporterPlugins = plugins;
             }

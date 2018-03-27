@@ -3,6 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ConfigurationComponents, Reference } from "../models/Configuration";
+import { ScopeUtils, Scope } from "../models/Plugins";
 
 export class SaveQueryModalData extends BSModalContext {
     constructor(public query: string, public type: string, public includeInferred: boolean) {
@@ -43,17 +44,7 @@ export class SaveQueryModal implements ModalComponent<SaveQueryModalData> {
         }
 
         //this is strange: I get the configuration scopes from the server but I need to hardwire the convertion to the serialization for the relativeReference
-        let scopeSerialization: string;
-        if (this.selectedScope == "SYSTEM") {
-            scopeSerialization = "sys";
-        } else if (this.selectedScope == "PROJECT") {
-            scopeSerialization = "proj";
-        } else if (this.selectedScope == "USER") {
-            scopeSerialization = "usr";
-        } else {
-            scopeSerialization = "pu";
-        }
-
+        let scopeSerialization: string = ScopeUtils.serializeScope(<Scope>this.selectedScope);
         let relativeReference: string = scopeSerialization + ":" + this.identifier;
 
         this.configurationsService.storeConfiguration(ConfigurationComponents.SPARQL_STORE, relativeReference, queryConfig).subscribe(

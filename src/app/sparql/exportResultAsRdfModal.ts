@@ -5,7 +5,7 @@ import { ExportServices } from "../services/exportServices";
 import { PluginsServices } from "../services/pluginsServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { RDFFormat } from "../models/RDFFormat";
-import { PluginConfiguration, Plugin, ExtensionPoint } from "../models/Plugins";
+import { PluginConfiguration, Plugin, ExtensionPointID } from "../models/Plugins";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
@@ -53,7 +53,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
             }
         );
 
-        this.pluginService.getAvailablePlugins(ExtensionPoint.EXPORT_FILTER_ID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPointID.EXPORT_FILTER_ID).subscribe(
             plugins => {
                 this.availableExporterFilterPlugins = plugins;
                 let filters: PluginStructure[] = [];
@@ -227,7 +227,7 @@ class PluginStructure {
     }
 }
 
-export class FilterChainElement {
+class FilterChainElement {
     public availablePlugins: PluginStructure[];
     public selectedPlugin: PluginStructure; //plugin currently selected in the <select> element
 

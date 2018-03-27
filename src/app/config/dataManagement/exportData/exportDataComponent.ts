@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { PluginsServices } from "../../../services/pluginsServices";
 import { ExportServices } from "../../../services/exportServices";
 import { MetadataServices } from "../../../services/metadataServices";
-import { Plugin, PluginConfiguration, ExtensionPoint } from "../../../models/Plugins";
+import { ExtensionsServices } from "../../../services/extensionsServices";
+import { ConfigurationsServices } from "../../../services/configurationsServices";
+import { Plugin, PluginConfiguration, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { VBContext } from "../../../utils/VBContext";
@@ -12,6 +13,7 @@ import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/filterGraphsModal";
+
 
 @Component({
     selector: "export-data-component",
@@ -30,11 +32,12 @@ export class ExportDataComponent {
     private exportGraphs: GraphStruct[] = [];
 
     //export filter management
-    private availableExporterFilterPlugins: Plugin[];
+    private filters: ExtensionFactory[];
     private filtersChain: FilterChainElement[] = [];
     private selectedFilterChainElement: FilterChainElement;
 
-    constructor(private pluginService: PluginsServices, private exportService: ExportServices, private metadataService: MetadataServices,
+    constructor(private extensionServices: ExtensionsServices, private configurationServices: ConfigurationsServices,
+        private exportService: ExportServices, private metadataService: MetadataServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
@@ -64,12 +67,12 @@ export class ExportDataComponent {
                 }
             }
         );
-        this.pluginService.getAvailablePlugins(ExtensionPoint.EXPORT_FILTER_ID).subscribe(
-            plugins => {
-                this.availableExporterFilterPlugins = plugins;
-                let filters: PluginStructure[] = [];
+
+        this.extensionServices.getExtensions(ExtensionPointID.RDF_TRANSFORMERS_ID).subscribe(
+            extensions => {
+                this.filters = extensions;
             }
-        );
+        )
     }
 
     /** =====================================
@@ -88,7 +91,7 @@ export class ExportDataComponent {
      * When a graph is included/excluded from the export, update the graph selection of the filters
      */
     private onGraphSelectionChange(graphStruct: GraphStruct) {
-        //if the graph is now selected, add it (as not selected since it was not included before) to the graphs selection of the filters
+        // if the graph is now selected, add it (as not selected since it was not included before) to the graphs selection of the filters
         if (graphStruct.checked) {
             if (this.collectCheckedGraphStructures().length == 1) {
                 //if the current graphStruct is the only one selected means that previously every graph was unchecked,
@@ -141,22 +144,29 @@ export class ExportDataComponent {
     }
 
     private appendFilter() {
-        this.pluginService.getPluginConfigurations(this.availableExporterFilterPlugins[0].factoryID).subscribe(
-            configs => {
-                var configurations: PluginConfiguration[] = configs.configurations;
-                let pluginStructs: PluginStructure[] = [];
-                for (var i = 0; i < this.availableExporterFilterPlugins.length; i++) {
-                    //initialize configuration only for the first (i = 0) plugin that is the selected by default
-                    //the other plugins configurations will be initialized once they are selected
-                    if (i == 0) {
-                        pluginStructs.push(new PluginStructure(this.availableExporterFilterPlugins[i], configurations, configurations[0]));
-                    } else {
-                        pluginStructs.push(new PluginStructure(this.availableExporterFilterPlugins[i], null, null));
-                    }
-                }
-                this.filtersChain.push(new FilterChainElement(pluginStructs, pluginStructs[0], this.collectCheckedGraphStructures()));
-            }
-        )
+        let extensionStructs: ExtensionFactStructure[] = [];
+        for (var i = 0; i < this.filters.length; i++) {
+            extensionStructs.push(new ExtensionFactStructure(this.filters[i], this.filters[i].configurations, this.filters[i].configurations[0]));
+        }
+        this.filtersChain.push(new FilterChainElement(extensionStructs, extensionStructs[0], this.collectCheckedGraphStructures()));
+
+        // this.configurationServices.getConfiguration()
+        // this.pluginService.getPluginConfigurations(this.availableExporterFilterPlugins[0].factoryID).subscribe(
+        //     configs => {
+        //         var configurations: PluginConfiguration[] = configs.configurations;
+        //         let pluginStructs: PluginStructure[] = [];
+        //         for (var i = 0; i < this.availableExporterFilterPlugins.length; i++) {
+        //             //initialize configuration only for the first (i = 0) plugin that is the selected by default
+        //             //the other plugins configurations will be initialized once they are selected
+        //             if (i == 0) {
+        //                 pluginStructs.push(new PluginStructure(this.availableExporterFilterPlugins[i], configurations, configurations[0]));
+        //             } else {
+        //                 pluginStructs.push(new PluginStructure(this.availableExporterFilterPlugins[i], null, null));
+        //             }
+        //         }
+        //         this.filtersChain2.push(new FilterChainElement2(pluginStructs, pluginStructs[0], this.collectCheckedGraphStructures()));
+        //     }
+        // )
     }
     private removeFilter() {
         this.filtersChain.splice(this.filtersChain.indexOf(this.selectedFilterChainElement), 1);
@@ -178,29 +188,35 @@ export class ExportDataComponent {
      */
     private onChangePlugin(filterChainEl: FilterChainElement) {
         //if there isn't a configuration, call getPluginConfigurations and initialize the configuration in the given filter
-        var selectedPlugin = filterChainEl.selectedPlugin; //exporter selected
-        var configurations: PluginConfiguration[] = this.retrievePluginConfigurations(filterChainEl, selectedPlugin.plugin.factoryID);
-        if (configurations == null) { //not yet initialized
-            this.pluginService.getPluginConfigurations(selectedPlugin.plugin.factoryID).subscribe(
-                configs => {
-                    selectedPlugin.configurations = configs.configurations;
-                    filterChainEl.selectedPlugin.selectedConfiguration = configs.configurations[0]; //set the first as selected
-                }
-            )
-        }
+        var selectedFactory = filterChainEl.selectedFactory; //exporter selected
+        // this.configurationServices.getConfiguration(selectedFactory.id, ScopeUtils.getScopeSerialization(selectedFactory.scope) + ":" + VBContext.getWorkingProject().getName()).subscribe(
+        //     conf => {
+        //         selectedFactory.configurations = conf;
+        //         console.log("conf", conf);
+        //     }
+        // )
+        // var configurations: PluginConfiguration[] = this.retrievePluginConfigurations(filterChainEl, selectedPlugin.plugin.factoryID);
+        // if (configurations == null) { //not yet initialized
+        //     this.pluginService.getPluginConfigurations(selectedPlugin.plugin.factoryID).subscribe(
+        //         configs => {
+        //             selectedPlugin.configurations = configs.configurations;
+        //             filterChainEl.selectedPlugin.selectedConfiguration = configs.configurations[0]; //set the first as selected
+        //         }
+        //     )
+        // }
     }
 
     private configureFilter(filterChainEl: FilterChainElement) {
-        var selectedConfiguration: PluginConfiguration = filterChainEl.selectedPlugin.selectedConfiguration;
+        var selectedConfiguration: PluginConfiguration = filterChainEl.selectedFactory.selectedConfiguration;
         this.sharedModals.configurePlugin(selectedConfiguration).then(
             (filterCfg: any) => {
                 //update the selected configuration...
-                filterChainEl.selectedPlugin.selectedConfiguration = filterCfg;
+                filterChainEl.selectedFactory.selectedConfiguration = filterCfg;
                 //...and the configuration among the availables
-                var configs: PluginConfiguration[] = filterChainEl.selectedPlugin.configurations;
+                var configs: PluginConfiguration[] = filterChainEl.selectedFactory.configurations;
                 for (var i = 0; i < configs.length; i++) {
-                    if (configs[i].shortName == filterChainEl.selectedPlugin.selectedConfiguration.shortName) {
-                        configs[i] = filterChainEl.selectedPlugin.selectedConfiguration;
+                    if (configs[i].shortName == filterChainEl.selectedFactory.selectedConfiguration.shortName) {
+                        configs[i] = filterChainEl.selectedFactory.selectedConfiguration;
                     }
                 }
             },
@@ -228,7 +244,7 @@ export class ExportDataComponent {
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
     private requireConfiguration(filterChainEl: FilterChainElement): boolean {
-        var conf: PluginConfiguration = filterChainEl.selectedPlugin.selectedConfiguration;
+        var conf: PluginConfiguration = filterChainEl.selectedFactory.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
         }
@@ -245,7 +261,7 @@ export class ExportDataComponent {
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
                 this.basicModals.alert("Missing filter configuration", "An export filter ("
-                    + this.filtersChain[i].selectedPlugin.plugin.factoryID + ") needs to be configured", "warning");
+                    + this.filtersChain[i].selectedFactory.factory.id + ") needs to be configured", "warning");
                 return;
             }
         }
@@ -258,7 +274,7 @@ export class ExportDataComponent {
             }
         }
 
-        var filteringPipeline: any[] = [];
+        var filteringPipeline: FilteringStep[] = [];
         for (var i = 0; i < this.filtersChain.length; i++) {
             filteringPipeline.push(this.filtersChain[i].convertToFilteringPipelineStep());
         }
@@ -299,15 +315,11 @@ export class ExportDataComponent {
     * Retrieves the PluginCon from a FilterChainElement about the given Plugin
     */
     private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): PluginConfiguration[] {
-        for (var i = 0; i < filterChainEl.availablePlugins.length; i++) { //look for the selected PluginConfiguration among the availables
-            if (filterChainEl.availablePlugins[i].plugin.factoryID == pluginFactoryID) {
-                return filterChainEl.availablePlugins[i].configurations;
+        for (var i = 0; i < filterChainEl.availableFactories.length; i++) { //look for the selected PluginConfiguration among the availables
+            if (filterChainEl.availableFactories[i].factory.id == pluginFactoryID) {
+                return filterChainEl.availableFactories[i].configurations;
             }
         }
-    }
-
-    private getFactoryIdShortName(factoryID: string) {
-        return factoryID.substring(factoryID.lastIndexOf(".") + 1);
     }
 
     private collectCheckedGraphStructures(): GraphStruct[] {
@@ -331,13 +343,13 @@ export class ExportDataComponent {
 
 //Utility model classes
 
-class PluginStructure {
-    public plugin: Plugin;
+class ExtensionFactStructure {
+    public factory: ExtensionFactory;
     public configurations: PluginConfiguration[];
     public selectedConfiguration: PluginConfiguration; //selected configuration of the selected plugin
 
-    constructor(plugin: Plugin, configurations: PluginConfiguration[], selectedConfig: PluginConfiguration) {
-        this.plugin = plugin;
+    constructor(factory: ExtensionFactory, configurations: PluginConfiguration[], selectedConfig: PluginConfiguration) {
+        this.factory = factory;
         this.configurations = configurations;
         this.selectedConfiguration = selectedConfig;
     }
@@ -352,28 +364,28 @@ class GraphStruct {
     }
 }
 
-export class FilterChainElement {
-    public availablePlugins: PluginStructure[];
-    public selectedPlugin: PluginStructure; //plugin currently selected in the <select> element
+class FilterChainElement {
+    public availableFactories: ExtensionFactStructure[];
+    public selectedFactory: ExtensionFactStructure;
     public filterGraphs: GraphStruct[];
 
-    constructor(availablePlugins: PluginStructure[], selectedPlugin: PluginStructure, filterGraphs: GraphStruct[]) {
-        this.availablePlugins = availablePlugins;
-        this.selectedPlugin = selectedPlugin;
+    constructor(availableFactories: ExtensionFactStructure[], selectedFactory: ExtensionFactStructure, filterGraphs: GraphStruct[]) {
+        this.availableFactories = availableFactories;
+        this.selectedFactory = selectedFactory;
         this.filterGraphs = filterGraphs;
     }
 
-    convertToFilteringPipelineStep(): {filter: {factoryId: string, properties: any}, graphs?: string[]} {
-        let filterStep: {filter: {factoryId: string, properties: any}, graphs?: string[]} = {filter: null};
+    convertToFilteringPipelineStep(): FilteringStep {
+        let filterStep: FilteringStep = {filter: null};
         //filter: factoryId and properties
-        var filter: {factoryId: string, properties: any} = {
-            factoryId: this.selectedPlugin.plugin.factoryID,
-            properties: null
+        var filter: {factoryId: string, configuration: any} = {
+            factoryId: this.selectedFactory.factory.id,
+            configuration: null
         }
         var filterProps: any = {};
-        var selectedConf: PluginConfiguration = this.selectedPlugin.selectedConfiguration;
+        var selectedConf: PluginConfiguration = this.selectedFactory.selectedConfiguration;
         
-        filter.properties = selectedConf.getPropertiesAsMap();
+        filter.configuration = selectedConf.getPropertiesAsMap();
         filterStep.filter = filter;
         //graphs to which apply the filter
         var graphs: string[] = [];

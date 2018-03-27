@@ -3,7 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { PluginsServices } from "../services/pluginsServices";
 import { CollaborationServices } from "../services/collaborationServices";
-import { Plugin, PluginConfiguration, ExtensionPoint } from "../models/Plugins";
+import { Plugin, PluginConfiguration, ExtensionPointID } from "../models/Plugins";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../utils/VBContext";
 import { VBCollaboration } from "../utils/VBCollaboration";

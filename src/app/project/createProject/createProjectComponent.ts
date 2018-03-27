@@ -4,7 +4,7 @@ import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository, BackendTypesEnum } from "../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPoint } from "../../models/Plugins";
+import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPointID } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
 import { RDFS, OWL, SKOS, SKOSXL, DCT, OntoLex } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -102,7 +102,7 @@ export class CreateProjectComponent {
 
     ngOnInit() {
         //init sail repository plugin
-        this.pluginService.getAvailablePlugins(ExtensionPoint.REPO_IMPL_CONFIGURER_ID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
@@ -136,7 +136,7 @@ export class CreateProjectComponent {
         );
 
         //init uri generator plugin
-        this.pluginService.getAvailablePlugins(ExtensionPoint.URI_GENERATOR_ID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPointID.URI_GENERATOR_ID).subscribe(
             (plugins: Plugin[]) => {
                 this.uriGenPluginList = plugins;
                 this.selectedUriGenPlugin = this.uriGenPluginList[0];
@@ -145,7 +145,7 @@ export class CreateProjectComponent {
         );
 
         //init rendering engine plugin
-        this.pluginService.getAvailablePlugins(ExtensionPoint.RENDERING_ENGINE_ID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
             (plugins: Plugin[]) => {
                 this.rendEngPluginList = plugins;
                 this.selectedRendEngPlugin = this.rendEngPluginList[0];

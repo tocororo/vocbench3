@@ -91,11 +91,85 @@ export class PluginSpecification {
     properties: any; //object {"key1": "value", "key2": "value2", ...}
 }
 
-export class ExtensionPoint {
+
+//Extension Point
+
+export class ExtensionPointID {
     public static EXPORT_FILTER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.ExportFilter";
     public static DATASET_METADATA_EXPORTER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.DatasetMetadataExporter";
     public static RENDERING_ENGINE_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
     public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
     public static REPO_IMPL_CONFIGURER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
     public static COLLABORATION_BACKEND_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.CollaborationBackend";
+    public static RDF_TRANSFORMERS_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.rdftransformer.RDFTransformer";
+}
+
+export class ExtensionFactory {
+    id: string;
+    name: string;
+    description: string;
+    extensionType: string;
+    scope: Scope;
+    configurationScopes: Scope[];
+    configurations: PluginConfiguration[];
+
+    constructor(id: string, name: string, description: string, extensionType: string, scope: Scope, configurationScopes: Scope[], configurations: PluginConfiguration[]) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.extensionType = extensionType;
+        this.scope = scope;
+        this.configurationScopes = configurationScopes;
+        this.configurations = configurations;
+    }
+}
+
+export class ExtensionPoint {
+    scope: Scope;
+    interface: string;
+    id: string;
+    settingsScopes?: Scope[];
+    configurationScopes?: Scope[];
+}
+
+export enum Scope {
+    SYSTEM = "SYSTEM",
+    PROJECT = "PROJECT",
+    USER = "USER",
+    PROJECT_USER = "PROJECT_USER"
+}
+
+export class ScopeUtils {
+    public static serializeScope(scope: Scope): string {
+        if (scope == Scope.SYSTEM) {
+            return "sys";
+        } else if (scope == Scope.PROJECT) {
+            return "proj";
+        } else if (scope == Scope.USER) { 
+            return "usr";
+        } else if (scope == Scope.PROJECT_USER) {
+            return "pu";
+        }
+    }
+
+    public static deserializeScope(serialization: string): Scope {
+        if (serialization == "sys") {
+            return Scope.SYSTEM;
+        } else if (serialization == "proj") {
+            return Scope.PROJECT;
+        } else if (serialization == "usr") {
+            return Scope.USER;
+        } else if (serialization == "pu") {
+            return Scope.PROJECT_USER
+        }
+    }
+}
+
+
+export class FilteringStep {
+    filter: {
+        factoryId: string,
+        configuration: {[key: string]: any}
+    };
+    graphs?: string[]
 }

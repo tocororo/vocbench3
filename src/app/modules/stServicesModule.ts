@@ -12,6 +12,7 @@ import { ConfigurationsServices } from "../services/configurationsServices";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { ExportServices } from "../services/exportServices";
+import { ExtensionsServices } from "../services/extensionsServices";
 import { HistoryServices } from "../services/historyServices";
 import { IcvServices } from "../services/icvServices";
 import { IndividualsServices } from "../services/individualsServices";
@@ -54,6 +55,7 @@ import { VersionsServices } from "../services/versionsServices";
         CustomFormsServices,
         DatasetMetadataServices,
         ExportServices,
+        ExtensionsServices,
         HistoryServices,
         IcvServices,
         IndividualsServices,

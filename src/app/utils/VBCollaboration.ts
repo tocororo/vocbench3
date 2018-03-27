@@ -6,7 +6,7 @@ import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ExtensionPoint } from '../models/Plugins';
+import { ExtensionPointID } from '../models/Plugins';
 import { Cookie } from '../utils/Cookie';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { UIUtils } from '../utils/UIUtils';
