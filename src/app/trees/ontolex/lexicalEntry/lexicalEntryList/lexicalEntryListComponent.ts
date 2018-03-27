@@ -68,7 +68,9 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     onListNodeCreated(node: ARTURIResource) {
-        this.list.unshift(node);
+        if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
+            this.list.unshift(node);
+        }
     }
 
     onListNodeDeleted(node: ARTURIResource) {
