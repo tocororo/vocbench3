@@ -4,7 +4,7 @@
         <div class="panel-heading">
             <label style="flex: 1;">Catalog Records:</label>
             <div class="btn-group btn-group-xs" role="group">
-                <button class="btn btn-default" title="Add Dataset" (click)="addCatalogRecond()" [disabled]="!isAddDatasetAuthorized()">
+                <button class="btn btn-default" title="Add Dataset" (click)="addCatalogRecord()" [disabled]="!isAddDatasetAuthorized()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
                 <button class="btn btn-default" title="Delete Dataset" (click)="deleteCatalogRecord()"
@@ -45,7 +45,8 @@
                     <label style="flex: 1;">Other versions:</label>
         
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" title="Add Dataset Version" (click)="addDatasetVersion()" [disabled]="!isAddDatasetAuthorized()">
+                        <button class="btn btn-default" title="Add Dataset Version" (click)="addDatasetVersion()"
+                            [disabled]="!selectedCatalog || !isAddDatasetAuthorized()">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                         <button class="btn btn-default" title="Delete Dataset Version" (click)="deleteDatasetVersion()"
