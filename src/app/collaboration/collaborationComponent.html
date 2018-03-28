@@ -59,9 +59,7 @@
                     <td nowrap>
                         <a [href]="i.getUrl()" target="_blank">{{i.getKey()}}</a>
                     </td>
-                    <td>
-                        {{i.getSummary()}}
-                    </td>
+                    <td>{{i.getSummary()}}</td>
                     <td>
                         <rdf-resource *ngFor="let r of i.getResources()" [resource]="r" class="clickable" (click)="onResourceClick(r)"></rdf-resource>
                     </td>
