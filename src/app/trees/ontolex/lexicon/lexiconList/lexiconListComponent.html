@@ -3,9 +3,15 @@
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
             <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
-                <lexicon-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
-                    [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
-                </lexicon-list-node>
+                <div *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())">
+                    <div class="listNodeItem">
+                        <input *ngIf="context == 'dataPanel'" type="radio" style="margin-right: 5px;" name="lex_radio" [value]="n"
+                            [(ngModel)]="activeLexicon" (ngModelChange)="updateActiveLexiconPref()">
+                        <lexicon-list-node [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" 
+                            (nodeSelected)="onNodeSelected($event)" style="flex: 1">
+                        </lexicon-list-node>
+                    </div>
+                </div>
             </ng-template>
         </div>
 

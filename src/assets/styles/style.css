@@ -107,7 +107,7 @@ resource-view-splitted, resource-view-tabbed {
 }
 
 tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, 
-instance-list-panel, property-tree-panel, collection-tree-panel, lexicon-list-panel, lexical-entry-list-panel, ontolex-panel,
+instance-list-panel, property-tree-panel, collection-tree-panel, lexicon-list-panel, lexical-entry-list-panel,
 concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list, 
 lexicon-list, lexical-entry-list, class-individual-tree,
 resource-view, scheme-selection, data-range-editor, import-tree {

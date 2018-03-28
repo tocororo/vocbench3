@@ -28,11 +28,18 @@
                 Property
             </a>
         </li>
-        <li *ngIf="isProjectOntolex()" [ngClass]="{active : activeTab == 'limeLexicon', disabled: !isLexiconAuthorized() }">
-            <a href (click)="selectTab('limeLexicon')">
-                Lexicon
-            </a>
-        </li>
+        <ng-template [ngIf]="isProjectOntolex()">
+            <li [ngClass]="{active : activeTab == 'limeLexicon', disabled: !isLexiconAuthorized() }">
+                <a href (click)="selectTab('limeLexicon')">
+                    Lexicon
+                </a>
+            </li>
+            <li [ngClass]="{active : activeTab == 'ontolexLexicalEntry', disabled: !isLexiconAuthorized() }">
+                <a href (click)="selectTab('ontolexLexicalEntry')">
+                    Lex.Entry
+                </a>
+            </li>
+        </ng-template>
 
         <li class="active" style="float: right;">
             <a (click)="openSettings()" style="margin: 0px 2px;">
@@ -67,12 +74,16 @@
             <property-tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
             </property-tree-panel>
         </div>
-        <div *ngIf="isProjectOntolex()" [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
-            <ontolex-panel (lexiconSelected)="onNodeSelected($event)" (lexiconDeleted)="onNodeDeleted($event)"
-                (lexicalEntrySelected)="onNodeSelected($event)" (lexicalEntryDeleted)="onNodeDeleted($event)"
-                [context]="context" [readonly]="readonly">
-            </ontolex-panel>
-        </div>
+        <ng-template [ngIf]="isProjectOntolex()">
+            <div [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
+                <lexicon-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
+                </lexicon-list-panel>
+            </div>
+            <div [ngClass]="{vbox : activeTab == 'ontolexLexicalEntry'}" [hidden]="activeTab != 'ontolexLexicalEntry'">
+                <lexical-entry-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" [context]="context" [readonly]="readonly">
+                </lexical-entry-list-panel>
+            </div>
+        </ng-template>
     </div>
     
 </div>

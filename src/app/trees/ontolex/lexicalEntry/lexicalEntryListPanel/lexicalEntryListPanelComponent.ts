@@ -35,6 +35,16 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
         super(cfService, resourceService, basicModals, eventHandler, vbProp);
+
+        this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
+            (lexicon: ARTURIResource) => this.onLexiconChanged(lexicon)));
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+        if (this.lexicon === undefined) { //if @Input is not provided at all, get the lexicon from the preferences
+            this.lexicon = this.vbProp.getActiveLexicon();
+        }
     }
 
     private create() {
@@ -108,5 +118,10 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     //         this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
     //     );
     // }
+
+
+    private onLexiconChanged(lexicon: ARTURIResource) {
+        this.lexicon = lexicon;
+    }
 
 }

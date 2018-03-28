@@ -39,8 +39,6 @@ import { LexicalEntryListPanelComponent } from '../trees/ontolex/lexicalEntry/le
 import { LexicalEntryListComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListComponent';
 import { LexicalEntryListNodeComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListNodeComponent';
 
-import { OntolexPanelComponent } from '../trees/ontolex/ontolexPanel/ontolexPanelComponent';
-
 import { ClassIndividualTreeComponent } from '../trees/owl/classIndividualTree/classIndividualTreeComponent';
 import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/instanceListPanelComponent';
 import { InstanceListComponent } from '../trees/owl/instanceList/instanceListComponent';
@@ -64,7 +62,6 @@ import { Ng2CompleterModule } from "ng2-completer";
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
         LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent,
-        OntolexPanelComponent,
         SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal
     ],
     exports: [
@@ -76,8 +73,7 @@ import { Ng2CompleterModule } from "ng2-completer";
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
-        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent,
-        OntolexPanelComponent
+        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent
     ],
     entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, TreeListSettingsModal]
 })

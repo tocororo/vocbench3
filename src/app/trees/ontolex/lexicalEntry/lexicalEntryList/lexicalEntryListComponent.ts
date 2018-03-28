@@ -55,6 +55,8 @@ export class LexicalEntryListComponent extends AbstractList {
         if (this.lexicon != undefined && this.index != undefined) {
             this.list = [];
             this.selectedNode = null;
+            this.nodeLimit = this.initialNodes;
+            
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon).subscribe(
                 entries => {

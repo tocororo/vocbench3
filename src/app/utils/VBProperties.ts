@@ -22,6 +22,7 @@ export class VBProperties {
     private editingLanguage: string; //default editing language
 
     private activeSchemes: ARTURIResource[] = [];
+    private activeLexicon: ARTURIResource;
     private showFlags: boolean = true;
     private showInstancesNumber: boolean = true;
     private projectThemeId: number = null;
@@ -64,7 +65,7 @@ export class VBProperties {
      */
     initUserProjectPreferences() {
         var properties: string[] = [
-            Properties.pref_active_schemes, Properties.pref_show_flags,
+            Properties.pref_active_schemes, Properties.pref_active_lexicon, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
@@ -80,6 +81,12 @@ export class VBProperties {
                     for (var i = 0; i < skSplitted.length; i++) {
                         this.activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
                     }
+                }
+
+                this.activeLexicon = null;
+                let activeLexiconPref: string = prefs[Properties.pref_active_lexicon];
+                if (activeLexiconPref != null) {
+                    this.activeLexicon = new ARTURIResource(activeLexiconPref, null, RDFResourceRolesEnum.limeLexicon);
                 }
 
                 this.showFlags = prefs[Properties.pref_show_flags] == "true";
@@ -159,13 +166,28 @@ export class VBProperties {
             }
         );
     }
-    isActiveScheme(scheme: ARTURIResource) {
+    isActiveScheme(scheme: ARTURIResource): boolean {
         for (var i = 0; i < this.activeSchemes.length; i++) {
             if (scheme.getURI() == this.activeSchemes[i].getURI()) {
                 return true;
             }
         }
         return false;
+    }
+
+    getActiveLexicon(): ARTURIResource {
+        return this.activeLexicon;
+    }
+    setActiveLexicon(lexicon: ARTURIResource) {
+        this.activeLexicon = lexicon;
+        this.prefService.setPUSetting(Properties.pref_active_lexicon, this.activeLexicon.getURI()).subscribe(
+            stResp => {
+                this.eventHandler.lexiconChangedEvent.emit(this.activeLexicon);
+            }
+        );
+    }
+    isActiveLexicon(lexicon: ARTURIResource): boolean {
+        return this.activeLexicon != null && this.activeLexicon.getURI() == lexicon.getURI();
     }
 
     getShowFlags(): boolean {

@@ -6,7 +6,7 @@ import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchSettings } from "../../../../models/Properties";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils } from "../../../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBContext } from "../../../../utils/VBContext";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
@@ -19,7 +19,13 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 })
 export class LexiconListComponent extends AbstractList {
 
+    @Input() context: TreeListContext; //useful to determine if show the radio buttons
+
     @ViewChildren(LexiconListNodeComponent) viewChildrenNode: QueryList<LexiconListNodeComponent>;
+
+    list: ARTURIResource[];
+
+    private activeLexicon: ARTURIResource;
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
@@ -38,12 +44,22 @@ export class LexiconListComponent extends AbstractList {
     initList() {
         this.list = [];
         this.selectedNode = null;
+        this.nodeLimit = this.initialNodes;
+
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.ontolexService.getLexicons().subscribe(
             lexicons => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(lexicons, this.rendering ? SortAttribute.show : SortAttribute.value);
+
+                for (var i = 0; i < lexicons.length; i++) {
+                    if (this.vbProp.isActiveLexicon(lexicons[i])) {
+                        this.activeLexicon = lexicons[i];
+                        break;
+                    }
+                }
                 this.list = lexicons;
+
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             }
         );
@@ -96,6 +112,10 @@ export class LexiconListComponent extends AbstractList {
                 }
             }
         );
+    }
+
+    private updateActiveLexiconPref() {
+        this.vbProp.setActiveLexicon(this.activeLexicon);
     }
 
 

@@ -3,6 +3,7 @@ export class Properties {
     static pref_languages: string = "languages";
     static pref_editing_language: string = "editing_language";
     static pref_active_schemes: string = "active_schemes";
+    static pref_active_lexicon: string = "active_lexicon";
     static pref_show_flags: string = "show_flags";
     static pref_project_theme: string = "project_theme";
     static pref_show_instances_number: string = "show_instances_number";

@@ -27,7 +27,7 @@
     
     <!-- List -->
     <div class="panel-body vbox">
-        <lexicon-list [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        <lexicon-list [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)" [context]="context">
         </lexicon-list>
     </div>
 

@@ -7,6 +7,8 @@ import { CollectionTreePanelComponent } from "../trees/skos/collection/collectio
 import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/schemeListPanelComponent";
 import { PropertyTreePanelComponent } from "../trees/property/propertyTreePanel/propertyTreePanelComponent";
 import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent";
+import { LexiconListPanelComponent } from "./ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent";
+import { LexicalEntryListPanelComponent } from "./ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { SKOS, OntoLex } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
@@ -26,6 +28,8 @@ export class TreePanelComponent {
     @ViewChild(SchemeListPanelComponent) viewChildSchemePanel: SchemeListPanelComponent;
     @ViewChild(PropertyTreePanelComponent) viewChildPropertyPanel: PropertyTreePanelComponent;
     @ViewChild(ClassIndividualTreePanelComponent) viewChildClsIndPanel: ClassIndividualTreePanelComponent;
+    @ViewChild(LexiconListPanelComponent) viewChildLexiconPanel: LexiconListPanelComponent;
+    @ViewChild(LexicalEntryListPanelComponent) viewChildLexialEntryPanel: LexicalEntryListPanelComponent;
 
     private context: TreeListContext = TreeListContext.dataPanel;
 
@@ -34,13 +38,13 @@ export class TreePanelComponent {
     private ONTO_TYPE: string;
     private readonly: boolean;    
 
-    private tabs: string[] = [
-        RDFResourceRolesEnum.cls,
-        RDFResourceRolesEnum.concept,
-        RDFResourceRolesEnum.conceptScheme,
-        RDFResourceRolesEnum.skosCollection,
-        RDFResourceRolesEnum.property,
-    ];
+    // private tabs: string[] = [
+    //     RDFResourceRolesEnum.cls,
+    //     RDFResourceRolesEnum.concept,
+    //     RDFResourceRolesEnum.conceptScheme,
+    //     RDFResourceRolesEnum.skosCollection,
+    //     RDFResourceRolesEnum.property,
+    // ];
     private activeTab: string;
 
     constructor(private modal: Modal) { }
@@ -58,6 +62,12 @@ export class TreePanelComponent {
                 this.activeTab = RDFResourceRolesEnum.cls;
             } else if (this.isPropertyAuthorized()) {
                 this.activeTab = RDFResourceRolesEnum.property;
+            }
+        } else if (this.ONTO_TYPE == OntoLex.uri) {
+            if (this.isLexiconAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.limeLexicon;
+            } else if (this.isLexicalEntryuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.ontolexLexicalEntry;
             }
         } else { //OWL
             if (this.isClassAuthorized()) {
@@ -93,6 +103,10 @@ export class TreePanelComponent {
                 this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
             } else if (resRole == RDFResourceRolesEnum.cls) {
                 this.viewChildClsIndPanel.openClassTreeAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.limeLexicon) {
+                this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
             }
         }
     }
@@ -134,6 +148,9 @@ export class TreePanelComponent {
     }
     private isLexiconAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICON);
+    }
+    private isLexicalEntryuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICAL_ENTRY);
     }
 
 }
