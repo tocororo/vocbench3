@@ -61,57 +61,62 @@
         </div>
     </div>
     <div class="panel-body scrollableContainer">
+        <div *ngIf="unexistingResource" class="alert alert-danger">
+            This resource is not available in the current project
+        </div>
         <div *ngIf="unknownHost" class="alert alert-danger">
             This resource is not available on accessible local projects nor can be reached on the Web
         </div>
-        <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </types-renderer>
-        <class-axiom-renderer *ngIf="classAxiomColl" [pred-obj-list]="classAxiomColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </class-axiom-renderer>
-        <top-concepts-renderer *ngIf="topconceptofColl" [pred-obj-list]="topconceptofColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </top-concepts-renderer>
-        <schemes-renderer *ngIf="schemesColl" [pred-obj-list]="schemesColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </schemes-renderer>
-        <broaders-renderer *ngIf="broadersColl" [pred-obj-list]="broadersColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </broaders-renderer>
-        <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </superproperties-renderer>
-        <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </domains-renderer>
-        <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </ranges-renderer>
-        <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
-            [resource]="resource" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </property-facets-renderer>
-        <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </lexicalizations-renderer>
-        <lexical-forms-renderer *ngIf="lexicalFormsColl" [pred-obj-list]="lexicalFormsColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </lexical-forms-renderer>
-        <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </notes-renderer>
-        <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
-            (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </members-renderer>
-        <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </members-ordered-renderer>
-        <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </label-relations-renderer>
-        <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
-            [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
-        </properties-renderer>
+        <ng-template [ngIf]="!unexistingResource && !unknownHost">
+            <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </types-renderer>
+            <class-axiom-renderer *ngIf="classAxiomColl" [pred-obj-list]="classAxiomColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </class-axiom-renderer>
+            <top-concepts-renderer *ngIf="topconceptofColl" [pred-obj-list]="topconceptofColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </top-concepts-renderer>
+            <schemes-renderer *ngIf="schemesColl" [pred-obj-list]="schemesColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </schemes-renderer>
+            <broaders-renderer *ngIf="broadersColl" [pred-obj-list]="broadersColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </broaders-renderer>
+            <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </superproperties-renderer>
+            <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </domains-renderer>
+            <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </ranges-renderer>
+            <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
+                [resource]="resource" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </property-facets-renderer>
+            <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </lexicalizations-renderer>
+            <lexical-forms-renderer *ngIf="lexicalFormsColl" [pred-obj-list]="lexicalFormsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </lexical-forms-renderer>
+            <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </notes-renderer>
+            <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </members-renderer>
+            <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </members-ordered-renderer>
+            <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </label-relations-renderer>
+            <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </properties-renderer>
+        </ng-template>
     </div>
 
     <div #blockDiv class="blockingDiv" style="display:none">

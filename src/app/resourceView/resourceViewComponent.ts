@@ -45,6 +45,7 @@ export class ResourceViewComponent {
     private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
 
     private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
+    private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
@@ -307,6 +308,28 @@ export class ResourceViewComponent {
         this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
         this.filterInferredFromPredObjList(this.propertiesColl);
         this.sortObjects(this.propertiesColl);
+
+        if (
+            (this.typesColl == null || this.typesColl.length == 0) &&
+            (this.classAxiomColl == null || this.classAxiomColl.length == 0) &&
+            (this.topconceptofColl == null || this.topconceptofColl.length == 0) &&
+            (this.schemesColl == null || this.schemesColl.length == 0) &&
+            (this.broadersColl == null || this.broadersColl.length == 0) &&
+            (this.superpropertiesColl == null || this.superpropertiesColl.length == 0) &&
+            (this.domainsColl == null || this.domainsColl.length == 0) &&
+            (this.rangesColl == null || this.rangesColl.length == 0) &&
+            (this.lexicalizationsColl == null || this.lexicalizationsColl.length == 0) &&
+            (this.lexicalFormsColl == null || this.lexicalFormsColl.length == 0) &&
+            (this.membersColl == null || this.membersColl.length == 0) &&
+            (this.propertiesColl == null || this.propertiesColl.length == 0) &&
+            (this.propertyFacets == null || this.propertyFacets.length == 0) &&
+            (this.inverseofColl == null || this.inverseofColl.length == 0) &&
+            (this.labelRelationsColl == null || this.labelRelationsColl.length == 0)
+        ) {
+            this.unexistingResource = true;
+        } else {
+            this.unexistingResource = false;
+        }
     }
 
     /**
