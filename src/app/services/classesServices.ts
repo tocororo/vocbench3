@@ -251,11 +251,11 @@ export class ClassesServices {
      * @param cls class to which remove the intersectionOf axiom
      * @param collectionNode the node representing the intersectionOf expression
      */
-    removeIntersectionOf(cls: ARTURIResource, collectionNode: ARTNode) {
+    removeIntersectionOf(cls: ARTURIResource, collectionBNode: ARTNode) {
         console.log("[ClassesServices] removeIntersectionOf");
         var params: any = {
             cls: cls,
-            collectionNode: collectionNode,
+            collectionBNode: collectionBNode,
         };
         return this.httpMgr.doPost(this.serviceName, "removeIntersectionOf", params);
     }

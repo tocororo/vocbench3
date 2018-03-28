@@ -191,10 +191,12 @@ export abstract class PartitionRenderer {
     removeAllValues(predicate: ARTURIResource) {
         let removeFnArray: any[] = [];
         for (var i = 0; i < this.predicateObjectList.length; i++) {
-            let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
-            for (var j = 0; j < objList.length; j++) {
-                let object = objList[j];
-                removeFnArray.push(this.getRemoveFunction(predicate, object));
+            if (this.predicateObjectList[i].getPredicate().getURI() == predicate.getURI()) {
+                let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
+                for (var j = 0; j < objList.length; j++) {
+                    let object = objList[j];
+                    removeFnArray.push(this.getRemoveFunction(predicate, object));
+                }
             }
         }
         this.removeAllRicursively(removeFnArray);
