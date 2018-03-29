@@ -5,6 +5,8 @@
 </div>
 <div class="modal-body vbox" style="max-height: 70vh">
 
+    <!-- <settings-renderer [(ngModel)]="config"></settings-renderer> -->
+
     <div class="scrollableContainer">
         <table class="table table-condensed table-borderless table-hoverable">
             <colgroup>
@@ -15,7 +17,7 @@
             <tbody>
                 <tr *ngFor="let p of config.properties">
                     <td nowrap>
-                        {{p.name}}
+                        {{p.displayName}}
                         <span *ngIf="p.required">*</span>
                     </td>
                     <td>

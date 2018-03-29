@@ -8,25 +8,25 @@ export class Plugin {
     }
 }
 
-export class PluginConfiguration {
+export class Settings {
     public shortName: string;
     public type: string;
     public editRequired: boolean;
-    public properties: PluginConfigProp[];
-    constructor(shortName: string, type: string, editRequired: boolean, properties: PluginConfigProp[]) {
+    public properties: SettingsProp[];
+    constructor(shortName: string, type: string, editRequired: boolean, properties: SettingsProp[]) {
         this.shortName = shortName;
         this.editRequired = editRequired;
         this.type = type;
         this.properties = properties;
     }
 
-    public clone(): PluginConfiguration {
-        var properties: PluginConfigProp[] = [];
+    public clone(): Settings {
+        var properties: SettingsProp[] = [];
         for (var i = 0; i < this.properties.length; i++) {
-            let p: PluginConfigProp = this.properties[i];
-            properties.push(new PluginConfigProp(p.name, p.description, p.required, p.value, p.enumeration, p.type));
+            let p: SettingsProp = this.properties[i];
+            properties.push(new SettingsProp(p.name, p.displayName, p.description, p.required, p.type, p.enumeration, p.value, p.jsonValue));
         }
-        return new PluginConfiguration(this.shortName, this.type, this.editRequired, properties);
+        return new Settings(this.shortName, this.type, this.editRequired, properties);
     }
 
     public requireConfiguration(): boolean {
@@ -52,34 +52,39 @@ export class PluginConfiguration {
         return map;
     }
 
-    public static parse(response: any): PluginConfiguration {
-        let props: PluginConfigProp[] = [];
+    public static parse(response: any): Settings {
+        let props: SettingsProp[] = [];
         for (var i = 0; i < response.properties.length; i++) {
             let name = response.properties[i].name;
+            let displayName = response.properties[i].displayName;
             let description = response.properties[i].description;
             let required = response.properties[i].required;
             let value = response.properties[i].value;
             let enumeration = response.properties[i].enumeration;
             let type = response.properties[i].type;
-            props.push(new PluginConfigProp(name, description, required, value, enumeration, type));
+            props.push(new SettingsProp(name, displayName, description, required, value, enumeration, type));
         }
-        let stProps = new PluginConfiguration(response.shortName, response['@type'], response.editRequired, props);
+        let stProps = new Settings(response.shortName, response['@type'], response.editRequired, props);
         return stProps;
     }
 }
 
-export class PluginConfigProp {
+export class SettingsProp {
     public name: string;
+    public displayName: string;
     public description: string;
     public required: boolean;
-    public value: any;
+    public value: string;
+    public jsonValue: any;
     public enumeration: string[];
     public type: string;
-    constructor (name: string, description: string, required: boolean, value?: any, enumeration?: string[], type?: string) {
-        this.description = description;
+    constructor (name: string, displayName: string, description: string, required: boolean, type?: string, enumeration?: string[], value?: string, jsonValue?: any) {
         this.name = name;
+        this.displayName = displayName;
+        this.description = description;
         this.required = required;
         this.value = value;
+        this.jsonValue = jsonValue;
         this.enumeration = enumeration;
         this.type = type;
     }
@@ -100,7 +105,7 @@ export class ExtensionPointID {
     public static RENDERING_ENGINE_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
     public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
     public static REPO_IMPL_CONFIGURER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
-    public static COLLABORATION_BACKEND_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.CollaborationBackend";
+    public static COLLABORATION_BACKEND_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackend";
     public static RDF_TRANSFORMERS_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.rdftransformer.RDFTransformer";
 }
 
@@ -111,9 +116,9 @@ export class ExtensionFactory {
     extensionType: string;
     scope: Scope;
     configurationScopes: Scope[];
-    configurations: PluginConfiguration[];
+    configurations: Settings[];
 
-    constructor(id: string, name: string, description: string, extensionType: string, scope: Scope, configurationScopes: Scope[], configurations: PluginConfiguration[]) {
+    constructor(id: string, name: string, description: string, extensionType: string, scope: Scope, configurationScopes: Scope[], configurations: Settings[]) {
         this.id = id;
         this.name = name;
         this.description = description;

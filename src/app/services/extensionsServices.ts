@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Scope, ExtensionFactory, PluginConfiguration } from '../models/Plugins';
+import { Scope, ExtensionFactory, Settings } from '../models/Plugins';
 
 @Injectable()
 export class ExtensionsServices {
@@ -36,10 +36,12 @@ export class ExtensionsServices {
             stResp => {
                 let exts: ExtensionFactory[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let configurations: PluginConfiguration[] = [];
+                    let configurations: Settings[] = [];
                     let configColl: any[] = stResp[i].configurations;
-                    for (var j = 0; j < configColl.length; j++) {
-                        configurations.push(PluginConfiguration.parse(configColl[j]));
+                    if (configColl != null) {
+                        for (var j = 0; j < configColl.length; j++) {
+                            configurations.push(Settings.parse(configColl[j]));
+                        }
                     }
                     let extFact: ExtensionFactory = new ExtensionFactory(stResp[i].id, stResp[i].name, stResp[i].description, 
                         stResp[i].extensionType, stResp[i].scope, stResp[i].configurationScopes, configurations);

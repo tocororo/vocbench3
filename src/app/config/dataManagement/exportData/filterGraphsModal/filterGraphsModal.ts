@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { PluginConfiguration } from "../../../../models/Plugins";
+import { Settings } from "../../../../models/Plugins";
 import { ARTURIResource } from "../../../../models/ARTResources";
 
 export class FilterGraphsModalData extends BSModalContext {

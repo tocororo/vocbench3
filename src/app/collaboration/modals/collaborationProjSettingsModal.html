@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Collaboration System configuration
+    </h3>
+</div>
+<div class="modal-body scrollableContainer blockingDivHost" style="max-height: 70vh">
+
+    <div class="hbox" style="align-items: center;">
+        <label style="margin-right: 4px; white-space: nowrap">Backend type:</label>
+        <select class="form-control input-sm" [(ngModel)]="selectedExtension">
+            <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
+        </select>
+    </div>
+
+    <settings-renderer [(ngModel)]="projSettings"></settings-renderer>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <span class="pull-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

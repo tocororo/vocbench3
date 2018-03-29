@@ -1,19 +1,18 @@
 import { Component, HostListener } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { OverlayConfig } from 'ngx-modialog';
-import { CollaborationConfigModal } from "./collaborationConfigModal";
-import { CollaborationProjectModal } from "./collaborationProjectModal";
+import { CollaborationProjSettingsModal } from "./modals/collaborationProjSettingsModal";
+import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
 import { CollaborationServices } from "../services/collaborationServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { Plugin, PluginConfiguration } from '../models/Plugins';
+import { Plugin, Settings } from '../models/Plugins';
 import { Issue } from '../models/Collaboration';
 import { VBContext } from '../utils/VBContext';
 import { UIUtils } from '../utils/UIUtils';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { ResourcesServices } from '../services/resourcesServices';
 import { ARTURIResource, ResourceUtils } from '../models/ARTResources';
+import { CollaborationModalServices } from './collaborationModalService';
 
 @Component({
     selector: 'collaboration-component',
@@ -32,9 +31,8 @@ export class CollaborationComponent {
 
     private issues: Issue[];
 
-    constructor(private collaborationService: CollaborationServices, private resourceService: ResourcesServices,
-        private vbCollaboration: VBCollaboration, private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
-        private modal: Modal) {}
+    constructor(private collaborationService: CollaborationServices, private resourceService: ResourcesServices, private vbCollaboration: VBCollaboration, 
+        private collModals: CollaborationModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
         this.initIssueList();
@@ -102,10 +100,19 @@ export class CollaborationComponent {
         );
     }
 
-    private openConfig() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(CollaborationConfigModal, overlayConfig).result.then(
+    private openProjectConfig() {
+        console.log("opening proj settings");
+        this.collModals.editCollaborationProjectSettings().then(
+            res => {
+                this.initIssueList();
+            },
+            () => {}
+        )
+    }
+
+    private openUserConfig() {
+        console.log("opening user settings");
+        this.collModals.editCollaborationUserSettings().then(
             res => {
                 this.initIssueList();
             },
@@ -114,9 +121,7 @@ export class CollaborationComponent {
     }
 
     private assignProject() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(CollaborationProjectModal, overlayConfig).result.then(
+        this.collModals.editCollaborationProject().then(
             res => {
                 this.initIssueList();
             },

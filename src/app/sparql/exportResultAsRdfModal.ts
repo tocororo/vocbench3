@@ -5,7 +5,7 @@ import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { RDFFormat } from "../models/RDFFormat";
-import { PluginConfiguration, ExtensionPointID, ExtensionFactory, FilteringStep } from "../models/Plugins";
+import { Settings, ExtensionPointID, ExtensionFactory, FilteringStep } from "../models/Plugins";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
@@ -170,13 +170,13 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
     }
 
     private configureFilter(filterChainEl: FilterChainElement) {
-        var selectedConfiguration: PluginConfiguration = filterChainEl.selectedFactory.selectedConfiguration;
+        var selectedConfiguration: Settings = filterChainEl.selectedFactory.selectedConfiguration;
         this.sharedModals.configurePlugin(selectedConfiguration).then(
             (filterCfg: any) => {
                 //update the selected configuration...
                 filterChainEl.selectedFactory.selectedConfiguration = filterCfg;
                 //...and the configuration among the availables
-                var configs: PluginConfiguration[] = filterChainEl.selectedFactory.configurations;
+                var configs: Settings[] = filterChainEl.selectedFactory.configurations;
                 for (var i = 0; i < configs.length; i++) {
                     if (configs[i].shortName == filterChainEl.selectedFactory.selectedConfiguration.shortName) {
                         configs[i] = filterChainEl.selectedFactory.selectedConfiguration;
@@ -191,7 +191,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
     private requireConfiguration(filterChainEl: FilterChainElement): boolean {
-        var conf: PluginConfiguration = filterChainEl.selectedFactory.selectedConfiguration;
+        var conf: Settings = filterChainEl.selectedFactory.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
         }
@@ -205,7 +205,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
     /**
      * Retrieves the PluginCon from a FilterChainElement about the given Plugin
      */
-    private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): PluginConfiguration[] {
+    private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): Settings[] {
         for (var i = 0; i < filterChainEl.availableFactories.length; i++) { //look for the selected PluginConfiguration among the availables
             if (filterChainEl.availableFactories[i].factory.id == pluginFactoryID) {
                 return filterChainEl.availableFactories[i].configurations;
@@ -219,10 +219,10 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
 //Utility model classes
 class ExtensionFactStructure {
     public factory: ExtensionFactory;
-    public configurations: PluginConfiguration[];
-    public selectedConfiguration: PluginConfiguration; //selected configuration of the selected plugin
+    public configurations: Settings[];
+    public selectedConfiguration: Settings; //selected configuration of the selected plugin
 
-    constructor(factory: ExtensionFactory, configurations: PluginConfiguration[], selectedConfig: PluginConfiguration) {
+    constructor(factory: ExtensionFactory, configurations: Settings[], selectedConfig: Settings) {
         this.factory = factory;
         this.configurations = configurations;
         this.selectedConfiguration = selectedConfig;

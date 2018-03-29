@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ARTURIResource } from '../models/ARTResources';
-import { PluginConfiguration, PluginConfigProp } from '../models/Plugins';
+import { Settings, SettingsProp } from '../models/Plugins';
 import { Issue, CollaborationUtils } from '../models/Collaboration';
 
 @Injectable()
@@ -17,14 +17,11 @@ export class CollaborationServices {
      * enabled
      * settingsConfigured
      * preferencesConfigured
-     * @param backendId 
      */
-    getCollaborationSystemStatus(backendId: string): 
-        Observable<{ enabled: boolean, linked: boolean, settingsConfigured: boolean, preferencesConfigured: boolean }> {
+    getCollaborationSystemStatus(): 
+        Observable<{ backendId: string, enabled: boolean, linked: boolean, settingsConfigured: boolean, preferencesConfigured: boolean }> {
         console.log("[CollaborationServices] getCollaborationSystemStatus");
-        var params: any = {
-            backendId: backendId
-        };
+        var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params);
     }
 
@@ -32,14 +29,14 @@ export class CollaborationServices {
      * Gets the settings to be set to the collaboration backend (mainly the serverURL)
      * @param backendId
      */
-    getProjectSettings(backendId: string): Observable<PluginConfiguration> {
+    getProjectSettings(backendId: string): Observable<Settings> {
         console.log("[CollaborationServices] getProjectSettings");
         var params: any = {
             backendId: backendId,
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params).map(
             stResp => {
-                return PluginConfiguration.parse(stResp);
+                return Settings.parse(stResp);
             }
         );
     }
@@ -48,14 +45,14 @@ export class CollaborationServices {
      * Gets the preferences to be set to the collaboration backend (likely username and password)
      * @param backendId
      */
-    getProjectPreferences(backendId: string): Observable<PluginConfiguration> {
+    getProjectPreferences(backendId: string): Observable<Settings> {
         console.log("[CollaborationServices] getProjectPreferences");
         var params: any = {
             backendId: backendId,
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params).map(
             stResp => {
-                return PluginConfiguration.parse(stResp);
+                return Settings.parse(stResp);
             }
         );
     }
@@ -76,13 +73,13 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "activateCollaboratioOnProject", params);
     }
 
-    addPreferenceiesForCurrentUser(backendId: string, currentUserPreferences: any) {
-        console.log("[CollaborationServices] addPreferenceiesForCurrentUser");
+    addPreferencesForCurrentUser(backendId: string, currentUserPreferences: any) {
+        console.log("[CollaborationServices] addPreferencesForCurrentUser");
         var params: any = {
             backendId: backendId,
             currentUserPreferences: JSON.stringify(currentUserPreferences)
         };
-        return this.httpMgr.doPost(this.serviceName, "addPreferenceiesForCurrentUser", params);
+        return this.httpMgr.doPost(this.serviceName, "addPreferencesForCurrentUser", params);
     }
 
     createIssue(resource: ARTURIResource, summary: string) {

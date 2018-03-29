@@ -3,7 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { PluginsServices } from "../../../services/pluginsServices";
 import { Repository, RemoteRepositoryAccessConfig, RepositoryAccess, RepositoryAccessType, BackendTypesEnum } from "../../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPointID } from "../../../models/Plugins";
+import { Plugin, Settings, SettingsProp, PluginSpecification, ExtensionPointID } from "../../../models/Plugins";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
@@ -34,8 +34,8 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
 
     //core repository containing data
     private repositoryId: string;
-    private repoConfList: { factoryID: string, configuration: PluginConfiguration }[];
-    private selectedRepoConf: { factoryID: string, configuration: PluginConfiguration }; //chosen configuration for data repository
+    private repoConfList: { factoryID: string, configuration: Settings }[];
+    private selectedRepoConf: { factoryID: string, configuration: Settings }; //chosen configuration for data repository
 
     //backend types
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
@@ -52,7 +52,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
-                        (configs: {factoryID: string, configurations: PluginConfiguration[]}) => {
+                        (configs: {factoryID: string, configurations: Settings[]}) => {
                             this.repoConfList = [];
                             //clone the configurations, so changes on data repo configuration don't affect support repo configuration
                             for (var i = 0; i < configs.configurations.length; i++) {
@@ -112,7 +112,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     private configureRepo() {
         this.sharedModals.configurePlugin(this.selectedRepoConf.configuration).then(
             (config: any) => {
-                this.selectedRepoConf.configuration.properties = (<PluginConfiguration>config).properties;
+                this.selectedRepoConf.configuration.properties = (<Settings>config).properties;
             },
             () => {}
         );
@@ -142,7 +142,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         }
         //valid repo configuration (in case of repo creation mode)
         if (this.isSelectedRepoAccessCreateMode()) {
-            let repoConfigParams: PluginConfigProp[] = this.selectedRepoConf.configuration.properties;
+            let repoConfigParams: SettingsProp[] = this.selectedRepoConf.configuration.properties;
             if (this.selectedRepoConf.configuration.requireConfiguration()) {
                 this.basicModals.alert("Missing configuration", "Required parameter(s) missing in repository configuration (" +
                     this.selectedRepoConf.configuration.shortName +")", "error");

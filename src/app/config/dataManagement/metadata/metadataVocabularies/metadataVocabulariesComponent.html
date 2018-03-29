@@ -64,7 +64,7 @@
                                 </tr>
                                 <tr *ngFor="let p of selectedExporterSettings.extensionPointSettings.properties">
                                     <td class="text-right" nowrap>
-                                        <label>{{p.name}}</label>
+                                        <label>{{p.displayName}}</label>
                                         <span *ngIf="p.required">*</span>
                                     </td>
                                     <td>
@@ -83,7 +83,7 @@
                                 </tr>
                                 <tr *ngFor="let p of selectedExporterSettings.pluginSettings.properties">
                                     <td class="text-right" nowrap>
-                                        <label>{{p.name}}</label>
+                                        <label>{{p.displayName}}</label>
                                         <span *ngIf="p.required">*</span>
                                     </td>
                                     <td>

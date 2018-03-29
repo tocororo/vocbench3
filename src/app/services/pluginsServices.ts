@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {HttpManager} from "../utils/HttpManager";
-import {Plugin, PluginConfiguration, PluginConfigProp} from "../models/Plugins";
+import {Plugin, Settings, SettingsProp} from "../models/Plugins";
 
 @Injectable()
 export class PluginsServices {
@@ -46,7 +46,7 @@ export class PluginsServices {
      * where params is in turn an array of struct {description, name, required, value}
      * @param factoryID the factory class of the plugin
      */
-    getPluginConfigurations(factoryID: string): Observable<{factoryID: string, configurations: PluginConfiguration[]}> {
+    getPluginConfigurations(factoryID: string): Observable<{factoryID: string, configurations: Settings[]}> {
         console.log("[PluginsServices] getPluginConfigurations");
         var params = {
             factoryID: factoryID
@@ -54,9 +54,9 @@ export class PluginsServices {
         return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params).map(
             stResp => {
                 var configColl: any[] = stResp;
-                var configurations: PluginConfiguration[] = [];
+                var configurations: Settings[] = [];
                 for (var i = 0; i < configColl.length; i++) {
-                    configurations.push(PluginConfiguration.parse(configColl[i]));
+                    configurations.push(Settings.parse(configColl[i]));
                 }
                 return {factoryID: factoryID, configurations: configurations};
             }

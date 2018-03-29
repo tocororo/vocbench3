@@ -220,7 +220,7 @@ export class ProjectServices {
      * Returns a map of pairs name-value of the project's properties
      * @param project 
      */
-    getProjectPropertyMap(project: Project): Observable<any[]> {
+    getProjectPropertyMap(project: Project): Observable<{name: string, value: string}[]> {
         console.log("[ProjectServices] getProjectPropertyMap");
         var params = {
             projectName: project.getName()

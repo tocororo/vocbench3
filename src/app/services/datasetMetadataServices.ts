@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
-import { PluginSpecification, PluginConfiguration, PluginConfigProp } from "../models/Plugins";
+import { PluginSpecification, Settings, SettingsProp } from "../models/Plugins";
 import { RDFFormat } from "../models/RDFFormat";
 
 @Injectable()
@@ -14,7 +14,7 @@ export class DatasetMetadataServices {
     /**
      * @param exporterId
      */
-    getDatasetMetadata(exporterId: string): Observable<{extensionPointSettings: PluginConfiguration, pluginSettings: PluginConfiguration}> {
+    getDatasetMetadata(exporterId: string): Observable<{extensionPointSettings: Settings, pluginSettings: Settings}> {
         console.log("[DatasetMetadataExportServices] getDatasetMetadata");
         var params = {
             exporterId: exporterId
@@ -22,35 +22,10 @@ export class DatasetMetadataServices {
         return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).map(
             stResp => {
                 let extPointSettingsJson = stResp.extensionPointSettings;
-                let extPointParamsJson: any[] = extPointSettingsJson.properties;
-                let extPointParams: PluginConfigProp[] = [];
-                for (var i = 0; i < extPointParamsJson.length; i++) {
-                    let param: PluginConfigProp = new PluginConfigProp(
-                        extPointParamsJson[i].name, 
-                        extPointParamsJson[i].description, 
-                        extPointParamsJson[i].required,
-                        extPointParamsJson[i].value
-                    );
-                    extPointParams.push(param);
-                }
-                let extensionPointSettings: PluginConfiguration = new PluginConfiguration(
-                    extPointSettingsJson.shortName, extPointSettingsJson['@type'], extPointSettingsJson.editRequired, extPointParams);
+                let extensionPointSettings: Settings = Settings.parse(extPointSettingsJson);
 
                 let pluginSettingsJson = stResp.pluginSettings;
-                let pluginParamsJson: any[] = pluginSettingsJson.properties;
-                let pluginParams: PluginConfigProp[] = [];
-                for (var i = 0; i < pluginParamsJson.length; i++) {
-                    let param: PluginConfigProp = new PluginConfigProp(
-                        pluginParamsJson[i].name, 
-                        pluginParamsJson[i].description, 
-                        pluginParamsJson[i].required,
-                        pluginParamsJson[i].value
-                    );
-                    pluginParams.push(param);
-                }
-                let pluginEditRequired: boolean = pluginSettingsJson.editRequired != null ? pluginSettingsJson.editRequired : false;
-                let pluginSettings: PluginConfiguration = new PluginConfiguration(
-                    pluginSettingsJson.shortName, pluginSettingsJson['@type'], pluginSettingsJson.editRequired, pluginParams);
+                let pluginSettings: Settings = Settings.parse(pluginSettingsJson);
 
                 return { extensionPointSettings: extensionPointSettings, pluginSettings: pluginSettings };
             }

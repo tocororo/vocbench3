@@ -5,7 +5,7 @@ import { ExportServices } from "../../../services/exportServices";
 import { MetadataServices } from "../../../services/metadataServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { ConfigurationsServices } from "../../../services/configurationsServices";
-import { PluginConfiguration, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep } from "../../../models/Plugins";
+import { Settings, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { VBContext } from "../../../utils/VBContext";
@@ -207,13 +207,13 @@ export class ExportDataComponent {
     }
 
     private configureFilter(filterChainEl: FilterChainElement) {
-        var selectedConfiguration: PluginConfiguration = filterChainEl.selectedFactory.selectedConfiguration;
+        var selectedConfiguration: Settings = filterChainEl.selectedFactory.selectedConfiguration;
         this.sharedModals.configurePlugin(selectedConfiguration).then(
             (filterCfg: any) => {
                 //update the selected configuration...
                 filterChainEl.selectedFactory.selectedConfiguration = filterCfg;
                 //...and the configuration among the availables
-                var configs: PluginConfiguration[] = filterChainEl.selectedFactory.configurations;
+                var configs: Settings[] = filterChainEl.selectedFactory.configurations;
                 for (var i = 0; i < configs.length; i++) {
                     if (configs[i].shortName == filterChainEl.selectedFactory.selectedConfiguration.shortName) {
                         configs[i] = filterChainEl.selectedFactory.selectedConfiguration;
@@ -244,7 +244,7 @@ export class ExportDataComponent {
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
     private requireConfiguration(filterChainEl: FilterChainElement): boolean {
-        var conf: PluginConfiguration = filterChainEl.selectedFactory.selectedConfiguration;
+        var conf: Settings = filterChainEl.selectedFactory.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
         }
@@ -314,7 +314,7 @@ export class ExportDataComponent {
     /**
      * Retrieves the PluginCon from a FilterChainElement about the given Plugin
      */
-    private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): PluginConfiguration[] {
+    private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): Settings[] {
         for (var i = 0; i < filterChainEl.availableFactories.length; i++) { //look for the selected PluginConfiguration among the availables
             if (filterChainEl.availableFactories[i].factory.id == pluginFactoryID) {
                 return filterChainEl.availableFactories[i].configurations;
@@ -345,10 +345,10 @@ export class ExportDataComponent {
 
 class ExtensionFactStructure {
     public factory: ExtensionFactory;
-    public configurations: PluginConfiguration[];
-    public selectedConfiguration: PluginConfiguration; //selected configuration of the selected plugin
+    public configurations: Settings[];
+    public selectedConfiguration: Settings; //selected configuration of the selected plugin
 
-    constructor(factory: ExtensionFactory, configurations: PluginConfiguration[], selectedConfig: PluginConfiguration) {
+    constructor(factory: ExtensionFactory, configurations: Settings[], selectedConfig: Settings) {
         this.factory = factory;
         this.configurations = configurations;
         this.selectedConfiguration = selectedConfig;
@@ -382,7 +382,7 @@ class FilterChainElement {
             factoryId: this.selectedFactory.factory.id,
             configuration: null
         }
-        var selectedConf: PluginConfiguration = this.selectedFactory.selectedConfiguration;
+        var selectedConf: Settings = this.selectedFactory.selectedConfiguration;
         
         filter.configuration = selectedConf.getPropertiesAsMap();
         filterStep.filter = filter;

@@ -4,7 +4,7 @@ import { ProjectServices } from "../../services/projectServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository, BackendTypesEnum } from "../../models/Project";
-import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPointID } from "../../models/Plugins";
+import { Plugin, Settings, SettingsProp, PluginSpecification, ExtensionPointID } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
 import { RDFS, OWL, SKOS, SKOSXL, DCT, OntoLex } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -57,12 +57,12 @@ export class CreateProjectComponent {
     private DEFAULT_REPO_CONFIGURER = "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration";
     //core repository containing data
     private dataRepoId: string;
-    private dataRepoConfList: {factoryID: string, configuration: PluginConfiguration}[]; 
-    private selectedDataRepoConf: {factoryID: string, configuration: PluginConfiguration}; //chosen configuration for data repository
+    private dataRepoConfList: {factoryID: string, configuration: Settings}[]; 
+    private selectedDataRepoConf: {factoryID: string, configuration: Settings}; //chosen configuration for data repository
     //support repository for history and validation
     private supportRepoId: string;
-    private supportRepoConfList: {factoryID: string, configuration: PluginConfiguration}[];
-    private selectedSupportRepoConf: {factoryID: string, configuration: PluginConfiguration}; //chosen configuration for history/validation repository
+    private supportRepoConfList: {factoryID: string, configuration: Settings}[];
+    private selectedSupportRepoConf: {factoryID: string, configuration: Settings}; //chosen configuration for history/validation repository
     //backend types
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
     private selectedCoreRepoBackendType: BackendTypesEnum = this.backendTypes[0];
@@ -78,17 +78,17 @@ export class CreateProjectComponent {
     private uriGenUseDefaultSetting: boolean = true;
     private uriGenPluginList: Plugin[]; //available plugins for uri generator (retrieved through getAvailablePlugins)
     private selectedUriGenPlugin: Plugin; //chosen plugin for uri generator (the one selected through a <select> element)
-    private uriGenPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> used to store the configurations for the plugins
-    private selectedUriGenPluginConfList: PluginConfiguration[]; //plugin configurations for the selected plugin (represent the choices of the <select> element of configurations)
-    private selectedUriGenPluginConf: PluginConfiguration; //chosen configuration for the chosen uri generator plugin (selected through a <select> element)
+    private uriGenPluginConfMap: Map<string, Settings[]> = new Map(); //map of <factoryID, pluginConf> used to store the configurations for the plugins
+    private selectedUriGenPluginConfList: Settings[]; //plugin configurations for the selected plugin (represent the choices of the <select> element of configurations)
+    private selectedUriGenPluginConf: Settings; //chosen configuration for the chosen uri generator plugin (selected through a <select> element)
 
     //RENDERING GENERATOR PLUGIN
     private rendEngUseDefaultSetting: boolean = true;
     private rendEngPluginList: Plugin[]; //available plugins for rendering engine
     private selectedRendEngPlugin: Plugin; //chosen plugin for rendering engine
-    private rendEngPluginConfMap: Map<string, PluginConfiguration[]> = new Map(); //map of <factoryID, pluginConf> (plugin - available configs)
-    private selectedRendEngPluginConfList: PluginConfiguration[]; //plugin configurations for the selected plugin
-    private selectedRendEngPluginConf: PluginConfiguration; //chosen configuration for the chosen rendering engine plugin
+    private rendEngPluginConfMap: Map<string, Settings[]> = new Map(); //map of <factoryID, pluginConf> (plugin - available configs)
+    private selectedRendEngPluginConfList: Settings[]; //plugin configurations for the selected plugin
+    private selectedRendEngPluginConf: Settings; //chosen configuration for the chosen rendering engine plugin
 
     private useProjMetadataProp: boolean = true;
     private creationDatePropList: ARTURIResource[] = [DCT.created];
@@ -106,7 +106,7 @@ export class CreateProjectComponent {
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
-                        (configs: {factoryID: string, configurations: PluginConfiguration[]}) => {
+                        (configs: {factoryID: string, configurations: Settings[]}) => {
                             this.dataRepoConfList = [];
                             this.supportRepoConfList = [];
                             //clone the configurations, so changes on data repo configuration don't affect support repo configuration
@@ -237,7 +237,7 @@ export class CreateProjectComponent {
     private configureDataRepo() {
         this.sharedModals.configurePlugin(this.selectedDataRepoConf.configuration).then(
             (config: any) => {
-                this.selectedDataRepoConf.configuration.properties = (<PluginConfiguration>config).properties;
+                this.selectedDataRepoConf.configuration.properties = (<Settings>config).properties;
             },
             () => {}
         );
@@ -246,7 +246,7 @@ export class CreateProjectComponent {
     private configureSupportRepo() {
         this.sharedModals.configurePlugin(this.selectedSupportRepoConf.configuration).then(
             (config: any) => {
-                this.selectedSupportRepoConf.configuration.properties = (<PluginConfiguration>config).properties;
+                this.selectedSupportRepoConf.configuration.properties = (<Settings>config).properties;
             },
             () => {}
         );
@@ -277,7 +277,7 @@ export class CreateProjectComponent {
 
     private onUriGenPluginChanged() {
         //check if the selected plugin configuration has already the configuration list
-        var uriGenConfs: PluginConfiguration[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
+        var uriGenConfs: Settings[] = this.uriGenPluginConfMap.get(this.selectedUriGenPlugin.factoryID);
         if (uriGenConfs != null) {
             this.selectedUriGenPluginConfList = uriGenConfs;
             this.selectedUriGenPluginConf = this.selectedUriGenPluginConfList[0];
@@ -297,7 +297,7 @@ export class CreateProjectComponent {
     private configureUriGenConf() {
         this.sharedModals.configurePlugin(this.selectedUriGenPluginConf).then(
             (config: any) => {
-                this.selectedUriGenPluginConf.properties = (<PluginConfiguration>config).properties;
+                this.selectedUriGenPluginConf.properties = (<Settings>config).properties;
             },
             () => {}
         )
@@ -309,7 +309,7 @@ export class CreateProjectComponent {
 
     private onRendEnginePluginChanged() {
         //check if the selected plugin configuration has already the configuration list
-        var rendEngConfs: PluginConfiguration[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
+        var rendEngConfs: Settings[] = this.rendEngPluginConfMap.get(this.selectedRendEngPlugin.factoryID);
         if (rendEngConfs != null) {
             this.selectedRendEngPluginConfList = rendEngConfs;
             this.selectedRendEngPluginConf = this.selectedRendEngPluginConfList[0];
@@ -329,7 +329,7 @@ export class CreateProjectComponent {
     private configureRendEngConf() {
         this.sharedModals.configurePlugin(this.selectedRendEngPluginConf).then(
             (config: any) => {
-                this.selectedRendEngPluginConf.properties = (<PluginConfiguration>config).properties;
+                this.selectedRendEngPluginConf.properties = (<Settings>config).properties;
             },
             () => {}
         )

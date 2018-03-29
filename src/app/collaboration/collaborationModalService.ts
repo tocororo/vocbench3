@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { CollaborationConfigModal } from "./collaborationConfigModal";
-import { CollaborationProjectModal } from "./collaborationProjectModal";
+import { CollaborationProjSettingsModal } from "./modals/collaborationProjSettingsModal";
+import { CollaborationUserSettingsModal } from "./modals/collaborationUserSettingsModal";
+import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
 import { IssueListModal } from "./issueListModal";
 import { Issue } from '../models/Collaboration';
 
@@ -25,12 +26,21 @@ export class CollaborationModalServices {
     }
 
     /**
-     * Opens a modal to edit the collaboration system configuration
+     * Opens a modal to edit the collaboration system project settings
      */
-    editCollaborationConfig() {
+    editCollaborationProjectSettings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(CollaborationConfigModal, overlayConfig).result;
+        return this.modal.open(CollaborationProjSettingsModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to edit the collaboration system user settings
+     */
+    editCollaborationUserSettings() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(CollaborationUserSettingsModal, overlayConfig).result;
     }
 
     /**
@@ -39,7 +49,7 @@ export class CollaborationModalServices {
     editCollaborationProject() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(CollaborationProjectModal, overlayConfig).result;
+        return this.modal.open(CollaborationProjectModal, overlayConfig).result;
     }
 
 }

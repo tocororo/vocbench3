@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DatasetMetadataServices } from "../../../../services/datasetMetadataServices";
 import { ExportServices } from "../../../../services/exportServices";
 import { PluginsServices } from "../../../../services/pluginsServices";
-import { Plugin, PluginConfiguration, PluginConfigProp, PluginSpecification, ExtensionPointID } from "../../../../models/Plugins";
+import { Plugin, Settings, SettingsProp, PluginSpecification, ExtensionPointID } from "../../../../models/Plugins";
 import { RDFFormat } from "../../../../models/RDFFormat";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -20,10 +20,10 @@ export class MetadataVocabulariesComponent {
 
     private exporterPlugins: Plugin[];
     private selectedExporterPlugin: Plugin;
-    private selectedExporterPluginConfigurations: PluginConfiguration[];
-    private selectedConfiguration: PluginConfiguration;
+    private selectedExporterPluginConfigurations: Settings[];
+    private selectedConfiguration: Settings;
 
-    private selectedExporterSettings: { extensionPointSettings: PluginConfiguration, pluginSettings: PluginConfiguration };
+    private selectedExporterSettings: { extensionPointSettings: Settings, pluginSettings: Settings };
 
     constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
         private pluginService: PluginsServices, private basicModals: BasicModalServices) { }

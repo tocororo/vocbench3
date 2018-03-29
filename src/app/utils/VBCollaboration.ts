@@ -14,11 +14,10 @@ import { BasicModalServices } from '../widget/modal/basicModal/basicModalService
 import { OWL, RDFS } from '../models/Vocabulary';
 import { VBContext } from './VBContext';
 import { CollaborationServices } from '../services/collaborationServices';
+import { ProjectServices } from '../services/projectServices';
 
 @Injectable()
 export class VBCollaboration {
-
-    public static jiraFactoryId: string = "it.uniroma2.art.semanticturkey.plugin.impls.collaboration.JiraBackendFactory";
 
     /* collaboration system could be enabled and configured (both settings and preferences) but not working:
     * settings or preferences could be invalid (invalid credentials or wrong serverURL), or the server could be unreachable */
@@ -27,14 +26,16 @@ export class VBCollaboration {
     private linked: boolean = false; //if a collaboration project is linked to the VB project
     private settingsConfigured: boolean = false;
     private preferencesConfigured: boolean = false;
+    private backendId: string;
 
-    constructor(private collaborationService: CollaborationServices, private eventHandler: VBEventHandler) {}
+    constructor(private collaborationService: CollaborationServices, private projectService: ProjectServices, private eventHandler: VBEventHandler) {}
 
-    public initCollaborationSystem(): Observable<any> {
+    public initCollaborationSystem(): Observable<void> {
         this.reset();
-        return this.collaborationService.getCollaborationSystemStatus(VBCollaboration.jiraFactoryId).map(
+        return this.collaborationService.getCollaborationSystemStatus().map(
             resp => {
                 this.enabled = resp.enabled;
+                this.backendId = resp.backendId;
                 this.linked = resp.linked;
                 this.settingsConfigured = resp.settingsConfigured;
                 this.preferencesConfigured = resp.preferencesConfigured;
@@ -57,6 +58,10 @@ export class VBCollaboration {
         return this.enabled;
     }
 
+    public getBackendId(): string {
+        return this.backendId;
+    }
+
     public isWorking(): boolean {
         return this.working;
     }
@@ -68,13 +73,14 @@ export class VBCollaboration {
     public isLinked(): boolean {
         return this.linked;
     }
-    
+
     public reset() {
         this.working = false;
         this.enabled = false;
         this.linked = false;
         this.settingsConfigured = false;
         this.preferencesConfigured = false;
+        this.backendId = null;
     }
 
 }

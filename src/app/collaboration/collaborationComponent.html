@@ -6,10 +6,16 @@
             [disabled]="!csWorking || !settingsConfigured || !preferencesConfigured || !csProjectLinked">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
-        <!-- This should be allowed only to project manager and admin -->
-        <button class="btn btn-default btn-xs" style="margin-left: 3px" (click)="openConfig()">
-            <span class="glyphicon glyphicon-cog"></span>
-        </button>
+        <div class="dropdown" style="margin-left: 3px">
+            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-cog"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li><a (click)="openProjectConfig()">Project configuration</a></li>
+                <li><a (click)="openUserConfig()">User configuration</a></li>
+            </ul>
+        </div>
+
     </div>
     
     <div class="panel-body vbox">

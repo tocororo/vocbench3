@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { ARTResource } from "../../../models/ARTResources";
-import { PluginConfiguration } from "../../../models/Plugins";
+import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
@@ -21,7 +21,7 @@ export class SharedModalServices {
      * Returns a new PluginConfiguration, the input configuration doesn't mutate.
      * @param configuration
      */
-    configurePlugin(configuration: PluginConfiguration) {
+    configurePlugin(configuration: Settings) {
         var modalData = new PluginConfigModalData(configuration);
         const builder = new BSModalContextBuilder<PluginConfigModalData>(
             modalData, undefined, PluginConfigModalData

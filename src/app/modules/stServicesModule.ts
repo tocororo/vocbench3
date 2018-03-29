@@ -32,6 +32,7 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { SearchServices } from "../services/searchServices";
 import { ServicesServices } from "../services/servicesServices";
+import { SettingsServices } from "../services/settingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
@@ -75,6 +76,7 @@ import { VersionsServices } from "../services/versionsServices";
         ResourceViewServices,
         SearchServices,
         ServicesServices,
+        SettingsServices,
         Sheet2RDFServices,
         SkosServices,
         SkosxlServices,
