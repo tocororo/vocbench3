@@ -60,19 +60,20 @@ export class CollaborationServices {
     /**
      * Activate the collaboration system on the current project
      * @param backendId 
-     * @param projectSettings 
-     * @param currentUserPreferences 
      */
-    activateCollaboratioOnProject(backendId: string, projectSettings: any, currentUserPreferences: any) {
+    activateCollaboratioOnProject(backendId: string) {
         console.log("[CollaborationServices] activateCollaboratioOnProject");
         var params: any = {
-            backendId: backendId,
-            projectSettings: JSON.stringify(projectSettings),
-            currentUserPreferences: JSON.stringify(currentUserPreferences)
+            backendId: backendId
         };
         return this.httpMgr.doPost(this.serviceName, "activateCollaboratioOnProject", params);
     }
 
+    /**
+     * 
+     * @param backendId 
+     * @param currentUserPreferences 
+     */
     addPreferencesForCurrentUser(backendId: string, currentUserPreferences: any) {
         console.log("[CollaborationServices] addPreferencesForCurrentUser");
         var params: any = {
@@ -82,6 +83,11 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "addPreferencesForCurrentUser", params);
     }
 
+    /**
+     * 
+     * @param resource 
+     * @param summary 
+     */
     createIssue(resource: ARTURIResource, summary: string) {
         console.log("[CollaborationServices] createIssue");
         var params: any = {
@@ -91,6 +97,12 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "createIssue", params);
     }
 
+    /**
+     * 
+     * @param projectName 
+     * @param projectKey 
+     * @param projectId 
+     */
     assignProject(projectName: string, projectKey: string, projectId: string) {
         console.log("[CollaborationServices] assignProject");
         var params: any = {
@@ -101,6 +113,11 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "assignProject", params);
     }
 
+    /**
+     * 
+     * @param projectName 
+     * @param projectKey 
+     */
     createProject(projectName: string, projectKey: string) {
         console.log("[CollaborationServices] createProject");
         var params: any = {
@@ -110,6 +127,11 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "createProject", params);
     }
 
+    /**
+     * 
+     * @param issue 
+     * @param resource 
+     */
     assignResourceToIssue(issue: string, resource: ARTURIResource) {
         console.log("[CollaborationServices] assignResourceToIssue");
         var params: any = {
@@ -119,6 +141,10 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "assignResourceToIssue", params);
     }
 
+    /**
+     * 
+     * @param resource 
+     */
     listIssuesAssignedToResource(resource: ARTURIResource): Observable<Issue[]> {
         console.log("[CollaborationServices] listIssuesAssignedToResource");
         var params: any = {
@@ -139,6 +165,9 @@ export class CollaborationServices {
         );
     }
 
+    /**
+     * 
+     */
     listProjects(): Observable<{ id: string, key: string, name: string }[]> {
         console.log("[CollaborationServices] listProjects");
         var params: any = {};
@@ -151,6 +180,9 @@ export class CollaborationServices {
         return this.httpMgr.doGet(this.serviceName, "listProjects", params, options);
     }
 
+    /**
+     * 
+     */
     listIssues(): Observable<Issue[]> {
         console.log("[CollaborationServices] listIssues");
         var params: any = {};

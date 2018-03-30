@@ -19,6 +19,7 @@ export class CollaborationUserSettingsModal implements ModalComponent<BSModalCon
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
+    private collSysBackendId: string;
     private userSettings: Settings;
 
     constructor(public dialog: DialogRef<BSModalContext>,
@@ -30,9 +31,9 @@ export class CollaborationUserSettingsModal implements ModalComponent<BSModalCon
     }
 
     ngOnInit() {
-        let backedndId = this.vbColl.getBackendId()
-        if (backedndId != null) {
-            this.settingsService.getSettings(backedndId, Scope.PROJECT_USER).subscribe(
+        this.collSysBackendId = this.vbColl.getBackendId();
+        if (this.collSysBackendId != null) {
+            this.settingsService.getSettings(this.collSysBackendId, Scope.PROJECT_USER).subscribe(
                 settings => {
                     this.userSettings = settings;
                 }
@@ -53,14 +54,14 @@ export class CollaborationUserSettingsModal implements ModalComponent<BSModalCon
     ok(event: Event) {
         let settingsParam = this.userSettings.getPropertiesAsMap();
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        // this.collaborationService.activateCollaboratioOnProject(VBCollaboration.jiraFactoryId, settingsParam, prefsParam).subscribe(
-        //     resp => {
-        //         UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-        //         event.stopPropagation();
-        //         event.preventDefault();
-        //         this.dialog.close();
-        //     }
-        // );
+        this.settingsService.storeSettings(this.collSysBackendId, Scope.PROJECT_USER, settingsParam).subscribe(
+            resp => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                event.stopPropagation();
+                event.preventDefault();
+                this.dialog.close();
+            }
+        );
     }
 
     cancel() {

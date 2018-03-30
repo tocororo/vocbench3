@@ -5,9 +5,9 @@
 </div>
 <div class="modal-body scrollableContainer blockingDivHost" style="max-height: 70vh">
 
-    <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+    <div class="hbox" style="align-items: center; margin: 4px;">
         <label style="margin-right: 4px; white-space: nowrap">Backend type:</label>
-        <select class="form-control input-sm" [(ngModel)]="selectedExtension">
+        <select class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
             <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
         </select>
     </div>

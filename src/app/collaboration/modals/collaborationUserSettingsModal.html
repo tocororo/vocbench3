@@ -5,7 +5,13 @@
 </div>
 <div class="modal-body scrollableContainer blockingDivHost" style="max-height: 70vh">
 
-    <settings-renderer [(ngModel)]="userSettings"></settings-renderer>
+    <div *ngIf="!collSysBackendId" style="margin-bottom: 4px;">
+        <div class="alert alert-warning">
+            The Collaboration System has not been configured for this project.
+        </div>
+    </div>
+
+    <settings-renderer *ngIf="collSysBackendId" [(ngModel)]="userSettings"></settings-renderer>
 
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">

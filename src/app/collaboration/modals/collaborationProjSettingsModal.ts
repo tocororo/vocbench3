@@ -36,7 +36,7 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
         this.extensionService.getExtensions(ExtensionPointID.COLLABORATION_BACKEND_ID).subscribe(
             extensions => {
                 this.extensions = extensions;
-                let backedndId = this.vbColl.getBackendId()
+                let backedndId = this.vbColl.getBackendId();
                 if (backedndId != null) {
                     for (var i = 0; i < this.extensions.length; i++) {
                         if (this.extensions[i].id == backedndId) {
@@ -44,15 +44,22 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
                             break;
                         }
                     }
-                    this.settingsService.getSettings(backedndId, Scope.PROJECT).subscribe(
-                        settings => {
-                            this.projSettings = settings;
-                        }
-                    );
+                    this.initSettings();
                 }
             }
-        )
+        );
+    }
 
+    private initSettings() {
+        this.settingsService.getSettings(this.selectedExtension.id, Scope.PROJECT).subscribe(
+            settings => {
+                this.projSettings = settings;
+            }
+        );
+    }
+
+    private onExtensionChange() {
+        this.initSettings();
     }
 
     private isOkClickable(): boolean {
@@ -68,14 +75,19 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
     ok(event: Event) {
         let settingsParam = this.projSettings.getPropertiesAsMap();
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        // this.collaborationService.activateCollaboratioOnProject(VBCollaboration.jiraFactoryId, settingsParam, prefsParam).subscribe(
-        //     resp => {
-        //         UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-        //         event.stopPropagation();
-        //         event.preventDefault();
-        //         this.dialog.close();
-        //     }
-        // );
+        this.settingsService.storeSettings(this.selectedExtension.id, Scope.PROJECT, settingsParam).subscribe(
+            resp => {
+                this.collaborationService.activateCollaboratioOnProject(this.selectedExtension.id).subscribe(
+                    resp => {
+                        UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                        this.vbColl.initCollaborationSystem();
+                        event.stopPropagation();
+                        event.preventDefault();
+                        this.dialog.close();
+                    }
+                )
+            }
+        );
     }
 
     cancel() {
