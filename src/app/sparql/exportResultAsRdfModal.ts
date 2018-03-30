@@ -5,7 +5,7 @@ import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { RDFFormat } from "../models/RDFFormat";
-import { Settings, ExtensionPointID, ExtensionFactory, FilteringStep } from "../models/Plugins";
+import { Settings, ExtensionPointID, ExtensionFactory, FilteringStep, ConfigurableExtensionFactory } from "../models/Plugins";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
@@ -29,7 +29,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
     private applyFilter: boolean = false;
 
     //export filter management
-    private filters: ExtensionFactory[];
+    private filters: ConfigurableExtensionFactory[];
     private filtersChain: FilterChainElement[] = [];
     private selectedFilterChainElement: FilterChainElement;
 
@@ -55,7 +55,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
 
         this.extensionServices.getExtensions(ExtensionPointID.RDF_TRANSFORMERS_ID).subscribe(
             extensions => {
-                this.filters = extensions;
+                this.filters = <ConfigurableExtensionFactory[]>extensions;
             }
         );
     }

@@ -13,11 +13,15 @@ export class Settings {
     public type: string;
     public editRequired: boolean;
     public properties: SettingsProp[];
-    constructor(shortName: string, type: string, editRequired: boolean, properties: SettingsProp[]) {
+    public htmlDescription?: string;
+    public htmlWarning?: string;
+    constructor(shortName: string, type: string, editRequired: boolean, properties: SettingsProp[], htmlDescription?: string, htmlWaning?: string) {
         this.shortName = shortName;
         this.editRequired = editRequired;
         this.type = type;
         this.properties = properties;
+        this.htmlDescription = htmlDescription;
+        this.htmlWarning = htmlWaning;
     }
 
     public clone(): Settings {
@@ -60,11 +64,13 @@ export class Settings {
             let description = response.properties[i].description;
             let required = response.properties[i].required;
             let value = response.properties[i].value;
+            let jsonValue = response.properties[i].jsonValue;
             let enumeration = response.properties[i].enumeration;
             let type = response.properties[i].type;
-            props.push(new SettingsProp(name, displayName, description, required, value, enumeration, type));
+            props.push(new SettingsProp(name, displayName, description, required, type, enumeration, value, jsonValue));
         }
-        let stProps = new Settings(response.shortName, response['@type'], response.editRequired, props);
+        let stProps = new Settings(response.shortName, response['@type'], response.editRequired, props, 
+            response.htmlDescription, response.htmlWarning);
         return stProps;
     }
 }
@@ -101,7 +107,7 @@ export class PluginSpecification {
 
 export class ExtensionPointID {
     public static EXPORT_FILTER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.ExportFilter";
-    public static DATASET_METADATA_EXPORTER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.DatasetMetadataExporter";
+    public static DATASET_METADATA_EXPORTER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.datasetmetadata.DatasetMetadataExporter";
     public static RENDERING_ENGINE_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RenderingEngine";
     public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
     public static REPO_IMPL_CONFIGURER_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.RepositoryImplConfigurer";
@@ -109,23 +115,36 @@ export class ExtensionPointID {
     public static RDF_TRANSFORMERS_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.rdftransformer.RDFTransformer";
 }
 
-export class ExtensionFactory {
+export abstract class ExtensionFactory {
     id: string;
     name: string;
     description: string;
     extensionType: string;
-    scope: Scope;
-    configurationScopes: Scope[];
-    configurations: Settings[];
-
-    constructor(id: string, name: string, description: string, extensionType: string, scope: Scope, configurationScopes: Scope[], configurations: Settings[]) {
+    constructor(id: string, name: string, description: string, extensionType: string) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.extensionType = extensionType;
+    }
+}
+
+export class ConfigurableExtensionFactory extends ExtensionFactory {
+    scope: Scope;
+    configurationScopes: Scope[];
+    configurations: Settings[];
+    constructor(id: string, name: string, description: string, extensionType: string, scope: Scope, configurationScopes: Scope[], configurations: Settings[]) {
+        super(id, name, description, extensionType)
         this.scope = scope;
         this.configurationScopes = configurationScopes;
         this.configurations = configurations;
+    }
+}
+
+export class NonConfigurableExtensionFactory extends ExtensionFactory {
+    settingsScopes: Scope[];
+    constructor(id: string, name: string, description: string, extensionType: string, settingsScopes: Scope[]) {
+        super(id, name, description, extensionType)
+        this.settingsScopes = settingsScopes;
     }
 }
 

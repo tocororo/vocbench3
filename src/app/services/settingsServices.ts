@@ -54,9 +54,9 @@ export class SettingsServices {
         var params = {
             componentID: componentID,
             scope: scope,
-            settings: settings
+            settings: JSON.stringify(settings)
         };
-        return this.httpMgr.doGet(this.serviceName, "storeSettings", params);
+        return this.httpMgr.doPost(this.serviceName, "storeSettings", params);
     }
 
 }

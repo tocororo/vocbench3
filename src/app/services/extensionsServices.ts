@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Scope, ExtensionFactory, Settings } from '../models/Plugins';
+import { Scope, ExtensionFactory, Settings, ConfigurableExtensionFactory, NonConfigurableExtensionFactory } from '../models/Plugins';
 
 @Injectable()
 export class ExtensionsServices {
@@ -36,15 +36,22 @@ export class ExtensionsServices {
             stResp => {
                 let exts: ExtensionFactory[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let configurations: Settings[] = [];
+                    let extFact: ExtensionFactory;
+
+                    //distinguish between Configurable and NonConfigurable ExtensionFactory
                     let configColl: any[] = stResp[i].configurations;
                     if (configColl != null) {
+                        let configurations: Settings[] = [];
                         for (var j = 0; j < configColl.length; j++) {
                             configurations.push(Settings.parse(configColl[j]));
                         }
+                        extFact = new ConfigurableExtensionFactory(stResp[i].id, stResp[i].name, stResp[i].description, 
+                            stResp[i].extensionType, stResp[i].scope, stResp[i].configurationScopes, configurations);
+                    } else {
+                        extFact = new NonConfigurableExtensionFactory(stResp[i].id, stResp[i].name, stResp[i].description, 
+                            stResp[i].extensionType, stResp[i].settingsScopes);
                     }
-                    let extFact: ExtensionFactory = new ExtensionFactory(stResp[i].id, stResp[i].name, stResp[i].description, 
-                        stResp[i].extensionType, stResp[i].scope, stResp[i].configurationScopes, configurations);
+                    
                     exts.push(extFact);
                 }
                 return exts;

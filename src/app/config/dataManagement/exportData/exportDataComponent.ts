@@ -5,7 +5,7 @@ import { ExportServices } from "../../../services/exportServices";
 import { MetadataServices } from "../../../services/metadataServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { ConfigurationsServices } from "../../../services/configurationsServices";
-import { Settings, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep } from "../../../models/Plugins";
+import { Settings, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep, ConfigurableExtensionFactory } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { VBContext } from "../../../utils/VBContext";
@@ -32,7 +32,7 @@ export class ExportDataComponent {
     private exportGraphs: GraphStruct[] = [];
 
     //export filter management
-    private filters: ExtensionFactory[];
+    private filters: ConfigurableExtensionFactory[];
     private filtersChain: FilterChainElement[] = [];
     private selectedFilterChainElement: FilterChainElement;
 
@@ -70,7 +70,7 @@ export class ExportDataComponent {
 
         this.extensionServices.getExtensions(ExtensionPointID.RDF_TRANSFORMERS_ID).subscribe(
             extensions => {
-                this.filters = extensions;
+                this.filters = <ConfigurableExtensionFactory[]>extensions;
             }
         );
     }

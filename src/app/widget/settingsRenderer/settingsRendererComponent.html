@@ -1,8 +1,15 @@
-<div *ngIf="settings" class="panel panel-default">
+<div class="panel panel-default vbox">
     <div class="panel-heading">
-        <label>{{settings.shortName}}:</label>
+        <label>{{settings?.shortName}}</label>
+        <span *ngIf="settings?.htmlDescription" class="glyphicon glyphicon-info-sign" [title]="settings.htmlDescription"></span>
     </div>
     <div class="panel-body" class="scrollableContainer">
+
+        <div *ngIf="settings?.htmlWarning" class="alert alert-warning" style="margin: 3px;">
+            <span class="glyphicon glyphicon-warning-sign" style="margin-right: 4px;"></span>
+            {{settings.htmlWarning}}
+        </div>
+
         <table class="table table-condensed table-borderless table-hoverable">
             <colgroup>
                 <col style="width: 1%;">
@@ -10,7 +17,7 @@
                 <col style="width: 1%;">
             </colgroup>
             <tbody>
-                <tr *ngFor="let p of settings.properties">
+                <tr *ngFor="let p of settings?.properties">
                     <td nowrap>
                         {{p.displayName}}
                         <span *ngIf="p.required">*</span>
@@ -22,25 +29,6 @@
                         <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onModelChanged()">
                             <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
                         </select>
-
-                        <!-- <select *ngIf="p.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onModelChanged()">
-                            <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
-                        </select>
-                        <ng-template #notEnumerationBlock>
-                            <div *ngIf="p.type == 'boolean'; else notBooleanBlock" class="input-sm form-control text-center">
-                                <label class="radio-inline">
-                                    <input type="radio" [name]="'radio_'+p.name" [(ngModel)]="p.value" value="true" (ngModelChange)="onModelChanged()">true
-                                </label>
-                                <label class="radio-inline" style="margin-left: 10px;">
-                                    <input type="radio" [name]="'radio_'+p.name" [(ngModel)]="p.value" value="false" (ngModelChange)="onModelChanged()">false
-                                </label>
-                            </div>
-                            <ng-template #notBooleanBlock>
-                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value" (ngModelChange)="onModelChanged()">
-                                </textarea>
-                            </ng-template>
-                        </ng-template> -->
-
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
