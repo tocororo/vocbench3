@@ -1,13 +1,19 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
         <label>{{settings?.shortName}}</label>
-        <span *ngIf="settings?.htmlDescription" class="glyphicon glyphicon-info-sign" [title]="settings.htmlDescription"></span>
     </div>
     <div class="panel-body" class="scrollableContainer">
 
-        <div *ngIf="settings?.htmlWarning" class="alert alert-warning" style="margin: 3px;">
-            <span class="glyphicon glyphicon-warning-sign" style="margin-right: 4px;"></span>
-            {{settings.htmlWarning}}
+        <div *ngIf="settings?.htmlDescription" class="alert alert-info hbox" style="align-items: center;">
+            <span class="glyphicon glyphicon-info-sign" style="margin-right: 6px;"></span>
+            <span style="flex: 1;" [innerHTML]="safeDescription"></span>
+            <button class="close" data-dismiss="alert" style="margin-left: 6px;"><span>&times;</span></button>
+        </div>
+
+        <div *ngIf="settings?.htmlWarning" class="alert alert-warning hbox" style="align-items: center; margin-top: 4px;">
+            <span class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;"></span>
+            <span style="flex: 1;" [innerHTML]="safeWarning"></span>
+            <button class="close" data-dismiss="alert" style="margin-left: 6px;"><span>&times;</span></button>
         </div>
 
         <table class="table table-condensed table-borderless table-hoverable">

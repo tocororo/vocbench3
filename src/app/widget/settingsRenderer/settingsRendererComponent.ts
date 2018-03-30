@@ -1,6 +1,7 @@
 import { Component, Input, forwardRef } from '@angular/core';
 import { Settings } from '../../models/Plugins';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
     selector: 'settings-renderer',
@@ -12,13 +13,23 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 export class SettingsRendererComponent {
     
     private settings: Settings;
+    private safeDescription: SafeHtml;
+    private safeWarning: SafeHtml;
 
-    constructor() { }
+    constructor(public sanitizer: DomSanitizer) { }
+
+    private sanitizeHtml() {
+        if (this.settings.htmlDescription) {
+            this.safeDescription = this.sanitizer.bypassSecurityTrustHtml(this.settings.htmlDescription);
+        }
+        if (this.settings.htmlWarning) {
+            this.safeWarning = this.sanitizer.bypassSecurityTrustHtml(this.settings.htmlWarning);
+        }
+    }
 
     private onModelChanged() {
         this.propagateChange(this.settings);
     }
-
 
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**
@@ -27,6 +38,7 @@ export class SettingsRendererComponent {
     writeValue(obj: Settings) {
         if (obj) {
             this.settings = obj;
+            this.sanitizeHtml();
         }
     }
     /**

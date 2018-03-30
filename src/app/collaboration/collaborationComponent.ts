@@ -101,7 +101,6 @@ export class CollaborationComponent {
     }
 
     private openProjectConfig() {
-        console.log("opening proj settings");
         this.collModals.editCollaborationProjectSettings().then(
             res => {
                 this.initIssueList();
@@ -111,7 +110,6 @@ export class CollaborationComponent {
     }
 
     private openUserConfig() {
-        console.log("opening user settings");
         this.collModals.editCollaborationUserSettings().then(
             res => {
                 this.initIssueList();
