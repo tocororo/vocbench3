@@ -23,8 +23,8 @@ export class CollaborationComponent {
 
     //TODO configuration only available to sys admin or users with privileges
 
-    private settingsConfigured: boolean; //serverURL
-    private preferencesConfigured: boolean; //credentials
+    private projSettingsConfigured: boolean; //serverURL
+    private userSettingsConfigured: boolean; //credentials
     private csProjectLinked: boolean;
 
     private csWorking: boolean = true;
@@ -47,10 +47,10 @@ export class CollaborationComponent {
         this.vbCollaboration.initCollaborationSystem().subscribe(
             resp => {
                 this.csProjectLinked = this.vbCollaboration.isLinked();
-                this.settingsConfigured = this.vbCollaboration.isSettingsConfigured();
-                this.preferencesConfigured = this.vbCollaboration.isPreferencesConfigured();
+                this.projSettingsConfigured = this.vbCollaboration.isProjSettingsConfigured();
+                this.userSettingsConfigured = this.vbCollaboration.isUserSettingsConfigured();
 
-                if (this.preferencesConfigured && this.settingsConfigured && this.csProjectLinked && this.vbCollaboration.isEnabled()) {
+                if (this.userSettingsConfigured && this.projSettingsConfigured && this.csProjectLinked && this.vbCollaboration.isEnabled()) {
                     this.csWorking = true;
                     this.vbCollaboration.setWorking(this.csWorking);
                     UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

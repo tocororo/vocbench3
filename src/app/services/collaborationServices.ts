@@ -13,13 +13,10 @@ export class CollaborationServices {
     constructor(private httpMgr: HttpManager) { }
 
     /**
-     * Returns an object containing the following boolean values:
-     * enabled
-     * settingsConfigured
-     * preferencesConfigured
+     * 
      */
     getCollaborationSystemStatus(): 
-        Observable<{ backendId: string, enabled: boolean, linked: boolean, settingsConfigured: boolean, preferencesConfigured: boolean }> {
+        Observable<{ backendId: string, enabled: boolean, linked: boolean, projSettingsConfigured: boolean, userSettingsConfigured: boolean }> {
         console.log("[CollaborationServices] getCollaborationSystemStatus");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params);

@@ -2,8 +2,7 @@
     <div class="panel-heading" style="display: flex;">
         <label style="flex: 1">Collaboration System</label>
 
-        <button class="btn btn-default btn-xs" (click)="initIssueList()"
-            [disabled]="!csWorking || !settingsConfigured || !preferencesConfigured || !csProjectLinked">
+        <button class="btn btn-default btn-xs" (click)="initIssueList()" [disabled]="!issues">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
         <div class="dropdown" style="margin-left: 3px">
@@ -13,6 +12,12 @@
             <ul class="dropdown-menu pull-right">
                 <li><a (click)="openProjectConfig()">Project configuration</a></li>
                 <li><a (click)="openUserConfig()">User configuration</a></li>
+                <li>
+                    <a (click)="assignProject()" 
+                        [ngClass]="{ disabled : projSettingsConfigured && userSettingsConfigured && !csProjectLinked }">
+                        Assign CS project
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -21,15 +26,15 @@
     <div class="panel-body vbox">
 
         <!-- Mandatory settings not configured (missing serverURL) -->
-        <div *ngIf="!settingsConfigured; else elseBlock1" class="alert alert-warning" style="margin: 3px;">
-            No Collaboration System has been configured. Please, configure a CS pushing the 
-            <span class="glyphicon glyphicon-cog"></span> button in the top right corner.
+        <div *ngIf="!projSettingsConfigured; else elseBlock1" class="alert alert-warning" style="margin: 3px;">
+            No Collaboration System has been configured. Please, 
+            <a style="cursor: pointer" (click)="openProjectConfig()">configure</a> a CS.
         </div>
         <ng-template #elseBlock1>
             <!-- Mandatory settings configured, Mandatory preferences not configured (missing credentials) -->
-            <div *ngIf="!preferencesConfigured; else elseBlock2" class="alert alert-warning" style="margin: 3px;">
-                You need to be logged to the CS in order to see the issues list. Please, provide your credential pushing the
-                <span class="glyphicon glyphicon-cog"></span> button in the top right corner.
+            <div *ngIf="!userSettingsConfigured; else elseBlock2" class="alert alert-warning" style="margin: 3px;">
+                You need to be logged to the CS in order to see the issues list. Please, 
+                <a style="cursor: pointer" (click)="openUserConfig()">provide</a> your credentials pushing.
             </div>
 
             <ng-template #elseBlock2>

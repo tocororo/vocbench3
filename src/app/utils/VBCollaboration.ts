@@ -24,8 +24,8 @@ export class VBCollaboration {
     private working: boolean = false;
     private enabled: boolean = false;
     private linked: boolean = false; //if a collaboration project is linked to the VB project
-    private settingsConfigured: boolean = false;
-    private preferencesConfigured: boolean = false;
+    private projSettingsConfigured: boolean = false;
+    private userSettingsConfigured: boolean = false;
     private backendId: string;
 
     constructor(private collaborationService: CollaborationServices, private projectService: ProjectServices, private eventHandler: VBEventHandler) {}
@@ -37,21 +37,21 @@ export class VBCollaboration {
                 this.enabled = resp.enabled;
                 this.backendId = resp.backendId;
                 this.linked = resp.linked;
-                this.settingsConfigured = resp.settingsConfigured;
-                this.preferencesConfigured = resp.preferencesConfigured;
-                if (this.preferencesConfigured && this.settingsConfigured && this.linked && this.enabled) {
+                this.projSettingsConfigured = resp.projSettingsConfigured;
+                this.userSettingsConfigured = resp.userSettingsConfigured;
+                if (this.userSettingsConfigured && this.projSettingsConfigured && this.linked && this.enabled) {
                     this.working = true;
                 }
             }
         );
     }
 
-    public isSettingsConfigured(): boolean {
-        return this.settingsConfigured;
+    public isProjSettingsConfigured(): boolean {
+        return this.projSettingsConfigured;
     }
 
-    public isPreferencesConfigured(): boolean {
-        return this.preferencesConfigured;
+    public isUserSettingsConfigured(): boolean {
+        return this.userSettingsConfigured;
     }
 
     public isEnabled(): boolean {
@@ -78,8 +78,8 @@ export class VBCollaboration {
         this.working = false;
         this.enabled = false;
         this.linked = false;
-        this.settingsConfigured = false;
-        this.preferencesConfigured = false;
+        this.projSettingsConfigured = false;
+        this.userSettingsConfigured = false;
         this.backendId = null;
     }
 
