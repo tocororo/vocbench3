@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { Settings } from "../../../../models/Plugins";
+import { Settings, SettingsProp } from "../../../../models/Plugins";
 import { ARTURIResource } from "../../../../models/ARTResources";
 
 export class PluginConfigModalData extends BSModalContext {
@@ -29,6 +29,10 @@ export class PluginConfigModal implements ModalComponent<PluginConfigModalData> 
     ngOnInit() {
         //copy the context configuration (so changes of params don't affect original configuration params)
         this.config = this.context.configuration.clone();
+    }
+
+    private updateBoolean(prop: SettingsProp, value: boolean) {
+        prop.value = value;
     }
 
     private isOkClickable(): boolean {

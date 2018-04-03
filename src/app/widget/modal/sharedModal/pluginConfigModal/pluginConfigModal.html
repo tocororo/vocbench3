@@ -27,10 +27,10 @@
                         <ng-template #notEnumerationBlock>
                             <div *ngIf="p.type == 'boolean'; else notBooleanBlock" class="input-sm form-control text-center">
                                 <label class="radio-inline">
-                                    <input type="radio" (click)="p.value='true'" [name]="'radio_'+p.name" [checked]="p.value=='true'">true
+                                    <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+p.name" [checked]="p.value">true
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" (click)="p.value='false'" [name]="'radio_'+p.name" [checked]="p.value=='false'">false
+                                    <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+p.name" [checked]="!p.value">false
                                 </label>
                             </div>
                             <ng-template #notBooleanBlock>

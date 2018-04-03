@@ -28,7 +28,7 @@ export class Settings {
         var properties: SettingsProp[] = [];
         for (var i = 0; i < this.properties.length; i++) {
             let p: SettingsProp = this.properties[i];
-            properties.push(new SettingsProp(p.name, p.displayName, p.description, p.required, p.type, p.enumeration, p.value, p.jsonValue));
+            properties.push(new SettingsProp(p.name, p.displayName, p.description, p.required, p.type, p.enumeration, p.value));
         }
         return new Settings(this.shortName, this.type, this.editRequired, properties);
     }
@@ -48,7 +48,7 @@ export class Settings {
         let map: { [key: string]: string } = {};
         for (var i = 0; i < this.properties.length; i++) {
             let value = this.properties[i].value;
-            if (value != null && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
+            if (value != null && typeof value === "string" && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
                 value = undefined;
             }
             map[this.properties[i].name] = value;
@@ -64,10 +64,9 @@ export class Settings {
             let description = response.properties[i].description;
             let required = response.properties[i].required;
             let value = response.properties[i].value;
-            let jsonValue = response.properties[i].jsonValue;
             let enumeration = response.properties[i].enumeration;
             let type = response.properties[i].type;
-            props.push(new SettingsProp(name, displayName, description, required, type, enumeration, value, jsonValue));
+            props.push(new SettingsProp(name, displayName, description, required, type, enumeration, value));
         }
         let stProps = new Settings(response.shortName, response['@type'], response.editRequired, props, 
             response.htmlDescription, response.htmlWarning);
@@ -80,17 +79,15 @@ export class SettingsProp {
     public displayName: string;
     public description: string;
     public required: boolean;
-    public value: string;
-    public jsonValue: any;
+    public value: any;
     public enumeration: string[];
     public type: string;
-    constructor (name: string, displayName: string, description: string, required: boolean, type?: string, enumeration?: string[], value?: string, jsonValue?: any) {
+    constructor (name: string, displayName: string, description: string, required: boolean, type?: string, enumeration?: string[], value?: string) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
         this.required = required;
         this.value = value;
-        this.jsonValue = jsonValue;
         this.enumeration = enumeration;
         this.type = type;
     }
@@ -126,6 +123,8 @@ export abstract class ExtensionFactory {
         this.description = description;
         this.extensionType = extensionType;
     }
+
+    public abstract clone(): ExtensionFactory;
 }
 
 export class ConfigurableExtensionFactory extends ExtensionFactory {
@@ -138,6 +137,15 @@ export class ConfigurableExtensionFactory extends ExtensionFactory {
         this.configurationScopes = configurationScopes;
         this.configurations = configurations;
     }
+
+    public clone(): ConfigurableExtensionFactory {
+        let confs: Settings[] = [];
+        this.configurations.forEach((conf: Settings) => {
+            confs.push(conf.clone());
+        });
+        return new ConfigurableExtensionFactory(this.id, this.name, this.description, this.extensionType, this.scope, 
+            this.configurationScopes, confs);
+    }
 }
 
 export class NonConfigurableExtensionFactory extends ExtensionFactory {
@@ -145,6 +153,10 @@ export class NonConfigurableExtensionFactory extends ExtensionFactory {
     constructor(id: string, name: string, description: string, extensionType: string, settingsScopes: Scope[]) {
         super(id, name, description, extensionType)
         this.settingsScopes = settingsScopes;
+    }
+
+    public clone(): NonConfigurableExtensionFactory {
+        return new NonConfigurableExtensionFactory(this.id, this.name, this.description, this.extensionType, this.settingsScopes);
     }
 }
 

@@ -74,17 +74,10 @@
                                 [ngClass]="{active: filterChainEl == selectedFilterChainElement}" (click)="selectFilterChainElement(filterChainEl)">
                                 <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
                                 <td class="hbox">
-                                    <select class="form-control input-sm" [(ngModel)]="filterChainEl.selectedFactory" 
-                                        (ngModelChange)="onChangePlugin(filterChainEl)" [title]="filterChainEl.selectedFactory.factory.description">
-                                        <option *ngFor="let fact of filterChainEl.availableFactories" [ngValue]="fact" [title]="fact.factory.description">
-                                            {{fact.factory.name}} 
-                                        </option>
-                                    </select>
-                                    <select *ngIf="filterChainEl.selectedFactory.configurations.length > 1" class="form-control input-sm"
-                                        [(ngModel)]="filterChainEl.selectedFactory.selectedConfiguration" style="margin-left: 4px;">
-                                        <option *ngFor="let cfg of filterChainEl.selectedFactory.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
-                                    </select>
-                                    <button class="btn btn-default" (click)="configureFilter(filterChainEl)" style="margin-left: 4px;">Configure</button>
+                                    <extension-configurator [extensions]="filterChainEl.availableFactories"
+                                        (extensionUpdated)="onExtensionUpdated(filterChainEl, $event)"
+                                        (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)">
+                                    </extension-configurator>
                                     <button class="btn btn-default" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
                                 </td>
                                 <td class="text-center" style="font-size: 14px; font-weight: 700;">
