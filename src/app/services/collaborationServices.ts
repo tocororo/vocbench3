@@ -165,7 +165,7 @@ export class CollaborationServices {
     /**
      * 
      */
-    listProjects(): Observable<{ id: string, key: string, name: string }[]> {
+    listProjects(): Observable<{ headers: string[], projects: any[] }> {
         console.log("[CollaborationServices] listProjects");
         var params: any = {};
         var options: VBRequestOptions = new VBRequestOptions({

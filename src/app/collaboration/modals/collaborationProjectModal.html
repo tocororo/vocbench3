@@ -16,16 +16,12 @@
             <table class="table table-condensed table-borderless table-hoverable">
                 <thead>
                     <tr>
-                        <th class="text-center">Key</th>
-                        <th class="text-center">Id</th>
-                        <th class="text-center">Name</th>
+                        <th *ngFor="let h of headers" class="text-center">{{h}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{ active : p == selectedProject }">
-                        <td class="text-center">{{p.key}}</td>
-                        <td class="text-center">{{p.id}}</td>
-                        <td class="text-center">{{p.name}}</td>
+                        <td *ngFor="let h of headers" class="text-center">{{p[h]}}</td>
                     </tr>
                 </tbody>
             </table>

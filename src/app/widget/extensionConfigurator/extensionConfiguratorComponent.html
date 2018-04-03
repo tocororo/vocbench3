@@ -1,13 +1,13 @@
-<div class="hbox">
+<div class="hbox" style="margin: 0 -5px;">
     <select *ngIf="extensions.length > 1" class="form-control input-sm" [(ngModel)]="selectedExtension"
-        (ngModelChange)="onChangeExtension()" [title]="selectedExtension.description">
+        (ngModelChange)="onChangeExtension()" [title]="selectedExtension.description" style="margin: 0 5px;">
         <option *ngFor="let ext of extensions" [ngValue]="ext" [title]="ext.description">
             {{ext.name}} 
         </option>
     </select>
     <select *ngIf="selectedExtension.configurations.length > 1" class="form-control input-sm" [(ngModel)]="selectedConfiguration"
-        (ngModelChange)="onChangeConfig()" style="margin-left: 4px;">
+        (ngModelChange)="onChangeConfig()" style="margin: 0 5px;">
         <option *ngFor="let cfg of selectedExtension.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
     </select>
-    <button class="btn btn-default" (click)="configure()" style="margin-left: 4px;">Configure</button>
+    <button class="btn btn-default" (click)="configure()" style="margin-right: 5px;">Configure</button>
 </div>

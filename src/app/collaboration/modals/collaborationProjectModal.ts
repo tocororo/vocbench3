@@ -16,8 +16,9 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
 
-    private projects: { id: string, key: string, name: string }[] = [];
-    private selectedProject: { id: string, key: string, name: string }
+    private headers: string[];
+    private projects: any[] = [];
+    private selectedProject: any;
 
     constructor(public dialog: DialogRef<BSModalContext>, private collaborationService: CollaborationServices, 
         private vbCollaboration: VBCollaboration, private basicModals: BasicModalServices) {
@@ -31,9 +32,10 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
     private initProjectList() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.collaborationService.listProjects().subscribe(
-            projects => {
+            resp => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                this.projects = projects;
+                this.headers = resp.headers;
+                this.projects = resp.projects;
             },
             (err: Error) => {
                 this.basicModals.alert("Error", "Cannot retrieve the projects list. Connection to Collaboration System server failed." ,
