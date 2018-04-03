@@ -73,16 +73,6 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     }
 
     delete() {
-        if (this.selectedNode.getAdditionalProperty(ResAttribute.NUM_INST) != 0) {
-            this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() +
-                " since it has instance(s). Please delete the instance(s) and retry.", "warning");
-            return;
-        }
-        if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-            this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
-                " since it has subClass(es). Please delete the subClass(es) and retry", "warning");
-            return;
-        }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
         this.classesService.deleteClass(this.selectedNode).subscribe(
             stResp => {

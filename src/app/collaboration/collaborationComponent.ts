@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { CollaborationProjSettingsModal } from "./modals/collaborationProjSettingsModal";
 import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
@@ -20,6 +20,8 @@ import { CollaborationModalServices } from './collaborationModalService';
     host: { class: "pageComponent" }
 })
 export class CollaborationComponent {
+
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     //TODO configuration only available to sys admin or users with privileges
 
@@ -53,10 +55,10 @@ export class CollaborationComponent {
                 if (this.userSettingsConfigured && this.projSettingsConfigured && this.csProjectLinked && this.vbCollaboration.isEnabled()) {
                     this.csWorking = true;
                     this.vbCollaboration.setWorking(this.csWorking);
-                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                    UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                     this.collaborationService.listIssues().subscribe(
                         issues => {
-                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                             this.issues = issues;
                             this.enrichIssuesWithResources();
                         },
