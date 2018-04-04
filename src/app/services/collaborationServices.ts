@@ -100,12 +100,10 @@ export class CollaborationServices {
      * @param projectKey 
      * @param projectId 
      */
-    assignProject(projectName: string, projectKey: string, projectId: string) {
+    assignProject(projectJson: any) {
         console.log("[CollaborationServices] assignProject");
         var params: any = {
-            projectName: projectName,
-            projectKey: projectKey,
-            projectId: projectId
+            projectJson: JSON.stringify(projectJson)
         };
         return this.httpMgr.doPost(this.serviceName, "assignProject", params);
     }
