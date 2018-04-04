@@ -113,11 +113,10 @@ export class CollaborationServices {
      * @param projectName 
      * @param projectKey 
      */
-    createProject(projectName: string, projectKey: string) {
+    createProject(projectJson: any) {
         console.log("[CollaborationServices] createProject");
         var params: any = {
-            projectName: projectName,
-            projectKey: projectKey
+            projectJson: JSON.stringify(projectJson)
         };
         return this.httpMgr.doPost(this.serviceName, "createProject", params);
     }

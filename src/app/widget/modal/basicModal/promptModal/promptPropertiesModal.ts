@@ -7,6 +7,7 @@ export class PromptPropertiesModalData extends BSModalContext {
     constructor(
         public title: string,
         public properties: { [key: string]: string },
+        public allowEmpty: boolean
     ) {
         super();
     }
@@ -30,6 +31,20 @@ export class PromptPropertiesModal implements ModalComponent<PromptPropertiesMod
     ngOnInit() {
         for (let key in this.properties) {
             this.mapKeys.push(key);
+        }
+    }
+
+    private isOkClickable(): boolean {
+        if (this.context.allowEmpty) {
+            return true;
+        } else {
+            let empty: boolean = false;
+            this.mapKeys.forEach((key: string) => {
+                if (this.properties[key] == null || this.properties[key].trim() == "") {
+                    empty = true;
+                }
+            });
+            return !empty;
         }
     }
 

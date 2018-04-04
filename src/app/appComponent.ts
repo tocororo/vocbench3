@@ -126,7 +126,7 @@ export class AppComponent {
     }
 
     private isCollaborationAuthorized() {
-        return this.vbProp.getExperimentalFeaturesEnabled();
+        return true;
     }
 
 }

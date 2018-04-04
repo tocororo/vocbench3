@@ -50,15 +50,13 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
     }
 
     private createProject() {
-        let projectProps: { [key: string]: string } = {
-            name: null, 
-            key: null
-        };
-        this.basicModals.promptProperties("Create project", projectProps).then(
+        let projectProps: { [key: string]: string } = {};
+        this.headers.forEach((h: string) => 
+            projectProps[h] = null
+        );
+        this.basicModals.promptProperties("Create project", projectProps, false).then(
             props => {
-                let projectName = props.name;
-                let projectKey = props.key;
-                this.collaborationService.createProject(projectName, projectKey).subscribe(
+                this.collaborationService.createProject(props).subscribe(
                     stResp => {
                         this.initProjectList();
                     }

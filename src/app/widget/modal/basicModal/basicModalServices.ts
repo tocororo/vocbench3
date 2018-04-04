@@ -69,9 +69,10 @@ export class BasicModalServices {
      * Opens a modal that allows to provide a set of properties values.
      * @param title 
      * @param properties 
+     * @param allowEmpty
      */
-    promptProperties(title: string, properties: { [key: string]: string }) {
-        var modalData = new PromptPropertiesModalData(title, properties);
+    promptProperties(title: string, properties: { [key: string]: string }, allowEmpty: boolean) {
+        var modalData = new PromptPropertiesModalData(title, properties, allowEmpty);
         const builder = new BSModalContextBuilder<PromptPropertiesModalData>(
             modalData, undefined, PromptPropertiesModalData
         );
