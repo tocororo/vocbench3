@@ -242,4 +242,7 @@ export class SemanticTurkey {
     public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
     public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
     public static inferenceGraph = "http://semanticturkey/inference-graph";
+
+    public static standardDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdreg#standardDereferenciation";
+    public static noDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdreg#noDereferenciation";
 }

@@ -15,41 +15,33 @@
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="dataset">
                 </td>
-                <td>*</td>
             </tr>
             <tr>
                 <td nowrap><label>URI Space:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="uriSpace">
                 </td>
+                <td>*</td>
             </tr>
             <tr>
                 <td nowrap><label>Title:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="title">
                 </td>
-                <td>*</td>
             </tr>
             <tr>
                 <td nowrap><label>Dereferenceable:</label></td>
                 <td>
-                    <div class="form-control input-sm text-center">
-                        <label class="radio-inline">
-                            <input type="radio" name="deref_radio" [(ngModel)]="dereferenceable" [value]="true">true
-                        </label>
-                        <label class="radio-inline" style="margin-left: 10px;">
-                            <input type="radio" name="deref_radio" [(ngModel)]="dereferenceable" [value]="false">false
-                        </label>
-                    </div>
+                    <select class="form-control input-sm" [(ngModel)]="dereferenceable">
+                        <option *ngFor="let der of dereferenceableValues" [ngValue]="der">{{der.label}}</option>
+                    </select>
                 </td>
-                <td>*</td>
             </tr>
             <tr>
                 <td nowrap><label>SPARQL Endpoint:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="sparqlEndpoint">
                 </td>
-                <td>*</td>
             </tr>
         </tbody>
     </table>

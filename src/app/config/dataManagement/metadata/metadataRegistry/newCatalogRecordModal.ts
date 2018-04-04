@@ -12,15 +12,22 @@ import { MetadataRegistryServices } from "../../../../services/metadataRegistryS
 export class NewCatalogRecordModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
+    private dereferenceableValues: { label: string, value: any }[] = [
+        { label: "Unknown", value: null },
+        { label: "Yes", value: true },
+        { label: "No", value: false }
+    ];
+
     private dataset: string;
     private uriSpace: string;
     private title: string;
-    private dereferenceable: boolean;
+    private dereferenceable: { label: string, value: any } = this.dereferenceableValues[0];
     private sparqlEndpoint: string;
-    
+
     constructor(public dialog: DialogRef<BSModalContext>, private metadataRegistryService: MetadataRegistryServices) {
         this.context = dialog.context;
     }
+
     
     private isInputValid() {
         return this.uriSpace != null && this.uriSpace.trim() != "";
@@ -35,14 +42,15 @@ export class NewCatalogRecordModal implements ModalComponent<BSModalContext> {
         if (this.sparqlEndpoint != null) {
             sparqlEndpointPar = new ARTURIResource(this.sparqlEndpoint);
         }
+        let dereferenceablePar: boolean = this.dereferenceable.value;
 
-        this.metadataRegistryService.addDataset(this.uriSpace, datasetPar, this.title, sparqlEndpointPar, this.dereferenceable).subscribe(
+        this.metadataRegistryService.addDataset(this.uriSpace, datasetPar, this.title, sparqlEndpointPar, dereferenceablePar).subscribe(
             stReps => {
                 event.stopPropagation();
                 event.preventDefault();
                 this.dialog.close();
             }
-        )
+        );
     }
 
     cancel() {

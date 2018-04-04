@@ -57,7 +57,7 @@
                 </div>
                 <div class="subPanel-body scrollableContainer">
                     <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" style="margin-bottom: 2px;"
-                        (click)="selectVersion(v)" [ngClass]="{ activeVers : v == selectedVersion }">
+                        (click)="selectVersion(v)" [ngClass]="{ activeVers : v == selectedVersion }" version="true">
                     </dataset-metadata>
                 </div>
             </div>

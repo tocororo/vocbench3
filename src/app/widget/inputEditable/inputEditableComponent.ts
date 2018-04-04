@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 import { UserForm } from "../../models/User";
 
@@ -12,6 +12,7 @@ export class InputEditableComponent implements OnInit {
     @Input() size: string = "sm"; //xs, sm (default), md, lg
     @Input() type: string; //text (default), email, date, select
     @Input() allowEmpty: boolean = false; //if true allow the value to be replaced with empty string
+    @Input() disabled: boolean = false;
 
     @Output() valueEdited = new EventEmitter<string>();
 
@@ -35,6 +36,12 @@ export class InputEditableComponent implements OnInit {
         }
 
         this.pristineValue = this.value;
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['value'] && changes['value'].currentValue) {
+            this.pristineValue = this.value;
+        }
     }
 
     private edit() {

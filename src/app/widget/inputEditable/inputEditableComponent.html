@@ -1,16 +1,16 @@
 <div [class]="inputClass">
     
-    <input *ngIf="type != 'select'" [type]="inputType" class="form-control" [(ngModel)]="value" [readonly]="!editInProgress">
+    <input *ngIf="type != 'select'" [type]="inputType" class="form-control" [(ngModel)]="value" [readonly]="!editInProgress" [disabled]="disabled">
 
     <!-- to show only if type == "select" and create a drop-down list with the items provided with "options" -->
-    <select *ngIf="type == 'select'" [(ngModel)]="value" class="form-control" [disabled]="!editInProgress">
+    <select *ngIf="type == 'select'" [(ngModel)]="value" class="form-control" [disabled]="disabled || !editInProgress">
         <option *ngFor="let o of options" [value]="o">{{o}}</option>
     </select>
 
     <!-- Edit buttons -->
     <span class="input-group-btn">
         <button *ngIf="!editInProgress" class="btn btn-default" type="button" style="width:36px;"
-            (click)="edit()" placeholder="Edit">
+            (click)="edit()" placeholder="Edit" [disabled]="disabled">
             <span class="glyphicon glyphicon-pencil"></span>
         </button>
         <button *ngIf="editInProgress" class="btn btn-default" type="button" style="width:18px; padding: 0px;"

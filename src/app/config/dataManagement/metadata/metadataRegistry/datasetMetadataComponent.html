@@ -9,43 +9,38 @@
                 <tr>
                     <td><label>Title:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.title" 
-                            (ngModelChange)="dataset.title = $event" [disabled]="!dataset">
+                        <input class="form-control input-sm" [ngModel]="dataset?.title" disabled>
                     </td>
                 </tr>
                 <tr>
                     <td><label>Identity:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.identity"
-                            (ngModelChange)="dataset.identity = $event" [disabled]="!dataset">
+                        <input class="form-control input-sm" [ngModel]="dataset?.identity" disabled>
                     </td>
                 </tr>
                 <tr>
                     <td><label>Dereferenciation System:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.dereferenciationSystem"
-                            (ngModelChange)="dataset.dereferenciationSystem = $event" [disabled]="!dataset">
+                        <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized" (valueEdited)="updateDerefSystem($event)"></input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td><label>SPARQL Endpoint:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.sparqlEndpoint"
-                            (ngModelChange)="dataset.sparqlEndpoint = $event" [disabled]="!dataset">
+                        <input-editable [value]="dataset?.sparqlEndpoint" (valueEdited)="updateSparqlEndpoint($event)" [disabled]="!dataset" allowEmpty="true">
+                        </input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td><label>URI space:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.uriSpace"
-                            (ngModelChange)="dataset.uriSpace = $event" [disabled]="!dataset">
+                        <input class="form-control input-sm" [ngModel]="dataset?.uriSpace" disabled>
                     </td>
                 </tr>
-                <tr>
+                <tr *ngIf="version">
                     <td><label>Version Info:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.versionInfo"
-                            (ngModelChange)="dataset.versionInfo = $event" [disabled]="!dataset">
+                        <input class="form-control input-sm" [ngModel]="dataset?.versionInfo" disabled>
                     </td>
                 </tr>
             </tbody>
