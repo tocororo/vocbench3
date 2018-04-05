@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Create Issue
+    </h3>
+</div>
+<div class="modal-body">
+
+    <settings-renderer [(ngModel)]="form"></settings-renderer>
+
+</div>
+<div class="modal-footer">
+    <span class="pull-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

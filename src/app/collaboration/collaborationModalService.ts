@@ -4,6 +4,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { CollaborationProjSettingsModal } from "./modals/collaborationProjSettingsModal";
 import { CollaborationUserSettingsModal } from "./modals/collaborationUserSettingsModal";
 import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
+import { CreateIssueModal } from "./modals/createIssueModal";
 import { IssueListModal } from "./issueListModal";
 import { Issue } from '../models/Collaboration';
 
@@ -50,6 +51,15 @@ export class CollaborationModalServices {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(CollaborationProjectModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     */
+    createIssue() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(CreateIssueModal, overlayConfig).result;
     }
 
 }

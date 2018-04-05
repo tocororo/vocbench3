@@ -79,6 +79,7 @@ import { SaveQueryModal } from "../sparql/saveQueryModal";
 import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
 import { CollaborationUserSettingsModal } from "../collaboration/modals/collaborationUserSettingsModal";
 import { CollaborationProjectModal } from "../collaboration/modals/collaborationProjectModal";
+import { CreateIssueModal } from "../collaboration/modals/createIssueModal";
 import { IssueListModal } from "../collaboration/issueListModal";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 
@@ -97,7 +98,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
         ExportResultAsRdfModal, LoadQueryModal, SaveQueryModal,
-        CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, IssueListModal
+        CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
     ],
     exports: [],
     providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices, CollaborationModalServices],
@@ -121,7 +122,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         ConverterPickerModal, SignaturePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         ExportResultAsRdfModal, LoadQueryModal, SaveQueryModal,
-        CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, IssueListModal
+        CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
     ]
 })
 export class VBModalModule { }

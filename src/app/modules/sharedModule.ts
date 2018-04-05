@@ -12,6 +12,7 @@ import { InputEditableComponent } from '../widget/inputEditable/inputEditableCom
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
+import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 
 import { YasguiComponent } from '../sparql/yasguiComponent';
@@ -21,13 +22,13 @@ import { YasguiComponent } from '../sparql/yasguiComponent';
     declarations: [
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
         YasguiComponent, CodemirrorComponent, InputEditableComponent, ResourceListComponent,
-        TypedLiteralInputComponent, LanguageItemComponent, SettingsRendererComponent,
+        TypedLiteralInputComponent, LanguageItemComponent, SettingsRendererComponent, SettingsRendererPanelComponent,
         ExtensionConfiguratorComponent
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
         YasguiComponent, CodemirrorComponent, InputEditableComponent, ResourceListComponent,
-        TypedLiteralInputComponent, LanguageItemComponent, SettingsRendererComponent,
+        TypedLiteralInputComponent, LanguageItemComponent, SettingsRendererComponent, SettingsRendererPanelComponent,
         ExtensionConfiguratorComponent
     ],
     providers: []

@@ -82,14 +82,27 @@ export class CollaborationServices {
 
     /**
      * 
-     * @param resource 
-     * @param summary 
      */
-    createIssue(resource: ARTURIResource, summary: string) {
+    getIssueCreationForm(): Observable<Settings> {
+        console.log("[CollaborationServices] getIssueCreationForm");
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getIssueCreationForm", params).map(
+            stResp => {
+                return Settings.parse(stResp);
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param resource 
+     * @param issueCreationForm a map key-value
+     */
+    createIssue(resource: ARTURIResource, issueCreationForm: any) {
         console.log("[CollaborationServices] createIssue");
         var params: any = {
             resource: resource,
-            summary: summary
+            issueCreationForm: JSON.stringify(issueCreationForm)
         };
         return this.httpMgr.doPost(this.serviceName, "createIssue", params);
     }

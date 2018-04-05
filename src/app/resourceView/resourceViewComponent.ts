@@ -152,14 +152,12 @@ export class ResourceViewComponent {
             }
         );
 
-        if (this.vbProp.getExperimentalFeaturesEnabled()) {
-            setTimeout(() => {
-                this.collaborationWorking = this.vbCollaboration.isWorking();
-                if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
-                    this.initCollaboration();
-                }
-            });
-        }
+        setTimeout(() => {
+            this.collaborationWorking = this.vbCollaboration.isWorking();
+            if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
+                this.initCollaboration();
+            }
+        });
     }
 
     /**
@@ -485,10 +483,10 @@ export class ResourceViewComponent {
     }
 
     private createIssue() {
-        this.basicModals.prompt("Create issue for " + this.resource.getShow(), "Summary").then(
-            summary => {
+        this.collabModals.createIssue().then(
+            formMap => {
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                this.collaborationService.createIssue(<ARTURIResource>this.resource, summary).subscribe(
+                this.collaborationService.createIssue(<ARTURIResource>this.resource, formMap).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                         this.initCollaboration();
