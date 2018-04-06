@@ -109,7 +109,7 @@ export class SparqlServices {
         console.log("[SparqlServices] exportGraphQueryResultAsRdf");
         var params: any = {
             query: query,
-            format: format.name
+            outputFormat: format.name
         };
         if (includeInferred != null) {
             params.includeInferred = includeInferred;
