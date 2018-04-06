@@ -8,6 +8,8 @@ import { ConceptTreeModal, ConceptTreeModalData } from "../browsingModal/concept
 import { CollectionTreeModal, CollectionTreeModalData } from "../browsingModal/collectionTreeModal/collectionTreeModal";
 import { SchemeListModal, SchemeListModalData } from "../browsingModal/schemeListModal/schemeListModal";
 import { PropertyTreeModal, PropertyTreeModalData } from "../browsingModal/propertyTreeModal/propertyTreeModal";
+import { LexicalEntryListModal, LexicalEntryListModalData } from './lexicalEntryListModal/lexicalEntryListModal';
+import { LexiconListModal, LexiconListModalData } from './lexiconListModal/lexiconListModal';
 import { ARTURIResource } from "../../../models/ARTResources";
 
 /**
@@ -120,6 +122,34 @@ export class BrowsingModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(PropertyTreeModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     * @param lexicon 
+     * @param lexiconChangeable 
+     */
+    browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean) {
+        var modalData = new LexicalEntryListModalData(title, lexicon, lexiconChangeable);
+        const builder = new BSModalContextBuilder<LexicalEntryListModalData>(
+            modalData, undefined, LexicalEntryListModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(LexicalEntryListModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     */
+    browseLexiconList(title: string) {
+        var modalData = new LexiconListModalData(title);
+        const builder = new BSModalContextBuilder<LexiconListModalData>(
+            modalData, undefined, LexiconListModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(LexiconListModal, overlayConfig).result;
     }
 
 }

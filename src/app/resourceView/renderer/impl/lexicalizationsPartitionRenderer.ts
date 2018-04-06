@@ -7,12 +7,14 @@ import { SkosxlServices } from "../../../services/skosxlServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ResAttribute, RDFTypesEnum, ARTPredicateObjects, ResourceUtils } from "../../../models/ARTResources";
-import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { RDFS, SKOS, SKOSXL, OntoLex } from "../../../models/Vocabulary";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
+import { NewOntoLexicalizationCfModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -31,7 +33,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     rootProperties: ARTURIResource[] = []; //lexicalization properties are not known at priori
     knownProperties: ARTURIResource[] = [
         RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
-        SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
+        SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel, OntoLex.isDenotedBy];
     label = "Lexicalizations";
     addBtnImgTitle = "Add a lexicalization";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
@@ -45,7 +47,8 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, resViewModals: ResViewModalServices,
-        private skosService: SkosServices, private skosxlService: SkosxlServices, private resViewService: ResourceViewServices,
+        private skosService: SkosServices, private skosxlService: SkosxlServices,
+        private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
         super(resourcesService, cfService, basicModals, resViewModals);
     }
@@ -154,6 +157,17 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 },
                 () => {}
             );
+        } else if (predicate.getURI() == OntoLex.isDenotedBy.getURI()) {
+            this.creationModals.newOntoLexicalizationCf("Add a lexical sense", predicate, false).then(
+                (data: NewOntoLexicalizationCfModalReturnData) => {
+                    this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
+                        stResp => {
+                            this.update.emit()
+                        }
+                    );
+                },
+                () => {}
+            )
         } else { //Not SKOSXL lexicalization
             this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
                 (literal: any) => {
@@ -230,6 +244,8 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 return this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
             } else if (predicate.getURI() == RDFS.label.getURI()) {
                 return this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
+            } else if (predicate.getURI() == OntoLex.isDenotedBy.getURI()) {
+                return this.ontolexService.removePlainLexicalization(<ARTResource>object, this.resource);
             }
         } else {//predicate is some subProperty of a root property
             return this.resourcesService.removeValue(this.resource, predicate, object);

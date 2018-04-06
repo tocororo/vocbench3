@@ -1,0 +1,93 @@
+<div class="modal-header">
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span *ngIf="createSense">
+            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()" [disabled]="!context.clsChangeable">
+                <rdf-resource [resource]="resourceClass"></rdf-resource>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="vbox" (keydown)="onKeydown($event)">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr *ngIf="linkToReference; else linkToLexEntry">
+                    <td class="text-right"><label>Reference:</label></td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" [(ngModel)]="linkedResource">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Pick an existing resource">
+                                    <img src="../../../../../../assets/images/icons/res/class.png">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a (click)="pickResource('cls')">Class</a></li>
+                                    <li><a (click)="pickResource('individual')">Instance</a></li>
+                                    <li><a (click)="pickResource('property')">Property</a></li>
+                                    <li><a (click)="pickResource('concept')">Concept</a></li>
+                                    <li><a (click)="pickResource('conceptScheme')">ConceptScheme</a></li>
+                                    <li><a (click)="pickResource('skosCollection')">Collection</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <ng-template #linkToLexEntry>
+                    <tr>
+                        <td class="text-right" nowrap><label>Lexical Entry:</label></td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" [(ngModel)]="linkedResource">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" (click)="pickResource('ontolexLexicalEntry')" title="Pick a lexical entry">
+                                        <img src="../../../../../../assets/images/icons/res/individual.png">
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <tr *ngIf="createSense; else createPlain">
+                    <td></td>
+                    <td>
+                        <div class="checkbox" style="margin-bottom: 0px;">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="createPlainCheck">Create Plain
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <ng-template #createPlain>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div class="checkbox" style="margin-bottom: 0px;">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="createSenseCheck">Create Sense
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </tbody>
+        </table>
+
+        <custom-form *ngIf="customFormId && createSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+            [(ngModel)]="formFields"></custom-form>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

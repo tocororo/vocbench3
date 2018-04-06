@@ -44,6 +44,8 @@ import { InstanceListModal } from '../widget/modal/browsingModal/instanceListMod
 import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
 import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
 import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
+import { LexicalEntryListModal } from '../widget/modal/browsingModal/lexicalEntryListModal/lexicalEntryListModal';
+import { LexiconListModal } from '../widget/modal/browsingModal/lexiconListModal/lexiconListModal';
 
 //creation modals
 import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
@@ -54,6 +56,7 @@ import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLite
 import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
 import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptFromLabelModal';
 import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
+import { NewOntoLexicalizationCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal';
 
 //these are used only in creation modals, if they will be useful elsewhere, they can be moved in sharedModule
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
@@ -88,10 +91,10 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     declarations: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewXLabelModal, NewResourceCfModal, NewConceptCfModal,
-        NewResourceWithLiteralCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal,
+        NewResourceWithLiteralCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal, NewOntoLexicalizationCfModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
-        PropertyTreeModal, SchemeListModal, CollectionTreeModal,
+        PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal,
@@ -113,10 +116,10 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
     entryComponents: [
         AlertModal, AlertCheckModal, ConfirmModal, ConfirmCheckModal, DownloadModal, FilePickerModal,
         NewPlainLiteralModal, NewXLabelModal, NewResourceCfModal, NewConceptCfModal,
-        NewResourceWithLiteralCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal,
+        NewResourceWithLiteralCfModal, NewTypedLiteralModal, NewConceptFromLabelModal, NewLexiconCfModal, NewOntoLexicalizationCfModal,
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
-        PropertyTreeModal, SchemeListModal, CollectionTreeModal,
+        PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal,

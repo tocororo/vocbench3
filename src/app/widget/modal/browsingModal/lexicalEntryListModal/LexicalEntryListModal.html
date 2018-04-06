@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body vbox" style="height:70vh;">
+
+    <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 5px;">
+        <label style="margin-right: 4px;">Lexicon:</label>
+        <button class="btn btn-default btn-xs" title="Change Lexicon" (click)="changeLexicon()" [disabled]="!context.lexiconChangeable">
+            <rdf-resource *ngIf="activeLexicon" [resource]="activeLexicon"></rdf-resource>
+            <span *ngIf="!activeLexicon">Select Lexicon</span>
+        </button>
+    </div>
+
+    <lexical-entry-list-panel [editable]="false" [lexicon]="activeLexicon" (nodeSelected)="onLexiconSelected($event)">
+    </lexical-entry-list-panel>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedEntry">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

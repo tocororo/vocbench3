@@ -217,4 +217,61 @@ export class OntoLexLemonServices {
         return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params);
     }
 
+    /**
+     * Adds a lexicalization of the RDF resource reference using the ontolex:LexicalEntry lexicalEntry. 
+     * @param lexicalEntry 
+     * @param reference 
+     * @param createPlain 
+     * @param createSense 
+     * @param lexicalSenseCls 
+     * @param customFormValue 
+     */
+    addLexicalization(lexicalEntry: ARTResource, reference: ARTResource, createPlain: boolean, createSense: boolean, 
+        lexicalSenseCls?: ARTURIResource, customFormValue?: CustomFormValue) {
+        console.log("[OntoLexLemonServices] addLexicalization");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            reference: reference,
+            createPlain: createPlain,
+            createSense: createSense
+        };
+        if (lexicalSenseCls != null) {
+            params.lexicalSenseCls = lexicalSenseCls;
+        }
+        if (customFormValue != null) {
+            params.customFormValue = customFormValue;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addLexicalization", params);
+    }
+
+    /**
+     * Removes a plain lexicalization. This operation removes the triples connecting the lexical entry and the
+	 * reference in both directions.
+     * @param lexicalEntry 
+     * @param reference 
+     */
+    removePlainLexicalization(lexicalEntry: ARTResource, reference: ARTResource) {
+        console.log("[OntoLexLemonServices] removePlainLexicalization");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            reference: reference,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removePlainLexicalization", params);
+    }
+
+    /**
+     * Removes a reified lexicalization expressed as an ontolex:LexicalSense.
+     * Optionally, it is possible to remove the corresponding plain lexicalization(s).
+     * @param lexicalSense 
+     * @param removePlain 
+     */
+    removeReifiedLexicalization(lexicalSense: ARTResource, removePlain: boolean) {
+        console.log("[OntoLexLemonServices] removeReifiedLexicalization");
+        var params: any = {
+            lexicalSense: lexicalSense,
+            removePlain: removePlain,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeReifiedLexicalization", params);
+    }
+
 }

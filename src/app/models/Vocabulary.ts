@@ -222,13 +222,17 @@ export class OntoLex {
     public static uri = "http://www.w3.org/ns/lemon/ontolex";
     public static namespace = OntoLex.uri + "#";
     //CLASSES
-    public static lexicalEntry = new ARTURIResource(OntoLex.namespace + "LexicalEntry", "ontolex:LexicalEntry", RDFResourceRolesEnum.cls);
     public static form = new ARTURIResource(OntoLex.namespace + "Form", "ontolex:Form", RDFResourceRolesEnum.cls);
+    public static lexicalEntry = new ARTURIResource(OntoLex.namespace + "LexicalEntry", "ontolex:LexicalEntry", RDFResourceRolesEnum.cls);
+    public static lexicalSense = new ARTURIResource(OntoLex.namespace + "LexicalSense", "ontolex:LexicalSense", RDFResourceRolesEnum.cls);
     //PROPERTIES
-    public static lexicalForm = new ARTURIResource(OntoLex.namespace + "lexicalForm", "ontolex:LexicalForm", RDFResourceRolesEnum.objectProperty);
     public static canonicalForm = new ARTURIResource(OntoLex.namespace + "canonicalForm", "ontolex:canonicalForm", RDFResourceRolesEnum.objectProperty);
+    public static denotes = new ARTURIResource(OntoLex.namespace + "denotes", "ontolex:denotes", RDFResourceRolesEnum.objectProperty);
+    public static evokes = new ARTURIResource(OntoLex.namespace + "evokes", "ontolex:evokes", RDFResourceRolesEnum.objectProperty);
+    public static isDenotedBy = new ARTURIResource(OntoLex.namespace + "isDenotedBy", "ontolex:isDenotedBy", RDFResourceRolesEnum.objectProperty);
+    public static lexicalForm = new ARTURIResource(OntoLex.namespace + "lexicalForm", "ontolex:LexicalForm", RDFResourceRolesEnum.objectProperty);
     public static otherForm = new ARTURIResource(OntoLex.namespace + "otherForm", "ontolex:otherForm", RDFResourceRolesEnum.objectProperty);
-
+    public static sense = new ARTURIResource(OntoLex.namespace + "sense", "ontolex:sense", RDFResourceRolesEnum.objectProperty);
 }
 
 export class Lime {

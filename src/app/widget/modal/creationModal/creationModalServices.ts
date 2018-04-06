@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { ARTURIResource, ARTResource, ARTLiteral } from "../../../models/ARTResources";
+import { ResViewPartition } from '../../../models/ResourceView';
 import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/shared/newResourceCfModal";
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
@@ -9,6 +10,7 @@ import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newRes
 import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/skos/newConceptCfModal";
 import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/skos/newXLabelModal';
 import { NewLexiconCfModalData, NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
+import { NewOntoLexicalizationCfModal, NewOntoLexicalizationCfModalData } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
 import { NewResourceWithLiteralCfModal, NewResourceWithLiteralCfModalData } from './newResourceModal/shared/newResourceWithLiteralCfModal';
 
 @Injectable()
@@ -81,6 +83,22 @@ export class CreationModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(NewLexiconCfModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     * @param lexicalizationProp determines which type of lexicalization should create
+     *  (OntoLex.senses | OntoLex.denotes | Ontolex.isDenotedBy)
+     * @param clsChangeable 
+     */
+    newOntoLexicalizationCf(title: string, lexicalizationProp: ARTURIResource, clsChangeable?: boolean) {
+        var modalData = new NewOntoLexicalizationCfModalData(title, lexicalizationProp, clsChangeable);
+        const builder = new BSModalContextBuilder<NewOntoLexicalizationCfModalData>(
+            modalData, undefined, NewOntoLexicalizationCfModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(NewOntoLexicalizationCfModal, overlayConfig).result;
     }
 
     /**

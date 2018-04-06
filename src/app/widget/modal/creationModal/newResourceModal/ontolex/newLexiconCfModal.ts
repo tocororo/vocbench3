@@ -94,7 +94,6 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal implements
         // if (this.resourceClass.getURI() != Lime.lexicon.getURI()) {
         //     returnedData.cls = this.resourceClass;
         // }
-        //set broaderProp only if not the default
         //set cfValue only if not null
         if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);

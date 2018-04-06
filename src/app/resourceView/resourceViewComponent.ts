@@ -5,6 +5,7 @@ import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute
 import { VersionInfo } from "../models/History";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { Issue } from "../models/Collaboration";
+import { ResViewPartition } from "../models/ResourceView";
 import { Deserializer } from "../utils/Deserializer";
 import { UIUtils } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -59,6 +60,9 @@ export class ResourceViewComponent {
     private rangesColl: ARTPredicateObjects[] = null;
     private lexicalizationsColl: ARTPredicateObjects[] = null;
     private lexicalFormsColl: ARTPredicateObjects[] = null;
+    private lexicalSensesColl: ARTPredicateObjects[] = null;
+    private denotationsColl: ARTPredicateObjects[] = null;
+    private evokedLexicalConceptsColl: ARTPredicateObjects[] = null;
     private notesColl: ARTPredicateObjects[] = null;
     private membersColl: ARTPredicateObjects[] = null;
     private membersOrderedColl: ARTPredicateObjects[] = null;
@@ -176,6 +180,9 @@ export class ResourceViewComponent {
         this.rangesColl = null;
         this.lexicalizationsColl = null;
         this.lexicalFormsColl = null;
+        this.lexicalSensesColl = null;
+        this.denotationsColl = null;
+        this.evokedLexicalConceptsColl = null;
         this.membersColl = null;
         this.propertiesColl = null;
         this.propertyFacets = null;
@@ -185,98 +192,119 @@ export class ResourceViewComponent {
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
 
-        var typesPartition: any = this.resViewResponse.types;
+        var typesPartition: any = this.resViewResponse[ResViewPartition.types];
         if (typesPartition != null) {
             this.typesColl = Deserializer.createPredicateObjectsList(typesPartition);
             this.filterInferredFromPredObjList(this.typesColl);
             this.sortObjects(this.typesColl);
         }
 
-        var classAxiomsPartition: any = this.resViewResponse.classaxioms;
+        var classAxiomsPartition: any = this.resViewResponse[ResViewPartition.classaxioms];
         if (classAxiomsPartition != null) {
             this.classAxiomColl = Deserializer.createPredicateObjectsList(classAxiomsPartition);
             this.filterInferredFromPredObjList(this.classAxiomColl);
             this.sortObjects(this.classAxiomColl);
         }
 
-        var topConceptOfPartition: any = this.resViewResponse.topconceptof;
+        var topConceptOfPartition: any = this.resViewResponse[ResViewPartition.topconceptof];
         if (topConceptOfPartition != null) {
             this.topconceptofColl = Deserializer.createPredicateObjectsList(topConceptOfPartition);
             this.filterInferredFromPredObjList(this.topconceptofColl);
             this.sortObjects(this.topconceptofColl);
         }
 
-        var schemesPartition: any = this.resViewResponse.schemes;
+        var schemesPartition: any = this.resViewResponse[ResViewPartition.schemes];
         if (schemesPartition != null) {
             this.schemesColl = Deserializer.createPredicateObjectsList(schemesPartition);
             this.filterInferredFromPredObjList(this.schemesColl);
             this.sortObjects(this.schemesColl);
         }
 
-        var broadersPartition: any = this.resViewResponse.broaders;
+        var broadersPartition: any = this.resViewResponse[ResViewPartition.broaders];
         if (broadersPartition != null) {
             this.broadersColl = Deserializer.createPredicateObjectsList(broadersPartition);
             this.filterInferredFromPredObjList(this.broadersColl);
             this.sortObjects(this.broadersColl);
         }
 
-        var superPropertiesPartition: any = this.resViewResponse.superproperties;
+        var superPropertiesPartition: any = this.resViewResponse[ResViewPartition.superproperties];
         if (superPropertiesPartition != null) {
             this.superpropertiesColl = Deserializer.createPredicateObjectsList(superPropertiesPartition);
             this.filterInferredFromPredObjList(this.superpropertiesColl);
             this.sortObjects(this.superpropertiesColl);
         }
 
-        var facetsPartition: any = this.resViewResponse.facets;
+        var facetsPartition: any = this.resViewResponse[ResViewPartition.facets];
         if (facetsPartition != null) {
             this.parseFacetsPartition(facetsPartition);
             this.filterInferredFromPredObjList(this.inverseofColl);
             this.sortObjects(this.inverseofColl);
         }
 
-        var domainsPartition: any = this.resViewResponse.domains;
+        var domainsPartition: any = this.resViewResponse[ResViewPartition.domains];
         if (domainsPartition != null) {
             this.domainsColl = Deserializer.createPredicateObjectsList(domainsPartition);
             this.filterInferredFromPredObjList(this.domainsColl);
             this.sortObjects(this.domainsColl);
         }
 
-        var rangesPartition: any = this.resViewResponse.ranges;
+        var rangesPartition: any = this.resViewResponse[ResViewPartition.ranges];
         if (rangesPartition != null) {
             this.rangesColl = Deserializer.createPredicateObjectsList(rangesPartition);
             this.filterInferredFromPredObjList(this.rangesColl);
             this.sortObjects(this.rangesColl);
         }
 
-        var lexicalizationsPartition: any = this.resViewResponse.lexicalizations;
+        var lexicalizationsPartition: any = this.resViewResponse[ResViewPartition.lexicalizations];
         if (lexicalizationsPartition != null) {
             this.lexicalizationsColl = Deserializer.createPredicateObjectsList(lexicalizationsPartition);
             this.filterInferredFromPredObjList(this.lexicalizationsColl);
             //do not sort (the sort is performed in the partition according the language)
         }
 
-        var lexicalFormsPartition: any = this.resViewResponse.lexicalForms;
+        var lexicalFormsPartition: any = this.resViewResponse[ResViewPartition.lexicalForms];
         if (lexicalFormsPartition != null) {
             this.lexicalFormsColl = Deserializer.createPredicateObjectsList(lexicalFormsPartition);
             this.filterInferredFromPredObjList(this.lexicalFormsColl);
             this.sortObjects(this.lexicalFormsColl);
         }
 
-        var notesPartition: any = this.resViewResponse.notes;
+        var lexicalSensesPartition: any = this.resViewResponse[ResViewPartition.lexicalSenses];
+        if (lexicalFormsPartition != null) {
+            this.lexicalSensesColl = Deserializer.createPredicateObjectsList(lexicalSensesPartition);
+            this.filterInferredFromPredObjList(this.lexicalSensesColl);
+            this.sortObjects(this.lexicalSensesColl);
+        }
+
+        var denotationsPartition: any = this.resViewResponse[ResViewPartition.denotations];
+        if (denotationsPartition != null) {
+            this.denotationsColl = Deserializer.createPredicateObjectsList(denotationsPartition);
+            this.filterInferredFromPredObjList(this.denotationsColl);
+            this.sortObjects(this.denotationsColl);
+        }
+
+        var evokedLexicalConceptsPartition: any = this.resViewResponse[ResViewPartition.evokedLexicalConcepts];
+        if (evokedLexicalConceptsPartition != null) {
+            this.evokedLexicalConceptsColl = Deserializer.createPredicateObjectsList(evokedLexicalConceptsPartition);
+            this.filterInferredFromPredObjList(this.evokedLexicalConceptsColl);
+            this.sortObjects(this.evokedLexicalConceptsColl);
+        }
+
+        var notesPartition: any = this.resViewResponse[ResViewPartition.notes];
         if (notesPartition != null) {
             this.notesColl = Deserializer.createPredicateObjectsList(notesPartition);
             this.filterInferredFromPredObjList(this.notesColl);
             this.sortObjects(this.notesColl);
         }
 
-        var membersPartition: any = this.resViewResponse.members;
+        var membersPartition: any = this.resViewResponse[ResViewPartition.members];
         if (membersPartition != null) {
             this.membersColl = Deserializer.createPredicateObjectsList(membersPartition);
             this.filterInferredFromPredObjList(this.membersColl);
             this.sortObjects(this.membersColl);
         }
 
-        var membersOrderedPartition: any = this.resViewResponse.membersOrdered;
+        var membersOrderedPartition: any = this.resViewResponse[ResViewPartition.membersOrdered];
         if (membersOrderedPartition != null) {
             this.membersOrderedColl = Deserializer.createPredicateObjectsList(membersOrderedPartition);
             //response doesn't declare the "explicit" for the collection members, set the attribute based on the explicit of the collection
@@ -295,14 +323,14 @@ export class ResourceViewComponent {
             this.sortObjects(this.membersOrderedColl);
         }
 
-        var labelRelationsPartition: any = this.resViewResponse.labelRelations;
+        var labelRelationsPartition: any = this.resViewResponse[ResViewPartition.labelRelations];
         if (labelRelationsPartition != null) {
             this.labelRelationsColl = Deserializer.createPredicateObjectsList(labelRelationsPartition);
             this.filterInferredFromPredObjList(this.labelRelationsColl);
             this.sortObjects(this.labelRelationsColl);
         }
 
-        var propertiesPartition: any = this.resViewResponse.properties;
+        var propertiesPartition: any = this.resViewResponse[ResViewPartition.properties];
         this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
         this.filterInferredFromPredObjList(this.propertiesColl);
         this.sortObjects(this.propertiesColl);

@@ -101,6 +101,15 @@
             <lexical-forms-renderer *ngIf="lexicalFormsColl" [pred-obj-list]="lexicalFormsColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexical-forms-renderer>
+            <lexical-senses-renderer *ngIf="lexicalSensesColl" [pred-obj-list]="lexicalSensesColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </lexical-senses-renderer>
+            <denotations-renderer *ngIf="denotationsColl" [pred-obj-list]="denotationsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </denotations-renderer>
+            <evoked-lexical-concepts-renderer *ngIf="evokedLexicalConceptsColl" [pred-obj-list]="evokedLexicalConceptsColl" [resource]="resource"
+                [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </evoked-lexical-concepts-renderer>
             <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </notes-renderer>

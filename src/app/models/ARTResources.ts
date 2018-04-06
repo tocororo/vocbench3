@@ -327,6 +327,7 @@ export enum RDFResourceRolesEnum {
     skosOrderedCollection = "skosOrderedCollection",
     limeLexicon = "limeLexicon",
     ontolexLexicalEntry = "ontolexLexicalEntry",
+    ontolexLexicalSense = "ontolexLexicalSense",
     ontolexForm = "ontolexForm"
 }
 

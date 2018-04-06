@@ -17,10 +17,13 @@ import { EditableResourceComponent } from '../resourceView/resViewResources/edit
 
 import { BroadersPartitionRenderer } from '../resourceView/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/impl/classAxiomPartitionRenderer';
+import { DenotationsPartitionRenderer } from '../resourceView/renderer/impl/denotationsPartitionRenderer';
 import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
+import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/renderer/impl/evokedLexicalConceptsPartitionRenderer';
 import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/impl/labelRelationsPartitionRenderer';
 import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/impl/lexicalizationsPartitionRenderer';
 import { LexicalFormsPartitionRenderer } from '../resourceView/renderer/impl/lexicalFormsPartitionRenderer';
+import { LexicalSensesPartitionRenderer } from '../resourceView/renderer/impl/lexicalSensesPartitionRenderer';
 import { MembersOrderedPartitionRenderer } from '../resourceView/renderer/impl/membersOrderedPartitionRenderer';
 import { MembersPartitionRenderer } from '../resourceView/renderer/impl/membersPartitionRenderer';
 import { NotesPartitionRenderer } from '../resourceView/renderer/impl/notesPartitionRenderer';
@@ -55,8 +58,9 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         ResourceRenameComponent, ResourceViewContextMenu,
         ReifiedResourceComponent, EditableResourceComponent,
         //renderers
-        BroadersPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer,
-        LexicalizationsPartitionRenderer, LexicalFormsPartitionRenderer, MembersOrderedPartitionRenderer, MembersPartitionRenderer,
+        BroadersPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer, DenotationsPartitionRenderer,
+        LexicalizationsPartitionRenderer, LexicalFormsPartitionRenderer, LexicalSensesPartitionRenderer, EvokedLexicalConceptsPartitionRenderer,
+        MembersOrderedPartitionRenderer, MembersPartitionRenderer,
         PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
         TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer,
