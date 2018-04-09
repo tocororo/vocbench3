@@ -10,7 +10,9 @@ export class LexicalEntryListModalData extends BSModalContext {
     constructor(
         public title: string = 'Modal Title',
         public lexicon: ARTURIResource,
-        public lexiconChangeable: boolean = false
+        public lexiconChangeable: boolean = false,
+        public editable: boolean = false,
+        public deletable: boolean = false
     ) {
         super();
     }

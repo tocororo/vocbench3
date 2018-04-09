@@ -130,8 +130,8 @@ export class BrowsingModalServices {
      * @param lexicon 
      * @param lexiconChangeable 
      */
-    browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean) {
-        var modalData = new LexicalEntryListModalData(title, lexicon, lexiconChangeable);
+    browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean, editable?: boolean, deletable?: boolean) {
+        var modalData = new LexicalEntryListModalData(title, lexicon, lexiconChangeable, editable, deletable);
         const builder = new BSModalContextBuilder<LexicalEntryListModalData>(
             modalData, undefined, LexicalEntryListModalData
         );

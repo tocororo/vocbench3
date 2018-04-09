@@ -11,7 +11,7 @@
         </button>
     </div>
 
-    <lexical-entry-list-panel [editable]="false" [lexicon]="activeLexicon" (nodeSelected)="onLexiconSelected($event)">
+    <lexical-entry-list-panel [editable]="context.editable" [deletable]="context.deletable" [lexicon]="activeLexicon" (nodeSelected)="onLexiconSelected($event)">
     </lexical-entry-list-panel>
     
 </div>

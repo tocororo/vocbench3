@@ -114,7 +114,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", null, true).then(
+            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", null, true, true).then(
                 (selectedResource: ARTURIResource) => {
                     this.linkedResource = selectedResource.getURI();
                 },

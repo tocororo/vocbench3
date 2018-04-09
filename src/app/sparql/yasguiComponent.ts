@@ -115,7 +115,6 @@ export class YasguiComponent {
      * @param changes 
      */
     public forceContentUpdate() {
-        console.log("forcing update query to ", this.query);
         this.yasqe.setValue(this.query);
         this.collapsePrefixDeclaration();
     }
