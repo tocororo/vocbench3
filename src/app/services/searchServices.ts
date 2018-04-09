@@ -82,6 +82,43 @@ export class SearchServices {
         );
     }
 
+
+    /**
+     * 
+     * @param searchString 
+     * @param useLocalName 
+     * @param useURI 
+     * @param searchMode 
+     * @param lexicons 
+     * @param langs 
+     * @param includeLocales 
+     */
+    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, searchMode: StringMatchMode, 
+        lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
+
+        console.log("[SearchServices] searchLexicalEntry");
+        var params: any = {
+            searchString: searchString,
+            useLocalName: useLocalName,
+            useURI: useURI,
+            searchMode: searchMode,
+        };
+        if (lexicons != null) {
+            params.lexicons = lexicons;
+        }
+        if (langs != null) {
+            params.langs = langs;
+        }
+        if (includeLocales != null) {
+            params.includeLocales = includeLocales;
+        }
+        return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp, ["index"]);
+            }
+        );
+    }
+
     /**
      * Returns the shortest path from a root to the given resource
      * @param resource

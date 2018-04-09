@@ -76,8 +76,8 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
                 searchLangs = searchSettings.languages;
                 includeLocales = searchSettings.includeLocales;
             }
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.ontolexLexicalEntry], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI,
+                searchSettings.stringMatchMode, [this.lexicon], searchLangs, includeLocales).subscribe(
                 searchResult => {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -100,7 +100,10 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     }
 
     public openAt(node: ARTURIResource) {
-        this.viewChildList.openListAt(node);
+        this.index = node.getAdditionalProperty("index").toLocaleUpperCase();;//update the index to the first character of the searched node
+        setTimeout(() => {
+            this.viewChildList.openListAt(node);
+        });
     }
 
     refresh() {

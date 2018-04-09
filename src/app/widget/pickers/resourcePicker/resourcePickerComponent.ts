@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ARTResource, RDFResourceRolesEnum, ARTURIResource } from '../../../models/ARTResources';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
+import { UIUtils } from '../../../utils/UIUtils';
 
 @Component({
     selector: 'resource-picker',
@@ -15,12 +16,20 @@ export class ResourcePickerComponent {
     @Output() resourceChanged = new EventEmitter<ARTURIResource>();
 
     private resourceIRI: string;
+
+    private menuAsButton: boolean = false; //if there is just a role => do not show a dropdown menu, just a button
+    private btnImageSrc: string;
     
     constructor(private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         if (this.resource) {
             this.resourceIRI = this.resource.getNominalValue();
+        }
+        
+        if (this.roles != null && this.roles.length == 1) {
+            this.menuAsButton = true;
+            this.btnImageSrc = UIUtils.getRoleImageSrc(this.roles[0]);
         }
     }
 
@@ -36,6 +45,9 @@ export class ResourcePickerComponent {
     }
 
     private pickResource(role: RDFResourceRolesEnum) {
+        if (role == null) { //called from UI in case there is just one role in roles array
+            role = this.roles[0];
+        }
         if (role == RDFResourceRolesEnum.cls) {
             this.browsingModals.browseClassTree("Select a Class").then(
                 (selectedResource: ARTURIResource) => {

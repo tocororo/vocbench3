@@ -349,7 +349,10 @@ export class UIUtils {
             return this.propOntologyImgSrc;
         } else if (role == RDFResourceRolesEnum.xLabel) {
             return this.xLabelImgSrc;
+        } else { //default
+            return this.individualImgSrc;
         }
+        
     }
 
     /**
