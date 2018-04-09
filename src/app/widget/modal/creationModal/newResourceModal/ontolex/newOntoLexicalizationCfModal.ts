@@ -32,6 +32,9 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
     private createPlainCheck: boolean = true;
     private createSenseCheck: boolean = true;
 
+    private pickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property, 
+        RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.skosCollection];
+
     /**
      * true if the modal should allow to link a lexical entry to a reference (show the reference input field),
      * false if it should allow to link a resource to a lexical entry (show the lexical entry input field).
@@ -70,58 +73,8 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
         this.changeClassWithRoot(OntoLex.lexicalSense);
     }
 
-    private pickResource(role: RDFResourceRolesEnum) {
-        if (role == RDFResourceRolesEnum.cls) {
-            this.browsingModals.browseClassTree("Select a Class").then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.individual) {
-            this.browsingModals.browseClassIndividualTree("Select an Instance").then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.concept) {
-            this.browsingModals.browseConceptTree("Select a Concept").then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            this.browsingModals.browseSchemeList("Select a ConceptScheme").then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.skosCollection) {
-            this.browsingModals.browseCollectionTree("Select a Collection").then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.property) {
-            this.browsingModals.browsePropertyTree("Select a Property").then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", null, true, true).then(
-                (selectedResource: ARTURIResource) => {
-                    this.linkedResource = selectedResource.getURI();
-                },
-                () => { }
-            );
-        }
-        
+    private updateLinkedRes(res: ARTURIResource) {
+        this.linkedResource = res.getURI();
     }
 
     isStandardFormDataValid(): boolean {

@@ -1,7 +1,8 @@
 import { Component, forwardRef } from '@angular/core';
-import { Settings } from '../../models/Plugins';
+import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ARTURIResource, RDFResourceRolesEnum } from '../../models/ARTResources';
 
 @Component({
     selector: 'settings-renderer',
@@ -18,6 +19,30 @@ export class SettingsRendererComponent {
 
     private onModelChanged() {
         this.propagateChange(this.settings);
+    }
+
+    private updateBoolean(prop: SettingsProp, value: boolean) {
+        prop.value = value;
+        this.propagateChange(this.settings);
+    }
+
+    private updateIRI(prop: SettingsProp, value: ARTURIResource) {
+        prop.value = value;
+        this.propagateChange(this.settings);
+        console.log("detected IRI change, propagating", this.settings);
+    }
+
+    private getIRIRoleConstraints(prop: SettingsProp) {
+        let roles: RDFResourceRolesEnum[] = [];
+        let constr: SettingsPropTypeConstraint[] = prop.type.constraints;
+        if (constr != null) {
+            for (var i = 0; i < constr.length; i++) {
+                if (constr[i].type.endsWith("HasRole")) {
+                    roles.push(<RDFResourceRolesEnum>constr[i].value);
+                }
+            }
+        }
+        return roles;
     }
 
     //---- method of ControlValueAccessor and Validator interfaces ----

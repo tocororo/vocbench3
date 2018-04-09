@@ -11,12 +11,33 @@
                 <span *ngIf="p.required">*</span>
             </td>
             <td>
-                <textarea *ngIf="!p.enumeration" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
-                    [(ngModel)]="p.value" (ngModelChange)="onModelChanged()"></textarea>
 
-                <select *ngIf="p.enumeration" class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onModelChanged()">
+                <select *ngIf="p.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onModelChanged()">
                     <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
                 </select>
+
+                <ng-template #notEnumerationBlock>
+                    <div [ngSwitch]="p.type.name">
+                        <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
+                            <label class="radio-inline">
+                                <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+p.name" [checked]="p.value">true
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+p.name" [checked]="!p.value">false
+                            </label>
+                        </div>
+
+                        <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" (resourceChanged)="updateIRI(p, $event)"></resource-picker>
+
+                        <!-- <div *ngSwitchCase="'Set'">
+                            Set
+                        </div> -->
+
+                        <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
+                        </textarea>
+                    </div>
+                </ng-template>
+
             </td>
             <td>
                 <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>

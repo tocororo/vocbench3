@@ -31,10 +31,6 @@ export class PluginConfigModal implements ModalComponent<PluginConfigModalData> 
         this.config = this.context.configuration.clone();
     }
 
-    private updateBoolean(prop: SettingsProp, value: boolean) {
-        prop.value = value;
-    }
-
     private isOkClickable(): boolean {
         return !this.config.requireConfiguration();
     }

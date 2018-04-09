@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { FilePickerComponent } from '../widget/filePicker/filePickerComponent';
-import { LangPickerComponent } from '../widget/langPicker/langPickerComponent';
+import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
+import { LangPickerComponent } from '../widget/pickers/langPicker/langPickerComponent';
+import { ResourcePickerComponent } from '../widget/pickers/resourcePicker/resourcePickerComponent';
 import { RdfResourceComponent } from '../widget/rdfResource/rdfResourceComponent';
 import { ResourceListComponent } from '../widget/rdfResource/resourceListComponent';
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
@@ -23,13 +24,13 @@ import { YasguiComponent } from '../sparql/yasguiComponent';
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
         YasguiComponent, CodemirrorComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, SettingsRendererComponent, SettingsRendererPanelComponent,
-        ExtensionConfiguratorComponent
+        ExtensionConfiguratorComponent, ResourcePickerComponent
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
         YasguiComponent, CodemirrorComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, SettingsRendererComponent, SettingsRendererPanelComponent,
-        ExtensionConfiguratorComponent
+        ExtensionConfiguratorComponent, ResourcePickerComponent
     ],
     providers: []
 })

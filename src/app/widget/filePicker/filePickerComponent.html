@@ -1,8 +1,0 @@
-<div class="input-group">
-    <span class="input-group-btn">
-        <span [class]="btnClass">{{label}}
-            <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])" [accept]="accept">
-        </span>
-    </span>
-    <input type="text" [class]="txtClass" [ngModel]="fileName" [placeholder]="placeholder" readonly>
-</div>

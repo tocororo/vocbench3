@@ -28,7 +28,7 @@ export class Settings {
         var properties: SettingsProp[] = [];
         for (var i = 0; i < this.properties.length; i++) {
             let p: SettingsProp = this.properties[i];
-            properties.push(new SettingsProp(p.name, p.displayName, p.description, p.required, p.type, p.enumeration, p.value));
+            properties.push(p.clone());
         }
         return new Settings(this.shortName, this.type, this.editRequired, properties);
     }
@@ -36,7 +36,10 @@ export class Settings {
     public requireConfiguration(): boolean {
         if (this.editRequired) {
             for (var i = 0; i < this.properties.length; i++) {
-                if (this.properties[i].required && (this.properties[i].value == null || this.properties[i].value.trim() == "")) {
+                if (
+                    this.properties[i].required && (this.properties[i].value == null || 
+                    (typeof this.properties[i].value == "string" && this.properties[i].value.trim() == ""))
+                ) {
                     return true;
                 }
             }
@@ -65,7 +68,7 @@ export class Settings {
             let required = response.properties[i].required;
             let value = response.properties[i].value;
             let enumeration = response.properties[i].enumeration;
-            let type = response.properties[i].type;
+            let type = SettingsPropType.parse(response.properties[i].type);
             props.push(new SettingsProp(name, displayName, description, required, type, enumeration, value));
         }
         let stProps = new Settings(response.shortName, response['@type'], response.editRequired, props, 
@@ -79,10 +82,10 @@ export class SettingsProp {
     public displayName: string;
     public description: string;
     public required: boolean;
+    public type: SettingsPropType;
     public value: any;
     public enumeration: string[];
-    public type: string;
-    constructor (name: string, displayName: string, description: string, required: boolean, type?: string, enumeration?: string[], value?: string) {
+    constructor (name: string, displayName: string, description: string, required: boolean, type: SettingsPropType, enumeration?: string[], value?: string) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -91,6 +94,75 @@ export class SettingsProp {
         this.enumeration = enumeration;
         this.type = type;
     }
+
+    public clone(): SettingsProp {
+        return new SettingsProp(this.name, this.displayName, this.description, this.required, this.type.clone(), this.enumeration, this.value);
+    }
+}
+
+export class SettingsPropType {
+    public name: string;
+    public constraints: SettingsPropTypeConstraint[];
+    public typeArguments: SettingsPropType[];
+
+    constructor(name: string, constraints?: SettingsPropTypeConstraint[], typeArguments?: SettingsPropType[]) {
+        this.name = name;
+        this.constraints = constraints;
+        this.typeArguments = typeArguments;
+    }
+
+    public static parse(jsonObject: any): SettingsPropType {
+        //for simplicity, if type attr is a plain type (a string like "boolean", "java.lang.String", ...) treat as complext type
+        if (typeof jsonObject == "string") {
+            return new SettingsPropType(jsonObject);
+        }
+
+        let name = jsonObject.name;
+
+        let constraints: SettingsPropTypeConstraint[];
+        let constraintsJson = jsonObject.constraints;
+        if (constraintsJson) {
+            constraints = [];
+            for (var i = 0; i < constraintsJson.length; i++) {
+                constraints.push({ type: constraintsJson[i]["@type"], value: constraintsJson[i].value });
+            }
+        }
+
+        let typeArguments: SettingsPropType[];
+        let typeArgumentsJson = jsonObject.typeArguments;
+        if (typeArgumentsJson) {
+            typeArguments = [];
+            for (var i = 0; i < typeArgumentsJson.length; i++) {
+                typeArguments.push(SettingsPropType.parse(typeArgumentsJson[i]));
+            }
+        }
+
+        return new SettingsPropType(name, constraints, typeArguments);
+    }
+
+    public clone(): SettingsPropType {
+        let constraints: SettingsPropTypeConstraint[];
+        if (this.constraints) {
+            constraints = [];
+            for (var i = 0; i < this.constraints.length; i++) {
+                constraints.push({ type: this.constraints[i].type, value: this.constraints[i].value });
+            }
+        }
+        let typeArguments: SettingsPropType[];
+        if (this.typeArguments) {
+            typeArguments = [];
+            for (var i = 0; i < this.typeArguments.length; i++) {
+                typeArguments.push(this.typeArguments[i].clone());
+            }
+        }
+        return new SettingsPropType(this.name, constraints, typeArguments);
+    }
+}
+
+export class SettingsPropTypeConstraint {
+    type: string;
+    value: string;
+    //other attributes currently not taken into account
 }
 
 export class PluginSpecification {

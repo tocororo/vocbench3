@@ -20,37 +20,14 @@
                 <tr *ngIf="linkToReference; else linkToLexEntry">
                     <td class="text-right"><label>Reference:</label></td>
                     <td>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" [(ngModel)]="linkedResource">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Pick an existing resource">
-                                    <img src="../../../../../../assets/images/icons/res/class.png">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a (click)="pickResource('cls')">Class</a></li>
-                                    <li><a (click)="pickResource('individual')">Instance</a></li>
-                                    <li><a (click)="pickResource('property')">Property</a></li>
-                                    <li><a (click)="pickResource('concept')">Concept</a></li>
-                                    <li><a (click)="pickResource('conceptScheme')">ConceptScheme</a></li>
-                                    <li><a (click)="pickResource('skosCollection')">Collection</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <resource-picker [roles]="pickerRoles" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
                     </td>
                 </tr>
                 <ng-template #linkToLexEntry>
                     <tr>
                         <td class="text-right" nowrap><label>Lexical Entry:</label></td>
                         <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control" [(ngModel)]="linkedResource">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" (click)="pickResource('ontolexLexicalEntry')" title="Pick a lexical entry">
-                                        <img src="../../../../../../assets/images/icons/res/individual.png">
-                                    </button>
-                                </div>
-                            </div>
+                            <resource-picker [roles]="['ontolexLexicalEntry']" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
                         </td>
                     </tr>
                 </ng-template>

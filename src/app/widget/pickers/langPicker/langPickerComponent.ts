@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
-import { VBContext } from "../../utils/VBContext";
-import { Language, Languages } from "../../models/LanguagesCountries";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBProperties } from "../../../utils/VBProperties";
+import { VBContext } from "../../../utils/VBContext";
+import { Language, Languages } from "../../../models/LanguagesCountries";
 
 @Component({
     selector: 'lang-picker',

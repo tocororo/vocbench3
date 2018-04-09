@@ -5,47 +5,7 @@
 </div>
 <div class="modal-body vbox" style="max-height: 70vh">
 
-    <!-- <settings-renderer-panel [(ngModel)]="config"></settings-renderer-panel> -->
-
-    <div class="scrollableContainer">
-        <table class="table table-condensed table-borderless table-hoverable">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-                <col style="width: 1%;">
-            </colgroup>
-            <tbody>
-                <tr *ngFor="let p of config.properties">
-                    <td nowrap>
-                        {{p.displayName}}
-                        <span *ngIf="p.required">*</span>
-                    </td>
-                    <td>
-                        <select *ngIf="p.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="p.value">
-                            <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
-                        </select>
-                        <ng-template #notEnumerationBlock>
-                            <div *ngIf="p.type == 'boolean'; else notBooleanBlock" class="input-sm form-control text-center">
-                                <label class="radio-inline">
-                                    <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+p.name" [checked]="p.value">true
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+p.name" [checked]="!p.value">false
-                                </label>
-                            </div>
-                            <ng-template #notBooleanBlock>
-                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
-                                </textarea>
-                            </ng-template>
-                        </ng-template>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <settings-renderer-panel [(ngModel)]="config"></settings-renderer-panel>
 
 </div>
 <div class="modal-footer">

@@ -73,23 +73,9 @@
                         </div>
                     </div>
                     <div *ngIf="field.getType() == 'uri'">
-                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()" [disabled]="!field.checked">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Pick an existing resource" [disabled]="!field.checked">
-                                    <img src="../../../assets/images/icons/res/class.png">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a (click)="pickExistingReource('cls', field)">Class</a></li>
-                                    <li><a (click)="pickExistingReource('individual', field)">Instance</a></li>
-                                    <li><a *ngIf="isProjectSKOS()" (click)="pickExistingReource('concept', field)">Concept</a></li>
-                                    <li><a *ngIf="isProjectSKOS()" (click)="pickExistingReource('conceptScheme', field)">ConceptScheme</a></li>
-                                    <li><a *ngIf="isProjectSKOS()" (click)="pickExistingReource('skosCollection', field)">Collection</a></li>
-                                    <li><a (click)="pickExistingReource('property', field)">Property</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <resource-picker [roles]="resPickerRoles" (resourceChanged)="updateIRIField($event, field)"
+                            [editable]="true" [disabled]="!field.checked">
+                        </resource-picker>
                     </div>
                 </td>
                 <!--Mandatory/Optional-->

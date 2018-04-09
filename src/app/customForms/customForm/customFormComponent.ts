@@ -1,10 +1,9 @@
 import { Component, Input, SimpleChanges, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormField } from "../../models/CustomForms";
-import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { RDFResourceRolesEnum, ARTURIResource } from "../../models/ARTResources";
 import { SKOS, OntoLex } from "../../models/Vocabulary";
 import { VBContext } from "../../utils/VBContext";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
@@ -22,15 +21,20 @@ export class CustomForm implements ControlValueAccessor {
 
     @Input() cfId: string;
 
-    private ontoType: string;
-
     private formFields: FormField[];
     private submittedWithError: boolean = false;
 
-    constructor(public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
+    private resPickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property];
+
+    constructor(public cfService: CustomFormsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
-        this.ontoType = VBContext.getWorkingProject().getModelType();
+        let ontoType: string = VBContext.getWorkingProject().getModelType();
+        if (ontoType == SKOS.uri || ontoType == OntoLex.uri) {
+            this.resPickerRoles.push(RDFResourceRolesEnum.concept);
+            this.resPickerRoles.push(RDFResourceRolesEnum.conceptScheme);
+            this.resPickerRoles.push(RDFResourceRolesEnum.skosCollection);
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -60,13 +64,6 @@ export class CustomForm implements ControlValueAccessor {
     }
 
     /**
-     * Used to determine whether to show or not the selection of skos resources in the uri resource picker
-     */
-    private isProjectSKOS() {
-        return this.ontoType == SKOS.uri || this.ontoType == OntoLex.uri;
-    }
-
-    /**
      * Listener to change of lang-picker used to set the language argument of a formField that
      * has coda:langString as converter
      */
@@ -92,56 +89,9 @@ export class CustomForm implements ControlValueAccessor {
         }
     }
 
-    private pickExistingReource(role: RDFResourceRolesEnum, formField: FormField) {
-        if (role == RDFResourceRolesEnum.cls) {
-            this.browsingModals.browseClassTree("Select a Class").then(
-                (selectedResource: any) => {
-                    formField['value'] = selectedResource.getNominalValue();
-                    this.propagateChange(this.formFields);
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.individual) {
-            this.browsingModals.browseClassIndividualTree("Select an Instance").then(
-                (selectedResource: any) => {
-                    formField['value'] = selectedResource.getNominalValue();
-                    this.propagateChange(this.formFields);
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.concept) {
-            this.browsingModals.browseConceptTree("Select a Concept").then(
-                (selectedResource: any) => {
-                    formField['value'] = selectedResource.getNominalValue();
-                    this.propagateChange(this.formFields);
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            this.browsingModals.browseSchemeList("Select a ConceptScheme").then(
-                (selectedResource: any) => {
-                    formField['value'] = selectedResource.getNominalValue();
-                    this.propagateChange(this.formFields);
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.skosCollection) {
-            this.browsingModals.browseCollectionTree("Select a Collection").then(
-                (selectedResource: any) => {
-                    formField['value'] = selectedResource.getNominalValue();
-                    this.propagateChange(this.formFields);
-                },
-                () => { }
-            );
-        } else if (role == RDFResourceRolesEnum.property) {
-            this.browsingModals.browsePropertyTree("Select a Property").then(
-                (selectedResource: any) => {
-                    formField['value'] = selectedResource.getNominalValue();
-                    this.propagateChange(this.formFields);
-                },
-                () => { }
-            );
-        }
+    private updateIRIField(res: ARTURIResource, formField: FormField) {
+        formField['value'] = res.getNominalValue();
+        this.propagateChange(this.formFields);
     }
 
     private onModelChanged() {

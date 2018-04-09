@@ -27,6 +27,10 @@ export class SettingsRendererPanelComponent {
         }
     }
 
+    private onModelChanged() {
+        this.propagateChange(this.settings);
+    }
+
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**
      * Write a new value to the element.
