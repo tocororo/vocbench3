@@ -67,11 +67,13 @@ export abstract class AbstractCustomConstructorModal {
                 } else if (customForms.length == 1) {
                     this.customFormId = customForms[0].getId();
                 } else { //(forms.length > 1) //let user choose
-                    return this.basicModals.selectCustomForm("Select constructor", customForms, true).then(
+                    return this.basicModals.selectCustomForm("Select constructor", customForms).then(
                         (selectedCF: any) => {
                             this.customFormId = (<CustomForm>selectedCF).getId();
                         },
-                        () => { }
+                        () => {
+                            this.cancel();
+                        }
                     );
                 }
             }

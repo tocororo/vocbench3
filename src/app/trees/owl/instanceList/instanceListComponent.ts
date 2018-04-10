@@ -38,9 +38,17 @@ export class InstanceListComponent extends AbstractList {
         eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
-            (data: any) => { if (data.cls.getURI() == this.cls.getURI()) this.onListNodeDeleted(data.instance); } ));
+            (data: any) => { 
+                if (this.cls == null) return; //in case there are multiple InstanceListComponent initialized and one of them has cls null
+                if (data.cls.getURI() == this.cls.getURI()) this.onListNodeDeleted(data.instance); 
+            }
+        ));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
-            (data: any) => { if (data.cls.getURI() == this.cls.getURI()) this.onListNodeCreated(data.instance); } ));
+            (data: any) => { 
+                if (this.cls == null) return; //in case there are multiple InstanceListComponent initialized and one of them has cls null
+                if (data.cls.getURI() == this.cls.getURI()) this.onListNodeCreated(data.instance); 
+            } 
+        ));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
             (data: any) => this.onTypeRemoved(data.resource, data.type)));
     }
@@ -71,6 +79,7 @@ export class InstanceListComponent extends AbstractList {
                 }
             }
         }
+        
     }
 
     ngAfterViewInit() {

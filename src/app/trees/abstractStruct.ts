@@ -1,4 +1,5 @@
 import { Component, Input, Output, ViewChild, ElementRef, EventEmitter, QueryList } from "@angular/core";
+import { Subscriber } from "rxjs";
 import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
@@ -16,7 +17,7 @@ export abstract class AbstractStruct {
      * ATTRIBUTES
      */
 
-    eventSubscriptions: any[] = [];
+    eventSubscriptions: Subscriber<any>[] = [];
     selectedNode: ARTURIResource;
 
     /**

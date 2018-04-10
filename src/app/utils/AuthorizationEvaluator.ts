@@ -311,7 +311,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.lexicalForms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICAL_FORM)) ||
                 (partition == ResViewPartition.lexicalSenses && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
                 (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
-                // (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
+                (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.members && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION)) ||
                 (partition == ResViewPartition.membersOrdered && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION)) ||
@@ -337,7 +337,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.lexicalForms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_LEXICAL_FORM)) ||
                 (partition == ResViewPartition.lexicalSenses && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_REIFIED_LEXICALIZATION)) ||
                 (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_PLAIN_LEXICALIZATION)) ||
-                // (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_PLAIN_LEXICALIZATION)) ||
+                (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE)) ||
                 (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
                 (partition == ResViewPartition.members && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_FROM_COLLECTION)) ||
                 (partition == ResViewPartition.membersOrdered && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_FROM_COLLECTION)) ||

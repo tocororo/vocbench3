@@ -36,20 +36,7 @@ export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingl
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        if (predicate.getURI() == this.rootProperty.getURI()) {
-            // this.creationModals.newOntoLexicalizationCf("Add an evoked lexical concept", this.rootProperty, false).then(
-            //     (data: NewOntoLexicalizationCfModalReturnData) => {
-            //         this.ontolexService.addLexicalization(this.resource, data.linkedResource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
-            //             stResp => {
-            //                 this.update.emit()
-            //             }
-            //         );
-            //     },
-            //     () => {}
-            // );
-        } else {
-            this.enrichProperty(predicate);
-        }
+        this.enrichProperty(predicate);
     }
 
     //not used since this partition doesn't allow manual add operation
@@ -66,8 +53,7 @@ export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingl
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        //TODO
-        return this.ontolexService.removePlainLexicalization(this.resource, <ARTResource>object);
+        return this.resourcesService.removeValue(this.resource, predicate, <ARTResource>object);
     }
 
 }
