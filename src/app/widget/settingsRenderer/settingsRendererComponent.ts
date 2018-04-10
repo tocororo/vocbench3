@@ -29,10 +29,21 @@ export class SettingsRendererComponent {
     private updateIRI(prop: SettingsProp, value: ARTURIResource) {
         prop.value = value;
         this.propagateChange(this.settings);
-        console.log("detected IRI change, propagating", this.settings);
     }
 
-    private getIRIRoleConstraints(prop: SettingsProp) {
+    private updateSetValue(prop: SettingsProp, value: any[]) {
+        prop.value = value;
+        this.propagateChange(this.settings);
+    }
+
+    private getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
+        /**
+         * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
+         * (so prevent firing change detection in resource-picker)
+         */
+        if (prop.type['roles'] != null) { //cached?
+            return prop.type['roles'];
+        }
         let roles: RDFResourceRolesEnum[] = [];
         let constr: SettingsPropTypeConstraint[] = prop.type.constraints;
         if (constr != null) {
@@ -42,6 +53,7 @@ export class SettingsRendererComponent {
                 }
             }
         }
+        prop.type['roles'] = roles;
         return roles;
     }
 

@@ -38,7 +38,7 @@ export class PluginConfigModal implements ModalComponent<PluginConfigModalData> 
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        console.log(this.config);
+        // console.log(this.config);
         this.dialog.close(this.config);
     }
 

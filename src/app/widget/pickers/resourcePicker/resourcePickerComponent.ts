@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { ARTResource, RDFResourceRolesEnum, ARTURIResource } from '../../../models/ARTResources';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
 import { UIUtils } from '../../../utils/UIUtils';
@@ -23,17 +23,26 @@ export class ResourcePickerComponent {
     constructor(private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
+        this.init();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.init();
+    }
+
+    private init() {
         if (this.resource) {
             this.resourceIRI = this.resource.getNominalValue();
+        } else {
+            this.resourceIRI = null;
         }
-        
         if (this.roles != null && this.roles.length == 1) {
             this.menuAsButton = true;
             this.btnImageSrc = UIUtils.getRoleImageSrc(this.roles[0]);
         }
     }
 
-    onModelChanged() {
+    private onModelChanged() {
         let returnedRes: ARTURIResource
         if (this.resource != null) {
             returnedRes = this.resource.clone();
@@ -112,7 +121,7 @@ export class ResourcePickerComponent {
      * @param role 
      */
     private pickableRole(role: RDFResourceRolesEnum) {
-        if (this.roles != null || this.roles.length == 0) {
+        if (this.roles != null && this.roles.length != 0) {
             return this.roles.indexOf(role) != -1;
         } else {
             return true; // if roles array is not provided, allow selection of all roles

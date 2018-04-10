@@ -1,3 +1,5 @@
+import { ARTURIResource } from "./ARTResources";
+
 /**
  * in the future this could have also a description field
  */
@@ -37,8 +39,11 @@ export class Settings {
         if (this.editRequired) {
             for (var i = 0; i < this.properties.length; i++) {
                 if (
-                    this.properties[i].required && (this.properties[i].value == null || 
-                    (typeof this.properties[i].value == "string" && this.properties[i].value.trim() == ""))
+                    this.properties[i].required && (
+                        this.properties[i].value == null || 
+                        (typeof this.properties[i].value == "string" && this.properties[i].value.trim() == "") ||
+                        (this.properties[i].value instanceof Array && this.properties[i].value.length == 0)
+                    )
                 ) {
                     return true;
                 }
@@ -53,6 +58,21 @@ export class Settings {
             let value = this.properties[i].value;
             if (value != null && typeof value === "string" && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
                 value = undefined;
+            }
+            if (value instanceof ARTURIResource) {
+                value = value.toNT();
+            }
+            if (value instanceof Array) {
+                let serializedValues: string[] = [];
+                for (var j = 0; j < value.length; j++) {
+                    let v: any = value[j];
+                    if (v instanceof ARTURIResource) {
+                        serializedValues.push(v.toNT())
+                    } else {
+                        serializedValues.push(v);
+                    }
+                }
+                value = serializedValues;
             }
             map[this.properties[i].name] = value;
         }
@@ -112,11 +132,6 @@ export class SettingsPropType {
     }
 
     public static parse(jsonObject: any): SettingsPropType {
-        //for simplicity, if type attr is a plain type (a string like "boolean", "java.lang.String", ...) treat as complext type
-        if (typeof jsonObject == "string") {
-            return new SettingsPropType(jsonObject);
-        }
-
         let name = jsonObject.name;
 
         let constraints: SettingsPropTypeConstraint[];

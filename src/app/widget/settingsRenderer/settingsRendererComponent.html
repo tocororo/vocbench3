@@ -29,9 +29,7 @@
 
                         <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" (resourceChanged)="updateIRI(p, $event)"></resource-picker>
 
-                        <!-- <div *ngSwitchCase="'Set'">
-                            Set
-                        </div> -->
+                        <setting-set *ngSwitchCase="'Set'" [value]="p.value" [types]="p.type.typeArguments" (valueChanged)="updateSetValue(p, $event)"></setting-set>
 
                         <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
                         </textarea>
