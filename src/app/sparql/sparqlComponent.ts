@@ -3,8 +3,6 @@ import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { YasguiComponent } from "./yasguiComponent";
 import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
-import { SaveQueryModal, SaveQueryModalData } from "./saveQueryModal";
-import { LoadQueryModal } from "./loadQueryModal";
 import { SparqlServices } from "../services/sparqlServices";
 import { ExportServices } from "../services/exportServices";
 import { ConfigurationsServices } from "../services/configurationsServices";
@@ -313,9 +311,7 @@ export class SparqlComponent {
     //LOAD/SAVE QUERY
 
     private loadQuery(tab: Tab) {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(LoadQueryModal, overlayConfig).result.then(
+        this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
             (conf: Configuration) => {
                 let query: string;
                 let includeInferred: boolean = false;
@@ -324,7 +320,7 @@ export class SparqlComponent {
                     if (confProps[i].name == "sparql") {
                         query = confProps[i].value;
                     } else if (confProps[i].name == "includeInferred") {
-                        includeInferred = confProps[i].value == "true";
+                        includeInferred = confProps[i].value;
                     }
                 }
                 tab.query = query;
@@ -339,17 +335,17 @@ export class SparqlComponent {
     }
 
     private saveQuery(tab: Tab) {
-        var modalData = new SaveQueryModalData(tab.query, tab.queryMode, tab.inferred);
-        const builder = new BSModalContextBuilder<SaveQueryModalData>(
-            modalData, undefined, SaveQueryModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(SaveQueryModal, overlayConfig).result.then(
+        let queryConfig: { [key: string]: any} = {
+            sparql: tab.query,
+            type: tab.queryMode,
+            includeInferred: tab.inferred
+        }
+        this.sharedModals.storeConfiguration("Store SPARQL query", ConfigurationComponents.SPARQL_STORE, queryConfig).then(
             () => {
                 this.basicModals.alert("Save query", "Query saved succesfully");
             },
             () => {}
-        );
+        )
     }
 
     //TAB HANDLER

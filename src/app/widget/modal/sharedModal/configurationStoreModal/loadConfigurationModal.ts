@@ -1,26 +1,29 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ConfigurationsServices } from "../services/configurationsServices";
-import { ConfigurationComponents, Reference } from "../models/Configuration";
+import { ConfigurationsServices } from "../../../../services/configurationsServices";
+import { Reference } from "../../../../models/Configuration";
 
-// export class LoadQueryModalData extends BSModalContext {
-//     constructor(public query: string, public inferred: boolean) {
-//         super();
-//     }
-// }
+export class LoadConfigurationModalData extends BSModalContext {
+    constructor(
+        public title: string, 
+        public configurationComponent: string
+    ) {
+        super();
+    }
+}
 
 @Component({
-    selector: "load-query",
-    templateUrl: "./loadQueryModal.html",
+    selector: "load-configuration",
+    templateUrl: "./loadConfigurationModal.html",
 })
-export class LoadQueryModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class LoadConfigurationModal implements ModalComponent<LoadConfigurationModalData> {
+    context: LoadConfigurationModalData;
 
     private references: Reference[];
     private selectedRef: Reference;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private configurationService: ConfigurationsServices) {
+    constructor(public dialog: DialogRef<LoadConfigurationModalData>, private configurationService: ConfigurationsServices) {
         this.context = dialog.context;
     }
 
@@ -29,7 +32,7 @@ export class LoadQueryModal implements ModalComponent<BSModalContext> {
     }
 
     private initReferences() {
-        this.configurationService.getConfigurationReferences(ConfigurationComponents.SPARQL_STORE).subscribe(
+        this.configurationService.getConfigurationReferences(this.context.configurationComponent).subscribe(
             refs => {
                 this.references = refs;
             }
@@ -57,7 +60,7 @@ export class LoadQueryModal implements ModalComponent<BSModalContext> {
     }
 
     private deleteReference(reference: Reference) {
-        this.configurationService.deleteConfiguration(ConfigurationComponents.SPARQL_STORE, reference.relativeReference).subscribe(
+        this.configurationService.deleteConfiguration(this.context.configurationComponent, reference.relativeReference).subscribe(
             stResp => {
                 this.selectedRef = null;
                 this.initReferences();
@@ -66,7 +69,7 @@ export class LoadQueryModal implements ModalComponent<BSModalContext> {
     }
 
     ok(event: Event) {
-        this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_STORE, this.selectedRef.relativeReference).subscribe(
+        this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
             conf => {
                 event.stopPropagation();
                 this.dialog.close(conf);

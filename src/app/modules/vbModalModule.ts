@@ -35,6 +35,8 @@ import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepo
 import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
 import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
 import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
+import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/storeConfigurationModal';
+import { LoadConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal';
 
 //browsing modals
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
@@ -75,8 +77,6 @@ import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreat
 
 //query
 import { ExportResultAsRdfModal } from "../sparql/exportResultAsRdfModal";
-import { LoadQueryModal } from "../sparql/loadQueryModal";
-import { SaveQueryModal } from "../sparql/saveQueryModal";
 
 //collaboration
 import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
@@ -97,10 +97,10 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
-        ConverterPickerModal, SignaturePickerModal,
+        ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
-        ExportResultAsRdfModal, LoadQueryModal, SaveQueryModal,
+        ExportResultAsRdfModal,
         CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
     ],
     exports: [],
@@ -122,9 +122,9 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
-        ConverterPickerModal, SignaturePickerModal,
+        ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        ExportResultAsRdfModal, LoadQueryModal, SaveQueryModal,
+        ExportResultAsRdfModal,
         CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
     ]
 })

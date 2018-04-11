@@ -41,7 +41,7 @@ export class ConfigurationsServices {
         return this.httpMgr.doGet(this.serviceName, "getConfigurationReferences", params);
     }
 
-    storeConfiguration(componentID: string, relativeReference: string, configuration: any) {
+    storeConfiguration(componentID: string, relativeReference: string, configuration: { [key: string]: any }) {
         console.log("[ConfigurationsServices] storeConfiguration");
         var params = {
             componentID: componentID,

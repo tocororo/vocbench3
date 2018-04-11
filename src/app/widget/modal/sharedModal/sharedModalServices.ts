@@ -10,6 +10,8 @@ import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remote
 import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
 import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
+import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
+import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
 
 @Injectable()
 export class SharedModalServices {
@@ -100,6 +102,36 @@ export class SharedModalServices {
         builder.size('lg').keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(ConverterPickerModal, overlayConfig).result;
+    }
+
+
+    /**
+     * 
+     * @param title 
+     * @param configurationComponent 
+     * @param configurationObject 
+     */
+    storeConfiguration(title: string, configurationComponent: string, configurationObject: { [key: string]: any }) {
+        var modalData = new StoreConfigurationModalData(title, configurationComponent, configurationObject);
+        const builder = new BSModalContextBuilder<StoreConfigurationModalData>(
+            modalData, undefined, StoreConfigurationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(StoreConfigurationModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     * @param configurationComponent 
+     */
+    loadConfiguration(title: string, configurationComponent: string) {
+        var modalData = new LoadConfigurationModalData(title, configurationComponent);
+        const builder = new BSModalContextBuilder<LoadConfigurationModalData>(
+            modalData, undefined, LoadConfigurationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(LoadConfigurationModal, overlayConfig).result;
     }
 
 }

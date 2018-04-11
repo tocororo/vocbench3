@@ -1,5 +1,6 @@
 export class ConfigurationComponents {
     static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
+    static EXPORTER: string = "it.uniroma2.art.semanticturkey.config.exporter.Exporter";
 }
 
 export class Reference {
@@ -34,7 +35,7 @@ export class ConfigurationProperty {
     public name: string;
     public description: string;
     public required: boolean;
-    public value: string;
+    public value: any;
     public enumeration?: string[];
     public type?: string;
     constructor (name: string, description: string, required: boolean, value?: any, enumeration?: string[], type?: string) {
