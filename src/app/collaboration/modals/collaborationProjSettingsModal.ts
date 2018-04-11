@@ -4,7 +4,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { CollaborationServices } from "../../services/collaborationServices";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { SettingsServices } from "../../services/settingsServices";
-import { Plugin, Settings, ExtensionPointID, ExtensionFactory, Scope } from "../../models/Plugins";
+import { Settings, ExtensionPointID, ExtensionFactory, Scope } from "../../models/Plugins";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
 import { VBCollaboration } from "../../utils/VBCollaboration";

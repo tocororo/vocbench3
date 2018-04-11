@@ -71,9 +71,7 @@ export abstract class AbstractCustomConstructorModal {
                         (selectedCF: any) => {
                             this.customFormId = (<CustomForm>selectedCF).getId();
                         },
-                        () => {
-                            this.cancel();
-                        }
+                        () => { }
                     );
                 }
             }

@@ -48,7 +48,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
 
     ngOnInit() {
         //init sail repository plugin
-        this.pluginService.getAvailablePlugins(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
+        this.pluginService.getAvailablePlugins(ExtensionPointID.REPO_IMPL_CONFIGURER_PLUGIN_ID).subscribe(
             (plugins: Plugin[]) => {
                 for (var i = 0; i < plugins.length; i++) {
                     this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(

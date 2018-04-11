@@ -10,6 +10,9 @@ export class Plugin {
     }
 }
 
+/**
+ * Soon I will rename this class in STProperties (like server side) and Settings will extends STProperties
+ */
 export class Settings {
     public shortName: string;
     public type: string;

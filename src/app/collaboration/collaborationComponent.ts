@@ -5,7 +5,6 @@ import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
 import { CollaborationServices } from "../services/collaborationServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { Plugin, Settings } from '../models/Plugins';
 import { Issue } from '../models/Collaboration';
 import { VBContext } from '../utils/VBContext';
 import { UIUtils } from '../utils/UIUtils';
