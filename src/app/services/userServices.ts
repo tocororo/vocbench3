@@ -400,6 +400,22 @@ export class UserServices {
 
     /**
      * 
+     * @param email
+     * @param oldPassword 
+     * @param newPassword 
+     */
+    changePassword(email: string, oldPassword: string, newPassword: string) {
+        console.log("[UserServices] changePassword");
+        var params: any = {
+            email: email,
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        }
+        return this.httpMgr.doPost(this.serviceName, "changePassword", params);
+    }
+
+    /**
+     * 
      * @param email 
      */
     forgotPassword(email: string) {

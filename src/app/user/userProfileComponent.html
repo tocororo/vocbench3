@@ -24,33 +24,46 @@
                     <tr>
                         <td nowrap><label>E-mail:</label></td>
                         <td><input-editable type="email" [value]="user.getEmail()" (valueEdited)="updateEmail($event)"></input-editable></td>
-                        <td nowrap><label>Phone:</label></td>
-                        <td><input-editable [value]="user.getPhone()" [allowEmpty]="true" (valueEdited)="updatePhone($event)"></input-editable></td>
+                        <td nowrap><label>Password:</label></td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" [ngModel]="'xxxxxxxx'" readonly>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" style="width:36px;" (click)="changePwd()" placeholder="Edit">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
+                        <td nowrap><label>Phone:</label></td>
+                        <td><input-editable [value]="user.getPhone()" [allowEmpty]="true" (valueEdited)="updatePhone($event)"></input-editable></td>
                         <td nowrap><label>Birthday:</label></td>
                         <td>
                             <input-editable type="date" [value]="user.getBirthday()" (valueEdited)="updateBirthday($event)" placeholder="yyyy-MM-dd">
                             </input-editable>
                         </td>
+                    </tr>
+                    <tr>
                         <td nowrap><label>Gender:</label></td>
                         <td><input-editable [value]="user.getGender()" [allowEmpty]="true" (valueEdited)="updateGender($event)"></input-editable></td>
-                    </tr>
-                    <tr>
                         <td nowrap><label>Country:</label></td>
                         <td><input-editable type="select" [options]="countries" [value]="user.getCountry()" (valueEdited)="updateCountry($event)"></input-editable></td>
+                    </tr>
+                    <tr>
                         <td nowrap><label>Address:</label></td>
                         <td><input-editable [value]="user.getAddress()" [allowEmpty]="true" (valueEdited)="updateAddress($event)"></input-editable></td>
-                    </tr>
-                    <tr>
                         <td nowrap><label>Affiliation:</label></td>
                         <td><input-editable [value]="user.getAffiliation()" [allowEmpty]="true" (valueEdited)="updateAffiliation($event)"></input-editable></td>
-                        <td nowrap><label>Personal Url:</label></td>
-                        <td><input-editable [value]="user.getUrl()" [allowEmpty]="true" (valueEdited)="updateUrl($event)"></input-editable></td>
                     </tr>
                     <tr>
+                        <td nowrap><label>Personal Url:</label></td>
+                        <td><input-editable [value]="user.getUrl()" [allowEmpty]="true" (valueEdited)="updateUrl($event)"></input-editable></td>
                         <td nowrap><label>Avatar Url:</label></td>
                         <td><input-editable [value]="user.getAvatarUrl()" [allowEmpty]="true" (valueEdited)="updateAvatarUrl($event)"></input-editable></td>
+                    </tr>
+                    <tr>
                         <td nowrap><label>Language proficiencies:</label></td>
                         <td>
                             <div class="input-group input-group-sm">

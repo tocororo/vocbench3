@@ -1,9 +1,12 @@
 import { Component } from "@angular/core";
-import { VBContext } from "../utils/VBContext";
-import { UserServices } from "../services/userServices";
+import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Countries } from "../models/LanguagesCountries";
 import { User } from "../models/User";
+import { UserServices } from "../services/userServices";
+import { VBContext } from "../utils/VBContext";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { ChangePasswordModal } from "./changePasswordModal";
 
 @Component({
     selector: "user-profile-component",
@@ -16,7 +19,7 @@ export class UserProfileComponent {
 
     private countries = Countries.countryList;
 
-    constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
+    constructor(private userService: UserServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initUser();
@@ -137,6 +140,12 @@ export class UserProfileComponent {
             },
             () => {}
         );
+    }
+
+    private changePwd() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(ChangePasswordModal, overlayConfig);
     }
 
 
