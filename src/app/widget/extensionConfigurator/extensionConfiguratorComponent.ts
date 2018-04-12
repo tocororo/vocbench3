@@ -1,31 +1,25 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Settings, ConfigurableExtensionFactory } from '../../models/Plugins';
 import { SharedModalServices } from '../modal/sharedModal/sharedModalServices';
+import { BasicModalServices } from '../modal/basicModal/basicModalServices';
+import { Configuration } from '../../models/Configuration';
 
 @Component({
     selector: 'extension-configurator',
-    templateUrl: './extensionConfiguratorComponent.html',
-    host: { class: "hbox" }
+    templateUrl: './extensionConfiguratorComponent.html'
 })
 export class ExtensionConfiguratorComponent {
 
-    @Input('extensions') extensionsInput: ConfigurableExtensionFactory[];
+    @Input('extensions') extensions: ConfigurableExtensionFactory[];
     @Output() extensionUpdated = new EventEmitter<ConfigurableExtensionFactory>();
     @Output() configurationUpdated = new EventEmitter<Settings>();
 
-    private extensions: ConfigurableExtensionFactory[];
     private selectedExtension: ConfigurableExtensionFactory;
     private selectedConfiguration: Settings;
     
-    constructor(private sharedModals: SharedModalServices) {}
+    constructor(private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
-        // clone Input extensions so that changes on them, do not changes the ConfigurableExtensionFactory of the parent component
-        this.extensions = [];
-        for (var i = 0; i < this.extensionsInput.length; i++) {
-            this.extensions.push(this.extensionsInput[i].clone());
-        }
-
         this.selectedExtension = this.extensions[0];
         this.extensionUpdated.emit(this.selectedExtension);
         
@@ -61,6 +55,26 @@ export class ExtensionConfiguratorComponent {
             },
             () => { }
         );
+    }
+
+    private saveConfig() {
+        let config: { [key: string]: any } = this.selectedConfiguration.getPropertiesAsMap();
+        this.sharedModals.storeConfiguration("Store configuration", this.selectedExtension.id, config).then(
+            () => {
+                this.basicModals.alert("Save configuration", "Configuration saved succesfully");
+            },
+            () => {}
+        );
+    }
+
+    private loadConfig() {
+        this.sharedModals.loadConfiguration("Load configuration", this.selectedExtension.id).then(
+            (config: Settings) => {
+                this.selectedConfiguration = config;
+                this.configurationUpdated.emit(this.selectedConfiguration);
+            },
+            () => {}
+        )
     }
 
 }

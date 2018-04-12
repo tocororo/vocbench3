@@ -30,7 +30,11 @@ export class ConfigurationsServices {
             componentID: componentID,
             relativeReference: relativeReference
         };
-        return this.httpMgr.doGet(this.serviceName, "getConfiguration", params);
+        return this.httpMgr.doGet(this.serviceName, "getConfiguration", params).map(
+            stResp => {
+                return Configuration.parse(stResp);
+            }
+        );
     }
 
     getConfigurationReferences(componentID: string): Observable<Reference[]> {

@@ -1,4 +1,5 @@
-<div class="hbox" style="margin: 0 -5px;">
+<div class="hbox">
+
     <select *ngIf="extensions.length > 1" class="form-control input-sm" [(ngModel)]="selectedExtension"
         (ngModelChange)="onChangeExtension()" [title]="selectedExtension.description" style="margin: 0 5px;">
         <option *ngFor="let ext of extensions" [ngValue]="ext" [title]="ext.description">
@@ -9,5 +10,15 @@
         (ngModelChange)="onChangeConfig()" style="margin: 0 5px;">
         <option *ngFor="let cfg of selectedExtension.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
     </select>
-    <button class="btn btn-default" (click)="configure()" style="margin-right: 5px;">Configure</button>
+
+    <span class="btn-group btn-group-sm" style="display: flex; margin-left: 4px;">
+        <button class="btn btn-default" (click)="configure()">Configure</button>
+        <button class="btn btn-default" title="Save configuration" (click)="saveConfig()">
+            <span class="glyphicon glyphicon-floppy-save"></span>
+        </button>
+        <button class="btn btn-default" title="Load configuration" (click)="loadConfig()">
+            <span class="glyphicon glyphicon-floppy-open"></span>
+        </button>
+    </span>
+
 </div>

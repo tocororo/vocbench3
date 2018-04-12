@@ -76,7 +76,7 @@
                                 <td class="hbox">
                                     <extension-configurator [extensions]="filterChainEl.availableFactories"
                                         (extensionUpdated)="onExtensionUpdated(filterChainEl, $event)"
-                                        (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)">
+                                        (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)" style="flex: 1;">
                                     </extension-configurator>
                                     <button class="btn btn-default" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
                                 </td>

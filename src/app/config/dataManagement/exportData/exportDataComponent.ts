@@ -251,17 +251,6 @@ export class ExportDataComponent {
      * ============= UTILS ==================
      * =====================================*/
 
-    /**
-     * Retrieves the PluginCon from a FilterChainElement about the given Plugin
-     */
-    private retrievePluginConfigurations(filterChainEl: FilterChainElement, pluginFactoryID: string): Settings[] {
-        for (var i = 0; i < filterChainEl.availableFactories.length; i++) { //look for the selected PluginConfiguration among the availables
-            if (filterChainEl.availableFactories[i].id == pluginFactoryID) {
-                return filterChainEl.availableFactories[i].configurations;
-            }
-        }
-    }
-
     private collectCheckedGraphStructures(): GraphStruct[] {
         var graphs: GraphStruct[] = []
         if (this.areAllGraphDeselected()) {
@@ -299,7 +288,12 @@ class FilterChainElement {
     public filterGraphs: GraphStruct[];
 
     constructor(availableFactories: ConfigurableExtensionFactory[], filterGraphs: GraphStruct[]) {
-        this.availableFactories = availableFactories;
+        //clone the available factories, so changing the configuration of one of them, doesn't change the default of the others
+        let availableFactClone: ConfigurableExtensionFactory[] = [];
+        for (var i = 0; i < availableFactories.length; i++) {
+            availableFactClone.push(availableFactories[i].clone());
+        }
+        this.availableFactories = availableFactClone;
         this.filterGraphs = filterGraphs;
     }
 

@@ -192,7 +192,12 @@ class FilterChainElement {
     public selectedConfiguration: Settings;
 
     constructor(availableFactories: ConfigurableExtensionFactory[]) {
-        this.availableFactories = availableFactories;
+        //clone the available factories, so changing the configuration of one of them, doesn't change the default of the others
+        let availableFactClone: ConfigurableExtensionFactory[] = [];
+        for (var i = 0; i < availableFactories.length; i++) {
+            availableFactClone.push(availableFactories[i].clone());
+        }
+        this.availableFactories = availableFactClone;
     }
 
     convertToFilteringPipelineStep(): FilteringStep {
