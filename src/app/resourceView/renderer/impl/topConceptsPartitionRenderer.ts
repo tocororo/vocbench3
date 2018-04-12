@@ -31,7 +31,6 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Top Concept of";
     addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/conceptScheme_create.png");
-    removeBtnImgTitle = "Remove as topConcept";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

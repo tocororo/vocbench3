@@ -122,6 +122,9 @@
             <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </label-relations-renderer>
+            <form-based-preview-renderer *ngIf="formBasedPreviewColl" [pred-obj-list]="formBasedPreviewColl" [resource]="resource" 
+                [rendering]="rendering" [readonly]="true" (dblclickObj)="objectDblClick($event)">
+            </form-based-preview-renderer>
             <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>

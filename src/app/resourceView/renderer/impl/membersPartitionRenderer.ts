@@ -31,7 +31,6 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Members";
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
-    removeBtnImgTitle = "Remove member";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

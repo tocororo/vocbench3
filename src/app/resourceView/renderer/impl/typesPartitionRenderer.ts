@@ -31,7 +31,6 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Types";
     addBtnImgTitle = "Add a type";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
-    removeBtnImgTitle = "Remove type";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

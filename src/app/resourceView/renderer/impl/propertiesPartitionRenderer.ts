@@ -32,7 +32,6 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Other properties";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
     addBtnImgTitle = "Add a property value";
-    removeBtnImgTitle = "Remove property value";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

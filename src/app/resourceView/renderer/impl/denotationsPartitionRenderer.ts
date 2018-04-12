@@ -33,7 +33,6 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Denotations";
     addBtnImgTitle = "Add denotation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
-    removeBtnImgTitle = "Remove denotation";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

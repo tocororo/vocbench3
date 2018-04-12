@@ -35,7 +35,6 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     label = "Class axioms";
     addBtnImgTitle = "Add a class axiom";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
-    removeBtnImgTitle = "Remove class axiom";
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, resViewModals: ResViewModalServices,

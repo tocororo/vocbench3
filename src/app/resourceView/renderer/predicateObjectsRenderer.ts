@@ -119,10 +119,8 @@ export class PredicateObjectsRenderer {
     }
 
     private isActionMenuDisabled() {
-        return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
-            this.readonly
-        );
+        //menu disabled if all of its action are disabled
+        return this.isAddDisabled() && this.isDeleteDisabled();
     }
 
     // PAGING

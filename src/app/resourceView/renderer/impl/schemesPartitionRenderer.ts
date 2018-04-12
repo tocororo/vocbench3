@@ -32,7 +32,6 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Schemes";
     addBtnImgTitle = "Add to a ConceptScheme";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/conceptScheme_create.png");
-    removeBtnImgTitle = "Remove from ConceptScheme";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

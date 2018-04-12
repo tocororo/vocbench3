@@ -31,7 +31,6 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Property facets";
     addBtnImgTitle = "Add a inverse property";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
-    removeBtnImgTitle = "Remove inverse property";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

@@ -72,10 +72,6 @@ export abstract class PartitionRenderer {
      * This is specific of a partition.
      */
     abstract addBtnImgTitle: string;
-    /**
-     * Title shown on mouseover on the "-" button placed near an object in a subPanel body when just one property of the partition is enriched
-     */
-    abstract removeBtnImgTitle: string;
 
     /**
      * METHODS

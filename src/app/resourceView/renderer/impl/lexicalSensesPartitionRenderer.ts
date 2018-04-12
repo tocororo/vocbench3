@@ -32,7 +32,6 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Lexical Senses";
     addBtnImgTitle = "Add lexical sense";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
-    removeBtnImgTitle = "Remove lexical sense";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

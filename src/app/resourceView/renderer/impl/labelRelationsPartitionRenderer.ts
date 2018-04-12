@@ -29,7 +29,6 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Label relations";
     addBtnImgTitle = "Add a label relation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
-    removeBtnImgTitle = "Remove label relation";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

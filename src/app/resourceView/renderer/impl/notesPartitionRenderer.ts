@@ -33,7 +33,6 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Notes";
     addBtnImgTitle = "Add a note";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
-    removeBtnImgTitle = "Remove note";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

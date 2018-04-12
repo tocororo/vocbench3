@@ -17,7 +17,8 @@ export enum ResViewPartition {
     membersOrdered = "membersOrdered",
     members = "members",
     labelRelations = "labelRelations",
-    properties = "properties"
+    properties = "properties",
+    formBasedPreview = "formBasedPreview"
 }
 
 export class ResViewUtils {

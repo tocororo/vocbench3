@@ -7,7 +7,7 @@
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
-        <span class="groupPanel-heading-content groupPanel-add-btn">
+        <span *ngIf="addBtnImgSrc" class="groupPanel-heading-content groupPanel-add-btn">
             <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="addHandler()" [disabled]="isAddDisabled()">
         </span>
         <span *ngIf="isAddManuallyAllowed()" class="groupPanel-heading-content groupPanel-dropdown-btn">

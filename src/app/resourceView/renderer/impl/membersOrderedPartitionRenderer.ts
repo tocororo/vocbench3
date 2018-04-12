@@ -36,7 +36,6 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Members";
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
-    removeBtnImgTitle = "Remove member";
 
     private selectedMember: ARTResource;
 

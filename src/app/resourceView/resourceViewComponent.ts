@@ -70,6 +70,7 @@ export class ResourceViewComponent {
     private propertyFacets: { name: string, value: boolean }[] = null;
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
+    private formBasedPreviewColl: ARTPredicateObjects[] = null;
 
     private collaborationWorking: boolean = false;
     private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
@@ -188,6 +189,7 @@ export class ResourceViewComponent {
         this.propertyFacets = null;
         this.inverseofColl = null;
         this.labelRelationsColl = null;
+        this.formBasedPreviewColl = null;
 
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
@@ -335,22 +337,32 @@ export class ResourceViewComponent {
         this.filterInferredFromPredObjList(this.propertiesColl);
         this.sortObjects(this.propertiesColl);
 
+        var formBasedPreviewPartition: any = this.resViewResponse[ResViewPartition.formBasedPreview];
+        if (formBasedPreviewPartition != null) {
+            this.formBasedPreviewColl = Deserializer.createPredicateObjectsList(formBasedPreviewPartition);
+            this.filterInferredFromPredObjList(this.formBasedPreviewColl);
+            this.sortObjects(this.formBasedPreviewColl);
+        }
+
         if (
+            //partitions of individual, so this are always returned, also when resource is not defined, I need to check also if lenght == 0
             (this.typesColl == null || this.typesColl.length == 0) &&
-            (this.classAxiomColl == null || this.classAxiomColl.length == 0) &&
-            (this.topconceptofColl == null || this.topconceptofColl.length == 0) &&
-            (this.schemesColl == null || this.schemesColl.length == 0) &&
-            (this.broadersColl == null || this.broadersColl.length == 0) &&
-            (this.superpropertiesColl == null || this.superpropertiesColl.length == 0) &&
-            (this.domainsColl == null || this.domainsColl.length == 0) &&
-            (this.rangesColl == null || this.rangesColl.length == 0) &&
-            (this.lexicalizationsColl == null || this.lexicalizationsColl.length == 0) &&
-            (this.lexicalFormsColl == null || this.lexicalFormsColl.length == 0) &&
-            (this.membersColl == null || this.membersColl.length == 0) &&
             (this.propertiesColl == null || this.propertiesColl.length == 0) &&
-            (this.propertyFacets == null || this.propertyFacets.length == 0) &&
-            (this.inverseofColl == null || this.inverseofColl.length == 0) &&
-            (this.labelRelationsColl == null || this.labelRelationsColl.length == 0)
+            (this.lexicalizationsColl == null || this.lexicalizationsColl.length == 0) &&
+            //partitions optional
+            this.classAxiomColl == null &&
+            this.topconceptofColl == null &&
+            this.schemesColl == null &&
+            this.broadersColl == null &&
+            this.superpropertiesColl == null &&
+            this.domainsColl == null &&
+            this.rangesColl == null &&
+            this.lexicalFormsColl == null &&
+            this.membersColl == null &&
+            this.propertyFacets == null &&
+            this.inverseofColl == null &&
+            this.labelRelationsColl == null &&
+            this.formBasedPreviewColl == null
         ) {
             this.unexistingResource = true;
         } else {

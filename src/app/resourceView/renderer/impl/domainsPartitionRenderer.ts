@@ -30,7 +30,6 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Domains";
     addBtnImgTitle = "Add a domain";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
-    removeBtnImgTitle = "Remove domain";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

@@ -1,58 +1,49 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { VBContext } from "../../../utils/VBContext";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum, ResourceUtils, ARTResource } from "../../../models/ARTResources";
-import { OntoLex } from "../../../models/Vocabulary"
+import { ARTURIResource, ARTNode } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { PropertyServices } from "../../../services/propertyServices";
-import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { NewOntoLexicalizationCfModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
-
 
 @Component({
-    selector: "evoked-lexical-concepts-renderer",
+    selector: "form-based-preview-renderer",
     templateUrl: "../partitionRenderer.html",
 })
-export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingleRoot {
+export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
 
-    partition = ResViewPartition.evokedLexicalConcepts;
-    rootProperty: ARTURIResource = OntoLex.evokes;
-    label = "Evoked Lexical Concepts";
-    addBtnImgTitle = "Add evoked lexical concept";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
+    partition = ResViewPartition.formBasedPreview;
+    rootProperty: ARTURIResource = null;
+    label = "Custom Form Preview";
+    addBtnImgTitle = "";
+    addBtnImgSrc: any = null; //do not show the add icon
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
-        resViewModals: ResViewModalServices, private ontolexService: OntoLexLemonServices) {
+        resViewModals: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
     }
 
-    add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.enrichProperty(predicate);
-    }
+    /**
+     * Following methods are not used, Every action is disabled in this partition since it is only a preview
+     */
 
-    //not used since this partition doesn't allow manual add operation
+    add(predicate: ARTURIResource, propChangeable: boolean) {}
+
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
         return Observable.of(true);
     }
 
-    removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        this.getRemoveFunction(predicate, object).subscribe(
-            stResp => {
-                this.update.emit(null);
-            }
-        );
-    }
+    
+    removePredicateObject(predicate: ARTURIResource, object: ARTNode) { }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.resourcesService.removeValue(this.resource, predicate, <ARTResource>object);
+        return this.resourcesService.removeValue(this.resource, predicate, object);
     }
 
 }

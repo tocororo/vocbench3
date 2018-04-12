@@ -30,7 +30,6 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Ranges";
     addBtnImgTitle = "Add a range";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
-    removeBtnImgTitle = "Remove range";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

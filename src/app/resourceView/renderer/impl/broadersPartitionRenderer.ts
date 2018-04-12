@@ -32,7 +32,6 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     label = "Broaders";
     addBtnImgTitle = "Add broader";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/concept_create.png");
-    removeBtnImgTitle = "Remove broader";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

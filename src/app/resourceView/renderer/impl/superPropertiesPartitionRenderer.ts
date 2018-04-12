@@ -30,7 +30,6 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
     label = "Superproperties";
     addBtnImgTitle = "Add a superproperty";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
-    removeBtnImgTitle = "Remove superproperty";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

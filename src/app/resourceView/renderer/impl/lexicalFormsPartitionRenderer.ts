@@ -32,7 +32,6 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     label = "Lexical forms";
     addBtnImgTitle = "Add a lexical form";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
-    removeBtnImgTitle = "Remove lexical form";
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, resViewModals: ResViewModalServices, private creationModals: CreationModalServices,
