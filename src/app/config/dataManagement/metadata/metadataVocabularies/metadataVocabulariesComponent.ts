@@ -25,7 +25,9 @@ export class MetadataVocabulariesComponent {
     private exporters: NonConfigurableExtensionFactory[];
     private selectedExporter: NonConfigurableExtensionFactory;
 
-    private selectedExporterSettings: Settings;
+    private settingsStructs: SettingsStruct[];
+
+    // private selectedExporterSettings: Settings;
     private extensionPointSettings: Settings;
 
     constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
@@ -54,11 +56,19 @@ export class MetadataVocabulariesComponent {
 
     private onExtensionChange() {
         if (this.selectedExporter == null) return;
-        this.settingsService.getSettings(this.selectedExporter.id, this.selectedExporter.settingsScopes[0]).subscribe(
-            settings => {
-                this.selectedExporterSettings = settings;
+
+        this.settingsStructs = [];
+        //for each scope retrieve the settings
+        this.selectedExporter.settingsScopes.forEach(
+            (scope: Scope) => {
+                this.settingsService.getSettings(this.selectedExporter.id, scope).subscribe(
+                    settings => {
+                        this.settingsStructs.push({ settings: settings, scope: scope });
+                    }
+                );
             }
         );
+
         this.settingsService.getSettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT).subscribe(
             settings => {
                 this.extensionPointSettings = settings;
@@ -67,34 +77,28 @@ export class MetadataVocabulariesComponent {
     }
 
     private saveSettings() {
-        //common settings
-        if (this.extensionPointSettings.requireConfiguration()) {
-            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
-                this.extensionPointSettings.shortName + ")", "warning");
-            return;
-        }
-        var extensionPointSettingsMap: any = this.extensionPointSettings.getPropertiesAsMap();
-
-        //selected exporter settings
-        if (this.selectedExporterSettings.requireConfiguration()) {
-            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in exporter configuration (" +
-                this.selectedExporterSettings.shortName + ")", "warning");
-            return;
-        }
-        var selectedExporterSettingsMap: any = this.selectedExporterSettings.getPropertiesAsMap();
-
         let saveSettingsFnArray: any[] = [];
 
+        if (!this.isCommonSettingsConfigure()) {
+            return;
+        }
         //extension point settings may be without properties, so check if is necessary to invoke storeSettings()
         if (this.extensionPointSettings.properties.length > 0) {
+            let extensionPointSettingsMap: any = this.extensionPointSettings.getPropertiesAsMap();
             saveSettingsFnArray.push(
                 this.settingsService.storeSettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT, extensionPointSettingsMap)
             );
         }
 
-        saveSettingsFnArray.push(
-            this.settingsService.storeSettings(this.selectedExporter.id, this.selectedExporter.settingsScopes[0], selectedExporterSettingsMap)
-        );
+        for (var i = 0; i < this.settingsStructs.length; i++) {
+            if (!this.isExporterSettingsConfigured(this.settingsStructs[i])) {
+                return;
+            }
+            let exporterSettingsMap: any = this.settingsStructs[i].settings.getPropertiesAsMap();
+            saveSettingsFnArray.push(
+                this.settingsService.storeSettings(this.selectedExporter.id, this.settingsStructs[i].scope, exporterSettingsMap)
+            );
+        }
 
         Observable.forkJoin(saveSettingsFnArray).subscribe(
             stResp => {
@@ -105,24 +109,24 @@ export class MetadataVocabulariesComponent {
     }
 
     private export() {
-        if (this.extensionPointSettings.requireConfiguration()) {
-            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
-                this.extensionPointSettings.shortName + ")", "warning");
+        let saveSettingsFnArray: any[] = [];
+
+        if (!this.isCommonSettingsConfigure()) {
             return;
         }
-        var extensionPointSettingsMap: any = this.extensionPointSettings.getPropertiesAsMap();
 
-        if (this.selectedExporterSettings.requireConfiguration()) {
-            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
-                this.selectedExporterSettings.shortName + ")", "warning");
-            return;
+        for (var i = 0; i < this.settingsStructs.length; i++) {
+            if (!this.isExporterSettingsConfigured(this.settingsStructs[i])) {
+                return;
+            }
+            let exporterSettingsMap: any = this.settingsStructs[i].settings.getPropertiesAsMap();
+            saveSettingsFnArray.push(
+                this.settingsService.storeSettings(this.selectedExporter.id, this.settingsStructs[i].scope, exporterSettingsMap)
+            );
         }
-        var selectedExporterSettingsMap: any = this.selectedExporterSettings.getPropertiesAsMap();
 
-
-        //first set the exporter settings
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.settingsService.storeSettings(this.selectedExporter.id, this.selectedExporter.settingsScopes[0], selectedExporterSettingsMap).subscribe(
+        Observable.forkJoin(saveSettingsFnArray).subscribe(
             stResp => {
                 //export the metadata
                 let expoterSpecification: PluginSpecification = {
@@ -139,4 +143,32 @@ export class MetadataVocabulariesComponent {
         );
     }
 
+    private isCommonSettingsConfigure(): boolean {
+        if (this.extensionPointSettings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
+                this.extensionPointSettings.shortName + ")", "warning");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private isExporterSettingsConfigured(settingsStruct: SettingsStruct): boolean {
+        if (settingsStruct.settings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in exporter configuration (" +
+                settingsStruct.settings.shortName + ", scope: " + settingsStruct.scope + ")", "warning");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+}
+
+
+
+
+class SettingsStruct {
+    scope: Scope;
+    settings: Settings;
 }

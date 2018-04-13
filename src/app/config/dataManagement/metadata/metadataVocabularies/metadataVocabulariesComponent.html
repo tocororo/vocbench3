@@ -22,24 +22,26 @@
         </table>
 
         <div style="margin-top: 4px;" class="scrollableContainer">
-            <settings-renderer-panel [(ngModel)]="selectedExporterSettings"></settings-renderer-panel>
-
+            <!-- Common extension point settings -->
             <settings-renderer-panel *ngIf="extensionPointSettings?.properties.length > 0" style="margin-top: 4px;" [(ngModel)]="extensionPointSettings">
             </settings-renderer-panel>
+
+            <!-- Settings of the exporter implementation -->
+            <settings-renderer-panel *ngFor="let s of settingsStructs" [(ngModel)]="s.settings" [scope]="s.scope"></settings-renderer-panel>
         </div>
 
     </div>
     
     <div class="panel-footer">
         <span class="pull-left">(*) Mandatory field</span>
-        <button type="submit" class="btn btn-default btn-sm pull-right" (click)="saveSettings()" [disabled]="!selectedExporterSettings">Save</button>
+        <button type="submit" class="btn btn-default btn-sm pull-right" (click)="saveSettings()" [disabled]="!settingsStructs">Save</button>
         <div class="col-sm-2 pull-right">
             <div class="input-group">
                 <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
                     <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
                 </select>
                 <span class="input-group-btn">
-                    <button class="btn btn-default btn-sm" (click)="export()" [disabled]="!selectedExporterSettings">
+                    <button class="btn btn-default btn-sm" (click)="export()" [disabled]="!settingsStructs">
                         Export
                     </button>
                 </span>

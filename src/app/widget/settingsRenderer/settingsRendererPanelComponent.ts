@@ -1,7 +1,7 @@
-import { Component, forwardRef } from '@angular/core';
-import { Settings } from '../../models/Plugins';
+import { Component, Input, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Scope, Settings } from '../../models/Plugins';
 
 @Component({
     selector: 'settings-renderer-panel',
@@ -11,7 +11,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     }]
 })
 export class SettingsRendererPanelComponent {
-    
+
+    @Input() scope: Scope;
+
     private settings: Settings;
     private safeDescription: SafeHtml;
     private safeWarning: SafeHtml;

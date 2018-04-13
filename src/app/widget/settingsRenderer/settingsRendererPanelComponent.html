@@ -1,6 +1,10 @@
 <div class="panel panel-default vbox">
-    <div class="panel-heading">
-        <label>{{settings?.shortName}}</label>
+    <div class="panel-heading hbox">
+        <label style="flex: 1">{{settings?.shortName}}</label>
+        <div *ngIf="scope">
+            <label>scope:</label>
+            <span>{{scope}}</span>
+        </div>
     </div>
     <div class="panel-body" class="scrollableContainer">
 
