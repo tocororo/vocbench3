@@ -13,90 +13,19 @@
                         <label>Metadata Vocabulary:</label>
                     </td>
                     <td>
-                        <select class="form-control input-sm" [(ngModel)]="selectedExporterPlugin" name="exporter" (change)="onPluginChange()">
-                            <option *ngFor="let e of exporterPlugins" [ngValue]="e">{{e.factoryID}}</option>
+                        <select class="form-control input-sm" [(ngModel)]="selectedExporter" (change)="onExtensionChange()">
+                            <option *ngFor="let e of exporters" [ngValue]="e">{{e.name}}</option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td nowrap>
-                        <label>Exporter Configuration:</label>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <select class="form-control input-sm" [(ngModel)]="selectedConfiguration" name="configuration" [disabled]="!selectedExporterPlugin">
-                                <option *ngFor="let c of selectedExporterPluginConfigurations" [ngValue]="c">{{c.shortName}}</option>
-                            </select>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-sm" (click)="configurePlugin()" 
-                                    [disabled]="!selectedConfiguration || selectedConfiguration.properties.length == 0">
-                                    Configure
-                                </button>
-                            </span>
-                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
 
+        <div style="margin-top: 4px;" class="scrollableContainer">
+            <settings-renderer-panel [(ngModel)]="selectedExporterSettings"></settings-renderer-panel>
 
-        <div class="subPanel vbox" style="margin-top: 6px;">
-            <div class="subPanel-heading">
-                <label>Settings</label>
-            </div>
-            <div class="subPanel-body scrollableContainer">
-                <ng-template [ngIf]="selectedExporterSettings">
-
-                    <table class="table table-condensed table-borderless">
-                        <colgroup>
-                            <col style="width: 1%;">
-                            <col style="width: 1%;">
-                            <col>
-                        </colgroup>
-                        <tbody>
-                            <ng-template [ngIf]="selectedExporterSettings.extensionPointSettings.properties">
-                                <tr *ngIf="selectedExporterSettings.extensionPointSettings.properties.length > 0">
-                                    <td colspan="3" class="text-center">
-                                        <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
-                                            <label>{{selectedExporterSettings.extensionPointSettings.shortName}}</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let p of selectedExporterSettings.extensionPointSettings.properties">
-                                    <td class="text-right" nowrap>
-                                        <label>{{p.displayName}}</label>
-                                        <span *ngIf="p.required">*</span>
-                                    </td>
-                                    <td>
-                                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
-                                    </td>
-                                    <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
-                                </tr>
-                            </ng-template>
-                            <ng-template [ngIf]="selectedExporterSettings.pluginSettings.properties">
-                                <tr>
-                                    <td colspan="3" class="text-center">
-                                        <div style="display: inline-block; padding: 6px; border: 1px solid #ddd; border-radius: 3px;">
-                                            <label>{{selectedExporterSettings.pluginSettings.shortName}}</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr *ngFor="let p of selectedExporterSettings.pluginSettings.properties">
-                                    <td class="text-right" nowrap>
-                                        <label>{{p.displayName}}</label>
-                                        <span *ngIf="p.required">*</span>
-                                    </td>
-                                    <td>
-                                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
-                                    </td>
-                                    <td><input type="text" class="form-control input-sm" [(ngModel)]="p.value"></td>
-                                </tr>
-                            </ng-template>
-                        </tbody>
-                    </table>
-
-                </ng-template>
-            </div>
+            <settings-renderer-panel *ngIf="extensionPointSettings?.properties.length > 0" style="margin-top: 4px;" [(ngModel)]="extensionPointSettings">
+            </settings-renderer-panel>
         </div>
 
     </div>

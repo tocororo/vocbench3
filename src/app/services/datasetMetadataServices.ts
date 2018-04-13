@@ -12,42 +12,6 @@ export class DatasetMetadataServices {
     constructor(private httpMgr: HttpManager) { }
 
     /**
-     * @param exporterId
-     */
-    getDatasetMetadata(exporterId: string): Observable<{extensionPointSettings: Settings, pluginSettings: Settings}> {
-        console.log("[DatasetMetadataExportServices] getDatasetMetadata");
-        var params = {
-            exporterId: exporterId
-        };
-        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).map(
-            stResp => {
-                let extPointSettingsJson = stResp.extensionPointSettings;
-                let extensionPointSettings: Settings = Settings.parse(extPointSettingsJson);
-
-                let pluginSettingsJson = stResp.pluginSettings;
-                let pluginSettings: Settings = Settings.parse(pluginSettingsJson);
-
-                return { extensionPointSettings: extensionPointSettings, pluginSettings: pluginSettings };
-            }
-        );
-    }
-
-    /**
-     * @param exporterId
-     * @param extensionPointProperties json map object of key - value
-     * @param pluginProperties json map object of key - value
-     */
-    setDatasetMetadata(exporterId: string, extensionPointProperties: any, pluginProperties: any) {
-        console.log("[DatasetMetadataExportServices] setDatasetMetadata");
-        var params = {
-            exporterId: exporterId,
-            extensionPointProperties: JSON.stringify(extensionPointProperties),
-            pluginProperties: JSON.stringify(pluginProperties)
-        };
-        return this.httpMgr.doPost(this.serviceName, "setDatasetMetadata", params);
-    }
-
-    /**
      * @param exporterSpecification
      * @param outputFormat
      */

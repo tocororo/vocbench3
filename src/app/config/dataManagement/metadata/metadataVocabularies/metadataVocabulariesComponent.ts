@@ -1,11 +1,15 @@
 import { Component } from "@angular/core";
+import { Observable } from 'rxjs/Observable';
+import { ExtensionPointID, NonConfigurableExtensionFactory, PluginSpecification, Scope, Settings } from "../../../../models/Plugins";
+import { RDFFormat } from "../../../../models/RDFFormat";
 import { DatasetMetadataServices } from "../../../../services/datasetMetadataServices";
 import { ExportServices } from "../../../../services/exportServices";
+import { ExtensionsServices } from "../../../../services/extensionsServices";
 import { PluginsServices } from "../../../../services/pluginsServices";
-import { Plugin, Settings, SettingsProp, PluginSpecification, ExtensionPointID } from "../../../../models/Plugins";
-import { RDFFormat } from "../../../../models/RDFFormat";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { SettingsServices } from "../../../../services/settingsServices";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+
 
 @Component({
     selector: "metadata-vocabularies-component",
@@ -18,14 +22,14 @@ export class MetadataVocabulariesComponent {
     private exportFormats: RDFFormat[];
     private selectedExportFormat: RDFFormat;
 
-    private exporterPlugins: Plugin[];
-    private selectedExporterPlugin: Plugin;
-    private selectedExporterPluginConfigurations: Settings[];
-    private selectedConfiguration: Settings;
+    private exporters: NonConfigurableExtensionFactory[];
+    private selectedExporter: NonConfigurableExtensionFactory;
 
-    private selectedExporterSettings: { extensionPointSettings: Settings, pluginSettings: Settings };
+    private selectedExporterSettings: Settings;
+    private extensionPointSettings: Settings;
 
     constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
+        private extensionService: ExtensionsServices, private settingsService: SettingsServices,
         private pluginService: PluginsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
@@ -41,80 +45,88 @@ export class MetadataVocabulariesComponent {
                 }
             }
         );
-        this.pluginService.getAvailablePlugins(ExtensionPointID.DATASET_METADATA_EXPORTER_ID).subscribe(
-            plugins => {
-                this.exporterPlugins = plugins;
+        this.extensionService.getExtensions(ExtensionPointID.DATASET_METADATA_EXPORTER_ID).subscribe(
+            extensions => {
+                this.exporters = <NonConfigurableExtensionFactory[]>extensions;
             }
         )
     }
 
-    private onPluginChange() {
-        if (this.selectedExporterPlugin == null) return;
-        this.pluginService.getPluginConfigurations(this.selectedExporterPlugin.factoryID).subscribe(
-            config => {
-                this.selectedExporterPluginConfigurations = config.configurations;
-                this.selectedConfiguration = this.selectedExporterPluginConfigurations[0];
-            }
-        )
-        this.metadataExporterService.getDatasetMetadata(this.selectedExporterPlugin.factoryID).subscribe(
-            config => {
-                this.selectedExporterSettings = config;
+    private onExtensionChange() {
+        if (this.selectedExporter == null) return;
+        this.settingsService.getSettings(this.selectedExporter.id, this.selectedExporter.settingsScopes[0]).subscribe(
+            settings => {
+                this.selectedExporterSettings = settings;
             }
         );
-    }
-
-    private configurePlugin() {
-        //at the moment there is no plugin configuration with parameters, so this method doesn't do anything
-        console.log("configure " + this.selectedConfiguration);
+        this.settingsService.getSettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT).subscribe(
+            settings => {
+                this.extensionPointSettings = settings;
+            }
+        )
     }
 
     private saveSettings() {
-        if (this.selectedExporterSettings.extensionPointSettings.requireConfiguration()) {
+        //common settings
+        if (this.extensionPointSettings.requireConfiguration()) {
             this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
-                this.selectedExporterSettings.extensionPointSettings.shortName + ")", "warning");
+                this.extensionPointSettings.shortName + ")", "warning");
             return;
         }
-        var extPointProps: any = this.selectedExporterSettings.extensionPointSettings.getPropertiesAsMap();
+        var extensionPointSettingsMap: any = this.extensionPointSettings.getPropertiesAsMap();
 
-        if (this.selectedExporterSettings.pluginSettings.requireConfiguration()) {
-            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
-                this.selectedExporterSettings.pluginSettings.shortName + ")", "warning");
+        //selected exporter settings
+        if (this.selectedExporterSettings.requireConfiguration()) {
+            this.basicModals.alert("Missing configuration", "Required parameter(s) missing in exporter configuration (" +
+                this.selectedExporterSettings.shortName + ")", "warning");
             return;
         }
-        var pluginProps: any = this.selectedExporterSettings.pluginSettings.getPropertiesAsMap();
+        var selectedExporterSettingsMap: any = this.selectedExporterSettings.getPropertiesAsMap();
 
-        this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
+        let saveSettingsFnArray: any[] = [];
+
+        //extension point settings may be without properties, so check if is necessary to invoke storeSettings()
+        if (this.extensionPointSettings.properties.length > 0) {
+            saveSettingsFnArray.push(
+                this.settingsService.storeSettings(ExtensionPointID.DATASET_METADATA_EXPORTER_ID, Scope.PROJECT, extensionPointSettingsMap)
+            );
+        }
+
+        saveSettingsFnArray.push(
+            this.settingsService.storeSettings(this.selectedExporter.id, this.selectedExporter.settingsScopes[0], selectedExporterSettingsMap)
+        );
+
+        Observable.forkJoin(saveSettingsFnArray).subscribe(
             stResp => {
                 this.basicModals.alert("Save settings", "Settings saved succesfully");
             }
         );
+
     }
 
     private export() {
-        if (this.selectedExporterSettings.extensionPointSettings.requireConfiguration()) {
+        if (this.extensionPointSettings.requireConfiguration()) {
             this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
-                this.selectedExporterSettings.extensionPointSettings.shortName + ")", "warning");
+                this.extensionPointSettings.shortName + ")", "warning");
             return;
         }
-        var extPointProps: any = this.selectedExporterSettings.extensionPointSettings.getPropertiesAsMap();
+        var extensionPointSettingsMap: any = this.extensionPointSettings.getPropertiesAsMap();
 
-        if (this.selectedExporterSettings.pluginSettings.requireConfiguration()) {
+        if (this.selectedExporterSettings.requireConfiguration()) {
             this.basicModals.alert("Missing configuration", "Required parameter(s) missing in plugin configuration (" +
-                this.selectedExporterSettings.pluginSettings.shortName + ")", "warning");
+                this.selectedExporterSettings.shortName + ")", "warning");
             return;
         }
-        var pluginProps: any = this.selectedExporterSettings.pluginSettings.getPropertiesAsMap();
+        var selectedExporterSettingsMap: any = this.selectedExporterSettings.getPropertiesAsMap();
 
 
         //first set the exporter settings
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.metadataExporterService.setDatasetMetadata(this.selectedExporterPlugin.factoryID, extPointProps, pluginProps).subscribe(
+        this.settingsService.storeSettings(this.selectedExporter.id, this.selectedExporter.settingsScopes[0], selectedExporterSettingsMap).subscribe(
             stResp => {
                 //export the metadata
                 let expoterSpecification: PluginSpecification = {
-                    factoryId: this.selectedExporterPlugin.factoryID,
-                    configType: this.selectedConfiguration.type,
-                    properties: this.selectedConfiguration.getPropertiesAsMap()
+                    factoryId: this.selectedExporter.id
                 }
                 this.metadataExporterService.export(expoterSpecification, this.selectedExportFormat).subscribe(
                     blob => {

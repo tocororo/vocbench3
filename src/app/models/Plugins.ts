@@ -185,8 +185,9 @@ export class SettingsPropTypeConstraint {
 
 export class PluginSpecification {
     factoryId: string;
-    configType: string;
-    properties: any; //object {"key1": "value", "key2": "value2", ...}
+    configType?: string;
+    configuration?: any;
+    properties?: any; //object {"key1": "value", "key2": "value2", ...}
 }
 
 
