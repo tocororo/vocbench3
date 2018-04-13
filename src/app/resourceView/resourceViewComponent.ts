@@ -1,22 +1,22 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
-import { ResViewModalServices } from "./resViewModals/resViewModalServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils, SortAttribute } from "../models/ARTResources";
-import { VersionInfo } from "../models/History";
-import { SemanticTurkey } from "../models/Vocabulary";
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { CollaborationModalServices } from "../collaboration/collaborationModalService";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
+import { VersionInfo } from "../models/History";
 import { ResViewPartition } from "../models/ResourceView";
-import { Deserializer } from "../utils/Deserializer";
-import { UIUtils } from "../utils/UIUtils";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBProperties } from "../utils/VBProperties";
-import { HttpServiceContext } from "../utils/HttpManager";
-import { VBContext } from "../utils/VBContext";
+import { SemanticTurkey } from "../models/Vocabulary";
+import { CollaborationServices } from "../services/collaborationServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
-import { CollaborationServices } from "../services/collaborationServices";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpServiceContext } from "../utils/HttpManager";
+import { UIUtils } from "../utils/UIUtils";
 import { VBCollaboration } from "../utils/VBCollaboration";
-import { CollaborationModalServices } from "../collaboration/collaborationModalService";
+import { VBContext } from "../utils/VBContext";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBProperties } from "../utils/VBProperties";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 
 @Component({
     selector: "resource-view",
@@ -50,27 +50,27 @@ export class ResourceViewComponent {
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
-    private typesColl: ARTPredicateObjects[] = null;
-    private classAxiomColl: ARTPredicateObjects[] = null;
-    private topconceptofColl: ARTPredicateObjects[] = null;
-    private schemesColl: ARTPredicateObjects[] = null;
     private broadersColl: ARTPredicateObjects[] = null;
-    private superpropertiesColl: ARTPredicateObjects[] = null;
-    private domainsColl: ARTPredicateObjects[] = null;
-    private rangesColl: ARTPredicateObjects[] = null;
-    private lexicalizationsColl: ARTPredicateObjects[] = null;
-    private lexicalFormsColl: ARTPredicateObjects[] = null;
-    private lexicalSensesColl: ARTPredicateObjects[] = null;
+    private classAxiomColl: ARTPredicateObjects[] = null;
     private denotationsColl: ARTPredicateObjects[] = null;
+    private domainsColl: ARTPredicateObjects[] = null;
     private evokedLexicalConceptsColl: ARTPredicateObjects[] = null;
-    private notesColl: ARTPredicateObjects[] = null;
-    private membersColl: ARTPredicateObjects[] = null;
-    private membersOrderedColl: ARTPredicateObjects[] = null;
-    private propertiesColl: ARTPredicateObjects[] = null;
-    private propertyFacets: { name: string, value: boolean }[] = null;
+    private formBasedPreviewColl: ARTPredicateObjects[] = null;
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
-    private formBasedPreviewColl: ARTPredicateObjects[] = null;
+    private lexicalFormsColl: ARTPredicateObjects[] = null;
+    private lexicalizationsColl: ARTPredicateObjects[] = null;
+    private lexicalSensesColl: ARTPredicateObjects[] = null;
+    private membersColl: ARTPredicateObjects[] = null;
+    private membersOrderedColl: ARTPredicateObjects[] = null;
+    private notesColl: ARTPredicateObjects[] = null;
+    private propertiesColl: ARTPredicateObjects[] = null;
+    private propertyFacets: { name: string, value: boolean }[] = null;
+    private rangesColl: ARTPredicateObjects[] = null;
+    private schemesColl: ARTPredicateObjects[] = null;
+    private superpropertiesColl: ARTPredicateObjects[] = null;
+    private topconceptofColl: ARTPredicateObjects[] = null;
+    private typesColl: ARTPredicateObjects[] = null;
 
     private collaborationWorking: boolean = false;
     private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
@@ -171,25 +171,27 @@ export class ResourceViewComponent {
      */
     private fillPartitions() {
         //reset all partitions
-        this.typesColl = null;
-        this.classAxiomColl = null;
-        this.topconceptofColl = null;
-        this.schemesColl = null;
         this.broadersColl = null;
-        this.superpropertiesColl = null;
-        this.domainsColl = null;
-        this.rangesColl = null;
-        this.lexicalizationsColl = null;
-        this.lexicalFormsColl = null;
-        this.lexicalSensesColl = null;
+        this.classAxiomColl = null;
         this.denotationsColl = null;
+        this.domainsColl = null;
         this.evokedLexicalConceptsColl = null;
-        this.membersColl = null;
-        this.propertiesColl = null;
-        this.propertyFacets = null;
+        this.formBasedPreviewColl = null;
         this.inverseofColl = null;
         this.labelRelationsColl = null;
-        this.formBasedPreviewColl = null;
+        this.lexicalFormsColl = null;
+        this.lexicalizationsColl = null;
+        this.lexicalSensesColl = null;
+        this.membersColl = null;
+        this.membersOrderedColl = null;
+        this.notesColl = null;
+        this.propertiesColl = null;
+        this.propertyFacets = null;
+        this.rangesColl = null;
+        this.schemesColl = null;
+        this.superpropertiesColl = null;
+        this.topconceptofColl = null;
+        this.typesColl = null;
 
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
