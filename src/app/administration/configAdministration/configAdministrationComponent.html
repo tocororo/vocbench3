@@ -4,11 +4,11 @@
 
          <div class="panel-body vbox"> 
 
-            <div class="panel panel-default vbox">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <label>VocBench Configuration:</label>
+                    <label>Administrator:</label>
                 </div>
-                <div class="panel-body vbox" style="flex: 1;">
+                <div class="panel-body">
                     <table class="table table-condensed table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
@@ -19,14 +19,35 @@
                             <tr>
                                 <td>
                                     <span class="glyphicon glyphicon-info-sign"
-                                        title="Email address used to identify the system administrator. The system notifications will be also send to the same address.">
+                                        title="Through this entry it is possible to hand over the role of administrator to another user (only one user can be the administrator).">
                                     </span>
                                 </td>
                                 <td nowrap>
-                                    <label>Email admin address:</label>
+                                    <label>Administrator account:</label>
                                 </td>
-                                <td><input class="form-control input-sm" type="email" [(ngModel)]="config.emailAdminAddress"></td>
+                                <td>
+                                    <select class="form-control input-sm" [(ngModel)]="adminMail" (ngModelChange)="updateAdmin()">
+                                        <option *ngFor="let u of users" [value]="u.email">{{u.givenName}} {{u.familyName}}</option>
+                                    </select>
+                                </td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-default" style="margin-top: 6px;">
+                <div class="panel-heading">
+                    <label>Vocbench Email Configuration:</label>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
                             <tr>
                                 <td>
                                     <span class="glyphicon glyphicon-info-sign" title="Email address used to send administration emails"></span>
@@ -34,7 +55,7 @@
                                 <td nowrap>
                                     <label>Email from address:</label>
                                 </td>
-                                <td><input class="form-control input-sm" type="email" [(ngModel)]="config.emailFromAddress"></td>
+                                <td><input class="form-control input-sm" type="email" [(ngModel)]="emailConfig.emailFromAddress"></td>
                             </tr>
                             <tr>
                                 <td>
@@ -43,7 +64,7 @@
                                 <td nowrap>
                                     <label>Email from password:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromPassword"></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.emailFromPassword"></td>
                             </tr>
                             <tr>
                                 <td>
@@ -52,7 +73,7 @@
                                 <td nowrap>
                                     <label>Email from alias:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromAlias"></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.emailFromAlias"></td>
                             </tr>
                             <tr>
                                 <td>
@@ -61,7 +82,7 @@
                                 <td nowrap>
                                     <label>Email from host:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromHost"></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.emailFromHost"></td>
                             </tr>
                             <tr>
                                 <td>
@@ -70,15 +91,18 @@
                                 <td nowrap>
                                     <label>Email from port:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="config.emailFromPort"></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.emailFromPort"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="panel-footer">
-                    <button type="submit" class="btn btn-default btn-sm pull-right" (click)="submitChange()" [disabled]="!isConfigChanged()">Submit</button>
+                    <button type="submit" class="btn btn-default btn-sm pull-right" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
+                    <span class="clearfix"></span>
                 </div>
             </div>
+
+            <span style="flex: 1"></span>
 
             <div class="panel panel-default" style="margin-top: 8px;">
                 <div class="panel-body">

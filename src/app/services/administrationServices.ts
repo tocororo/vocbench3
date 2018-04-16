@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { ProjectUserBinding, Role } from "../models/User";
 import { Project } from "../models/Project";
+import { ProjectUserBinding, Role } from "../models/User";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class AdministrationServices {
@@ -23,26 +23,35 @@ export class AdministrationServices {
     }
 
     /**
-     * Updates the administration config parameters
-	 * @param emailAdminAddress
-	 * @param emailFromAddress
-	 * @param emailFromPassword
-	 * @param emailFromAlias
-	 * @param emailFromHost
-	 * @param emailFromPort
+     * 
+     * @param emailAdminAddress 
      */
-    updateAdministrationConfig(emailAdminAddress: string, emailFromAddress: string, emailFromPassword: string,
-        emailFromAlias: string, emailFromHost: string, emailFromPort: string) {
-        console.log("[AdministrationServices] updateAdministrationConfig");
+    updateAdministrator(emailAdminAddress: string) {
+        console.log("[AdministrationServices] updateAdministrator");
         var params: any = {
             emailAdminAddress: emailAdminAddress,
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateAdministrator", params);
+    }
+
+    /**
+     * 
+     * @param emailFromAddress 
+     * @param emailFromPassword 
+     * @param emailFromAlias 
+     * @param emailFromHost 
+     * @param emailFromPort 
+     */
+    updateEmailConfig(emailFromAddress: string, emailFromPassword: string, emailFromAlias: string, emailFromHost: string, emailFromPort: string) {
+        console.log("[AdministrationServices] updateEmailConfig");
+        var params: any = {
             emailFromAddress: emailFromAddress,
             emailFromPassword: emailFromPassword,
             emailFromAlias: emailFromAlias,
             emailFromHost: emailFromHost,
             emailFromPort: emailFromPort
         }
-        return this.httpMgr.doPost(this.serviceName, "updateAdministrationConfig", params);
+        return this.httpMgr.doPost(this.serviceName, "updateEmailConfig", params);
     }
 
 

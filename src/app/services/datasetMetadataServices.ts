@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { PluginSpecification, Settings, SettingsProp } from "../models/Plugins";
+import { PluginSpecification } from "../models/Plugins";
 import { RDFFormat } from "../models/RDFFormat";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class DatasetMetadataServices {

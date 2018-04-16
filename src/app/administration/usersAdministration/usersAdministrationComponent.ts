@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { UserCreateModal, UserCreateModalData } from "./userCreateModal"
-import { UserServices } from "../../services/userServices";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { User, UserStatusEnum } from "../../models/User";
+import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { UserCreateModal, UserCreateModalData } from "./userCreateModal";
 
 @Component({
     selector: "users-admin-component",
