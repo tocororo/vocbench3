@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
+import { CustomForm, CustomFormValue, FormCollection } from "../models/CustomForms";
+import { RDFS } from "../models/Vocabulary";
+import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTLiteral, ARTBNode, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum, ARTNode, ResourceUtils } from "../models/ARTResources";
-import { RDF, OWL, RDFS } from "../models/Vocabulary";
-import { FormCollection, CustomForm, CustomFormType, CustomFormValue } from "../models/CustomForms";
-import { ResourcesServices } from "./resourcesServices"
+import { ResourcesServices } from "./resourcesServices";
 
 @Injectable()
 export class PropertyServices {
@@ -488,6 +488,22 @@ export class PropertyServices {
         return this.httpMgr.doGet(this.serviceName, "getDatarangeLiterals", params).map(
             stResp => {
                 return Deserializer.createLiteralArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns the inverse properties of the given
+     * @param properties 
+     */
+    getInverseProperties(properties: ARTURIResource[]) {
+        console.log("[PropertyServices] getInverseProperties");
+        var params: any = {
+            properties: properties
+        };
+        return this.httpMgr.doGet(this.serviceName, "getInverseProperties", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp, ["inverseOf"]);
             }
         );
     }

@@ -1,24 +1,22 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
-import { AbstractTreePanel } from "../../../abstractTreePanel"
-import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
-import { SkosServices } from "../../../../services/skosServices";
-import { SearchServices } from "../../../../services/searchServices";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { SearchServices } from "../../../../services/searchServices";
+import { SkosServices } from "../../../../services/skosServices";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { NewConceptCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { CustomForm } from "../../../../models/CustomForms";
-import { SKOS } from "../../../../models/Vocabulary";
-import { SearchSettings } from "../../../../models/Properties";
+import { AbstractTreePanel } from "../../../abstractTreePanel";
+import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
+import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
 
 @Component({
     selector: "concept-tree-panel",
@@ -281,13 +279,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ConceptTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                //currently don't do nothing, probably in the future I need to refresh the tree if the hierarchy should be
-                //based on a given property
-                // this.refresh();
+                //Refresh the tree since there have been changes in the properties used for building the hierarchy
+                this.refresh();
             },
-            () => {
-                // this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
-            }
+            () => {}
         );
     }
 

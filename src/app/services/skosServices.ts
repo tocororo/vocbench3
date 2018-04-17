@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFTypesEnum, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
-import { SKOS } from "../models/Vocabulary";
-import { ResourcesServices } from "./resourcesServices"
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { ResourcesServices } from "./resourcesServices";
 
 @Injectable()
 export class SkosServices {
@@ -22,11 +21,21 @@ export class SkosServices {
      * @param schemes
      * @return an array of top concepts
      */
-    getTopConcepts(schemes: ARTURIResource[]) {
+    getTopConcepts(schemes?: ARTURIResource[], broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
+        includeSubProperties?: boolean) {
         console.log("[SkosServices] getTopConcepts");
         var params: any = {};
         if (schemes != null) {
             params.schemes = schemes;
+        }
+        if (broaderProps != null) {
+            params.broaderProps = broaderProps;
+        }
+        if (narrowerProps != null) {
+            params.narrowerProps = narrowerProps;
+        }
+        if (includeSubProperties != null) {
+            params.includeSubProperties = includeSubProperties;
         }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params).map(
             stResp => {
@@ -45,13 +54,23 @@ export class SkosServices {
      * @param schemes schemes where the narrower should belong
      * @return an array of narrowers
      */
-    getNarrowerConcepts(concept: ARTURIResource, schemes: ARTURIResource[]) {
+    getNarrowerConcepts(concept: ARTURIResource, schemes?: ARTURIResource[], broaderProps?: ARTURIResource[],
+        narrowerProps?: ARTURIResource[], includeSubProperties?: boolean) {
         console.log("[SkosServices] getNarrowerConcepts");
         var params: any = {
             concept: concept
         };
         if (schemes != null) {
             params.schemes = schemes;
+        }
+        if (broaderProps != null) {
+            params.broaderProps = broaderProps;
+        }
+        if (narrowerProps != null) {
+            params.narrowerProps = narrowerProps;
+        }
+        if (includeSubProperties != null) {
+            params.includeSubProperties = includeSubProperties;
         }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params).map(
             stResp => {

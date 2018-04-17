@@ -7,7 +7,9 @@
     * Added Lexicon and Lex.Entry panels in Data page.
     * Added new ResourceView partitions: "lexicalSenses", "denotations" and "evokedLexicalConcepts".
   * Implemented the storage management of SPARQL queries.
-  * Enabled customization of the base broader property in the creation of a concepts hierarcy.
+  * Enabled customization of the concept tree hierarchy:
+    * Enabled possibility to customize the property during the creation of a sub concept;
+    * Enabled the customization of the properties on which base the tree hierarchy.
   * Enabled the possibility to change the credentials of remote repositories.
   * Implemented UI for the management of MetadataRegistry.
   * Adopted new Extensions in place of old Plugins.

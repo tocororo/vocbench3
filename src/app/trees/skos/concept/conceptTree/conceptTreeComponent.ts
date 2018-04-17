@@ -1,14 +1,15 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { SkosServices } from "../../../../services/skosServices";
+import { ConceptTreePreference } from "../../../../models/Properties";
 import { SearchServices } from "../../../../services/searchServices";
+import { SkosServices } from "../../../../services/skosServices";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 import { AbstractTree } from "../../../abstractTree";
+import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 
 @Component({
     selector: "concept-tree",
@@ -61,8 +62,15 @@ export class ConceptTreeComponent extends AbstractTree {
         this.selectedNode = null;
         this.rootLimit = this.initialRoots;
 
+        let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+        let broaderProps: ARTURIResource[] = [];
+        prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
+        let narrowerProps: ARTURIResource[] = [];
+        prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
+        let includeSubProps: boolean = prefs.includeSubProps;
+
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.skosService.getTopConcepts(this.schemes).subscribe( //new service (whithout lang param)
+        this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps).subscribe( //new service (whithout lang param)
             topConcepts => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -136,7 +144,6 @@ export class ConceptTreeComponent extends AbstractTree {
             if (this.schemes != null) {
                 for (var i = 0; i < schemes.length; i++) {
                     if (ResourceUtils.containsNode(this.schemes, schemes[i])) {
-                        // this.roots.push(concept);
                         this.roots.unshift(concept);
                         break;
                     }

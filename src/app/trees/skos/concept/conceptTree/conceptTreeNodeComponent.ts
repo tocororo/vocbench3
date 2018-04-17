@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBContext } from "../../../../utils/VBContext";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ConceptTreePreference } from "../../../../models/Properties";
 import { SkosServices } from "../../../../services/skosServices";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from "../../../../utils/VBProperties";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
 @Component({
@@ -17,7 +18,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
+    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
         super(eventHandler, basicModals);
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             (deletedConcept: ARTURIResource) => this.onTreeNodeDeleted(deletedConcept)));
@@ -38,7 +39,14 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        return this.skosService.getNarrowerConcepts(this.node, this.schemes).map(
+        let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+        let broaderProps: ARTURIResource[] = [];
+        prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
+        let narrowerProps: ARTURIResource[];
+        prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
+        let includeSubProps: boolean = prefs.includeSubProps;
+
+        return this.skosService.getNarrowerConcepts(this.node, this.schemes, broaderProps, narrowerProps, includeSubProps).map(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(narrower, this.rendering ? SortAttribute.show : SortAttribute.value);

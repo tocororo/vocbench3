@@ -16,7 +16,10 @@ export class Properties {
     static pref_class_tree_filter_enabled: string = "class_tree_filter_enabled";
     static pref_class_tree_root: string = "class_tree_root";
 
-    static pref_concept_tree_broader_prop: string = "concept_tree_broader_prop";
+    static pref_concept_tree_base_broader_prop: string = "concept_tree_base_broader_prop";
+    static pref_concept_tree_broader_props: string = "concept_tree_broader_props";
+    static pref_concept_tree_narrower_props: string = "concept_tree_narrower_props";
+    static pref_concept_tree_include_subprops: string = "concept_tree_include_subprops";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
@@ -61,4 +64,7 @@ export class ClassTreePreference {
 
 export class ConceptTreePreference {
     baseBroaderUri: string;
+    broaderProps: string[];
+    narrowerProps: string[];
+    includeSubProps: boolean; //tells if the hierarchy should consider
 }

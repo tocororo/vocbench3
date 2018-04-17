@@ -375,12 +375,22 @@ export class ResourceUtils {
      * Tells if a list contains a given node
      */
     static containsNode(list: ARTNode[], node: ARTNode): boolean {
+        return this.indexOfNode(list, node) != -1;
+        // for (var i = 0; i < list.length; i++) {
+        //     if (list[i].getNominalValue() == node.getNominalValue()) {
+        //         return true;
+        //     }
+        // }
+        // return false;
+    }
+
+    static indexOfNode(list: ARTNode[], node: ARTNode): number {
         for (var i = 0; i < list.length; i++) {
             if (list[i].getNominalValue() == node.getNominalValue()) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     /**

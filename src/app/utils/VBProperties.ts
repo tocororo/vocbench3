@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
-import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, StringMatchMode, ConceptTreePreference } from '../models/Properties';
-import { ProjectTableColumnStruct } from '../models/Project';
 import { ExtensionPointID } from '../models/Plugins';
-import { Cookie } from '../utils/Cookie';
-import { VBEventHandler } from '../utils/VBEventHandler';
-import { UIUtils } from '../utils/UIUtils';
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices'
+import { ProjectTableColumnStruct } from '../models/Project';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, Properties, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
+import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
+import { Cookie } from '../utils/Cookie';
+import { UIUtils } from '../utils/UIUtils';
+import { VBEventHandler } from '../utils/VBEventHandler';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { VBContext } from './VBContext';
 
 @Injectable()
@@ -70,7 +70,8 @@ export class VBProperties {
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
-            Properties.pref_concept_tree_broader_prop, Properties.pref_editing_language
+            Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
+            Properties.pref_editing_language
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
@@ -109,11 +110,8 @@ export class VBProperties {
                 if (classTreeFilterMapPref != null) {
                     this.classTreePreferences.filterMap = classTreeFilterMapPref;
                 }
-                let classTreeFilterEnabledPref: any = prefs[Properties.pref_class_tree_filter_enabled];
-                if (classTreeFilterEnabledPref != null) {
-                    this.classTreePreferences.filterEnabled = classTreeFilterEnabledPref;
-                }
-                let classTreeRootPref: any = prefs[Properties.pref_class_tree_root];
+                this.classTreePreferences.filterEnabled = prefs[Properties.pref_class_tree_filter_enabled] != "false";
+                let classTreeRootPref: string = prefs[Properties.pref_class_tree_root];
                 if (classTreeRootPref != null) {
                     this.classTreePreferences.rootClassUri = classTreeRootPref;
                 }
@@ -121,12 +119,24 @@ export class VBProperties {
                 //concept tree preferences
 
                 this.conceptTreePreferences = {
-                    baseBroaderUri: SKOS.broader.getURI()
+                    baseBroaderUri: SKOS.broader.getURI(),
+                    broaderProps: [],
+                    narrowerProps: [],
+                    includeSubProps: true
                 }
-                let conceptTreeBroaderPropPref: any = prefs[Properties.pref_concept_tree_broader_prop];
-                if (conceptTreeBroaderPropPref != null) {
-                    this.conceptTreePreferences.baseBroaderUri = conceptTreeBroaderPropPref;
+                let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
+                if (conceptTreeBaseBroaderPropPref != null) {
+                    this.conceptTreePreferences.baseBroaderUri = conceptTreeBaseBroaderPropPref;
                 }
+                let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
+                if (conceptTreeBroaderPropsPref != null) {
+                    this.conceptTreePreferences.broaderProps = conceptTreeBroaderPropsPref.split(",");
+                }
+                let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
+                if (conceptTreeNarrowerPropsPref != null) {
+                    this.conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
+                }
+                this.conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
 
                 //search settings
                 let searchLangsPref = prefs[Properties.pref_search_languages];
@@ -230,6 +240,7 @@ export class VBProperties {
         this.editingLanguage = lang;
     }
 
+    //class tree settings
     getClassTreePreferences(): ClassTreePreference {
         return this.classTreePreferences;
     }
@@ -238,7 +249,7 @@ export class VBProperties {
         this.classTreePreferences.filterMap = filterMap;
     }
     setClassTreeFilterEnabled(enabled: boolean) {
-        this.prefService.setPUSetting(Properties.pref_class_tree_filter_map, enabled+"").subscribe();
+        this.prefService.setPUSetting(Properties.pref_class_tree_filter_enabled, enabled+"").subscribe();
         this.classTreePreferences.filterEnabled = enabled;
     }
     setClassTreeRoot(rootUri: string) {
@@ -246,12 +257,33 @@ export class VBProperties {
         this.classTreePreferences.rootClassUri = rootUri;
     }
 
+    //concept tree settings
     getConceptTreePreferences(): ConceptTreePreference {
         return this.conceptTreePreferences;
     }
-    setConceptTreeBroaderProp(propUri: string) {
-        this.prefService.setPUSetting(Properties.pref_concept_tree_broader_prop, propUri).subscribe();
+    setConceptTreeBaseBroaderProp(propUri: string) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_base_broader_prop, propUri).subscribe();
         this.conceptTreePreferences.baseBroaderUri = propUri;
+    }
+    setConceptTreeBroaderProps(props: string[]) {
+        let prefValue: string;
+        if (props.length > 0) {
+            prefValue = props.join(",")
+        }
+        this.prefService.setPUSetting(Properties.pref_concept_tree_broader_props, prefValue).subscribe();
+        this.conceptTreePreferences.broaderProps = props;
+    }
+    setConceptTreeNarrowerProps(props: string[]) {
+        let prefValue: string;
+        if (props.length > 0) {
+            prefValue = props.join(",")
+        }
+        this.prefService.setPUSetting(Properties.pref_concept_tree_narrower_props, prefValue).subscribe();
+        this.conceptTreePreferences.narrowerProps = props;
+    }
+    setConceptTreeIncludeSubProps(include: boolean) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_include_subprops, include+"").subscribe();
+        this.conceptTreePreferences.includeSubProps = include;
     }
 
 

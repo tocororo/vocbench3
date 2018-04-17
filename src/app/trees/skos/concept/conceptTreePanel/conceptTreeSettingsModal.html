@@ -1,20 +1,98 @@
 <div class="modal-header">
     <h3 class="modal-title">Concept tree settings</h3>
 </div>
-<div class="modal-body vbox" style="max-height: 70vh;">
-
-    <div class="alert alert-info" style="margin-bottom: 6px;">
-        Here you can change the base broader property to be selected when creating narrower concepts
-    </div>
+<div class="modal-body vbox" style="max-height: 70vh; min-height: 300px;">
 
     <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
-        <label style="white-space: nowrap; margin-right: 4px;">
-            Broader property:
+        <span class="glyphicon glyphicon-info-sign" title="Base broader property to be selected when creating narrower concepts"></span>
+        <label style="white-space: nowrap; margin: 0px 4px;">
+            Base broader property:
         </label>
-        <input-editable *ngIf="broaderProperty" [value]="broaderProperty.getURI()" (valueEdited)="updateBroaderProp($event)" style="flex: 1;"></input-editable>
-        <button class="btn btn-default btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeProperty()">
+        <input-editable *ngIf="baseBroaderProp" [value]="baseBroaderProp" (valueEdited)="updateBaseBroaderProp($event)" style="flex: 1;"></input-editable>
+        <button class="btn btn-default btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeBaseBroaderProperty()">
             <img src="../../../../../assets/images/icons/res/propObject.png"/>
         </button>
+    </div>
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Management of broader/narrower</label>
+        </div>
+        <div class="panel-body vbox">
+
+            <div class="alert alert-info" style="margin-bottom: 4px;">
+                Here it is possible to customize the properties on which base the hierarchy
+            </div>
+
+            <div class="hbox">
+                <div class="subPanel vbox">
+                    <div class="subPanel-heading">
+                        <div style="flex:1">
+                            <label>Broader</label>
+                            <span *ngIf="broaderProps.length == 0" style="margin-left: 2px;">
+                                <span class="glyphicon glyphicon-warning-sign" title="No properties implicitly means skos:broader as default"></span>
+                            </span>
+                        </div>
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-default" (click)="addBroader()">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button class="btn btn-default" (click)="removeBroader()" [disabled]="!selectedBroader">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subPanel-body vbox">
+                        <resource-list [resources]="broaderProps" (nodeSelected)="selectedBroader = $event"></resource-list>
+                    </div>
+                </div>
+
+                <div class="subPanel vbox" style="margin-left: 4px;">
+                    <div class="subPanel-heading">
+                        <div style="flex:1">
+                            <label>Narrower</label>
+                            <span *ngIf="narrowerProps.length == 0" style="margin-left: 2px;">
+                                <span class="glyphicon glyphicon-warning-sign" title="No properties implicitly means skos:narrower as default"></span>
+                            </span>
+                        </div>
+                        <div class="btn-toolbar" role="toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-default" (click)="addNarrower()">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                                <button class="btn btn-default" (click)="removeNarrower()" [disabled]="!selectedNarrower">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subPanel-body vbox">
+                        <resource-list [resources]="narrowerProps" (nodeSelected)="selectedNarrower = $event"></resource-list>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">Sync inverse properties
+                    </label>
+                    <span class="glyphicon glyphicon-info-sign" title="Keep synced the broader/narrower properties with their inverse properties">
+                    </span>
+                </div>
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="includeSubProps">Include subProperties
+                    </label>
+                    <span class="glyphicon glyphicon-info-sign"
+                        title="Includes the subProperties of the selected broader/narrower properties">
+                    </span>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 </div>
