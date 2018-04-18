@@ -24,8 +24,7 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     private broaderProps: ARTURIResource[] = [];
     private narrowerProps: ARTURIResource[] = [];
     private includeSubProps: boolean
-
-    private syncInverse: boolean = true;
+    private syncInverse: boolean;
 
     private selectedBroader: ARTURIResource;
     private selectedNarrower: ARTURIResource;
@@ -89,6 +88,7 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         }
 
         this.includeSubProps = conceptTreePref.includeSubProps;
+        this.syncInverse = conceptTreePref.syncInverse;
 
     }
 
@@ -242,6 +242,10 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
 
         if (this.pristineConcPref.includeSubProps != this.includeSubProps) {
             this.vbProp.setConceptTreeIncludeSubProps(this.includeSubProps);
+        }
+
+        if (this.pristineConcPref.syncInverse != this.syncInverse) {
+            this.vbProp.setConceptTreeSyncInverse(this.syncInverse);
         }
 
         //look for changes in broaderProps:

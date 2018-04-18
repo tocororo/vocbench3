@@ -71,6 +71,7 @@ export class VBProperties {
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
+            Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse,
             Properties.pref_editing_language
         ];
         this.prefService.getPUSettings(properties).subscribe(
@@ -122,7 +123,8 @@ export class VBProperties {
                     baseBroaderUri: SKOS.broader.getURI(),
                     broaderProps: [],
                     narrowerProps: [],
-                    includeSubProps: true
+                    includeSubProps: true,
+                    syncInverse: true
                 }
                 let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
                 if (conceptTreeBaseBroaderPropPref != null) {
@@ -137,6 +139,7 @@ export class VBProperties {
                     this.conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
                 }
                 this.conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
+                this.conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
 
                 //search settings
                 let searchLangsPref = prefs[Properties.pref_search_languages];
@@ -284,6 +287,10 @@ export class VBProperties {
     setConceptTreeIncludeSubProps(include: boolean) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_include_subprops, include+"").subscribe();
         this.conceptTreePreferences.includeSubProps = include;
+    }
+    setConceptTreeSyncInverse(sync: boolean) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_sync_inverse, sync+"").subscribe();
+        this.conceptTreePreferences.syncInverse = sync;
     }
 
 

@@ -123,7 +123,13 @@
 
         <div class="groupPanel">
             <div class="groupPanel-heading">
-                <label class="groupPanel-heading-content">Converter</label>
+                <label class="groupPanel-heading-content">
+                    Converter
+                    <span class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" 
+                        title="If left empty the system will try to automatically resolve the converter">
+                    </span>
+                </label>
+                
             </div>
             <div class="groupPanel-body">
                 <div class="hbox" style="align-items: center;">
@@ -138,10 +144,6 @@
                     <button class="btn btn-sm btn-default" (click)="chooseConverter()" title="Change converter">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>
-                    <span *ngIf="!converterType && !converterQName" class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" 
-                        title="If left empty the system will try to automatically resolve the converter">
-                    </span>
-                    
                 </div>
             </div>
         </div>
