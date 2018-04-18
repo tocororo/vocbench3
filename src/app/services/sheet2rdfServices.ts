@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { HeaderStruct, TableRow, TriplePreview } from "../models/Sheet2RDF";
-import { RDFCapabilityType } from "../models/Coda";
 import { ARTURIResource } from "../models/ARTResources";
+import { RDFCapabilityType } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
+import { HeaderStruct, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 
 @Injectable()
 export class Sheet2RDFServices {
@@ -70,8 +70,7 @@ export class Sheet2RDFServices {
         return h;
     }
 
-    updateHeader(headerId: string, headerResource?: ARTURIResource, 
-        // converterMention?: string, converterType?: RDFCapabilityType, 
+    updateHeader(headerId: string, headerResource?: ARTURIResource, converterMention?: string, converterType?: RDFCapabilityType, 
         applyToAll?: boolean) {
         console.log("[Sheet2RDFServices] updateHeader");
         var params: any = {
@@ -80,10 +79,10 @@ export class Sheet2RDFServices {
         if (headerResource != null) {
             params.headerResource = headerResource;
         }
-        // if (converterMention != null && converterType != null) {
-        //     params.converterMention = converterMention;
-        //     params.converterType = converterType;
-        // }
+        if (converterMention != null && converterType != null) {
+            params.converterMention = converterMention;
+            params.converterType = converterType;
+        }
         if (applyToAll != null) {
             params.applyToAll = applyToAll;
         }

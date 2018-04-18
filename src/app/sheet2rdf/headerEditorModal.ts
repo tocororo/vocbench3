@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { HeaderStruct } from "../models/Sheet2RDF";
-import { ConverterContractDescription, RDFCapabilityType, ConverterUtils } from "../models/Coda";
-import { ARTURIResource, RDFTypesEnum } from "../models/ARTResources";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../models/ARTResources";
+import { ConverterContractDescription, ConverterUtils, RDFCapabilityType } from "../models/Coda";
+import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 
 export class HeaderEditorModalData extends BSModalContext {
     /**
@@ -34,7 +33,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     private headerResource: ARTURIResource;
 
     private converterType: RDFCapabilityType;
-    private converterTypeList: RDFCapabilityType[] = [RDFCapabilityType.literal, RDFCapabilityType.uri];
     private converterUri: string;
     private converterQName: string;
 
@@ -53,8 +51,9 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 this.headerResource = header.resource;
                 this.converterType = header.converter.type;
                 this.converterUri = header.converter.uri;
-                this.converterQName = ConverterUtils.getConverterQName(this.converterUri);
-
+                if (this.converterUri != null) {
+                    this.converterQName = ConverterUtils.getConverterQName(this.converterUri);
+                }
                 this.multiple = header.isMultiple;
             }
         );
@@ -114,9 +113,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private updateHeader(applyToAll?: boolean) {
-        this.s2rdfService.updateHeader(this.headerId, this.headerResource, 
-            // this.converterQName, this.converterType, 
-            applyToAll).subscribe(
+        this.s2rdfService.updateHeader(this.headerId, this.headerResource, this.converterQName, this.converterType, applyToAll).subscribe(
             stResp => {
                 this.dialog.close();
             }

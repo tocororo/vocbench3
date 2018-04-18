@@ -42,7 +42,7 @@
                     <td class="text-right" nowrap>
                         <label>Property/Class:</label>
                         <span class="glyphicon glyphicon-info-sign"
-                            title="Cells of first columns could also contain references to subjects, so the first header could be mapped to property or classes">
+                            title="Cells of first columns could also contain references to subjects, so the first header could be mapped to a property or a class">
                         </span>
                     </td>
                     <td>
@@ -121,40 +121,30 @@
             </div>
         </div> -->
 
-        <!-- <div class="groupPanel">
+        <div class="groupPanel">
             <div class="groupPanel-heading">
                 <label class="groupPanel-heading-content">Converter</label>
             </div>
             <div class="groupPanel-body">
-                <table class="table table-condensed table-borderless">
-                    <colgroup>
-                        <col style="width: 1%;">
-                        <col>
-                        <col style="width: 1%;">
-                        <col>
-                        <col style="width: 1%;">
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <td class="text-right" nowrap><label>URI:</label></td>
-                            <td>
-                                <input type="text" class="form-control input-sm" [ngModel]="converterQName" readonly>
-                            </td>
-
-                            <td class="text-right" nowrap><label>Capability type:</label></td>
-                            <td>
-                                <input type="text" class="form-control input-sm" [ngModel]="converterType" readonly>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-default" (click)="chooseConverter()" title="Change converter">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="hbox" style="align-items: center;">
+                    <div class="hbox" style="align-items: center; margin-right: 4px;">
+                        <label style="margin-right: 4px;">URI:</label>
+                        <input type="text" class="form-control input-sm" [ngModel]="converterQName" readonly>
+                    </div>
+                    <div class="hbox" style="align-items: center; margin-right: 4px;">
+                        <label style="white-space: nowrap; margin-right: 4px;">Capability type:</label>
+                        <input type="text" class="form-control input-sm" [ngModel]="converterType" readonly>
+                    </div>
+                    <button class="btn btn-sm btn-default" (click)="chooseConverter()" title="Change converter">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <span *ngIf="!converterType && !converterQName" class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" 
+                        title="If left empty the system will try to automatically resolve the converter">
+                    </span>
+                    
+                </div>
             </div>
-        </div> -->
+        </div>
         
     
 </div>
