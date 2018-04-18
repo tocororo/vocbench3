@@ -21,18 +21,15 @@
         <div class="panel-body vbox">
 
             <div class="alert alert-info" style="margin-bottom: 4px;">
-                Here it is possible to customize the properties on which base the hierarchy
+                Here it is possible to customize the properties on which the concept tree hierarchy is based on.<br>
+                If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts.
+                If any of the two is selected (with one or more properties), then only the selected properties will be used.
             </div>
 
             <div class="hbox">
                 <div class="subPanel vbox">
                     <div class="subPanel-heading">
-                        <div style="flex:1">
-                            <label>Broader</label>
-                            <span *ngIf="broaderProps.length == 0" style="margin-left: 2px;">
-                                <span class="glyphicon glyphicon-warning-sign" title="No properties implicitly means skos:broader as default"></span>
-                            </span>
-                        </div>
+                        <label style="flex:1">Broader</label>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
                                 <button class="btn btn-default" (click)="addBroader()">
@@ -51,12 +48,7 @@
 
                 <div class="subPanel vbox" style="margin-left: 4px;">
                     <div class="subPanel-heading">
-                        <div style="flex:1">
-                            <label>Narrower</label>
-                            <span *ngIf="narrowerProps.length == 0" style="margin-left: 2px;">
-                                <span class="glyphicon glyphicon-warning-sign" title="No properties implicitly means skos:narrower as default"></span>
-                            </span>
-                        </div>
+                        <label style="flex:1">Narrower</label>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
                                 <button class="btn btn-default" (click)="addNarrower()">

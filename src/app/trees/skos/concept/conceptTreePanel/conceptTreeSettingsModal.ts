@@ -100,7 +100,6 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         this.browsingModals.browsePropertyTree("Select root class", [SKOS.broader]).then(
             (prop: ARTURIResource) => {
                 this.baseBroaderProp = prop.getURI();
-                // this.broaderProperty = prop;
             },
             () => {}
         );
@@ -206,13 +205,11 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         if (this.broaderProps.length > 0) {
             this.propService.getInverseProperties(this.broaderProps).subscribe(
                 (inverseProps: ARTURIResource[]) => {
-                    console.log("inverseProps", inverseProps);
                     inverseProps.forEach((narrowerProp: ARTURIResource) => {
                         if (!ResourceUtils.containsNode(this.narrowerProps, narrowerProp)) { //invers is not already among the narrowerProps
                             let broaderPropUri: string = narrowerProp.getAdditionalProperty("inverseOf");
                             //add it at the same index of its inverse prop
                             let idx: number = ResourceUtils.indexOfNode(this.broaderProps, new ARTURIResource(broaderPropUri));
-                            console.log("idx of", broaderPropUri, idx);
                             this.narrowerProps.splice(idx, 0, narrowerProp);
                         }
                     });
@@ -222,13 +219,11 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         if (this.narrowerProps.length > 0) {
             this.propService.getInverseProperties(this.narrowerProps).subscribe(
                 (inverseProps: ARTURIResource[]) => {
-                    console.log("inverseProps", inverseProps);
                     inverseProps.forEach((broaderProp: ARTURIResource) => {
                         if (!ResourceUtils.containsNode(this.broaderProps, broaderProp)) { //invers is not already among the broaderProps
                             let narrowerPropUri: string = broaderProp.getAdditionalProperty("inverseOf");
                             //add it at the same index of its inverse prop
                             let idx: number = ResourceUtils.indexOfNode(this.narrowerProps, new ARTURIResource(narrowerPropUri));
-                            console.log("idx of", narrowerPropUri, idx);
                             this.broaderProps.splice(idx, 0, broaderProp);
                         }
                     });

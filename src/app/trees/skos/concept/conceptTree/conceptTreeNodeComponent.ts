@@ -42,7 +42,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
         let broaderProps: ARTURIResource[] = [];
         prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
-        let narrowerProps: ARTURIResource[];
+        let narrowerProps: ARTURIResource[] = [];
         prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
         let includeSubProps: boolean = prefs.includeSubProps;
 
