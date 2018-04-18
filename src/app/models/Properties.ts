@@ -20,6 +20,7 @@ export class Properties {
     static pref_concept_tree_broader_props: string = "concept_tree_broader_props";
     static pref_concept_tree_narrower_props: string = "concept_tree_narrower_props";
     static pref_concept_tree_include_subprops: string = "concept_tree_include_subprops";
+    static pref_concept_tree_sync_inverse: string = "concept_tree_sync_inverse";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
@@ -67,4 +68,5 @@ export class ConceptTreePreference {
     broaderProps: string[];
     narrowerProps: string[];
     includeSubProps: boolean; //tells if the hierarchy should consider
+    syncInverse: boolean; //tells if the narrower/broader properties should be synced with their inverse
 }
