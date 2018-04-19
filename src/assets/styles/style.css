@@ -416,6 +416,8 @@ textarea.disabled + .CodeMirror {
     background: #eee;
 }
 
+.cm-s-default .cm-variable-4 { color: #c00 }
+
 /*Limit height of codemirror to 40% of viewport*/ 
 sparql-component .CodeMirror { height: 35vh !important }
 /*Reset height to auto when codemirror is fullscreen*/

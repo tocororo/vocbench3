@@ -27,6 +27,11 @@ CodeMirror.defineMode("pearl", function(config) {
       stream.match(/^[\w\d]*/);
       return "variable-2";
     }
+    //next character is % and the stream matches characters/digits and ends with % => assign variable-4 token => apply cm-variable-4 style class
+    else if (ch == "%" && stream.match(/^[a-zA-Z0-9-_]+%/)) {
+      stream.match(/^[^\s\u00a0>]*>?/);
+      return "variable-4";
+    }
     else if (ch == "<" && !stream.match(/^[\s\u00a0=]/, false)) {
       stream.match(/^[^\s\u00a0>]*>?/);
       return "atom";
