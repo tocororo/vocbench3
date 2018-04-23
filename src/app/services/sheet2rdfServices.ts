@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource } from "../models/ARTResources";
+import { ARTURIResource, RDFTypesEnum } from "../models/ARTResources";
 import { RDFCapabilityType } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
 import { HeaderStruct, TableRow, TriplePreview } from "../models/Sheet2RDF";
@@ -65,19 +65,28 @@ export class Sheet2RDFServices {
                 uri: json.converter.uri,
                 type: json.converter.type
             },
-            isMultiple: json.isMultiple
+            isMultiple: json.isMultiple,
+
+            range: {
+                type: json.range.type,
+                cls: (json.range.cls) ? Deserializer.createURI(json.range.cls) : null
+            }
         }
         return h;
     }
 
-    updateHeader(headerId: string, headerResource?: ARTURIResource, converterMention?: string, converterType?: RDFCapabilityType, 
-        applyToAll?: boolean) {
+    updateHeader(headerId: string, headerResource: ARTURIResource, rangeType?: RDFTypesEnum, rangeClass?: ARTURIResource,
+        converterMention?: string, converterType?: RDFCapabilityType, applyToAll?: boolean) {
         console.log("[Sheet2RDFServices] updateHeader");
         var params: any = {
             headerId: headerId,
+            headerResource: headerResource
         };
-        if (headerResource != null) {
-            params.headerResource = headerResource;
+        if (rangeType != null) {
+            params.rangeType = rangeType;
+        }
+        if (rangeClass != null) {
+            params.rangeClass = rangeClass;
         }
         if (converterMention != null && converterType != null) {
             params.converterMention = converterMention;

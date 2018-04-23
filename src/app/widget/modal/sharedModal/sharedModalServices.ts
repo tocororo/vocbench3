@@ -3,6 +3,7 @@ import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
 import { ARTResource } from "../../../models/ARTResources";
 import { Settings } from "../../../models/Plugins";
+import { RDFCapabilityType } from "../../../models/Coda";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
@@ -94,8 +95,8 @@ export class SharedModalServices {
      * @param title 
      * @param message 
      */
-    selectConverter(title: string, message?: string) {
-        var modalData = new ConverterPickerModalData(title, message);
+    selectConverter(title: string, message?: string, capabilities?: RDFCapabilityType[]) {
+        var modalData = new ConverterPickerModalData(title, message, capabilities);
         const builder = new BSModalContextBuilder<ConverterPickerModalData>(
             modalData, undefined, ConverterPickerModalData
         );

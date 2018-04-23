@@ -10,12 +10,10 @@ export class HeaderStruct {
 
     public lang: string;
 
-    // public range: {
-    //     name: string;
-    //     type: RDFTypesEnum;
-    //     uri: string;
-    //     cls: any; //ARTURIResource?
-    // }
+    public range: {
+        type: RDFTypesEnum;
+        cls: ARTURIResource;
+    }
 
     public converter: {
         uri: string;

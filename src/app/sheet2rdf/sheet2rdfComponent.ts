@@ -134,8 +134,10 @@ export class Sheet2RdfComponent {
     }
 
     private initTablePreview() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.s2rdfService.getTablePreview(this.maxSizePreviews).subscribe(
             table => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.truncatedRows = table.returned;
                 this.totalRows = table.total;
                 this.tablePreview = table.rows;

@@ -3,130 +3,105 @@
 </div>
 <div class="modal-body vbox" style="max-height: 70vh;">
 
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
 
-        <table class="table table-condensed table-borderless">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-            </colgroup>
-            <tbody>
+            <tr>
+                <td class="text-right"><label>Header:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [ngModel]="headerName" readonly>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-right" nowrap><label>PEARL feature:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [ngModel]="headerId" readonly>
+                </td>
+            </tr>
+
+            <tr *ngIf="!context.first">
+                <td class="text-right"><label>Property:</label></td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <div class="form-control">
+                            <rdf-resource *ngIf="headerResource" [resource]="headerResource"></rdf-resource>
+                        </div>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" (click)="assignPropertyToHeader()">
+                                <img src="../../assets/images/icons/res/prop.png">
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="context.first">
+                <td class="text-right" nowrap>
+                    <label>Property/Class:</label>
+                    <span class="glyphicon glyphicon-info-sign"
+                        title="Cells of first columns could also contain references to subjects, so the first header could be mapped to a property or a class">
+                    </span>
+                </td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <div class="form-control">
+                            <rdf-resource *ngIf="headerResource" [resource]="headerResource"></rdf-resource>
+                        </div>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" (click)="assignPropertyToHeader()">
+                                <img src="../../assets/images/icons/res/prop.png">
+                            </button>
+                            <button class="btn btn-default dropdown-toggle" style="padding: 3px;" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a (click)="assignPropertyToHeader()"><img src="../../assets/images/icons/res/prop.png">Property</a></li>
+                                <li><a (click)="assignClassToHeader()"><img src="../../assets/images/icons/res/class.png">Class</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <ng-template [ngIf]="headerResource && isHeaderResourceProperty()">
                 <tr>
-                    <td class="text-right"><label>Header:</label></td>
+                    <td class="text-right"><label>Range type:</label></td>
                     <td>
-                        <input type="text" class="form-control input-sm" [ngModel]="headerName" readonly>
+                        <select class="form-control input-sm" [(ngModel)]="selectedRangeType" [disabled]="!rangeTypeChangeable">
+                            <option *ngFor="let rt of rangeTypes" [ngValue]="rt">{{rt.show}}</option>
+                        </select>
                     </td>
                 </tr>
-                <tr>
-                    <td class="text-right" nowrap><label>PEARL feature:</label></td>
-                    <td>
-                        <input type="text" class="form-control input-sm" [ngModel]="headerId" readonly>
-                    </td>
-                </tr>
-
-                <tr *ngIf="!context.first">
-                    <td class="text-right"><label>Property:</label></td>
+                <tr *ngIf="selectedRangeType?.type == 'resource'">
+                    <td class="text-right"><label>Range class:</label></td>
                     <td>
                         <div class="input-group input-group-sm">
-                            <div class="form-control">
-                                <rdf-resource *ngIf="headerResource" [resource]="headerResource"></rdf-resource>
-                            </div>
+                            <select class="form-control" [(ngModel)]="selectedRangeClass">
+                                <option *ngFor="let rc of rangeClasses" [ngValue]="rc">{{rc.getNominalValue()}}</option>
+                            </select>
                             <div class="input-group-btn">
-                                <button class="btn btn-default" (click)="browseProperty()">
-                                    <img src="../../assets/images/icons/res/prop.png">
+                                <button class="btn btn-default" (click)="addRangeClass()" [disabled]="!rangeClassChangeable">
+                                    <img src="../../assets/images/icons/res/class.png">
                                 </button>
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr *ngIf="context.first">
-                    <td class="text-right" nowrap>
-                        <label>Property/Class:</label>
-                        <span class="glyphicon glyphicon-info-sign"
-                            title="Cells of first columns could also contain references to subjects, so the first header could be mapped to a property or a class">
-                        </span>
-                    </td>
-                    <td>
-                        <div class="input-group input-group-sm">
-                            <div class="form-control">
-                                <rdf-resource *ngIf="headerResource" [resource]="headerResource"></rdf-resource>
-                            </div>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" (click)="browseProperty()">
-                                    <img src="../../assets/images/icons/res/prop.png">
-                                </button>
-                                <button class="btn btn-default dropdown-toggle" style="padding: 3px;" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a (click)="browseProperty()"><img src="../../assets/images/icons/res/prop.png">Property</a></li>
-                                    <li><a (click)="browseClass()"><img src="../../assets/images/icons/res/class.png">Class</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+            </ng-template>
 
-
-            </tbody>
-        </table>
-
-        <!-- <div class="groupPanel">
-            <div class="groupPanel-heading">
-                <label class="groupPanel-heading-content">Range</label>
-            </div>
-            <div class="groupPanel-body">
-                <table class="table table-condensed table-borderless">
-                    <colgroup>
-                        <col style="width: 1%;">
-                        <col>
-                        <col style="width: 1%;">
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <td class="text-right" nowrap><label>Range type:</label></td>
-                            <td>
-                                <select class="form-control input-sm" [(ngModel)]="header.range.type">
-                                    <option>IRI</option>
-                                    <option>Plain Literal</option>
-                                    <option>Typed Literal</option>
-                                </select>
-                            </td>
-                            <td>
-                                <button class="btn btn-default btn-sm" [ngClass]="{ active: rangeTypeLocked }" title="Block range type">
-                                    <span class="glyphicon glyphicon-lock"></span>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-right" nowrap><label>Range class:</label></td>
-                            <td>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" [(ngModel)]="header.range.cls">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-default">
-                                            <img src="../../assets/images/icons/res/class.png">
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center"><input type="checkbox"></td>
-                        </tr>
-                        <tr *ngIf="showLanguageSelection">
-                            <td class="text-right" nowrap><label>Language:</label></td>
-                            <td><lang-picker [lang]="header.resource.lang"></lang-picker></td>
-                            <td class="text-center"><input type="checkbox"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div> -->
+        </tbody>
+    </table>
 
         <div class="groupPanel">
             <div class="groupPanel-heading">
                 <label class="groupPanel-heading-content">
                     Converter
                     <span class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" 
-                        title="If left empty the system will try to automatically resolve the converter">
+                        title="If left empty, the system will try to automatically detect the most suitable converter">
                     </span>
                 </label>
                 

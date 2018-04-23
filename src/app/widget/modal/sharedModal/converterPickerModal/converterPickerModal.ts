@@ -9,10 +9,12 @@ export class ConverterPickerModalData extends BSModalContext {
     /**
      * @param title modal title
      * @param message modal message, if null no the message is shwown the modal
+     * @param capabilities list of admitted capabilities of converter to show
      */
     constructor(
         public title: string = 'Modal Title',
         public message: string,
+        public capabilities: RDFCapabilityType[]
     ) {
         super();
     }
@@ -42,7 +44,38 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
     ngOnInit() {
         this.codaService.listConverterContracts().subscribe(
             converterList => {
-                this.converters = converterList;
+                if (this.context.capabilities != null && this.context.capabilities.length != 0) {
+                    if (this.context.capabilities.indexOf(RDFCapabilityType.node) != -1) {
+                        this.converters = converterList;
+                    } else {
+                        //=> filter for capability, show only converters compliant with given capabilities
+                        this.converters = [];
+                        converterList.forEach((conv: ConverterContractDescription) => {
+                            let capab: RDFCapabilityType = conv.getRDFCapability();
+                            if (capab == RDFCapabilityType.node) {
+                                this.converters.push(conv);
+                            } else if (capab == RDFCapabilityType.uri) {
+                                if (this.context.capabilities.indexOf(RDFCapabilityType.uri) != -1) {
+                                    this.converters.push(conv);
+                                }
+                            } else if (capab == RDFCapabilityType.literal) {
+                                if (this.context.capabilities.indexOf(RDFCapabilityType.literal) != -1) {
+                                    this.converters.push(conv);
+                                }
+                            } else  if (capab == RDFCapabilityType.typedLiteral) {
+                                if (
+                                    this.context.capabilities.indexOf(RDFCapabilityType.literal) != -1 || 
+                                    this.context.capabilities.indexOf(RDFCapabilityType.typedLiteral) != -1
+                                ) {
+                                    this.converters.push(conv);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    //=> do not filter, show all converters
+                    this.converters = converterList;
+                }
             }
         );
     }

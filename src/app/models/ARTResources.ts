@@ -573,4 +573,27 @@ export class ResourceUtils {
         return false;
     }
 
+    /**
+     * Taken from it.uniroma2.art.semanticturkey.data.role.RDFResourceRoles
+     * @param subsumer 
+     * @param subsumee 
+     * @param undeterminedSubsumeesAll 
+     */
+    static roleSubsumes(subsumer: RDFResourceRolesEnum, subsumee: RDFResourceRolesEnum, undeterminedSubsumeesAll?: boolean) {
+        if (subsumer == subsumee) {
+            return true;
+        }
+        if (subsumer == RDFResourceRolesEnum.undetermined && undeterminedSubsumeesAll) {
+            return true;
+        }
+        if (subsumer == RDFResourceRolesEnum.property) {
+            return subsumee == RDFResourceRolesEnum.objectProperty || subsumee == RDFResourceRolesEnum.datatypeProperty
+                || subsumee == RDFResourceRolesEnum.annotationProperty || subsumee == RDFResourceRolesEnum.ontologyProperty;
+        }
+        if (subsumer == RDFResourceRolesEnum.skosCollection && subsumee == RDFResourceRolesEnum.skosOrderedCollection) {
+            return true;
+        }
+        return false;
+    }
+
 }
