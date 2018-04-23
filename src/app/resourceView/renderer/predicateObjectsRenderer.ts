@@ -125,15 +125,15 @@ export class PredicateObjectsRenderer {
 
     // PAGING
     private pagingLimit: number = 10;
-    private openPages: number = 0;
+    private limitActive: boolean = true;
     private showObject(index: number) {
-        return (index < this.openPages * this.pagingLimit + this.pagingLimit);
+        return !this.limitActive || (index < this.pagingLimit);
     }
-    private showMoreButton() {
-        return (this.openPages * this.pagingLimit + this.pagingLimit < this.predicateObjects.getObjects().length);
+    private showAllButton() {
+        return this.limitActive && (this.pagingLimit < this.predicateObjects.getObjects().length);
     }
-    private showMore() {
-        this.openPages++;
+    private showAll() {
+        this.limitActive = false;
     }
 
 
