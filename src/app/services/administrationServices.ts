@@ -36,20 +36,23 @@ export class AdministrationServices {
 
     /**
      * 
-     * @param emailFromAddress 
-     * @param emailFromPassword 
-     * @param emailFromAlias 
-     * @param emailFromHost 
-     * @param emailFromPort 
+     * @param mailSmtpHost 
+     * @param mailSmtpPort 
+     * @param mailSmtpAuth 
+     * @param mailFromAddress 
+     * @param mailFromPassword 
+     * @param mailFromAlias 
      */
-    updateEmailConfig(emailFromAddress: string, emailFromPassword: string, emailFromAlias: string, emailFromHost: string, emailFromPort: string) {
+    updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: string,
+        mailFromAddress: string, mailFromPassword: string, mailFromAlias: string) {
         console.log("[AdministrationServices] updateEmailConfig");
         var params: any = {
-            emailFromAddress: emailFromAddress,
-            emailFromPassword: emailFromPassword,
-            emailFromAlias: emailFromAlias,
-            emailFromHost: emailFromHost,
-            emailFromPort: emailFromPort
+            mailSmtpHost: mailSmtpHost,
+            mailSmtpPort: mailSmtpPort,
+            mailSmtpAuth: mailSmtpAuth,
+            mailFromAddress: mailFromAddress,
+            mailFromPassword: mailFromPassword,
+            mailFromAlias: mailFromAlias
         }
         return this.httpMgr.doPost(this.serviceName, "updateEmailConfig", params);
     }

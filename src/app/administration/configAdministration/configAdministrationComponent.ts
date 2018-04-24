@@ -17,11 +17,12 @@ export class ConfigAdministrationComponent {
     private pristineAdminMail: string;
 
     private emailConfig: EmailConfig = {
-        emailFromAddress: null,
-        emailFromPassword: null,
-        emailFromAlias: null,
-        emailFromHost: null,
-        emailFromPort: null
+        mailFromAddress: null,
+        mailFromPassword: null,
+        mailFromAlias: null,
+        mailSmtpHost: null,
+        mailSmtpPort: null,
+        mailSmtpAuth: null
     };
     private pristineEmailConfig: EmailConfig;
 
@@ -50,15 +51,16 @@ export class ConfigAdministrationComponent {
         this.adminService.getAdministrationConfig().subscribe(
             conf => {
                 this.emailConfig = {
-                    emailFromAddress: conf.emailFromAddress,
-                    emailFromPassword: conf.emailFromPassword,
-                    emailFromAlias: conf.emailFromAlias,
-                    emailFromHost: conf.emailFromHost,
-                    emailFromPort: conf.emailFromPort
+                    mailFromAddress: conf.mailFromAddress,
+                    mailFromPassword: conf.mailFromPassword,
+                    mailFromAlias: conf.mailFromAlias,
+                    mailSmtpHost: conf.mailSmtpHost,
+                    mailSmtpPort: conf.mailSmtpPort,
+                    mailSmtpAuth: conf.mailSmtpAuth
                 }
                 this.pristineEmailConfig = Object.assign({}, this.emailConfig);
 
-                this.adminMail = conf.emailAdminAddress;
+                this.adminMail = conf.adminAddress;
                 this.pristineAdminMail = conf.emailAdminAddress;
             }
         );
@@ -81,9 +83,14 @@ export class ConfigAdministrationComponent {
         );
     }
 
+    
     private updateEmailConfig() {
-        this.adminService.updateEmailConfig(this.emailConfig.emailFromAddress, this.emailConfig.emailFromPassword, 
-            this.emailConfig.emailFromAlias, this.emailConfig.emailFromHost, this.emailConfig.emailFromPort).subscribe(
+        let mailFromPwd: string = null;
+        if (this.emailConfig.mailSmtpAuth == "true") {
+            mailFromPwd = this.emailConfig.mailFromPassword;
+        }
+        this.adminService.updateEmailConfig(this.emailConfig.mailSmtpHost, this.emailConfig.mailSmtpPort, this.emailConfig.mailSmtpAuth, 
+            this.emailConfig.mailFromAddress, mailFromPwd, this.emailConfig.mailFromAlias).subscribe(
             stResp => {
                 this.init();
             }
@@ -110,9 +117,10 @@ export class ConfigAdministrationComponent {
 }
 
 class EmailConfig {
-    public emailFromAddress: string;
-    public emailFromPassword: string;
-    public emailFromAlias: string;
-    public emailFromHost: string;
-    public emailFromPort: string;
+    public mailFromAddress: string;
+    public mailFromPassword: string;
+    public mailFromAlias: string;
+    public mailSmtpAuth: string;
+    public mailSmtpHost: string;
+    public mailSmtpPort: string;
 }
