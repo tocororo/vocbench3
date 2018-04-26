@@ -27,7 +27,7 @@ export class UserCreateComponent {
 
     ngAfterViewInit() {
         setTimeout(() => {
-            this.propagateChange(this.form);
+            this.onModelChange();
         });
     }
 
@@ -37,28 +37,28 @@ export class UserCreateComponent {
         } else {
             this.form.gender = this.selectedGender;
         }
-        this.propagateChange(this.form);
+        this.onModelChange();
     }
 
     private onUrlAsIriChange() {
         if (this.form.urlAsIri) {
             this.form.iri = this.form.url;
         }
-        this.propagateChange(this.form);
+        this.onModelChange();
     }
 
     private onUrlChange() {
         if (this.form.urlAsIri) {
             this.form.iri = this.form.url;
         }
-        this.propagateChange(this.form);
+        this.onModelChange();
     }
 
     private editLanguages() {
         this.sharedModals.selectLanguages("Language proficiencies", this.form.languageProficiencies).then(
             langs => {
                 this.form.languageProficiencies = langs;
-                this.propagateChange(this.form);
+                this.onModelChange();
             },
             () => {}
         );
@@ -73,6 +73,11 @@ export class UserCreateComponent {
 
 
     private onModelChange() {
+        for (let key in this.form) {
+            if (this.form[key] == "") {
+                this.form[key] = undefined;
+            }
+        }
         this.propagateChange(this.form);
     }
 
