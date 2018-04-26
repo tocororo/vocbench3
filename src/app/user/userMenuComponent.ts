@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
-import { AuthServices } from "../services/authServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { VBContext } from "../utils/VBContext";
-import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { VBEventHandler } from "../utils/VBEventHandler";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { User } from "../models/User";
+import { AuthServices } from "../services/authServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBContext } from "../utils/VBContext";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "li[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
@@ -15,10 +16,11 @@ export class UserMenuComponent {
 
     private currentUser: User;
 
-    private imgBackground: string;
     private imgSrcFallback: string = require("../../assets/images/logos/user.svg");
+    private userAvatarUrl: SafeUrl;
 
-    constructor(private evtHandler: VBEventHandler, private authService: AuthServices, private basicModals: BasicModalServices) { }
+    constructor(private evtHandler: VBEventHandler, private authService: AuthServices, private basicModals: BasicModalServices,
+        private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
         this.currentUser = VBContext.getLoggedUser();
@@ -66,7 +68,11 @@ export class UserMenuComponent {
     }
 
     private initBackgroundImgSrc() {
-        this.imgBackground = "url(" + this.currentUser.getAvatarUrl() + "), url(" + this.imgSrcFallback + ")"
+        this.userAvatarUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.currentUser.getAvatarUrl());
+    }
+
+    private setFallbackImage() {
+        this.userAvatarUrl = this.sanitizer.bypassSecurityTrustUrl(this.imgSrcFallback);
     }
 
     /**

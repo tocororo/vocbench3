@@ -1,12 +1,15 @@
 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" style="padding: 10px;" 
 	(click)="onMenuOpen()" [title]="currentUser.getGivenName() + ' ' + currentUser.getFamilyName()">
-	<div class="avatarContainer" [ngStyle]="{'background-image': imgBackground}" style="height: 24px; width: 24px; background-color: #95A5BC;"></div>
-
+	<div class="avatarContainer" style="height: 24px; width: 24px;">
+		<img [src]="userAvatarUrl" (error)="setFallbackImage()" style="max-height: 24px; max-width: 24px; background-color: #95A5BC;"/>
+	</div>
 </a>
 <ul class="dropdown-menu" style="font-size: 12px;">
 	<li>
 		<div class="hbox" style="padding: 10px; align-items: center;">
-			<div class="avatarContainer" [ngStyle]="{'background-image': imgBackground}" style="height: 48px; width: 48px;"></div>
+			<div class="avatarContainer" style="height: 48px; width: 48px;">
+				<img [src]="userAvatarUrl" (error)="setFallbackImage()" style="max-height: 48px; max-width: 48px;"/>
+			</div>
 			<a [routerLink]="['/Profile']" style="margin-left: 4px;">
 				<span style="font-weight: bold; white-space: nowrap;">
 					{{currentUser.getGivenName()}} {{currentUser.getFamilyName()}}
