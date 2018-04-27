@@ -48,7 +48,9 @@ export class SearchSettings {
 export enum StringMatchMode {
     startsWith = "startsWith",
     contains = "contains",
-    endsWith = "endsWith"
+    endsWith = "endsWith",
+    exact = "exact",
+    fuzzy = "fuzzy"
 }
 
 export enum ClassIndividualPanelSearchMode {

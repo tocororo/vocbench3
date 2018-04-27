@@ -32,7 +32,9 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private stringMatchModes: { show: string, value: StringMatchMode }[] = [
         { show: "Starts with", value: StringMatchMode.startsWith },
         { show: "Contains", value: StringMatchMode.contains },
-        { show: "Ends with", value: StringMatchMode.endsWith }
+        { show: "Ends with", value: StringMatchMode.endsWith },
+        { show: "Exact", value: StringMatchMode.exact },
+        { show: "Fuzzy", value: StringMatchMode.fuzzy }
     ];
     private activeStringMatchMode: StringMatchMode;
 
