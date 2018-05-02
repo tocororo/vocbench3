@@ -240,10 +240,14 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private selectSearchResult(resource: ARTURIResource) {
         let schemes: ARTURIResource[] = resource.getAdditionalProperty(ResAttribute.SCHEMES);
         let isInActiveSchemes: boolean = false;
-        for (var i = 0; i < schemes.length; i++) {
-            if (ResourceUtils.containsNode(this.workingSchemes, schemes[i])) {
-                isInActiveSchemes = true;
-                break;
+        if (this.workingSchemes.length == 0) { //no scheme mode -> searched concept should be visible
+            isInActiveSchemes = true;
+        } else {
+            for (var i = 0; i < schemes.length; i++) {
+                if (ResourceUtils.containsNode(this.workingSchemes, schemes[i])) {
+                    isInActiveSchemes = true;
+                    break;
+                }
             }
         }
         if (isInActiveSchemes) {

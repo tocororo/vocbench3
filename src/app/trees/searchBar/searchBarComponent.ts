@@ -28,7 +28,7 @@ export class SearchBarComponent {
         { show: "Starts with", value: StringMatchMode.startsWith, symbol: "α.." },
         { show: "Contains", value: StringMatchMode.contains, symbol: ".α." },
         { show: "Ends with", value: StringMatchMode.endsWith, symbol: "..α" },
-        { show: "Exact", value: StringMatchMode.exact, symbol: "^α$" },
+        { show: "Exact", value: StringMatchMode.exact, symbol: "α" },
         { show: "Fuzzy", value: StringMatchMode.fuzzy, symbol: "~α" }
     ];
 

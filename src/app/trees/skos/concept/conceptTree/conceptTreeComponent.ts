@@ -110,12 +110,14 @@ export class ConceptTreeComponent extends AbstractTree {
      * @param node 
      */
     private openRoot(path: ARTURIResource[], node: ARTURIResource) {
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         var childrenNodeComponent = this.viewChildrenNode.toArray();
         for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
             if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
                 //let the found node expand itself and the remaining path
                 path.splice(0, 1);
                 childrenNodeComponent[i].expandPath(path);
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 return;
             }
         }
@@ -125,6 +127,7 @@ export class ConceptTreeComponent extends AbstractTree {
             this.searchRetryAttempt++;
             if (this.searchRetryAttempt > 20) { //after 20 attempts (20*300ms) stop searching
                 this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             } else {
                 this.ensureRootVisibility(path[0]);
                 this.openRoot(path, node); 
