@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ConfigurationsServices } from "../../../../services/configurationsServices";
-import { Reference } from "../../../../models/Configuration";
+import { Reference, Configuration } from "../../../../models/Configuration";
 
 export class LoadConfigurationModalData extends BSModalContext {
     constructor(
@@ -72,7 +72,11 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
         this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
             conf => {
                 event.stopPropagation();
-                this.dialog.close(conf);
+                let returnData: LoadConfigurationModalReturnData = {
+                    configuration: conf,
+                    relativeReference: this.selectedRef.relativeReference
+                }
+                this.dialog.close(returnData);
             }
         )
     }
@@ -81,4 +85,10 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
         this.dialog.dismiss();
     }
 
+}
+
+
+export class LoadConfigurationModalReturnData {
+    configuration: Configuration;
+    relativeReference: string;
 }

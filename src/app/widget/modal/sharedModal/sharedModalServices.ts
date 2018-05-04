@@ -107,10 +107,11 @@ export class SharedModalServices {
 
 
     /**
-     * 
+     * Open a modal that allows to store a configuration. If the configuration is succesfully stored, returns it relativeReference.
      * @param title 
      * @param configurationComponent 
      * @param configurationObject 
+     * @return the relativeReference of the stored configuration
      */
     storeConfiguration(title: string, configurationComponent: string, configurationObject: { [key: string]: any }) {
         var modalData = new StoreConfigurationModalData(title, configurationComponent, configurationObject);
@@ -124,7 +125,8 @@ export class SharedModalServices {
     /**
      * 
      * @param title 
-     * @param configurationComponent 
+     * @param configurationComponent
+     * @return returns a LoadConfigurationModalReturnData object with configuration and relativeReference
      */
     loadConfiguration(title: string, configurationComponent: string) {
         var modalData = new LoadConfigurationModalData(title, configurationComponent);

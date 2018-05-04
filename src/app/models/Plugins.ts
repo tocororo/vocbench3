@@ -305,3 +305,8 @@ export class FilteringStep {
     };
     graphs?: string[]
 }
+
+export enum ExtensionConfigurationStatus {
+    saved = "saved", //configuration just loaded or saved
+    unsaved = "unsaved" //configuration modified or unsaved
+}

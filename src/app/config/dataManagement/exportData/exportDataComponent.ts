@@ -1,16 +1,19 @@
-import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, QueryList, ViewChildren } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../../models/ARTResources";
+import { ConfigurationComponents } from "../../../models/Configuration";
+import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, FilteringStep, Settings, SettingsProp } from "../../../models/Plugins";
+import { RDFFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
-import { Settings, ExtensionPointID, ExtensionFactory, ScopeUtils, FilteringStep, ConfigurableExtensionFactory } from "../../../models/Plugins";
-import { RDFFormat } from "../../../models/RDFFormat";
-import { ARTURIResource } from "../../../models/ARTResources";
-import { VBContext } from "../../../utils/VBContext";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBContext } from "../../../utils/VBContext";
+import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigurator/extensionConfiguratorComponent";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { LoadConfigurationModalReturnData } from "../../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/filterGraphsModal";
-
 
 @Component({
     selector: "export-data-component",
@@ -19,11 +22,14 @@ import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/fi
 })
 export class ExportDataComponent {
 
+    //ExtensionConfiguratorComponent children of this Component (useful to load single configurations of a chain)
+    @ViewChildren(ExtensionConfiguratorComponent) viewChildrenExtConfig: QueryList<ExtensionConfiguratorComponent>;
+
     //export format selection
     private exportFormats: RDFFormat[];
     private selectedExportFormat: RDFFormat;
 
-    private includeInferred: boolean;
+    private includeInferred: boolean = false;
 
     //graph selection
     private exportGraphs: GraphStruct[] = [];
@@ -34,7 +40,7 @@ export class ExportDataComponent {
     private selectedFilterChainElement: FilterChainElement;
 
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
-        private basicModals: BasicModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.exportService.getOutputFormats().subscribe(
@@ -164,6 +170,11 @@ export class ExportDataComponent {
         filterChainEl.selectedConfiguration = config;
     }
 
+    private onConfigStatusUpdated(filterChainEl: FilterChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+        filterChainEl.status = statusEvent.status;
+        filterChainEl.relativeReference = statusEvent.relativeReference;
+    }
+
     private configureGraphs(filterChainEl: FilterChainElement) {
         this.openGraphSelectionModal(filterChainEl.filterGraphs).then(
             res => {},
@@ -189,6 +200,104 @@ export class ExportDataComponent {
             return true;
         }
         return false;
+    }
+
+    /** =====================================
+     * Save/Load chain
+     * =====================================*/
+
+    private saveChain() {
+        let graphs: string[] = [];
+        for (var i = 0; i < this.exportGraphs.length; i++) {
+            if (this.exportGraphs[i].checked) {
+                graphs.push(this.exportGraphs[i].graph.toNT());
+            }
+        }
+
+        let transformationPipeline: any[] = [];
+
+        for (var i = 0; i < this.filtersChain.length; i++) {
+
+            if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
+                this.basicModals.alert("Unsaved configuration", "Filter at position " + (i+1) + " is not saved. " +
+                    "In order to save a filter chain all its filters needs to be saved.", "warning");
+                return;
+            }
+
+            //first element in pair: configRef
+            let transfStepConfig: any = {
+                extensionID: this.filtersChain[i].selectedFactory.id,
+                // configuration: this.filtersChain[i].selectedConfiguration.getPropertiesAsMap()
+                configRef: this.filtersChain[i].relativeReference
+            };
+            //second element in pair: graphs
+            let transfStepGraphs: string[] = [];
+            this.filtersChain[i].filterGraphs.forEach((g: GraphStruct) => {
+                if (g.checked) {
+                    transfStepGraphs.push(g.graph.toNT());
+                }
+            })
+
+            let transfPipelineStepPair: any[] = [ transfStepConfig, transfStepGraphs ]; //pair [configuration, graphs]
+
+            transformationPipeline.push(transfPipelineStepPair);
+        }
+
+        let config: { [key: string]: any } = {
+            graphs: graphs,
+            transformationPipeline: transformationPipeline,
+            includeInferred: this.includeInferred,
+            deployerSpec: null
+        }
+
+        this.sharedModals.storeConfiguration("Save exporter chain configuration", ConfigurationComponents.EXPORTER, config).then(
+            () => {
+                this.basicModals.alert("Save configuration", "Configuration saved succesfully");
+            },
+            () => {}
+        );
+    }
+
+    private loadChain() {
+        this.sharedModals.loadConfiguration("Load exporter chain configuration", ConfigurationComponents.EXPORTER).then(
+            (conf: LoadConfigurationModalReturnData) => {
+                this.filtersChain = []; //reset the chain
+                let configurations: SettingsProp[] = conf.configuration.properties;
+                for (var i = 0; i < configurations.length; i++) {
+                    if (configurations[i].name == "transformationPipeline") {
+                        //value of a stored transformationPipeline (see loadConfiguration response)
+                        let chain: [{extensionID: string, configRef: string}, string[]][] = configurations[i].value;
+
+                        //for each element of the pipeline append a filter (so that a ExtensionConfiguratorComponent is instantiated for each one of them)
+                        chain.forEach(() => {
+                            this.appendFilter();
+                        });
+
+                        //...and force a configuration
+                        setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended filters are initialized
+                            chain.forEach((c : [{extensionID: string, configRef: string}, string[]], index: number) => {
+                                let extConfPair = c[0];
+                                let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+                                extConfigurators[index].forceConfiguration(extConfPair.extensionID, extConfPair.configRef);
+
+                                let graphs = c[1];
+                                //check all the graphs in the graphs parameter
+                                this.filtersChain[index].filterGraphs.forEach((fg: GraphStruct) => {
+                                    fg.checked = graphs.indexOf(fg.graph.toNT()) != -1;
+                                });
+                            });
+                        });
+                    } else if (configurations[i].name == "graphs") {
+                        let graphs: string[] = configurations[i].value;
+                        this.exportGraphs.forEach((gs: GraphStruct) => {
+                            gs.checked = graphs.indexOf(gs.graph.toNT()) != -1;
+                        })
+                    } else if (configurations[i].name == "includeInferred") {
+                        this.includeInferred = configurations[i].value;
+                    }
+                }
+            }
+        );
     }
 
     /*
@@ -286,6 +395,8 @@ class FilterChainElement {
     public selectedFactory: ConfigurableExtensionFactory;
     public selectedConfiguration: Settings;
     public filterGraphs: GraphStruct[];
+    public status: ExtensionConfigurationStatus;
+    public relativeReference: string;
 
     constructor(availableFactories: ConfigurableExtensionFactory[], filterGraphs: GraphStruct[]) {
         //clone the available factories, so changing the configuration of one of them, doesn't change the default of the others

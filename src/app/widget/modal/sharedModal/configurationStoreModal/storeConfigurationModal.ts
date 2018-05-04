@@ -48,7 +48,7 @@ export class StoreConfigurationModal implements ModalComponent<StoreConfiguratio
         this.configurationsService.storeConfiguration(this.context.configurationComponent, relativeReference, this.context.configurationObject).subscribe(
             stResp => {
                 event.stopPropagation();
-                this.dialog.close();
+                this.dialog.close(relativeReference);
             }
         );
     }

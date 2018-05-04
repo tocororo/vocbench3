@@ -39,22 +39,33 @@
             <div class="subPanel vbox" style="flex: 2">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Export filters:</label>
-                    <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" title="Add filter" (click)="appendFilter()">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                        <button class="btn btn-default" title="Remove filter" (click)="removeFilter()"
-                            [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
-                        <button class="btn btn-default" title="Move down"  (click)="moveFilterDown()"
-                            [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </button>
-                        <button class="btn btn-default" title="Move up" (click)="moveFilterUp()"
-                            [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
-                            <span class="glyphicon glyphicon-chevron-up"></span>
-                        </button>
+
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" title="Add filter" (click)="appendFilter()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Remove filter" (click)="removeFilter()"
+                                [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                            <button class="btn btn-default" title="Move down"  (click)="moveFilterDown()"
+                                [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
+                                <span class="glyphicon glyphicon-chevron-down"></span>
+                            </button>
+                            <button class="btn btn-default" title="Move up" (click)="moveFilterUp()"
+                                [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
+                                <span class="glyphicon glyphicon-chevron-up"></span>
+                            </button>
+                        </div>
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" title="Save export chain" (click)="saveChain()" [disabled]="filtersChain.length == 0">
+                                <span class="glyphicon glyphicon-floppy-save"></span>
+                            </button>
+                            <button class="btn btn-default" title="Load export chain" (click)="loadChain()">
+                                <span class="glyphicon glyphicon-floppy-open"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="subPanel-body scrollableContainer">
@@ -76,7 +87,9 @@
                                 <td class="hbox">
                                     <extension-configurator [extensions]="filterChainEl.availableFactories"
                                         (extensionUpdated)="onExtensionUpdated(filterChainEl, $event)"
-                                        (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)" style="flex: 1;">
+                                        (configurationUpdated)="onConfigurationUpdated(filterChainEl, $event)" 
+                                        (configStatusUpdated)="onConfigStatusUpdated(filterChainEl, $event)"
+                                        style="flex: 1;">
                                     </extension-configurator>
                                     <button class="btn btn-default" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
                                 </td>

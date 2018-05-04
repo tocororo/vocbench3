@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/
 import { ARTResource, RDFResourceRolesEnum, ARTURIResource } from '../../../models/ARTResources';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
 import { UIUtils } from '../../../utils/UIUtils';
+import { ResourcesServices } from '../../../services/resourcesServices';
 
 @Component({
     selector: 'resource-picker',
@@ -20,7 +21,7 @@ export class ResourcePickerComponent {
     private menuAsButton: boolean = false; //if there is just a role => do not show a dropdown menu, just a button
     private btnImageSrc: string;
     
-    constructor(private browsingModals: BrowsingModalServices) { }
+    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
         this.init();
@@ -32,7 +33,16 @@ export class ResourcePickerComponent {
 
     private init() {
         if (this.resource) {
-            this.resourceIRI = this.resource.getNominalValue();
+            if (typeof this.resource == 'string') {
+                this.resourceService.getResourceDescription(this.resource).subscribe(
+                    res => {
+                        this.resource = <ARTURIResource>res;
+                        this.resourceIRI = this.resource.getNominalValue();
+                    }
+                )
+            } else {
+                this.resourceIRI = this.resource.getNominalValue();
+            }
         } else {
             this.resourceIRI = null;
         }

@@ -1,20 +1,20 @@
 import { Component, ViewChild } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { YasguiComponent } from "./yasguiComponent";
-import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
-import { SparqlServices } from "../services/sparqlServices";
-import { ExportServices } from "../services/exportServices";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTBNode, ARTResource, ARTURIResource } from "../models/ARTResources";
+import { ConfigurationComponents, ConfigurationProperty } from "../models/Configuration";
+import { PrefixMapping } from "../models/Metadata";
 import { ConfigurationsServices } from "../services/configurationsServices";
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
+import { ExportServices } from "../services/exportServices";
+import { SparqlServices } from "../services/sparqlServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
-import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { PrefixMapping } from "../models/Metadata";
-import { ARTURIResource, ARTResource, ARTBNode } from "../models/ARTResources";
-import { RDFFormat } from "../models/RDFFormat";
-import { ConfigurationComponents, Configuration, ConfigurationProperty } from "../models/Configuration";
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
+import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
+import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
+import { YasguiComponent } from "./yasguiComponent";
 
 @Component({
     selector: "sparql-component",
@@ -312,10 +312,10 @@ export class SparqlComponent {
 
     private loadQuery(tab: Tab) {
         this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
-            (conf: Configuration) => {
+            (conf: LoadConfigurationModalReturnData) => {
                 let query: string;
                 let includeInferred: boolean = false;
-                let confProps: ConfigurationProperty[] = conf.properties;
+                let confProps: ConfigurationProperty[] = conf.configuration.properties;
                 for (var i = 0; i < confProps.length; i++) {
                     if (confProps[i].name == "sparql") {
                         query = confProps[i].value;

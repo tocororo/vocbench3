@@ -27,7 +27,7 @@ export class SettingsRendererComponent {
     }
 
     private updateIRI(prop: SettingsProp, value: ARTURIResource) {
-        prop.value = value;
+        prop.value = value.toNT();
         this.propagateChange(this.settings);
     }
 

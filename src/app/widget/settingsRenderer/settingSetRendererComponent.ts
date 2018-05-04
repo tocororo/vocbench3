@@ -53,7 +53,7 @@ export class SettingSetRendererComponent {
     }
 
     private updateIRI(index: number, value: ARTURIResource) {
-        this.value[index] = value;
+        this.value[index] = value.toNT();
         this.onModelChange();
     }
 
