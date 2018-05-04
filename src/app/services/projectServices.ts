@@ -333,16 +333,15 @@ export class ProjectServices {
      * @param basicModals 
      */
     public handleMissingChangetrackierSailError(error: Error, basicModals: BasicModalServices) {
-        if (
-            error.name.endsWith("ProjectAccessException") && 
-            error.message.includes("Unsupported Sail type: http://semanticturkey.uniroma2.it/sail/changetracker")
-        ) {
-            let message = "The changetracker sail, required for history and validation, " + 
-                "is reported to be missing from the triple store; please contact the administrator in order to " + 
-                "have the st-changetracking-sail.jar bundle deployed within the triple store connected for this project";
-            basicModals.alert("Error", message, "error", error.name + ": " + error.message);
-        } else {
-            basicModals.alert("Error", error.message, "error", error.name);
+        if (error.name.endsWith("ProjectAccessException")) {
+            if (error.message.includes("Unsupported Sail type: http://semanticturkey.uniroma2.it/sail/changetracker")) {
+                let message = "The changetracker sail, required for history and validation, " + 
+                    "is reported to be missing from the triple store; please contact the administrator in order to " + 
+                    "have the st-changetracking-sail.jar bundle deployed within the triple store connected for this project";
+                basicModals.alert("Error", message, "error", error.name + ": " + error.message);
+            } else {
+                basicModals.alert("Error", error.message, "error", error.name);
+            }
         }
     }
 

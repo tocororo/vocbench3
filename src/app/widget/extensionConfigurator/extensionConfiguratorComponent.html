@@ -1,24 +1,26 @@
 <div class="hbox">
 
     <select *ngIf="extensions.length > 1" class="form-control input-sm" [(ngModel)]="selectedExtension"
-        (ngModelChange)="onChangeExtension()" [title]="selectedExtension.description" style="margin: 0 5px;">
+        (ngModelChange)="onChangeExtension()" [title]="selectedExtension.description" style="margin-right: 5px;">
         <option *ngFor="let ext of extensions" [ngValue]="ext" [title]="ext.description">
             {{ext.name}} 
         </option>
     </select>
     <select *ngIf="selectedExtension.configurations.length > 1" class="form-control input-sm" [(ngModel)]="selectedConfiguration"
-        (ngModelChange)="onChangeConfig()" style="margin: 0 5px;">
+        (ngModelChange)="onChangeConfig()" style="margin-right: 5px;">
         <option *ngFor="let cfg of selectedExtension.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
     </select>
 
-    <span class="btn-group btn-group-sm" style="display: flex; margin-left: 4px;">
+    <span class="btn-group btn-group-sm" style="display: flex;">
         <button class="btn btn-default" (click)="configure()">Configure</button>
-        <button class="btn btn-default" title="Save configuration" (click)="saveConfig()">
-            <span class="glyphicon glyphicon-floppy-save"></span>
-        </button>
-        <button class="btn btn-default" title="Load configuration" (click)="loadConfig()">
-            <span class="glyphicon glyphicon-floppy-open"></span>
-        </button>
+        <ng-template [ngIf]="storeable">
+            <button class="btn btn-default" title="Save configuration" (click)="saveConfig()">
+                <span class="glyphicon glyphicon-floppy-save"></span>
+            </button>
+            <button class="btn btn-default" title="Load configuration" (click)="loadConfig()">
+                <span class="glyphicon glyphicon-floppy-open"></span>
+            </button>
+        </ng-template>
     </span>
 
 </div>

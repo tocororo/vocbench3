@@ -32,16 +32,11 @@
         <div *ngIf="isSelectedRepoAccessCreateMode()" class="form-group">
             <label class="control-label col-sm-3">Repo Configuration:</label>
             <div class="col-sm-9">
-                <div class="input-group">
-                    <select class="form-control input-sm" [(ngModel)]="selectedRepoConf" name="selectedRepoConf">
-                        <option *ngFor="let rc of repoConfList" [ngValue]="rc" >{{rc.configuration.shortName}}</option>
-                    </select>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default btn-sm" (click)="configureRepo()">
-                            Configure
-                        </button>
-                    </span>
-                </div>
+                <extension-configurator #repoConfigurator *ngIf="repoExtensions" 
+                    [extensions]="repoExtensions"
+                    (extensionUpdated)="selectedRepoExtension = $event"
+                    (configurationUpdated)="selectedRepoConfig = $event">
+                </extension-configurator>
             </div>
         </div>
 

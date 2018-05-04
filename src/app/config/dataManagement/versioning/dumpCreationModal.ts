@@ -1,11 +1,13 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ConfigurableExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "../../../models/Plugins";
+import { BackendTypesEnum, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../../models/Project";
+import { ExtensionsServices } from "../../../services/extensionsServices";
 import { PluginsServices } from "../../../services/pluginsServices";
-import { Repository, RemoteRepositoryAccessConfig, RepositoryAccess, RepositoryAccessType, BackendTypesEnum } from "../../../models/Project";
-import { Plugin, Settings, SettingsProp, PluginSpecification, ExtensionPointID } from "../../../models/Plugins";
-import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
+import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigurator/extensionConfiguratorComponent";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 
 export class DumpCreationModalData extends BSModalContext {
     /**
@@ -23,6 +25,8 @@ export class DumpCreationModalData extends BSModalContext {
 export class DumpCreationModal implements ModalComponent<DumpCreationModalData> {
     context: DumpCreationModalData;
 
+    @ViewChild("repoConfigurator") repoConfigurator: ExtensionConfiguratorComponent;
+
     private versionId: string;
 
     private repositoryAccessList: RepositoryAccessType[] = [
@@ -34,34 +38,30 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
 
     //core repository containing data
     private repositoryId: string;
-    private repoConfList: { factoryID: string, configuration: Settings }[];
-    private selectedRepoConf: { factoryID: string, configuration: Settings }; //chosen configuration for data repository
+    private repoExtensions: ConfigurableExtensionFactory[];
+    private selectedRepoExtension: ConfigurableExtensionFactory;
+    private selectedRepoConfig: Settings;
+
+    private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryImplConfigurer";
+    private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfigurerConfiguration";
 
     //backend types
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
     private selectedRepoBackendType: BackendTypesEnum = this.backendTypes[0];
 
     constructor(public dialog: DialogRef<DumpCreationModalData>, private pluginService: PluginsServices,
+        private extensionService: ExtensionsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        //init sail repository plugin
-        this.pluginService.getAvailablePlugins(ExtensionPointID.REPO_IMPL_CONFIGURER_PLUGIN_ID).subscribe(
-            (plugins: Plugin[]) => {
-                for (var i = 0; i < plugins.length; i++) {
-                    this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
-                        (configs: {factoryID: string, configurations: Settings[]}) => {
-                            this.repoConfList = [];
-                            //clone the configurations, so changes on data repo configuration don't affect support repo configuration
-                            for (var i = 0; i < configs.configurations.length; i++) {
-                                this.repoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
-                            }
-                            this.selectedRepoConf = this.repoConfList[0];
-                        }
-                    );
-                }
+        this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
+            extensions => {
+                this.repoExtensions = <ConfigurableExtensionFactory[]>extensions;
+                setTimeout(() => { //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
+                    this.repoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
+                });
             }
         );
     }
@@ -109,15 +109,6 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         );
     }
 
-    private configureRepo() {
-        this.sharedModals.configurePlugin(this.selectedRepoConf.configuration).then(
-            (config: any) => {
-                this.selectedRepoConf.configuration.properties = (<Settings>config).properties;
-            },
-            () => {}
-        );
-    }
-
     ok(event: Event) {
         //check if all the data is ok
         //valid version id
@@ -142,13 +133,13 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         }
         //valid repo configuration (in case of repo creation mode)
         if (this.isSelectedRepoAccessCreateMode()) {
-            let repoConfigParams: SettingsProp[] = this.selectedRepoConf.configuration.properties;
-            if (this.selectedRepoConf.configuration.requireConfiguration()) {
+            //check if repository configuration needs to be configured
+            if (this.selectedRepoConfig.requireConfiguration()) {
+                //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Missing configuration", "Required parameter(s) missing in repository configuration (" +
-                    this.selectedRepoConf.configuration.shortName +")", "error");
+                    this.selectedRepoConfig.shortName + ")", "warning");
                 return;
             }
-            
         }
 
 
@@ -173,9 +164,9 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         } else { //prepare config of repo only if it is in creation mode
             var repoConfigPluginSpecification: PluginSpecification;
             repoConfigPluginSpecification = {
-                factoryId: this.selectedRepoConf.factoryID,
-                configType: this.selectedRepoConf.configuration.type,
-                properties: this.selectedRepoConf.configuration.getPropertiesAsMap()
+                factoryId: this.selectedRepoExtension.id,
+                configType: this.selectedRepoConfig.type,
+                configuration: this.selectedRepoConfig.getPropertiesAsMap()
             }
             returnedData.repoConfigurerSpecification = repoConfigPluginSpecification;
         }

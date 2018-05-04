@@ -13,6 +13,7 @@ import { SharedModalServices } from '../modal/sharedModal/sharedModalServices';
 export class ExtensionConfiguratorComponent {
 
     @Input('extensions') extensions: ConfigurableExtensionFactory[];
+    @Input() storeable: boolean = true; //tells if the component should allow to store and load configuration
     @Output() extensionUpdated = new EventEmitter<ConfigurableExtensionFactory>();
     @Output() configurationUpdated = new EventEmitter<Settings>();
     @Output() configStatusUpdated = new EventEmitter<{ status: ExtensionConfigurationStatus, relativeReference?: string }>();
@@ -105,6 +106,21 @@ export class ExtensionConfiguratorComponent {
         );
     }
 
+    //useful to change the selected extension and configuration from a parent component
+    public selectExtensionAndConfiguration(extensionID: string, configurationType: string) {
+        for (var i = 0; i < this.extensions.length; i++) {
+            if (this.extensions[i].id == extensionID) {
+                this.selectedExtension = this.extensions[i];
+                this.extensionUpdated.emit(this.selectedExtension);
+                break;
+            }
+        }
+        for (var i = 0; i < this.selectedExtension.configurations.length; i++) {
+            if (this.selectedExtension.configurations[i].type == configurationType) {
+                this.selectedConfiguration = this.selectedExtension.configurations[i];
+            }
+        }
+    }
 
     //useful only for the filter chain, in order to force the load of a single filter
     public forceConfiguration(extensionID: string, configRef: string) {

@@ -1,15 +1,16 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { ProjectServices } from "../../services/projectServices";
-import { OntoManagerServices } from "../../services/ontoManagerServices";
-import { PluginsServices } from "../../services/pluginsServices";
-import { RepositoryAccess, RepositoryAccessType, RemoteRepositoryAccessConfig, Repository, BackendTypesEnum } from "../../models/Project";
-import { Plugin, Settings, SettingsProp, PluginSpecification, ExtensionPointID } from "../../models/Plugins";
 import { ARTURIResource } from "../../models/ARTResources";
-import { RDFS, OWL, SKOS, SKOSXL, DCT, OntoLex } from "../../models/Vocabulary";
+import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
+import { BackendTypesEnum, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
+import { DCT, OWL, OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { ExtensionsServices } from "../../services/extensionsServices";
+import { PluginsServices } from "../../services/pluginsServices";
+import { ProjectServices } from "../../services/projectServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { ExtensionConfiguratorComponent } from "../../widget/extensionConfigurator/extensionConfiguratorComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { UIUtils } from "../../utils/UIUtils";
 
 @Component({
     selector: "create-project-component",
@@ -17,6 +18,9 @@ import { UIUtils } from "../../utils/UIUtils";
     host: { class: "pageComponent" }
 })
 export class CreateProjectComponent {
+
+    @ViewChild("dataRepoConfigurator") dataRepoConfigurator: ExtensionConfiguratorComponent;
+    @ViewChild("supportRepoConfigurator") supportRepoConfigurator: ExtensionConfiguratorComponent;
 
     /**
      * BASIC PROJECT SETTINGS
@@ -54,16 +58,22 @@ export class CreateProjectComponent {
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
     private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    private DEFAULT_REPO_CONFIGURER = "it.uniroma2.art.semanticturkey.plugin.impls.repositoryimplconfigurer.conf.RDF4JNativeSailConfigurerConfiguration";
+    private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryImplConfigurer";
+    private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfigurerConfiguration";
+
     //core repository containing data
     private dataRepoId: string;
-    private dataRepoConfList: {factoryID: string, configuration: Settings}[]; 
-    private selectedDataRepoConf: {factoryID: string, configuration: Settings}; //chosen configuration for data repository
+    private dataRepoExtensions: ConfigurableExtensionFactory[];
+    private selectedDataRepoExtension: ConfigurableExtensionFactory;
+    private selectedDataRepoConfig: Settings;
+
     //support repository for history and validation
     private supportRepoId: string;
-    private supportRepoConfList: {factoryID: string, configuration: Settings}[];
-    private selectedSupportRepoConf: {factoryID: string, configuration: Settings}; //chosen configuration for history/validation repository
-    //backend types
+    private supportRepoExtensions: ConfigurableExtensionFactory[];
+    private selectedSupportRepoExtension: ConfigurableExtensionFactory;
+    private selectedSupportRepoConfig: Settings;
+
+    //backend types (when accessing an existing remote repository)
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
     private selectedCoreRepoBackendType: BackendTypesEnum = this.backendTypes[0];
     private selectedSupportRepoBackendType: BackendTypesEnum = this.backendTypes[0];
@@ -96,42 +106,32 @@ export class CreateProjectComponent {
     private modificationDatePropList: ARTURIResource[] = [DCT.modified];
     private modificationDateProp: ARTURIResource = this.modificationDatePropList[0];
 
-    constructor(private projectService: ProjectServices, private ontMgrService: OntoManagerServices, private pluginService: PluginsServices,
+    constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
-        //init sail repository plugin
-        this.pluginService.getAvailablePlugins(ExtensionPointID.REPO_IMPL_CONFIGURER_PLUGIN_ID).subscribe(
-            (plugins: Plugin[]) => {
-                for (var i = 0; i < plugins.length; i++) {
-                    this.pluginService.getPluginConfigurations(plugins[i].factoryID).subscribe(
-                        (configs: {factoryID: string, configurations: Settings[]}) => {
-                            this.dataRepoConfList = [];
-                            this.supportRepoConfList = [];
-                            //clone the configurations, so changes on data repo configuration don't affect support repo configuration
-                            for (var i = 0; i < configs.configurations.length; i++) {
-                                this.dataRepoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
-                                this.supportRepoConfList.push({factoryID: configs.factoryID, configuration: configs.configurations[i].clone()});
-                            }
-                            this.selectedDataRepoConf = this.dataRepoConfList[0];
-                            for (var i = 0; i < this.dataRepoConfList.length; i++) {
-                                if (this.dataRepoConfList[i].configuration.type == this.DEFAULT_REPO_CONFIGURER) {
-                                    this.selectedDataRepoConf = this.dataRepoConfList[i];
-                                    break;
-                                }
-                            }
-                            
-                            this.selectedSupportRepoConf = this.supportRepoConfList[0];
-                            for (var i = 0; i < this.supportRepoConfList.length; i++) {
-                                if (this.supportRepoConfList[i].configuration.type == this.DEFAULT_REPO_CONFIGURER) {
-                                    this.selectedSupportRepoConf = this.supportRepoConfList[i];
-                                    break;
-                                }
-                            }
-                        }
-                    );
-                }
+        //init core repo extensions
+        this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
+            extensions => {
+                this.dataRepoExtensions = <ConfigurableExtensionFactory[]>extensions;
+                setTimeout(() => { //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
+                    this.dataRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
+                });
+            }
+        );
+
+        //init support repo extensions
+        /**
+         * this could be done also exploiting the same previous getExtension,
+         * but I preferred to repeat the request in order to avoid to clone the extensions
+         */
+        this.extensionService.getExtensions(ExtensionPointID.REPO_IMPL_CONFIGURER_ID).subscribe(
+            extensions => {
+                this.supportRepoExtensions = <ConfigurableExtensionFactory[]>extensions;
+                setTimeout(() => { //let the supportRepoConfigurator component to be initialized (due to *ngIf="supportRepoExtensions")
+                    this.supportRepoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
+                });
             }
         );
 
@@ -229,24 +229,6 @@ export class CreateProjectComponent {
         this.sharedModals.configureRemoteRepositoryAccess(this.remoteAccessConfig).then(
             (config: any) => {
                 this.remoteAccessConfig = config;
-            },
-            () => {}
-        );
-    }
-
-    private configureDataRepo() {
-        this.sharedModals.configurePlugin(this.selectedDataRepoConf.configuration).then(
-            (config: any) => {
-                this.selectedDataRepoConf.configuration.properties = (<Settings>config).properties;
-            },
-            () => {}
-        );
-    }
-
-    private configureSupportRepo() {
-        this.sharedModals.configurePlugin(this.selectedSupportRepoConf.configuration).then(
-            (config: any) => {
-                this.selectedSupportRepoConf.configuration.properties = (<Settings>config).properties;
             },
             () => {}
         );
@@ -370,18 +352,17 @@ export class CreateProjectComponent {
         //prepare config of core repo only if it is in creation mode
         if (this.isSelectedRepoAccessCreateMode()) { 
             //check if data repository configuration needs to be configured
-
-            if (this.selectedDataRepoConf.configuration.requireConfiguration()) {
+            if (this.selectedDataRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConf.configuration.shortName 
+                this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConfig.shortName 
                     + ") requires to be configured", "warning");
                     return;
             }
 
             coreRepoSailConfigurerSpecification = {
-                factoryId: this.selectedDataRepoConf.factoryID,
-                configType: this.selectedDataRepoConf.configuration.type,
-                properties: this.selectedDataRepoConf.configuration.getPropertiesAsMap()
+                factoryId: this.selectedDataRepoExtension.id,
+                configType: this.selectedDataRepoConfig.type,
+                configuration: this.selectedDataRepoConfig.getPropertiesAsMap()
             }
         }
 
@@ -391,18 +372,17 @@ export class CreateProjectComponent {
         var supportRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
-            //check if support repository configuration needs to be configured
-            if (this.selectedSupportRepoConf.configuration.requireConfiguration()) {
+            if (this.selectedSupportRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConf.configuration.shortName 
+                this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConfig.shortName 
                     + ") requires to be configured", "warning");
                     return;
             }
 
             supportRepoSailConfigurerSpecification = {
-                factoryId: this.selectedSupportRepoConf.factoryID,
-                configType: this.selectedSupportRepoConf.configuration.type,
-                properties: this.selectedSupportRepoConf.configuration.getPropertiesAsMap()
+                factoryId: this.selectedSupportRepoExtension.id,
+                configType: this.selectedSupportRepoConfig.type,
+                configuration: this.selectedSupportRepoConfig.getPropertiesAsMap()
             }
         }
 
