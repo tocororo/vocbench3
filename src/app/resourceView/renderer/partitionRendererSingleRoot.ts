@@ -1,16 +1,15 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderer } from "./partitionRenderer";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../models/ARTResources";
-import { PropertyServices, RangeType } from "../../services/propertyServices";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
+import { CustomForm, CustomFormValue, FormCollection } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
+import { PropertyServices, RangeType } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
-import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { FormCollection, CustomForm, CustomFormValue } from "../../models/CustomForms";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { PartitionRenderer } from "./partitionRenderer";
 
 @Component({
     selector: "partition-renderer-single",

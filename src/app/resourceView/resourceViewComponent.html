@@ -86,6 +86,9 @@
             <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </superproperties-renderer>
+            <subterms-renderer *ngIf="subtermsColl" [pred-obj-list]="subtermsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </subterms-renderer>
             <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </domains-renderer>
@@ -122,6 +125,9 @@
             <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </label-relations-renderer>
+            <form-representations-renderer *ngIf="formRepresentationsColl" [pred-obj-list]="formRepresentationsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </form-representations-renderer>
             <form-based-preview-renderer *ngIf="formBasedPreviewColl" [pred-obj-list]="formBasedPreviewColl" [resource]="resource" 
                 [rendering]="rendering" [readonly]="true" (dblclickObj)="objectDblClick($event)">
             </form-based-preview-renderer>

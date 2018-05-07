@@ -35,7 +35,7 @@ export class Settings {
             let p: SettingsProp = this.properties[i];
             properties.push(p.clone());
         }
-        return new Settings(this.shortName, this.type, this.editRequired, properties);
+        return new Settings(this.shortName, this.type, this.editRequired, properties, this.htmlDescription, this.htmlWarning);
     }
 
     public requireConfiguration(): boolean {
@@ -187,7 +187,7 @@ export class PluginSpecification {
     factoryId: string;
     configType?: string;
     configuration?: any;
-    properties?: any; //object {"key1": "value", "key2": "value2", ...}
+    properties?: any; //object {"key1": "value", "key2": "value2", ...} //for old plugins. When they will be dropped, delete this
 }
 
 
@@ -206,6 +206,11 @@ export class ExtensionPointID {
     public static SEARCH_STRATEGY_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.search.SearchStrategy";
     public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.plugin.extpts.URIGenerator";
     // public static URI_GENERATOR_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.urigen.URIGenerator";//NEW
+
+
+
+    public static REPOSITORY_SOURCED_DEPLOYER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.deployer.RepositorySourcedDeployer";
+    public static STREAM_SOURCED_DEPLOYER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.deployer.StreamSourcedDeployer";
 }
 
 export abstract class ExtensionFactory {

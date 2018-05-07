@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ClassTreeModal, ClassTreeModalData } from "../browsingModal/classTreeModal/classTreeModal";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../../models/ARTResources";
 import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "../browsingModal/classIndividualTreeModal/classIndividualTreeModal";
-import { InstanceListModal, InstanceListModalData } from "../browsingModal/instanceListModal/instanceListModal";
-import { ConceptTreeModal, ConceptTreeModalData } from "../browsingModal/conceptTreeModal/conceptTreeModal";
+import { ClassTreeModal, ClassTreeModalData } from "../browsingModal/classTreeModal/classTreeModal";
 import { CollectionTreeModal, CollectionTreeModalData } from "../browsingModal/collectionTreeModal/collectionTreeModal";
-import { SchemeListModal, SchemeListModalData } from "../browsingModal/schemeListModal/schemeListModal";
+import { ConceptTreeModal, ConceptTreeModalData } from "../browsingModal/conceptTreeModal/conceptTreeModal";
+import { InstanceListModal, InstanceListModalData } from "../browsingModal/instanceListModal/instanceListModal";
 import { PropertyTreeModal, PropertyTreeModalData } from "../browsingModal/propertyTreeModal/propertyTreeModal";
+import { SchemeListModal, SchemeListModalData } from "../browsingModal/schemeListModal/schemeListModal";
 import { LexicalEntryListModal, LexicalEntryListModalData } from './lexicalEntryListModal/lexicalEntryListModal';
 import { LexiconListModal, LexiconListModalData } from './lexiconListModal/lexiconListModal';
-import { ARTURIResource } from "../../../models/ARTResources";
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
@@ -127,7 +127,7 @@ export class BrowsingModalServices {
     /**
      * 
      * @param title 
-     * @param lexicon 
+     * @param lexicon if not provided, get the current active
      * @param lexiconChangeable 
      */
     browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean, editable?: boolean, deletable?: boolean) {

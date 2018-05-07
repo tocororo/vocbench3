@@ -274,4 +274,72 @@ export class OntoLexLemonServices {
         return this.httpMgr.doPost(this.serviceName, "removeReifiedLexicalization", params);
     }
 
+    /**
+     * Adds a representation to an ontolex:Form.
+     * @param form 
+     * @param representation 
+     * @param property 
+     */
+    addFormRepresentation(form: ARTResource, representation: ARTLiteral, property: ARTURIResource) {
+        console.log("[OntoLexLemonServices] addFormRepresentation");
+        var params: any = {
+            form: form,
+            representation: representation,
+            property: property
+        };
+        return this.httpMgr.doPost(this.serviceName, "addFormRepresentation", params);
+    }
+
+    /**
+     * Removes a representations from an ontolex:Form.
+     * @param form 
+     * @param representation 
+     * @param property 
+     */
+    removeFormRepresentation(form: ARTResource, representation: ARTLiteral, property: ARTURIResource) {
+        console.log("[OntoLexLemonServices] removeFormRepresentation");
+        var params: any = {
+            form: form,
+            representation: representation,
+            property: property
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeFormRepresentation", params);
+    }
+
+    /**
+     * Adds a subterm to an ontolex:LexicalEntry.
+     * @param lexicalEntry 
+     * @param sublexicalEntry 
+     * @param property 
+     */
+    addSubterm(lexicalEntry: ARTURIResource, sublexicalEntry: ARTURIResource, property?: ARTURIResource) {
+        console.log("[OntoLexLemonServices] addSubterm");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            sublexicalEntry: sublexicalEntry
+        };
+        if (property != null) {
+            params.property = property
+        }
+        return this.httpMgr.doPost(this.serviceName, "addSubterm", params);
+    }
+
+    /**
+     * Removes a subterm from an ontolex:LexicalEntry.
+     * @param lexicalEntry 
+     * @param sublexicalEntry 
+     * @param property 
+     */
+    removeSubterm(lexicalEntry: ARTURIResource, sublexicalEntry: ARTURIResource, property?: ARTURIResource) {
+        console.log("[OntoLexLemonServices] removeSubterm");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            sublexicalEntry: sublexicalEntry
+        };
+        if (property != null) {
+            params.property = property
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeSubterm", params);
+    }
+
 }

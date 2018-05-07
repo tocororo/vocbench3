@@ -1,17 +1,24 @@
 <div class="hbox">
 
-    <select *ngIf="extensions.length > 1" class="form-control input-sm" [(ngModel)]="selectedExtension"
-        (ngModelChange)="onChangeExtension()" [title]="selectedExtension.description" style="margin-right: 5px;">
+    <!--
+        Extension selector visible if: 
+        * there are multiple extensions;
+        * there is one extension (immediately selected) and it has 0 or 1 configuration
+        Configuration selector visible if the selected extension has multiple configurations.
+    -->
+    <select *ngIf="extensions.length > 1 || !selectedExtension.configurations || selectedExtension.configurations.length == 1"
+        class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onChangeExtension()"
+        [title]="selectedExtension.description" style="margin-right: 5px;">
         <option *ngFor="let ext of extensions" [ngValue]="ext" [title]="ext.description">
             {{ext.name}} 
         </option>
     </select>
-    <select *ngIf="selectedExtension.configurations.length > 1" class="form-control input-sm" [(ngModel)]="selectedConfiguration"
+    <select *ngIf="selectedExtension.configurations?.length > 1" class="form-control input-sm" [(ngModel)]="selectedConfiguration"
         (ngModelChange)="onChangeConfig()" style="margin-right: 5px;">
         <option *ngFor="let cfg of selectedExtension.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
     </select>
 
-    <span class="btn-group btn-group-sm" style="display: flex;">
+    <span *ngIf="selectedExtension.configurations" class="btn-group btn-group-sm" style="display: flex;">
         <button class="btn btn-default" (click)="configure()">Configure</button>
         <ng-template [ngIf]="storeable">
             <button class="btn btn-default" title="Save configuration" (click)="saveConfig()">

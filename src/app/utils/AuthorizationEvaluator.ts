@@ -55,15 +55,19 @@ enum Actions {
     METADATA_REGISTRY_UPDATE,
     ONT_MANAGER_DELETE_ONTOLOGY_MIRROR,
     ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR,
+    ONTOLEX_ADD_FORM_REPRESENTATION,
     ONTOLEX_ADD_LEXICAL_FORM,
     ONTOLEX_ADD_LEXICALIZATION,
+    ONTOLEX_ADD_SUBTERM,
     ONTOLEX_CREATE_LEXICON,
     ONTOLEX_CREATE_LEXICAL_ENTRY,
     ONTOLEX_DELETE_LEXICON,
     ONTOLEX_DELETE_LEXICAL_ENTRY,
+    ONTOLEX_REMOVE_FORM_REPRESENTATION,
     ONTOLEX_REMOVE_LEXICAL_FORM,
-    ONTOLEX_REMOVE_REIFIED_LEXICALIZATION,
     ONTOLEX_REMOVE_PLAIN_LEXICALIZATION,
+    ONTOLEX_REMOVE_REIFIED_LEXICALIZATION,
+    ONTOLEX_REMOVE_SUBTERM,
     ONTOLEX_GET_LEXICAL_ENTRY,
     ONTOLEX_GET_LEXICON,
     PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
@@ -172,17 +176,21 @@ export class AuthorizationEvaluator {
         [Actions.METADATA_REGISTRY_UPDATE] : 'auth(sys(metadataRegistry), "U").',
         [Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "D").',
         [Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR] : 'auth(sys(ontologyMirror), "CU").',
+        [Actions.ONTOLEX_ADD_FORM_REPRESENTATION] : 'auth(rdf(ontolexForm, formRepresentations), "C").',
         [Actions.ONTOLEX_ADD_LEXICAL_FORM] : 'auth(rdf(ontolexLexicalEntry), "U").',
         [Actions.ONTOLEX_ADD_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
+        [Actions.ONTOLEX_ADD_SUBTERM] : 'auth(rdf(ontolexLexicalEntry, subterms), "C").',
         [Actions.ONTOLEX_CREATE_LEXICAL_ENTRY] : 'auth(rdf(ontolexLexicalEntry), "C").',
         [Actions.ONTOLEX_CREATE_LEXICON] : 'auth(rdf(limeLexicon), "C").',
         [Actions.ONTOLEX_DELETE_LEXICAL_ENTRY] : 'auth(rdf(ontolexLexicalEntry), "D").',
         [Actions.ONTOLEX_DELETE_LEXICON] : 'auth(rdf(limeLexicon), "D").',
         [Actions.ONTOLEX_GET_LEXICAL_ENTRY] : 'auth(rdf(ontolexLexicalEntry), "R").',
         [Actions.ONTOLEX_GET_LEXICON] : 'auth(rdf(limeLexicon), "R").',
+        [Actions.ONTOLEX_REMOVE_FORM_REPRESENTATION] : 'auth(rdf(ontolexForm, formRepresentations), "U").',
         [Actions.ONTOLEX_REMOVE_LEXICAL_FORM] : 'auth(rdf(ontolexLexicalEntry), "U").',
         [Actions.ONTOLEX_REMOVE_PLAIN_LEXICALIZATION] : 'auth(rdf(resource, lexicalization), "D").',
         [Actions.ONTOLEX_REMOVE_REIFIED_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
+        [Actions.ONTOLEX_REMOVE_SUBTERM] : 'auth(rdf(ontolexLexicalEntry, subterms), "D").',
         [Actions.PLUGINS_GET_PLUGINS] : 'auth(sys(plugins), "R").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
@@ -298,25 +306,27 @@ export class AuthorizationEvaluator {
     public static ResourceView = {
         isAddAuthorized(partition: ResViewPartition, resource?: ARTResource): boolean {
             return (
-                (partition == ResViewPartition.types && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INDIVIDUALS_ADD_TYPE, resource)) ||
-                (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS_AXIOM)) ||
-                (partition == ResViewPartition.topconceptof && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TOP_CONCEPT)) ||
-                (partition == ResViewPartition.schemes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_CONCEPT_TO_SCHEME)) ||
                 (partition == ResViewPartition.broaders && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_BROADER_CONCEPT)) ||
-                (partition == ResViewPartition.superproperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_SUPERPROPERTY)) ||
+                (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS_AXIOM)) ||
+                (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
                 (partition == ResViewPartition.domains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_DOMAIN)) ||
-                (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_RANGE)) ||
+                (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.facets && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
+                (partition == ResViewPartition.formRepresentations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_FORM_REPRESENTATION, resource)) ||
+                (partition == ResViewPartition.labelRelations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.lexicalizations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_LEXICALIZATION, resource)) ||
                 (partition == ResViewPartition.lexicalForms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICAL_FORM)) ||
                 (partition == ResViewPartition.lexicalSenses && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
-                (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
-                (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
-                (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.members && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION)) ||
                 (partition == ResViewPartition.membersOrdered && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TO_COLLECTION)) ||
-                (partition == ResViewPartition.labelRelations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
-                (partition == ResViewPartition.properties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource))
+                (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
+                (partition == ResViewPartition.properties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
+                (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_RANGE)) ||
+                (partition == ResViewPartition.schemes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_CONCEPT_TO_SCHEME)) ||
+                (partition == ResViewPartition.subterms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_SUBTERM)) ||
+                (partition == ResViewPartition.superproperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_SUPERPROPERTY)) ||
+                (partition == ResViewPartition.topconceptof && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TOP_CONCEPT)) ||
+                (partition == ResViewPartition.types && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INDIVIDUALS_ADD_TYPE, resource))
             );
         },
         isEditAuthorized(partition: ResViewPartition, resource?: ARTResource): boolean {
@@ -324,25 +334,27 @@ export class AuthorizationEvaluator {
         },
         isRemoveAuthorized(partition: ResViewPartition, resource?: ARTResource): boolean {
             return (
-                (partition == ResViewPartition.types && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INDIVIDUALS_REMOVE_TYPE, resource)) ||
-                (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_REMOVE_CLASS_AXIOM)) ||
-                (partition == ResViewPartition.topconceptof && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_TOP_CONCEPT)) ||
-                (partition == ResViewPartition.schemes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME)) ||
                 (partition == ResViewPartition.broaders && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_BROADER_CONCEPT)) ||
-                (partition == ResViewPartition.superproperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_SUPERPROPERTY)) ||
+                (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_REMOVE_CLASS_AXIOM)) ||
+                (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_PLAIN_LEXICALIZATION)) ||
                 (partition == ResViewPartition.domains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN)) ||
-                (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_RANGE)) ||
+                (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE)) ||
                 (partition == ResViewPartition.facets && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
+                (partition == ResViewPartition.formRepresentations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_FORM_REPRESENTATION, resource)) ||
+                (partition == ResViewPartition.labelRelations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
                 (partition == ResViewPartition.lexicalizations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_LEXICALIZATION, resource)) ||
                 (partition == ResViewPartition.lexicalForms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_LEXICAL_FORM)) ||
                 (partition == ResViewPartition.lexicalSenses && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_REIFIED_LEXICALIZATION)) ||
-                (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_PLAIN_LEXICALIZATION)) ||
-                (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE)) ||
-                (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
                 (partition == ResViewPartition.members && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_FROM_COLLECTION)) ||
                 (partition == ResViewPartition.membersOrdered && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_FROM_COLLECTION)) ||
-                (partition == ResViewPartition.labelRelations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
-                (partition == ResViewPartition.properties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource))
+                (partition == ResViewPartition.notes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
+                (partition == ResViewPartition.properties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
+                (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_RANGE)) ||
+                (partition == ResViewPartition.schemes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME)) ||
+                (partition == ResViewPartition.subterms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_SUBTERM)) ||
+                (partition == ResViewPartition.superproperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_SUPERPROPERTY)) ||
+                (partition == ResViewPartition.topconceptof && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_TOP_CONCEPT)) ||
+                (partition == ResViewPartition.types && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INDIVIDUALS_REMOVE_TYPE, resource))
             );
         }
     }
