@@ -196,7 +196,6 @@ export class PropertyServices {
      *              or typedLiteral, then represent the admitted datatypes);
      * - formCollection, an optional FormCollection object only if the property has form collection associated
      */
-    // getRange(property: ARTURIResource): Observable<{ ranges: { type: RangeType, rangeCollection: ARTURIResource[] }, formCollection: FormCollection }> {
     getRange(property: ARTURIResource): Observable<RangeResponse> {
         console.log("[PropertyServices] getRange");
         var params: any = {

@@ -71,7 +71,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                         this.basicModals.select("Select range type", null, options).then(
                             (selectedRange: any) => {
                                 if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                    this.enrichWithTypedLiteral(predicate);
+                                    let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                                    this.enrichWithTypedLiteral(predicate, datatypes);
                                 } else if (selectedRange == RDFTypesEnum.plainLiteral) {
                                     this.enrichWithPlainLiteral(predicate);
                                 }

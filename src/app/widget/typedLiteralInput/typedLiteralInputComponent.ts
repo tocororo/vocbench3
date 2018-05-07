@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { XmlSchema, RDFS } from "../../models/Vocabulary";
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 
 @Component({
     selector: "typed-literal-input",
@@ -31,7 +31,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         } else {
             //check if in allowedDatatypes there is some datatype not foreseen by datatypeList. In case, add it to datatypeList
             this.allowedDatatypes.forEach(dt => { 
-                if (this.datatypeList.indexOf(dt) == -1) {
+                if (ResourceUtils.indexOfNode(this.datatypeList, dt) == -1) {
                     this.datatypeList.push(dt);
                 }
             });
