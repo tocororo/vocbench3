@@ -43,6 +43,10 @@
             </ng-template>
         </div>
 
+        <div *ngIf="visualizationMode == 'searchBased' && !lastSearch" class="alert alert-warning" style="margin-bottom: 4px;">
+            Please use the search field to retrieve lexical entries
+        </div>
+
         <lexical-entry-list [lexicon]="lexicon" [index]="index" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
         </lexical-entry-list>
     </div>

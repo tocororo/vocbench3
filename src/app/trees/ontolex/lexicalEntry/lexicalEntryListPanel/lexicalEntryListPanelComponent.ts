@@ -148,7 +148,6 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(LexicalEntryListSettingsModal, overlayConfig).result.then(
             changesDone => {
-                console.log(this.vbProp.getLexicalEntryListPreferences());
                 this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;
                 if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
                     this.viewChildList.forceList([]);
